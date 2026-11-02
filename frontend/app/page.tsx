@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import StatBar from './components/StatBar';
 import NarrativeFeed from './components/NarrativeFeed';
 import EventCard from './components/EventCard';
@@ -1083,6 +1084,18 @@ export default function LifeGraphPage() {
               </button>
             )}
           </div>
+
+          {/* Prototype v0.1 Gateway */}
+          <Link
+            href="/prototype"
+            className="px-2.5 sm:px-3 py-1.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white shadow-lg shadow-emerald-900/30 transition-all border border-emerald-400/30 shrink-0 group"
+            title="Trải nghiệm Nguyên Mẫu Gameplay Mới: Dòng Chảy Liên Tục & Di Sản 2 Thế Hệ"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-300 group-hover:rotate-45 transition-transform" />
+            <span className="hidden sm:inline">Bản Mới: Di Sản 2 Thế Hệ</span>
+            <span className="sm:hidden">Di Sản 2 Đời</span>
+            <span className="text-[10px] px-1.5 py-0.2 bg-amber-400 text-slate-950 font-black rounded-full uppercase tracking-tighter">v0.1</span>
+          </Link>
         </div>
 
         {/* 2. Center Zone: Beautiful Detailed Aspiration Hub (Bố cục giữa nổi bật & chi tiết) */}

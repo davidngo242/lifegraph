@@ -46,9 +46,19 @@ import {
   checkGeneticAffinity,
   getTuitionFee
 } from '../engine/skillEngine.js';
+import {
+  initPrototypeSession,
+  advancePrototypeYear,
+  processPrototypeDecision,
+  setupWill,
+  triggerSuccessionTransfer
+} from '../engine/prototypeTickOrchestrator.js';
+import { payDebtDirectly } from '../engine/fairEconomyEngine.js';
+import { evaluateHeirWillingness } from '../engine/familySuccessionEngine.js';
 
 const router = express.Router();
 let currentDilemma = null;
+const prototypeSessions = new Map();
 
 // GET /api/game/diagnostic
 router.get('/diagnostic', async (req, res) => {
@@ -2570,6 +2580,199 @@ router.post('/reset', async (req, res) => {
   } catch (err) {
     console.error('Reset failed:', err);
     res.status(500).json({ error: 'Reset failed', message: err.message });
+  }
+});
+
+// =============================================================================
+// PROTOTYPE v0.1: 2-GENERATION CONTINUOUS FLOW & FAIR SUCCESSION ROUTES
+// =============================================================================
+
+function getOrCreatePrototypeSession(sessionId, playerName = 'Trần Văn An') {
+  const sid = sessionId || 'default_prototype';
+  let session = prototypeSessions.get(sid);
+  if (!session) {
+    session = initPrototypeSession({ playerName });
+    session.sessionId = sid;
+    prototypeSessions.set(sid, session);
+  }
+  return session;
+}
+
+// POST /api/game/prototype/start - Khởi tạo phiên chơi nguyên mẫu mới
+router.post('/prototype/start', (req, res) => {
+  try {
+    const { playerName = 'Trần Văn An', startYear = 2024 } = req.body || {};
+    const sid = req.body?.sessionId || req.headers['x-session-id'] || 'session_' + Date.now();
+    const session = initPrototypeSession({ playerName, startYear });
+    session.sessionId = sid;
+    prototypeSessions.set(sid, session);
+
+    res.json({
+      success: true,
+      sessionId: sid,
+      sessionState: session
+    });
+  } catch (err) {
+    console.error('Prototype start error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// GET /api/game/prototype/state - Lấy trạng thái hiện tại của phiên chơi
+router.get('/prototype/state', (req, res) => {
+  try {
+    const sid = req.query?.sessionId || req.headers['x-session-id'] || 'default_prototype';
+    const session = getOrCreatePrototypeSession(sid);
+
+    // Tính toán đánh giá con cái thừa kế nếu có
+    const heirEvaluations = (session.family?.children || []).map(child => {
+      return evaluateHeirWillingness(child, { assets: session.assets }, session.debts);
+    });
+
+    res.json({
+      success: true,
+      sessionState: session,
+      heirEvaluations
+    });
+  } catch (err) {
+    console.error('Prototype state error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/game/prototype/tick - Tua thời gian 1 hoặc N năm (Tự động dừng khi có sự kiện lớn)
+router.post('/prototype/tick', (req, res) => {
+  try {
+    const { sessionId, years = 1 } = req.body || {};
+    const sid = sessionId || req.headers['x-session-id'] || 'default_prototype';
+    const session = getOrCreatePrototypeSession(sid);
+
+    const stepCount = Math.max(1, Math.min(10, Number(years) || 1));
+    const allEvents = [];
+
+    for (let i = 0; i < stepCount; i++) {
+      if (session.is_paused || session.active_story_node || session.needs_succession) {
+        break;
+      }
+      const tickRes = advancePrototypeYear(session);
+      allEvents.push(...tickRes.events);
+      if (session.is_paused || session.active_story_node || session.needs_succession) {
+        break;
+      }
+    }
+
+    const heirEvaluations = (session.family?.children || []).map(child => {
+      return evaluateHeirWillingness(child, { assets: session.assets }, session.debts);
+    });
+
+    res.json({
+      success: true,
+      sessionState: session,
+      events: allEvents,
+      heirEvaluations
+    });
+  } catch (err) {
+    console.error('Prototype tick error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/game/prototype/decision - Đưa ra lựa chọn tại Story Node
+router.post('/prototype/decision', (req, res) => {
+  try {
+    const { sessionId, optionId } = req.body || {};
+    if (!optionId) {
+      return res.status(400).json({ success: false, error: 'Thiếu optionId.' });
+    }
+    const sid = sessionId || req.headers['x-session-id'] || 'default_prototype';
+    const session = getOrCreatePrototypeSession(sid);
+
+    const decisionRes = processPrototypeDecision(session, optionId);
+
+    const heirEvaluations = (session.family?.children || []).map(child => {
+      return evaluateHeirWillingness(child, { assets: session.assets }, session.debts);
+    });
+
+    res.json({
+      success: true,
+      sessionState: decisionRes.sessionState,
+      historyItem: decisionRes.historyItem,
+      scheduledConsequence: decisionRes.scheduledConsequence,
+      heirEvaluations
+    });
+  } catch (err) {
+    console.error('Prototype decision error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/game/prototype/pay-debt - Trả nợ chủ động từ tiền mặt
+router.post('/prototype/pay-debt', (req, res) => {
+  try {
+    const { sessionId, debtId, amount } = req.body || {};
+    if (!debtId || !amount) {
+      return res.status(400).json({ success: false, error: 'Thiếu debtId hoặc amount.' });
+    }
+    const sid = sessionId || req.headers['x-session-id'] || 'default_prototype';
+    const session = getOrCreatePrototypeSession(sid);
+
+    const payRes = payDebtDirectly(session.character, session.debts, debtId, amount);
+    session.character = payRes.character;
+    session.debts = payRes.debts;
+
+    res.json({
+      success: true,
+      sessionState: session,
+      actualPaid: payRes.actualPaid,
+      updatedDebt: payRes.updatedDebt
+    });
+  } catch (err) {
+    console.error('Prototype pay-debt error:', err);
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/game/prototype/will - Thiết lập di chúc
+router.post('/prototype/will', (req, res) => {
+  try {
+    const { sessionId, willData } = req.body || {};
+    const sid = sessionId || req.headers['x-session-id'] || 'default_prototype';
+    const session = getOrCreatePrototypeSession(sid);
+
+    const updatedSession = setupWill(session, willData || {});
+
+    res.json({
+      success: true,
+      sessionState: updatedSession
+    });
+  } catch (err) {
+    console.error('Prototype will error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/game/prototype/succession - Kích hoạt Chuyển giao Thế hệ (Gen 1 -> Gen 2)
+router.post('/prototype/succession', (req, res) => {
+  try {
+    const { sessionId, heirId, compromiseType = 'STANDARD' } = req.body || {};
+    const sid = sessionId || req.headers['x-session-id'] || 'default_prototype';
+    const session = getOrCreatePrototypeSession(sid);
+
+    const chosenHeirId = heirId || session.will?.primaryHeirId || session.family?.children?.[0]?.id;
+    if (!chosenHeirId) {
+      return res.status(400).json({ success: false, error: 'Không tìm thấy người thừa kế để chuyển giao thế hệ.' });
+    }
+
+    const successionRes = triggerSuccessionTransfer(session, chosenHeirId, compromiseType);
+
+    res.json({
+      success: true,
+      sessionState: successionRes.sessionState,
+      gen1Chronicle: successionRes.gen1Chronicle
+    });
+  } catch (err) {
+    console.error('Prototype succession error:', err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
