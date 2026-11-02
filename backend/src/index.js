@@ -13,7 +13,23 @@ import {
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = parseInt(process.env.PORT, 10) || 10000;
+
+// Enable reverse proxy support (Render, Vercel, Cloudflare)
+app.set('trust proxy', 1);
+
+// Fast Health Check Endpoint (Đặt đầu tiên để Render / Vercel ping tức thời không bao giờ nghẽn)
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    security: 'multi-layer-active',
+    port: PORT,
+    time: new Date().toISOString()
+  });
+});
+app.get('/', (req, res) => {
+  res.send('LifeGraph Backend Engine is Live & Healthy.');
+});
 
 // =========================================================================
 // LAYER 1: NETWORK & PERIMETER SECURITY (SECURITY HEADERS + CORS)
@@ -34,16 +50,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// Strict / Configurable CORS with exposed security headers
-const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',').map(s => s.trim()) : ['*'];
+// CORS: Cho phép bất kỳ Frontend nào gọi tới (Vercel, Localhost, Mobile)
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Yêu cầu bị từ chối bởi Chính Sách Bảo Mật Nguồn Gốc (CORS).'));
-    }
-  },
+  origin: true,
+  credentials: true,
   exposedHeaders: ['x-session-token']
 }));
 
@@ -114,8 +124,8 @@ app.get('/health', (req, res) => {
 
 async function bootstrap() {
   await initDb();
-  app.listen(PORT, () => {
-    console.log(`🛡️ [LifeGraph Security] Server is running on http://localhost:${PORT} with Multi-layer Defense.`);
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🛡️ [LifeGraph Security] Server is running on http://0.0.0.0:${PORT} with Multi-layer Defense.`);
   });
 }
 
