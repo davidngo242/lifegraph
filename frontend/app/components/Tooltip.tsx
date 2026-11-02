@@ -1,0 +1,59 @@
+'use client';
+
+import React, { useState } from 'react';
+
+interface TooltipProps {
+  content: React.ReactNode;
+  children: React.ReactNode;
+  position?: 'top' | 'bottom' | 'left' | 'right';
+  className?: string;
+}
+
+export default function Tooltip({
+  content,
+  children,
+  position = 'top',
+  className = ''
+}: TooltipProps) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  const positionClasses = {
+    top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
+    bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
+    left: 'right-full top-1/2 -translate-y-1/2 mr-2',
+    right: 'left-full top-1/2 -translate-y-1/2 ml-2'
+  };
+
+  const isFullWidth = className.includes('w-full');
+
+  return (
+    <div
+      className={`relative ${isFullWidth ? 'flex w-full' : 'inline-flex'} items-center ${className}`}
+      onMouseEnter={() => setIsVisible(true)}
+      onMouseLeave={() => setIsVisible(false)}
+      onClick={() => setIsVisible(!isVisible)}
+    >
+      {children}
+      {isVisible && content && (
+        <div
+          role="tooltip"
+          className={`absolute z-50 ${positionClasses[position]} px-2.5 py-1.5 text-[11px] leading-snug font-sans text-slate-200 bg-slate-900/95 border border-slate-700/80 rounded-xl shadow-2xl backdrop-blur-md pointer-events-none whitespace-normal min-w-[140px] max-w-[260px] animate-in fade-in duration-150`}
+        >
+          {content}
+          {/* Arrow */}
+          <div
+            className={`absolute w-2 h-2 bg-slate-900 border-slate-700/80 rotate-45 pointer-events-none ${
+              position === 'top'
+                ? 'top-full -translate-y-1 left-1/2 -translate-x-1/2 border-b border-r'
+                : position === 'bottom'
+                ? 'bottom-full translate-y-1 left-1/2 -translate-x-1/2 border-t border-l'
+                : position === 'left'
+                ? 'left-full -translate-x-1 top-1/2 -translate-y-1/2 border-t border-r'
+                : 'right-full translate-x-1 top-1/2 -translate-y-1/2 border-b border-l'
+            }`}
+          />
+        </div>
+      )}
+    </div>
+  );
+}

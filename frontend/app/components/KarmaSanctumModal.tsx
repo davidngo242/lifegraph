@@ -1,0 +1,233 @@
+'use client';
+
+import React, { useState } from 'react';
+import { Sparkles, ShieldCheck, HeartPulse, Flame, X, CheckCircle2, AlertCircle, ArrowRight, RefreshCw, Award } from 'lucide-react';
+
+interface KarmaSanctumModalProps {
+  karma: number;
+  playerAccount?: any;
+  characterVitality?: number;
+  characterBurnout?: number;
+  onInvokeBlessing: (type: 'vitality_shield' | 'benefactor_grace') => Promise<string>;
+  onTriggerEarlyRebirth: () => void;
+  onClose: () => void;
+}
+
+export default function KarmaSanctumModal({
+  karma,
+  playerAccount,
+  characterVitality = 80,
+  characterBurnout = 20,
+  onInvokeBlessing,
+  onTriggerEarlyRebirth,
+  onClose
+}: KarmaSanctumModalProps) {
+  const [loadingType, setLoadingType] = useState<string | null>(null);
+  const [notice, setNotice] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [confirmAbandon, setConfirmAbandon] = useState<boolean>(false);
+
+  const handleBlessing = async (type: 'vitality_shield' | 'benefactor_grace') => {
+    try {
+      setLoadingType(type);
+      setNotice(null);
+      const msg = await onInvokeBlessing(type);
+      setNotice({ type: 'success', text: msg });
+    } catch (err: any) {
+      setNotice({ type: 'error', text: err.message || "Thỉnh cầu thất bại." });
+    } finally {
+      setLoadingType(null);
+    }
+  };
+
+  const unlockedPerks = playerAccount?.unlocked_perks || [];
+  const reincarnationCount = playerAccount?.reincarnation_count || 1;
+  const lifetimeStats = playerAccount?.lifetime_stats || {};
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+      <div className="relative w-full max-w-2xl bg-slate-950 border border-purple-500/40 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-5 right-5 p-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition z-20"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
+        {/* Ambient Top Glow */}
+        <div className="absolute top-0 right-1/4 w-80 h-28 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Header */}
+        <div className="flex items-center gap-3.5 mb-4">
+          <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-2xl shadow-lg shadow-purple-500/20 shrink-0">
+            ✨
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+                Đền Thờ Nghiệp Quả (Karma Sanctum)
+              </h2>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                Luân Hồi Đời {reincarnationCount}
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Nơi lưu trữ công đức vĩnh hằng và thỉnh cầu phước lành tiền kiếp
+            </p>
+          </div>
+        </div>
+
+        {/* Karma Balance Strip */}
+        <div className="grid grid-cols-3 gap-3 p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 mb-4 text-xs">
+          <div>
+            <div className="text-[10px] text-slate-400 uppercase font-mono">Nghiệp Lực Vĩnh Cửu</div>
+            <div className="text-xl font-mono font-bold text-amber-300 mt-0.5 flex items-center gap-1">
+              <Sparkles className="w-4 h-4 text-purple-400" />
+              <span>{karma} Karma</span>
+            </div>
+          </div>
+          <div>
+            <div className="text-[10px] text-slate-400 uppercase font-mono">Tổng Số Năm Đã Sống</div>
+            <div className="text-xl font-mono font-bold text-white mt-0.5">
+              {lifetimeStats.total_years_lived || 0} năm
+            </div>
+          </div>
+          <div>
+            <div className="text-[10px] text-slate-400 uppercase font-mono">Đỉnh Cao Net Worth</div>
+            <div className="text-xl font-mono font-bold text-emerald-400 mt-0.5">
+              ${(lifetimeStats.max_net_worth || 0).toLocaleString()}
+            </div>
+          </div>
+        </div>
+
+        {/* Notice Toast */}
+        {notice && (
+          <div className={`mb-4 p-3 rounded-2xl border text-xs flex items-center gap-2 animate-in slide-in-from-top-2 ${
+            notice.type === 'success'
+              ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300'
+              : 'bg-rose-950/80 border-rose-500/50 text-rose-300'
+          }`}>
+            {notice.type === 'success' ? (
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            ) : (
+              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+            )}
+            <span>{notice.text}</span>
+          </div>
+        )}
+
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto space-y-4 pr-1">
+          {/* Section 1: Ancestral Blessings (Dùng Karma Cứu Nguy) */}
+          <div className="p-4 rounded-2xl bg-slate-900/70 border border-purple-500/20">
+            <h3 className="text-xs font-bold text-purple-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <HeartPulse className="w-4 h-4 text-rose-400" /> Thỉnh Cầu Phước Lành Tiền Kiếp
+            </h3>
+            <p className="text-[11px] text-slate-400 mb-3 leading-relaxed">
+              Dùng Nghiệp Lực tích lũy qua các đời để giải cứu bản thân khi lâm nguy hoặc bế tắc tại thế.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Blessing 1: Hộ Thể Kim Thân */}
+              <button
+                disabled={loadingType !== null || karma < 15}
+                onClick={() => handleBlessing('vitality_shield')}
+                className="p-3.5 rounded-2xl bg-slate-950/80 hover:bg-rose-950/30 border border-slate-800 hover:border-rose-500/40 text-left transition active:scale-95 disabled:opacity-40 group"
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="font-bold text-white group-hover:text-rose-300 text-xs flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-rose-400" />
+                    <span>Hộ Thể Kim Thân</span>
+                  </div>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                    15 Karma
+                  </span>
+                </div>
+                <div className="text-[11px] text-slate-400 leading-snug">
+                  Hồi phục ngay +25 Sinh lực và xả -35 Burnout khi thể xác kiệt quệ.
+                </div>
+              </button>
+
+              {/* Blessing 2: Quý Nhân Phù Trợ */}
+              <button
+                disabled={loadingType !== null || karma < 25}
+                onClick={() => handleBlessing('benefactor_grace')}
+                className="p-3.5 rounded-2xl bg-slate-950/80 hover:bg-emerald-950/30 border border-slate-800 hover:border-emerald-500/40 text-left transition active:scale-95 disabled:opacity-40 group"
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="font-bold text-white group-hover:text-emerald-300 text-xs flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-emerald-400" />
+                    <span>Quý Nhân Phù Trợ</span>
+                  </div>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                    25 Karma
+                  </span>
+                </div>
+                <div className="text-[11px] text-slate-400 leading-snug">
+                  Nhận cờ &quot;Gia Tộc Hộ Mệnh&quot; (+20 Karma tại thế, tăng độ may mắn).
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Section 2: Unlocked Perks Portfolio */}
+          <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800">
+            <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Award className="w-4 h-4 text-amber-400" /> Kho Tàng Đặc Quyền Vĩnh Cửu
+            </h3>
+            {unlockedPerks.length === 0 ? (
+              <p className="text-[11px] text-slate-500">
+                Chưa mở khóa đặc quyền nào. Khi qua đời, bạn có thể dùng Karma tại Vòng Quay Luân Hồi để mua Perk vĩnh cửu.
+              </p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {unlockedPerks.map((p: string, idx: number) => (
+                  <span key={idx} className="text-[11px] font-mono px-2.5 py-1 rounded-xl bg-purple-950/80 text-purple-300 border border-purple-500/30">
+                    ✓ {p}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Section 3: Early Rebirth (Chuyển Kiếp Sớm) */}
+          <div className="p-4 rounded-2xl bg-rose-950/20 border border-rose-500/30">
+            <h3 className="text-xs font-bold text-rose-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <Flame className="w-4 h-4 text-rose-400" /> Kết Thúc Kiếp Này & Tái Sinh Sớm
+            </h3>
+            <p className="text-[11px] text-slate-400 mb-3 leading-relaxed">
+              Nếu số phận hiện tại bế tắc hoàn toàn, bạn có thể chủ động quy y cửa phật để kết thúc kiếp này sớm và bước vào Vòng Quay Tái Sinh.
+            </p>
+
+            {!confirmAbandon ? (
+              <button
+                onClick={() => setConfirmAbandon(true)}
+                className="py-2.5 px-4 rounded-xl bg-rose-950/60 hover:bg-rose-900/80 border border-rose-500/40 text-rose-300 hover:text-white text-xs font-bold transition active:scale-95"
+              >
+                Yêu Cầu Chuyển Kiếp Sớm
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    onClose();
+                    onTriggerEarlyRebirth();
+                  }}
+                  className="py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition active:scale-95 shadow-md shadow-rose-600/30"
+                >
+                  Xác Nhận Từ Bỏ Kiếp Này & Tái Sinh
+                </button>
+                <button
+                  onClick={() => setConfirmAbandon(false)}
+                  className="py-2.5 px-3 rounded-xl bg-slate-800 text-slate-300 hover:text-white text-xs transition"
+                >
+                  Hủy
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

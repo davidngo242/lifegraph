@@ -1,0 +1,11 @@
+{
+  "name": "lifegraph-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LifeGraph AI-Driven Life Simulation RPG Monorepo",
+  "scripts": {
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build"
+  }
+}
