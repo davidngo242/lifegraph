@@ -8,7 +8,6 @@ import {
   FastForward,
   SkipForward,
   AlertTriangle,
-  ShieldCheck,
   Heart,
   TrendingUp,
   DollarSign,
@@ -19,11 +18,10 @@ import {
   RefreshCw,
   Sparkles,
   ChevronRight,
-  Compass,
+  Home,
   CheckCircle2,
-  XCircle,
-  HelpCircle,
-  Home
+  Clock,
+  ShieldAlert
 } from 'lucide-react';
 
 interface StoryOption {
@@ -166,17 +164,16 @@ export default function PrototypePage() {
   const [loading, setLoading] = useState(true);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<'chronicle' | 'finance' | 'family'>('chronicle');
   const [debtPayModal, setDebtPayModal] = useState<DebtItem | null>(null);
   const [payAmount, setPayAmount] = useState<number>(1000);
   const [willModalOpen, setWillModalOpen] = useState(false);
   const [selectedHeirId, setSelectedHeirId] = useState<string>('');
   const [compromiseType, setCompromiseType] = useState<'STANDARD' | 'SELL_BIZ_SPLIT' | 'AUTONOMY_SUPPORT'>('STANDARD');
   const [successionModalOpen, setSuccessionModalOpen] = useState(false);
-  const [latestGen1Recap, setLatestGen1Recap] = useState<any>(null);
 
   const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Khởi tạo hoặc tải session
   const fetchState = useCallback(async () => {
     try {
       const res = await fetch('/api/game/prototype/state');
@@ -208,7 +205,6 @@ export default function PrototypePage() {
         setSession(data.sessionState);
         setHeirEvals([]);
         setIsAutoPlaying(false);
-        setLatestGen1Recap(null);
       }
     } catch (err) {
       console.error('Lỗi khởi tạo game:', err);
@@ -221,7 +217,6 @@ export default function PrototypePage() {
     fetchState();
   }, [fetchState]);
 
-  // Bước nhảy thời gian (1 hoặc nhiều năm)
   const advanceTick = useCallback(async (years = 1) => {
     if (actionLoading || !session) return;
     setActionLoading(true);
@@ -250,7 +245,6 @@ export default function PrototypePage() {
     }
   }, [actionLoading, session]);
 
-  // Vòng lặp tự động chạy (Auto-tick)
   useEffect(() => {
     if (isAutoPlaying) {
       if (session?.is_paused || session?.active_story_node || session?.needs_succession) {
@@ -273,7 +267,6 @@ export default function PrototypePage() {
     };
   }, [isAutoPlaying, session, advanceTick]);
 
-  // Đưa ra quyết định Story
   const makeDecision = async (optionId: string) => {
     if (!session || actionLoading) return;
     setActionLoading(true);
@@ -295,7 +288,6 @@ export default function PrototypePage() {
     }
   };
 
-  // Trả bớt nợ chủ động
   const handlePayDebt = async () => {
     if (!debtPayModal || !session || payAmount <= 0) return;
     try {
@@ -318,7 +310,6 @@ export default function PrototypePage() {
     }
   };
 
-  // Thực thi chuyển giao sang Đời 2
   const handleExecuteSuccession = async () => {
     if (!session) return;
     const heirId = selectedHeirId || session.family?.children?.[0]?.id;
@@ -340,7 +331,6 @@ export default function PrototypePage() {
       const data = await res.json();
       if (data.success && data.sessionState) {
         setSession(data.sessionState);
-        setLatestGen1Recap(data.gen1Chronicle);
         setSuccessionModalOpen(false);
       }
     } catch (err) {
@@ -350,600 +340,461 @@ export default function PrototypePage() {
 
   if (loading || !session) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-6">
-        <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
-        <h2 className="text-xl font-bold tracking-wide">Đang Tải LifeGraph Prototype v0.1...</h2>
-        <p className="text-sm text-slate-400 mt-2">Mô phỏng Dòng Chảy Liên Tục & Di Sản 2 Thế Hệ</p>
+      <div className="min-h-screen bg-[#080a12] text-slate-100 flex flex-col items-center justify-center p-6">
+        <div className="w-12 h-12 border-3 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
+        <h2 className="text-base font-semibold tracking-wide text-slate-300">Đang Khởi Tạo Không Gian Cuộc Đời...</h2>
       </div>
     );
   }
 
   const { character, family, assets, debts, pending_consequences, act, current_year } = session;
   const activeNode = session.active_story_node;
-  const isPaused = session.is_paused || !!activeNode || session.needs_succession;
+  const activeDebts = debts.filter(d => d.status !== 'SETTLED');
+  const activeSeeds = pending_consequences.filter(pc => pc.status === 'PENDING');
 
-  // Bản đồ màu sắc trạng thái Solvency
-  const solvencyColorMap = {
-    HEALTHY: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40',
-    STRESSED: 'bg-amber-500/20 text-amber-400 border-amber-500/40',
-    CRITICAL: 'bg-orange-500/20 text-orange-400 border-orange-500/40',
-    INSOLVENT: 'bg-red-500/20 text-red-400 border-red-500/40'
+  const actLabelMap: Record<string, string> = {
+    ACT_1_YOUTH: 'Hồi 1: Tuổi Trẻ (18 - 30t)',
+    ACT_2_EMPIRE: 'Hồi 2: Cơ Nghiệp (30 - 50t)',
+    ACT_3_LEGACY: 'Hồi 3: Di Sản (50 - 80+t)'
   };
-
-  const solvencyLabelMap = {
-    HEALTHY: 'Tài Chính Khỏe Mạnh',
-    STRESSED: 'Áp Lực Dòng Tiền',
-    CRITICAL: 'Cảnh Báo Quá Hạn',
-    INSOLVENT: 'Mất Khả Năng Thanh Toán'
-  };
-
-  // Bản đồ tên Hồi (Acts)
-  const actNameMap: Record<string, { label: string; desc: string; color: string }> = {
-    ACT_1_YOUTH: {
-      label: 'Hồi 1: Tuổi Trẻ & Lập Thân',
-      desc: '18 - 30 tuổi: Học nghề, chọn lối đi, kết duyên và tích lũy vốn đầu đời.',
-      color: 'from-blue-600 to-indigo-600'
-    },
-    ACT_2_EMPIRE: {
-      label: 'Hồi 2: Cơ Nghiệp & Trọng Trách',
-      desc: '30 - 50 tuổi: Mua nhà, gánh nợ, mở rộng sản nghiệp và dạy dỗ con cái.',
-      color: 'from-amber-600 to-orange-600'
-    },
-    ACT_3_LEGACY: {
-      label: 'Hồi 3: Di Sản & Chuyển Giao',
-      desc: '50 - 80+ tuổi: Trả sạch nợ nần, lập di chúc và truyền thừa cơ nghiệp cho thế hệ 2.',
-      color: 'from-emerald-600 to-teal-600'
-    }
-  };
-
-  const currentActMeta = actNameMap[act] || actNameMap.ACT_1_YOUTH;
 
   return (
-    <div className="min-h-screen bg-[#070913] text-slate-100 font-sans selection:bg-indigo-500 selection:text-white">
-      {/* Top Banner & Header */}
-      <header className="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md sticky top-0 z-40 px-6 py-3.5">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+    <div className="min-h-screen bg-[#07090f] text-slate-200 font-sans selection:bg-indigo-600 selection:text-white flex flex-col justify-between">
+      {/* 1. Ultra-Clean Top Bar */}
+      <header className="border-b border-white/5 bg-[#0b0e19]/90 backdrop-blur-md px-5 py-3 sticky top-0 z-40">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+          {/* Identity & Life Stage */}
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors flex items-center gap-1.5 text-xs font-medium"
-              title="Quay lại Bản đồ Cuộc đời"
+              className="text-slate-400 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/5"
+              title="Về Trang Chủ"
             >
               <Home className="w-4 h-4" />
-              <span>Về Bản Đồ Cũ</span>
             </Link>
 
-            <div className="h-6 w-px bg-slate-800 mx-1 hidden sm:block" />
+            <div className="h-4 w-px bg-white/10" />
 
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
-                  PROTOTYPE v0.1
-                </span>
-                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                  {session.generation_index === 1 ? 'Đời 1: Khai Sáng' : 'Đời 2: Kế Thừa'}
-                </span>
-              </div>
-              <h1 className="text-lg font-black tracking-tight text-white flex items-center gap-2">
-                <span>{character.name}</span>
-                <span className="text-slate-400 text-sm font-normal">
-                  ({character.age} tuổi • Năm {current_year})
-                </span>
-              </h1>
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-white text-base tracking-tight">
+                {character.name}
+              </span>
+              <span className="text-xs text-indigo-400 font-medium px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20">
+                {character.age} Tuổi
+              </span>
+              <span className="text-xs text-slate-400 font-medium hidden sm:inline">
+                • Năm {current_year}
+              </span>
+              <span className="text-xs text-slate-500 font-normal hidden md:inline">
+                ({actLabelMap[act] || act})
+              </span>
             </div>
           </div>
 
-          {/* Time Pacing Controls */}
-          <div className="flex items-center gap-2 bg-slate-950/80 p-1.5 rounded-xl border border-slate-800">
-            <button
-              onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-              disabled={isPaused && !isAutoPlaying}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
-                isAutoPlaying
-                  ? 'bg-amber-500 text-slate-950 hover:bg-amber-400 animate-pulse'
-                  : isPaused
-                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                  : 'bg-emerald-600 hover:bg-emerald-500 text-white'
-              }`}
-            >
-              {isAutoPlaying ? (
-                <>
-                  <Pause className="w-3.5 h-3.5 fill-current" />
-                  <span>Dừng Tự Động</span>
-                </>
-              ) : (
-                <>
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Tự Động Trôi (1s/Năm)</span>
-                </>
-              )}
-            </button>
+          {/* Quick HUD Metrics */}
+          <div className="flex items-center gap-4 text-xs">
+            <div className="hidden sm:flex items-center gap-1.5">
+              <span className="text-slate-400">Tiền:</span>
+              <span className="font-mono font-bold text-emerald-400">
+                ${character.cash?.toLocaleString()}
+              </span>
+            </div>
 
-            <button
-              onClick={() => advanceTick(1)}
-              disabled={isPaused || isAutoPlaying || actionLoading}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 disabled:opacity-40 transition-colors flex items-center gap-1"
-            >
-              <SkipForward className="w-3.5 h-3.5" />
-              <span>+1 Năm</span>
-            </button>
+            <div className="hidden sm:flex items-center gap-1.5">
+              <span className="text-slate-400">Tài sản ròng:</span>
+              <span className="font-mono font-bold text-cyan-400">
+                ${session.net_worth?.toLocaleString()}
+              </span>
+            </div>
 
-            <button
-              onClick={() => advanceTick(3)}
-              disabled={isPaused || isAutoPlaying || actionLoading}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-950/60 hover:bg-indigo-900/80 text-indigo-300 border border-indigo-800/50 disabled:opacity-40 transition-colors flex items-center gap-1"
-            >
-              <FastForward className="w-3.5 h-3.5" />
-              <span>Tua 3 Năm</span>
-            </button>
+            {character.burnout > 0 && (
+              <div className="hidden md:flex items-center gap-1">
+                <span className="text-slate-400">Áp lực:</span>
+                <span className={`font-semibold ${character.burnout > 50 ? 'text-rose-400' : 'text-slate-300'}`}>
+                  {character.burnout}%
+                </span>
+              </div>
+            )}
 
-            <button
-              onClick={startNewGame}
-              className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-950/60 hover:text-rose-300 text-slate-400 transition-colors ml-1"
-              title="Khởi tạo kiếp mới hoàn toàn"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-            </button>
+            {/* Time Controls */}
+            <div className="flex items-center gap-1.5 bg-black/40 p-1 rounded-xl border border-white/5">
+              <button
+                onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+                disabled={!!activeNode || session.needs_succession}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                  isAutoPlaying
+                    ? 'bg-amber-500 text-black hover:bg-amber-400'
+                    : !!activeNode
+                    ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                    : 'bg-indigo-600 hover:bg-indigo-500 text-white'
+                }`}
+              >
+                {isAutoPlaying ? (
+                  <>
+                    <Pause className="w-3.5 h-3.5 fill-current" />
+                    <span>Dừng</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    <span>Chạy Năm</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={() => advanceTick(1)}
+                disabled={!!activeNode || isAutoPlaying || actionLoading || session.needs_succession}
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:bg-white/5 disabled:opacity-40 transition-colors"
+                title="Tua 1 Năm"
+              >
+                <SkipForward className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                onClick={() => advanceTick(3)}
+                disabled={!!activeNode || isAutoPlaying || actionLoading || session.needs_succession}
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-indigo-300 hover:bg-indigo-500/10 disabled:opacity-40 transition-colors"
+                title="Tua 3 Năm"
+              >
+                <FastForward className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                onClick={startNewGame}
+                className="p-1.5 rounded-lg text-slate-500 hover:text-slate-300 transition-colors"
+                title="Bắt đầu lại từ đầu"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Act Banner */}
-      <div className={`bg-gradient-to-r ${currentActMeta.color} px-6 py-2.5 shadow-lg`}>
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-2 font-semibold text-white tracking-wide">
-            <Sparkles className="w-4 h-4 text-amber-300 animate-spin" style={{ animationDuration: '8s' }} />
-            <span className="text-sm font-bold uppercase">{currentActMeta.label}</span>
-            <span className="hidden md:inline text-white/80 font-normal">— {currentActMeta.desc}</span>
-          </div>
-
-          <div className="flex items-center gap-4 text-white/90 font-medium">
-            <span className="flex items-center gap-1.5">
-              <DollarSign className="w-4 h-4 text-emerald-300" />
-              Tiền mặt: <strong className="text-white font-mono">${character.cash?.toLocaleString()}</strong>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <TrendingUp className="w-4 h-4 text-cyan-300" />
-              Tài sản ròng: <strong className="text-white font-mono">${session.net_worth?.toLocaleString()}</strong>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Heart className={`w-4 h-4 ${character.burnout > 60 ? 'text-rose-400 animate-bounce' : 'text-pink-300'}`} />
-              Căng thẳng: <strong className="text-white">{character.burnout}%</strong>
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content Dashboard */}
-      <main className="max-w-7xl mx-auto px-6 py-6 space-y-6">
-        {/* Dynamic Story Dilemma Modal / Overlay (Auto-Pause Trigger) */}
-        {activeNode && (
-          <div className="bg-gradient-to-b from-indigo-950/90 to-slate-900 border-2 border-indigo-500/70 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200">
-            <div className="absolute top-0 right-0 px-4 py-1.5 bg-indigo-600 text-white text-xs font-black tracking-wider uppercase rounded-bl-xl shadow flex items-center gap-1.5">
-              <Compass className="w-3.5 h-3.5 animate-spin" />
-              Ngã Rẽ Định Mệnh (Tự Động Dừng)
-            </div>
-
-            <div className="max-w-3xl">
-              <div className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">
-                Giai đoạn {character.age} tuổi • Sự kiện bước ngoặt
+      {/* 2. Main Stage: Focused, Clean & Cinematic */}
+      <main className="flex-1 max-w-5xl w-full mx-auto px-5 py-8 flex flex-col justify-center">
+        {/* CASE A: PIVOTAL LIFE DECISION (CINEMATIC FOCUS) */}
+        {activeNode ? (
+          <div className="space-y-8 animate-in fade-in duration-300">
+            {/* Header / Dilemma Context */}
+            <div className="text-center max-w-2xl mx-auto space-y-3">
+              <div className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Bước Ngoặt Tuổi {character.age}</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-3">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 {activeNode.title}
               </h2>
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6 bg-slate-950/40 p-4 rounded-xl border border-slate-800">
-                {activeNode.summary}
+              <p className="text-slate-400 text-sm sm:text-base leading-relaxed italic">
+                "{activeNode.summary}"
               </p>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {activeNode.options.map((opt) => (
-                  <div
-                    key={opt.id}
-                    className="flex flex-col justify-between bg-slate-900/90 border border-slate-700/80 hover:border-indigo-400/80 rounded-xl p-4 transition-all hover:shadow-lg hover:shadow-indigo-500/10 group"
-                  >
+            {/* 3 Distinct Choice Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+              {activeNode.options.map((opt) => (
+                <div
+                  key={opt.id}
+                  className="bg-[#0f1322] border border-white/10 hover:border-indigo-500/60 rounded-2xl p-5 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/5 group"
+                >
+                  <div className="space-y-4">
                     <div>
-                      <h4 className="font-bold text-slate-100 text-sm mb-2 group-hover:text-indigo-300 transition-colors flex items-center justify-between">
-                        <span>{opt.label}</span>
-                      </h4>
-                      <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                      <h3 className="font-bold text-white text-base group-hover:text-indigo-300 transition-colors">
+                        {opt.label}
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-2 leading-relaxed">
                         {opt.description}
                       </p>
+                    </div>
 
-                      {/* Immediate Cost / Benefit Badges */}
-                      <div className="space-y-1.5 text-xs mb-4">
-                        <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                          Tác động tức thì:
+                    {/* Trade-offs & Consequences (Clean, Minimalist Badges) */}
+                    <div className="space-y-2 pt-2 border-t border-white/5 text-xs">
+                      {/* Immediate Cost/Benefit */}
+                      {opt.immediate_effects.cash_delta !== undefined && (
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-slate-400">Tiền mặt:</span>
+                          <span className={`font-mono font-bold ${opt.immediate_effects.cash_delta >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                            {opt.immediate_effects.cash_delta >= 0 ? '+' : ''}${opt.immediate_effects.cash_delta.toLocaleString()}
+                          </span>
                         </div>
-                        {opt.immediate_effects.cash_delta !== undefined && (
-                          <div className={`font-mono font-semibold ${opt.immediate_effects.cash_delta >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                            {opt.immediate_effects.cash_delta >= 0 ? '+' : ''}${opt.immediate_effects.cash_delta.toLocaleString()} tiền mặt
-                          </div>
-                        )}
-                        {opt.immediate_effects.family_trust_delta !== undefined && (
-                          <div className={opt.immediate_effects.family_trust_delta >= 0 ? 'text-emerald-400' : 'text-amber-400'}>
-                            {opt.immediate_effects.family_trust_delta >= 0 ? '+' : ''}{opt.immediate_effects.family_trust_delta} Niềm tin gia đình
-                          </div>
-                        )}
-                        {opt.immediate_effects.debt_add && (
-                          <div className="text-rose-400 font-medium">
-                            + Phát sinh nợ: ${opt.immediate_effects.debt_add.principal.toLocaleString()}
-                          </div>
-                        )}
-                      </div>
+                      )}
 
-                      {/* Signaled Risk / Pending Consequence */}
+                      {opt.immediate_effects.family_trust_delta !== undefined && (
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-slate-400">Gia đình:</span>
+                          <span className={`font-semibold ${opt.immediate_effects.family_trust_delta >= 0 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                            {opt.immediate_effects.family_trust_delta >= 0 ? '+' : ''}{opt.immediate_effects.family_trust_delta} Niềm tin
+                          </span>
+                        </div>
+                      )}
+
+                      {opt.immediate_effects.debt_add && (
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-slate-400">Gánh nợ mới:</span>
+                          <span className="font-mono font-bold text-rose-400">
+                            +${opt.immediate_effects.debt_add.principal.toLocaleString()}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Seed of Destiny (5-Year Pending Consequence) */}
                       {opt.pending_consequence && (
-                        <div className="p-2.5 rounded-lg bg-amber-950/30 border border-amber-800/40 text-amber-200/90 text-xs mb-4">
-                          <div className="font-bold flex items-center gap-1 text-[11px] uppercase tracking-wide text-amber-400 mb-0.5">
-                            <AlertTriangle className="w-3 h-3" />
-                            Hậu quả sau {opt.pending_consequence.delay_years} năm:
+                        <div className="mt-3 p-2.5 rounded-xl bg-amber-500/5 border border-amber-500/20 text-amber-200/90 text-xs">
+                          <div className="text-[10px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1 mb-1">
+                            <Clock className="w-3 h-3" />
+                            Mầm mống {opt.pending_consequence.delay_years} năm tới:
                           </div>
-                          <div className="font-semibold text-xs text-white">
+                          <div className="font-semibold text-white text-[11px]">
                             {opt.pending_consequence.title}
                           </div>
-                          <div className="text-[11px] text-amber-300/80 mt-0.5">
+                          <div className="text-[10px] text-slate-400 mt-0.5">
                             {opt.pending_consequence.description}
                           </div>
                         </div>
                       )}
                     </div>
-
-                    <button
-                      onClick={() => makeDecision(opt.id)}
-                      disabled={actionLoading}
-                      className="w-full py-2.5 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow transition-all disabled:opacity-50"
-                    >
-                      <span>Chọn Phương Án Này</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
                   </div>
-                ))}
-              </div>
+
+                  <button
+                    onClick={() => makeDecision(opt.id)}
+                    disabled={actionLoading}
+                    className="w-full mt-6 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md shadow-indigo-600/20 disabled:opacity-50"
+                  >
+                    <span>Chọn Lối Đi Này</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
             </div>
+          </div>
+        ) : (
+          /* CASE B: FLOW MODE (TIME IS ADVANCING NORMALLY) */
+          <div className="max-w-2xl mx-auto w-full text-center space-y-6 py-6 animate-in fade-in duration-200">
+            <div className="space-y-2">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                <Clock className="w-7 h-7" />
+              </div>
+              <h3 className="text-xl font-bold text-white">
+                Cuộc Đời Đang Trôi Chảy Yên Bình
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed max-w-lg mx-auto">
+                Bạn đang bước qua tuổi <strong className="text-white">{character.age}</strong> ({current_year}). 
+                Thời gian trôi đi theo từng chu kỳ năm, tích lũy thu nhập và vun đắp các nghĩa vụ.
+              </p>
+            </div>
+
+            {/* Quick Action Button */}
+            <div className="flex items-center justify-center gap-3">
+              <button
+                onClick={() => advanceTick(1)}
+                disabled={actionLoading}
+                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg transition-all"
+              >
+                <SkipForward className="w-4 h-4" />
+                <span>Tiến Sang Năm Sau (+1)</span>
+              </button>
+
+              <button
+                onClick={() => setIsAutoPlaying(true)}
+                disabled={actionLoading}
+                className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs flex items-center gap-2 transition-all"
+              >
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>Bật Tự Động Trôi (1s/Năm)</span>
+              </button>
+            </div>
+
+            {/* Recent Event Snippet */}
+            {session.tick_logs && session.tick_logs.length > 0 && (
+              <div className="mt-8 pt-6 border-t border-white/5 text-left max-w-lg mx-auto">
+                <div className="text-xs font-semibold text-slate-400 mb-2">Ghi chú gần nhất:</div>
+                <div className="bg-[#0f1322] border border-white/5 p-3 rounded-xl text-xs space-y-1">
+                  <div className="text-indigo-400 font-bold">Năm {session.tick_logs[0].year} ({session.tick_logs[0].age} tuổi):</div>
+                  {session.tick_logs[0].events.slice(0, 2).map((ev, i) => (
+                    <div key={i} className="text-slate-300 text-[11px] leading-relaxed">{ev}</div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
+      </main>
 
-        {/* 3-Column Dashboard Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Column 1: Fair Financial & Debt Ledger (4 cols) */}
-          <div className="lg:col-span-4 space-y-5">
-            {/* Net Worth & Solvency Card */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-black text-slate-200 text-sm tracking-wide flex items-center gap-2">
-                  <DollarSign className="w-4 h-4 text-emerald-400" />
-                  Sổ Cái Tài Chính Công Bằng
-                </h3>
-                <span className={`text-[11px] px-2.5 py-1 rounded-full font-bold border ${solvencyColorMap[session.solvency]}`}>
-                  {solvencyLabelMap[session.solvency]}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">
-                  <div className="text-[11px] text-slate-400">Tiền Mặt Khả Dụng</div>
-                  <div className="text-base font-black text-emerald-400 font-mono mt-0.5">
-                    ${character.cash?.toLocaleString()}
-                  </div>
-                </div>
-                <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">
-                  <div className="text-[11px] text-slate-400">Tài Sản Ròng (Net Worth)</div>
-                  <div className="text-base font-black text-cyan-400 font-mono mt-0.5">
-                    ${session.net_worth?.toLocaleString()}
-                  </div>
-                </div>
-              </div>
-
-              {/* Active Debts List (Fair Economics: debts never vanish!) */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-slate-300">Nghĩa Vụ Nợ ({debts.filter(d => d.status !== 'SETTLED').length})</span>
-                  <span className="text-[11px] text-slate-500">Không bao giờ tự bốc hơi</span>
-                </div>
-
-                {debts.length === 0 || debts.every(d => d.status === 'SETTLED') ? (
-                  <div className="p-3 rounded-xl bg-slate-950/40 border border-slate-800/60 text-center text-xs text-slate-500">
-                    Không có khoản nợ nào. Bạn đang tự do tài chính.
-                  </div>
-                ) : (
-                  debts.map((debt) => (
-                    debt.status !== 'SETTLED' && (
-                      <div
-                        key={debt.id}
-                        className={`p-3 rounded-xl border text-xs space-y-1.5 ${
-                          debt.status === 'OVERDUE' || debt.status === 'DEFAULTED'
-                            ? 'bg-rose-950/20 border-rose-800/60 text-rose-200'
-                            : 'bg-slate-950/60 border-slate-800 text-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-white">{debt.name}</span>
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                            debt.status === 'OVERDUE'
-                              ? 'bg-rose-600 text-white'
-                              : debt.status === 'DEFAULTED'
-                              ? 'bg-red-700 text-white animate-pulse'
-                              : 'bg-slate-800 text-slate-400'
-                          }`}>
-                            {debt.status}
-                          </span>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-2 text-[11px]">
-                          <div>
-                            Gốc còn lại: <strong className="text-white font-mono">${debt.principal.toLocaleString()}</strong>
-                          </div>
-                          <div>
-                            Đóng hàng năm: <strong className="text-white font-mono">${debt.annual_payment.toLocaleString()}</strong>
-                          </div>
-                        </div>
-
-                        {debt.overdue_amount > 0 && (
-                          <div className="text-[11px] font-bold text-rose-400 flex items-center gap-1">
-                            <AlertTriangle className="w-3 h-3" />
-                            Quá hạn lũy kế: ${debt.overdue_amount.toLocaleString()}
-                          </div>
-                        )}
-
-                        <button
-                          onClick={() => {
-                            setDebtPayModal(debt);
-                            setPayAmount(Math.min(character.cash, debt.overdue_amount || debt.annual_payment));
-                          }}
-                          className="w-full mt-1 py-1 px-2 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-[11px] transition-colors"
-                        >
-                          Trả Bớt Nợ Chủ Động
-                        </button>
-                      </div>
-                    )
-                  ))
-                )}
-              </div>
-
-              {/* Assets list */}
-              <div className="mt-4 pt-4 border-t border-slate-800 space-y-2">
-                <div className="text-xs font-bold text-slate-300">Tài Sản Sở Hữu ({assets.length})</div>
-                {assets.map((asset) => (
-                  <div key={asset.id} className="p-2.5 rounded-xl bg-slate-950/40 border border-slate-800 text-xs flex items-center justify-between">
-                    <div>
-                      <div className="font-semibold text-slate-200">{asset.name}</div>
-                      <div className="text-[10px] text-slate-500 uppercase">{asset.category}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-mono font-bold text-emerald-400">${asset.current_value.toLocaleString()}</div>
-                      {asset.annual_yield && (
-                        <div className="text-[10px] text-cyan-400">Lợi tức: +{(asset.annual_yield * 100).toFixed(0)}%/năm</div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Column 2: Narrative Timeline & Brewing Consequences (4 cols) */}
-          <div className="lg:col-span-4 space-y-5">
-            {/* Brewing Pending Consequences Queue */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-sm">
-              <h3 className="font-black text-slate-200 text-sm tracking-wide flex items-center gap-2 mb-3">
-                <Compass className="w-4 h-4 text-amber-400" />
-                Hậu Quả Chờ Đang Ủ (Pending Queue)
-              </h3>
-
-              {pending_consequences.filter(pc => pc.status === 'PENDING').length === 0 ? (
-                <div className="p-4 rounded-xl bg-slate-950/40 border border-slate-800/60 text-center text-xs text-slate-500">
-                  Không có hạt giống hệ quả nào đang ủ. Hành trình của bạn tạm thời bình yên.
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {pending_consequences
-                    .filter(pc => pc.status === 'PENDING')
-                    .map((pc) => {
-                      const yearsLeft = Math.max(0, pc.due_year - current_year);
-                      return (
-                        <div
-                          key={pc.id}
-                          className="p-3.5 rounded-xl bg-amber-950/20 border border-amber-800/50 text-xs space-y-1.5"
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="font-bold text-amber-300">{pc.title}</span>
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                              Còn {yearsLeft} năm nữa ({pc.due_year})
-                            </span>
-                          </div>
-                          <p className="text-slate-300 text-[11px] leading-relaxed">
-                            {pc.description}
-                          </p>
-                        </div>
-                      );
-                    })}
-                </div>
-              )}
-            </div>
-
-            {/* Life Event Logs Timeline */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-sm">
-              <h3 className="font-black text-slate-200 text-sm tracking-wide flex items-center gap-2 mb-3">
-                <Scroll className="w-4 h-4 text-indigo-400" />
+      {/* 3. Bottom Compact Drawer Tabs (Replaces the 3 Cluttered Columns) */}
+      <footer className="border-t border-white/5 bg-[#0b0e19]/90 backdrop-blur-md px-5 py-4">
+        <div className="max-w-5xl mx-auto space-y-4">
+          {/* Tab Switchers */}
+          <div className="flex items-center justify-between border-b border-white/5 pb-2 text-xs">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setActiveTab('chronicle')}
+                className={`font-semibold pb-1 border-b-2 transition-all ${
+                  activeTab === 'chronicle'
+                    ? 'border-indigo-500 text-white'
+                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
+              >
                 Biên Niên Sử Cuộc Đời
-              </h3>
+              </button>
 
-              <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
-                {(session.tick_logs || []).map((log, index) => (
-                  <div key={index} className="border-l-2 border-indigo-500/40 pl-3 py-1 space-y-1 text-xs">
-                    <div className="font-bold text-indigo-300 flex items-center gap-1.5 text-[11px]">
-                      <span>Năm {log.year}</span>
-                      <span className="text-slate-500">•</span>
-                      <span>{log.age} tuổi</span>
-                    </div>
-                    {log.events.map((ev, evIdx) => (
-                      <p
-                        key={evIdx}
-                        className={`text-[11px] leading-relaxed ${
-                          ev.includes('[HỆ QUẢ')
-                            ? 'text-amber-300 font-semibold'
-                            : ev.includes('[NGÃ RẼ')
-                            ? 'text-cyan-300 font-semibold'
-                            : ev.includes('[DI SẢN')
-                            ? 'text-rose-300 font-bold'
-                            : 'text-slate-400'
-                        }`}
-                      >
-                        {ev}
-                      </p>
-                    ))}
-                  </div>
-                ))}
-              </div>
+              <button
+                onClick={() => setActiveTab('finance')}
+                className={`font-semibold pb-1 border-b-2 transition-all flex items-center gap-1.5 ${
+                  activeTab === 'finance'
+                    ? 'border-indigo-500 text-white'
+                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <span>Tài Sản & Nợ</span>
+                {activeDebts.length > 0 && (
+                  <span className="w-2 h-2 rounded-full bg-rose-500" />
+                )}
+              </button>
+
+              <button
+                onClick={() => setActiveTab('family')}
+                className={`font-semibold pb-1 border-b-2 transition-all ${
+                  activeTab === 'family'
+                    ? 'border-indigo-500 text-white'
+                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Mái Ấm & Thế Hệ 2
+              </button>
             </div>
+
+            {/* Quick Seeds Indicator */}
+            {activeSeeds.length > 0 && (
+              <div className="text-[11px] text-amber-400/90 font-medium flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                <span>{activeSeeds.length} hệ quả tương lai đang ủ</span>
+              </div>
+            )}
           </div>
 
-          {/* Column 3: Family Agency & Dynasty Succession (4 cols) */}
-          <div className="lg:col-span-4 space-y-5">
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-sm">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-black text-slate-200 text-sm tracking-wide flex items-center gap-2">
-                  <Users className="w-4 h-4 text-purple-400" />
-                  Mái Ấm & Đời Con
-                </h3>
-
-                <button
-                  onClick={() => setWillModalOpen(true)}
-                  className="px-2.5 py-1 rounded-lg bg-purple-950/60 hover:bg-purple-900 text-purple-300 border border-purple-800 text-xs font-semibold flex items-center gap-1 transition-colors"
-                >
-                  <Briefcase className="w-3.5 h-3.5" />
-                  <span>Di Chúc</span>
-                </button>
-              </div>
-
-              {/* Spouse Info */}
-              {family.spouse ? (
-                <div className="p-3 rounded-xl bg-slate-950/50 border border-slate-800 text-xs mb-4">
-                  <div className="flex items-center justify-between font-bold text-slate-200">
-                    <span>Bạn Đời: {family.spouse.name}</span>
-                    <span className="text-pink-400 flex items-center gap-1">
-                      <Heart className="w-3 h-3 fill-current" />
-                      {family.spouse.trust}% Niềm tin
+          {/* Tab Content Panel */}
+          <div className="min-h-24 max-h-48 overflow-y-auto text-xs pr-2">
+            {/* TAB 1: CHRONICLE */}
+            {activeTab === 'chronicle' && (
+              <div className="space-y-2">
+                {(session.tick_logs || []).slice(0, 5).map((log, index) => (
+                  <div key={index} className="flex gap-3 text-[11px] text-slate-300">
+                    <span className="font-mono text-indigo-400 font-bold shrink-0">
+                      Năm {log.year} ({log.age}t):
+                    </span>
+                    <span className="text-slate-400">
+                      {log.events.join(' • ')}
                     </span>
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-1">
-                    Trạng thái: <strong className={family.spouse.status === 'ALIVE' ? 'text-emerald-400' : 'text-amber-400'}>
-                      {family.spouse.status === 'ALIVE' ? 'Hạnh phúc gắn kết' : 'Ly thân'}
-                    </strong>
+                ))}
+              </div>
+            )}
+
+            {/* TAB 2: FINANCE & DEBTS */}
+            {activeTab === 'finance' && (
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                  <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
+                    <span className="text-slate-500 text-[10px]">Tiền Mặt:</span>
+                    <div className="font-mono font-bold text-emerald-400">${character.cash?.toLocaleString()}</div>
+                  </div>
+                  <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
+                    <span className="text-slate-500 text-[10px]">Tài Sản Ròng:</span>
+                    <div className="font-mono font-bold text-cyan-400">${session.net_worth?.toLocaleString()}</div>
+                  </div>
+                  <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
+                    <span className="text-slate-500 text-[10px]">Tài Sản Sở Hữu:</span>
+                    <div className="font-semibold text-slate-200">{assets.length} Danh mục</div>
+                  </div>
+                  <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
+                    <span className="text-slate-500 text-[10px]">Nghĩa Vụ Nợ:</span>
+                    <div className={`font-semibold ${activeDebts.length > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                      {activeDebts.length > 0 ? `${activeDebts.length} Khoản vay` : 'Không có nợ'}
+                    </div>
                   </div>
                 </div>
-              ) : (
-                <div className="p-3 rounded-xl bg-slate-950/40 border border-slate-800/60 text-xs text-slate-500 mb-4">
-                  Chưa lập gia đình (Dự kiến mở ra ở độ tuổi 24).
-                </div>
-              )}
 
-              {/* Children List with Agency & Willingness */}
+                {activeDebts.length > 0 && (
+                  <div className="space-y-2">
+                    {activeDebts.map((d) => (
+                      <div key={d.id} className="p-2.5 rounded-xl bg-black/40 border border-rose-500/20 flex items-center justify-between text-xs">
+                        <div>
+                          <span className="font-bold text-white">{d.name}</span>
+                          <span className="text-slate-400 ml-2">Gốc còn lại: ${d.principal.toLocaleString()}</span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setDebtPayModal(d);
+                            setPayAmount(Math.min(character.cash, d.annual_payment));
+                          }}
+                          className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-semibold"
+                        >
+                          Trả Bớt Nợ
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB 3: FAMILY & SUCCESSION */}
+            {activeTab === 'family' && (
               <div className="space-y-3">
-                <div className="text-xs font-bold text-slate-300">
-                  Thế Hệ F1 ({family.children.length} người con)
+                <div className="flex items-center justify-between">
+                  <div className="text-slate-400">
+                    {family.spouse ? (
+                      <span>Bạn đời: <strong className="text-white">{family.spouse.name}</strong> ({family.spouse.trust}% Tin tưởng)</span>
+                    ) : (
+                      <span>Chưa kết hôn (sẽ mở ra khi bước vào tuổi 24)</span>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => setWillModalOpen(true)}
+                    className="px-3 py-1 rounded-lg bg-indigo-950/60 hover:bg-indigo-900 border border-indigo-700 text-indigo-300 text-xs font-semibold"
+                  >
+                    Lập Di Chúc
+                  </button>
                 </div>
 
                 {family.children.length === 0 ? (
-                  <div className="p-3 rounded-xl bg-slate-950/40 border border-slate-800/60 text-xs text-slate-500 text-center">
-                    Chưa có con. Con cái sẽ chào đời khi bạn kết hôn và bước vào độ tuổi lập nghiệp.
-                  </div>
+                  <div className="text-slate-500 italic">Chưa có con cái.</div>
                 ) : (
-                  family.children.map((child) => {
-                    const evalInfo = heirEvals.find(e => e.childId === child.id);
-                    return (
-                      <div
-                        key={child.id}
-                        className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 text-xs space-y-2"
-                      >
-                        <div className="flex items-center justify-between">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {family.children.map((c) => {
+                      const ev = heirEvals.find(e => e.childId === c.id);
+                      return (
+                        <div key={c.id} className="p-2.5 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
                           <div>
-                            <span className="font-bold text-white text-sm">{child.full_name}</span>
-                            <span className="text-slate-400 text-xs ml-1.5">({child.age} tuổi)</span>
+                            <span className="font-bold text-white">{c.full_name}</span>
+                            <span className="text-slate-400 text-[11px] ml-1.5">({c.age} tuổi)</span>
+                            <div className="text-[10px] text-slate-500">Chí hướng: {c.personal_goal}</div>
                           </div>
-                          {child.is_heir && (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                              Người Thừa Kế Đề Cử
+                          {ev && (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300">
+                              Kế thừa: {ev.willingnessScore}%
                             </span>
                           )}
                         </div>
-
-                        <div className="text-[11px] text-slate-400">
-                          Chí hướng cá nhân: <strong className="text-indigo-300">{child.personal_goal}</strong>
-                        </div>
-
-                        {/* Willingness to Inherit Meter */}
-                        {evalInfo && (
-                          <div className="p-2.5 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
-                            <div className="flex items-center justify-between text-[11px]">
-                              <span className="text-slate-400">Mức độ muốn kế thừa:</span>
-                              <span className={`font-bold ${
-                                evalInfo.status === 'ENTHUSIASTIC'
-                                  ? 'text-emerald-400'
-                                  : evalInfo.status === 'CONDITIONAL'
-                                  ? 'text-amber-400'
-                                  : 'text-rose-400'
-                              }`}>
-                                {evalInfo.willingnessScore}% ({evalInfo.status})
-                              </span>
-                            </div>
-
-                            <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                              <div
-                                className={`h-full transition-all ${
-                                  evalInfo.willingnessScore >= 70
-                                    ? 'bg-emerald-500'
-                                    : evalInfo.willingnessScore >= 45
-                                    ? 'bg-amber-500'
-                                    : 'bg-rose-500'
-                                }`}
-                                style={{ width: `${evalInfo.willingnessScore}%` }}
-                              />
-                            </div>
-
-                            {evalInfo.reasons.length > 0 && (
-                              <div className="text-[10px] text-slate-400 mt-1 italic">
-                                {evalInfo.reasons[0]}
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })
+                      );
+                    })}
+                  </div>
                 )}
               </div>
-
-              {/* Transition to Gen 2 Button if ready */}
-              {session.needs_succession && (
-                <div className="mt-4 p-4 rounded-xl bg-rose-950/40 border border-rose-800 text-xs space-y-2 animate-pulse">
-                  <div className="font-bold text-rose-300 flex items-center gap-1.5">
-                    <AlertTriangle className="w-4 h-4" />
-                    Đã Đến Lúc Truyền Thừa (Tuổi {character.age})
-                  </div>
-                  <p className="text-slate-300 text-[11px]">
-                    Sức lực đã cạn kiệt, bạn cần chuyển giao toàn bộ di sản và nợ nần cho thế hệ thứ hai.
-                  </p>
-                  <button
-                    onClick={() => setSuccessionModalOpen(true)}
-                    className="w-full py-2.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-lg transition-all"
-                  >
-                    Kích Hoạt Chuyển Giao Thế Hệ 2
-                  </button>
-                </div>
-              )}
-            </div>
+            )}
           </div>
         </div>
-      </main>
+      </footer>
 
       {/* Pay Debt Modal */}
       {debtPayModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-            <h3 className="text-lg font-bold text-white">Thanh Toán Nợ Chủ Động</h3>
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#0f1322] border border-white/10 rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+            <h3 className="text-base font-bold text-white">Thanh Toán Nợ</h3>
             <p className="text-xs text-slate-400">
-              Khoản vay: <strong>{debtPayModal.name}</strong>. Gốc còn lại: ${debtPayModal.principal.toLocaleString()}. Quá hạn: ${debtPayModal.overdue_amount.toLocaleString()}.
+              Khoản vay: <strong>{debtPayModal.name}</strong>. Gốc còn lại: ${debtPayModal.principal.toLocaleString()}.
             </p>
 
             <div>
@@ -954,7 +805,7 @@ export default function PrototypePage() {
                 onChange={(e) => setPayAmount(Number(e.target.value))}
                 max={character.cash}
                 min={100}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white font-mono text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white font-mono text-sm focus:outline-none focus:border-indigo-500"
               />
               <div className="text-[11px] text-slate-500 mt-1">
                 Tiền mặt hiện có: ${character.cash.toLocaleString()}
@@ -966,76 +817,68 @@ export default function PrototypePage() {
                 onClick={() => setDebtPayModal(null)}
                 className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 text-xs font-semibold hover:bg-slate-700"
               >
-                Hủy Bỏ
+                Hủy
               </button>
               <button
                 onClick={handlePayDebt}
                 className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold"
               >
-                Xác Nhận Trả
+                Xác Nhận
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Will & Testament Modal */}
+      {/* Will Modal */}
       {willModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-purple-400" />
-              Thiết Lập Di Chúc & Truyền Thừa
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#0f1322] border border-white/10 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <Briefcase className="w-4 h-4 text-indigo-400" />
+              Thiết Lập Di Chúc
             </h3>
-            <p className="text-xs text-slate-400">
-              Định đoạt người thừa kế chính và phương thức xử lý tài sản, nợ nần khi bạn qua đời.
-            </p>
 
-            <div className="space-y-3">
+            <div className="space-y-3 text-xs">
               <div>
-                <label className="text-xs font-bold text-slate-300 mb-1 block">Chọn Người Thừa Kế Chính:</label>
+                <label className="text-slate-400 mb-1 block">Người Thừa Kế Chính:</label>
                 <select
                   value={selectedHeirId || (family.children[0]?.id || '')}
                   onChange={(e) => setSelectedHeirId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white text-xs"
+                  className="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs"
                 >
-                  {family.children.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.full_name} ({c.age} tuổi) - Hướng đi: {c.personal_goal}
-                    </option>
-                  ))}
+                  {family.children.length === 0 ? (
+                    <option value="">Chưa có con</option>
+                  ) : (
+                    family.children.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.full_name} ({c.age} tuổi) - {c.personal_goal}
+                      </option>
+                    ))
+                  )}
                 </select>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300 mb-1 block">Chiến Lược Chuyển Giao Cơ Nghiệp:</label>
+                <label className="text-slate-400 mb-1 block">Chiến Lược Chuyển Giao:</label>
                 <div className="space-y-2">
-                  <label className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-950 border border-slate-800 cursor-pointer text-xs">
+                  <label className="flex items-center gap-2 p-2 rounded-lg bg-black/30 border border-white/5 cursor-pointer">
                     <input
                       type="radio"
                       name="compType"
                       checked={compromiseType === 'STANDARD'}
                       onChange={() => setCompromiseType('STANDARD')}
                     />
-                    <span>Tiếp quản toàn diện sản nghiệp & gánh vác nợ nần</span>
+                    <span>Tiếp quản toàn diện sản nghiệp & nợ nần</span>
                   </label>
-                  <label className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-950 border border-slate-800 cursor-pointer text-xs">
+                  <label className="flex items-center gap-2 p-2 rounded-lg bg-black/30 border border-white/5 cursor-pointer">
                     <input
                       type="radio"
                       name="compType"
                       checked={compromiseType === 'SELL_BIZ_SPLIT'}
                       onChange={() => setCompromiseType('SELL_BIZ_SPLIT')}
                     />
-                    <span>Bán sản nghiệp thu tiền mặt, chia đều di sản để con tự do</span>
-                  </label>
-                  <label className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-950 border border-slate-800 cursor-pointer text-xs">
-                    <input
-                      type="radio"
-                      name="compType"
-                      checked={compromiseType === 'AUTONOMY_SUPPORT'}
-                      onChange={() => setCompromiseType('AUTONOMY_SUPPORT')}
-                    />
-                    <span>Trích quỹ tài trợ cho con tự lập con đường riêng</span>
+                    <span>Thanh lý sản nghiệp thu tiền mặt chia con</span>
                   </label>
                 </div>
               </div>
@@ -1044,16 +887,16 @@ export default function PrototypePage() {
             <div className="flex items-center gap-3 justify-end pt-2">
               <button
                 onClick={() => setWillModalOpen(false)}
-                className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 text-xs font-semibold hover:bg-slate-700"
+                className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 text-xs font-semibold"
               >
                 Đóng
               </button>
               <button
                 onClick={() => {
                   setWillModalOpen(false);
-                  alert('Di chúc đã được lập và ghi nhận vào hồ sơ gia tộc!');
+                  alert('Di chúc đã được lưu thành công.');
                 }}
-                className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold"
+                className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold"
               >
                 Lưu Di Chúc
               </button>
@@ -1062,37 +905,35 @@ export default function PrototypePage() {
         </div>
       )}
 
-      {/* Succession Transition Modal (Gen 1 -> Gen 2) */}
+      {/* Succession Modal */}
       {successionModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border-2 border-indigo-500 rounded-2xl max-w-xl w-full p-6 sm:p-8 space-y-6 shadow-2xl">
-            <div className="text-center space-y-2">
-              <div className="w-12 h-12 mx-auto rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400">
+        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#0f1322] border-2 border-indigo-500/80 rounded-2xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl">
+            <div className="text-center space-y-1.5">
+              <div className="w-12 h-12 mx-auto rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
                 <Sparkles className="w-6 h-6" />
               </div>
-              <h2 className="text-2xl font-black text-white">Chuyển Giao Thế Hệ (Đời 1 ➔ Đời 2)</h2>
+              <h2 className="text-2xl font-bold text-white">Chuyển Giao Thế Hệ (Đời 1 ➔ Đời 2)</h2>
               <p className="text-xs text-slate-400">
-                Khép lại một kiếp đời cống hiến. Thế hệ con cái chính thức bước lên tiếp nối di sản.
+                Khép lại một kiếp người cống hiến. Thế hệ con cái chính thức kế thừa di sản.
               </p>
             </div>
 
-            {/* Gen 1 Life Recap */}
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs space-y-2">
+            <div className="bg-black/40 p-4 rounded-xl border border-white/5 text-xs space-y-2">
               <div className="font-bold text-indigo-300 uppercase tracking-wide text-[11px]">
-                Tổng Kết Kiếp Sống Đời 1: {character.name}
+                Tổng Kết Đời 1: {character.name}
               </div>
               <div className="grid grid-cols-2 gap-2 text-slate-300">
-                <div>Độ tuổi viên tịch: <strong>{character.age} tuổi</strong></div>
-                <div>Tài sản tích lũy: <strong>${session.net_worth?.toLocaleString()}</strong></div>
+                <div>Tuổi thọ: <strong>{character.age} tuổi</strong></div>
+                <div>Tài sản ròng: <strong>${session.net_worth?.toLocaleString()}</strong></div>
                 <div>Tiền mặt để lại: <strong>${character.cash?.toLocaleString()}</strong></div>
-                <div>Gia đình: <strong>{family.children.length} người con</strong></div>
+                <div>Đời con: <strong>{family.children.length} người</strong></div>
               </div>
             </div>
 
-            {/* Choose Heir for Next Generation */}
             <div>
               <label className="text-xs font-bold text-slate-300 mb-1.5 block">
-                Chọn người con để bạn nhập vai tiếp nối (Thế hệ 2):
+                Chọn người con để tiếp tục nhập vai:
               </label>
               <div className="space-y-2">
                 {family.children.map((child) => (
@@ -1102,16 +943,14 @@ export default function PrototypePage() {
                     className={`p-3 rounded-xl border cursor-pointer transition-all text-xs flex items-center justify-between ${
                       (selectedHeirId === child.id || (!selectedHeirId && child.id === family.children[0]?.id))
                         ? 'bg-indigo-950/60 border-indigo-500 text-white shadow'
-                        : 'bg-slate-950/40 border-slate-800 text-slate-400 hover:border-slate-700'
+                        : 'bg-black/30 border-white/5 text-slate-400 hover:border-white/20'
                     }`}
                   >
                     <div>
                       <div className="font-bold text-sm">{child.full_name} ({child.age} tuổi)</div>
                       <div className="text-[11px] text-slate-400">Chí hướng: {child.personal_goal}</div>
                     </div>
-                    <div className="text-right">
-                      <div className="font-semibold text-indigo-300">Nhập vai từ tuổi {child.age}</div>
-                    </div>
+                    <div className="font-semibold text-indigo-300">Bắt đầu từ tuổi {child.age}</div>
                   </div>
                 ))}
               </div>
@@ -1119,9 +958,9 @@ export default function PrototypePage() {
 
             <button
               onClick={handleExecuteSuccession}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black text-sm tracking-wide shadow-xl transition-all"
+              className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-xl transition-all"
             >
-              Bước Vào Thế Hệ 2 & Tiếp Nối Di Sản
+              Bước Vào Thế Hệ 2
             </button>
           </div>
         </div>
