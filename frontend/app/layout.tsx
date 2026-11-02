@@ -34,11 +34,23 @@ export default function RootLayout({
                     var origFetch = window.fetch;
                     window.fetch = function(input, init) {
                       var headers = new Headers((init && init.headers) || {});
+                      var token = localStorage.getItem('lifegraph_session_token');
+                      if (token && !headers.has('x-session-token')) {
+                        headers.set('x-session-token', token);
+                      }
                       if (!headers.has('x-session-id')) {
                         headers.set('x-session-id', sid);
                       }
                       var nextInit = Object.assign({}, init, { headers: headers });
-                      return origFetch.call(this, input, nextInit);
+                      return origFetch.call(this, input, nextInit).then(function(res) {
+                        try {
+                          var newToken = res.headers.get('x-session-token');
+                          if (newToken) {
+                            localStorage.setItem('lifegraph_session_token', newToken);
+                          }
+                        } catch (e) {}
+                        return res;
+                      });
                     };
                   }
                 } catch (e) {}

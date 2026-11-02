@@ -297,20 +297,36 @@ export async function addTotalKarma(deltaKarma) {
   return updatePlayerAccount({ total_karma: newKarma });
 }
 
-export async function buyKarmaPerk(perkId, cost) {
-  const account = await getPlayerAccount();
-  if (account.total_karma < cost) {
-    return { success: false, message: "Không đủ điểm Karma để mở khóa đặc quyền." };
+export const AUTHORITATIVE_PERK_COSTS = {
+  longevity_root: 80,
+  lock_t1_t2: 150,
+  guarantee_middle_class: 250,
+  golden_cradle: 250,
+  choose_trait: 400
+};
+
+export async function buyKarmaPerk(perkId, clientCost = null) {
+  const authoritativeCost = AUTHORITATIVE_PERK_COSTS[perkId];
+  if (!authoritativeCost) {
+    return { success: false, message: "Đặc quyền không tồn tại trong danh mục bảo mật của hệ thống." };
   }
-  const perks = Array.isArray(account.unlocked_perks) ? account.unlocked_perks : [];
+
+  const account = await getPlayerAccount();
+  if ((account.total_karma || 0) < authoritativeCost) {
+    return { success: false, message: `Không đủ điểm Karma! Cần ${authoritativeCost} KP (Hiện có ${account.total_karma || 0} KP).` };
+  }
+
+  const perks = Array.isArray(account.unlocked_perks) ? [...account.unlocked_perks] : [];
   if (!perks.includes(perkId)) {
     perks.push(perkId);
   }
+
+  const updatedKarma = Math.max(0, (account.total_karma || 0) - authoritativeCost);
   await updatePlayerAccount({
-    total_karma: account.total_karma - cost,
+    total_karma: updatedKarma,
     unlocked_perks: perks
   });
-  return { success: true, total_karma: account.total_karma - cost, unlocked_perks: perks };
+  return { success: true, total_karma: updatedKarma, unlocked_perks: perks };
 }
 
 export async function getAncestralLineage() {

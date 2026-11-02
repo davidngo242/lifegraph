@@ -35,6 +35,12 @@ import { getRealWorldSyncData } from '../services/realWorldSyncService.js';
 import { getMmoMacroState, recordPlayerAction } from '../services/mmoMacroService.js';
 import { generateCulturallyAuthenticName, extractFamilySurname, getCountryBigData } from '../data/countryBigData.js';
 import {
+  signSessionToken,
+  getSecurityAuditLogs,
+  sanitizeString,
+  logSecurityIncident
+} from '../security/securityEngine.js';
+import {
   SKILL_DEFINITIONS,
   getExamMinigameType,
   checkGeneticAffinity,
@@ -52,6 +58,7 @@ router.get('/diagnostic', async (req, res) => {
     res.json({
       status: 'online',
       version: 'v6.0-ultimate-narrative',
+      security_shield: 'active-hmac-sha256',
       timestamp: new Date().toISOString(),
       connections: {
         database: process.env.DATABASE_URL ? 'PostgreSQL (Connected)' : 'In-Memory Simulation DB (Ready)',
@@ -67,6 +74,27 @@ router.get('/diagnostic', async (req, res) => {
   } catch (err) {
     res.status(500).json({ status: 'error', message: err.message });
   }
+});
+
+// POST /api/game/auth/handshake - Cấp phát Token có chữ ký Mật mã (Anti-Tampering)
+router.post('/auth/handshake', (req, res) => {
+  const clientProvidedId = req.body?.client_id || req.headers['x-session-id'] || 'user_' + Date.now();
+  const sanitizedId = String(clientProvidedId).replace(/[^a-zA-Z0-9_\-]/g, '').slice(0, 64);
+  const token = signSessionToken(sanitizedId);
+  res.json({
+    success: true,
+    session_id: sanitizedId,
+    session_token: token,
+    issued_at: new Date().toISOString()
+  });
+});
+
+// GET /api/game/security/audit - Kiểm tra nhật ký an ninh và phát hiện xâm nhập
+router.get('/security/audit', (req, res) => {
+  res.json({
+    success: true,
+    audit_logs: getSecurityAuditLogs()
+  });
 });
 
 // GET /api/game/account - Layer 1 Meta Progression
@@ -430,6 +458,13 @@ router.post('/rebirth', async (req, res) => {
     
     // If client already fast-forwarded and sent the complete new character, sync and return
     if (directChar && directChar.id) {
+      // Server-Authoritative Anti-Cheat: Khóa chặt giới hạn chỉ số, chống giả mạo gói tin
+      directChar.vitality = Math.max(0, Math.min(100, Number(directChar.vitality) || 100));
+      directChar.max_vitality = Math.max(50, Math.min(100, Number(directChar.max_vitality) || 100));
+      directChar.action_points = Math.max(0, Math.min(6, Number(directChar.action_points) || 3));
+      directChar.burnout = Math.max(0, Math.min(100, Number(directChar.burnout) || 0));
+      directChar.cash = Math.max(0, Math.min(5000000, Number(directChar.cash) || 0)); // Chống bơm tiền ảo lúc tái sinh
+
       await updateCharacter(directChar.id, directChar);
       const assets = await getAssets(directChar.id);
       const relationships = await getRelationships(directChar.id);
@@ -1026,14 +1061,16 @@ router.post('/action/buy-asset', async (req, res) => {
       });
     }
 
-    const actualType = asset_type || type || 'stocks';
-    const actualCostAp = Number(ap_cost || cost_ap || 1);
-    const actualMaintenance = Number(maintenance_cost ?? maintenance ?? 0);
-    const actualCashFlow = Number(annual_cash_flow || cash_flow || 0);
+    const actualType = sanitizeString(asset_type || type || 'stocks', 50);
+    const safeName = sanitizeString(name || 'Tài sản', 100);
+    const actualCostAp = Math.max(1, Math.min(4, Math.floor(Number(ap_cost || cost_ap || 1))));
+    const rawCost = Math.max(0, Number(cost) || 0);
+    const actualMaintenance = Math.max(0, Number(maintenance_cost ?? maintenance ?? 0));
+    const actualCashFlow = Math.max(0, Number(annual_cash_flow || cash_flow || 0));
 
     const financeLevel = character.skills?.finance_market?.level || 0;
     const discountRate = financeLevel === 1 ? 0.10 : financeLevel === 2 ? 0.20 : financeLevel >= 3 ? 0.25 : 0;
-    const finalCost = Math.round(cost * (1 - discountRate));
+    const finalCost = Math.round(rawCost * (1 - discountRate));
 
     if ((character.action_points || 0) < actualCostAp) {
       return res.status(400).json({ error: "Không đủ Điểm Hành Động (AP)!" });
@@ -1048,8 +1085,8 @@ router.post('/action/buy-asset', async (req, res) => {
     const newAsset = await addAsset({
       character_id: character.id,
       type: actualType,
-      name,
-      current_value: cost, // Keeps intrinsic asset value!
+      name: safeName,
+      current_value: rawCost, // Keeps intrinsic asset value!
       liquidity_status: actualType === 'stock' || actualType === 'stocks' || actualType === 'gold' ? 'liquid' : 'illiquid',
       maintenance_cost_per_tick: actualMaintenance,
       maintenance_cost: actualMaintenance,
@@ -1338,29 +1375,32 @@ router.get('/macro/mmo-state', async (req, res) => {
 router.post('/action/sell-asset', async (req, res) => {
   try {
     const { asset_id, cost_ap = 1 } = req.body;
+    const safeAssetId = sanitizeString(asset_id, 64);
+    const validCostAp = Math.max(1, Math.min(4, Math.floor(Number(cost_ap || 1))));
+
     let character = await getLatestCharacter();
     let assets = await getAssets(character.id);
 
-    if ((character.action_points || 0) < cost_ap) {
+    if ((character.action_points || 0) < validCostAp) {
       return res.status(400).json({ error: "Không đủ Điểm Hành Động (AP)!" });
     }
 
-    const targetAsset = assets.find(a => a.id === asset_id);
+    const targetAsset = assets.find(a => a.id === safeAssetId);
     if (!targetAsset) {
       return res.status(404).json({ error: "Không tìm thấy tài sản trong danh mục!" });
     }
 
-    const saleAmount = Number(targetAsset.current_value) || 0;
-    character.action_points -= cost_ap;
+    const saleAmount = Math.max(0, Number(targetAsset.current_value) || 0);
+    character.action_points -= validCostAp;
     character.cash = (Number(character.cash) || 0) + saleAmount;
 
-    await deleteAsset(asset_id);
+    await deleteAsset(safeAssetId);
 
     const history = character.history_log || [];
     history.push({
       age: character.age,
       event: `Thanh lý tài sản: ${targetAsset.name}`,
-      choice: `Thu về $${saleAmount.toLocaleString()} tiền mặt (Tốn ${cost_ap} AP)`
+      choice: `Thu về $${saleAmount.toLocaleString()} tiền mặt (Tốn ${validCostAp} AP)`
     });
     character.history_log = history;
 
