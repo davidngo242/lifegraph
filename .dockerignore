@@ -1,0 +1,7 @@
+node_modules
+.git
+.next
+frontend
+tools
+*.bat
+*.log
