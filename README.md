@@ -1,4 +1,4 @@
-# 🧠 LifeGraph — AI-Driven Life Simulation RPG
+# 🧠 LifeGraph — Driven Life Simulation RPG
 
 > Game sinh tồn quản lý rủi ro và nguồn lực đa mô-đun với AI Game Master theo thời gian thực.
 
