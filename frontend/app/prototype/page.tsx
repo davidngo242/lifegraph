@@ -658,7 +658,7 @@ export default function PrototypeTarotPage() {
                   transform: `translateX(${cardTranslateX}px) rotate(${cardRotation}deg)`,
                   transition: isDragging ? 'none' : 'transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
                 }}
-                className={`relative w-full h-full rounded-3xl p-6 flex flex-col justify-between cursor-grab active:cursor-grabbing shadow-2xl border-2 transition-colors ${
+                className={`relative w-full h-full rounded-3xl p-6 flex flex-col justify-between cursor-grab active:cursor-grabbing shadow-2xl border-2 transition-colors touch-none select-none ${
                   swipeDirection === 'left'
                     ? 'border-cyan-500/90 shadow-cyan-500/20 bg-gradient-to-br from-[#0e1628] to-[#0a0d18]'
                     : swipeDirection === 'right'
@@ -712,34 +712,32 @@ export default function PrototypeTarotPage() {
             </div>
 
             {/* Direct Tap Buttons for Mobile / Desktop Precision */}
-            <div className="grid grid-cols-2 gap-3 w-full max-w-sm pt-1">
-              {leftOption && (
-                <button
-                  onClick={() => handlePickOption(leftOption.id, 'left')}
-                  disabled={actionLoading}
-                  className="py-2.5 px-3 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/80 active:bg-cyan-800 border border-cyan-700/60 text-cyan-200 text-xs font-bold flex flex-col items-center gap-0.5 shadow transition-all group"
-                >
-                  <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-cyan-400">
-                    <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-                    <span>Lối Đi 1</span>
-                  </div>
-                  <span className="truncate max-w-[130px]">{leftOption.label}</span>
-                </button>
-              )}
+            <div className={`grid gap-2.5 w-full max-w-sm pt-1 ${activeNode.options.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}>
+              {activeNode.options.map((opt, idx) => {
+                const isFirst = idx === 0;
+                const isSecond = idx === 1;
+                const colorClasses = isFirst
+                  ? 'bg-cyan-950/60 hover:bg-cyan-900/80 active:bg-cyan-800 border-cyan-700/60 text-cyan-200'
+                  : isSecond
+                  ? 'bg-emerald-950/60 hover:bg-emerald-900/80 active:bg-emerald-800 border-emerald-700/60 text-emerald-200'
+                  : 'bg-indigo-950/60 hover:bg-indigo-900/80 active:bg-indigo-800 border-indigo-700/60 text-indigo-200';
 
-              {rightOption && (
-                <button
-                  onClick={() => handlePickOption(rightOption.id, 'right')}
-                  disabled={actionLoading}
-                  className="py-2.5 px-3 rounded-xl bg-emerald-950/60 hover:bg-emerald-900/80 active:bg-emerald-800 border border-emerald-700/60 text-emerald-200 text-xs font-bold flex flex-col items-center gap-0.5 shadow transition-all group"
-                >
-                  <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-emerald-400">
-                    <span>Lối Đi 2</span>
-                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                  <span className="truncate max-w-[130px]">{rightOption.label}</span>
-                </button>
-              )}
+                return (
+                  <button
+                    key={opt.id}
+                    onClick={() => handlePickOption(opt.id, isFirst ? 'left' : 'right')}
+                    disabled={actionLoading}
+                    className={`py-2 px-2 rounded-xl border text-xs font-bold flex flex-col items-center gap-0.5 shadow transition-all group ${colorClasses}`}
+                  >
+                    <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider opacity-80">
+                      {isFirst && <ArrowLeft className="w-2.5 h-2.5 group-hover:-translate-x-0.5 transition-transform" />}
+                      <span>{isFirst ? 'Lối Đi 1' : isSecond ? 'Lối Đi 2' : 'Lối Đi 3'}</span>
+                      {isSecond && <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />}
+                    </div>
+                    <span className="truncate w-full text-center text-[11px]">{opt.label}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         ) : (
