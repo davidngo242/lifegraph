@@ -264,7 +264,8 @@ router.get('/state', async (req, res) => {
       dilemma: currentDilemma,
       net_worth: netWorth,
       can_transhuman: canTranshuman,
-      aspiration
+      aspiration,
+      scenario: getCurrentScenarioForCharacter(character)
     });
   } catch (err) {
     console.error('Error fetching game state:', err);

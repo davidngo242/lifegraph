@@ -1183,7 +1183,7 @@ export default function LifeGraphPage() {
       )}
 
       {/* Slim Top Navigation */}
-      <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-40 gap-3 max-w-full overflow-x-auto scrollbar-none">
+      <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-40 gap-3 max-w-full overflow-visible z-50">
         {/* 1. Left Zone: Brand Logo & View Switcher Tabs (Đẩy sát sang trái) */}
         <div className="flex items-center gap-3 sm:gap-4 shrink-0">
           <div className="flex items-center gap-2.5">
@@ -1197,45 +1197,57 @@ export default function LifeGraphPage() {
 
           {/* View Switcher Pills */}
           <div className="flex items-center gap-1 bg-slate-950/90 p-1 rounded-2xl border border-slate-800">
-            <button
-              onClick={() => setActiveView('home')}
-              className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
-                activeView === 'home'
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-              title="Đại Sảnh Vận Mệnh & Toàn Bộ Gia Phả Các Kiếp"
+            <Tooltip
+              position="bottom"
+              content="Đại sảnh vận mệnh & gia phả các kiếp sống tiền nhân"
             >
-              <Home className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Trang Chủ Gia Phả</span>
-            </button>
-
-            {character && !character.is_deceased ? (
               <button
-                onClick={() => setActiveView('game')}
-                className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
-                  activeView === 'game'
-                    ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
-                title="Vào Cockpit kiếp sống đang diễn ra"
-              >
-                <Play className="w-3.5 h-3.5 fill-current" />
-                <span className="hidden md:inline">Kiếp Đang Sống</span>
-              </button>
-            ) : (
-              <button
-                onClick={() => setShowRebirthModal(true)}
+                onClick={() => setActiveView('home')}
                 className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                   activeView === 'home'
-                    ? 'text-slate-400 hover:text-purple-300 hover:bg-slate-800/60'
-                    : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-600/30 hover:opacity-90'
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                    : 'text-slate-400 hover:text-slate-200'
                 }`}
-                title="Gieo quẻ nhân phẩm khởi sinh kiếp mới"
               >
-                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span className="hidden md:inline">Gieo Quẻ Tái Sinh</span>
+                <Home className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">Trang Chủ Gia Phả</span>
               </button>
+            </Tooltip>
+
+            {character && !character.is_deceased ? (
+              <Tooltip
+                position="bottom"
+                content="Bảng điều khiển cockpit kiếp sống hiện tại"
+              >
+                <button
+                  onClick={() => setActiveView('game')}
+                  className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
+                    activeView === 'game'
+                      ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <Play className="w-3.5 h-3.5 fill-current" />
+                  <span className="hidden md:inline">Kiếp Đang Sống</span>
+                </button>
+              </Tooltip>
+            ) : (
+              <Tooltip
+                position="bottom"
+                content="Gieo quẻ nhân phẩm khởi sinh kiếp sống mới"
+              >
+                <button
+                  onClick={() => setShowRebirthModal(true)}
+                  className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
+                    activeView === 'home'
+                      ? 'text-slate-400 hover:text-purple-300 hover:bg-slate-800/60'
+                      : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-600/30 hover:opacity-90'
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span className="hidden md:inline">Gieo Quẻ Tái Sinh</span>
+                </button>
+              </Tooltip>
             )}
           </div>
         </div>
@@ -1559,6 +1571,41 @@ export default function LifeGraphPage() {
                     hiddenFlags={character.hidden_flags || []}
                     isLoading={loading}
                   />
+                )}
+
+                {/* Active Scenario Cross-Cutting Quest Card (Xuyên suốt kịch bản trong Cockpit) */}
+                {character?.age >= 18 && (
+                  <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/60 via-slate-900 to-indigo-950/60 border border-purple-500/40 shadow-xl space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs">📖</span>
+                        <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">
+                          Kịch Bản Trọng Tâm: Chương 1 · Giữ Nghề Hay Đổi Đời?
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => setGameMode('2d_scene')}
+                        className="px-2.5 py-1 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 text-[11px] font-bold flex items-center gap-1 transition"
+                      >
+                        <span>Mở Cảnh 2D</span>
+                        <Play className="w-3 h-3 fill-current" />
+                      </button>
+                    </div>
+
+                    <p className="text-xs text-slate-300 font-serif leading-relaxed">
+                      Minh rủ bạn lập công ty AI với 35% cổ phần. Trong khi đó, sếp Hùng đề xuất thăng chức Tech Lead (+30% lương), còn Mai mong muốn sự an toàn tài chính.
+                    </p>
+
+                    <div className="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-400">
+                      <span>Nhân vật liên quan: Mai, Minh, Anh Hùng</span>
+                      <button
+                        onClick={() => setGameMode('2d_scene')}
+                        className="text-purple-300 hover:text-white font-medium underline underline-offset-2"
+                      >
+                        Khám phá manh mối & đối diện ngã rẽ →
+                      </button>
+                    </div>
+                  </div>
                 )}
 
                 {/* Decision Dilemma Interaction Area (Tiêu điểm duy nhất khi có Trilemma) */}

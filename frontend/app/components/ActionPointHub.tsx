@@ -231,18 +231,16 @@ export default function ActionPointHub({
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-bold text-white tracking-wide uppercase font-sans">
-                Trạm Hành Động
+                Hoạt Động
               </span>
               <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-slate-800 text-amber-300 border border-slate-700">
                 {characterAge <= 5
-                  ? "Giai Đoạn Ấu Thơ"
-                  : characterAge <= 12
-                  ? "Tuổi Nhi Đồng"
+                  ? "0–5 tuổi · Ấu thơ"
                   : characterAge <= 17
-                  ? "Tuổi Thiếu Niên"
+                  ? "6–17 tuổi · Trưởng thành"
                   : characterAge >= 60
-                  ? "Giai Đoạn Dưỡng Lão"
-                  : "Tuổi Trưởng Thành"}
+                  ? "60+ tuổi · Di sản"
+                  : "18+ tuổi · Lập nghiệp"}
               </span>
             </div>
             <Tooltip content={<div className="text-[10px]">Điểm AP chưa dùng khi hết năm sẽ tự động chuyển hóa thành dưỡng sinh nhẹ (+hồi phục thể lực, giảm bớt căng thẳng).</div>}>
@@ -425,7 +423,7 @@ export default function ActionPointHub({
                     className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white font-bold text-xs flex items-center gap-2 transition active:scale-95 shadow-md shadow-indigo-950"
                   >
                     <FastForward className="w-4 h-4 text-amber-300" />
-                    <span>Trải Qua Tuổi Thơ ➔ Bước Vào Lớp 1 (6 Tuổi)</span>
+                    <span>Chuyển đến năm 6 tuổi (Tiểu học)</span>
                   </button>
                 )}
 
@@ -435,7 +433,7 @@ export default function ActionPointHub({
                     disabled={isLoading}
                     className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-xs border border-slate-700/80 transition active:scale-95"
                   >
-                    <span>Khôn Lớn (+1 Tuổi)</span>
+                    <span>Sang năm tiếp theo (+1 tuổi)</span>
                   </button>
                 )}
               </div>

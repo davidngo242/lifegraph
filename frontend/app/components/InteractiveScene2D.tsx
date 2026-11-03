@@ -82,34 +82,34 @@ interface InteractiveScene2DProps {
 
 const KNOWLEDGE_LABELS: { [key: string]: { label: string; icon: string; desc: string } } = {
   mai_financial_caution: {
-    label: "Mai lo lắng an toàn tài chính",
+    label: "Mai cần an toàn tài chính",
     icon: "❤️",
-    desc: "Mai mong muốn gia đình có quỹ dự phòng an toàn, tránh rơi vào nợ nần."
+    desc: "Mai mong muốn gia đình có quỹ dự phòng an toàn trước khi mạo hiểm."
   },
   personal_runway_verified: {
-    label: "Quỹ dự phòng cá nhân 120M (6 tháng)",
+    label: "Quỹ dự phòng 120M (6 tháng)",
     icon: "💰",
-    desc: "Tài khoản tiết kiệm cá nhân đủ chi trả sinh hoạt 6-8 tháng nếu không có lương."
+    desc: "Tiết kiệm cá nhân đủ chi trả sinh hoạt 6–8 tháng nếu không có lương."
   },
   corporate_promotion_offer: {
     label: "Đề xuất Tech Lead (+30% lương)",
     icon: "💼",
-    desc: "Sếp Hùng đề xuất thăng chức Tech Lead kèm thưởng cổ phiếu ESOP tại tập đoàn."
+    desc: "Sếp Hùng đề xuất thăng chức Tech Lead kèm thưởng cổ phiếu ESOP."
   },
   corporate_stability_and_limits: {
-    label: "Giới hạn sáng tạo tại tập đoàn",
+    label: "Quy trình tập đoàn chậm",
     icon: "🏢",
-    desc: "Môi trường tập đoàn rất ổn định nhưng quy trình rườm rà, ít đất diễn đột phá."
+    desc: "Môi trường ổn định nhưng khó bứt phá công nghệ mới."
   },
   minh_equity_offer: {
-    label: "Đề xuất 35% cổ phần CTO từ Minh",
+    label: "35% cổ phần CTO từ Minh",
     icon: "🤝",
-    desc: "Minh đề nghị chia 35% cổ phần sáng lập nếu bạn đảm nhận vị trí Giám đốc Kỹ thuật."
+    desc: "Minh đề nghị chia 35% cổ phần sáng lập nếu bạn làm Giám đốc Kỹ thuật."
   },
   market_real_demand_confirmed: {
-    label: "Hợp đồng 150M sẵn sàng ký kết",
+    label: "Hợp đồng 150M sẵn sàng ký",
     icon: "📈",
-    desc: "Khách hàng Logistics sẵn sàng ký hợp đồng 150 triệu nếu có cam kết SLA bảo mật."
+    desc: "Khách hàng Logistics sẵn sàng ký hợp đồng 150 triệu nếu có cam kết bảo mật."
   }
 };
 
@@ -519,8 +519,8 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
 
       {/* 5. Mind Stage Overlay Modal */}
       {showMindStage && (
-        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in">
-          <div className="max-w-3xl w-full bg-slate-950 border border-purple-500/40 rounded-3xl p-6 md:p-8 shadow-2xl relative max-h-[95vh] overflow-y-auto custom-scrollbar flex flex-col gap-6">
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 animate-in fade-in">
+          <div className="max-w-3xl w-full bg-slate-900/95 border border-purple-500/40 rounded-3xl p-5 sm:p-6 shadow-2xl relative max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col gap-4">
             <button
               onClick={() => {
                 setShowMindStage(false);
@@ -539,65 +539,65 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                   Sân Khấu Tâm Trí · Ngã Rẽ Định Mệnh
                 </span>
               </div>
-              <h2 className="text-2xl font-bold text-white font-serif">{scenario.title}</h2>
-              <p className="text-xs text-slate-400 mt-1">{scenario.mind_stage?.whispers?.dilemma_prompt}</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-white font-serif">{scenario.title}</h2>
+              <p className="text-xs text-slate-300 mt-1 font-serif">{scenario.mind_stage?.whispers?.dilemma_prompt}</p>
             </div>
 
             {/* 3 Internal Ego Whispers */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div className="p-3.5 rounded-2xl bg-blue-950/40 border border-blue-500/30 text-xs">
-                <div className="font-bold text-blue-300 mb-1 flex items-center gap-1.5">
-                  <Brain className="w-3.5 h-3.5" />
+              <div className="p-3 rounded-2xl bg-blue-950/40 border border-blue-500/30 text-xs space-y-1">
+                <div className="font-bold text-blue-300 flex items-center gap-1.5">
+                  <Brain className="w-3.5 h-3.5 text-blue-400" />
                   <span>Lý Trí</span>
                 </div>
-                <p className="text-slate-300 leading-relaxed font-serif">
-                  {scenario.mind_stage?.whispers?.rational}
+                <p className="text-slate-300 leading-relaxed font-serif text-[11.5px]">
+                  {(scenario.mind_stage?.whispers?.rational || '').replace(/^[^:]{1,25}:\s*['"]?/, '').replace(/['"]$/, '')}
                 </p>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-rose-950/40 border border-rose-500/30 text-xs">
-                <div className="font-bold text-rose-300 mb-1 flex items-center gap-1.5">
-                  <Heart className="w-3.5 h-3.5" />
+              <div className="p-3 rounded-2xl bg-rose-950/40 border border-rose-500/30 text-xs space-y-1">
+                <div className="font-bold text-rose-300 flex items-center gap-1.5">
+                  <Heart className="w-3.5 h-3.5 text-rose-400" />
                   <span>Trái Tim</span>
                 </div>
-                <p className="text-slate-300 leading-relaxed font-serif">
-                  {scenario.mind_stage?.whispers?.empathy}
+                <p className="text-slate-300 leading-relaxed font-serif text-[11.5px]">
+                  {(scenario.mind_stage?.whispers?.empathy || '').replace(/^[^:]{1,25}:\s*['"]?/, '').replace(/['"]$/, '')}
                 </p>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-xs">
-                <div className="font-bold text-amber-300 mb-1 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" />
+              <div className="p-3 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-xs space-y-1">
+                <div className="font-bold text-amber-300 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                   <span>Bản Năng</span>
                 </div>
-                <p className="text-slate-300 leading-relaxed font-serif">
-                  {scenario.mind_stage?.whispers?.instinct}
+                <p className="text-slate-300 leading-relaxed font-serif text-[11.5px]">
+                  {(scenario.mind_stage?.whispers?.instinct || '').replace(/^[^:]{1,25}:\s*['"]?/, '').replace(/['"]$/, '')}
                 </p>
               </div>
             </div>
 
             {/* Roll Result Display (If resolved) */}
             {rollResult ? (
-              <div className="p-6 rounded-2xl bg-slate-900 border-2 border-emerald-500/60 shadow-xl space-y-4 animate-in zoom-in-95">
+              <div className="p-5 rounded-2xl bg-slate-900 border-2 border-emerald-500/60 shadow-xl space-y-3 animate-in zoom-in-95">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                   <div>
                     <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">
                       Kết Quả Định Mệnh ({rollResult.outcome_key?.toUpperCase()})
                     </span>
-                    <h3 className="text-lg font-bold text-white mt-1">{rollResult.choice_title}</h3>
+                    <h3 className="text-base font-bold text-white mt-1">{rollResult.choice_title}</h3>
                   </div>
 
                   {rollResult.roll && (
                     <div className="text-right">
-                      <div className="text-xs text-slate-400">Xúc xắc D20 (Server)</div>
-                      <div className="text-xl font-bold font-mono text-emerald-400">
+                      <div className="text-[11px] text-slate-400">Xúc xắc D20</div>
+                      <div className="text-lg font-bold font-mono text-emerald-400">
                         {rollResult.roll.d20_base} + {rollResult.roll.trait_bonus + rollResult.roll.stat_bonus + rollResult.roll.ap_bonus} = {rollResult.roll.total_score} (vs DC {rollResult.roll.target_dc})
                       </div>
                     </div>
                   )}
                 </div>
 
-                <p className="text-sm text-slate-200 font-serif leading-relaxed italic bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                <p className="text-xs text-slate-200 font-serif leading-relaxed italic bg-slate-950/60 p-3 rounded-xl border border-slate-800">
                   "{rollResult.narration}"
                 </p>
 
@@ -607,7 +607,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                       setShowMindStage(false);
                       setRollResult(null);
                     }}
-                    className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition"
+                    className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition"
                   >
                     Tiếp Tục Hành Trình
                   </button>
@@ -615,15 +615,16 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
               </div>
             ) : (
               /* Choices List */
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                   Chọn Phương Án Đối Diện Ngã Rẽ:
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   {scenario.choices.map(choice => {
                     const missingKnowledge = (choice.knowledge_requirements || []).filter(k => !knowledgeBase.includes(k));
                     const isLocked = missingKnowledge.length > 0;
+                    const cleanChoiceTitle = choice.title.replace(/^\[[^\]]+\]\s*/, '').trim();
 
                     return (
                       <div
@@ -631,7 +632,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                         onClick={() => {
                           if (!isLocked) setSelectedChoiceId(choice.id);
                         }}
-                        className={`p-4 rounded-2xl border transition-all ${
+                        className={`p-3.5 rounded-2xl border transition-all ${
                           isLocked
                             ? 'bg-slate-900/40 border-slate-800/80 opacity-60 cursor-not-allowed'
                             : selectedChoiceId === choice.id
@@ -642,14 +643,14 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                         <div className="flex items-start justify-between gap-3">
                           <div className="space-y-1">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-bold text-sm text-white">{choice.title}</span>
+                              <span className="font-bold text-sm text-white">{cleanChoiceTitle}</span>
                               {isLocked ? (
                                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800/50 flex items-center gap-1">
-                                  <Lock className="w-3 h-3" /> Chưa đủ thông tin
+                                  <Lock className="w-3 h-3" /> Chưa đủ manh mối
                                 </span>
                               ) : (
                                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800/50 font-semibold">
-                                  Lập trường: {choice.stance}
+                                  {choice.stance}
                                 </span>
                               )}
                             </div>
@@ -668,7 +669,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                         {isLocked && (
                           <div className="mt-2 text-[11px] text-rose-400/90 flex items-center gap-1.5">
                             <AlertCircle className="w-3 h-3 shrink-0" />
-                            <span>Cần khám phá thêm: {missingKnowledge.map(k => KNOWLEDGE_LABELS[k]?.label || k).join(', ')}</span>
+                            <span>Cần thêm: {missingKnowledge.map(k => KNOWLEDGE_LABELS[k]?.label || k).join(', ')}</span>
                           </div>
                         )}
 
