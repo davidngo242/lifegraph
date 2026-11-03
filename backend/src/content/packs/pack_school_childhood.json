@@ -1,0 +1,213 @@
+{
+  "pack_id": "pack_school_childhood",
+  "name": "Tuyến Tuổi Thơ: Ngã Rẽ Học Trò (6 - 17 Tuổi)",
+  "version": "1.0.0",
+  "description": "Trải nghiệm những năm tháng học trò trên ghế nhà trường: Thi cử, bạn bè, thầy cô và vòng tay gia đình.",
+  "scenarios": [
+    {
+      "id": "scenario_school_first_decade",
+      "arc_id": "arc_school_childhood",
+      "stage": 1,
+      "title": "Ngã Rẽ Học Trò: Lớp Học & Bước Đầu Khôn Lớn",
+      "description": "Bước vào trường lớp, bạn đứng trước những bài kiểm tra đầu đời, tình bạn lớp học và sự kỳ vọng của cha mẹ.",
+      "location_id": "primary_school_hanoi",
+      "roles": {
+        "teacher": "Cô giáo chủ nhiệm (Dìu dắt bài vở)",
+        "classmate": "Bạn cùng bàn (Chia sẻ đồ chơi & bài tập)",
+        "parent": "Cha mẹ (Chăm sóc & động viên)"
+      },
+      "prerequisites": {
+        "min_age": 6,
+        "max_age": 17,
+        "required_flags": [],
+        "excluded_flags": [
+          "school_decade_resolved"
+        ]
+      },
+      "scenes": [
+        {
+          "id": "scene_school_classroom",
+          "name": "Lớp học & Sân trường",
+          "background_theme": "classroom_bright",
+          "hotspots": [
+            {
+              "id": "hs_desk_study",
+              "label": "Bàn học & Cặp sách",
+              "icon": "book",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Bàn học chăm ngoan",
+                "text": "Sách vở được sắp xếp ngăn nắp. Ôn tập kỹ các bài toán và chính tả giúp bạn tự tin trước kỳ thi kiểm tra chất lượng.",
+                "granted_knowledge": "knowledge_school_curriculum",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "hs_classmate_friend",
+              "label": "Bạn cùng bàn",
+              "icon": "heart",
+              "position_x": 480,
+              "npc_role": "classmate",
+              "dialogue": {
+                "speaker": "Bạn cùng bàn",
+                "text": "Cậu có muốn cùng tớ giải câu đố vui này không? Cùng học cùng chơi bao giờ cũng vui hơn một mình!",
+                "granted_knowledge": "peer_trust_friendship",
+                "affinity_delta": 10,
+                "trust_delta": 10,
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "hs_teacher",
+              "label": "Cô giáo chủ nhiệm",
+              "icon": "award",
+              "position_x": 750,
+              "npc_role": "teacher",
+              "dialogue": {
+                "speaker": "Cô giáo chủ nhiệm",
+                "text": "Kiến thức như mầm non cần được tưới tắm mỗi ngày. Sự trung thực và kiên trì mới là điểm số quý giá nhất.",
+                "granted_knowledge": "teacher_academic_guidance",
+                "affinity_delta": 5,
+                "trust_delta": 15,
+                "cost_ap": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "scene_home_living",
+          "name": "Góc học tập tại gia đình",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "hs_parent_support",
+              "label": "Bàn trà cùng cha mẹ",
+              "icon": "coffee",
+              "position_x": 400,
+              "npc_role": "parent",
+              "dialogue": {
+                "speaker": "Cha Mẹ",
+                "text": "Con cứ cố gắng hết sức là ba mẹ tự hào rồi. Nhớ giữ gìn sức khỏe, đừng thức quá khuya con nhé.",
+                "granted_knowledge": "family_encouragement",
+                "affinity_delta": 15,
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Trước kỳ thi học kỳ và các hoạt động của trường, bạn sẽ định hướng bản thân tập trung vào điều gì?",
+          "rational": "Chăm chỉ rèn luyện kỷ luật và kiến thức nền tảng sẽ tạo bệ phóng vững chắc nhất cho tương lai.",
+          "empathy": "Tình bạn trong sáng và sự hiếu thảo với cha mẹ là hành trang tinh thần vô giá không con số nào đo được.",
+          "instinct": "Hãy tự tin thể hiện năng khiếu riêng và khám phá thế giới xung quanh bằng sự tò mò trong trẻo."
+        }
+      },
+      "choices": [
+        {
+          "id": "CHOICE_ACADEMIC_EXCELLENCE",
+          "title": "Tập Trung Học Tập Xuất Sắc & Thi Học Sinh Giỏi",
+          "stance": "LÝ TRÍ",
+          "description": "Dành thời gian ôn luyện chuyên sâu, hướng tới thành tích xuất sắc trong kỳ thi của trường.",
+          "knowledge_requirements": [
+            "knowledge_school_curriculum"
+          ],
+          "cost_ap": 1,
+          "check": {
+            "type": "STUDY",
+            "stat": "IQ",
+            "target_dc": 10,
+            "bonus_traits": [
+              "Thông minh thiên bẩm",
+              "Ham học hỏi"
+            ]
+          },
+          "outcomes": {
+            "critical_success": {
+              "narration": "Bạn xuất sắc đạt giải cao trong kỳ thi học sinh giỏi! Thầy cô khen ngợi, cha mẹ hãnh diện.",
+              "stat_deltas": {
+                "karma": 10,
+                "cash": 500
+              },
+              "commitments": [
+                "Danh hiệu học sinh ưu tú"
+              ]
+            },
+            "success": {
+              "narration": "Bạn hoàn thành kỳ thi với kết quả giỏi, tiếp thu vững vàng kiến thức nền tảng.",
+              "stat_deltas": {
+                "karma": 5
+              },
+              "commitments": [
+                "Nền tảng học thuật vững chắc"
+              ]
+            },
+            "failure": {
+              "narration": "Đề thi có một vài câu hóc búa, nhưng bạn đã nỗ lực hết sức và rút ra nhiều kinh nghiệm.",
+              "stat_deltas": {
+                "burnout": 5
+              }
+            }
+          }
+        },
+        {
+          "id": "CHOICE_PEER_BONDING",
+          "title": "Gắn Kết Bạn Bè & Xây Dựng Tình Bạn Đẹp",
+          "stance": "TRÁI TIM",
+          "description": "Tích cực giúp đỡ bạn bè cùng tiến bộ, tham gia hoạt động đội nhóm vui tươi.",
+          "knowledge_requirements": [
+            "peer_trust_friendship"
+          ],
+          "cost_ap": 1,
+          "check": {
+            "type": "SOCIAL",
+            "stat": "EQ",
+            "target_dc": 9,
+            "bonus_traits": [
+              "Hòa đồng",
+              "Ấm áp"
+            ]
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Bạn trở thành người bạn thân thiết được cả lớp yêu mến, cùng nhau lưu giữ kỷ niệm tuổi thơ tuyệt đẹp.",
+              "stat_deltas": {
+                "karma": 8
+              },
+              "commitments": [
+                "Tình bạn tri kỷ trường lớp"
+              ]
+            },
+            "failure": {
+              "narration": "Đôi lúc giữa bạn bè có chút hiểu lầm trẻ con, nhưng mọi người nhanh chóng làm hòa.",
+              "stat_deltas": {
+                "karma": 2
+              }
+            }
+          }
+        },
+        {
+          "id": "CHOICE_CREATIVE_PLAY",
+          "title": "Tự Do Khám Phá Năng Khiếu Sáng Tạo & Thể Thao",
+          "stance": "BẢN NĂNG",
+          "description": "Rèn luyện thể chất trên sân trường, vẽ tranh hoặc theo đuổi sở thích riêng sau giờ học.",
+          "knowledge_requirements": [],
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Một tuổi thơ tràn ngập tiếng cười và sức khỏe dồi dào, tâm hồn luôn rạng rỡ và tràn đầy sinh khí.",
+              "stat_deltas": {
+                "vitality": 10,
+                "burnout": -10
+              },
+              "commitments": [
+                "Tâm hồn tự do phóng khoáng"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

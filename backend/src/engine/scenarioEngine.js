@@ -54,15 +54,54 @@ export function getScenarioById(scenarioId) {
 export function getCurrentScenarioForCharacter(character) {
   if (scenarioIndex.size === 0) loadAllContentPacks();
 
-  // Check if character already has an active scenario
+  const characterAge = Number(character?.age ?? 25);
+
+  // 1. Check if character already has an explicitly pinned active scenario matching their age
   const activeId = character?.hidden_flags?.find(f => typeof f === 'string' && f.startsWith('active_scenario:'))?.split(':')[1];
   if (activeId && scenarioIndex.has(activeId)) {
-    return scenarioIndex.get(activeId);
+    const sc = scenarioIndex.get(activeId);
+    const minAge = sc.prerequisites?.min_age ?? 0;
+    const maxAge = sc.prerequisites?.max_age ?? 120;
+    if (characterAge >= minAge && characterAge <= maxAge) {
+      return personalizeScenario(sc, character);
+    }
   }
 
-  // Default to Chapter 1 "Giữ nghề hay đổi đời"
-  const defaultScenario = scenarioIndex.get('scenario_career_crossroads_28');
-  return defaultScenario || Array.from(scenarioIndex.values())[0] || null;
+  // 2. Dynamic age matching: find scenario matching current age phase
+  const matchingScenarios = Array.from(scenarioIndex.values()).filter(sc => {
+    const minAge = sc.prerequisites?.min_age ?? 0;
+    const maxAge = sc.prerequisites?.max_age ?? 120;
+    return characterAge >= minAge && characterAge <= maxAge;
+  });
+
+  if (matchingScenarios.length > 0) {
+    return personalizeScenario(matchingScenarios[0], character);
+  }
+
+  // Fallback to default Chapter 1
+  const defaultScenario = scenarioIndex.get('scenario_career_crossroads_28') || Array.from(scenarioIndex.values())[0] || null;
+  return defaultScenario ? personalizeScenario(defaultScenario, character) : null;
+}
+
+// Personalize names and dynamic references
+function personalizeScenario(scenario, character) {
+  if (!character || !scenario) return scenario;
+  const charName = character.name || "Nhân vật";
+
+  // Deep clone to avoid mutating pack master template
+  const cloned = JSON.parse(JSON.stringify(scenario));
+
+  // Dynamically replace generic names like 'An' with actual character name
+  cloned.scenes.forEach(scene => {
+    if (scene.name) scene.name = scene.name.replace(/\bAn\b/g, charName);
+    scene.hotspots.forEach(h => {
+      if (h.dialogue?.speaker && (h.dialogue.speaker === 'An' || h.dialogue.speaker.startsWith('An '))) {
+        h.dialogue.speaker = h.dialogue.speaker.replace(/\bAn\b/g, charName);
+      }
+    });
+  });
+
+  return cloned;
 }
 
 export function interactWithHotspot(character, sceneId, hotspotId, npcs = []) {

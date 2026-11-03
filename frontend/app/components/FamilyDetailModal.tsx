@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Heart, Users, Baby, Gift, Sparkles, X, AlertCircle } from 'lucide-react';
+import { Heart, Users, Baby, Gift, Sparkles, X, AlertCircle, Lock } from 'lucide-react';
 
 interface Relationship {
   id: string;
@@ -111,8 +111,8 @@ export default function FamilyDetailModal({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
           {/* Action 1: Báo hiếu */}
           <button
-            disabled={loadingAction !== null || actionPoints < 1 || cash < 1000}
-            onClick={() => executeAction('gift_parent', 1, 1000)}
+            disabled={loadingAction !== null || actionPoints < 1 || cash < 2000}
+            onClick={() => executeAction('gift_parent', 1, 2000)}
             className="p-3 rounded-2xl bg-slate-950 border border-slate-800 hover:border-pink-500/40 text-left transition active:scale-95 disabled:opacity-40"
           >
             <div className="flex items-center justify-between mb-1">
@@ -120,54 +120,90 @@ export default function FamilyDetailModal({
               <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
             </div>
             <div className="text-xs font-bold text-white">Báo Hiếu Cha Mẹ</div>
-            <div className="text-[10px] text-slate-400 mt-0.5">Chi $1.000 (Karma +10)</div>
+            <div className="text-[10px] text-slate-400 mt-0.5">Chi $2.000 (Karma +20)</div>
           </button>
 
-          {/* Action 2: Hẹn hò */}
+          {/* Action 2: Hẹn hò (Yêu cầu >= 16 tuổi) */}
           {!spouse && (
             <button
-              disabled={loadingAction !== null || actionPoints < 1 || cash < 500}
-              onClick={() => executeAction('date', 1, 500)}
-              className="p-3 rounded-2xl bg-slate-950 border border-slate-800 hover:border-pink-500/40 text-left transition active:scale-95 disabled:opacity-40"
+              disabled={loadingAction !== null || actionPoints < 1 || cash < 1500 || (characterAge ?? 18) < 16}
+              onClick={() => executeAction('date', 1, 1500)}
+              className={`p-3 rounded-2xl bg-slate-950 border text-left transition active:scale-95 ${
+                (characterAge ?? 18) < 16
+                  ? 'border-slate-800 opacity-50 cursor-not-allowed'
+                  : 'border-slate-800 hover:border-pink-500/40 disabled:opacity-40'
+              }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <Heart className="w-4 h-4 text-rose-400" />
+                {(characterAge ?? 18) < 16 ? (
+                  <Lock className="w-4 h-4 text-slate-500" />
+                ) : (
+                  <Heart className="w-4 h-4 text-rose-400" />
+                )}
                 <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
               </div>
               <div className="text-xs font-bold text-white">Hẹn Hò Gặp Gỡ</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Chi $500 (Tìm bạn đời)</div>
+              <div className="text-[10px] text-slate-400 mt-0.5">
+                {(characterAge ?? 18) < 16
+                  ? `Khóa: Cần 16+ tuổi (Hiện tại: ${characterAge} tuổi)`
+                  : 'Chi $1.500 (Tìm bạn đời)'}
+              </div>
             </button>
           )}
 
-          {/* Action 3: Kết hôn */}
+          {/* Action 3: Kết hôn (Yêu cầu >= 18 tuổi) */}
           {partner && !spouse && (
             <button
-              disabled={loadingAction !== null || actionPoints < 2 || cash < 5000}
-              onClick={() => executeAction('marry', 2, 5000)}
-              className="p-3 rounded-2xl bg-slate-950 border border-slate-800 hover:border-pink-500/40 text-left transition active:scale-95 disabled:opacity-40"
+              disabled={loadingAction !== null || actionPoints < 2 || cash < 10000 || (characterAge ?? 18) < 18}
+              onClick={() => executeAction('marry', 2, 10000)}
+              className={`p-3 rounded-2xl bg-slate-950 border text-left transition active:scale-95 ${
+                (characterAge ?? 18) < 18
+                  ? 'border-slate-800 opacity-50 cursor-not-allowed'
+                  : 'border-slate-800 hover:border-pink-500/40 disabled:opacity-40'
+              }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <Sparkles className="w-4 h-4 text-amber-400" />
+                {(characterAge ?? 18) < 18 ? (
+                  <Lock className="w-4 h-4 text-slate-500" />
+                ) : (
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                )}
                 <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">2 AP</span>
               </div>
               <div className="text-xs font-bold text-white">Tổ Chức Hôn Lễ</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Chi $5.000 (Thành hôn)</div>
+              <div className="text-[10px] text-slate-400 mt-0.5">
+                {(characterAge ?? 18) < 18
+                  ? `Khóa: Cần 18+ tuổi (Hiện tại: ${characterAge} tuổi)`
+                  : 'Chi $10.000 (Thành hôn)'}
+              </div>
             </button>
           )}
 
-          {/* Action 4: Sinh con */}
+          {/* Action 4: Sinh con (Yêu cầu >= 18 tuổi) */}
           {spouse && (
             <button
-              disabled={loadingAction !== null || actionPoints < 2 || cash < 3000 || characterAge > 55}
-              onClick={() => executeAction('have_child', 2, 3000)}
-              className="p-3 rounded-2xl bg-slate-950 border border-slate-800 hover:border-pink-500/40 text-left transition active:scale-95 disabled:opacity-40"
+              disabled={loadingAction !== null || actionPoints < 2 || cash < 8000 || (characterAge ?? 18) < 18 || (characterAge ?? 18) > 55}
+              onClick={() => executeAction('have_child', 2, 8000)}
+              className={`p-3 rounded-2xl bg-slate-950 border text-left transition active:scale-95 ${
+                (characterAge ?? 18) < 18
+                  ? 'border-slate-800 opacity-50 cursor-not-allowed'
+                  : 'border-slate-800 hover:border-pink-500/40 disabled:opacity-40'
+              }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <Baby className="w-4 h-4 text-cyan-400" />
+                {(characterAge ?? 18) < 18 ? (
+                  <Lock className="w-4 h-4 text-slate-500" />
+                ) : (
+                  <Baby className="w-4 h-4 text-cyan-400" />
+                )}
                 <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">2 AP</span>
               </div>
               <div className="text-xs font-bold text-white">Sinh Con Kế Thừa</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Chi $3.000 (Dòng dõi)</div>
+              <div className="text-[10px] text-slate-400 mt-0.5">
+                {(characterAge ?? 18) < 18
+                  ? `Khóa: Cần 18+ tuổi (Hiện tại: ${characterAge} tuổi)`
+                  : 'Chi $8.000 (Dòng dõi)'}
+              </div>
             </button>
           )}
 

@@ -1,0 +1,113 @@
+{
+  "pack_id": "pack_infancy_first_steps",
+  "name": "Tuyến Sơ Sinh: Vòng Tay Ấu Thơ (0 - 5 Tuổi)",
+  "version": "1.0.0",
+  "description": "Giai đoạn ấu thơ trong vòng tay chở che của phụ mẫu: Tập đi, bi bô tập nói và nhận thức thế giới.",
+  "scenarios": [
+    {
+      "id": "scenario_infancy_first_steps",
+      "arc_id": "arc_infancy",
+      "stage": 1,
+      "title": "Vòng Tay Gia Đình: Những Bước Đi Đầu Đời (0 - 5 Tuổi)",
+      "description": "Những năm tháng ấu thơ ấm áp bên cha mẹ, tập đi những bước đầu tiên và làm quen với ngôi nhà thân thương.",
+      "location_id": "home_nursery",
+      "roles": {
+        "parent": "Cha Mẹ (Che chở & yêu thương)"
+      },
+      "prerequisites": {
+        "min_age": 0,
+        "max_age": 5,
+        "required_flags": [],
+        "excluded_flags": [
+          "infancy_resolved"
+        ]
+      },
+      "scenes": [
+        {
+          "id": "scene_nursery",
+          "name": "Căn phòng ấu thơ",
+          "background_theme": "nursery_soft",
+          "hotspots": [
+            {
+              "id": "hs_crib_toys",
+              "label": "Đồ chơi phát triển trí tuệ",
+              "icon": "star",
+              "position_x": 250,
+              "dialogue": {
+                "speaker": "Góc đồ chơi",
+                "text": "Những khối hình màu sắc giúp bạn nhận diện không gian và kích thích trí tò mò từ thuở lọt lòng.",
+                "granted_knowledge": "infant_curiosity",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "hs_parents_cradle",
+              "label": "Vòng tay phụ mẫu",
+              "icon": "heart",
+              "position_x": 550,
+              "npc_role": "parent",
+              "dialogue": {
+                "speaker": "Cha Mẹ",
+                "text": "Ngoan nào con yêu. Ba mẹ sẽ luôn là điểm tựa bình yên nhất che chở cho con khôn lớn.",
+                "granted_knowledge": "parental_unconditional_love",
+                "affinity_delta": 20,
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Trước những bước chập chững đầu đời, cơ thể bé bỏng của bạn muốn hướng về điều gì?",
+          "rational": "Khám phá các khối đồ chơi và lắng nghe ngôn ngữ của người lớn để phát triển trí tuệ sớm.",
+          "empathy": "Cảm nhận trọn vẹn tình yêu thương ấm áp từ ánh mắt và bàn tay vỗ về của cha mẹ.",
+          "instinct": "Dũng cảm buông tay vịn để bước đi những bước đầu tiên trên đôi chân của chính mình."
+        }
+      },
+      "choices": [
+        {
+          "id": "CHOICE_FIRST_STEPS",
+          "title": "Dũng Cảm Bước Đi Những Bước Đầu Tiên",
+          "stance": "BẢN NĂNG",
+          "description": "Chập chững bước về phía vòng tay của cha mẹ trong tiếng vỗ tay khích lệ.",
+          "knowledge_requirements": [],
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn đã tự mình bước được 5 bước vững vàng! Cha mẹ rơi nước mắt vì hạnh phúc.",
+              "stat_deltas": {
+                "vitality": 5,
+                "karma": 5
+              },
+              "commitments": [
+                "Vững bước đầu đời"
+              ]
+            }
+          }
+        },
+        {
+          "id": "CHOICE_EARLY_LANGUAGE",
+          "title": "Bi Bô Tập Nói & Lắng Nghe Lời Ru",
+          "stance": "TRÁI TIM",
+          "description": "Gọi tiếng 'Ba', 'Mẹ' đầu tiên và hòa mình vào tình yêu thương gia đình.",
+          "knowledge_requirements": [
+            "parental_unconditional_love"
+          ],
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Tiếng gọi đầu đời vang lên trong trẻo, gắn kết sợi dây tình thân ruột thịt thiêng liêng.",
+              "stat_deltas": {
+                "karma": 10
+              },
+              "commitments": [
+                "Tình thân gia đình bền chặt"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

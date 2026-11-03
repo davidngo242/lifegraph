@@ -1579,6 +1579,11 @@ router.post('/action/family', async (req, res) => {
     const history = character.history_log || [];
 
     if (action_type === 'date') {
+      if ((Number(character.age) || 0) < 16) {
+        return res.status(400).json({
+          error: `Chưa đủ tuổi hẹn hò (${character.age} tuổi)! Tình yêu đôi lứa chỉ mở khóa từ năm 16 tuổi.`
+        });
+      }
       const costAP = 1;
       const costCash = 1500;
       if (character.action_points < costAP || character.cash < costCash) {
@@ -1596,7 +1601,7 @@ router.post('/action/family', async (req, res) => {
       } else {
         const partnerGender = character.gender === 'female' ? 'male' : 'female';
         const name = generateCulturallyAuthenticName(character.nationality, 'partner', partnerGender);
-        const partnerAge = Math.max(18, (character.age || 18) + (Math.floor(Math.random() * 5) - 2));
+        const partnerAge = Math.max(16, (character.age || 18) + (Math.floor(Math.random() * 3) - 1));
         partner = await addRelationship({
           character_id: character.id,
           type: 'partner',
@@ -1626,6 +1631,11 @@ router.post('/action/family', async (req, res) => {
     }
 
     if (action_type === 'marry') {
+      if ((Number(character.age) || 0) < 18) {
+        return res.status(400).json({
+          error: `Chưa đủ 18 tuổi (${character.age} tuổi)! Pháp luật quy định độ tuổi kết hôn hợp pháp là từ đủ 18 tuổi trở lên.`
+        });
+      }
       const costAP = 2;
       const costCash = 10000;
       if (character.action_points < costAP || character.cash < costCash) {
@@ -1674,6 +1684,11 @@ router.post('/action/family', async (req, res) => {
     }
 
     if (action_type === 'have_child') {
+      if ((Number(character.age) || 0) < 18) {
+        return res.status(400).json({
+          error: `Chưa đủ 18 tuổi (${character.age} tuổi)! Bạn chưa đủ tuổi trưởng thành để sinh con lập gia đình.`
+        });
+      }
       const costAP = 2;
       const costCash = 8000;
       if (character.action_points < costAP || character.cash < costCash) {
