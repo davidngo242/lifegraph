@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
 import {
@@ -23,6 +23,15 @@ const Dynamic3DAvatar = dynamic(() => import('./Dynamic3DAvatar'), {
   )
 });
 
+export interface BannerActionFeedback {
+  type: 'work' | 'study' | 'wellness' | 'infant' | 'gamble' | 'network' | 'milestone' | 'focus';
+  title: string;
+  subtitle?: string;
+  delta?: string;
+  icon?: string;
+  timestamp: number;
+}
+
 interface CharacterHeroBannerProps {
   character: any;
   visuals?: any;
@@ -31,6 +40,7 @@ interface CharacterHeroBannerProps {
   reaction?: AvatarReactionType;
   isFastForwarding?: boolean;
   onOpen3DInspector: () => void;
+  actionFeedback?: BannerActionFeedback | null;
 }
 
 export default function CharacterHeroBanner({
@@ -40,7 +50,8 @@ export default function CharacterHeroBanner({
   netWorth,
   reaction = 'idle',
   isFastForwarding = false,
-  onOpen3DInspector
+  onOpen3DInspector,
+  actionFeedback = null
 }: CharacterHeroBannerProps) {
   if (!character) return null;
 
@@ -48,6 +59,19 @@ export default function CharacterHeroBanner({
   const vitality = character.vitality ?? 80;
   const burnout = character.burnout ?? 0;
   const nationality = character.nationality || "Việt Nam";
+
+  // Dynamic Action Feedback Realtime Overlay
+  const [activeFeedback, setActiveFeedback] = useState<BannerActionFeedback | null>(null);
+
+  useEffect(() => {
+    if (actionFeedback && actionFeedback.timestamp) {
+      setActiveFeedback(actionFeedback);
+      const timer = setTimeout(() => {
+        setActiveFeedback(null);
+      }, 3800);
+      return () => clearTimeout(timer);
+    }
+  }, [actionFeedback?.timestamp]);
 
   // Social Status Badge
   const getSocialStatus = () => {
@@ -128,6 +152,78 @@ export default function CharacterHeroBanner({
   };
   const env = getBannerEnvironment();
 
+  // Dynamic Realtime Action Feedback Atmosphere
+  const getFeedbackAtmosphere = () => {
+    if (!activeFeedback) return null;
+    switch (activeFeedback.type) {
+      case 'work':
+        return {
+          glowGradient: 'from-amber-500/35 via-yellow-600/20 to-transparent',
+          borderRing: 'ring-2 ring-amber-400 shadow-[0_0_35px_rgba(245,158,11,0.5)]',
+          badgeBg: 'bg-amber-950/90 border-amber-500/60 text-amber-200 shadow-amber-900/40',
+          badgeIconBg: 'bg-amber-500/20 text-amber-400 border-amber-500/40',
+          badgeDelta: 'bg-amber-500/25 text-amber-300 border-amber-500/40',
+          particlePulse: 'bg-amber-300',
+        };
+      case 'study':
+        return {
+          glowGradient: 'from-cyan-500/35 via-blue-600/20 to-transparent',
+          borderRing: 'ring-2 ring-cyan-400 shadow-[0_0_35px_rgba(6,182,212,0.5)]',
+          badgeBg: 'bg-cyan-950/90 border-cyan-500/60 text-cyan-200 shadow-cyan-900/40',
+          badgeIconBg: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/40',
+          badgeDelta: 'bg-cyan-500/25 text-cyan-300 border-cyan-500/40',
+          particlePulse: 'bg-cyan-300',
+        };
+      case 'wellness':
+        return {
+          glowGradient: 'from-emerald-500/35 via-teal-600/20 to-transparent',
+          borderRing: 'ring-2 ring-emerald-400 shadow-[0_0_35px_rgba(16,185,129,0.5)]',
+          badgeBg: 'bg-emerald-950/90 border-emerald-500/60 text-emerald-200 shadow-emerald-900/40',
+          badgeIconBg: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40',
+          badgeDelta: 'bg-emerald-500/25 text-emerald-300 border-emerald-500/40',
+          particlePulse: 'bg-emerald-300',
+        };
+      case 'infant':
+        return {
+          glowGradient: 'from-pink-500/30 via-amber-400/20 to-transparent',
+          borderRing: 'ring-2 ring-pink-400 shadow-[0_0_35px_rgba(244,114,182,0.5)]',
+          badgeBg: 'bg-pink-950/90 border-pink-400/60 text-pink-200 shadow-pink-900/40',
+          badgeIconBg: 'bg-pink-500/20 text-pink-300 border-pink-400/40',
+          badgeDelta: 'bg-pink-500/25 text-pink-300 border-pink-500/40',
+          particlePulse: 'bg-pink-300',
+        };
+      case 'gamble':
+        return {
+          glowGradient: 'from-fuchsia-600/35 via-purple-600/20 to-transparent',
+          borderRing: 'ring-2 ring-fuchsia-400 shadow-[0_0_35px_rgba(217,70,239,0.5)]',
+          badgeBg: 'bg-fuchsia-950/90 border-fuchsia-500/60 text-fuchsia-200 shadow-fuchsia-900/40',
+          badgeIconBg: 'bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/40',
+          badgeDelta: 'bg-fuchsia-500/25 text-fuchsia-300 border-fuchsia-500/40',
+          particlePulse: 'bg-fuchsia-300',
+        };
+      case 'network':
+        return {
+          glowGradient: 'from-orange-500/35 via-rose-600/20 to-transparent',
+          borderRing: 'ring-2 ring-orange-400 shadow-[0_0_35px_rgba(249,115,22,0.5)]',
+          badgeBg: 'bg-orange-950/90 border-orange-500/60 text-orange-200 shadow-orange-900/40',
+          badgeIconBg: 'bg-orange-500/20 text-orange-400 border-orange-500/40',
+          badgeDelta: 'bg-orange-500/25 text-orange-300 border-orange-500/40',
+          particlePulse: 'bg-orange-300',
+        };
+      case 'milestone':
+      default:
+        return {
+          glowGradient: 'from-yellow-400/40 via-amber-500/25 to-transparent',
+          borderRing: 'ring-2 ring-yellow-400 shadow-[0_0_40px_rgba(250,204,21,0.6)]',
+          badgeBg: 'bg-amber-950/90 border-yellow-400/70 text-yellow-100 shadow-amber-900/40',
+          badgeIconBg: 'bg-yellow-500/25 text-yellow-300 border-yellow-400/40',
+          badgeDelta: 'bg-yellow-500/30 text-yellow-200 border-yellow-400/50',
+          particlePulse: 'bg-yellow-300',
+        };
+    }
+  };
+  const feedbackAtmo = getFeedbackAtmosphere();
+
   // Life Stage Definition
   const getLifeStageBadge = () => {
     if (age < 6) return { icon: "🌱", stage: "Thời Kỳ Ấu Thơ", desc: "0-5 Tuổi: Giai đoạn định hình thể chất & gắn kết phụ mẫu" };
@@ -145,7 +241,9 @@ export default function CharacterHeroBanner({
   const isInfant = age <= 5;
 
   const avatarContainerClasses = `w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 shrink-0 relative shadow-2xl group transition-all duration-500 ${
-    isSevereBurnout
+    feedbackAtmo
+      ? `${feedbackAtmo.borderRing} animate-pulse scale-[1.02]`
+      : isSevereBurnout
       ? 'border-rose-500 ring-2 ring-rose-500/80 ring-offset-2 ring-offset-slate-950 shadow-[0_0_24px_rgba(244,63,94,0.6)] animate-pulse'
       : isCriticalVitality
       ? 'border-rose-400/80 bg-slate-950 animate-[pulse_3s_ease-in-out_infinite] shadow-[0_0_18px_rgba(244,63,94,0.35)]'
@@ -157,10 +255,15 @@ export default function CharacterHeroBanner({
   }`;
 
   return (
-    <div className={`w-full rounded-3xl bg-slate-950/95 border ${env.borderColor} shadow-2xl backdrop-blur-2xl mb-4 relative overflow-hidden transition-all duration-700`}>
+    <div className={`w-full rounded-3xl bg-slate-950/95 border ${feedbackAtmo ? 'border-indigo-400/70 shadow-[0_0_35px_rgba(99,102,241,0.3)]' : env.borderColor} shadow-2xl backdrop-blur-2xl mb-4 relative overflow-hidden transition-all duration-700`}>
       
       {/* 1. CINEMATIC LIVING ATMOSPHERE BACKDROP */}
       <div className={`absolute inset-0 bg-gradient-to-r ${env.bgGradient} pointer-events-none transition-all duration-1000`} />
+      
+      {/* REAL-TIME DYNAMIC ACTION FEEDBACK ATMOSPHERE OVERLAY (0ms latency visual wave) */}
+      {feedbackAtmo && (
+        <div className={`absolute inset-0 bg-gradient-to-r ${feedbackAtmo.glowGradient} pointer-events-none transition-all duration-500 animate-pulse z-[2]`} />
+      )}
       
       {/* Drifting Atmospheric Clouds & Mist */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 select-none animate-banner-drift">
@@ -356,16 +459,43 @@ export default function CharacterHeroBanner({
           </div>
         </div>
 
-        {/* Right: Giai Đoạn Vận Mệnh */}
-        <Tooltip content={<div className="text-[10px] max-w-xs">{lifeStage.desc}</div>}>
-          <div className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 rounded-2xl bg-slate-900/70 hover:bg-slate-900/90 border border-indigo-500/30 backdrop-blur-md cursor-help transition shrink-0">
-            <span className="text-base">{lifeStage.icon}</span>
-            <div className="flex flex-col text-right">
-              <span className="text-[9px] uppercase tracking-wider text-indigo-400 font-mono font-semibold">Giai Đoạn</span>
-              <span className="text-xs font-bold text-white">{lifeStage.stage}</span>
+        {/* Right: Dynamic Action Result Feedback / Giai Đoạn Vận Mệnh */}
+        <div className="flex items-center gap-3 shrink-0">
+          {activeFeedback ? (
+            <div className={`flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border backdrop-blur-xl shadow-xl transition-all duration-300 animate-in fade-in zoom-in-95 slide-in-from-right-3 ${feedbackAtmo?.badgeBg}`}>
+              <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-lg border shrink-0 ${feedbackAtmo?.badgeIconBg}`}>
+                {activeFeedback.icon || '✨'}
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-xs font-bold text-white tracking-tight">
+                    {activeFeedback.title}
+                  </span>
+                  {activeFeedback.delta && (
+                    <span className={`text-[9.5px] font-mono font-bold px-1.5 py-0.2 rounded-md border ${feedbackAtmo?.badgeDelta}`}>
+                      {activeFeedback.delta}
+                    </span>
+                  )}
+                </div>
+                {activeFeedback.subtitle && (
+                  <span className="text-[9.5px] text-slate-300 max-w-[220px] truncate">
+                    {activeFeedback.subtitle}
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
-        </Tooltip>
+          ) : (
+            <Tooltip content={<div className="text-[10px] max-w-xs">{lifeStage.desc}</div>}>
+              <div className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 rounded-2xl bg-slate-900/70 hover:bg-slate-900/90 border border-indigo-500/30 backdrop-blur-md cursor-help transition shrink-0">
+                <span className="text-base">{lifeStage.icon}</span>
+                <div className="flex flex-col text-right">
+                  <span className="text-[9px] uppercase tracking-wider text-indigo-400 font-mono font-semibold">Giai Đoạn</span>
+                  <span className="text-xs font-bold text-white">{lifeStage.stage}</span>
+                </div>
+              </div>
+            </Tooltip>
+          )}
+        </div>
 
       </div>
     </div>

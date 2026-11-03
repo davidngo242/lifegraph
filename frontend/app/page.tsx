@@ -21,7 +21,7 @@ import AudioVolumeControl from './components/AudioVolumeControl';
 import KarmaSanctumModal from './components/KarmaSanctumModal';
 import SkillSelectorModal from './components/SkillSelectorModal';
 import StickyProfileSidebar from './components/StickyProfileSidebar';
-import CharacterHeroBanner from './components/CharacterHeroBanner';
+import CharacterHeroBanner, { BannerActionFeedback } from './components/CharacterHeroBanner';
 import AvatarInspectorModal from './components/AvatarInspectorModal';
 import type { AvatarReactionType } from './components/Dynamic3DAvatar';
 import AspirationUpgradeModal from './components/AspirationUpgradeModal';
@@ -93,12 +93,35 @@ export default function LifeGraphPage() {
   const [show3DInspectorModal, setShow3DInspectorModal] = useState<boolean>(false);
   const [annualDigest, setAnnualDigest] = useState<AnnualDigestData | null>(null);
   const [avatarReaction, setAvatarReaction] = useState<AvatarReactionType>('idle');
+  const [bannerFeedback, setBannerFeedback] = useState<BannerActionFeedback | null>(null);
 
   const triggerAvatarReaction = (reactionType: AvatarReactionType, durationMs: number = 3200) => {
     setAvatarReaction(reactionType);
     setTimeout(() => {
       setAvatarReaction('idle');
     }, durationMs);
+  };
+
+  const triggerBannerFeedback = (feedback: Omit<BannerActionFeedback, 'timestamp'>) => {
+    setBannerFeedback({
+      ...feedback,
+      timestamp: Date.now()
+    });
+  };
+
+  const childhoodActionFeedbackMap: Record<string, Omit<BannerActionFeedback, 'timestamp'>> = {
+    infant_breastfeed: { type: 'infant', title: 'Ăn Dặm & Bú Mẹ', subtitle: 'Hấp thụ trọn vẹn dinh dưỡng & tình mẫu tử', delta: '+15 Thể chất', icon: '🍼' },
+    infant_toys: { type: 'study', title: 'Đồ Chơi Trí Não', subtitle: 'Kích thích phản xạ tư duy & nhận thức', delta: '+10 Trí tuệ', icon: '🧸' },
+    infant_walk_talk: { type: 'infant', title: 'Tập Đi & Học Nói', subtitle: 'Những bước chập chững đầu đời vững vàng', delta: '+3 Max HP', icon: '👶' },
+    infant_cuddle: { type: 'infant', title: 'Làm Nũng Cha Mẹ', subtitle: 'Vòng tay cha mẹ chở che ấm áp', delta: '+15 Tình thân', icon: '💖' },
+    sunbath: { type: 'wellness', title: 'Tắm Nắng Sớm Tự Nhiên', subtitle: 'Hấp thụ vitamin D tự nhiên, gia tăng đề kháng', delta: '+Đề kháng & HP', icon: '☀️' },
+    explore_nature: { type: 'study', title: 'Khám Phá Thiên Nhiên', subtitle: 'Quan sát thế giới thực xung quanh', delta: '+Tư duy nhạy bén', icon: '🌿' },
+    first_birthday_grab: { type: 'milestone', title: 'Lễ Thôi Nôi Bốc Đồ', subtitle: 'Nghi thức văn hóa chọn vật định hướng cuộc đời', delta: 'Định hình thiên phú', icon: '🎁' },
+    teen_part_time: { type: 'work', title: 'Làm Thêm Thiếu Niên', subtitle: 'Tập tành bươn chải tự lập tài chính', delta: '+$ Tiền tiêu vặt', icon: '🥤' },
+    teen_sports: { type: 'wellness', title: 'Thể Thao Học Đường', subtitle: 'Rèn luyện thể lực bền bỉ & tinh thần đồng đội', delta: '+Thể chất & Năng động', icon: '⚽' },
+    teen_online_sales: { type: 'work', title: 'Bán Hàng Trực Tuyến', subtitle: 'Bén duyên thương mại và thị trường sớm', delta: '+$ Thu nhập & Nhạy bén', icon: '📱' },
+    prodigy_math_infant: { type: 'study', title: 'Ươm Mầm Logic Thần Đồng', subtitle: 'Khơi dậy tiềm năng toán học trừu tượng', delta: '++Trí Tuệ & Logic', icon: '🧮' },
+    prodigy_art_infant: { type: 'study', title: 'Năng Khiếu Hội Họa Tinh Hoa', subtitle: 'Rung cảm thẩm mỹ và phối màu đầu đời', delta: '++Sáng Tạo Nghệ Thuật', icon: '🎨' },
   };
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -418,6 +441,13 @@ export default function LifeGraphPage() {
     const data = await res.json();
     setCharacter(data.character);
     triggerAvatarReaction('exhausted');
+    triggerBannerFeedback({
+      type: 'work',
+      title: 'Tăng Ca Vượt Giờ',
+      subtitle: data.message || 'Lao động miệt mài gầy dựng sự nghiệp',
+      delta: '+$ Thu Nhập & +Burnout',
+      icon: '💼'
+    });
     return data.message;
   };
 
@@ -433,6 +463,13 @@ export default function LifeGraphPage() {
     const data = await res.json();
     setCharacter(data.character);
     triggerAvatarReaction('negotiating');
+    triggerBannerFeedback({
+      type: 'study',
+      title: 'Đèn Sách Nâng Cao Học Vấn',
+      subtitle: data.message || 'Rèn luyện tri thức & bằng cấp',
+      delta: '+Trí Tuệ & Cơ Hội',
+      icon: '📚'
+    });
     return data.message;
   };
 
@@ -448,6 +485,13 @@ export default function LifeGraphPage() {
     const data = await res.json();
     setCharacter(data.character);
     triggerAvatarReaction('celebrate');
+    triggerBannerFeedback({
+      type: 'gamble',
+      title: 'Thử Thách Vận May',
+      subtitle: data.message || 'Cơ hội tài chính may rủi',
+      delta: 'Biến động tiền tài',
+      icon: '🎲'
+    });
     return data.message;
   };
 
@@ -464,6 +508,13 @@ export default function LifeGraphPage() {
     const data = await res.json();
     setCharacter(data.character);
     triggerAvatarReaction('meditating');
+    triggerBannerFeedback({
+      type: 'wellness',
+      title: 'Dưỡng Sinh Phục Hồi',
+      subtitle: data.message || 'Tịnh tâm điều dưỡng, cân bằng sinh học',
+      delta: '+HP & Giảm Burnout',
+      icon: '🌿'
+    });
     return data.message;
   };
 
@@ -480,6 +531,13 @@ export default function LifeGraphPage() {
     setCharacter(data.character);
     if (data.npcs) setNpcs(data.npcs);
     triggerAvatarReaction('negotiating');
+    triggerBannerFeedback({
+      type: 'network',
+      title: 'Mở Rộng Mạng Lưới',
+      subtitle: data.message || 'Thiết lập quan hệ với mạng lưới xã hội',
+      delta: '+Mạng Lưới Xã Hội',
+      icon: '🤝'
+    });
     return data.message;
   };
 
@@ -498,6 +556,13 @@ export default function LifeGraphPage() {
       setCharacter(data.character);
       if (data.relationships) setRelationships(data.relationships);
       triggerAvatarReaction('meditating');
+      triggerBannerFeedback({
+        type: (character?.age || 0) < 6 ? 'infant' : 'wellness',
+        title: (character?.age || 0) < 6 ? 'Bầu Sữa Mẹ Ấm Áp' : 'Bữa Cơm Sum Vầy',
+        subtitle: (character?.age || 0) < 6 ? 'Dòng sữa ngọt lành vỗ về giấc ngủ thơ ngây' : 'Ấm áp tình thân mái ấm gia đình sum họp',
+        delta: '+Hạnh Phúc & +HP',
+        icon: (character?.age || 0) < 6 ? '🍼' : '🍲'
+      });
       return data.message;
     } catch (err: any) {
       setErrorMsg(err.message);
@@ -517,6 +582,15 @@ export default function LifeGraphPage() {
     }
     const data = await res.json();
     setCharacter(data.character);
+    const fb = childhoodActionFeedbackMap[actionId] || {
+      type: 'infant',
+      title: 'Hành Động Tuổi Thơ',
+      subtitle: data.message || 'Giai đoạn phát triển tự nhiên',
+      delta: '+Chỉ Số',
+      icon: '🌱'
+    };
+    triggerBannerFeedback(fb);
+    triggerAvatarReaction(fb.type === 'study' ? 'negotiating' : fb.type === 'work' ? 'exhausted' : 'meditating');
     return data.message;
   };
 
@@ -537,6 +611,13 @@ export default function LifeGraphPage() {
       if (data.dilemma) setDilemma(data.dilemma);
       if (data.visuals) setVisuals(data.visuals);
       triggerAvatarReaction('celebrate');
+      triggerBannerFeedback({
+        type: 'milestone',
+        title: 'Khôn Lớn ➔ Bước Vào Lớp 1 (6 Tuổi)',
+        subtitle: 'Ấu thơ bình yên khép lại, bước vào mái trường đèn sách',
+        delta: 'Mở Khóa Học Viện & Đèn Sách',
+        icon: '🎒'
+      });
     } catch (err: any) {
       console.error(err);
       setErrorMsg(err.message || "Lỗi tua nhanh");
@@ -557,7 +638,34 @@ export default function LifeGraphPage() {
     }
     const data = await res.json();
     if (data.character) setCharacter(data.character);
-    triggerAvatarReaction(focusType === 'wellness' ? 'meditating' : 'celebrate');
+    if (focusType === 'hustle') {
+      triggerAvatarReaction('celebrate');
+      triggerBannerFeedback({
+        type: 'work',
+        title: 'Trọng Tâm Cả Năm: Cày Cuốc Kiếm Tiền',
+        subtitle: data.message || 'Toàn lực dồn vào kiếm tiền & phát triển sự nghiệp',
+        delta: 'Tối đa dòng tiền & AP',
+        icon: '💼'
+      });
+    } else if (focusType === 'study') {
+      triggerAvatarReaction('negotiating');
+      triggerBannerFeedback({
+        type: 'study',
+        title: 'Trọng Tâm Cả Năm: Đèn Sách Nâng Cao Học Vấn',
+        subtitle: data.message || 'Chuyên tâm học vấn và trau dồi chuyên môn',
+        delta: 'Tối đa Trí Tuệ & Bằng Cấp',
+        icon: '🎓'
+      });
+    } else {
+      triggerAvatarReaction('meditating');
+      triggerBannerFeedback({
+        type: 'wellness',
+        title: 'Trọng Tâm Cả Năm: Dưỡng Sinh Phục Hồi',
+        subtitle: data.message || 'Nghỉ ngơi dưỡng sinh, hồi phục sức khỏe toàn diện',
+        delta: 'Tái tạo HP & Xóa kiệt sức',
+        icon: '🌿'
+      });
+    }
     return data.message;
   };
 
@@ -1357,6 +1465,7 @@ export default function LifeGraphPage() {
               playerAccount={playerAccount}
               netWorth={netWorth}
               reaction={avatarReaction}
+              actionFeedback={bannerFeedback}
               isFastForwarding={loading}
               onOpen3DInspector={() => setShow3DInspectorModal(true)}
             />
