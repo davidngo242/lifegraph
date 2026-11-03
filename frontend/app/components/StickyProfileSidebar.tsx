@@ -61,7 +61,8 @@ export default function StickyProfileSidebar({
   const vitalityPercent = Math.max(0, Math.min(100, (vitality / maxVitality) * 100));
 
   // Multi-currency calculation
-  const formattedCash = formatCurrency(cash, nationality);
+  const displayCash = !isAdult ? Math.max(0, cash) : cash;
+  const formattedCash = formatCurrency(displayCash, nationality);
   const formattedEndowment = formatCurrency(familyEndowment, nationality);
   const formattedNetWorth = formatCurrency(netWorth, nationality);
 
@@ -178,7 +179,7 @@ export default function StickyProfileSidebar({
           <span className="text-[9.5px] uppercase tracking-wider text-slate-400 block font-medium">
             {age < 6 ? "Quỹ Sữa Bỉm (Mẹ Giữ)" : isAdult ? "Tiền Mặt" : "Tiền Tiêu Vặt"}
           </span>
-          <span className={`text-base font-mono font-extrabold ${cash < 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
+          <span className={`text-base font-mono font-extrabold ${displayCash < 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
             {formattedCash.primary}
           </span>
         </div>

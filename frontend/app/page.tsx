@@ -735,6 +735,7 @@ export default function LifeGraphPage() {
         return (
           <TimeSkipCard
             dilemma={dilemma}
+            characterAge={character?.age ?? 0}
             onContinue={handleTimeSkipContinue}
             isLoading={loading}
           />
@@ -757,7 +758,7 @@ export default function LifeGraphPage() {
   // Aggregated Emergency Alerts for Top Loudspeaker Notification Hub
   const emergencyAlerts: EmergencyAlert[] = [];
   if (character) {
-    if (character.cash < 0 && !dismissedAlerts.includes('debt_crisis')) {
+    if ((character.age || 0) >= 18 && character.cash < 0 && !dismissedAlerts.includes('debt_crisis')) {
       emergencyAlerts.push({
         id: 'debt_crisis',
         type: 'critical',

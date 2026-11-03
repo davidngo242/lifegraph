@@ -1209,6 +1209,10 @@ router.post('/action/childhood', async (req, res) => {
       character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 15);
       flags.add("well_nourished");
       feedback = "Ăn dặm ngon miệng & ngủ đủ giấc! Cơ thể khỏe khoắn, tăng đề kháng (+15 Sức khỏe).";
+    } else if (action_id === 'sunbath') {
+      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 5);
+      flags.add("sunbath_immunity");
+      feedback = "Tắm nắng sớm tiếp nhận vitamin D tự nhiên! Da dẻ hồng hào, tăng sức đề kháng (+5 Sức khỏe).";
     } else if (action_id === 'toy_brain') {
       character.karma = Math.min(100, (character.karma || 100) + 10);
       flags.add("early_curiosity");
@@ -1237,6 +1241,29 @@ router.post('/action/childhood', async (req, res) => {
       character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 10);
       character.burnout = Math.max(0, (character.burnout || 0) - 20);
       feedback = "Chơi đuổi bắt và đá bóng rộn rã cùng bạn bè trang lứa! Tinh thần sảng khoái (-20 Stress).";
+    } else if (action_id === 'explore_nature') {
+      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 8);
+      character.karma = Math.min(100, (character.karma || 100) + 8);
+      flags.add("nature_lover");
+      feedback = "Khám phá thế giới tự nhiên, bắt bướm trồng cây! Nuôi dưỡng tình yêu sinh thái (+8 Sinh lực, +8 Karma).";
+    }
+    // 13-17 tuổi (Thiếu niên)
+    else if (action_id === 'teen_part_time') {
+      const pocketMoney = 100;
+      character.cash = (Number(character.cash) || 0) + pocketMoney;
+      character.karma = Math.min(100, (character.karma || 100) + 5);
+      flags.add("teen_work_ethic");
+      feedback = `Làm thêm phụ việc quán xá ngoài giờ học! Kiếm được +$${pocketMoney} tiền túi, học cách tự lập dòng tiền (+5 Karma).`;
+    } else if (action_id === 'teen_sports') {
+      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 12);
+      character.burnout = Math.max(0, (character.burnout || 0) - 20);
+      flags.add("athletic_youth");
+      feedback = "Tập luyện thể thao tuổi dậy thì! Chiều cao và thể lực phát triển vượt trội (+12 Thể chất, -20 Stress).";
+    } else if (action_id === 'teen_online_sales') {
+      const profit = 150;
+      character.cash = (Number(character.cash) || 0) + profit;
+      flags.add("young_entrepreneur");
+      feedback = `Tập tành kinh doanh phụ kiện online! Thu về +$${profit} tiền vốn tích lũy, trui rèn kỹ năng thương trường sớm.`;
     }
     // Hành động bẩm sinh / thần đồng (Prodigy actions)
     else if (action_id === 'prodigy_trade') {
@@ -1244,10 +1271,19 @@ router.post('/action/childhood', async (req, res) => {
       character.cash = (Number(character.cash) || 0) + earnings;
       flags.add("young_entrepreneur");
       feedback = `Trổ tài buôn bán truyện tranh cũ và đồ chơi! Thu về +$${earnings} tiền túi, nhận cờ 'Thương Nhân Nhí'.`;
+    } else if (action_id === 'prodigy_math_infant') {
+      character.karma = Math.min(100, (character.karma || 100) + 10);
+      flags.add("early_logic");
+      feedback = "Nhận biết các khối hình và màu sắc chuẩn xác từ khi còn trong nôi! Não bộ phản xạ vượt trội (+10 Karma).";
     } else if (action_id === 'prodigy_math') {
       character.karma = Math.min(100, (character.karma || 100) + 18);
       flags.add("math_prodigy");
       feedback = "Giải đề thi cờ thế và toán học nâng cao! Nhận học bổng khen thưởng tuổi thơ (+18 Karma).";
+    } else if (action_id === 'prodigy_art_infant') {
+      character.burnout = 0;
+      character.karma = Math.min(100, (character.karma || 100) + 10);
+      flags.add("early_art");
+      feedback = "Nghịch màu bằng ngón tay bé xíu, reo vui trước những mảng màu rực rỡ! Kích hoạt cảm thụ nghệ thuật sớm (+10 Karma).";
     } else if (action_id === 'prodigy_art') {
       character.burnout = 0;
       character.karma = Math.min(100, (character.karma || 100) + 15);
@@ -1612,6 +1648,9 @@ router.post('/action/family', async (req, res) => {
 
       character.burnout = Math.max(0, (character.burnout || 0) - 15);
       character.karma = Math.min(100, (character.karma || 50) + 5);
+      if (character.age < 6) {
+        character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 0) + 10);
+      }
       character.household.family_meals_available = 0;
 
       history.push({
@@ -2366,16 +2405,42 @@ router.post('/tick', async (req, res) => {
         const yearsJump = skip.years_jump || 3;
         character.age += yearsJump - 1; // 1 will be added in passive phase
 
-        if (strategy === 'relax') {
-          character.burnout = Math.max(0, character.burnout - 40);
-          character.vitality = Math.min(character.max_vitality || 100, character.vitality + 15);
-          character.karma = Math.min(100, character.karma + 15);
-          character.cash += (skip.yearly_income_save || 1500) * yearsJump;
-          lastChoiceOutcome = `Dành ${yearsJump} năm tĩnh tâm dưỡng sức, bồi đắp mái ấm (-40 Burnout, +15 Sinh lực)`;
+        const isInfant = character.age < 6;
+        const isMinor = character.age < 18;
+
+        if (isInfant) {
+          if (strategy === 'relax') {
+            character.karma = Math.min(100, (character.karma || 100) + 15);
+            character.burnout = 0;
+            lastChoiceOutcome = `Trôi qua ${yearsJump} năm tuổi thơ ấm áp trong tình yêu thương của cha mẹ (+15 Karma)`;
+          } else {
+            character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 15);
+            character.max_vitality = Math.min(100, (character.max_vitality || 90) + 3);
+            lastChoiceOutcome = `Ăn ngoan ngủ đẫy giấc suốt ${yearsJump} năm đầu đời, lớn nhanh như thổi (+15 Sinh lực, +3 Max HP)`;
+          }
+        } else if (isMinor) {
+          if (strategy === 'relax') {
+            character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 15);
+            character.burnout = Math.max(0, (character.burnout || 0) - 35);
+            character.karma = Math.min(100, (character.karma || 100) + 10);
+            lastChoiceOutcome = `Tận hưởng ${yearsJump} năm học trò năng động bên bạn bè trang lứa (+15 Sinh lực, -35 Stress)`;
+          } else {
+            character.karma = Math.min(100, (character.karma || 100) + 15);
+            character.burnout = Math.max(0, (character.burnout || 0) - 15);
+            lastChoiceOutcome = `Chuyên tâm học hành đèn sách suốt ${yearsJump} năm, gặt hái thành tích xuất sắc (+15 Karma tri thức)`;
+          }
         } else {
-          character.cash += (skip.yearly_income_save || 3000) * yearsJump;
-          character.burnout = Math.max(0, character.burnout - (skip.burnout_decay || 20));
-          lastChoiceOutcome = `Chuyên tâm cày việc và tích lũy chuyên môn (+${((skip.yearly_income_save || 3000) * yearsJump).toLocaleString()} USD)`;
+          if (strategy === 'relax') {
+            character.burnout = Math.max(0, character.burnout - 40);
+            character.vitality = Math.min(character.max_vitality || 100, character.vitality + 15);
+            character.karma = Math.min(100, character.karma + 15);
+            character.cash += (skip.yearly_income_save || 1500) * yearsJump;
+            lastChoiceOutcome = `Dành ${yearsJump} năm tĩnh tâm dưỡng sức, bồi đắp mái ấm (-40 Burnout, +15 Sinh lực)`;
+          } else {
+            character.cash += (skip.yearly_income_save || 3000) * yearsJump;
+            character.burnout = Math.max(0, character.burnout - (skip.burnout_decay || 20));
+            lastChoiceOutcome = `Chuyên tâm cày việc và tích lũy chuyên môn (+${((skip.yearly_income_save || 3000) * yearsJump).toLocaleString()} USD)`;
+          }
         }
 
         historyLog.push({

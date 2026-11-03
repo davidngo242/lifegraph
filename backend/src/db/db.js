@@ -183,7 +183,7 @@ export function seedInitialData(lineageParent = null, karmaPerks = {}) {
         age: (freshChar.age || 0) + (freshChar.household.father_age || 28),
         status: freshChar.household.father_status || "alive",
         affection_level: 85,
-        monthly_cost: 200
+        monthly_cost: (freshChar.age || 0) < 18 ? 0 : 200
       });
     }
     if (freshChar.household.mother_name) {
@@ -195,7 +195,7 @@ export function seedInitialData(lineageParent = null, karmaPerks = {}) {
         age: (freshChar.age || 0) + (freshChar.household.mother_age || 26),
         status: freshChar.household.mother_status || "alive",
         affection_level: 90,
-        monthly_cost: 150
+        monthly_cost: (freshChar.age || 0) < 18 ? 0 : 150
       });
     }
   } else if (lineageParent) {
@@ -207,7 +207,7 @@ export function seedInitialData(lineageParent = null, karmaPerks = {}) {
       age: (freshChar.age || 0) + 30,
       status: "alive",
       affection_level: 85,
-      monthly_cost: 250
+      monthly_cost: (freshChar.age || 0) < 18 ? 0 : 250
     });
   }
 

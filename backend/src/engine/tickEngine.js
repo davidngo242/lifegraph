@@ -195,7 +195,10 @@ export async function processPassivePhase(character, assets, relationships) {
       });
     }
 
-    totalRelationshipCost += Number(rel.monthly_cost || rel.monthly_upkeep || 0);
+    const isMinorCharacter = (character.age < 18);
+    const isParentType = (rel.type === 'parent' || rel.type === 'father' || rel.type === 'mother');
+    const cost = (isMinorCharacter && isParentType) ? 0 : Number(rel.monthly_cost || rel.monthly_upkeep || 0);
+    totalRelationshipCost += cost;
     if (cash < -5000 && rel.affection_level > 20) {
       rel.affection_level = Math.max(10, rel.affection_level - 5);
       await updateRelationship(rel.id, { affection_level: rel.affection_level });
@@ -256,11 +259,17 @@ export async function processPassivePhase(character, assets, relationships) {
   const netPassiveFlow = totalAssetIncome - totalAssetMaintenance - totalRelationshipCost;
   cash += netPassiveFlow;
 
-  // 8. Cash < 0 debt compounding & Burnout
+  // MINOR SHIELD: Minors (< 18) are protected from negative cash / personal debt
+  if (age < 18) {
+    cash = Math.max(0, cash);
+    flagsSet.delete("high_debt");
+  }
+
+  // 8. Cash < 0 debt compounding & Burnout (Adults only)
   let burnoutChange = 0;
   let vitalityChange = 0;
 
-  if (cash < 0) {
+  if (age >= 18 && cash < 0) {
     const interest = Math.round(Math.abs(cash) * 0.045);
     cash -= interest;
     const debtRatio = Math.min(30, Math.ceil(Math.abs(cash) / 2500));
