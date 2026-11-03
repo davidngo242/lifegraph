@@ -1,0 +1,130 @@
+{
+  "pack_id": "pack_artisan_apprentice",
+  "name": "Tuyến Mở Rộng: Người Giữ Nghề (The Artisan)",
+  "version": "1.0.0",
+  "description": "Gói kịch bản chứng minh tính mở rộng của Engine: Trải nghiệm học nghề thủ công truyền thống, tôi luyện bàn tay nghệ nhân và tiếp quản xưởng gốm di sản.",
+  "scenarios": [
+    {
+      "id": "scenario_artisan_trial",
+      "arc_id": "arc_craft_heritage",
+      "stage": 1,
+      "title": "Bí Quyết Men Gốm Cổ: Khảo Nghiệm Của Sư Phụ",
+      "description": "Nghệ nhân Bách ra thử thách tạo tác mẻ gốm men hỏa biến gia truyền để phục dựng bảo vật tổ tiên.",
+      "location_id": "bat_trang_village",
+      "roles": {
+        "mentor": "Nghệ nhân Bách (Sư phụ 40 năm nghề)",
+        "merchant": "Bà Triệu (Nhà sưu tầm cổ vật)"
+      },
+      "prerequisites": {
+        "min_age": 20,
+        "max_age": 60,
+        "required_flags": [],
+        "excluded_flags": ["artisan_trial_completed"]
+      },
+      "scenes": [
+        {
+          "id": "scene_workshop",
+          "name": "Xưởng Lò Nung Cổ Truyền",
+          "background_theme": "artisan_kiln",
+          "hotspots": [
+            {
+              "id": "hs_master_bach",
+              "label": "Thỉnh giáo Nghệ nhân Bách",
+              "icon": "flame",
+              "position_x": 250,
+              "npc_role": "mentor",
+              "dialogue": {
+                "speaker": "Nghệ nhân Bách",
+                "text": "Nghề gốm cốt ở cái tâm tịnh và sự thấu hiểu lửa. Mẻ men hỏa biến này cần nhiệt độ lò ổn định ở 1280 độ suốt 18 canh giờ. Chú phải kiên nhẫn canh củi lửa, một thoáng lơ là sẽ hỏng cả lò.",
+                "granted_knowledge": "kiln_temperature_secret",
+                "affinity_delta": 5,
+                "trust_delta": 10,
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "hs_clay_wheel",
+              "label": "Bàn Xoay Vuốt Gốm & Đất Sét",
+              "icon": "tool",
+              "position_x": 550,
+              "dialogue": {
+                "speaker": "An (Thực hành)",
+                "text": "Bạn đặt tay lên khối đất sét trên bàn xoay. Độ ẩm của đất và lực miết của các ngón tay quyết định độ thanh thoát của chiếc bình cổ.",
+                "granted_knowledge": "clay_molding_mastery",
+                "cost_ap": 0
+              }
+            }
+          ]
+        },
+        {
+          "id": "scene_gallery",
+          "name": "Gian Nhà Trưng Bày Tác Phẩm",
+          "background_theme": "art_gallery",
+          "hotspots": [
+            {
+              "id": "hs_art_collector",
+              "label": "Trao đổi với Nhà Sưu Tầm",
+              "icon": "gem",
+              "position_x": 400,
+              "npc_role": "merchant",
+              "dialogue": {
+                "speaker": "Bà Triệu (Nhà Sưu Tầm)",
+                "text": "Nếu cậu vuốt được dáng bình hoa lam chuẩn phong cách thế kỷ 15, tôi sẽ tài trợ toàn bộ chi phí mở gian triển lãm tại Tuần lễ Văn hóa Quốc gia.",
+                "granted_knowledge": "exhibition_sponsorship_offer",
+                "cost_ap": 1
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "rational": "🧠 Lý Trí: 'Áp dụng chính xác quy luật nhiệt độ lò 1280 độ đã học từ Sư phụ để tối thiểu hóa tỷ lệ nứt vỡ.'",
+          "empathy": "❤️ Trái Tim: 'Nghệ thuật không chỉ là kỹ thuật, mà là thổi linh hồn truyền thống của tiền nhân vào từng nét vẽ men.'",
+          "instinct": "⚡ Bản Năng: 'Dám thử nghiệm công thức tạo màu mới để tạo nên kiệt tác chưa từng có!'"
+        }
+      },
+      "choices": [
+        {
+          "id": "CHOICE_HERITAGE_MASTERY",
+          "title": "[Khổ Luyện & Giữ Nghề] Canh Lò Cổ Truyền 18 Canh Giờ",
+          "stance": "RATIONAL",
+          "description": "Tuân thủ nghiêm ngặt bí quyết gia truyền, thức trắng đêm canh nhiệt độ lò để cho ra đời mẻ gốm hoàn mỹ.",
+          "knowledge_requirements": ["kiln_temperature_secret", "clay_molding_mastery"],
+          "cost_ap": 1,
+          "check": {
+            "type": "CRAFT",
+            "stat": "VITALITY",
+            "target_dc": 12,
+            "bonus_traits": ["Tâm lý thép", "Ý chí kiên định"]
+          },
+          "outcomes": {
+            "critical_success": {
+              "narration": "Mẻ gốm ra lò với sắc men hỏa biến óng ánh kỳ ảo! Nghệ nhân Bách rơi lệ vì xúc động, trao lại ấn tín kế thừa xưởng gốm cho bạn.",
+              "effects": { "cash_delta": 40000000, "vitality_delta": -10, "karma_delta": 25 },
+              "npc_trust_delta": { "Nghệ nhân Bách": 30, "Bà Triệu": 20 }
+            },
+            "success": {
+              "narration": "Tác phẩm hoàn thành xuất sắc, được nhà sưu tầm mua lại với giá cao. Bạn được công nhận là thợ chính của làng nghề.",
+              "effects": { "cash_delta": 20000000, "vitality_delta": -15, "karma_delta": 15 },
+              "npc_trust_delta": { "Nghệ nhân Bách": 15, "Bà Triệu": 15 }
+            },
+            "failure": {
+              "narration": "Lửa lò bị non vào rạng sáng khiến một số bình bị rạn men. Dù chưa hoàn hảo, sư phụ vẫn khen ngợi tinh thần dám chịu khổ của bạn.",
+              "effects": { "vitality_delta": -20, "burnout_delta": 15, "karma_delta": 10 },
+              "npc_trust_delta": { "Nghệ nhân Bách": 5 }
+            }
+          },
+          "commitments": [
+            {
+              "id": "com_preserve_kiln",
+              "to_npc": "Nghệ nhân Bách",
+              "title": "Tiếp tục duy trì và truyền dạy kỹ thuật men cổ",
+              "due_ticks": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,310 @@
+{
+  "pack_id": "pack_chapter1_career",
+  "name": "Chương 1: Giữ Nghề Hay Đổi Đời?",
+  "version": "1.0.0",
+  "description": "Ngã rẽ cuộc đời của An ở tuổi 28: Đối mặt giữa cơ hội thăng tiến ổn định tại tập đoàn và lời mời gọi khởi nghiệp công nghệ đầy bão táp từ bạn thân.",
+  "scenarios": [
+    {
+      "id": "scenario_career_crossroads_28",
+      "arc_id": "arc_career_foundation",
+      "stage": 1,
+      "title": "Ngã Rẽ Tuổi 28: Giữ Nghề Hay Đổi Đời?",
+      "description": "Minh vừa gửi lời mời cùng thành lập công ty AI. Trong khi đó, sếp Hùng đang cân nhắc bạn cho vị trí Tech Lead, và Mai mong muốn sự an cư.",
+      "location_id": "hanoi_urban",
+      "roles": {
+        "friend": "Minh (Bạn thân / Co-founder)",
+        "partner": "Mai (Người yêu / Bạn đời)",
+        "manager": "Anh Hùng (Trưởng phòng Công ty)"
+      },
+      "prerequisites": {
+        "min_age": 25,
+        "max_age": 35,
+        "required_flags": [],
+        "excluded_flags": ["career_crossroads_resolved"]
+      },
+      "scenes": [
+        {
+          "id": "scene_home",
+          "name": "Căn Hộ Của An (Nhà Riêng)",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "hs_mai",
+              "label": "Trò chuyện với Mai",
+              "icon": "heart",
+              "position_x": 220,
+              "npc_role": "partner",
+              "dialogue": {
+                "speaker": "Mai (Người yêu)",
+                "text": "Em thấy anh dạo này hay thức khuya đọc tài liệu. Minh rủ anh lập công ty phải không? Em không cấm anh theo đuổi ước mơ, nhưng mình đang chuẩn bị tính chuyện lâu dài. Em chỉ mong anh có kế hoạch tài chính rõ ràng, đừng để cả hai rơi vào cảnh nợ nần bất an.",
+                "granted_knowledge": "mai_financial_caution",
+                "affinity_delta": 5,
+                "trust_delta": 10,
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "hs_budget",
+              "label": "Kiểm tra Sổ Tài Chính & Quỹ Dự Phòng",
+              "icon": "ledger",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "An (Nội tâm)",
+                "text": "Bạn mở ứng dụng ngân hàng: Tổng tiền tiết kiệm cá nhân là 120.000.000 ₫. Số tiền này đủ để chi trả sinh hoạt trong 6-8 tháng nếu không có lương. Nếu trích ra 50 triệu để đầu tư, quỹ an toàn của bạn vẫn còn 70 triệu.",
+                "granted_knowledge": "personal_runway_verified",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "hs_rest",
+              "label": "Nghỉ ngơi & Dưỡng sức",
+              "icon": "coffee",
+              "position_x": 720,
+              "dialogue": {
+                "speaker": "Hệ thống",
+                "text": "Bạn pha một tách trà nóng, nghe nhạc không lời và để tâm trí lắng lại. Cơ thể bạn được nạp lại năng lượng sau những ngày dài căng thẳng.",
+                "cost_ap": 0
+              }
+            }
+          ]
+        },
+        {
+          "id": "scene_office",
+          "name": "Tập Đoàn Công Nghệ (Văn Phòng Làm Việc)",
+          "background_theme": "office_corporate",
+          "hotspots": [
+            {
+              "id": "hs_manager",
+              "label": "Trao đổi với Trưởng phòng Hùng",
+              "icon": "briefcase",
+              "position_x": 260,
+              "npc_role": "manager",
+              "dialogue": {
+                "speaker": "Anh Hùng (Trưởng phòng)",
+                "text": "An này, quý tới tập đoàn sẽ tái cấu trúc nền tảng thanh toán. Anh đã đề xuất Ban Giám Đốc cất nhắc chú lên vị trí Tech Lead với mức lương tăng 30% kèm thưởng cổ phiếu ESOP. Chú là nhân tố cốt lõi của team, anh rất tin vào sự ổn định của chú.",
+                "granted_knowledge": "corporate_promotion_offer",
+                "affinity_delta": 3,
+                "trust_delta": 15,
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "hs_workstation",
+              "label": "Bàn làm việc & Bảng Kế hoạch Dự án",
+              "icon": "laptop",
+              "position_x": 560,
+              "dialogue": {
+                "speaker": "An (Quan sát)",
+                "text": "Nhìn vào sơ đồ kiến trúc hệ thống của công ty: Mọi thứ rất bài bản và an toàn, nhưng quy trình phê duyệt rườm rà. Bạn nhận ra nếu ở lại, bạn sẽ có thu nhập cao và ổn định, nhưng cơ hội tự mình tạo ra một sản phẩm công nghệ đột phá sẽ phải gác lại.",
+                "granted_knowledge": "corporate_stability_and_limits",
+                "cost_ap": 0
+              }
+            }
+          ]
+        },
+        {
+          "id": "scene_cafe",
+          "name": "Không Gian Làm Việc Chung (The Hub Cafe)",
+          "background_theme": "cafe_coworking",
+          "hotspots": [
+            {
+              "id": "hs_minh",
+              "label": "Gặp gỡ Minh & Xem Bản Demo AI",
+              "icon": "sparkles",
+              "position_x": 240,
+              "npc_role": "friend",
+              "dialogue": {
+                "speaker": "Minh (Bạn thân)",
+                "text": "An! Nhìn số liệu này đi, 25 doanh nghiệp vừa và nhỏ đã dùng thử tool tự động hóa của tao và tỷ lệ quay lại là 80%. Tao cần một người đủ tầm như mày nắm vai trò CTO để tối ưu hóa backend chịu tải lớn. Tao chia cho mày 35% cổ phần sáng lập nếu mày cùng tao bước lên con tàu này!",
+                "granted_knowledge": "minh_equity_offer",
+                "affinity_delta": 8,
+                "trust_delta": 8,
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "hs_customer",
+              "label": "Phỏng vấn Khách Hàng Tiềm Năng (Doanh Chủ)",
+              "icon": "users",
+              "position_x": 600,
+              "dialogue": {
+                "speaker": "Anh Tuấn (Giám đốc Chuỗi Bán Lẻ)",
+                "text": "Giải pháp AI của bên Minh xử lý đơn hàng rất nhanh, chúng tôi tiết kiệm được 2 nhân sự mỗi ca. Nếu các bạn hoàn thiện tính năng bảo mật dữ liệu và ký cam kết SLA hỗ trợ 24/7, công ty tôi sẵn sàng ký hợp đồng dài hạn 150 triệu/năm ngay tháng sau.",
+                "granted_knowledge": "market_real_demand_confirmed",
+                "cost_ap": 1
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "rational": "🧠 Lý Trí: 'Hãy nhìn vào các con số. Đề xuất Tech Lead cho thu nhập an toàn, nhưng thị trường thực tế đã có khách hàng sẵn sàng trả 150 triệu. Một giải pháp lai (vừa làm vừa hỗ trợ) hoặc nghỉ việc có điều kiện sẽ giảm thiểu tối đa rủi ro tài chính.'",
+          "empathy": "❤️ Trái Tim: 'Minh là bạn tri kỷ từ thời hàn vi, còn Mai là người sẽ cùng bạn xây dựng tổ ấm. Hãy chọn phương án tôn trọng lời hứa với Mai mà không dập tắt ngọn lửa nhiệt huyết của Minh.'",
+          "instinct": "⚡ Bản Năng: 'Vùng an toàn là nấm mồ của sự bứt phá! Nếu không dám thử thách khi còn ở tuổi 28, sau này bạn sẽ mãi nuối tiếc.'",
+          "dilemma_prompt": "Sau khi quan sát và thu thập thông tin từ Mai, Anh Hùng và Minh, bạn quyết định sẽ đối diện với ngã rẽ này như thế nào?"
+        }
+      },
+      "choices": [
+        {
+          "id": "CHOICE_HYBRID_ADVISOR",
+          "title": "[Thận Trọng & Cân Bằng] Làm Cố Vấn Kỹ Thuật Ngoài Giờ (Part-time Advisor)",
+          "stance": "RATIONAL",
+          "description": "Giữ công việc tập đoàn để duy trì thu nhập và quyền đề xuất Tech Lead, đồng thời hỗ trợ Minh 15 giờ/tuần đổi lấy 15% cổ phần cố vấn.",
+          "knowledge_requirements": ["corporate_promotion_offer", "minh_equity_offer"],
+          "cost_ap": 1,
+          "check": {
+            "type": "PERSUASION",
+            "stat": "IQ",
+            "target_dc": 12,
+            "bonus_traits": ["Tư duy logic", "Trực giác kinh doanh"]
+          },
+          "outcomes": {
+            "critical_success": {
+              "narration": "Minh và Sếp Hùng đều đồng thuận! Bạn sắp xếp thời gian khoa học, Minh nhận được kiến trúc chuẩn mà Mai hoàn toàn yên tâm. Nhận 15% cổ phần và tăng 15% lương tập đoàn.",
+              "effects": { "cash_delta": 30000000, "vitality_delta": -5, "burnout_delta": 10, "karma_delta": 15 },
+              "npc_trust_delta": { "Minh": 15, "Mai": 20, "Anh Hùng": 10 }
+            },
+            "success": {
+              "narration": "Minh đồng ý phương án cố vấn dù hơi tiếc vì bạn không thể làm full-time. Bạn bắt đầu lịch làm việc kép bận rộn nhưng an toàn.",
+              "effects": { "cash_delta": 15000000, "vitality_delta": -10, "burnout_delta": 18, "karma_delta": 10 },
+              "npc_trust_delta": { "Minh": 5, "Mai": 15, "Anh Hùng": 5 }
+            },
+            "failure": {
+              "narration": "Khối lượng công việc hai nơi khiến bạn kiệt sức. Minh phàn nàn vì tiến độ chậm, còn sếp Hùng nhắc nhở bạn thiếu tập trung. Bạn phải học cách quản lý thời gian khắt khe hơn.",
+              "effects": { "vitality_delta": -15, "burnout_delta": 30, "karma_delta": 5 },
+              "npc_trust_delta": { "Minh": -10, "Mai": 5, "Anh Hùng": -10 }
+            }
+          },
+          "commitments": [
+            {
+              "id": "com_advisor_hours",
+              "to_npc": "Minh",
+              "title": "Hỗ trợ kỹ thuật 15 giờ/tuần cho startup",
+              "due_ticks": 1,
+              "consequence_on_break": { "trust_penalty": 30, "flag": "broken_promise_minh" }
+            },
+            {
+              "id": "com_mai_home_savings",
+              "to_npc": "Mai",
+              "title": "Duy trì tiết kiệm mua nhà 10 triệu/tháng",
+              "due_ticks": 1,
+              "consequence_on_break": { "affinity_penalty": 20 }
+            }
+          ]
+        },
+        {
+          "id": "CHOICE_CONDITIONAL_LEAP",
+          "title": "[Thực Tế & Cam Kết] Nghỉ Việc Có Điều Kiện Khi Có Hợp Đồng Đầu Tiên",
+          "stance": "DIPLOMATIC",
+          "description": "Thương lượng với Minh: Bạn hỗ trợ hoàn thiện bản demo bảo mật để chốt hợp đồng 150 triệu với khách hàng; khi hợp đồng ký chính thức, bạn sẽ nộp đơn nghỉ việc.",
+          "knowledge_requirements": ["market_real_demand_confirmed", "mai_financial_caution"],
+          "cost_ap": 1,
+          "check": {
+            "type": "NEGOTIATION",
+            "stat": "CHARISMA",
+            "target_dc": 13,
+            "bonus_traits": ["Khí chất lãnh đạo", "Tâm lý thép"]
+          },
+          "outcomes": {
+            "critical_success": {
+              "narration": "Kế hoạch thuyết phục tuyệt đối! Khách hàng ký hợp đồng 150 triệu sớm hơn dự kiến. Mai nhìn thấy dòng tiền thật nên hoàn toàn ủng hộ bạn bước sang startup với tư cách Co-founder đầy tự hào.",
+              "effects": { "cash_delta": 65000000, "vitality_delta": 0, "burnout_delta": 5, "karma_delta": 20 },
+              "npc_trust_delta": { "Minh": 25, "Mai": 25 }
+            },
+            "success": {
+              "narration": "Minh chấp nhận mốc thỏa thuận. Sau 2 tháng tập trung, hợp đồng đầu tiên được ký kết. Bạn đàng hoàng bàn giao công việc tại tập đoàn và bước sang chặng đường mới.",
+              "effects": { "cash_delta": 40000000, "vitality_delta": -8, "burnout_delta": 15, "karma_delta": 15 },
+              "npc_trust_delta": { "Minh": 15, "Mai": 15 }
+            },
+            "failure": {
+              "narration": "Khách hàng dời lịch ký hợp đồng sang năm sau do cắt giảm ngân sách. Bạn chưa thể nghỉ việc ngay, Minh gặp áp lực vốn nhưng cả hai vẫn giữ được sự tôn trọng.",
+              "effects": { "vitality_delta": -5, "burnout_delta": 12, "karma_delta": 8 },
+              "npc_trust_delta": { "Minh": 5, "Mai": 10 }
+            }
+          },
+          "commitments": [
+            {
+              "id": "com_sla_security",
+              "to_npc": "Minh",
+              "title": "Hoàn thành module bảo mật để chốt hợp đồng khách hàng",
+              "due_ticks": 1,
+              "consequence_on_break": { "trust_penalty": 25 }
+            }
+          ]
+        },
+        {
+          "id": "CHOICE_STAY_CORPORATE",
+          "title": "[Gắn Bó & Thăng Tiến] Tiếp Nhận Vị Trí Tech Lead & Giới Thiệu Đối Tác Cho Minh",
+          "stance": "RATIONAL",
+          "description": "Chọn con đường phát triển chuyên môn tại tập đoàn, nhận mức lương tăng 30%, đồng thời dùng mạng lưới quan hệ để giới thiệu lập trình viên giỏi khác cho Minh.",
+          "knowledge_requirements": ["corporate_promotion_offer"],
+          "cost_ap": 0,
+          "check": {
+            "type": "DIPLOMACY",
+            "stat": "EQ",
+            "target_dc": 10,
+            "bonus_traits": ["Tâm lý thép"]
+          },
+          "outcomes": {
+            "critical_success": {
+              "narration": "Bạn được bổ nhiệm Tech Lead thành công rực rỡ, thu nhập tăng vọt. Ứng viên bạn giới thiệu cho Minh làm việc rất ăn ý. Minh cảm ơn bạn chân thành, Mai hạnh phúc vì tương lai gia đình vững chắc.",
+              "effects": { "cash_delta": 80000000, "vitality_delta": 5, "burnout_delta": -10, "karma_delta": 15 },
+              "npc_trust_delta": { "Anh Hùng": 30, "Mai": 25, "Minh": 10 }
+            },
+            "success": {
+              "narration": "Bạn bước lên vị trí Tech Lead với trách nhiệm mới. Minh hơi chạnh lòng nhưng hiểu quyết định của bạn. Thu nhập gia đình tăng trưởng đều đặn.",
+              "effects": { "cash_delta": 50000000, "vitality_delta": 0, "burnout_delta": 5, "karma_delta": 10 },
+              "npc_trust_delta": { "Anh Hùng": 20, "Mai": 20, "Minh": 0 }
+            },
+            "failure": {
+              "narration": "Công việc mới nhiều áp lực quản lý hơn bạn tưởng. Minh cảm thấy khoảng cách giữa hai người xa dần vì bạn không còn thời gian giao lưu.",
+              "effects": { "cash_delta": 35000000, "vitality_delta": -10, "burnout_delta": 22, "karma_delta": 5 },
+              "npc_trust_delta": { "Anh Hùng": 10, "Mai": 15, "Minh": -15 }
+            }
+          }
+        },
+        {
+          "id": "CHOICE_ALL_IN_STARTUP",
+          "title": "[Canh Bạc Bứt Phá] Tất Tay Nghỉ Việc Cùng Minh Dẫn Dắt Startup",
+          "stance": "INSTINCT",
+          "description": "Nộp đơn thôi việc tại tập đoàn, trích 50 triệu tiền tiết kiệm góp vốn và toàn tâm toàn ý cùng Minh xây dựng công ty từ con số 0.",
+          "knowledge_requirements": ["minh_equity_offer", "personal_runway_verified"],
+          "cost_ap": 2,
+          "check": {
+            "type": "EXECUTION",
+            "stat": "IQ",
+            "target_dc": 15,
+            "bonus_traits": ["Gen thiên tài", "Trực giác kinh doanh"]
+          },
+          "outcomes": {
+            "critical_success": {
+              "narration": "Kỳ tích khởi nghiệp! Bản kiến trúc chịu tải do bạn dựng chạy mượt mà trước 10.000 người dùng đầu tiên. Công ty gọi thành công 1 tỷ vốn thiên thần. Mai rơi nước mắt xúc động vì niềm tin đặt đúng chỗ!",
+              "effects": { "cash_delta": 150000000, "vitality_delta": -10, "burnout_delta": 25, "karma_delta": 25 },
+              "npc_trust_delta": { "Minh": 40, "Mai": 20, "Anh Hùng": -10 }
+            },
+            "success": {
+              "narration": "Những tháng ngày khởi nghiệp đầy gian nan nhưng tràn đầy cảm hứng. Sản phẩm vận hành ổn định, mang lại doanh thu đủ nuôi sống team nhỏ. Bạn chính thức là Co-founder.",
+              "effects": { "cash_delta": 20000000, "vitality_delta": -15, "burnout_delta": 30, "karma_delta": 15 },
+              "npc_trust_delta": { "Minh": 25, "Mai": 10, "Anh Hùng": -15 }
+            },
+            "failure": {
+              "narration": "Sản phẩm gặp lỗi bảo mật nghiêm trọng khiến máy chủ sập 3 ngày. Doanh thu không kịp bù chi phí duy trì, tiền dự phòng vơi nhanh. Bạn và Minh phải làm việc ngày đêm để khắc phục.",
+              "effects": { "cash_delta": -50000000, "vitality_delta": -25, "burnout_delta": 45, "karma_delta": 10 },
+              "npc_trust_delta": { "Minh": 10, "Mai": -15, "Anh Hùng": -20 }
+            }
+          },
+          "commitments": [
+            {
+              "id": "com_fulltime_cto",
+              "to_npc": "Minh",
+              "title": "Chịu trách nhiệm 100% về kiến trúc hệ thống và bảo mật",
+              "due_ticks": 2,
+              "consequence_on_break": { "trust_penalty": 40 }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

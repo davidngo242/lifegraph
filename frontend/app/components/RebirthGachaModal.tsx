@@ -64,14 +64,12 @@ export default function RebirthGachaModal({
   onEnterNirvanaComplete,
   onClose
 }: RebirthGachaModalProps) {
-  const [viewMode, setViewMode] = useState<'wheel' | 'nirvana'>('wheel');
   const [isSpinning, setIsSpinning] = useState(false);
   const [selectedPerks, setSelectedPerks] = useState<{ [key: string]: boolean }>({});
   const [selectedStarterPack, setSelectedStarterPack] = useState<'standard' | 'genz_startup' | 'crazy_rich' | 'street_hustler'>('standard');
   const [chosenTrait, setChosenTrait] = useState<string>("thiên_tài_toán_học");
   const [rollResult, setRollResult] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [nirvanaInfo, setNirvanaInfo] = useState<any | null>(null);
 
   // Animated Roulette Reel States
   const [reelCountry, setReelCountry] = useState(REEL_COUNTRIES[0]);
@@ -174,130 +172,7 @@ export default function RebirthGachaModal({
     }
   };
 
-  // Nirvana Transcendence Call for Weary Souls
-  const handleEnterNirvana = async () => {
-    try {
-      setErrorMessage(null);
-      const res = await fetch('/api/game/rebirth/nirvana', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      if (!res.ok) throw new Error("Quy y Niết Bàn thất bại.");
-      const data = await res.json();
-      setNirvanaInfo(data);
-    } catch (err: any) {
-      setErrorMessage(err.message);
-    }
-  };
-
-  // 2. View Mode: Nirvana Sanctuary (For Weary Souls who want to stop Samsara)
-  if (viewMode === 'nirvana') {
-    return (
-      <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in">
-        <div className="max-w-xl w-full bg-slate-950 border border-purple-500/40 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden flex flex-col items-center text-center">
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="absolute top-5 right-5 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
-
-          <div className="w-16 h-16 rounded-3xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-3xl mb-4 shadow-xl shadow-purple-500/20">
-            🕊️
-          </div>
-
-          <span className="text-[10px] font-mono uppercase px-3 py-1 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 font-bold tracking-wider mb-2">
-            Đại Thừa Niết Bàn (The Nirvana Sanctuary)
-          </span>
-
-          <h2 className="text-2xl font-bold text-white mb-2 font-serif">
-            Buông Bỏ Vòng Luân Hồi
-          </h2>
-
-          <p className="text-xs text-slate-300 italic max-w-md mb-6 leading-relaxed font-serif">
-            "Nếu bạn cảm thấy mệt mỏi với cơm áo gạo tiền, bệnh tật và sinh tử trần gian, linh hồn bạn có quyền dừng lại. Không ai bắt bạn phải vất vả tái sinh làm người phàm nữa."
-          </p>
-
-          {/* Nirvana Perks for Weary Souls */}
-          <div className="w-full space-y-3 mb-6 text-left text-xs">
-            <div className="p-3.5 rounded-2xl bg-slate-900 border border-purple-500/30 flex items-start gap-3">
-              <div className="p-2 rounded-xl bg-purple-500/20 text-purple-300">
-                <Feather className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="font-bold text-white">Lưu Danh Đại Điện Tiên Hiền</div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
-                  Toàn bộ gia phả các đời của bạn được khắc bia vĩnh hằng, trở thành một thiên sử thi hoàn chỉnh.
-                </div>
-              </div>
-            </div>
-
-            <div className="p-3.5 rounded-2xl bg-slate-900 border border-emerald-500/30 flex items-start gap-3">
-              <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-300">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="font-bold text-white">Quỹ An Nghỉ Linh Hồn (+150 Karma)</div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
-                  Được ban tặng ngay 150 Karma tĩnh dưỡng vào tài khoản vĩnh cửu. Karma không bao giờ bị mất đi.
-                </div>
-              </div>
-            </div>
-
-            <div className="p-3.5 rounded-2xl bg-slate-900 border border-amber-500/30 flex items-start gap-3">
-              <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300">
-                <ShieldCheck className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="font-bold text-white">Hóa Thân Thần Hộ Mệnh Dòng Tộc</div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
-                  Trở thành tổ tiên hộ trì, ban phước lành cho con cháu trần gian mà không cần tự mình nhập xác cày cuốc.
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Action options */}
-          <div className="w-full space-y-2.5">
-            {nirvanaInfo ? (
-              <div className="space-y-2">
-                <div className="p-3.5 rounded-2xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs">
-                  ✨ Đã thâu nhận <strong>+150 Karma Vĩnh Cửu</strong>! Khắc ghi danh hiệu: <strong className="text-amber-300">{nirvanaInfo.soul_title}</strong> vào Đài Tưởng Niệm Gia Phả.
-                </div>
-                <button
-                  onClick={() => {
-                    if (onEnterNirvanaComplete) onEnterNirvanaComplete(nirvanaInfo);
-                    else if (onClose) onClose();
-                  }}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-amber-500/30 active:scale-95 flex items-center justify-center gap-2"
-                >
-                  <span>🏛️ Quy Hồi Trang Chủ & Chiêm Bái Đại Điện Tiên Hiền</span>
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={handleEnterNirvana}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-purple-600/30 active:scale-95"
-              >
-                Nhận Phước Lành Niết Bàn & An Nghỉ (+150 Karma)
-              </button>
-            )}
-
-            <button
-              onClick={() => setViewMode('wheel')}
-              className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold transition"
-            >
-              ← Khi Tâm Tĩnh Lại: Quay Về Bánh Xe Luân Hồi
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // 3. Main Rebirth Gacha Wheel & Karma Shop
+  // 2. Main Rebirth Gacha Wheel & Karma Shop
   return (
     <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in">
       <div className="max-w-xl w-full bg-slate-950 border border-slate-800 rounded-3xl p-5 md:p-7 shadow-2xl relative overflow-hidden flex flex-col max-h-[95vh] overflow-y-auto custom-scrollbar">
@@ -313,21 +188,12 @@ export default function RebirthGachaModal({
         {/* Top Radial Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Header with Switcher to Nirvana */}
+        {/* Header */}
         <div className="text-center mb-5">
           <div className="flex items-center justify-center gap-2 mb-2">
             <span className="text-[10px] font-sans font-semibold tracking-wider uppercase text-indigo-400 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 inline-block">
               Phòng Chờ Luân Hồi (The Karma Void)
             </span>
-            {canEnterNirvana && (
-              <button
-                onClick={() => setViewMode('nirvana')}
-                className="text-[10px] font-sans font-bold px-2.5 py-1 rounded-full bg-purple-950/60 hover:bg-purple-900/80 text-purple-300 border border-purple-500/40 flex items-center gap-1 transition"
-                title="Buông bỏ luân hồi, an nghỉ vĩnh hằng"
-              >
-                🕊️ Buông Bỏ Hồng Trần
-              </button>
-            )}
           </div>
 
           <h2 className="text-2xl md:text-3xl font-serif font-bold text-white">Vòng Quay Tái Sinh</h2>

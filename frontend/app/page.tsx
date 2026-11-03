@@ -23,6 +23,7 @@ import SkillSelectorModal from './components/SkillSelectorModal';
 import StickyProfileSidebar from './components/StickyProfileSidebar';
 import CharacterHeroBanner, { BannerActionFeedback } from './components/CharacterHeroBanner';
 import AvatarInspectorModal from './components/AvatarInspectorModal';
+import InteractiveScene2D from './components/InteractiveScene2D';
 import type { AvatarReactionType } from './components/Dynamic3DAvatar';
 import AspirationUpgradeModal from './components/AspirationUpgradeModal';
 import LifeGraphHomePortal from './components/LifeGraphHomePortal';
@@ -81,6 +82,7 @@ export default function LifeGraphPage() {
   const [showSkillSelector, setShowSkillSelector] = useState<boolean>(false);
   const [showTarotCardModal, setShowTarotCardModal] = useState<boolean>(false);
   const [activeView, setActiveView] = useState<'home' | 'game' | 'lineage'>('home');
+  const [gameMode, setGameMode] = useState<'2d_scene' | 'cockpit'>('2d_scene');
   const [lineage, setLineage] = useState<any[]>([]);
   const [nirvanaBanner, setNirvanaBanner] = useState<any | null>(null);
   const [dismissedAlerts, setDismissedAlerts] = useState<string[]>([]);
@@ -1473,7 +1475,41 @@ export default function LifeGraphPage() {
               onOpen3DInspector={() => setShow3DInspectorModal(true)}
             />
 
-            {/* 3-Column Responsive Grid Cockpit */}
+            {/* View Mode Switcher: 2D Interactive Scene vs Cockpit Dashboard */}
+            <div className="flex items-center justify-between p-2 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md mb-4 flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setGameMode('2d_scene')}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
+                    gameMode === '2d_scene'
+                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <span>🏙️ Không Gian 2D Nhập Vai (Chương 1)</span>
+                </button>
+                <button
+                  onClick={() => setGameMode('cockpit')}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
+                    gameMode === 'cockpit'
+                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <span>📋 Bảng Điều Khiển Cuộc Đời (Cockpit)</span>
+                </button>
+              </div>
+              <span className="text-[11px] text-slate-400 hidden sm:inline">
+                {gameMode === '2d_scene' ? "Di chuyển trong không gian để khám phá manh mối trước khi quyết định" : "Chế độ quản lý chỉ số tổng hợp"}
+              </span>
+            </div>
+
+            {gameMode === '2d_scene' ? (
+              <div className="mb-6">
+                <InteractiveScene2D onScenarioResolved={() => loadState()} character={character} />
+              </div>
+            ) : (
+              /* 3-Column Responsive Grid Cockpit */
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
               {/* Left Column: Sticky Profile Sidebar (3 cols) */}
               <div className="order-2 lg:order-1 lg:col-span-3 min-w-0 w-full">
@@ -1549,6 +1585,7 @@ export default function LifeGraphPage() {
                 />
               </div>
             </div>
+            )}
           </>
         )}
       </main>

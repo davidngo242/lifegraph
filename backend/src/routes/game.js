@@ -22,6 +22,7 @@ import {
   addAncestralMemorial
 } from '../db/db.js';
 import { processPassivePhase, calculateMaxVitality } from '../engine/tickEngine.js';
+import { getCurrentScenarioForCharacter, interactWithHotspot, resolveMindStageChoice } from '../engine/scenarioEngine.js';
 import { compileSystemPrompt } from '../engine/promptCompiler.js';
 import { generateDilemma } from '../engine/aiGameMaster.js';
 import { getChildhoodMilestones, generateLocalizedName, NAMES_BY_COUNTRY } from '../engine/rebirthEngine.js';
@@ -2749,6 +2750,88 @@ router.post('/reset', async (req, res) => {
   } catch (err) {
     console.error('Reset failed:', err);
     res.status(500).json({ error: 'Reset failed', message: err.message });
+  }
+});
+
+
+// =========================================================================
+// 2D INTERACTIVE SCENARIO & MIND STAGE ROUTES
+// =========================================================================
+
+// GET /api/game/scenario/current - Lấy kịch bản & cảnh 2D hiện thời
+router.get('/scenario/current', async (req, res) => {
+  try {
+    const character = await getLatestCharacter();
+    if (!character) return res.status(400).json({ error: "Không tìm thấy nhân vật." });
+    const npcs = await getNpcs(character.id);
+    const scenario = getCurrentScenarioForCharacter(character);
+    const currentSceneId = character.current_scene_id || scenario?.scenes[0]?.id || "scene_home";
+
+    res.json({
+      success: true,
+      scenario,
+      current_scene_id: currentSceneId,
+      knowledge_base: character.knowledge_base || [],
+      commitments: character.commitments || [],
+      action_points: character.action_points || 3,
+      npcs
+    });
+  } catch (err) {
+    console.error('Scenario fetch error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/game/scenario/interact - Tương tác với hotspot trong cảnh 2D
+router.post('/scenario/interact', async (req, res) => {
+  try {
+    const { scene_id, hotspot_id } = req.body;
+    const character = await getLatestCharacter();
+    if (!character) return res.status(400).json({ error: "Không tìm thấy nhân vật." });
+    const npcs = await getNpcs(character.id);
+
+    const result = interactWithHotspot(character, scene_id, hotspot_id, npcs);
+    await updateCharacter(character.id, character);
+
+    res.json(result);
+  } catch (err) {
+    console.error('Scenario interact error:', err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// POST /api/game/scenario/resolve-mindstage - Giải quyết lựa chọn Mind Stage server-side
+router.post('/scenario/resolve-mindstage', async (req, res) => {
+  try {
+    const { choice_id, ap_investment } = req.body;
+    const character = await getLatestCharacter();
+    if (!character) return res.status(400).json({ error: "Không tìm thấy nhân vật." });
+    const npcs = await getNpcs(character.id);
+
+    const result = resolveMindStageChoice(character, choice_id, ap_investment, npcs);
+    await updateCharacter(character.id, character);
+
+    res.json(result);
+  } catch (err) {
+    console.error('Scenario resolve error:', err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// POST /api/game/scenario/transition - Chuyển đổi cảnh 2D
+router.post('/scenario/transition', async (req, res) => {
+  try {
+    const { scene_id } = req.body;
+    const character = await getLatestCharacter();
+    if (!character) return res.status(400).json({ error: "Không tìm thấy nhân vật." });
+
+    character.current_scene_id = scene_id;
+    await updateCharacter(character.id, character);
+
+    res.json({ success: true, current_scene_id: scene_id });
+  } catch (err) {
+    console.error('Scenario transition error:', err);
+    res.status(400).json({ error: err.message });
   }
 });
 

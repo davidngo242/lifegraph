@@ -40,6 +40,30 @@ export default function EpitaphModal({
 }: EpitaphModalProps) {
   const [showRecapModal, setShowRecapModal] = useState<boolean>(false);
   const [showTarotCard, setShowTarotCard] = useState<boolean>(false);
+  const [isAscendingNirvana, setIsAscendingNirvana] = useState<boolean>(false);
+  const [nirvanaMessage, setNirvanaMessage] = useState<string | null>(null);
+
+  const canAscendNirvana = (age >= 45 && karma >= 70) || Boolean(character?.life_aspiration_completed);
+
+  const handleAscendNirvana = async () => {
+    try {
+      setIsAscendingNirvana(true);
+      const res = await fetch('/api/game/rebirth/nirvana', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Đắc đạo thất bại");
+      setNirvanaMessage(data.message || "Linh hồn bạn đã đắc đạo Niết Bàn, an trụ Đại Điện Tiên Hiền.");
+      setTimeout(() => {
+        if (onReturnHome) onReturnHome();
+        else window.location.reload();
+      }, 2500);
+    } catch (err: any) {
+      alert(err.message || "Chưa đủ duyên lành Niết Bàn.");
+      setIsAscendingNirvana(false);
+    }
+  };
 
   const charData = character || {
     name,
@@ -127,6 +151,23 @@ export default function EpitaphModal({
                 <UserCheck className="w-4 h-4" />
                 <span>Truyền Thừa: Nhập Vai Vào Con ({childrenList[0]?.name || "Hậu duệ"})</span>
               </button>
+            )}
+
+            {/* Đắc Đạo Niết Bàn (Chỉ sáng khi đủ tuổi thọ & công đức thiện lành) */}
+            {canAscendNirvana && !nirvanaMessage && (
+              <button
+                onClick={handleAscendNirvana}
+                disabled={isAscendingNirvana}
+                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 hover:from-purple-800 hover:to-indigo-800 border border-purple-500/40 text-purple-200 font-bold text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-purple-950/50 active:scale-[0.98]"
+              >
+                <span>🕊️ {isAscendingNirvana ? "Đang Khai Quang Nhập Niết Bàn..." : "Đắc Đạo Niết Bàn (An Trụ Đại Điện Tiên Hiền)"}</span>
+              </button>
+            )}
+
+            {nirvanaMessage && (
+              <div className="p-3.5 rounded-xl bg-purple-950/80 border border-purple-500/50 text-purple-200 text-xs text-center font-serif">
+                ✨ {nirvanaMessage}
+              </div>
             )}
 
             <button
