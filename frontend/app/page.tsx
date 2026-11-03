@@ -520,6 +520,47 @@ export default function LifeGraphPage() {
     return data.message;
   };
 
+    const handleFastForwardToSchool = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(`${API_BASE}/childhood-fastforward`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ target_age: 6 })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || "Tua nhanh lên 6 tuổi thất bại");
+      }
+      const data = await res.json();
+      if (data.character) setCharacter(data.character);
+      if (data.dilemma) setDilemma(data.dilemma);
+      if (data.visuals) setVisuals(data.visuals);
+      triggerAvatarReaction('celebrate');
+    } catch (err: any) {
+      console.error(err);
+      setErrorMsg(err.message || "Lỗi tua nhanh");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAnnualFocus = async (focusType: 'hustle' | 'study' | 'wellness'): Promise<string> => {
+    const res = await fetch(`${API_BASE}/action/annual-focus`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ focus_type: focusType })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || err.message || "Thao tác trọng tâm năm thất bại");
+    }
+    const data = await res.json();
+    if (data.character) setCharacter(data.character);
+    triggerAvatarReaction(focusType === 'wellness' ? 'meditating' : 'celebrate');
+    return data.message;
+  };
+
   const handleCustomResolve = async (actionText: string) => {
     try {
       setLoading(true);
@@ -1355,6 +1396,8 @@ export default function LifeGraphPage() {
                     character={character}
                     isTrilemmaActive={dilemma?.interaction_type === 'TRILEMMA'}
                     onChildhoodAction={handleChildhoodAction}
+                    onFastForwardToSchool={handleFastForwardToSchool}
+                    onAnnualFocus={handleAnnualFocus}
                     onOpenAssets={() => setShowAssetModal(true)}
                     onOpenFamily={() => setShowFamilyModal(true)}
                     onOvertime={handleOvertime}

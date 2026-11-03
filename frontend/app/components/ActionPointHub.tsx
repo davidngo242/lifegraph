@@ -46,6 +46,8 @@ interface ActionPointHubProps {
   onGamble: () => Promise<string | void>;
   onNetwork?: () => Promise<string | void>;
   onChildhoodAction?: (actionId: string) => Promise<string | void>;
+  onFastForwardToSchool?: () => void;
+  onAnnualFocus?: (focusType: 'hustle' | 'study' | 'wellness') => Promise<string | void>;
   onTimeSkip?: () => void;
   onLaunchMiniGame: (gameType: MiniGameType) => void;
   onOpenSkillHub?: () => void;
@@ -71,6 +73,8 @@ export default function ActionPointHub({
   onGamble,
   onNetwork,
   onChildhoodAction,
+  onFastForwardToSchool,
+  onAnnualFocus,
   onTimeSkip,
   onLaunchMiniGame,
   onOpenSkillHub,
@@ -119,6 +123,25 @@ export default function ActionPointHub({
   const handleChildActionTrigger = (actionId: string, costCash: number = 0) => {
     if (!onChildhoodAction) return;
     handleAction(actionId, () => onChildhoodAction(actionId), 1, costCash);
+  };
+
+  const handleFocusClick = async (focusType: 'hustle' | 'study' | 'wellness') => {
+    if (!onAnnualFocus) return;
+    if (actionPoints < 1) {
+      showToast('error', 'Đã dùng hết Điểm Hành Động (AP) năm nay!');
+      return;
+    }
+    try {
+      setActiveButton(`focus_${focusType}`);
+      const resMsg = await onAnnualFocus(focusType);
+      if (typeof resMsg === 'string' && resMsg) {
+        showToast('success', resMsg);
+      }
+    } catch (err: any) {
+      showToast('error', err.message || 'Thao tác thất bại');
+    } finally {
+      setActiveButton(null);
+    }
   };
 
   // Determine age-appropriate mini-game
@@ -269,149 +292,227 @@ export default function ActionPointHub({
       {/* DYNAMIC AGE-APPROPRIATE ACTION TILES */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 my-2.5 w-full">
         {/* ========================================================================= */}
-        {/* 1. GIAI ĐOẠN 0 - 5 TUỔI: ẤU THƠ BẬP BẸ (CHI PHÍ $0) */}
+        {/* 1. GIAI ĐOẠN 0 - 5 TUỔI: ẤU THƠ ĐƯỢC GIA ĐÌNH NUÔI DƯỠNG TỰ ĐỘNG */}
         {/* ========================================================================= */}
         {characterAge <= 5 && (
-          <>
-            {/* Tile 1: Ăn dặm & Bú mẹ */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Ăn Dặm & Bú Mẹ:</strong> Nhận nguồn dinh dưỡng dồi dào từ dòng sữa mẹ, tăng cường thể chất và miễn dịch tự nhiên (+15 Thể chất).</div>}>
-              <button
-                disabled={isLoading || activeButton !== null || actionPoints < 1}
-                onClick={() => handleChildActionTrigger('eat_grow', 0)}
-                className="w-full p-2.5 rounded-2xl bg-slate-950/70 hover:bg-emerald-950/30 border border-slate-800 hover:border-emerald-500/50 text-left transition group active:scale-95 disabled:opacity-40"
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs">🍼</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+          <div className="col-span-full p-4 rounded-2xl bg-gradient-to-br from-slate-950 via-slate-900/90 to-slate-950 border border-indigo-500/30 shadow-lg">
+            {/* Header info */}
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 rounded-xl bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                  <Baby className="w-4 h-4" />
+                </span>
+                <div>
+                  <h4 className="text-xs font-bold text-white flex items-center gap-2">
+                    Mái Ấm Gia Đình Nuôi Dưỡng (0–5 Tuổi)
+                    <span className="text-[9px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      Tự Động Nuôi Lớn
+                    </span>
+                  </h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5">
+                    Dưới 6 tuổi, bé được phụ mẫu toàn tâm chăm bẵm, thể chất & trí tuệ tự nhiên phát triển không cần tiêu hao sức lực tự thân.
+                  </p>
                 </div>
-                <div className="font-bold text-white group-hover:text-emerald-300 text-[11px] truncate">Ăn Dặm & Bú Mẹ</div>
-                <div className="text-[9px] text-emerald-400 font-mono truncate mt-0.5">+15 Thể chất</div>
-              </button>
-            </Tooltip>
+              </div>
+              <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded-xl border border-slate-800">
+                <Shield className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Bảo bọc 100% chi phí</span>
+              </div>
+            </div>
 
-            {/* Tile 2: Đồ chơi trí tuệ */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Đồ Chơi Trí Não:</strong> Khám phá khối hình xếp, kích hoạt khớp thần kinh sớm (+10 Karma trí tuệ sớm).</div>}>
-              <button
-                disabled={isLoading || activeButton !== null || actionPoints < 1}
-                onClick={() => handleChildActionTrigger('toy_brain', 0)}
-                className="w-full p-2.5 rounded-2xl bg-slate-950/70 hover:bg-sky-950/30 border border-slate-800 hover:border-sky-500/50 text-left transition group active:scale-95 disabled:opacity-40"
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs">🧸</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+            {/* Development status pills */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3 text-[11px]">
+              <div className="p-2 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-2">
+                <span className="text-base">🍼</span>
+                <div>
+                  <div className="text-white font-semibold text-[10px]">Dinh Dưỡng Bú Mẹ</div>
+                  <div className="text-[9px] text-emerald-400">+15 Thể chất tự động / năm</div>
                 </div>
-                <div className="font-bold text-white group-hover:text-sky-300 text-[11px] truncate">Đồ Chơi Trí Não</div>
-                <div className="text-[9px] text-sky-400 font-mono truncate mt-0.5">+10 Trí tuệ</div>
-              </button>
-            </Tooltip>
-
-            {/* Tile 3: Tập đi chập chững */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Tập Đi & Học Nói:</strong> Những bước chân chập chững đầu đời, tăng giới hạn sinh lực vĩnh viễn (+3 Max Vitality).</div>}>
-              <button
-                disabled={isLoading || activeButton !== null || actionPoints < 1}
-                onClick={() => handleChildActionTrigger('toddler_walk', 0)}
-                className="w-full p-2.5 rounded-2xl bg-slate-950/70 hover:bg-teal-950/30 border border-slate-800 hover:border-teal-500/50 text-left transition group active:scale-95 disabled:opacity-40"
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs">👶</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+              </div>
+              <div className="p-2 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-2">
+                <span className="text-base">🧸</span>
+                <div>
+                  <div className="text-white font-semibold text-[10px]">Tập Đi & Khám Phá</div>
+                  <div className="text-[9px] text-sky-400">Phát triển nhận thức tự nhiên</div>
                 </div>
-                <div className="font-bold text-white group-hover:text-teal-300 text-[11px] truncate">Tập Đi & Học Nói</div>
-                <div className="text-[9px] text-teal-400 font-mono truncate mt-0.5">+3 Max HP</div>
-              </button>
-            </Tooltip>
-
-            {/* Tile 4: Làm nũng cha mẹ */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Làm Nũng Cha Mẹ:</strong> Đắm chìm trong tình thương yêu gia đình, hạ căng thẳng và tích phước (+15 Karma).</div>}>
-              <button
-                disabled={isLoading || activeButton !== null || actionPoints < 1}
-                onClick={() => handleChildActionTrigger('cuddle_parents', 0)}
-                className="w-full p-2.5 rounded-2xl bg-slate-950/70 hover:bg-pink-950/30 border border-slate-800 hover:border-pink-500/50 text-left transition group active:scale-95 disabled:opacity-40"
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs">👨‍👩‍👧</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+              </div>
+              <div className="p-2 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-2">
+                <span className="text-base">🏡</span>
+                <div>
+                  <div className="text-white font-semibold text-[10px]">Vòng Tay Phụ Mẫu</div>
+                  <div className="text-[9px] text-pink-400">Bình an ấm êm vô lo</div>
                 </div>
-                <div className="font-bold text-white group-hover:text-pink-300 text-[11px] truncate">Làm Nũng Cha Mẹ</div>
-                <div className="text-[9px] text-pink-400 font-mono truncate mt-0.5">+15 Karma ấm áp</div>
-              </button>
-            </Tooltip>
+              </div>
+            </div>
 
-            {/* Tile 5: Hành động năng khiếu bẩm sinh nếu có */}
-            {hasTradeTrait ? (
-              <Tooltip className="w-full" content={<div className="text-[10px]"><strong>{characterAge <= 2 ? "Nắm Giữ Đồ Vật (Mã Gen Thương Gia)" : "Tập Tính Tiền (Mã Gen Thương Gia)"}:</strong> {characterAge <= 2 ? "Phản xạ bẩm sinh: Bàn tay bé xíu siết chặt mọi vật phẩm có giá trị." : "Bộc lộ năng khiếu kinh doanh bẩm sinh từ bé (+Trực giác tài chính)."}</div>}>
-                <button
-                  disabled={isLoading || activeButton !== null || actionPoints < 1}
-                  onClick={() => handleChildActionTrigger('prodigy_trade', 0)}
-                  className="w-full p-2.5 rounded-2xl bg-amber-950/40 hover:bg-amber-900/50 border border-amber-500/50 text-left transition group active:scale-95 disabled:opacity-40"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs">🪙</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500 text-slate-950">Mã Gen</span>
+            {/* LỄ THÔI NÔI (1 TUỔI) MILESTONE TRAY */}
+            {characterAge === 1 && (
+              <div className="mb-3">
+                {!hiddenFlags.includes('first_birthday_chosen') ? (
+                  <div className="p-3 bg-gradient-to-r from-amber-950/40 via-amber-900/20 to-amber-950/40 rounded-2xl border border-amber-500/40">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-base">🎂</span>
+                        <div>
+                          <span className="text-xs font-bold text-amber-300">Lễ Thôi Nôi (1 Tuổi): Mâm Cỗ Bốc Đồ Vật Đầu Đời</span>
+                          <p className="text-[10px] text-slate-300">Tục lệ cổ truyền định hướng mầm non tương lai (chọn 1 vật phẩm may mắn):</p>
+                        </div>
+                      </div>
+                      <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold animate-pulse">
+                        Cột mốc 1 lần duy nhất
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <button
+                        onClick={() => handleChildActionTrigger('thoi_noi_book', 0)}
+                        disabled={isLoading || activeButton !== null}
+                        className="p-2.5 rounded-xl bg-slate-900/90 hover:bg-sky-950/80 border border-slate-700 hover:border-sky-500/70 text-left transition active:scale-95 group shadow-sm"
+                      >
+                        <div className="text-xs font-bold text-white group-hover:text-sky-300 flex items-center gap-1.5">
+                          <span>📚</span> Sách Bút & Thước Kẻ
+                        </div>
+                        <div className="text-[9.5px] text-sky-400 mt-1 font-mono">+15 Karma Tri Thức & Công Danh</div>
+                      </button>
+
+                      <button
+                        onClick={() => handleChildActionTrigger('thoi_noi_coin', 0)}
+                        disabled={isLoading || activeButton !== null}
+                        className="p-2.5 rounded-xl bg-slate-900/90 hover:bg-amber-950/80 border border-slate-700 hover:border-amber-500/70 text-left transition active:scale-95 group shadow-sm"
+                      >
+                        <div className="text-xs font-bold text-white group-hover:text-amber-300 flex items-center gap-1.5">
+                          <span>🪙</span> Tiền Vàng & Bàn Tính
+                        </div>
+                        <div className="text-[9.5px] text-amber-400 mt-1 font-mono">+$100 Tiền mừng & Trực giác kinh doanh</div>
+                      </button>
+
+                      <button
+                        onClick={() => handleChildActionTrigger('thoi_noi_toy', 0)}
+                        disabled={isLoading || activeButton !== null}
+                        className="p-2.5 rounded-xl bg-slate-900/90 hover:bg-emerald-950/80 border border-slate-700 hover:border-emerald-500/70 text-left transition active:scale-95 group shadow-sm"
+                      >
+                        <div className="text-xs font-bold text-white group-hover:text-emerald-300 flex items-center gap-1.5">
+                          <span>⚽</span> Quả Bóng & Đồ Chơi
+                        </div>
+                        <div className="text-[9.5px] text-emerald-400 mt-1 font-mono">+15 Thể chất, +3 Max HP</div>
+                      </button>
+                    </div>
                   </div>
-                  <div className="font-bold text-amber-300 text-[11px] truncate">
-                    {characterAge <= 2 ? "Nắm Giữ Đồ Vật" : "Tập Tính Tiền"}
+                ) : (
+                  <div className="p-2.5 rounded-xl bg-slate-900/70 border border-amber-500/40 text-[11px] text-amber-300 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-400" />
+                    <span>
+                      {hiddenFlags.includes('thoi_noi_hoc_thuat') ? 'Lễ Thôi Nôi: Đã bốc Sách Bút & Thước Kẻ (Tố chất học vấn sáng lạn)' :
+                       hiddenFlags.includes('thoi_noi_kinh_doanh') ? 'Lễ Thôi Nôi: Đã bốc Tiền Vàng & Bàn Tính (Bản lĩnh thương trường tích lũy)' :
+                       'Lễ Thôi Nôi: Đã bốc Quả Bóng & Đồ Chơi (Thể chất dẻo dai)'}
+                    </span>
                   </div>
-                  <div className="text-[9px] text-amber-400/90 font-mono truncate mt-0.5">
-                    {characterAge <= 2 ? "Phản xạ bẩm sinh" : "Trực giác tài chính"}
-                  </div>
-                </button>
-              </Tooltip>
-            ) : hasMathTrait ? (
-              <Tooltip className="w-full" content={<div className="text-[10px]"><strong>{characterAge <= 2 ? "Nhận Biết Hình Khối (Mã Gen Thần Đồng)" : "Đố Vui Logic (Mã Gen Thần Đồng)"}:</strong> {characterAge <= 2 ? "Kích hoạt thị giác và nhận thức không gian sớm." : "Giải đố sớm, kích hoạt tư duy trừu tượng (+12 Karma)."}</div>}>
-                <button
-                  disabled={isLoading || activeButton !== null || actionPoints < 1}
-                  onClick={() => handleChildActionTrigger(characterAge <= 2 ? 'prodigy_math_infant' : 'prodigy_math', 0)}
-                  className="w-full p-2.5 rounded-2xl bg-sky-950/40 hover:bg-sky-900/50 border border-sky-500/50 text-left transition group active:scale-95 disabled:opacity-40"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs">🧠</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-sky-500 text-slate-950">Mã Gen</span>
-                  </div>
-                  <div className="font-bold text-sky-300 text-[11px] truncate">
-                    {characterAge <= 2 ? "Nhận Biết Hình Khối" : "Đố Vui Logic"}
-                  </div>
-                  <div className="text-[9px] text-sky-400/90 font-mono truncate mt-0.5">
-                    {characterAge <= 2 ? "Thị giác không gian" : "+12K Toán học"}
-                  </div>
-                </button>
-              </Tooltip>
-            ) : hasArtTrait ? (
-              <Tooltip className="w-full" content={<div className="text-[10px]"><strong>{characterAge <= 2 ? "Nghịch Màu Tay Bé (Mã Gen Nghệ Sĩ)" : "Vẽ Tranh Ngộ Nghĩnh (Mã Gen Nghệ Sĩ)"}:</strong> {characterAge <= 2 ? "Vọc vẽ ngón tay, cảm thụ màu sắc ngây thơ." : "Nét vẽ ngây thơ kích hoạt cảm thụ thẩm mỹ sâu sắc."}</div>}>
-                <button
-                  disabled={isLoading || activeButton !== null || actionPoints < 1}
-                  onClick={() => handleChildActionTrigger(characterAge <= 2 ? 'prodigy_art_infant' : 'prodigy_art', 0)}
-                  className="w-full p-2.5 rounded-2xl bg-purple-950/40 hover:bg-purple-900/50 border border-purple-500/50 text-left transition group active:scale-95 disabled:opacity-40"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs">🎨</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-purple-500 text-slate-950">Mã Gen</span>
-                  </div>
-                  <div className="font-bold text-purple-300 text-[11px] truncate">
-                    {characterAge <= 2 ? "Nghịch Màu Tay" : "Vẽ Tranh Sớm"}
-                  </div>
-                  <div className="text-[9px] text-purple-400/90 font-mono truncate mt-0.5">
-                    {characterAge <= 2 ? "Cảm thụ sắc màu" : "Tâm hồn nghệ thuật"}
-                  </div>
-                </button>
-              </Tooltip>
-            ) : (
-              <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Tắm Nắng Sớm:</strong> Tổng hợp vitamin D tự nhiên, tăng cường sức đề kháng trước ốm vặt (+5 Thể chất, +5 Đề kháng).</div>}>
-                <button
-                  disabled={isLoading || activeButton !== null || actionPoints < 1}
-                  onClick={() => handleChildActionTrigger('sunbath', 0)}
-                  className="w-full p-2.5 rounded-2xl bg-slate-950/70 hover:bg-amber-950/30 border border-slate-800 hover:border-amber-500/50 text-left transition group active:scale-95 disabled:opacity-40"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs">☀️</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
-                  </div>
-                  <div className="font-bold text-white group-hover:text-amber-300 text-[11px] truncate">Tắm Nắng Sớm</div>
-                  <div className="text-[9px] text-amber-400 font-mono truncate mt-0.5">+5 HP · Đề kháng</div>
-                </button>
-              </Tooltip>
+                )}
+              </div>
             )}
-          </>
+
+            {/* Fast-Forward Childhood vs Single Year Advance */}
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
+              <div className="flex items-center gap-2 flex-wrap">
+                {onFastForwardToSchool && (
+                  <button
+                    onClick={() => {
+                      if (window.confirm("Bỏ qua giai đoạn bập bẹ để bước thẳng vào Lớp 1 (6 Tuổi) với đầy đủ ký ức tuổi thơ êm đềm?")) {
+                        onFastForwardToSchool();
+                      }
+                    }}
+                    disabled={isLoading}
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white font-bold text-xs flex items-center gap-2 transition active:scale-95 shadow-md shadow-indigo-950"
+                  >
+                    <FastForward className="w-4 h-4 text-amber-300" />
+                    <span>Trải Qua Tuổi Thơ ➔ Bước Vào Lớp 1 (6 Tuổi)</span>
+                  </button>
+                )}
+
+                {onTimeSkip && (
+                  <button
+                    onClick={onTimeSkip}
+                    disabled={isLoading}
+                    className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-xs border border-slate-700/80 transition active:scale-95"
+                  >
+                    <span>Khôn Lớn (+1 Tuổi)</span>
+                  </button>
+                )}
+              </div>
+
+              <div className="text-[10px] text-slate-400 italic">
+                * Không cần click lẻ tẻ từng hành động em bé
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* CHẾ ĐỘ TRỌNG TÂM NĂM (1-CLICK STRATEGIC FOCUS) DÀNH CHO TUỔI ĐI HỌC & ĐỜI */}
+        {/* ========================================================================= */}
+        {characterAge >= 6 && onAnnualFocus && (
+          <div className="col-span-full p-2.5 rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-indigo-500/30 shadow-md">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-1.5">
+                <Zap className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-xs font-bold text-white">Chế Độ Trọng Tâm Năm (1-Click Strategy)</span>
+                <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                  3 AP
+                </span>
+              </div>
+              <span className="text-[10px] text-slate-400 hidden sm:inline">Dùng 3 AP định hình cả năm, chừa 1 AP minigame / quan hệ</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <button
+                disabled={isLoading || activeButton !== null || actionPoints < 1}
+                onClick={() => handleFocusClick('hustle')}
+                className="p-2 rounded-xl bg-slate-900/80 hover:bg-amber-950/50 border border-slate-800 hover:border-amber-500/50 text-left transition active:scale-95 group disabled:opacity-40"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                    <span>💼</span> {characterAge >= 18 ? 'Cày Cuốc Hết Mình' : characterAge >= 13 ? 'Làm Thêm & Tự Lập' : 'Vận Động Năng Lượng'}
+                  </span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
+                </div>
+                <div className="text-[9.5px] text-slate-400 group-hover:text-amber-200 truncate">
+                  {characterAge >= 18 ? '+$3,500-$7,000 Thặng dư' : characterAge >= 13 ? '+$250 tiền túi tuổi teen' : '+15 Thể chất, sảng khoái'}
+                </div>
+              </button>
+
+              <button
+                disabled={isLoading || activeButton !== null || actionPoints < 1}
+                onClick={() => handleFocusClick('study')}
+                className="p-2 rounded-xl bg-slate-900/80 hover:bg-sky-950/50 border border-slate-800 hover:border-sky-500/50 text-left transition active:scale-95 group disabled:opacity-40"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-bold text-sky-300 flex items-center gap-1.5">
+                    <span>📖</span> Đèn Sách Tri Thức
+                  </span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
+                </div>
+                <div className="text-[9.5px] text-slate-400 group-hover:text-sky-200 truncate">
+                  +22 Karma học thuật, đỗ đạt
+                </div>
+              </button>
+
+              <button
+                disabled={isLoading || activeButton !== null || actionPoints < 1}
+                onClick={() => handleFocusClick('wellness')}
+                className="p-2 rounded-xl bg-slate-900/80 hover:bg-emerald-950/50 border border-slate-800 hover:border-emerald-500/50 text-left transition active:scale-95 group disabled:opacity-40"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                    <span>🌿</span> Dưỡng Sinh & Chữa Lành
+                  </span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
+                </div>
+                <div className="text-[9.5px] text-slate-400 group-hover:text-emerald-200 truncate">
+                  +25 Sinh lực, xóa sạch 45 Stress
+                </div>
+              </button>
+            </div>
+          </div>
         )}
 
         {/* ========================================================================= */}

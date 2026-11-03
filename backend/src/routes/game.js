@@ -411,6 +411,27 @@ router.post('/childhood-fastforward', async (req, res) => {
       });
     }
 
+    
+    if ((!milestone_choices || milestone_choices.length === 0) && (Number(target_age) || 18) <= 6) {
+      history.push({
+        age: 1,
+        event: "Lễ Thôi Nôi & Bước Đi Chập Chững",
+        choice: "Cất tiếng gọi cha mẹ đầu đời và chập chững những bước đi vững chãi đầu tiên trong tình yêu thương gia đình."
+      });
+      history.push({
+        age: 3,
+        event: "Những Năm Tháng Nhà Trẻ Rộn Rã",
+        choice: "Làm quen với bạn bè trang lứa, học hát đồng dao và khám phá thế giới xung quanh qua từng trang sách ảnh."
+      });
+      history.push({
+        age: 5,
+        event: "Tốt Nghiệp Mầm Non & Cắp Sách Vào Lớp 1",
+        choice: "Được cha mẹ mua cho bộ đồng phục và chiếc cặp sách mới tinh, háo hức sẵn sàng bước vào ngưỡng cửa trường tiểu học."
+      });
+      character.vitality = Math.min(100, (character.vitality || 80) + 15);
+      character.karma = Math.min(100, (character.karma || 100) + 15);
+      flagSet.add("cherished_childhood");
+    }
     const finalAge = Math.max(6, Math.min(18, Number(target_age) || 18));
     character.age = finalAge;
     character.max_vitality = calculateMaxVitality(finalAge);
@@ -1225,6 +1246,23 @@ router.post('/action/childhood', async (req, res) => {
       character.burnout = 0;
       character.karma = Math.min(100, (character.karma || 100) + 15);
       feedback = "Làm nũng trong vòng tay ấm áp của mẹ cha! Cảm nhận tình thương vô điều kiện (+15 Karma).";
+    } else if (action_id === 'thoi_noi_book') {
+      character.karma = Math.min(100, (character.karma || 100) + 15);
+      flags.add("first_birthday_chosen");
+      flags.add("thoi_noi_hoc_thuat");
+      feedback = "Lễ Thôi Nôi 1 Tuổi: Bàn tay bé xíu vươn ra bốc Sách Bút & Thước Kẻ! Cả họ tấm tắc khen ngợi mầm non đỗ đạt, công danh sáng lạn (+15 Karma tri thức).";
+    } else if (action_id === 'thoi_noi_coin') {
+      const luckyMoney = 100;
+      character.cash = (Number(character.cash) || 0) + luckyMoney;
+      flags.add("first_birthday_chosen");
+      flags.add("thoi_noi_kinh_doanh");
+      feedback = `Lễ Thôi Nôi 1 Tuổi: Em bé nhoẻn miệng cười bốc xấp Tiền Vàng & Bàn Tính! Cha mẹ mừng rỡ, họ hàng lì xì thêm +$${luckyMoney} vào quỹ bỉm sữa (+Trực giác thương trường).`;
+    } else if (action_id === 'thoi_noi_toy') {
+      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 15);
+      character.max_vitality = Math.min(100, (character.max_vitality || 90) + 3);
+      flags.add("first_birthday_chosen");
+      flags.add("thoi_noi_the_thao");
+      feedback = "Lễ Thôi Nôi 1 Tuổi: Em bé nắm chặt Quả Bóng & Đồ Chơi! Thể chất tràn đầy sinh lực và óc sáng tạo linh hoạt (+15 Thể chất, +3 Max HP).";
     } 
     // 6-12 tuổi
     else if (action_id === 'school_study') {
@@ -1315,6 +1353,82 @@ router.post('/action/childhood', async (req, res) => {
 });
 
 // POST /api/game/action/custom-resolve - Open-Text AI Resolution Engine
+// POST /api/game/action/annual-focus - Chiến lược 1 click trọng tâm năm (giảm tải choice fatigue)
+router.post('/action/annual-focus', async (req, res) => {
+  try {
+    const { focus_type } = req.body;
+    let character = await getLatestCharacter();
+    if (!character) return res.status(404).json({ error: "Không tìm thấy nhân vật!" });
+
+    const apAvailable = character.action_points || 0;
+    const reqAP = Math.min(3, Math.max(1, apAvailable));
+    if (apAvailable < 1) {
+      return res.status(400).json({ error: "Đã dùng hết Điểm Hành Động (AP) năm nay!" });
+    }
+
+    character.action_points = Math.max(0, apAvailable - reqAP);
+    const history = character.history_log || [];
+    const flags = new Set(character.hidden_flags || []);
+    const isAdult = (character.age || 0) >= 18;
+    const isTeen = (character.age || 0) >= 13 && (character.age || 0) < 18;
+    let message = "";
+
+    if (focus_type === 'hustle') {
+      if (isAdult) {
+        const bonusCash = Math.round(Math.random() * 3500 + 3500);
+        character.cash = (Number(character.cash) || 0) + bonusCash;
+        character.burnout = Math.min(100, (character.burnout || 0) + 25);
+        message = `Cả năm dốc toàn lực cày cuốc! Thu về +$${bonusCash.toLocaleString()} USD thặng dư, tăng 25 Căng thẳng.`;
+      } else if (isTeen) {
+        const pocketMoney = 250;
+        character.cash = (Number(character.cash) || 0) + pocketMoney;
+        character.burnout = Math.min(100, (character.burnout || 0) + 15);
+        message = `Chăm chỉ phụ việc & làm thêm suốt cả năm! Tích lũy được +$${pocketMoney} tiền túi, rèn tính tự lập.`;
+      } else {
+        character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 15);
+        character.burnout = Math.max(0, (character.burnout || 0) - 20);
+        message = "Một năm năng động thể thao và chạy nhảy cùng bè bạn! Thể lực tăng vọt (+15 Sinh lực, -20 Stress).";
+      }
+    } else if (focus_type === 'study') {
+      if (isAdult && character.cash >= 800) character.cash -= 800;
+      character.karma = Math.min(100, (character.karma || 100) + 22);
+      character.burnout = Math.min(100, (character.burnout || 0) + 10);
+      message = isAdult
+        ? "Đầu tư cả năm trau dồi tri thức & thi chứng chỉ chuyên môn (-$800, +22 Karma tri thức)!"
+        : "Chuyên tâm đèn sách suốt cả năm học! Đạt thành tích xuất sắc đứng đầu lớp (+22 Karma học vấn).";
+    } else if (focus_type === 'wellness') {
+      const healVitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 25);
+      character.vitality = healVitality;
+      character.burnout = Math.max(0, (character.burnout || 0) - 45);
+      if (isAdult && character.cash >= 600) character.cash -= 600;
+      message = isAdult
+        ? "Dành trọn năm dưỡng sinh, nghỉ ngơi trị liệu và gắn kết mái ấm (-$600, hồi phục +25 Sinh lực, giảm 45 Stress)!"
+        : "Một năm bình yên bên gia đình và bạn bè, thanh lọc mọi áp lực trường lớp (+25 Sinh lực, giảm 45 Stress).";
+    } else {
+      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 10);
+      message = "Một năm trôi qua bình dị và thuận hòa.";
+    }
+
+    history.push({
+      age: character.age,
+      event: `Trọng tâm năm: ${focus_type === 'hustle' ? 'Cày Cuốc Hết Mình' : focus_type === 'study' ? 'Đèn Sách Tri Thức' : 'Dưỡng Sinh Chữa Lành'}`,
+      choice: message
+    });
+    character.history_log = history;
+    character.hidden_flags = Array.from(flags);
+
+    await updateCharacter(character.id, character);
+
+    res.json({
+      success: true,
+      message,
+      character
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Thao tác trọng tâm năm thất bại", message: err.message });
+  }
+});
+
 router.post('/action/custom-resolve', async (req, res) => {
   try {
     const { user_action_text, cost_ap = 1 } = req.body;

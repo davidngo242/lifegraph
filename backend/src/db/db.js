@@ -350,6 +350,9 @@ export async function addAncestralMemorial(record) {
 // Current Life (Ephemeral Layer)
 export function ensureCharacterSkills(char) {
   if (!char) return char;
+  if (char.age < 18 && (Number(char.cash) || 0) < 0) {
+    char.cash = 0;
+  }
   if (!char.skills || typeof char.skills !== 'object') {
     char.skills = {
       tech_logic: { level: 0, name: "Trí Tuệ & Công Nghệ" },
