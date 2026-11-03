@@ -1,0 +1,2710 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>LifeGraph V6.0 RPG · Thiết kế Hệ thống, Mapping CSDL & Luồng Nghiệp vụ</title>
+<meta name="theme-color" content="#4f46e5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></symbol>
+  <symbol id="i-userplus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0 1 12 0v1M19 8v6M16 11h6"/></symbol>
+  <symbol id="i-cols" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+  <symbol id="i-no" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-dice" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="16" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="8" cy="16" r="1.5"/><circle cx="16" cy="8" r="1.5"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+  <symbol id="i-brain" viewBox="0 0 24 24"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04ZM14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04Z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+  <symbol id="i-karma" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20 5 5 0 0 1 0-10 5 5 0 0 0 0-10z"/><circle cx="12" cy="7" r="1.5"/><circle cx="12" cy="17" r="1.5"/></symbol>
+</svg>
+<style>
+/* Layout: Tài liệu một cột, mục lục dính bên trái trên màn rộng; bảng mapping cuộn ngang riêng */
+:root {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --brand: #4f46e5;
+  --brand-soft: #eef2ff;
+  --brand-deep: #3730a3;
+  --warn: #d97706;
+  --warn-soft: #fef3c7;
+  --ok: #059669;
+  --ok-soft: #ecfdf5;
+  --bad: #dc2626;
+  --bad-soft: #fef2f2;
+  --f-display: "Roboto Condensed", "Arial Narrow", Roboto, system-ui, sans-serif;
+  --f-body: Roboto, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --f-mono: "Roboto Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #090d16;
+    --surface: #131b2e;
+    --ink: #f1f5f9;
+    --muted: #94a3b8;
+    --line: #222f4c;
+    --brand: #818cf8;
+    --brand-soft: #1e1e38;
+    --brand-deep: #a5b4fc;
+    --warn: #fbbf24;
+    --warn-soft: #382d14;
+    --ok: #34d399;
+    --ok-soft: #123326;
+    --bad: #f87171;
+    --bad-soft: #39181b;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #090d16;
+  --surface: #131b2e;
+  --ink: #f1f5f9;
+  --muted: #94a3b8;
+  --line: #222f4c;
+  --brand: #818cf8;
+  --brand-soft: #1e1e38;
+  --brand-deep: #a5b4fc;
+  --warn: #fbbf24;
+  --warn-soft: #382d14;
+  --ok: #34d399;
+  --ok-soft: #123326;
+  --bad: #f87171;
+  --bad-soft: #39181b;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.wrap {
+  margin: 0;
+  padding-block: 28px 80px;
+  padding-left: max(24px, env(safe-area-inset-left, 0px));
+  padding-right: max(24px, env(safe-area-inset-right, 0px));
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 36px;
+}
+@media (max-width: 980px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 24px; padding-block: 20px 56px; }
+  nav.toc { position: static; }
+}
+
+h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; line-height: 1.25; margin: 0; }
+h1 { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 1.6rem; font-weight: 700; border-bottom: 2px solid var(--line); padding-bottom: 8px; }
+h3 { font-size: 1.25rem; font-weight: 600; }
+h4 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; max-width: 76ch; }
+ul, ol { margin: 0; padding-left: 1.25em; max-width: 76ch; display: grid; gap: 5px; }
+a { color: var(--brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 2px; }
+code, .mono { font-family: var(--f-mono); font-size: 0.88em; }
+strong { font-weight: 600; }
+
+/* Sticky Navigation TOC */
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; font-size: 0.86rem; max-height: calc(100vh - 40px); overflow-y: auto; padding-right: 6px; }
+nav.toc .label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-weight: 700; }
+nav.toc ol { list-style: none; padding: 0; gap: 3px; }
+nav.toc a { color: var(--ink); text-decoration: none; display: block; padding: 5px 8px; border-left: 2px solid var(--line); transition: all 0.15s ease; border-radius: 0 4px 4px 0; }
+nav.toc a:hover { border-left-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
+nav.toc ol ol { padding-left: 12px; margin-top: 2px; gap: 2px; font-size: 0.82rem; }
+
+main { display: grid; gap: 52px; min-width: 0; }
+section { display: grid; gap: 18px; scroll-margin-top: 24px; }
+
+/* Document Header */
+header.doc { display: grid; gap: 14px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.eyebrow { font-size: 0.78rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--brand); font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+.lede { font-size: 1.12rem; color: var(--ink); max-width: 68ch; line-height: 1.6; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 0.85rem; color: var(--muted); }
+.meta b { color: var(--ink); font-weight: 500; }
+
+.id { font-family: var(--f-mono); font-size: 0.8rem; font-weight: 600; color: var(--brand); background: var(--brand-soft); padding: 3px 8px; border-radius: 4px; white-space: nowrap; border: 1px solid var(--line); }
+.caption { font-size: 0.86rem; color: var(--muted); max-width: 76ch; }
+
+/* Features */
+.feature { display: grid; gap: 18px; padding-top: 28px; border-top: 1px solid var(--line); }
+.feature:first-of-type { border-top: 0; padding-top: 0; }
+.f-head { display: grid; gap: 8px; }
+.f-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; }
+.block { display: grid; gap: 10px; }
+.block > .k { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.steps { counter-reset: s; list-style: none; padding: 0; gap: 8px; }
+.steps li { counter-increment: s; position: relative; padding-left: 36px; min-height: 24px; }
+.steps li::before { content: counter(s); font-family: var(--f-mono); font-size: 0.8rem; font-weight: 700; color: var(--brand); border: 1.5px solid var(--brand); border-radius: 50%; width: 22px; height: 22px; display: grid; place-items: center; position: absolute; left: 0; top: 1px; }
+
+/* Tables */
+.tbl { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 600; background: var(--bg); white-space: nowrap; }
+td.f { font-weight: 600; color: var(--ink); }
+td.req { font-family: var(--f-mono); font-size: 0.8rem; font-weight: 600; }
+td.req.y { color: var(--brand); }
+td.map { font-family: var(--f-mono); font-size: 0.82rem; }
+td.num { font-family: var(--f-mono); font-size: 0.82rem; color: var(--muted); white-space: nowrap; }
+.minw { min-width: 640px; }
+.minw-l { min-width: 840px; }
+.minw-x { min-width: 1040px; }
+
+/* Sequence & Mermaid */
+.seq { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); padding: 18px; border-radius: 6px; }
+.seq pre.mermaid { margin: 0; font-family: var(--f-body); white-space: pre; }
+.seq svg { max-width: none !important; height: auto; }
+
+/* SQL Details Block */
+details.sql { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; overflow: hidden; }
+details.sql > summary { cursor: pointer; padding: 9px 14px; font-size: 0.88rem; font-weight: 600; color: var(--ink); background: var(--bg); user-select: none; }
+details.sql > summary:hover { background: var(--brand-soft); }
+details.sql > summary::marker { color: var(--brand); }
+details.sql pre { margin: 0; padding: 16px 18px; overflow-x: auto; background: #0f172a; color: #e2e8f0; font-family: var(--f-mono); font-size: 0.82rem; line-height: 1.6; white-space: pre; }
+
+/* Mockup UI Elements */
+.ui-fig { margin: 0; display: grid; gap: 10px; min-width: 0; }
+.ui-fig > *, .ui-switch > * { min-width: 0; }
+.ui-switch { display: grid; gap: 8px; }
+.ui-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.ui-tabs button { font: inherit; font-size: 0.82rem; font-weight: 500; padding: 5px 14px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; cursor: pointer; transition: all 0.15s ease; }
+.ui-tabs button[aria-selected="true"] { border-color: var(--brand); color: #fff; background: var(--brand); font-weight: 600; }
+.ui-tabs button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+.ui {
+  color-scheme: light;
+  --u-pri: #4f46e5; --u-pri-soft: #eef2ff; --u-pri-line: #c7d2fe;
+  --u-ink: #1e293b; --u-txt: #475569; --u-mute: #94a3b8; --u-ph: #cbd5e1;
+  --u-line: #e2e8f0; --u-line2: #f1f5f9; --u-head: #f8fafc; --u-dis: #f8fafc;
+  --u-ok: #10b981; --u-ok-soft: #ecfdf5; --u-ok-line: #a7f3d0;
+  --u-warn: #f59e0b; --u-warn-soft: #fef3c7; --u-warn-line: #fde68a;
+  --u-bad: #ef4444; --u-bad-soft: #fef2f2; --u-bad-line: #fecaca;
+  --u-gold: #fbbf24;
+  background: #ffffff; color: var(--u-ink);
+  font: 13px/1.5 Roboto, "Segoe UI", system-ui, Arial, sans-serif;
+  border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+.ui-bar { display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 14px; background: #0f172a; color: #94a3b8; font-size: 12px; }
+.ui-bar .dots { display: inline-flex; gap: 5px; }
+.ui-bar .dots i { width: 10px; height: 10px; border-radius: 50%; background: #334155; }
+.ui-bar .dots i:nth-child(1) { background: #ef4444; }
+.ui-bar .dots i:nth-child(2) { background: #f59e0b; }
+.ui-bar .dots i:nth-child(3) { background: #10b981; }
+.ui-bar b { color: #f8fafc; font-weight: 600; }
+.ui-bar .sep { opacity: .4; }
+.ui-page { padding: 18px; background: #ffffff; }
+
+.ui-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 0 14px; font: inherit; font-size: 12.5px; font-weight: 500; color: var(--u-txt); background: #fff; border: 1px solid var(--u-line); border-radius: 6px; cursor: pointer; white-space: nowrap; }
+.ui-btn.p { background: var(--u-pri); border-color: var(--u-pri); color: #fff; }
+.ui-btn.pl { background: var(--u-pri-soft); border-color: var(--u-pri-line); color: var(--u-pri); }
+.ui-btn.d { background: var(--u-bad); border-color: var(--u-bad); color: #fff; }
+.ui-btn.w { background: var(--u-warn); border-color: var(--u-warn); color: #fff; }
+.ui-btn.g { background: var(--u-ok); border-color: var(--u-ok); color: #fff; }
+.ui-btn.sm { height: 26px; padding: 0 10px; font-size: 11.5px; }
+
+.ui-tag { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; font-size: 11.5px; font-weight: 500; border: 1px solid var(--u-pri-line); background: var(--u-pri-soft); color: var(--u-pri); border-radius: 4px; white-space: nowrap; }
+.ui-tag.w { background: var(--u-warn-soft); border-color: var(--u-warn-line); color: var(--u-warn); }
+.ui-tag.s { background: var(--u-ok-soft); border-color: var(--u-ok-line); color: var(--u-ok); }
+.ui-tag.d { background: var(--u-bad-soft); border-color: var(--u-bad-line); color: var(--u-bad); }
+.ui-tag.i { background: #f1f5f9; border-color: #cbd5e1; color: var(--u-mute); }
+.ui-tag.gold { background: #fef3c7; border-color: #fde68a; color: #b45309; }
+
+/* Custom LifeGraph UI Elements */
+.ui-hero { border-radius: 8px; padding: 18px; color: #fff; display: grid; gap: 14px; position: relative; overflow: hidden; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%); }
+.ui-hero.calm { background: linear-gradient(135deg, #064e3b 0%, #065f46 60%, #047857 100%); }
+.ui-hero.stress { background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 60%, #b91c1c 100%); }
+.ui-hero-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.ui-hero-avatar { width: 56px; height: 56px; border-radius: 50%; border: 3px solid #818cf8; background: #312e81; display: grid; place-items: center; font-size: 26px; }
+.ui-hero-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+.ui-stat-box { background: rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 8px 10px; border: 1px solid rgba(255, 255, 255, 0.12); }
+.ui-stat-lb { font-size: 11px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; display: flex; justify-content: space-between; }
+.ui-bar-bg { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; overflow: hidden; margin-top: 5px; }
+.ui-bar-fill { height: 100%; border-radius: 3px; }
+
+.ui-dice-stage { background: #0f172a; color: #f8fafc; border-radius: 8px; padding: 18px; border: 1px solid #334155; display: grid; gap: 14px; text-align: center; }
+.ui-dice-box { width: 64px; height: 64px; margin: 0 auto; background: linear-gradient(135deg, #6366f1, #4338ca); border-radius: 12px; display: grid; place-items: center; font-size: 28px; font-weight: 700; color: #fff; box-shadow: 0 0 16px rgba(99,102,241,0.5); }
+.ui-whispers { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.ui-whisper-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px; font-size: 12.5px; border-left: 4px solid var(--u-pri); }
+.ui-whisper-card.heart { border-left-color: #ef4444; }
+.ui-whisper-card.instinct { border-left-color: #f59e0b; }
+
+footer { font-size: 0.84rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 20px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+</style>
+
+
+<div class="wrap">
+  <nav class="toc" aria-label="Mục lục hệ thống">
+    <div class="label">Mục lục kỹ thuật</div>
+    <ol>
+      <li><a href="#nen-tang">1. Nền tảng cốt lõi & Vòng lặp RPG</a></li>
+      <li><a href="#tich-hop">2. Giao tiếp hệ thống & Endpoints</a></li>
+      <li><a href="#engine">3. Engine tính toán & Quy tắc vận hành</a></li>
+      <li><a href="#luu-tru">4. Chiến lược lưu trữ 2 tầng</a></li>
+      <li><a href="#bang">5. Bảng dữ liệu CSDL (DDL)</a></li>
+      <li><a href="#quan-he">6. Quan hệ bảng & Ràng buộc</a></li>
+      <li><a href="#enum">7. Enum & Danh mục quy chuẩn</a></li>
+      <li><a href="#ma-tran">8. Ma trận Chức năng × Bảng</a></li>
+      <li>
+        <a href="#g1">9. Nhóm 1: Sinh tồn & Cốt lõi</a>
+        <ol>
+          <li><a href="#LG-F01">LG-F01: Hero Banner & 3D Avatar</a></li>
+          <li><a href="#LG-F02">LG-F02: Annual Tick & Bảo vệ tài chính</a></li>
+          <li><a href="#LG-F03">LG-F03: Action Point Hub & 1-Click Focus</a></li>
+          <li><a href="#LG-F04">LG-F04: Ấu thơ 0–5 tuổi & Fast-forward</a></li>
+        </ol>
+      </li>
+      <li>
+        <a href="#g2">10. Nhóm 2: RPG Mind Stage & Số phận</a>
+        <ol>
+          <li><a href="#LG-F05">LG-F05: Mind Stage & Tiếng thì thầm</a></li>
+          <li><a href="#LG-F06">LG-F06: Xúc xắc Định mệnh D20 & DC Check</a></li>
+          <li><a href="#LG-F07">LG-F07: AI Game Master & Tình huống</a></li>
+          <li><a href="#LG-F08">LG-F08: Đối chất NPC & Mạng lưới xã hội</a></li>
+        </ol>
+      </li>
+      <li>
+        <a href="#g3">11. Nhóm 3: Kinh tế & Danh mục tài sản</a>
+        <ol>
+          <li><a href="#LG-F09">LG-F09: Thị trường Tài sản & Đầu tư</a></li>
+          <li><a href="#LG-F10">LG-F10: Nâng cấp nơi ở & Nhà ở</a></li>
+          <li><a href="#LG-F11">LG-F11: MMO Macro & Thế giới thực</a></li>
+        </ol>
+      </li>
+      <li>
+        <a href="#g4">12. Nhóm 4: Gia tộc & Chuyển giao di sản</a>
+        <ol>
+          <li><a href="#LG-F12">LG-F12: Quan hệ gia đình & Hôn nhân</a></li>
+          <li><a href="#LG-F13">LG-F13: Kế thừa Thế hệ & Di chúc</a></li>
+          <li><a href="#LG-F14">LG-F14: Ban thờ Tổ tiên & Hồi hướng</a></li>
+        </ol>
+      </li>
+      <li>
+        <a href="#g5">13. Nhóm 5: Luân hồi, Gacha & Bảo mật</a>
+        <ol>
+          <li><a href="#LG-F15">LG-F15: Luân hồi Nghiệp quả & Gacha</a></li>
+          <li><a href="#LG-F16">LG-F16: Tử kỳ & Video Death Recap 15s</a></li>
+          <li><a href="#LG-F17">LG-F17: Bảo mật HMAC-SHA256 & Audit</a></li>
+          <li><a href="#LG-F18">LG-F18: Khát vọng & Siêu việt hóa</a></li>
+        </ol>
+      </li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="doc">
+      <div class="eyebrow">
+        <svg class="ic" width="16" height="16"><use href="#i-karma"/></svg>
+        LifeGraph RPG · Tài liệu Đặc tả Kỹ thuật & GDD Chi tiết (V6.0)
+      </div>
+      <h1>Mapping CSDL, Kiến Trúc Hệ Thống & Luồng Nghiệp Vụ LifeGraph RPG</h1>
+      <p class="lede">Đặc tả toàn diện kiến trúc game nhập vai mô phỏng cuộc đời <b>LifeGraph</b>: Chuyển dịch toàn diện từ cơ chế bấm thẻ thụ động sang <b>Hệ thống RPG Sân khấu Tâm trí (Mind Stage) & Xúc xắc Định mệnh D20</b>; Cơ chế bảo vệ tài chính nghiêm ngặt cho vị thành niên &lt; 18 tuổi; Tối ưu hóa lượt click thường niên qua <b>1-Click Annual Strategic Focus</b>; Cấu trúc cơ sở dữ liệu 2 tầng (Vĩnh cửu vs Phù du); cùng toàn bộ luồng xử lý Backend/Frontend tương đương.</p>
+      <div class="meta">
+        <span><b>Backend:</b> Node.js 20 LTS / Express <code>v6.0-ultimate-narrative</code></span>
+        <span><b>Frontend:</b> Next.js 15 (App Router) / React 19 / Tailwind CSS</span>
+        <span><b>CSDL:</b> Dual-Layer PostgreSQL 16 / Supabase (Layer 1 Meta + Layer 2 Mortal)</span>
+        <span><b>AI Engine:</b> Gemini 2.0 Flash + Procedural Prompt Compiler</span>
+        <span><b>Phiên bản:</b> V6.0 Enterprise Ready (Cập nhật 03/11/2026)</span>
+      </div>
+    </header>
+
+
+    <!-- 1. NỀN TẢNG CỐT LÕI -->
+    <section id="nen-tang">
+      <h2>1. Nền tảng cốt lõi & Vòng lặp RPG Nhập vai</h2>
+      <p>Trước phiên bản V6.0, LifeGraph vận hành như một game chọn thẻ bài thụ động (card-picker), nơi người chơi chỉ đơn thuần bấm vào các lựa chọn định sẵn. Bản cập nhật V6.0 đã tái cấu trúc toàn diện thành <b>Hệ thống Sân khấu Tâm trí (RPG Mind Stage)</b> kết hợp cùng <b>Xúc xắc Định mệnh D20 tương tác</b> và <b>Phản ứng thị giác thời gian thực 0ms</b>:</p>
+      <ul>
+        <li><b>Sân khấu Tâm trí (Mind Stage):</b> Mọi sự kiện lớn không còn là lựa chọn tĩnh. Tâm trí nhân vật hiện lên 3 tiếng thì thầm đối thoại từ các bản ngã: <code>🧠 Lý Trí</code>, <code>❤️ Trái Tim</code> và <code>⚡ Bản Năng</code>. Người chơi chọn lập trường (Stance) đại diện cho phong cách sống.</li>
+        <li><b>Xúc xắc Định mệnh D20 (Fate Dice System):</b> Thành bại của quyết định không định đoạt trước, mà được thử thách qua tung xúc xắc D20 vật lý với Ngưỡng khó khăn (DC). Chỉ số nhân vật, tư chất bẩm sinh và điểm hành động đầu tư (AP Boost) sẽ cộng trực tiếp vào kết quả gieo xúc xắc.</li>
+        <li><b>Tối ưu hóa lượt click (Click Fatigue Reduction):</b> Triệt tiêu thao tác click lẻ tẻ qua <i>1-Click Annual Strategic Focus</i> (phân bổ trọng tâm năm) và <i>Childhood 0-5 Fast-Forward</i> (tự động hóa giai đoạn sơ sinh).</li>
+        <li><b>Bảo vệ tài chính vị thành niên:</b> Trẻ em dưới 18 tuổi bị khóa tiền mặt nghiêm ngặt ở mức 0 VND. Toàn bộ chi phí sinh hoạt do quỹ gia đình gánh vác, xóa bỏ hoàn toàn hiện tượng vô lý khi trẻ 3 tuổi phải gánh nợ hay tự thanh toán tiền ăn.</li>
+      </ul>
+
+      <div class="seq"><pre class="mermaid">
+flowchart LR
+  subgraph L1[Layer 1: Vĩnh Cửu - Meta Progression]
+    ACC[(player_accounts<br/>Karma vĩnh cửu · Lineage Tree)]
+    PERK[(unlocked_perks<br/>Tư chất luân hồi)]
+  end
+
+  subgraph L2[Layer 2: Phù Du - Cuộc Đời Hiện Tại]
+    CHAR[(characters<br/>Vitality · Burnout · Cash · AP)]
+    NPC[(npcs<br/>Ân oán · Thiện cảm)]
+    ASSET[(assets<br/>Bất động sản · Cổ phiếu)]
+    REL[(relationships<br/>Gia tộc · Hôn nhân)]
+  end
+
+  subgraph TICK[Annual Tick Engine]
+    CALC[Tính hao mòn sinh lực<br/>Tuổi & Burnout]
+    SHIELD[Khiên bảo vệ tài chính<br/>Tuổi &lt; 18: Cash = 0]
+    AP_POOL[Cấp phát 3 Action Points]
+  end
+
+  subgraph STAGE[Sân Khấu Tâm Trí & Số Phận]
+    WHISP[Tiếng thì thầm Nội tâm<br/>Lý trí · Trái tim · Bản năng]
+    DICE[Xúc xắc Định mệnh D20<br/>Chỉ số + Tư chất + AP vs DC]
+  end
+
+  ACC --> CHAR
+  PERK --> CHAR
+  CHAR --> TICK
+  TICK --> AP_POOL
+  AP_POOL --> STAGE
+  STAGE -->|Thắng DC / Thua DC| CHAR
+  STAGE -->|Biến động mối quan hệ| NPC
+  STAGE -->|Dòng tiền & Lợi tức| ASSET
+  CHAR -->|Lâm chung / Hết sinh lực| ACC
+</pre></div>
+    </section>
+
+    <!-- 2. GIAO TIẾP HỆ THỐNG -->
+    <section id="tich-hop">
+      <h2>2. Giao tiếp hệ thống & Endpoints</h2>
+      <p>LifeGraph kết nối mô hình Client-Server hiện đại giữa Next.js Frontend và Express Backend với chuẩn bảo mật mật mã HMAC-SHA256.</p>
+      
+      <div class="tbl">
+        <table class="minw-l">
+          <thead>
+            <tr>
+              <th>Phương thức</th>
+              <th>Endpoint</th>
+              <th>Mục đích nghiệp vụ</th>
+              <th>Payload yêu cầu</th>
+              <th>Bảo mật</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>POST</code></td>
+              <td><code>/api/game/auth/handshake</code></td>
+              <td>Cấp phát Session Token ký mật mã chống can thiệp (Anti-tamper)</td>
+              <td><code>{ client_id }</code></td>
+              <td><span class="ui-tag s">Public</span></td>
+            </tr>
+            <tr>
+              <td><code>GET</code></td>
+              <td><code>/api/game/state</code></td>
+              <td>Lấy toàn bộ trạng thái nhân vật, tài sản, NPC, gia đình và tình huống hiện hành</td>
+              <td><em>Không có</em></td>
+              <td><span class="ui-tag">Session Token</span></td>
+            </tr>
+            <tr>
+              <td><code>POST</code></td>
+              <td><code>/api/game/tick</code></td>
+              <td>Thực thi bước nhảy năm (Tick), giải quyết lựa chọn RPG Mind Stage hoặc tung xúc xắc D20</td>
+              <td><code>{ choice_id, stance, dice_roll, ap_spent, custom_action }</code></td>
+              <td><span class="ui-tag w">HMAC Signed</span></td>
+            </tr>
+            <tr>
+              <td><code>POST</code></td>
+              <td><code>/api/game/action/annual-focus</code></td>
+              <td>1-Click phân bổ trọng tâm chiến lược năm (Thể chất, Sự nghiệp, Gia đình)</td>
+              <td><code>{ focus_type: 'career' | 'vitality' | 'family' }</code></td>
+              <td><span class="ui-tag">Session Token</span></td>
+            </tr>
+            <tr>
+              <td><code>POST</code></td>
+              <td><code>/api/game/childhood-fastforward</code></td>
+              <td>Chuyển tiếp nhanh giai đoạn 0–5 tuổi mầm non lên 6 tuổi (bước vào cấp 1)</td>
+              <td><code>{ target_age: 6 }</code></td>
+              <td><span class="ui-tag">Session Token</span></td>
+            </tr>
+            <tr>
+              <td><code>POST</code></td>
+              <td><code>/api/game/action/buy-asset</code></td>
+              <td>Mua tài sản sinh lời (Bất động sản, Cổ phiếu công nghệ, Doanh nghiệp)</td>
+              <td><code>{ asset_id, category, amount }</code></td>
+              <td><span class="ui-tag w">HMAC Signed</span></td>
+            </tr>
+            <tr>
+              <td><code>POST</code></td>
+              <td><code>/api/game/action/upgrade-housing</code></td>
+              <td>Nâng cấp nơi ở (Trọ bình dân -> Căn hộ cao cấp -> Dinh thự sinh thái)</td>
+              <td><code>{ tier_id }</code></td>
+              <td><span class="ui-tag">Session Token</span></td>
+            </tr>
+            <tr>
+              <td><code>POST</code></td>
+              <td><code>/api/game/rebirth</code></td>
+              <td>Tái sinh luân hồi, tính toán điểm Karma, bốc quẻ Tarot và mở khóa tư chất kiếp sau</td>
+              <td><code>{ selected_perks, chosen_heritage }</code></td>
+              <td><span class="ui-tag w">HMAC Signed</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. ENGINE TÍNH TOÁN -->
+    <section id="engine">
+      <h2>3. Engine tính toán & Quy tắc vận hành thời gian thực</h2>
+      <p>Toàn bộ cơ chế mô phỏng cuộc đời được điều phối thông qua các công thức toán học và quy tắc nghiệp vụ nghiêm ngặt trong <code>tickEngine.js</code>:</p>
+
+      <div class="flow">
+        <div>
+          <div class="side">Công thức Suy hao Sinh lực (Vitality Decay)</div>
+          <p>Sinh lực tối đa (Max Vitality) bị suy giảm tự nhiên theo độ tuổi từ năm 35 tuổi trở đi, mô phỏng quá trình lão hóa sinh học:</p>
+          <pre class="mono" style="background:var(--bg);padding:8px;border-radius:4px;font-size:12px;">
+Max_Vitality(age) = 
+  if is_transhuman: return 100
+  if age &lt; 35: return 100
+  else: return max(20, 100 - floor((age - 35) * 1.25))
+          </pre>
+        </div>
+        <div>
+          <div class="side">Khiên Bảo vệ Tài chính Vị thành niên</div>
+          <p>Loại bỏ lỗi logic game đời sống khi trẻ em có tiền mặt hoặc gánh nợ cá nhân:</p>
+          <ul>
+            <li>Với nhân vật dưới 18 tuổi: Tiền mặt cá nhân luôn cố định <code>cash = 0</code>.</li>
+            <li>Học phí, dinh dưỡng và y tế được chi trả trực tiếp từ quỹ bảo trợ gia đình (<code>family_endowment</code>).</li>
+            <li>Đủ 18 tuổi: Hệ thống mở khóa ví tiền cá nhân và trao quyền tự chủ tài chính.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flow" style="margin-top:12px;">
+        <div>
+          <div class="side">Công thức Xúc xắc Định mệnh D20</div>
+          <p>Xác định kết quả hành động dựa trên ngưỡng độ khó (DC - Difficulty Class):</p>
+          <pre class="mono" style="background:var(--bg);padding:8px;border-radius:4px;font-size:12px;">
+Total_Roll = D20_Base + Stat_Bonus + Trait_Mod + (AP_Boost * 2)
+
+Kết quả:
+  - Total_Roll &gt;= DC + 5 : Critical Success (Thành tựu xuất chúng)
+  - Total_Roll &gt;= DC     : Success (Thành công trọn vẹn)
+  - Total_Roll &lt; DC      : Hard Lesson (Bài học đắt giá)
+          </pre>
+        </div>
+        <div>
+          <div class="side">Cơ chế Kiệt sức (Burnout Penalty)</div>
+          <p>Khi Burnout tích lũy vượt ngưỡng an toàn:</p>
+          <ul>
+            <li><code>Burnout &gt; 70</code>: Mỗi năm trừ thêm <code>floor((Burnout - 70) / 5)</code> điểm sinh lực.</li>
+            <li><code>Burnout == 100</code>: Kích hoạt khẩn cấp biến cố "Đột quỵ / Suy nhược cấp tính" đe dọa trực tiếp tính mạng nhân vật.</li>
+            <li>Nơi ở cao cấp (Luxury Housing) tự động hồi phục 15-25 điểm Burnout mỗi năm.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. CHIẾN LƯỢC LƯU TRỮ -->
+    <section id="luu-tru">
+      <h2>4. Chiến lược lưu trữ & Kiến trúc 2 tầng (Dual-Layer)</h2>
+      <p>Cơ sở dữ liệu của LifeGraph được thiết kế phân tầng triệt để nhằm tách biệt giữa tiến trình bất tử của người chơi và sinh mệnh tạm bợ của nhân vật:</p>
+      
+      <div class="flow">
+        <div>
+          <div class="side">Tầng 1: Vĩnh Cửu (Layer 1 - Meta Progression)</div>
+          <p>Bảng <code>player_accounts</code> lưu trữ danh tính người chơi, tổng điểm Karma tích lũy qua các kiếp, phả hệ tổ tiên và cây công đức gia tộc. <b>Tuyệt đối không bao giờ bị xóa hay reset</b> khi nhân vật qua đời.</p>
+        </div>
+        <div>
+          <div class="side">Tầng 2: Phù Du (Layer 2 - Mortal Session)</div>
+          <p>Bảng <code>characters</code> cùng các bảng quan hệ <code>assets</code>, <code>npcs</code>, <code>relationships</code> đại diện cho một kiếp sống duy nhất. Khi nhân vật qua đời, dữ liệu này được đóng băng thành bản ghi lịch sử phục vụ Death Recap và kế thừa thế hệ.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 5. BẢNG DỮ LIỆU CSDL -->
+    <section id="bang">
+      <h2>5. Bảng dữ liệu CSDL & Data Dictionary</h2>
+      <p>Hệ thống sử dụng cơ sở dữ liệu quan hệ PostgreSQL chuẩn hóa cao với hỗ trợ định dạng JSONB cho các cấu trúc dữ liệu linh hoạt (tư chất, cờ cốt truyện, lịch sử snapshot).</p>
+
+      <!-- player_accounts -->
+      <div class="block">
+        <h3>5.1. Bảng <code>player_accounts</code> (Layer 1 - Meta Tiến trình vĩnh cửu)</h3>
+        <div class="tbl">
+          <table class="minw">
+            <thead><tr><th>Tên cột</th><th>Kiểu</th><th>Nullable</th><th>Mặc định</th><th>Mô tả nghiệp vụ</th></tr></thead>
+            <tbody>
+              <tr><td class="f">id</td><td>VARCHAR(100)</td><td class="req y">NOT NULL</td><td>'primary_player'</td><td>Khóa chính đại diện cho tài khoản người chơi bất tử</td></tr>
+              <tr><td class="f">total_karma</td><td>INT</td><td class="req y">NOT NULL</td><td>100</td><td>Tổng điểm công đức luân hồi tích lũy từ mọi kiếp</td></tr>
+              <tr><td class="f">unlocked_perks</td><td>JSONB</td><td class="req y">NOT NULL</td><td>'[]'::jsonb</td><td>Danh sách tư chất vĩnh viễn đã mua bằng Karma</td></tr>
+              <tr><td class="f">reincarnation_count</td><td>INT</td><td class="req y">NOT NULL</td><td>1</td><td>Số kiếp luân hồi đã trải qua</td></tr>
+              <tr><td class="f">lifetime_stats</td><td>JSONB</td><td class="req y">NOT NULL</td><td>'{...}'::jsonb</td><td>Thống kê tổng số năm đã sống, tài sản cao nhất, số lần tử nạn</td></tr>
+              <tr><td class="f">created_at</td><td>TIMESTAMPTZ</td><td class="req">NULL</td><td>CURRENT_TIMESTAMP</td><td>Thời điểm lập hồ sơ người chơi</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- characters -->
+      <div class="block" style="margin-top:20px;">
+        <h3>5.2. Bảng <code>characters</code> (Layer 2 - Nhân vật kiếp sống hiện hành)</h3>
+        <div class="tbl">
+          <table class="minw-l">
+            <thead><tr><th>Tên cột</th><th>Kiểu</th><th>Nullable</th><th>Mặc định</th><th>Mô tả nghiệp vụ</th></tr></thead>
+            <tbody>
+              <tr><td class="f">id</td><td>UUID</td><td class="req y">NOT NULL</td><td>gen_random_uuid()</td><td>Khóa chính nhận diện kiếp sống hiện tại</td></tr>
+              <tr><td class="f">player_account_id</td><td>VARCHAR(100)</td><td class="req y">NOT NULL</td><td>'primary_player'</td><td>FK tham chiếu đến bảng vĩnh cửu <code>player_accounts</code></td></tr>
+              <tr><td class="f">name</td><td>VARCHAR(255)</td><td class="req y">NOT NULL</td><td></td><td>Họ và tên nhân vật theo bản sắc văn hóa quốc gia</td></tr>
+              <tr><td class="f">age</td><td>INT</td><td class="req y">NOT NULL</td><td>0</td><td>Tuổi hiện tại của nhân vật (0 đến 120+)</td></tr>
+              <tr><td class="f">generation</td><td>INT</td><td class="req y">NOT NULL</td><td>1</td><td>Đời thứ mấy trong gia phả gia tộc</td></tr>
+              <tr><td class="f">nationality</td><td>VARCHAR(100)</td><td class="req y">NOT NULL</td><td>'T2_Vietnam'</td><td>Quốc tịch và nền kinh tế xuất phát điểm</td></tr>
+              <tr><td class="f">vitality</td><td>INT</td><td class="req y">NOT NULL</td><td>100</td><td>Điểm sinh lực hiện tại (0: Tử vong lâm chung, 100: Tối đa)</td></tr>
+              <tr><td class="f">max_vitality</td><td>INT</td><td class="req y">NOT NULL</td><td>100</td><td>Ngưỡng trần sinh lực (suy giảm theo tuổi trừ khi Transhuman)</td></tr>
+              <tr><td class="f">burnout</td><td>INT</td><td class="req y">NOT NULL</td><td>0</td><td>Mức độ căng thẳng / kiệt sức tâm lý (0 đến 100)</td></tr>
+              <tr><td class="f">cash</td><td>BIGINT</td><td class="req y">NOT NULL</td><td>0</td><td>Tiền mặt tự do (khóa ở mức 0 VND cho đến 18 tuổi)</td></tr>
+              <tr><td class="f">family_endowment</td><td>BIGINT</td><td class="req y">NOT NULL</td><td>0</td><td>Quỹ bảo trợ gia đình gánh vác chi phí khi &lt; 18 tuổi</td></tr>
+              <tr><td class="f">action_points</td><td>INT</td><td class="req y">NOT NULL</td><td>3</td><td>Điểm hành động cấp phát mỗi năm để học tập/sự nghiệp/thể chất</td></tr>
+              <tr><td class="f">innate_traits</td><td>JSONB</td><td class="req y">NOT NULL</td><td>'[]'::jsonb</td><td>Các tư chất bẩm sinh (ví dụ: 'Gen thiên tài', 'Ý chí sắt đá')</td></tr>
+              <tr><td class="f">hidden_flags</td><td>JSONB</td><td class="req y">NOT NULL</td><td>'[]'::jsonb</td><td>Cờ cốt truyện bí mật dẫn dắt các sự kiện rẽ nhánh tương lai</td></tr>
+              <tr><td class="f">is_transhuman</td><td>BOOLEAN</td><td class="req y">NOT NULL</td><td>false</td><td>Đã cấy ghép công nghệ sinh học/bất tử hay chưa</td></tr>
+              <tr><td class="f">is_deceased</td><td>BOOLEAN</td><td class="req y">NOT NULL</td><td>false</td><td>Đánh dấu nhân vật đã qua đời (kích hoạt Death Recap & Luân hồi)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- npcs -->
+      <div class="block" style="margin-top:20px;">
+        <h3>5.3. Bảng <code>npcs</code> (Mạng lưới nhân vật NPC & Ký ức xã hội)</h3>
+        <div class="tbl">
+          <table class="minw">
+            <thead><tr><th>Tên cột</th><th>Kiểu</th><th>Nullable</th><th>Mặc định</th><th>Mô tả nghiệp vụ</th></tr></thead>
+            <tbody>
+              <tr><td class="f">id</td><td>UUID</td><td class="req y">NOT NULL</td><td>gen_random_uuid()</td><td>Khóa chính định danh NPC</td></tr>
+              <tr><td class="f">character_id</td><td>UUID</td><td class="req y">NOT NULL</td><td></td><td>FK tham chiếu <code>characters.id</code> (ON DELETE CASCADE)</td></tr>
+              <tr><td class="f">name</td><td>VARCHAR(255)</td><td class="req y">NOT NULL</td><td></td><td>Tên NPC tương tác</td></tr>
+              <tr><td class="f">role</td><td>VARCHAR(100)</td><td class="req y">NOT NULL</td><td></td><td>Vai trò quan hệ: 'Tình đầu', 'Sếp cũ', 'Kẻ thù', 'Tri kỷ', 'Đối tác'</td></tr>
+              <tr><td class="f">affinity</td><td>INT</td><td class="req y">NOT NULL</td><td>50</td><td>Điểm thiện cảm (-100 thù hận đến +100 tri kỷ sống chết)</td></tr>
+              <tr><td class="f">memory_notes</td><td>TEXT</td><td class="req">NULL</td><td></td><td>Ghi nhớ ký ức tương tác với nhân vật phục vụ đối thoại AI</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- assets -->
+      <div class="block" style="margin-top:20px;">
+        <h3>5.4. Bảng <code>assets</code> (Danh mục tài sản & Bất động sản sở hữu)</h3>
+        <div class="tbl">
+          <table class="minw">
+            <thead><tr><th>Tên cột</th><th>Kiểu</th><th>Nullable</th><th>Mặc định</th><th>Mô tả nghiệp vụ</th></tr></thead>
+            <tbody>
+              <tr><td class="f">id</td><td>UUID</td><td class="req y">NOT NULL</td><td>gen_random_uuid()</td><td>Khóa chính tài sản</td></tr>
+              <tr><td class="f">character_id</td><td>UUID</td><td class="req y">NOT NULL</td><td></td><td>FK tham chiếu <code>characters.id</code></td></tr>
+              <tr><td class="f">type</td><td>VARCHAR(50)</td><td class="req y">NOT NULL</td><td></td><td>Loại tài sản: 'real_estate', 'stock', 'business', 'crypto'</td></tr>
+              <tr><td class="f">name</td><td>VARCHAR(255)</td><td class="req y">NOT NULL</td><td></td><td>Tên tài sản (Căn hộ Penthouse, Cổ phần VinFast, Trại nông sản)</td></tr>
+              <tr><td class="f">current_value</td><td>BIGINT</td><td class="req y">NOT NULL</td><td>0</td><td>Định giá thị trường hiện thời</td></tr>
+              <tr><td class="f">maintenance_cost_per_tick</td><td>INT</td><td class="req y">NOT NULL</td><td>0</td><td>Chi phí duy trì / thuế thường niên</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. QUAN HỆ BẢNG -->
+    <section id="quan-he">
+      <h2>6. Quan hệ bảng & Khóa ngoại (ERD)</h2>
+      <p>Sơ đồ thực thể liên kết (Entity Relationship Diagram) thể hiện mối tương quan chặt chẽ giữa tài khoản vĩnh cửu và các thực thể phù du của kiếp sống:</p>
+      
+      <div class="seq"><pre class="mermaid">
+erDiagram
+  player_accounts ||--o{ characters : "sở hữu qua các kiếp"
+  characters ||--o{ npcs : "quen biết & tương tác"
+  characters ||--o{ assets : "nắm giữ danh mục đầu tư"
+  characters ||--o{ relationships : "quan hệ gia đình & vợ chồng"
+  characters ||--o{ tick_events : "nhật ký biến cố hàng năm"
+  player_accounts ||--o{ ancestral_memorials : "vinh danh tại ban thờ tổ tiên"
+
+  player_accounts {
+    string id PK
+    int total_karma
+    jsonb unlocked_perks
+    int reincarnation_count
+  }
+
+  characters {
+    uuid id PK
+    string player_account_id FK
+    string name
+    int age
+    int vitality
+    int burnout
+    bigint cash
+    bigint family_endowment
+    int action_points
+    boolean is_deceased
+  }
+
+  npcs {
+    uuid id PK
+    uuid character_id FK
+    string name
+    string role
+    int affinity
+    text memory_notes
+  }
+
+  assets {
+    uuid id PK
+    uuid character_id FK
+    string type
+    string name
+    bigint current_value
+    int maintenance_cost_per_tick
+  }
+
+  relationships {
+    uuid id PK
+    uuid character_id FK
+    string type
+    string name
+    int affection_level
+  }
+</pre></div>
+    </section>
+
+    <!-- 7. ENUM & DANH MỤC -->
+    <section id="enum">
+      <h2>7. Enum & Danh mục chuẩn</h2>
+      <div class="tbl">
+        <table class="minw">
+          <thead><tr><th>Tên Enum</th><th>Giá trị hợp lệ</th><th>Ý nghĩa nghiệp vụ</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="f"><code>AgeStage</code></td>
+              <td><code>INFANT_0_5</code>, <code>YOUTH_6_17</code>, <code>ADULT_18_59</code>, <code>ELDER_60_PLUS</code></td>
+              <td>Giai đoạn độ tuổi: Ấu thơ, Vị thành niên, Trưởng thành, Tuổi xế chiều</td>
+            </tr>
+            <tr>
+              <td class="f"><code>MindStance</code></td>
+              <td><code>RATIONAL</code>, <code>EMPATHY</code>, <code>INSTINCT</code>, <code>RISK</code>, <code>DIPLOMATIC</code></td>
+              <td>Lập trường tâm trí trong Mind Stage: Lý trí, Thấu cảm, Bản năng, Đột phá, Khôn khéo</td>
+            </tr>
+            <tr>
+              <td class="f"><code>FateResult</code></td>
+              <td><code>CRITICAL_SUCCESS</code>, <code>SUCCESS</code>, <code>HARD_LESSON</code></td>
+              <td>Kết quả gieo xúc xắc D20: Xuất chúng (DC+5), Thành công (DC), Bài học đắt giá (&lt; DC)</td>
+            </tr>
+            <tr>
+              <td class="f"><code>HousingTier</code></td>
+              <td><code>TIER_0_SLUM</code>, <code>TIER_1_RENTAL</code>, <code>TIER_2_STUDIO</code>, <code>TIER_3_CONDO</code>, <code>TIER_4_MANSION</code></td>
+              <td>Cấp bậc nơi ở: Từ nhà trọ ổ chuột đến dinh thự triệu đô (tăng hồi phục Burnout & AP)</td>
+            </tr>
+            <tr>
+              <td class="f"><code>KarmaRarity</code></td>
+              <td><code>COMMON</code>, <code>UNCOMMON</code>, <code>RARE</code>, <code>EPIC</code>, <code>LEGENDARY</code>, <code>MYTHIC</code></td>
+              <td>Độ hiếm tư chất luân hồi trong Soul Gacha</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 8. MA TRẬN CHỨC NĂNG × BẢNG CSDL -->
+    <section id="ma-tran">
+      <h2>8. Ma trận Chức năng × Bảng CSDL</h2>
+      <p>Bảng ma trận truy xuất dữ liệu (CRUD Matrix) đối chiếu giữa 18 tính năng cốt lõi và các bảng cơ sở dữ liệu tương ứng:</p>
+      <div class="tbl">
+        <table class="minw-x">
+          <thead>
+            <tr>
+              <th>Mã chức năng</th>
+              <th>Tên tính năng</th>
+              <th>player_accounts</th>
+              <th>characters</th>
+              <th>npcs</th>
+              <th>assets</th>
+              <th>relationships</th>
+              <th>tick_events</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="f">LG-F01</td><td>Character Hero Banner & 3D Scene</td><td>R</td><td>R</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+            <tr><td class="f">LG-F02</td><td>Annual Tick & Minor Shield</td><td>-</td><td>R/W</td><td>-</td><td>R/W</td><td>R/W</td><td>W</td></tr>
+            <tr><td class="f">LG-F03</td><td>Action Point Hub & 1-Click Focus</td><td>-</td><td>R/W</td><td>-</td><td>-</td><td>-</td><td>W</td></tr>
+            <tr><td class="f">LG-F04</td><td>Childhood 0–5 Nurture & Fastforward</td><td>-</td><td>R/W</td><td>-</td><td>-</td><td>R/W</td><td>W</td></tr>
+            <tr><td class="f">LG-F05</td><td>Mind Stage & Ego Whispers</td><td>-</td><td>R/W</td><td>R</td><td>-</td><td>-</td><td>W</td></tr>
+            <tr><td class="f">LG-F06</td><td>Fate Dice D20 & DC Check</td><td>-</td><td>R/W</td><td>-</td><td>-</td><td>-</td><td>W</td></tr>
+            <tr><td class="f">LG-F07</td><td>AI Game Master & Scenarios</td><td>-</td><td>R/W</td><td>R/W</td><td>-</td><td>-</td><td>W</td></tr>
+            <tr><td class="f">LG-F08</td><td>NPC Confrontation Stage</td><td>-</td><td>R/W</td><td>R/W</td><td>-</td><td>-</td><td>W</td></tr>
+            <tr><td class="f">LG-F09</td><td>Asset Market & Portfolio</td><td>-</td><td>R/W</td><td>-</td><td>R/W</td><td>-</td><td>W</td></tr>
+            <tr><td class="f">LG-F10</td><td>Housing Tier Upgrades</td><td>-</td><td>R/W</td><td>-</td><td>R/W</td><td>-</td><td>W</td></tr>
+            <tr><td class="f">LG-F11</td><td>MMO Macro Index & Real World</td><td>-</td><td>R</td><td>-</td><td>R</td><td>-</td><td>-</td></tr>
+            <tr><td class="f">LG-F12</td><td>Family Sanctum & Romance</td><td>-</td><td>R/W</td><td>-</td><td>-</td><td>R/W</td><td>W</td></tr>
+            <tr><td class="f">LG-F13</td><td>Heir Succession & Legacy</td><td>R/W</td><td>R/W</td><td>-</td><td>R/W</td><td>R/W</td><td>W</td></tr>
+            <tr><td class="f">LG-F14</td><td>Ancestral Altar & Incense</td><td>R/W</td><td>R/W</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+            <tr><td class="f">LG-F15</td><td>Karmic Rebirth & Soul Gacha</td><td>R/W</td><td>W</td><td>-</td><td>-</td><td>-</td><td>W</td></tr>
+            <tr><td class="f">LG-F16</td><td>Death Recap Video 15s</td><td>-</td><td>R</td><td>R</td><td>R</td><td>R</td><td>R</td></tr>
+            <tr><td class="f">LG-F17</td><td>Cryptographic Handshake & Audit</td><td>R</td><td>R</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+            <tr><td class="f">LG-F18</td><td>Lifelong Aspiration & Transhumanism</td><td>-</td><td>R/W</td><td>-</td><td>-</td><td>-</td><td>W</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <!-- 9. NHÓM 1: NỀN TẢNG CỐT LÕI & VÒNG LẶP SINH TỒN -->
+    <section id="g1">
+      <h2>9. Nhóm 1: Nền tảng cốt lõi & Vòng lặp Sinh tồn</h2>
+
+      <!-- LG-F01 -->
+      <article class="feature" id="LG-F01">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F01</span>
+            <h3>Character Hero Banner & 3D Avatar Dynamic Scene Visualizer</h3>
+          </div>
+          <p class="caption">Thanh điều hướng đỉnh cao (Hero Banner) kết nối mô hình Avatar 3D phản ứng cảm xúc theo thời gian thực (0ms latency), thay đổi dải màu khí quyển (Atmospheric Gradient) theo chỉ số sinh lực và mức độ kiệt sức (Burnout), cung cấp thông tin sống còn: Sinh lực, Kiệt sức, Tiền mặt và Điểm hành động (AP).</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui-switch">
+              <div class="ui-tabs" role="tablist">
+                <button type="button" role="tab" data-ui-tab="f01-calm" aria-selected="true">Trạng thái Bình an (Sinh lực cao)</button>
+                <button type="button" role="tab" data-ui-tab="f01-stress" aria-selected="false">Trạng thái Khủng hoảng (Burnout cao)</button>
+              </div>
+
+              <!-- PANE 1: Bình an -->
+              <div class="ui ui-x" data-ui-pane="f01-calm">
+                <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>LifeGraph RPG V6.0</b> · Nhân vật: Nguyễn An (28 tuổi)</div>
+                <div class="ui-page">
+                  <div class="ui-hero calm">
+                    <div class="ui-hero-head">
+                      <div style="display:flex;align-items:center;gap:14px;">
+                        <div class="ui-hero-avatar">🧑‍💼</div>
+                        <div>
+                          <div style="font-size:18px;font-weight:700;">Nguyễn An <span style="font-size:12px;opacity:0.8;font-weight:400;">(Đời 2 · Việt Nam)</span></div>
+                          <div style="font-size:12px;opacity:0.9;">Nghề nghiệp: Lập trình viên cấp cao · Nơi ở: Căn hộ Studio</div>
+                        </div>
+                      </div>
+                      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                        <span class="ui-tag gold">⚡ 3/3 AP Có sẵn</span>
+                        <span class="ui-tag s">Trạng thái: Tràn đầy năng lượng</span>
+                      </div>
+                    </div>
+                    <div class="ui-hero-stats">
+                      <div class="ui-stat-box">
+                        <div class="ui-stat-lb"><span>Sinh lực</span><span>92 / 100</span></div>
+                        <div class="ui-bar-bg"><div class="ui-bar-fill" style="width:92%;background:#10b981;"></div></div>
+                      </div>
+                      <div class="ui-stat-box">
+                        <div class="ui-stat-lb"><span>Kiệt sức</span><span>18 / 100</span></div>
+                        <div class="ui-bar-bg"><div class="ui-bar-fill" style="width:18%;background:#fbbf24;"></div></div>
+                      </div>
+                      <div class="ui-stat-box">
+                        <div class="ui-stat-lb"><span>Tiền mặt</span><span style="color:#6ee7b7;font-weight:700;">145.000.000 ₫</span></div>
+                        <div style="font-size:11px;opacity:0.8;margin-top:4px;">Dòng tiền: +18.5M / năm</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PANE 2: Stress -->
+              <div class="ui ui-x" data-ui-pane="f01-stress" hidden>
+                <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>LifeGraph RPG V6.0</b> · Cảnh báo y tế khẩn cấp</div>
+                <div class="ui-page">
+                  <div class="ui-hero stress">
+                    <div class="ui-hero-head">
+                      <div style="display:flex;align-items:center;gap:14px;">
+                        <div class="ui-hero-avatar" style="border-color:#f87171;">😫</div>
+                        <div>
+                          <div style="font-size:18px;font-weight:700;">Nguyễn An <span style="font-size:12px;opacity:0.8;font-weight:400;">(42 tuổi · Lao lực)</span></div>
+                          <div style="font-size:12px;opacity:0.9;">Cảnh báo: Nguy cơ suy sụp thần kinh nghiêm trọng</div>
+                        </div>
+                      </div>
+                      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                        <span class="ui-tag d">🚨 Burnout 88%</span>
+                        <span class="ui-tag w">Sinh lực suy yếu</span>
+                      </div>
+                    </div>
+                    <div class="ui-hero-stats">
+                      <div class="ui-stat-box">
+                        <div class="ui-stat-lb"><span>Sinh lực</span><span style="color:#f87171;">35 / 78</span></div>
+                        <div class="ui-bar-bg"><div class="ui-bar-fill" style="width:45%;background:#ef4444;"></div></div>
+                      </div>
+                      <div class="ui-stat-box">
+                        <div class="ui-stat-lb"><span>Kiệt sức</span><span style="color:#f87171;font-weight:700;">88 / 100</span></div>
+                        <div class="ui-bar-bg"><div class="ui-bar-fill" style="width:88%;background:#ef4444;"></div></div>
+                      </div>
+                      <div class="ui-stat-box">
+                        <div class="ui-stat-lb"><span>Tiền mặt</span><span style="color:#fde047;font-weight:700;">820.000.000 ₫</span></div>
+                        <div style="font-size:11px;opacity:0.8;margin-top:4px;">Cảnh báo viện phí: -50M / đợt</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Khối hiển thị</th><th>Trường giao diện</th><th>Kiểu dữ liệu</th><th>Mapping CSDL</th><th>Ràng buộc & Logic</th></tr></thead>
+              <tbody>
+                <tr><td class="f" rowspan="3">Thông tin định danh</td><td>Tên nhân vật & Đời</td><td>String</td><td class="map"><code>characters.name</code>, <code>characters.generation</code></td><td>Hiển thị văn hóa theo quốc gia xuất thân</td></tr>
+                <tr><td>Tuổi & Nghề nghiệp</td><td>Int / String</td><td class="map"><code>characters.age</code>, <code>characters.hidden_flags-&gt;'job'</code></td><td>Nếu age &lt; 18 thì ghi nhận giai đoạn học sinh</td></tr>
+                <tr><td>Avatar 3D & Biểu cảm</td><td>URL / Canvas</td><td class="map"><code>characters.current_portrait_url</code></td><td>Renderer cập nhật ngay khi trạng thái Burnout / Vitality đổi</td></tr>
+                <tr><td class="f" rowspan="3">Chỉ số sinh tồn</td><td>Thanh Sinh lực</td><td>Number / %</td><td class="map"><code>characters.vitality</code> / <code>characters.max_vitality</code></td><td>Màu chuyển từ xanh lá (&gt;60%) -&gt; vàng (&gt;30%) -&gt; đỏ (&lt;30%)</td></tr>
+                <tr><td>Thanh Kiệt sức (Burnout)</td><td>Number / %</td><td class="map"><code>characters.burnout</code></td><td>Nếu burnout &gt; 70%, kích hoạt cảnh báo rung lắc và dải màu đỏ</td></tr>
+                <tr><td>Số dư Tiền mặt</td><td>Currency (VND)</td><td class="map"><code>characters.cash</code></td><td>Khóa cố định ở 0 VND nếu <code>characters.age &lt; 18</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Truy vấn khởi tạo dữ liệu Hero Banner</summary>
+<pre>SELECT 
+    c.id, c.name, c.age, c.generation, c.nationality,
+    c.vitality, c.max_vitality, c.burnout, c.cash, c.action_points,
+    c.current_portrait_url, c.hidden_flags,
+    COALESCE(SUM(a.current_value), 0) AS total_asset_value
+FROM characters c
+LEFT JOIN assets a ON a.character_id = c.id
+WHERE c.id = :character_id AND c.is_deceased = FALSE
+GROUP BY c.id;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as Frontend Banner & Visualizer
+  participant BE as Backend Game Engine
+  participant DB as CSDL PostgreSQL
+  U->>FE: Tải giao diện chính LifeGraph
+  FE->>BE: GET /api/game/state
+  BE->>DB: Đọc bản ghi characters mới nhất
+  DB-->>BE: Trả về vitality, burnout, cash, action_points, age
+  BE-->>FE: Payload JSON { character, assets, visual_scene }
+  Note over FE: Canvas tính toán mood gradient (0ms)<br/>Render Avatar biểu cảm phù hợp
+  U->>FE: Quan sát tình trạng sức khỏe & tài chính
+</pre></div>
+        </div>
+      </article>
+
+      <!-- LG-F02 -->
+      <article class="feature" id="LG-F02">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F02</span>
+            <h3>Annual Tick Engine & Cân bằng chuyển giao thế hệ (Khiên bảo vệ vị thành niên)</h3>
+          </div>
+          <p class="caption">Trọng tâm vận hành của toàn bộ game: Bước nhảy thường niên (Annual Advance). Thực hiện già hóa sinh học, tính toán hao mòn sinh lực theo tuổi tác, áp dụng quy tắc bảo vệ tài chính nghiêm ngặt cho trẻ vị thành niên (&lt; 18 tuổi) và quyết toán dòng tiền ròng.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui-switch">
+              <div class="ui-tabs" role="tablist">
+                <button type="button" role="tab" data-ui-tab="f02-adult" aria-selected="true">Chuyển giao năm (Người trưởng thành 30t)</button>
+                <button type="button" role="tab" data-ui-tab="f02-minor" aria-selected="false">Chuyển giao năm (Vị thành niên 14t - Khiên bảo vệ)</button>
+              </div>
+
+              <!-- PANE 1: Adult Tick -->
+              <div class="ui ui-x" data-ui-pane="f02-adult">
+                <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Tổng kết bước nhảy năm</b> · Chuyển tiếp từ 29 lên 30 tuổi</div>
+                <div class="ui-page">
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:16px;display:grid;gap:12px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                      <span style="font-size:16px;font-weight:700;color:#1e293b;">🎆 Chúc mừng sinh nhật 30 tuổi!</span>
+                      <span class="ui-tag s">+3 Điểm hành động mới</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
+                      <div style="background:#fff;border:1px solid #cbd5e1;padding:10px;border-radius:4px;">
+                        <div style="color:#64748b;font-size:11px;text-transform:uppercase;">Biến động thể chất</div>
+                        <div style="font-weight:700;color:#059669;">Sinh lực: 90/100 (-2 suy hao tuổi)</div>
+                        <div style="font-size:12px;color:#d97706;">Kiệt sức: 25/100 (+10 áp lực công việc)</div>
+                      </div>
+                      <div style="background:#fff;border:1px solid #cbd5e1;padding:10px;border-radius:4px;">
+                        <div style="color:#64748b;font-size:11px;text-transform:uppercase;">Quyết toán tài chính</div>
+                        <div style="font-weight:700;color:#1e293b;">Thu nhập ròng: +42.000.000 ₫</div>
+                        <div style="font-size:12px;color:#64748b;">Chi phí sinh hoạt: -18.000.000 ₫</div>
+                      </div>
+                    </div>
+                    <button class="ui-btn p" style="justify-self:start;">Tiếp tục bước vào năm mới</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PANE 2: Minor Shield -->
+              <div class="ui ui-x" data-ui-pane="f02-minor" hidden>
+                <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Tổng kết bước nhảy năm</b> · Vị thành niên (14 tuổi)</div>
+                <div class="ui-page">
+                  <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:16px;display:grid;gap:12px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                      <span style="font-size:16px;font-weight:700;color:#1e3a8a;">🛡️ Khiên bảo trợ vị thành niên đang kích hoạt</span>
+                      <span class="ui-tag" style="background:#dbeafe;color:#1e40af;">Tuổi: 14 (Học sinh cấp 2)</span>
+                    </div>
+                    <p style="font-size:13px;color:#1e40af;">Theo luật pháp và quy tắc game, bạn chưa đủ tuổi công dân độc lập. Mọi chi phí ăn ở, học tập (12.000.000 ₫/năm) đều được <b>Quỹ gia đình bảo trợ 100%</b>. Số dư cá nhân tiếp tục giữ ở mức an toàn <b>0 ₫</b>.</p>
+                    <div style="display:flex;gap:10px;">
+                      <span class="ui-tag s">Cơm no áo ấm: +5 Sinh lực</span>
+                      <span class="ui-tag">Học lực: Đạt học sinh giỏi</span>
+                    </div>
+                    <button class="ui-btn p" style="justify-self:start;">Tiếp tục năm học mới</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Trường xử lý</th><th>Công thức / Nghiệp vụ</th><th>Bảng tác động</th><th>Cột cập nhật</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Tuổi (Age)</td><td><code>age = age + 1</code></td><td>characters</td><td class="map"><code>characters.age</code></td></tr>
+                <tr><td class="f">Trần sinh lực (Max Vitality)</td><td>Nếu <code>age &gt;= 35</code>: <code>max_vitality = 100 - floor((age - 35) * 1.25)</code></td><td>characters</td><td class="map"><code>characters.max_vitality</code></td></tr>
+                <tr><td class="f">Khiên vị thành niên</td><td>Nếu <code>age &lt; 18</code>: Giữ cố định <code>cash = 0</code>, trừ chi phí vào <code>family_endowment</code></td><td>characters</td><td class="map"><code>characters.cash</code>, <code>characters.family_endowment</code></td></tr>
+                <tr><td class="f">Cấp phát Action Points</td><td>Reset <code>action_points = 3 + bonus_from_housing</code></td><td>characters</td><td class="map"><code>characters.action_points</code></td></tr>
+                <tr><td class="f">Ghi nhớ lịch sử Tick</td><td>Lưu trữ toàn bộ biến cố và chỉ số năm vào bảng nhật ký</td><td>tick_events</td><td class="map"><code>tick_events.event_data</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Xử lý bước nhảy năm & Cập nhật chỉ số</summary>
+<pre>UPDATE characters
+SET 
+    age = age + 1,
+    action_points = 3,
+    max_vitality = CASE 
+        WHEN is_transhuman THEN 100
+        WHEN age + 1 &lt; 35 THEN 100
+        ELSE GREATEST(20, 100 - FLOOR((age + 1 - 35) * 1.25))
+    END,
+    cash = CASE 
+        WHEN age + 1 &lt; 18 THEN 0
+        ELSE cash + :net_annual_income
+    END,
+    burnout = GREATEST(0, LEAST(100, burnout - :housing_recovery_rate)),
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = :character_id AND is_deceased = FALSE;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as Frontend
+  participant BE as TickEngine
+  participant DB as CSDL
+  U->>FE: Bấm "Chuyển tiếp năm" (Next Year)
+  FE->>BE: POST /api/game/tick
+  BE->>DB: Đọc trạng thái hiện tại của character
+  DB-->>BE: Trả về age, vitality, burnout, cash, housing
+  Note over BE: Tính toán suy giảm sinh lực theo tuổi<br/>Kiểm tra nếu age &lt; 18 -> Áp dụng Khiên tài chính (Cash = 0)<br/>Tính toán dòng tiền tài sản & chi phí sinh hoạt
+  BE->>DB: Cập nhật characters & ghi vào tick_events
+  DB-->>BE: Cập nhật thành công
+  BE-->>FE: Trả kết quả năm mới { character, summary, dilemma }
+  FE-->>U: Hiển thị báo cáo chuyển giao năm
+</pre></div>
+        </div>
+      </article>
+
+      <!-- LG-F03 -->
+      <article class="feature" id="LG-F03">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F03</span>
+            <h3>Action Point Hub & 1-Click Annual Focus (Tối ưu hóa lượt click)</h3>
+          </div>
+          <p class="caption">Giải pháp tối ưu trải nghiệm người dùng, loại bỏ hiện tượng mỏi tay do bấm hàng chục lựa chọn vụn vặt mỗi năm. Người chơi phân bổ 3 Điểm Hành Động (Action Points) một lần duy nhất vào 1 trong 3 trọng tâm chiến lược: Phát triển Sự nghiệp (Tăng tiền, tăng Burnout), Rèn luyện Thể chất (Hồi phục sinh lực, xả stress) hoặc Chăm sóc Gia đình (Tăng gắn kết, mở rộng mối quan hệ).</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Trung tâm Phân bổ Điểm Hành Động Thường Niên (AP Hub)</b></div>
+              <div class="ui-page">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                  <div>
+                    <div style="font-size:15px;font-weight:700;">🎯 Chọn Trọng Tâm Chiến Lược Năm Nay</div>
+                    <div style="font-size:12px;color:#64748b;">Mỗi năm bạn có 3 AP để định hình ưu tiên cuộc sống</div>
+                  </div>
+                  <span class="ui-tag gold" style="font-size:13px;padding:4px 10px;">Điểm khả dụng: 3 / 3 AP</span>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;">
+                  <!-- Lựa chọn 1 -->
+                  <div style="border:2px solid #e2e8f0;border-radius:8px;padding:14px;background:#fff;display:grid;gap:8px;cursor:pointer;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span style="font-size:22px;">💼</span>
+                      <div>
+                        <div style="font-weight:700;font-size:14px;">Đột phá Sự nghiệp & Kiếm tiền</div>
+                        <div style="font-size:11.5px;color:#64748b;">Làm thêm giờ, thăng tiến công danh</div>
+                      </div>
+                    </div>
+                    <div style="font-size:12px;color:#059669;background:#ecfdf5;padding:6px;border-radius:4px;">
+                      +30M ₫ Thu nhập ròng · +1 Cấp kinh nghiệm
+                    </div>
+                    <div style="font-size:11.5px;color:#dc2626;">Đánh đổi: +15 Kiệt sức (Burnout)</div>
+                    <button class="ui-btn pl" style="width:100%;margin-top:6px;">1-Click: Phân bổ 3 AP</button>
+                  </div>
+
+                  <!-- Lựa chọn 2 -->
+                  <div style="border:2px solid #10b981;border-radius:8px;padding:14px;background:#f0fdf4;display:grid;gap:8px;cursor:pointer;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span style="font-size:22px;">🧘</span>
+                      <div>
+                        <div style="font-weight:700;font-size:14px;color:#065f46;">Dưỡng sinh & Thể thao chuyên sâu</div>
+                        <div style="font-size:11.5px;color:#047857;">Chăm sóc cơ thể, tái tạo tinh thần</div>
+                      </div>
+                    </div>
+                    <div style="font-size:12px;color:#059669;background:#fff;padding:6px;border-radius:4px;border:1px solid #a7f3d0;">
+                      +10 Sinh lực hiện tại · Giảm -20 Kiệt sức
+                    </div>
+                    <div style="font-size:11.5px;color:#047857;">Miễn dịch với bệnh tật mùa này</div>
+                    <button class="ui-btn g" style="width:100%;margin-top:6px;">Đang chọn: Phân bổ 3 AP</button>
+                  </div>
+
+                  <!-- Lựa chọn 3 -->
+                  <div style="border:2px solid #e2e8f0;border-radius:8px;padding:14px;background:#fff;display:grid;gap:8px;cursor:pointer;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span style="font-size:22px;">❤️</span>
+                      <div>
+                        <div style="font-weight:700;font-size:14px;">Gia đình & Mở rộng Mạng lưới</div>
+                        <div style="font-size:11.5px;color:#64748b;">Hẹn hò, giao thiệp quý nhân, con cái</div>
+                      </div>
+                    </div>
+                    <div style="font-size:12px;color:#4f46e5;background:#eef2ff;padding:6px;border-radius:4px;">
+                      +15 Thiện cảm mọi NPC · Cơ hội lập gia đình
+                    </div>
+                    <div style="font-size:11.5px;color:#64748b;">Chi phí quà tặng & ăn uống: -5M ₫</div>
+                    <button class="ui-btn pl" style="width:100%;margin-top:6px;">1-Click: Phân bổ 3 AP</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Trọng tâm</th><th>Mã tham số API</th><th>Tác động Sinh lực</th><th>Tác động Burnout</th><th>Tác động Dòng tiền</th><th>Tác động Quan hệ</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Sự nghiệp</td><td><code>focus_type = 'career'</code></td><td>-2</td><td>+15</td><td>+20.000.000 ₫ đến +50.000.000 ₫</td><td>0</td></tr>
+                <tr><td class="f">Thể chất</td><td><code>focus_type = 'vitality'</code></td><td>+8 đến +12</td><td>-20</td><td>-3.000.000 ₫ (phí gym/dinh dưỡng)</td><td>0</td></tr>
+                <tr><td class="f">Gia đình</td><td><code>focus_type = 'family'</code></td><td>+3</td><td>-5</td><td>-5.000.000 ₫ (giao tế)</td><td>+15 điểm Thiện cảm toàn bộ NPC</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Cập nhật trạng thái sau khi phân bổ 1-Click Annual Focus</summary>
+<pre>UPDATE characters
+SET 
+    action_points = 0,
+    vitality = LEAST(max_vitality, vitality + :delta_vitality),
+    burnout = GREATEST(0, LEAST(100, burnout + :delta_burnout)),
+    cash = cash + :delta_cash,
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = :character_id AND action_points >= 3;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as AP Hub Component
+  participant BE as Game Engine (/action/annual-focus)
+  participant DB as CSDL
+  U->>FE: Bấm chọn 1-Click trọng tâm "Dưỡng sinh & Thể thao"
+  FE->>BE: POST /api/game/action/annual-focus { focus_type: 'vitality' }
+  BE->>DB: Kiểm tra characters.action_points >= 3
+  Note over BE: Tính toán: Sinh lực +10, Burnout -20, Tiêu hao 3 AP
+  BE->>DB: Cập nhật chỉ số nhân vật
+  DB-->>BE: Xác nhận thành công
+  BE-->>FE: Trả kết quả { success: true, new_vitality: 92, new_burnout: 18, ap_remaining: 0 }
+  FE-->>U: Hiển thị hiệu ứng ánh sáng xanh hồi phục thể lực
+</pre></div>
+        </div>
+      </article>
+
+      <!-- LG-F04 -->
+      <article class="feature" id="LG-F04">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F04</span>
+            <h3>Giai đoạn ấu thơ 0–5 tuổi & Tự động hóa Nuôi dưỡng (Fast-forward)</h3>
+          </div>
+          <p class="caption">Giải quyết triệt để bất cập trong game mô phỏng truyền thống khi người chơi phải bấm chọn các hành động vô lý của trẻ 1-2 tuổi (như tự kiếm tiền hay gánh nợ). Cung cấp cơ chế tự động hóa nuôi dưỡng giác quan và nút bấm <b>Fast-forward chuyển thẳng lên 6 tuổi</b> để bắt đầu đi học cấp 1.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Giai đoạn Mầm non & Ấu thơ (0–5 tuổi)</b></div>
+              <div class="ui-page">
+                <div style="background:#fefce8;border:1px solid #fef08a;border-radius:8px;padding:16px;display:grid;gap:12px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                    <div>
+                      <div style="font-size:16px;font-weight:700;color:#854d0e;">👶 Giai đoạn ấu thơ: Bé An (2 tuổi)</div>
+                      <div style="font-size:12px;color:#a16207;">Cơ thể và trí não đang hình thành những phản xạ đầu đời</div>
+                    </div>
+                    <button class="ui-btn p" style="background:#ca8a04;border-color:#ca8a04;">⏩ Chuyển tiếp nhanh lên 6 tuổi (Vào lớp 1)</button>
+                  </div>
+
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
+                    <div style="background:#fff;border:1px solid #fde047;border-radius:6px;padding:12px;">
+                      <div style="font-weight:700;font-size:13px;color:#854d0e;">🍼 Dinh dưỡng sữa mẹ</div>
+                      <div style="font-size:12px;color:#64748b;margin:4px 0;">Tăng cường đề kháng tự nhiên</div>
+                      <span class="ui-tag s">+10 Sinh lực tiềm năng</span>
+                    </div>
+                    <div style="background:#fff;border:1px solid #fde047;border-radius:6px;padding:12px;">
+                      <div style="font-weight:700;font-size:13px;color:#854d0e;">🎵 Kích thích thính giác</div>
+                      <div style="font-size:12px;color:#64748b;margin:4px 0;">Nghe nhạc cổ điển & truyện cổ tích</div>
+                      <span class="ui-tag gold">Tư chất: Trực giác nhạy bén</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Trường nghiệp vụ</th><th>Ý nghĩa</th><th>Tác động dữ liệu</th><th>Mapping CSDL</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Tuổi mầm non</td><td>Độ tuổi từ 0 đến 5</td><td>Không kích hoạt các biến cố tài chính hay lao động</td><td class="map"><code>characters.age &lt; 6</code></td></tr>
+                <tr><td class="f">Nút Fast-forward</td><td>Chuyển nhanh lên 6 tuổi</td><td>Tự động tăng <code>age = 6</code>, tích lũy 5 năm phát triển tự nhiên</td><td class="map"><code>characters.age = 6</code></td></tr>
+                <tr><td class="f">Tư chất ấu thơ</td><td>Hình thành thiên hướng IQ/EQ</td><td>Ghi nhận các cờ tư chất vào mảng JSONB</td><td class="map"><code>characters.innate_traits</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Chuyển tiếp nhanh giai đoạn ấu thơ lên 6 tuổi</summary>
+<pre>UPDATE characters
+SET 
+    age = 6,
+    vitality = 100,
+    max_vitality = 100,
+    burnout = 0,
+    cash = 0,
+    innate_traits = innate_traits || '["Tuổi thơ bình an", "Thể chất dẻo dai"]'::jsonb,
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = :character_id AND age &lt; 6;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as Childhood Component
+  participant BE as Engine (/childhood-fastforward)
+  participant DB as CSDL
+  U->>FE: Bấm "Chuyển tiếp nhanh lên 6 tuổi"
+  FE->>BE: POST /api/game/childhood-fastforward { target_age: 6 }
+  BE->>DB: Kiểm tra tuổi hiện tại của nhân vật (< 6)
+  Note over BE: Khởi tạo các cột mốc thể chất mầm non<br/>Đặt age = 6, chuẩn bị bước vào hệ thống giáo dục
+  BE->>DB: Cập nhật characters (age = 6, tư chất mới)
+  DB-->>BE: Cập nhật thành công
+  BE-->>FE: Trả kết quả { success: true, age: 6, milestones: [...] }
+  FE-->>U: Hiển thị hoạt họa nhân vật cắp sách đến trường lớp 1
+</pre></div>
+        </div>
+      </article>
+    </section>
+
+
+    <!-- 10. NHÓM 2: HỆ THỐNG NHẬP VAI RPG TÂM TRÍ & SỐ PHẬN -->
+    <section id="g2">
+      <h2>10. Nhóm 2: Hệ thống Nhập vai RPG Tâm Trí & Số Phận</h2>
+
+      <!-- LG-F05 -->
+      <article class="feature" id="LG-F05">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F05</span>
+            <h3>Mind Stage & Tiếng thì thầm nội tâm (3 Bản ngã Ego Whispers)</h3>
+          </div>
+          <p class="caption">Thay thế hoàn toàn cơ chế chọn thẻ bài thụ động. Khi đối mặt với ngã rẽ cuộc đời, màn hình kích hoạt <b>Sân khấu Tâm trí (Mind Stage)</b>: Ba giọng nói nội tâm đại diện cho <code>🧠 Lý Trí</code>, <code>❤️ Trái Tim</code> và <code>⚡ Bản Năng</code> đồng loạt đưa ra phân tích và thôi thúc nhân vật. Người chơi chọn lập trường (Stance) để bước vào thử thách số phận.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Sân Khấu Tâm Trí (Mind Stage)</b> · Tình huống: Cơ hội khởi nghiệp mạo hiểm</div>
+              <div class="ui-page">
+                <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;display:grid;gap:14px;">
+                  <div>
+                    <span class="ui-tag w">⚡ Tình thế phân nhánh cuộc đời</span>
+                    <h3 style="margin-top:6px;font-size:16px;">Lời mời hợp tác từ người bạn cũ: Bỏ việc mở công ty AI?</h3>
+                    <p style="font-size:13px;color:#475569;margin-top:4px;">Bạn thân thời đại học rủ bạn góp vốn 200 triệu và nghỉ việc tại tập đoàn để cùng xây dựng startup công nghệ. Bạn đang giằng xé nội tâm dữ dội...</p>
+                  </div>
+
+                  <!-- 3 TIẾNG THÌ THẦM -->
+                  <div class="ui-whispers">
+                    <div class="ui-whisper-card">
+                      <div style="font-weight:700;color:#4f46e5;display:flex;align-items:center;gap:4px;">
+                        <svg class="ic" width="14" height="14"><use href="#i-brain"/></svg> 🧠 Lý Trí mách bảo
+                      </div>
+                      <p style="font-size:12px;color:#334155;margin-top:4px;">"Tỷ lệ thất bại của startup AI là 92%. Bạn cần giữ nguồn thu ổn định để trả góp căn hộ. Đừng liều lĩnh!"</p>
+                    </div>
+
+                    <div class="ui-whisper-card heart">
+                      <div style="font-weight:700;color:#ef4444;display:flex;align-items:center;gap:4px;">
+                        <svg class="ic" width="14" height="14"><use href="#i-heart"/></svg> ❤️ Trái Tim thôi thúc
+                      </div>
+                      <p style="font-size:12px;color:#334155;margin-top:4px;">"Tình bạn mười năm quý hơn tiền bạc. Nếu bạn từ chối, cậu ấy sẽ một mình gánh chịu và mối quan hệ sẽ rạn nứt."</p>
+                    </div>
+
+                    <div class="ui-whisper-card instinct">
+                      <div style="font-weight:700;color:#d97706;display:flex;align-items:center;gap:4px;">
+                        <svg class="ic" width="14" height="14"><use href="#i-bolt"/></svg> ⚡ Bản Năng gầm gừ
+                      </div>
+                      <p style="font-size:12px;color:#334155;margin-top:4px;">"Cả đời làm thuê sẽ không bao giờ bứt phá được. Đây là thời cơ ngàn năm có một để làm chủ vận mệnh!"</p>
+                    </div>
+                  </div>
+
+                  <!-- DANH SÁCH LẬP TRƯỜNG -->
+                  <div style="display:grid;gap:8px;">
+                    <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;">Chọn Lập Trường Đối Diện Thử Thách (Stance)</div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                      <button class="ui-btn p" style="background:#4338ca;">[Lý Trí & Thận Trọng] Từ chối & Khuyên bạn cẩn trọng (DC 10)</button>
+                      <button class="ui-btn" style="border-color:#ef4444;color:#ef4444;">[Thấu Cảm & Tình Thân] Góp vốn hỗ trợ nhưng không nghỉ việc (DC 13)</button>
+                      <button class="ui-btn" style="border-color:#d97706;color:#d97706;font-weight:700;">[Canh Bạc Đột Phá] Tất tay nghỉ việc, dẫn đầu dự án! (DC 16)</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Thành phần</th><th>Mục đích</th><th>Mapping CSDL</th><th>Quy tắc nghiệp vụ</th></tr></thead>
+              <tbody>
+                <tr><td class="f">🧠 Lý Trí (Rational)</td><td>Phân tích logic, bảo toàn nguồn lực</td><td class="map"><code>dilemmas.whispers-&gt;'rational'</code></td><td>Cộng thưởng nếu nhân vật có tư chất 'Tư duy logic'</td></tr>
+                <tr><td class="f">❤️ Trái Tim (Empathy)</td><td>Ưu tiên gắn kết, tình cảm gia đình/bạn bè</td><td class="map"><code>dilemmas.whispers-&gt;'empathy'</code></td><td>Cộng thưởng nếu chỉ số EQ cao hoặc có NPC thân thiết</td></tr>
+                <tr><td class="f">⚡ Bản Năng (Instinct)</td><td>Thúc đẩy mạo hiểm, bứt phá giới hạn</td><td class="map"><code>dilemmas.whispers-&gt;'instinct'</code></td><td>Phù hợp với các tình huống cần dũng khí hoặc đột phá tài chính</td></tr>
+                <tr><td class="f">Lập trường (Stance)</td><td>Đại diện cho hướng xử lý của người chơi</td><td class="map"><code>tick_events.event_data-&gt;'stance'</code></td><td>Quyết định độ khó DC và công thức tính xúc xắc D20</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Lưu vết lựa chọn lập trường Mind Stage vào nhật ký</summary>
+<pre>INSERT INTO tick_events (character_id, tick_number, event_data)
+VALUES (
+    :character_id,
+    :current_age,
+    jsonb_build_object(
+        'type', 'mind_stage_resolution',
+        'dilemma_id', :dilemma_id,
+        'stance', 'CALCULATED_RISK',
+        'whisper_chosen', 'instinct',
+        'target_dc', 16,
+        'timestamp', CURRENT_TIMESTAMP
+    )
+);</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as MindStage UI
+  participant BE as AI Dilemma Engine
+  participant DB as CSDL
+  BE->>FE: Gửi gói tình huống kèm 3 tiếng thì thầm { rational, empathy, instinct, stances }
+  FE-->>U: Hiển thị 3 bản ngã nội tâm & các nút Stance
+  U->>FE: Bấm chọn "[Canh Bạc Đột Phá] Tất tay nghỉ việc" (Stance: RISK)
+  FE->>FE: Kích hoạt màn hình Tung Xúc xắc Định mệnh D20 (DC = 16)
+</pre></div>
+        </div>
+      </article>
+
+      <!-- LG-F06 -->
+      <article class="feature" id="LG-F06">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F06</span>
+            <h3>Xúc xắc Định mệnh D20 & Thử thách DC (Fate Dice Check)</h3>
+          </div>
+          <p class="caption">Hệ thống tung xúc xắc D20 tương tác trực tiếp tạo nên cảm xúc hồi hộp đỉnh cao của game nhập vai thực thụ. Kết quả được tính toán minh bạch: Giá trị gieo được (1–20) cộng với Điểm bổ trợ tư chất bẩm sinh, Chỉ số thể lực và Điểm hành động đầu tư (AP Boost) để đối đầu cùng Ngưỡng độ khó (DC).</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Vũ Đài Tung Xúc Xắc Định Mệnh (Fate Dice Stage)</b></div>
+              <div class="ui-page" style="background:#090d16;color:#f8fafc;padding:24px;">
+                <div class="ui-dice-stage">
+                  <div style="font-size:13px;text-transform:uppercase;color:#818cf8;letter-spacing:0.1em;font-weight:700;">Thử Thách Định Mệnh: Khởi nghiệp công nghệ AI</div>
+                  <div style="font-size:15px;color:#cbd5e1;">Ngưỡng độ khó yêu cầu: <b style="color:#fbbf24;font-size:18px;">DC 16</b></div>
+
+                  <!-- XÚC XẮC D20 -->
+                  <div class="ui-dice-box">
+                    <span>17</span>
+                  </div>
+
+                  <div style="display:flex;justify-content:center;gap:10px;font-size:13px;flex-wrap:wrap;">
+                    <span class="ui-tag" style="background:#1e1b4b;color:#a5b4fc;border-color:#4338ca;">🎲 Gieo được: 17</span>
+                    <span class="ui-tag s">🧠 Tư chất 'Gen thiên tài': +2</span>
+                    <span class="ui-tag gold">⚡ Đầu tư 1 AP: +2</span>
+                    <span class="ui-tag" style="background:#064e3b;color:#6ee7b7;border-color:#059669;font-weight:700;">Tổng điểm: 21</span>
+                  </div>
+
+                  <div style="background:#064e3b;border:1px solid #059669;border-radius:6px;padding:12px;margin-top:6px;">
+                    <div style="font-weight:700;color:#6ee7b7;font-size:15px;">🎉 THÀNH TỰU XUẤT CHÚNG (CRITICAL SUCCESS)!</div>
+                    <div style="font-size:12.5px;color:#d1fae5;margin-top:4px;">Bạn không chỉ huy động được vốn đầu tư mà công ty còn ký được hợp đồng độc quyền với đối tác nước ngoài. Tài sản tăng vọt +500.000.000 ₫!</div>
+                  </div>
+
+                  <button class="ui-btn p" style="justify-self:center;background:#4f46e5;padding:0 24px;">Nhận Kết Quả & Tiếp Tục Vận Mệnh</button>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Chỉ số tham gia</th><th>Giá trị</th><th>Công thức ảnh hưởng</th><th>Phân loại kết quả</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Xúc xắc cơ bản</td><td>1 đến 20</td><td>Ngẫu nhiên phân phối đều (D20 Random)</td><td>Nếu gieo 20 tự nhiên: Auto Critical Success</td></tr>
+                <tr><td class="f">Bổ trợ Tư chất</td><td>+1 đến +3</td><td>Đọc từ <code>characters.innate_traits</code></td><td>Tư chất phù hợp với tính chất sự kiện</td></tr>
+                <tr><td class="f">Đầu tư Action Point</td><td>+2 / 1 AP</td><td>Đọc từ <code>ap_spent</code> do người chơi phân bổ</td><td>Tối đa có thể đầu tư 2 AP (+4 điểm)</td></tr>
+                <tr><td class="f">Ngưỡng DC</td><td>10 đến 20</td><td>Xác định từ độ mạo hiểm của tình huống</td><td>
+                  <code>Total &gt;= DC + 5</code>: Critical Success<br/>
+                  <code>Total &gt;= DC</code>: Normal Success<br/>
+                  <code>Total &lt; DC</code>: Hard Lesson (Thất bại nhận kinh nghiệm)
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Cập nhật chỉ số sau khi vượt qua thử thách DC</summary>
+<pre>UPDATE characters
+SET 
+    cash = cash + :reward_cash,
+    vitality = LEAST(max_vitality, vitality + :reward_vitality),
+    burnout = GREATEST(0, LEAST(100, burnout + :cost_burnout)),
+    action_points = action_points - :ap_spent,
+    history_log = history_log || jsonb_build_object(
+        'age', age,
+        'event', 'Thử thách khởi nghiệp',
+        'result', 'CRITICAL_SUCCESS',
+        'roll', 21,
+        'dc', 16
+    ),
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = :character_id;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as FateDiceCheck Component
+  participant BE as Game Engine (/tick)
+  participant DB as CSDL
+  U->>FE: Bấm nút "Gieo Xúc Xắc D20" (kèm đầu tư 1 AP)
+  FE->>FE: Chạy hoạt họa vật lý tung xúc xắc 3D
+  FE->>BE: Gửi kết quả gieo { choice_id, stance, dice_roll: 17, ap_spent: 1 }
+  BE->>DB: Đọc tư chất & cờ của character để xác minh tính hợp lệ
+  Note over BE: Tính tổng = 17 + 2 (Trait) + 2 (AP) = 21 >= DC 16<br/>Xác định kết quả: CRITICAL_SUCCESS
+  BE->>DB: Ghi nhận tiền thưởng (+500M) & trừ 1 AP
+  DB-->>BE: Cập nhật thành công
+  BE-->>FE: Trả về kết cục thành công mỹ mãn & dữ liệu âm thanh reo hò
+  FE-->>U: Hiển thị hiệu ứng pháo hoa và cập nhật dòng tiền
+</pre></div>
+        </div>
+      </article>
+
+      <!-- LG-F07 -->
+      <article class="feature" id="LG-F07">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F07</span>
+            <h3>AI Game Master & Tình huống phân nhánh triệu tổ hợp (Scenario Bank)</h3>
+          </div>
+          <p class="caption">Hạt nhân tạo sinh cốt truyện của LifeGraph. Kết hợp giữa Ngân hàng tình huống triệu tổ hợp (Scenario Bank) được phân loại theo giai đoạn lứa tuổi và Prompt Compiler tích hợp Gemini 2.0 Flash để tạo nên những ngã rẽ cuộc đời chân thực, độc bản và hoàn toàn phù hợp với bối cảnh văn hóa của từng quốc gia.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>AI Game Master Narrative Engine</b></div>
+              <div class="ui-page">
+                <div style="border-left:4px solid #4f46e5;padding:12px 16px;background:#f8fafc;border-radius:0 6px 6px 0;">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#4f46e5;font-weight:700;">
+                    <span>✨ AI Dungeon Master phân tích hoàn cảnh:</span>
+                  </div>
+                  <p style="font-size:13.5px;color:#1e293b;margin-top:6px;line-height:1.6;">
+                    "Bạn vừa bước sang tuổi 35 tại Hà Nội. Nền kinh tế thế giới đang đối mặt với lạm phát cao (Chỉ số MMO Kinh tế: 48 điểm). Sau 10 năm cống hiến, tập đoàn bất ngờ tái cơ cấu và đề xuất bạn chuyển sang chi nhánh vùng xa hoặc nhận bồi thường thôi việc 6 tháng lương..."
+                  </p>
+                  <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
+                    <span class="ui-tag i">Nhóm tuổi: 35-45 (Trung niên)</span>
+                    <span class="ui-tag w">Khủng hoảng kinh tế vĩ mô</span>
+                    <span class="ui-tag s">Cơ hội rẽ hướng</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Tham số đầu vào AI</th><th>Nguồn dữ liệu</th><th>Mapping CSDL</th><th>Mục đích</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Độ tuổi & Giới tính</td><td>Hồ sơ nhân vật</td><td class="map"><code>characters.age</code>, <code>characters.name</code></td><td>Định hình ngôn ngữ và trải nghiệm phù hợp lứa tuổi</td></tr>
+                <tr><td class="f">Tài chính & Nghề nghiệp</td><td>Chỉ số hiện thời</td><td class="map"><code>characters.cash</code>, <code>characters.hidden_flags-&gt;'job'</code></td><td>Tạo ra các thử thách tương xứng với địa vị xã hội</td></tr>
+                <tr><td class="f">Biến số Vĩ mô MMO</td><td>Chỉ số kinh tế toàn cầu</td><td class="map"><code>characters.global_indices</code></td><td>Phản ánh tình hình lạm phát, việc làm của thế giới thực</td></tr>
+                <tr><td class="f">Ký ức sự kiện cũ</td><td>Lịch sử sự kiện gần</td><td class="map"><code>characters.recent_event_tags</code></td><td>Chống lặp lại tình huống (Anti-loop mechanism)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Ghi nhận cờ sự kiện chống lặp lại (Anti-loop fuse)</summary>
+<pre>UPDATE characters
+SET 
+    recent_event_tags = recent_event_tags || '["crisis_corporate_restructure_35"]'::jsonb,
+    experienced_scenarios = experienced_scenarios || '["scenario_career_fork_v6"]'::jsonb,
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = :character_id;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as Frontend Game
+  participant GM as AI Game Master Engine
+  participant LLM as Gemini 2.0 Flash API
+  participant DB as CSDL
+  FE->>GM: Yêu cầu tạo tình huống năm mới (GET /state)
+  GM->>DB: Đọc tuổi, chỉ số sinh tồn, danh sách cờ và lịch sử
+  GM->>GM: Lọc Scenario Bank (loại bỏ kịch bản đã gặp trong 5 năm)
+  GM->>LLM: Gửi Prompt hệ thống (System Prompt + Country Context + Dynamic Stats)
+  LLM-->>GM: Trả về kịch bản JSON (Tiêu đề, Mô tả, 3 tiếng thì thầm, Danh sách Stance, DC)
+  GM-->>FE: Chuyển giao tình huống đến giao diện Mind Stage
+</pre></div>
+        </div>
+      </article>
+
+      <!-- LG-F08 -->
+      <article class="feature" id="LG-F08">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F08</span>
+            <h3>Đối chất NPC trực diện & Mạng lưới quan hệ (NPCDialogCard)</h3>
+          </div>
+          <p class="caption">Mô hình hóa các mối quan hệ xã hội phức tạp (Tình đầu, Sếp cũ, Đối thủ kinh doanh, Tri kỷ). Cho phép đối thoại trực diện, thuyết phục (Persuasion Check) với NPC thông qua tung xúc xắc D20, ghi nhớ ân oán và biến chuyển điểm thiện cảm từ -100 (thù địch truyền kiếp) đến +100 (sống chết có nhau).</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Đối Thoại & Thương Thảo Trực Diện Với NPC</b></div>
+              <div class="ui-page">
+                <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;display:grid;gap:14px;">
+                  <div style="display:flex;align-items:center;gap:12px;border-bottom:1px solid #f1f5f9;padding-bottom:12px;">
+                    <div style="width:48px;height:48px;border-radius:50%;background:#4f46e5;color:#fff;display:grid;place-items:center;font-size:22px;">👨‍⚖️</div>
+                    <div style="flex:1;">
+                      <div style="font-size:16px;font-weight:700;">Trần Quốc Hùng <span style="font-size:12px;color:#64748b;font-weight:400;">(Sếp Tổng · Tập đoàn Đa quốc gia)</span></div>
+                      <div style="display:flex;gap:8px;align-items:center;margin-top:2px;">
+                        <span class="ui-tag w">Mối quan hệ: Nghiêm khắc & Thận trọng</span>
+                        <span style="font-size:12px;color:#64748b;">Thiện cảm: <b>45/100</b></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="background:#f8fafc;padding:12px;border-radius:6px;font-size:13px;color:#334155;border-left:3px solid #6366f1;">
+                    <i>"Hùng nhìn thẳng vào mắt bạn, gõ nhẹ cây bút lên bàn: 'Bản đề xuất của cậu rất táo bạo. Nhưng nếu thất bại, ai sẽ chịu trách nhiệm cho khoản lỗ 2 tỷ đồng này?'"</i>
+                  </div>
+
+                  <div style="display:grid;gap:8px;">
+                    <div style="font-size:12px;font-weight:700;color:#64748b;">CHỌN PHẢN HỒI THƯƠNG THẢO (PERSUASION STANCE):</div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                      <button class="ui-btn p">[Cam kết Trách nhiệm] Lấy toàn bộ thưởng cuối năm bảo lãnh (DC 14)</button>
+                      <button class="ui-btn pl">[Viện dẫn Số liệu] Trình bày phân tích rủi ro & giải pháp dự phòng (DC 12)</button>
+                      <button class="ui-btn d">[Thẳng thắn & Tự tin] "Thương trường là chiến trường, thưa sếp!" (DC 17)</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Trường thông tin</th><th>Ý nghĩa</th><th>Mapping CSDL</th><th>Hiệu ứng nghiệp vụ</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Tên & Vai trò NPC</td><td>Định danh người đối thoại</td><td class="map"><code>npcs.name</code>, <code>npcs.role</code></td><td>Hiển thị ảnh chân dung và màu sắc đại diện</td></tr>
+                <tr><td class="f">Thang đo Thiện cảm</td><td>-100 đến +100</td><td class="map"><code>npcs.affinity</code></td><td>Ảnh hưởng đến thái độ và tỷ lệ thành công của đàm phán</td></tr>
+                <tr><td class="f">Ký ức tương tác</td><td>Ghi chép biến cố cũ</td><td class="map"><code>npcs.memory_notes</code></td><td>Cung cấp ngữ cảnh cho AI Game Master sinh lời thoại</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Cập nhật thiện cảm và ghi nhớ sau khi đối thoại</summary>
+<pre>UPDATE npcs
+SET 
+    affinity = LEAST(100, GREATEST(-100, affinity + :delta_affinity)),
+    memory_notes = memory_notes || '; Thuyết phục thành công về dự án lớn tuổi ' || :current_age,
+    last_encountered_age = :current_age
+WHERE id = :npc_id;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as NPCDialogCard
+  participant BE as Engine (/action/network)
+  participant DB as CSDL
+  U->>FE: Chọn lập trường thuyết phục "[Viện dẫn Số liệu]" (DC 12)
+  FE->>BE: POST /api/game/action/network { npc_id, stance: 'RATIONAL', dice_roll: 15 }
+  BE->>DB: Đọc thiện cảm hiện thời của NPC
+  Note over BE: Roll 15 >= DC 12 -> Thành công<br/>Tăng thiện cảm +15 (45 -> 60)<br/>Ký ức: Sếp đánh giá cao năng lực lập luận
+  BE->>DB: Cập nhật npcs (affinity = 60, memory_notes)
+  DB-->>BE: Cập nhật thành công
+  BE-->>FE: Trả về kết quả thuyết phục & lời khen của Sếp
+  FE-->>U: Hiển thị phản hồi tích cực và mở khóa cơ hội thăng chức
+</pre></div>
+        </div>
+      </article>
+    </section>
+
+
+    <!-- 11. NHÓM 3: KINH TẾ VĨ MÔ, THỊ TRƯỜNG & BẤT ĐỘNG SẢN -->
+    <section id="g3">
+      <h2>11. Nhóm 3: Kinh tế vĩ mô, Thị trường & Bất động sản</h2>
+
+      <!-- LG-F09 -->
+      <article class="feature" id="LG-F09">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F09</span>
+            <h3>Thị trường Tài sản & Danh mục đầu tư (Asset Market & Portfolio)</h3>
+          </div>
+          <p class="caption">Hệ thống đầu tư đa dạng cho phép nhân vật xây dựng danh mục tài sản sinh lời: Bất động sản cho thuê, Cổ phiếu niêm yết, Quỹ đầu tư mạo hiểm và Doanh nghiệp tư nhân. Tính toán dòng tiền thụ động, chi phí bảo trì và giá trị vốn hóa theo từng năm.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Sàn Giao Dịch Tài Sản & Đầu Tư (Asset Market)</b></div>
+              <div class="ui-page">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                  <div>
+                    <div style="font-size:15px;font-weight:700;">Danh Mục Đầu Tư Cá Nhân</div>
+                    <div style="font-size:12px;color:#64748b;">Tổng giá trị tài sản ròng: <b style="color:#059669;">2.450.000.000 ₫</b></div>
+                  </div>
+                  <button class="ui-btn p">+ Mua Tài Sản Mới</button>
+                </div>
+
+                <div class="ui-tw">
+                  <table class="ui-t">
+                    <thead>
+                      <tr>
+                        <th>Tên tài sản</th>
+                        <th>Phân loại</th>
+                        <th>Giá trị hiện thời</th>
+                        <th>Lợi tức năm</th>
+                        <th>Chi phí bảo trì</th>
+                        <th>Thao tác</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="f">🏢 Căn hộ 2PN Vinhomes</td>
+                        <td><span class="ui-tag">Bất động sản</span></td>
+                        <td>1.800.000.000 ₫</td>
+                        <td style="color:#059669;font-weight:600;">+72.000.000 ₫ (+4%)</td>
+                        <td style="color:#dc2626;">-6.000.000 ₫</td>
+                        <td><button class="ui-btn sm d">Bán thanh lý</button></td>
+                      </tr>
+                      <tr>
+                        <td class="f">📈 Cổ phiếu VinFast (VFS)</td>
+                        <td><span class="ui-tag w">Cổ phiếu</span></td>
+                        <td>450.000.000 ₫</td>
+                        <td style="color:#059669;font-weight:600;">+45.000.000 ₫ (+10%)</td>
+                        <td>0 ₫</td>
+                        <td><button class="ui-btn sm d">Chốt lời</button></td>
+                      </tr>
+                      <tr>
+                        <td class="f">☕ Quán cà phê nhượng quyền</td>
+                        <td><span class="ui-tag gold">Doanh nghiệp</span></td>
+                        <td>200.000.000 ₫</td>
+                        <td style="color:#059669;font-weight:600;">+36.000.000 ₫ (+18%)</td>
+                        <td style="color:#dc2626;">-12.000.000 ₫</td>
+                        <td><button class="ui-btn sm d">Chuyển nhượng</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Cột hiển thị</th><th>Ý nghĩa</th><th>Kiểu dữ liệu</th><th>Mapping CSDL</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Tên tài sản</td><td>Mô tả tài sản đầu tư</td><td>String</td><td class="map"><code>assets.name</code></td></tr>
+                <tr><td class="f">Phân loại</td><td>Loại hình tài sản</td><td>Enum</td><td class="map"><code>assets.type</code> ('real_estate', 'stock', 'business')</td></tr>
+                <tr><td class="f">Giá trị hiện thời</td><td>Định giá theo thị trường</td><td>BIGINT</td><td class="map"><code>assets.current_value</code></td></tr>
+                <tr><td class="f">Chi phí bảo trì</td><td>Khấu hao / quản lý mỗi năm</td><td>INT</td><td class="map"><code>assets.maintenance_cost_per_tick</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Mua tài sản mới và trừ tiền mặt</summary>
+<pre>BEGIN;
+  -- 1. Kiểm tra và trừ tiền mặt
+  UPDATE characters
+  SET cash = cash - :asset_price, updated_at = CURRENT_TIMESTAMP
+  WHERE id = :character_id AND cash >= :asset_price AND age >= 18;
+
+  -- 2. Thêm bản ghi tài sản mới
+  INSERT INTO assets (character_id, type, name, current_value, maintenance_cost_per_tick)
+  VALUES (:character_id, :type, :name, :asset_price, :maintenance_cost);
+COMMIT;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as Asset Market
+  participant BE as Engine (/action/buy-asset)
+  participant DB as CSDL
+  U->>FE: Bấm chọn mua "Căn hộ Studio" (Giá: 1.2 Tỷ)
+  FE->>BE: POST /api/game/action/buy-asset { asset_id: 'studio_01', price: 1200000000 }
+  BE->>DB: Kiểm tra số dư cash của character >= 1.2 Tỷ và age >= 18
+  Note over BE: Khởi tạo giao dịch mua bán an toàn<br/>Trừ tiền mặt và ghi nhận vào bảng assets
+  BE->>DB: Trừ cash & Thêm assets
+  DB-->>BE: Hoàn tất Transaction
+  BE-->>FE: Trả kết quả thành công { asset, remaining_cash }
+  FE-->>U: Hiển thị thông báo mua nhà thành công và cập nhật Hero Banner
+</pre></div>
+        </div>
+      </article>
+
+      <!-- LG-F10 -->
+      <article class="feature" id="LG-F10">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F10</span>
+            <h3>Nâng cấp nơi ở & Nhà ở gia đình (Housing Tier Upgrades)</h3>
+          </div>
+          <p class="caption">Nơi ở là yếu tố then chốt quyết định chất lượng cuộc sống và tốc độ hồi phục của nhân vật. Từ phòng trọ tồi tàn (không hồi phục Burnout, dễ sinh bệnh) cho đến Căn hộ cao cấp và Dinh thự sinh thái (giảm stress cực nhanh, tặng thêm điểm AP mỗi năm và mở rộng không gian nuôi dạy con cái).</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Nâng Cấp Nơi Ở & Môi Trường Sống (Housing Tiers)</b></div>
+              <div class="ui-page">
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;">
+                  <div style="border:1px solid #cbd5e1;border-radius:6px;padding:12px;background:#f8fafc;">
+                    <span class="ui-tag i">Cấp 1: Phòng Trọ Ổ Chuột</span>
+                    <div style="font-weight:700;font-size:14px;margin:6px 0;">Trọ Tồi Tàn Vùng Ven</div>
+                    <div style="font-size:12px;color:#64748b;">Chi phí: 1.5M / tháng</div>
+                    <div style="font-size:11.5px;color:#dc2626;margin-top:6px;">⚠️ Không giảm Burnout · Tăng nguy cơ ốm đau</div>
+                  </div>
+
+                  <div style="border:2px solid #4f46e5;border-radius:6px;padding:12px;background:#eef2ff;">
+                    <span class="ui-tag s">Cấp 3: Căn Hộ Chung Cư Cao Cấp (Hiện Tại)</span>
+                    <div style="font-weight:700;font-size:14px;margin:6px 0;color:#3730a3;">Condo Vinhomes 2PN</div>
+                    <div style="font-size:12px;color:#4338ca;">Chi phí bảo trì: 25M / năm</div>
+                    <div style="font-size:11.5px;color:#059669;margin-top:6px;">✨ Giảm -15 Burnout/năm · Tặng +1 AP/năm</div>
+                    <button class="ui-btn sm p" style="width:100%;margin-top:8px;" disabled>Đang sinh sống</button>
+                  </div>
+
+                  <div style="border:1px solid #cbd5e1;border-radius:6px;padding:12px;background:#fff;">
+                    <span class="ui-tag gold">Cấp 4: Biệt Thự Sân Vườn Độc Lập</span>
+                    <div style="font-weight:700;font-size:14px;margin:6px 0;">Villa Ciputra Eco</div>
+                    <div style="font-size:12px;color:#64748b;">Giá mua: 15.000.000.000 ₫</div>
+                    <div style="font-size:11.5px;color:#059669;margin-top:6px;">👑 Giảm -30 Burnout/năm · Tặng +2 AP/năm · Con cái kế thừa gen tốt</div>
+                    <button class="ui-btn sm p" style="width:100%;margin-top:8px;">Nâng cấp nơi ở</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Cấp bậc</th><th>Tên nơi ở</th><th>Giảm Burnout</th><th>Thưởng Action Point</th><th>Mapping CSDL</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Tier 0</td><td>Trọ ổ chuột / Vô gia cư</td><td>0</td><td>0 AP</td><td class="map"><code>characters.hidden_flags-&gt;'housing' = 'slum'</code></td></tr>
+                <tr><td class="f">Tier 1</td><td>Nhà trọ sinh viên bình dân</td><td>-5 / năm</td><td>0 AP</td><td class="map"><code>characters.hidden_flags-&gt;'housing' = 'rental'</code></td></tr>
+                <tr><td class="f">Tier 2</td><td>Căn hộ Studio nhỏ</td><td>-10 / năm</td><td>0 AP</td><td class="map"><code>characters.hidden_flags-&gt;'housing' = 'studio'</code></td></tr>
+                <tr><td class="f">Tier 3</td><td>Chung cư cao cấp 2-3PN</td><td>-15 / năm</td><td>+1 AP / năm</td><td class="map"><code>characters.hidden_flags-&gt;'housing' = 'condo'</code></td></tr>
+                <tr><td class="f">Tier 4</td><td>Biệt thự / Penthouse siêu sang</td><td>-30 / năm</td><td>+2 AP / năm</td><td class="map"><code>characters.hidden_flags-&gt;'housing' = 'mansion'</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Nâng cấp cấp bậc nơi ở và cấu hình cờ hệ số hồi phục</summary>
+<pre>UPDATE characters
+SET 
+    cash = cash - :upgrade_cost,
+    hidden_flags = jsonb_set(
+        hidden_flags,
+        '{housing}',
+        to_jsonb(:housing_tier::text)
+    ),
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = :character_id AND cash >= :upgrade_cost;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as Housing Upgrade Modal
+  participant BE as Engine (/action/upgrade-housing)
+  participant DB as CSDL
+  U->>FE: Bấm chọn "Nâng cấp lên Biệt thự Villa"
+  FE->>BE: POST /api/game/action/upgrade-housing { tier_id: 'mansion' }
+  BE->>DB: Kiểm tra số dư tiền mặt của nhân vật
+  Note over BE: Khấu trừ chi phí nâng cấp<br/>Cập nhật cờ housing = 'mansion'<br/>Thiết lập tỷ lệ hồi phục Burnout = -30 điểm/năm
+  BE->>DB: Lưu cờ mới vào characters.hidden_flags
+  DB-->>BE: Xác nhận thành công
+  BE-->>FE: Trả kết quả { success: true, new_housing: 'mansion' }
+  FE-->>U: Cập nhật cảnh quan nền 3D sang khuôn viên biệt thự sang trọng
+</pre></div>
+        </div>
+      </article>
+
+      <!-- LG-F11 -->
+      <article class="feature" id="LG-F11">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F11</span>
+            <h3>MMO Macro Index & Đồng bộ chỉ số thế giới thực</h3>
+          </div>
+          <p class="caption">Hệ thống đồng bộ dữ liệu vĩ mô tạo nên tính sống động cho môi trường giả lập. Chỉ số kinh tế, lạm phát và môi trường được lấy mẫu từ dữ liệu kinh tế vĩ mô thực tế, tác động trực tiếp lên giá bất động sản, thị trường lao động và lợi tức cổ phiếu của người chơi.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Chỉ Số Kinh Tế Vĩ Mô Toàn Cầu (MMO Weather Bar)</b></div>
+              <div class="ui-page" style="padding:12px 18px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                  <div style="display:flex;gap:16px;align-items:center;">
+                    <div>
+                      <span style="font-size:11px;color:#64748b;text-transform:uppercase;">Kinh tế thị trường</span>
+                      <div style="font-weight:700;color:#059669;font-size:14px;">📈 68/100 (Tăng trưởng)</div>
+                    </div>
+                    <div>
+                      <span style="font-size:11px;color:#64748b;text-transform:uppercase;">Áp lực lạm phát</span>
+                      <div style="font-weight:700;color:#d97706;font-size:14px;">🔥 4.2% (Ổn định)</div>
+                    </div>
+                    <div>
+                      <span style="font-size:11px;color:#64748b;text-transform:uppercase;">Môi trường sống</span>
+                      <div style="font-weight:700;color:#4f46e5;font-size:14px;">🌱 72/100 (Trong lành)</div>
+                    </div>
+                  </div>
+                  <span class="ui-tag s">Cơ hội việc làm: Thuận lợi (+15% lương thưởng)</span>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Chỉ số vĩ mô</th><th>Ý nghĩa</th><th>Ảnh hưởng trong game</th><th>Mapping CSDL</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Kinh tế (Economy Index)</td><td>Điểm số tăng trưởng kinh tế</td><td>Nếu &gt; 60: Tăng lương và lợi nhuận đầu tư. Nếu &lt; 40: Nguy cơ mất việc</td><td class="map"><code>characters.global_indices-&gt;'economy'</code></td></tr>
+                <tr><td class="f">Lạm phát (Inflation)</td><td>Tỷ lệ trượt giá tiền tệ</td><td>Tăng chi phí sinh hoạt thường niên và giá bất động sản</td><td class="map"><code>characters.global_indices-&gt;'inflation'</code></td></tr>
+                <tr><td class="f">Môi trường (Environment)</td><td>Chất lượng không khí & khí hậu</td><td>Môi trường xấu làm gia tăng tốc độ suy hao sinh lực</td><td class="map"><code>characters.global_indices-&gt;'environment'</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Đọc và đồng bộ chỉ số MMO Macro vào trạng thái nhân vật</summary>
+<pre>SELECT global_indices,
+       (global_indices->>'economy')::int AS economy_idx,
+       (global_indices->>'environment')::int AS env_idx
+FROM characters
+WHERE id = :character_id;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as MmoWeatherBar
+  participant BE as Macro Service (/macro/mmo-state)
+  participant DB as CSDL
+  FE->>BE: GET /api/game/macro/mmo-state
+  BE->>BE: Tính toán độ lệch thị trường từ bộ nhớ đệm
+  BE-->>FE: Trả về { economy: 68, inflation: 4.2, environment: 72 }
+  FE-->>U: Cập nhật thanh thời tiết vĩ mô và tính toán hệ số lương thưởng năm
+</pre></div>
+        </div>
+      </article>
+    </section>
+
+
+    <!-- 12. NHÓM 4: GIA TỘC, HÔN NHÂN & CHUYỂN GIAO DI SẢN -->
+    <section id="g4">
+      <h2>12. Nhóm 4: Gia tộc, Hôn nhân & Chuyển giao Di sản</h2>
+
+      <!-- LG-F12 -->
+      <article class="feature" id="LG-F12">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F12</span>
+            <h3>Mối quan hệ gia đình, Tình yêu & Hôn nhân (Family Sanctum)</h3>
+          </div>
+          <p class="caption">Hệ thống gia đình và tình duyên cho phép người chơi tìm kiếm bạn đời, kết hôn, sinh con và chăm sóc con cái. Điểm gắn kết tình cảm (Affection Level) tác động trực tiếp đến hạnh phúc gia đình, sự phát triển trí tuệ của con cái và chi phí sinh hoạt gia đình.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Tổ Ấm Gia Đình & Con Cái (Family Sanctum)</b></div>
+              <div class="ui-page">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                  <div>
+                    <div style="font-size:15px;font-weight:700;">Hồ Sơ Hôn Nhân & Thành Viên Gia Đình</div>
+                    <div style="font-size:12px;color:#64748b;">Tình trạng: Đã kết hôn (6 năm) · 1 Con gái</div>
+                  </div>
+                  <button class="ui-btn p">+ Sinh thêm con</button>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;">
+                  <div style="border:1px solid #cbd5e1;border-radius:6px;padding:12px;background:#fff;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div style="width:40px;height:40px;border-radius:50%;background:#ec4899;color:#fff;display:grid;place-items:center;font-size:18px;">👰</div>
+                      <div>
+                        <div style="font-weight:700;font-size:13.5px;">Lê Mai Phương (Vợ)</div>
+                        <div style="font-size:11.5px;color:#64748b;">Nghề: Giảng viên đại học · 32 tuổi</div>
+                      </div>
+                    </div>
+                    <div style="margin-top:10px;font-size:12px;">
+                      <div style="display:flex;justify-content:space-between;"><span>Mức độ hạnh phúc:</span><b style="color:#059669;">85/100</b></div>
+                      <div class="ui-bar-bg"><div class="ui-bar-fill" style="width:85%;background:#ec4899;"></div></div>
+                    </div>
+                  </div>
+
+                  <div style="border:1px solid #cbd5e1;border-radius:6px;padding:12px;background:#fff;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div style="width:40px;height:40px;border-radius:50%;background:#3b82f6;color:#fff;display:grid;place-items:center;font-size:18px;">👧</div>
+                      <div>
+                        <div style="font-weight:700;font-size:13.5px;">Nguyễn Bảo Châu (Con gái)</div>
+                        <div style="font-size:11.5px;color:#64748b;">Học sinh lớp 1 · 6 tuổi · Thừa kế gen thông minh</div>
+                      </div>
+                    </div>
+                    <div style="margin-top:10px;font-size:12px;">
+                      <div style="display:flex;justify-content:space-between;"><span>Điểm tình phụ tử:</span><b style="color:#3b82f6;">92/100</b></div>
+                      <div class="ui-bar-bg"><div class="ui-bar-fill" style="width:92%;background:#3b82f6;"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Trường hiển thị</th><th>Quan hệ</th><th>Mapping CSDL</th><th>Hành vi nghiệp vụ</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Người phối ngẫu</td><td>Vợ / Chồng</td><td class="map"><code>relationships.type = 'spouse'</code></td><td>Cùng đóng góp thu nhập và hồi phục tinh thần cho nhân vật</td></tr>
+                <tr><td class="f">Con cái</td><td>Con trai / Con gái</td><td class="map"><code>relationships.type = 'child'</code></td><td>Kế thừa các tư chất bẩm sinh, là ứng viên thừa kế cho thế hệ sau</td></tr>
+                <tr><td class="f">Mức độ hạnh phúc</td><td>0 đến 100</td><td class="map"><code>relationships.affection_level</code></td><td>Nếu &lt; 20 có nguy cơ ly hôn, phân chia 50% tài sản ròng</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Khởi tạo quan hệ sinh con mới và kế thừa tư chất</summary>
+<pre>INSERT INTO relationships (character_id, type, name, affection_level, inherited_traits)
+VALUES (
+    :character_id,
+    'child',
+    :child_name,
+    90,
+    jsonb_build_array('Gen thông minh', 'Ý chí kiên định')
+);</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as Family Modal
+  participant BE as Engine (/action/family)
+  participant DB as CSDL
+  U->>FE: Bấm nút "Chào đón thành viên mới (Sinh con)"
+  FE->>BE: POST /api/game/action/family { action: 'have_child', partner_id }
+  BE->>DB: Đọc tư chất cha mẹ từ characters & relationships
+  Note over BE: Kết hợp gen di truyền (50% cha, 50% mẹ)<br/>Đặt tên ngẫu nhiên theo gia phả dòng họ
+  BE->>DB: Tạo bản ghi mới trong bảng relationships (type: 'child')
+  DB-->>BE: Tạo thành công
+  BE-->>FE: Trả thông tin em bé { name, traits, affection: 90 }
+  FE-->>U: Hiển thị hoạt họa chào đón thiên thần nhỏ
+</pre></div>
+        </div>
+      </article>
+
+      <!-- LG-F13 -->
+      <article class="feature" id="LG-F13">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F13</span>
+            <h3>Kế thừa Thế hệ & Di chúc gia tộc (Heir Succession)</h3>
+          </div>
+          <p class="caption">Cơ chế chuyển giao quyền lực khi nhân vật lớn tuổi hoặc cận kề tử kỳ. Người chơi chỉ định một người con làm <b>Người Thừa Kế Chính (Primary Heir)</b>: Toàn bộ danh mục bất động sản, tiền mặt và cổ phần công ty được chuyển giao cho kiếp sống tiếp theo, tiếp nối đời thứ 2, thứ 3 của gia tộc mà không bị reset từ đầu.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Lập Di Chúc & Chỉ Định Người Thừa Kế (Heir Succession)</b></div>
+              <div class="ui-page">
+                <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;padding:16px;display:grid;gap:12px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                      <div style="font-size:16px;font-weight:700;color:#1e293b;">📜 Di Chúc Gia Tộc Họ Nguyễn (Đời 1)</div>
+                      <div style="font-size:12px;color:#64748b;">Nhân vật hiện tại: Nguyễn An (76 tuổi · Sinh lực: 28)</div>
+                    </div>
+                    <span class="ui-tag gold">Tài sản chuyển giao: 12.8 Tỷ ₫</span>
+                  </div>
+
+                  <p style="font-size:13px;color:#475569;">
+                    Khi bạn qua đời hoặc chọn an dưỡng tuổi già, quyền điều khiển trò chơi sẽ được chuyển giao sang người thừa kế được chỉ định. Bạn sẽ bắt đầu kiếp sống mới dưới thân phận của người con này ở độ tuổi thanh xuân.
+                  </p>
+
+                  <div style="border:2px solid #4f46e5;border-radius:6px;padding:12px;background:#eef2ff;display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                      <div style="font-weight:700;font-size:14px;color:#3730a3;">👧 Nguyễn Bảo Châu (Con gái · 24 tuổi)</div>
+                      <div style="font-size:12px;color:#4338ca;">Tốt nghiệp Thạc sĩ Tài chính · Thừa hưởng 100% cổ phần & Bất động sản</div>
+                    </div>
+                    <button class="ui-btn p">Chỉ định làm Người Kế Tự</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Trường thông tin</th><th>Mô tả</th><th>Mapping CSDL</th><th>Quy tắc nghiệp vụ</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Người kế tự</td><td>Con được chọn làm chủ thể mới</td><td class="map"><code>relationships.id</code></td><td>Chuyển đổi thành nhân vật chính trong bảng <code>characters</code></td></tr>
+                <tr><td class="f">Thế hệ (Generation)</td><td>Đời thứ mấy</td><td class="map"><code>characters.generation = generation + 1</code></td><td>Tăng chỉ số đời để tiếp nối cây phả hệ</td></tr>
+                <tr><td class="f">Di sản tài sản</td><td>Bất động sản & Cổ phiếu</td><td class="map"><code>assets.character_id = new_character_id</code></td><td>Giữ nguyên quyền sở hữu, không bị thanh lý mất phí</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Khởi tạo kiếp sống người thừa kế và chuyển giao tài sản</summary>
+<pre>BEGIN;
+  -- 1. Đánh dấu cha/mẹ đã hoàn thành sứ mệnh
+  UPDATE characters SET is_deceased = TRUE, death_cause = 'Kế thừa thế hệ' WHERE id = :old_character_id;
+
+  -- 2. Tạo nhân vật mới đại diện cho con nối nghiệp
+  INSERT INTO characters (
+      player_account_id, name, age, generation, parent_name,
+      vitality, max_vitality, burnout, cash, innate_traits
+  ) VALUES (
+      'primary_player', :heir_name, :heir_age, :next_generation, :parent_name,
+      100, 100, 0, :transferred_cash, :inherited_traits
+  ) RETURNING id INTO :new_character_id;
+
+  -- 3. Chuyển giao toàn bộ tài sản sang ID nhân vật mới
+  UPDATE assets SET character_id = :new_character_id WHERE character_id = :old_character_id;
+COMMIT;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as Succession UI
+  participant BE as Engine (/rebirth/heir)
+  participant DB as CSDL
+  U->>FE: Bấm chọn "Kế thừa thế hệ cho Nguyễn Bảo Châu"
+  FE->>BE: POST /api/game/rebirth/heir { child_id }
+  BE->>DB: Thực thi chuyển giao Transaction (tạo character đời mới, chuyển giao tài sản)
+  DB-->>BE: Hoàn tất chuyển giao thế hệ
+  BE-->>FE: Trả về trạng thái nhân vật đời 2 (Tuổi: 24, Tài sản thừa kế: 12.8 Tỷ)
+  FE-->>U: Hiển thị hoạt họa chuyển giao di sản gia tộc hào nhoáng
+</pre></div>
+        </div>
+      </article>
+
+      <!-- LG-F14 -->
+      <article class="feature" id="LG-F14">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F14</span>
+            <h3>Ban thờ Tổ tiên & Thắp nhang hồi hướng (Ancestral Memorial)</h3>
+          </div>
+          <p class="caption">Nét văn hóa Á Đông độc bản trong LifeGraph: Ban thờ tổ tiên lưu giữ bài vị của tất cả các đời nhân vật đã qua đời. Người chơi ở các kiếp sau có thể dâng hương thắp nhang, khấn nguyện công đức để nhận điểm phúc lành (Ancestral Blessing) giúp tăng tỷ lệ may mắn khi gieo xúc xắc D20.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Từ Đường Gia Tộc & Ban Thờ Tổ Tiên (Ancestral Altar)</b></div>
+              <div class="ui-page" style="background:#18110c;color:#fef3c7;padding:20px;">
+                <div style="text-align:center;display:grid;gap:12px;">
+                  <div style="font-size:24px;">🪔 🕯️ 🏮</div>
+                  <div style="font-size:18px;font-weight:700;color:#fde68a;">TỪ ĐƯỜNG GIA TỘC HỌ NGUYỄN</div>
+                  <div style="font-size:12.5px;color:#d4af37;">"Cây có cội mới trổ cành xanh lá · Nước có nguồn mới bủa khắp rạch sông"</div>
+
+                  <div style="display:flex;justify-content:center;gap:14px;margin-top:8px;">
+                    <div style="background:#2c1d11;border:1px solid #78350f;padding:10px 16px;border-radius:6px;">
+                      <div style="font-size:11px;color:#fef3c7;opacity:0.8;">CÔNG ĐỨC TỔ TIÊN</div>
+                      <div style="font-size:18px;font-weight:700;color:#fbbf24;">480 Điểm</div>
+                    </div>
+                    <div style="background:#2c1d11;border:1px solid #78350f;padding:10px 16px;border-radius:6px;">
+                      <div style="font-size:11px;color:#fef3c7;opacity:0.8;">BÀI VỊ TIỀN NHÂN</div>
+                      <div style="font-size:18px;font-weight:700;color:#fde68a;">3 Đời</div>
+                    </div>
+                  </div>
+
+                  <button class="ui-btn p" style="background:#b45309;border-color:#b45309;color:#fff;justify-self:center;margin-top:10px;">
+                    🪔 Dâng Nén Nhang Thành Kính (Cầu Phúc May Mắn)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Trường thông tin</th><th>Ý nghĩa</th><th>Mapping CSDL</th><th>Hiệu ứng nghiệp vụ</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Bài vị tổ tiên</td><td>Danh sách các bậc tiền nhân</td><td class="map"><code>ancestral_memorials</code></td><td>Lưu trữ tên tuổi, thành tựu cuộc đời và công đức của tiền bối</td></tr>
+                <tr><td class="f">Nhang dâng cúng</td><td>Hành động thắp nhang</td><td class="map"><code>POST /lineage/incense</code></td><td>Cộng thêm buff 'Phù hộ độ trì' (+2 điểm vào lần gieo xúc xắc D20 kế tiếp)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Ghi nhận bài vị tiền nhân vào ban thờ tổ tiên</summary>
+<pre>INSERT INTO ancestral_memorials (player_account_id, character_name, generation, death_age, greatest_achievement, karma_contributed)
+VALUES ('primary_player', 'Nguyễn An', 1, 82, 'Sáng lập tập đoàn AI công nghệ', 150);</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as Ancestral Memorial
+  participant BE as Engine (/lineage/incense)
+  participant DB as CSDL
+  U->>FE: Bấm "Dâng Nén Nhang Thành Kính"
+  FE->>BE: POST /api/game/lineage/incense
+  BE->>DB: Đọc tổng số bài vị tổ tiên
+  Note over BE: Khởi tạo hiệu ứng tâm linh<br/>Cấp phát bùa chúc phúc: +2 điểm xúc xắc D20
+  BE-->>FE: Trả về trạng thái hồi hướng công đức
+  FE-->>U: Hiển thị khói nhang trầm lắng và âm thanh chuông tĩnh tâm
+</pre></div>
+        </div>
+      </article>
+    </section>
+
+
+    <!-- 13. NHÓM 5: LUÂN HỒI NGHIỆP QUẢ, GACHA LINH HỒN & AN TOÀN HỆ THỐNG -->
+    <section id="g5">
+      <h2>13. Nhóm 5: Luân hồi Nghiệp quả, Gacha Linh hồn & An toàn Hệ thống</h2>
+
+      <!-- LG-F15 -->
+      <article class="feature" id="LG-F15">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F15</span>
+            <h3>Vòng luân hồi Nghiệp báo & Gacha Linh hồn (Rebirth & Soul Gacha)</h3>
+          </div>
+          <p class="caption">Hệ thống chuyển kiếp siêu hình học: Khi một kiếp sống khép lại, toàn bộ công đức và tội lỗi được chuyển hóa thành Điểm Nghiệp Quả (Karma Points) nạp vào bảng vĩnh cửu <code>player_accounts</code>. Người chơi sử dụng Karma để rút thẻ bài Tarot và quay Gacha định mệnh chọn lựa tư chất bẩm sinh cho kiếp sống tiếp theo.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Đài Luân Hồi & Gacha Linh Hồn (Soul Rebirth Gacha)</b></div>
+              <div class="ui-page" style="background:#090d16;color:#f8fafc;padding:24px;">
+                <div style="text-align:center;display:grid;gap:14px;">
+                  <div style="font-size:12px;color:#a5b4fc;text-transform:uppercase;letter-spacing:0.1em;">Cõi Vô Thường · Chuyển Kiếp Tái Sinh</div>
+                  <div style="font-size:20px;font-weight:700;color:#c7d2fe;">BỐC QUẺ ĐỊNH MỆNH KIẾP SAU</div>
+                  <div style="display:inline-flex;justify-content:center;gap:10px;">
+                    <span class="ui-tag gold" style="font-size:13px;padding:4px 12px;">🌟 Điểm Karma vĩnh cửu: 280</span>
+                    <span class="ui-tag" style="background:#312e81;color:#e0e7ff;border-color:#4338ca;">Kiếp thứ: 3</span>
+                  </div>
+
+                  <!-- 3 LÁ BÀI TAROT GACHA -->
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:10px;">
+                    <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border:2px solid #818cf8;border-radius:8px;padding:16px;box-shadow:0 0 15px rgba(129,140,248,0.3);">
+                      <div style="font-size:28px;">🧠</div>
+                      <div style="font-weight:700;font-size:14px;color:#e0e7ff;margin:8px 0;">Gen Trí Tuệ Thiên Tài</div>
+                      <div style="font-size:11.5px;color:#c7d2fe;">Độ hiếm: <b style="color:#fbbf24;">LEGENDARY</b></div>
+                      <div style="font-size:11px;color:#94a3b8;margin-top:6px;">+4 vào tất cả thử thách học thuật và công nghệ</div>
+                      <button class="ui-btn p sm" style="width:100%;margin-top:10px;background:#4f46e5;">Đã Mở Khóa</button>
+                    </div>
+
+                    <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border:1px solid #4338ca;border-radius:8px;padding:16px;">
+                      <div style="font-size:28px;">👑</div>
+                      <div style="font-weight:700;font-size:14px;color:#e0e7ff;margin:8px 0;">Xuất Thân Trâm Anh Thế Phiệt</div>
+                      <div style="font-size:11.5px;color:#c7d2fe;">Độ hiếm: <b style="color:#f43f5e;">MYTHIC</b></div>
+                      <div style="font-size:11px;color:#94a3b8;margin-top:6px;">Khởi đầu với gia sản 5 Tỷ VND và quan hệ tầng lớp thượng lưu</div>
+                      <button class="ui-btn sm pl" style="width:100%;margin-top:10px;">Mua với 150 Karma</button>
+                    </div>
+
+                    <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border:1px solid #4338ca;border-radius:8px;padding:16px;">
+                      <div style="font-size:28px;">❤️</div>
+                      <div style="font-weight:700;font-size:14px;color:#e0e7ff;margin:8px 0;">Duyên Lành Quý Nhân</div>
+                      <div style="font-size:11.5px;color:#c7d2fe;">Độ hiếm: <b style="color:#38bdf8;">RARE</b></div>
+                      <div style="font-size:11px;color:#94a3b8;margin-top:6px;">Luôn gặp người tốt nâng đỡ trong những giai đoạn ngặt nghèo</div>
+                      <button class="ui-btn sm pl" style="width:100%;margin-top:10px;">Mua với 60 Karma</button>
+                    </div>
+                  </div>
+
+                  <button class="ui-btn p" style="justify-self:center;background:#059669;padding:0 32px;font-size:14px;height:38px;margin-top:12px;">
+                    ✨ Bắt Đầu Kiếp Sống Mới (Nhập Thể)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Trường thông tin</th><th>Kiểu</th><th>Mapping CSDL</th><th>Quy tắc luân hồi</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Karma vĩnh cửu</td><td>INT</td><td class="map"><code>player_accounts.total_karma</code></td><td>Tích lũy từ điểm số cuộc đời cũ, không bao giờ bị xóa</td></tr>
+                <tr><td class="f">Tư chất đã mở khóa</td><td>JSONB Array</td><td class="map"><code>player_accounts.unlocked_perks</code></td><td>Lưu trữ các perk vĩnh viễn đã mua để áp dụng vào nhân vật mới</td></tr>
+                <tr><td class="f">Số lần luân hồi</td><td>INT</td><td class="map"><code>player_accounts.reincarnation_count</code></td><td>Tự động tăng <code>reincarnation_count = count + 1</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Khởi tạo nhân vật kiếp mới kế thừa tư chất từ Soul Gacha</summary>
+<pre>BEGIN;
+  -- 1. Tăng số kiếp luân hồi trong tài khoản vĩnh cửu
+  UPDATE player_accounts
+  SET 
+      reincarnation_count = reincarnation_count + 1,
+      total_karma = total_karma - :spent_karma + :earned_karma,
+      updated_at = CURRENT_TIMESTAMP
+  WHERE id = 'primary_player';
+
+  -- 2. Tạo nhân vật sơ sinh kiếp mới
+  INSERT INTO characters (
+      player_account_id, name, age, generation, nationality,
+      vitality, max_vitality, burnout, cash, innate_traits
+  ) VALUES (
+      'primary_player', :new_name, 0, 1, :chosen_country,
+      100, 100, 0, 0, :selected_gacha_perks
+  ) RETURNING id;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as Rebirth Gacha UI
+  participant BE as Engine (/rebirth)
+  participant DB as CSDL
+  U->>FE: Chọn mua tư chất "Gen Trí Tuệ" & bấm "Bắt Đầu Kiếp Sống Mới"
+  FE->>BE: POST /api/game/rebirth { selected_perks: ['genius_mind'], country: 'T2_Vietnam' }
+  BE->>DB: Trừ điểm Karma trong player_accounts & khởi tạo nhân vật kiếp mới
+  DB-->>BE: Hoàn tất khởi tạo (character_id mới)
+  BE-->>FE: Trả về dữ liệu em bé sơ sinh kiếp mới
+  FE-->>U: Hiển thị hoạt họa chuyển sinh ánh sáng và mở màn kiếp mới
+</pre>
+          </div>
+        </div>
+      </article>
+
+      <!-- LG-F16 -->
+      <article class="feature" id="LG-F16">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F16</span>
+            <h3>Tử kỳ & Video Death Recap 15s (End of Life Chronicle)</h3>
+          </div>
+          <p class="caption">Hồi kết trang trọng cho một kiếp người. Khi nhân vật cạn kiệt sinh lực hoặc qua đời vì tuổi già, hệ thống tự động tổng hợp toàn bộ các dấu mốc chói lọi, biến động đồ thị tài sản và mối lương duyên thành <b>Cuộn phim Hồi ký 15 giây (Death Recap)</b> kèm nguyên nhân lâm chung và đánh giá độ viên mãn cuộc đời.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Hồi Ký Tổng Kết Cuộc Đời (Death Recap Chronicle)</b></div>
+              <div class="ui-page" style="background:#0f172a;color:#f8fafc;padding:24px;">
+                <div style="border:1px solid #334155;border-radius:8px;padding:20px;display:grid;gap:14px;background:#1e293b;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #334155;padding-bottom:12px;">
+                    <div>
+                      <div style="font-size:20px;font-weight:700;color:#f8fafc;">🕯️ CỐ NHÂN: NGUYỄN AN</div>
+                      <div style="font-size:12px;color:#94a3b8;">Hưởng thọ: <b>82 tuổi</b> · Nguyên nhân: Tuổi cao an nghỉ thanh thản</div>
+                    </div>
+                    <span class="ui-tag gold" style="font-size:13px;padding:4px 12px;">Đánh giá: BẬC ĐẠI PHÚ ĐẠI QUÝ</span>
+                  </div>
+
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+                    <div style="background:#0f172a;padding:10px;border-radius:6px;border:1px solid #334155;">
+                      <div style="font-size:11px;color:#94a3b8;">ĐỈNH CAO TÀI SẢN</div>
+                      <div style="font-size:16px;font-weight:700;color:#34d399;">36.5 Tỷ ₫</div>
+                    </div>
+                    <div style="background:#0f172a;padding:10px;border-radius:6px;border:1px solid #334155;">
+                      <div style="font-size:11px;color:#94a3b8;">HẬU DUỆ NỐI DÕI</div>
+                      <div style="font-size:16px;font-weight:700;color:#818cf8;">2 Con · 5 Cháu</div>
+                    </div>
+                    <div style="background:#0f172a;padding:10px;border-radius:6px;border:1px solid #334155;">
+                      <div style="font-size:11px;color:#94a3b8;">CÔNG ĐỨC KARMA TÍCH LŨY</div>
+                      <div style="font-size:16px;font-weight:700;color:#fbbf24;">+125 Điểm</div>
+                    </div>
+                  </div>
+
+                  <div style="font-size:13px;color:#cbd5e1;line-height:1.6;background:#0f172a;padding:12px;border-radius:6px;">
+                    <i>"Một đời thanh liêm, khởi nghiệp từ hai bàn tay trắng, tạo dựng cơ nghiệp công nghệ vang danh và để lại di sản mẫu mực cho muôn đời con cháu..."</i>
+                  </div>
+
+                  <div style="display:flex;gap:10px;justify-content:flex-end;">
+                    <button class="ui-btn" style="background:#334155;color:#fff;border-color:#475569;">▶ Xem Lại Video Recap 15s</button>
+                    <button class="ui-btn p" style="background:#4f46e5;">Bước Vào Đài Luân Hồi</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Trường tổng kết</th><th>Nguồn dữ liệu</th><th>Mapping CSDL</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Tuổi thọ lâm chung</td><td>Tuổi tại thời điểm sinh lực = 0</td><td class="map"><code>characters.death_age</code></td></tr>
+                <tr><td class="f">Nguyên nhân tử vong</td><td>Lý do kết thúc cuộc đời</td><td class="map"><code>characters.death_cause</code> ('Tuổi già', 'Lao lực đột quỵ', 'Tai nạn')</td></tr>
+                <tr><td class="f">Dòng thời gian (Timeline)</td><td>Các mốc son cuộc đời phục vụ video recap</td><td class="map"><code>characters.timeline_snapshots</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Đóng băng nhân vật và tính toán điểm Karma hồi kết</summary>
+<pre>UPDATE characters
+SET 
+    is_deceased = TRUE,
+    death_age = age,
+    death_cause = :cause_of_death,
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = :character_id;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as Death Recap Modal
+  participant BE as Engine (/death-recap)
+  participant DB as CSDL
+  BE->>DB: Kiểm tra characters.vitality <= 0
+  Note over BE: Đóng băng kiếp sống (is_deceased = true)<br/>Tổng hợp toàn bộ snapshot tài sản, danh hiệu, con cái<br/>Tính toán điểm công đức Karma thưởng thêm
+  BE-->>FE: Trả về gói dữ liệu tổng kết cuộc đời
+  FE-->>U: Trình chiếu chuỗi hồi ký 15 giây trang trọng
+</pre></div>
+        </div>
+      </article>
+
+      <!-- LG-F17 -->
+      <article class="feature" id="LG-F17">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F17</span>
+            <h3>Bảo mật Phiên & Chống gian lận mật mã (HMAC-SHA256 Handshake)</h3>
+          </div>
+          <p class="caption">Hệ thống bảo vệ tính toàn vẹn của trò chơi. Mọi phiên đăng nhập bắt buộc phải thực hiện bắt tay mã hóa (Cryptographic Handshake) để cấp phát Session Token có chữ ký số HMAC-SHA256. Mọi hành động nhạy cảm (mua tài sản, cộng tiền, tung xúc xắc) đều được xác minh chữ ký và ghi nhận nhật ký an ninh tự động.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Bảng Giám Sát An Ninh & Kiểm Soát Gian Lận</b></div>
+              <div class="ui-page">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                  <div>
+                    <div style="font-size:15px;font-weight:700;">Hệ Thống Khiên Bảo Mật (Cryptographic Shield)</div>
+                    <div style="font-size:12px;color:#64748b;">Trạng thái: <b style="color:#059669;">Hoạt động bình thường · Chữ ký HMAC-SHA256</b></div>
+                  </div>
+                  <span class="ui-tag s">Không phát hiện can thiệp</span>
+                </div>
+
+                <div class="ui-tw">
+                  <table class="ui-t">
+                    <thead><tr><th>Thời gian</th><th>Sự kiện</th><th>Mã phiên</th><th>Địa chỉ IP</th><th>Trạng thái</th></tr></thead>
+                    <tbody>
+                      <tr>
+                        <td>14:32:01</td>
+                        <td class="f">Handshake Cấp Token</td>
+                        <td><code>sess_9f81a7b...</code></td>
+                        <td>118.70.12.4</td>
+                        <td><span class="ui-tag s">Hợp lệ</span></td>
+                      </tr>
+                      <tr>
+                        <td>14:32:15</td>
+                        <td class="f">Xác minh chữ ký /action/buy-asset</td>
+                        <td><code>sess_9f81a7b...</code></td>
+                        <td>118.70.12.4</td>
+                        <td><span class="ui-tag s">Đã ký HMAC</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Cơ chế</th><th>Thuật toán</th><th>Mục đích</th><th>Hành động khi phát hiện lỗi</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Bắt tay mã hóa</td><td>HMAC-SHA256</td><td>Cấp phát chữ ký số cho từng phiên người chơi</td><td>Từ chối kết nối nếu Token hết hạn</td></tr>
+                <tr><td class="f">Kiểm tra chữ ký hành động</td><td>Payload Signature Verification</td><td>Ngăn chặn việc sửa đổi số dư cash hay sinh lực từ client</td><td>Khóa tài khoản và ghi nhận Security Incident</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Ghi nhận nhật ký an ninh và phát hiện can thiệp</summary>
+<pre>INSERT INTO security_audit_logs (session_id, action_name, is_tampered, ip_address, incident_details)
+VALUES (:session_id, 'VERIFY_DICE_INTEGRITY', FALSE, :client_ip, 'Chữ ký hợp lệ, dữ liệu toàn vẹn');</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Trình duyệt Client
+  participant BE as Backend Security Filter
+  participant DB as CSDL
+  U->>BE: POST /api/game/auth/handshake { client_id }
+  Note over BE: Tạo Session ID & Ký mật mã HMAC-SHA256 bằng Server Secret Key
+  BE-->>U: Trả về { session_id, session_token }
+  U->>BE: Gửi yêu cầu mua tài sản kèm Header (x-session-token)
+  BE->>BE: Kiểm tra tính toàn vẹn của chữ ký số
+  BE->>DB: Thực thi nếu chữ ký hợp lệ (chặn đứng 100% gian lận can thiệp)
+</pre></div>
+        </div>
+      </article>
+
+      <!-- LG-F18 -->
+      <article class="feature" id="LG-F18">
+        <div class="f-head">
+          <div class="f-title">
+            <span class="id">LG-F18</span>
+            <h3>Khát vọng trọn đời & Tiến trình Siêu việt (Transhumanism & Nirvana)</h3>
+          </div>
+          <p class="caption">Hành trình tối hậu của kiếp người: Vượt qua các biến cố phàm trần để chinh phục Khát Vọng Trọn Đời (Lifelong Aspiration). Mở khóa công nghệ cấy ghép công nghệ sinh học (Transhumanism - Khóa vĩnh viễn sinh lực không bị lão hóa) hoặc giác ngộ cảnh giới Niết Bàn (Nirvana) giải thoát khỏi vòng luân hồi sinh tử.</p>
+        </div>
+
+        <div class="block">
+          <div class="k">Giao diện người dùng (Mockup UI)</div>
+          <figure class="ui-fig">
+            <div class="ui">
+              <div class="ui-bar"><div class="dots"><i></i><i></i><i></i></div><span class="sep">|</span><b>Tiến Trình Siêu Việt & Khát Vọng Trọn Đời</b></div>
+              <div class="ui-page">
+                <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:16px;display:grid;gap:14px;">
+                  <div>
+                    <span class="ui-tag gold">Cảnh Giới Tối Hậu</span>
+                    <h3 style="font-size:16px;margin-top:6px;">Khát Vọng: Đại Hiền Triết & Bất Tử Thể (Transhumanism)</h3>
+                    <p style="font-size:12.5px;color:#64748b;margin-top:4px;">Bạn đã tích lũy đủ thành tựu khoa học và nguồn tài chính để thực hiện đại phẫu thuật cấy ghép Nano sinh học.</p>
+                  </div>
+
+                  <div style="background:#eef2ff;border:1px solid #c7d2fe;padding:12px;border-radius:6px;font-size:13px;color:#3730a3;">
+                    <b>✨ Hiệu ứng Siêu Việt Hóa:</b>
+                    <ul style="margin-top:6px;">
+                      <li>Khóa vĩnh viễn mức trần Sinh lực ở <b>100/100</b>, triệt tiêu hoàn toàn quá trình già hóa sinh học.</li>
+                      <li>Kháng 100% các bệnh nan y tuổi già.</li>
+                      <li>Nhận thêm danh hiệu <i>Thực Thể Siêu Việt</i> tại ban thờ tổ tiên.</li>
+                    </ul>
+                  </div>
+
+                  <button class="ui-btn p" style="background:#4338ca;justify-self:start;">
+                    ⚡ Kích Hoạt Dự Án Bất Tử Thể (Tiêu hao 5 Tỷ ₫ + 50 Karma)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="k">Mô tả chi tiết & Mapping CSDL</div>
+          <div class="tbl">
+            <table class="minw-l">
+              <thead><tr><th>Trường trạng thái</th><th>Kiểu</th><th>Mapping CSDL</th><th>Đặc quyền kích hoạt</th></tr></thead>
+              <tbody>
+                <tr><td class="f">Cờ Bất tử thể</td><td>BOOLEAN</td><td class="map"><code>characters.is_transhuman</code></td><td>Đặt = true, bỏ qua toàn bộ công thức trừ Max Vitality của TickEngine</td></tr>
+                <tr><td class="f">Khóa suy giảm tuổi</td><td>INT</td><td class="map"><code>characters.transhuman_frozen_until_age</code></td><td>Cố định sinh lực tối đa 100 đến tuổi 150+</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <details class="sql">
+            <summary>SQL – Kích hoạt trạng thái Siêu Việt Hóa Transhumanism</summary>
+<pre>UPDATE characters
+SET 
+    is_transhuman = TRUE,
+    vitality = 100,
+    max_vitality = 100,
+    cash = cash - 5000000000,
+    hidden_flags = hidden_flags || '["transhuman_ascension"]'::jsonb,
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = :character_id AND cash >= 5000000000;</pre>
+          </details>
+        </div>
+
+        <div class="block">
+          <div class="k">Luồng nghiệp vụ xử lý</div>
+          <div class="seq"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người chơi
+  participant FE as Aspiration Modal
+  participant BE as Engine (/transhumanism)
+  participant DB as CSDL
+  U->>FE: Bấm chọn "Kích Hoạt Dự Án Bất Tử Thể"
+  FE->>BE: POST /api/game/transhumanism
+  BE->>DB: Kiểm tra điều kiện (tài chính >= 5 Tỷ, chỉ số trí tuệ cao)
+  Note over BE: Kích hoạt cờ is_transhuman = true<br/>Khóa Max Vitality = 100 không suy giảm theo tuổi
+  BE->>DB: Cập nhật characters
+  DB-->>BE: Xác nhận thành công
+  BE-->>FE: Trả kết quả siêu việt hóa
+  FE-->>U: Hiển thị giao diện hào quang cơ khí sinh học tối tân
+</pre></div>
+        </div>
+      </article>
+    </section>
+
+
+    <footer>
+      <p><b>LifeGraph RPG V6.0 System & Architecture Specification</b> · Tài liệu đặc tả kỹ thuật và mapping CSDL chi tiết cho LifeGraph Game Engine · Thiết kế theo chuẩn Enterprise Game Design Document (GDD) & Software Requirements Specification (SRS).</p>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted);display:flex;gap:18px;flex-wrap:wrap;">
+        <span><b>Backend:</b> <code>v6.0-ultimate-narrative</code> (Branch: <code>main</code>)</span>
+        <span><b>Frontend:</b> Next.js 15 App Router (Branch: <code>main</code>)</span>
+        <span><b>Database:</b> Dual-Layer PostgreSQL 16 (Schema V6)</span>
+        <span><b>Ngày phát hành:</b> 03/11/2026</span>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<!-- Thư viện Mermaid CDN hỗ trợ sơ đồ Sequence & Flowchart -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<script>
+(function () {
+  if (!window.mermaid) return;
+  var dark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+    (document.documentElement.getAttribute('data-theme') !== 'light' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'strict',
+    theme: dark ? 'dark' : 'default',
+    themeVariables: { fontFamily: 'Roboto, system-ui, sans-serif', fontSize: '13.5px' },
+    sequence: { wrap: true, width: 220, noteMargin: 10, messageMargin: 35, actorMargin: 50, mirrorActors: true, useMaxWidth: false }
+  });
+})();
+</script>
+
+<!-- Script xử lý chuyển tab UI Mockup -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-ui-tab]');
+    if (!b) return;
+    var box = b.closest('.ui-switch');
+    if (!box) return;
+    var i = b.getAttribute('data-ui-tab');
+    box.querySelectorAll(':scope > .ui-tabs [data-ui-tab]').forEach(function (t) { 
+      t.setAttribute('aria-selected', String(t === b)); 
+    });
+    box.querySelectorAll(':scope > [data-ui-pane]').forEach(function (p) { 
+      p.hidden = p.getAttribute('data-ui-pane') !== i; 
+    });
+  });
+})();
+</script>
+</body>
+</html>
