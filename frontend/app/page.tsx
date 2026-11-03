@@ -1028,7 +1028,7 @@ export default function LifeGraphPage() {
       )}
 
       {/* Slim Top Navigation */}
-      <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-40 gap-3">
+      <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-40 gap-3 max-w-full overflow-x-auto scrollbar-none">
         {/* 1. Left Zone: Brand Logo & View Switcher Tabs (Đẩy sát sang trái) */}
         <div className="flex items-center gap-3 sm:gap-4 shrink-0">
           <div className="flex items-center gap-2.5">
@@ -1322,7 +1322,7 @@ export default function LifeGraphPage() {
             {/* 3-Column Responsive Grid Cockpit */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
               {/* Left Column: Sticky Profile Sidebar (3 cols) */}
-              <div className="lg:col-span-3">
+              <div className="order-2 lg:order-1 lg:col-span-3 min-w-0 w-full">
                 <StickyProfileSidebar
                   character={character}
                   visuals={visuals}
@@ -1340,7 +1340,7 @@ export default function LifeGraphPage() {
               </div>
 
               {/* Center Column: AP Hub & Life Dilemmas (6 cols) */}
-              <div className="lg:col-span-6 flex flex-col gap-4">
+              <div className="order-1 lg:order-2 lg:col-span-6 flex flex-col gap-4 min-w-0 w-full">
                 {/* Strategic Action Points (AP) Hub (Đẩy lên trên cùng, tối ưu không gian) */}
                 {character && (
                   <ActionPointHub
@@ -1378,7 +1378,7 @@ export default function LifeGraphPage() {
               </div>
 
               {/* Right Column: Sticky Life Chronicle & Narrative Feed + Annual Digest (3 cols) */}
-              <div className="lg:col-span-3">
+              <div className="order-3 lg:order-3 lg:col-span-3 min-w-0 w-full">
                 <NarrativeFeed
                   history={character?.history_log || []}
                   assets={assets}

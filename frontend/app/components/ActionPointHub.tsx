@@ -267,7 +267,7 @@ export default function ActionPointHub({
       </div>
 
       {/* DYNAMIC AGE-APPROPRIATE ACTION TILES */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 my-2.5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 my-2.5 w-full">
         {/* ========================================================================= */}
         {/* 1. GIAI ĐOẠN 0 - 5 TUỔI: ẤU THƠ BẬP BẸ (CHI PHÍ $0) */}
         {/* ========================================================================= */}

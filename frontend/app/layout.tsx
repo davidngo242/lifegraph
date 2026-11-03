@@ -1,9 +1,18 @@
 import './globals.css';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 export const metadata: Metadata = {
   title: 'LifeGraph — AI-Driven Life Simulation RPG',
   description: 'Mô phỏng cuộc đời sinh tồn quản lý rủi ro và nguồn lực đa mô-đun với AI Game Master',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
+  themeColor: '#020617',
 };
 
 export default function RootLayout({

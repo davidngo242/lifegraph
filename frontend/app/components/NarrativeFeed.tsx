@@ -83,7 +83,7 @@ export default function NarrativeFeed({
   };
 
   return (
-    <div className="w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-4 md:p-5 shadow-2xl backdrop-blur-xl flex flex-col h-[calc(100vh-6.5rem)] sticky top-20 overflow-hidden">
+    <div className="w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-4 md:p-5 shadow-2xl backdrop-blur-xl flex flex-col h-auto max-h-[520px] lg:max-h-none lg:h-[calc(100vh-6.5rem)] lg:sticky top-20 overflow-hidden">
       {/* Header: Replaced redundant age badge with Timeline Progress and Filters */}
       <div className="flex flex-col gap-2.5 pb-3 border-b border-slate-800/80 mb-2.5 shrink-0">
         <div className="flex items-center justify-between">

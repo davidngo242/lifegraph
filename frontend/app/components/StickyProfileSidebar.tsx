@@ -259,7 +259,7 @@ export default function StickyProfileSidebar({
   );
 
   return (
-    <div className="w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-3.5 md:p-4 shadow-2xl backdrop-blur-xl flex flex-col gap-3 sticky top-20 max-h-[calc(100vh-6.5rem)] overflow-y-auto custom-scrollbar">
+    <div className="w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-3.5 md:p-4 shadow-2xl backdrop-blur-xl flex flex-col gap-3 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6.5rem)] overflow-y-auto custom-scrollbar">
       
       {/* Dynamic Lifecycle: Adults prioritize Health & Financials first */}
       {!isAdult ? (
