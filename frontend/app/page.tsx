@@ -845,8 +845,10 @@ export default function LifeGraphPage() {
           characterVisuals={visuals}
           characterName={character?.name}
           characterAge={character?.age}
+          character={character}
           actionPoints={character?.action_points || 3}
           onSelectOption={handleSelectChoice}
+          onCustomResolve={handleCustomResolve}
           isLoading={loading}
         />
       );
@@ -896,6 +898,7 @@ export default function LifeGraphPage() {
             dilemma={dilemma}
             actionPoints={character?.action_points || 3}
             characterAge={character?.age}
+            character={character}
             onSelectOption={handleSelectChoice}
             onCustomResolve={handleCustomResolve}
             isLoading={loading}
