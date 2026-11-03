@@ -182,13 +182,29 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
   const choice = scenario.choices.find(c => c.id === choiceId);
   if (!choice) throw new Error(`Lựa chọn '${choiceId}' không hợp lệ trong tình huống này.`);
 
-  // 1. Verify Knowledge Requirements
+  // 0. Handle Postpone / Continue Observing
+  if (choiceId === 'CHOICE_POSTPONE_OBSERVE') {
+    return {
+      success: true,
+      choice_id: choiceId,
+      choice_title: "Trì Hoãn Quyết Định & Tiếp Tục Quan Sát",
+      narration: "Bạn quyết định tạm thời giữ nguyên hiện trạng, không vội vàng cam kết khi chưa sẵn sàng. Hãy tiếp tục quan sát và tích lũy thêm trải nghiệm.",
+      commitments: character.commitments || [],
+      character_state: {
+        action_points: character.action_points,
+        cash: character.cash,
+        burnout: character.burnout,
+        vitality: character.vitality
+      }
+    };
+  }
+
+  // 1. Check Knowledge Requirements & Calculate Uncertainty Penalty
+  let missingKnowledgeCount = 0;
   if (Array.isArray(choice.knowledge_requirements) && choice.knowledge_requirements.length > 0) {
     const currentKnowledge = new Set(character.knowledge_base || []);
     const missing = choice.knowledge_requirements.filter(k => !currentKnowledge.has(k));
-    if (missing.length > 0) {
-      throw new Error(`Bạn chưa có đủ thông tin để đưa ra lựa chọn này. Hãy khám phá thêm manh mối trong các cảnh! (Thiếu: ${missing.join(', ')})`);
-    }
+    missingKnowledgeCount = missing.length;
   }
 
   // 2. Verify and Deduct Action Points
@@ -203,7 +219,9 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
   let outcomeKey = "success";
 
   if (choice.check) {
-    const targetDc = Number(choice.check.target_dc || 12);
+    const baseDc = Number(choice.check.target_dc || 12);
+    // Uncertainty penalty for choosing without complete knowledge (+2 DC per missing clue)
+    const targetDc = baseDc + (missingKnowledgeCount * 2);
     // True Server Random D20
     const d20Base = Math.floor(Math.random() * 20) + 1;
 

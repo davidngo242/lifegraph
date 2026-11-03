@@ -1,0 +1,185 @@
+{
+  "pack_id": "pack_midlife_crossroads",
+  "name": "Tuyến Trung Niên: Ngã Rẽ Tuổi 42 (36 - 55 Tuổi)",
+  "version": "1.0.0",
+  "description": "Gánh nặng và vinh quang tuổi trung niên: Đỉnh cao sự nghiệp, trách nhiệm phụ dưỡng mẹ cha và định hướng con cái.",
+  "scenarios": [
+    {
+      "id": "scenario_midlife_crossroads",
+      "arc_id": "arc_midlife_leadership",
+      "stage": 1,
+      "title": "Ngã Rẽ Tuổi 42: Củng Cố Vị Thế Hay Tái Thiết Cuộc Sống?",
+      "description": "Đứng ở đỉnh cao công danh, bạn đứng trước cơ hội mở rộng đầu tư quy mô lớn hoặc giảm tải công việc để dành trọn vẹn thời gian cho sức khỏe và gia đình.",
+      "location_id": "hanoi_commercial_district",
+      "roles": {
+        "partner": "Bạn đời (Đồng hành hơn 15 năm)",
+        "partner_biz": "Đối tác chiến lược (Đề xuất liên doanh lớn)",
+        "heir": "Con cái (Đang tuổi trưởng thành)"
+      },
+      "prerequisites": {
+        "min_age": 36,
+        "max_age": 55,
+        "required_flags": [],
+        "excluded_flags": [
+          "midlife_resolved"
+        ]
+      },
+      "scenes": [
+        {
+          "id": "scene_midlife_office",
+          "name": "Văn phòng điều hành",
+          "background_theme": "office_executive",
+          "hotspots": [
+            {
+              "id": "hs_biz_proposal",
+              "label": "Bàn đàm phán mở rộng thị trường",
+              "icon": "briefcase",
+              "position_x": 280,
+              "dialogue": {
+                "speaker": "Đối tác chiến lược",
+                "text": "Dự án liên doanh này có thể nâng định giá tài sản lên gấp đôi, nhưng đòi hỏi bạn phải túc trực công tác nước ngoài ít nhất 2 năm.",
+                "granted_knowledge": "joint_venture_expansion_data",
+                "cost_ap": 1
+              }
+            },
+            {
+              "id": "hs_financial_health_audit",
+              "label": "Báo cáo kiểm toán & Sức khỏe",
+              "icon": "ledger",
+              "position_x": 650,
+              "dialogue": {
+                "speaker": "Hồ sơ sức khỏe định kỳ",
+                "text": "Chỉ số áp lực tim mạch và Burnout đang ở mức báo động. Bác sĩ khuyến cáo bạn cần giảm giờ làm để bảo vệ tính mạng.",
+                "granted_knowledge": "midlife_health_warning",
+                "cost_ap": 0
+              }
+            }
+          ]
+        },
+        {
+          "id": "scene_midlife_home",
+          "name": "Phòng khách gia đình ấm cúng",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "hs_family_dialogue",
+              "label": "Trò chuyện cùng người thân",
+              "icon": "heart",
+              "position_x": 450,
+              "npc_role": "partner",
+              "dialogue": {
+                "speaker": "Người Bạn Đời",
+                "text": "Tiền bạc bao nhiêu cũng không bằng bữa cơm quây quần ấm êm. Con cái lớn rồi, chúng cần bạn làm gương và chia sẻ.",
+                "granted_knowledge": "family_harmony_priority",
+                "affinity_delta": 15,
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Trước đỉnh cao danh vọng và tín hiệu cảnh báo sức khỏe, bạn sẽ phân bổ nguồn lực những năm tháng này thế nào?",
+          "rational": "Định giá doanh nghiệp đang ở mức đỉnh, tận dụng mở rộng sẽ tạo lập đế chế tài chính truyền đời cho thế hệ sau.",
+          "empathy": "Gia đình và sự bình yên bên người bạn đời tri kỷ mới là đích đến sau cùng của một kiếp nhân sinh.",
+          "instinct": "Hãy biết điểm dừng. Sức khỏe và sinh mệnh một khi suy sụp thì bao nhiêu gia sản cũng hóa hư không."
+        }
+      },
+      "choices": [
+        {
+          "id": "CHOICE_BUSINESS_EMPIRE",
+          "title": "Bứt Phá Mở Rộng Đế Chế Kinh Doanh",
+          "stance": "LÝ TRÍ",
+          "description": "Chấp nhận dấn thân công tác, mở rộng quy mô kinh doanh để tối đa hóa gia sản dòng họ.",
+          "knowledge_requirements": [
+            "joint_venture_expansion_data"
+          ],
+          "cost_ap": 1,
+          "check": {
+            "type": "EXPANSION",
+            "stat": "IQ",
+            "target_dc": 13,
+            "bonus_traits": [
+              "Tư duy chiến lược",
+              "Bản lĩnh tài chính"
+            ]
+          },
+          "outcomes": {
+            "critical_success": {
+              "narration": "Thương vụ liên doanh thắng lớn! Bạn đưa doanh nghiệp bước vào danh sách tinh hoa, tài sản tăng vọt.",
+              "stat_deltas": {
+                "cash": 500000,
+                "karma": 15,
+                "burnout": 15
+              },
+              "commitments": [
+                "Thủ lĩnh đế chế thương mại"
+              ]
+            },
+            "success": {
+              "narration": "Mở rộng thành công bước đầu, doanh thu tăng trưởng vững vàng dù áp lực công việc gia tăng.",
+              "stat_deltas": {
+                "cash": 200000,
+                "burnout": 10
+              },
+              "commitments": [
+                "Gia sản tăng trưởng ổn định"
+              ]
+            },
+            "failure": {
+              "narration": "Biến động thị trường khiến dự án chậm tiến độ, gánh nặng công việc khiến bạn kiệt sức.",
+              "stat_deltas": {
+                "burnout": 20
+              }
+            }
+          }
+        },
+        {
+          "id": "CHOICE_FAMILY_REBALANCE",
+          "title": "Tái Cân Bằng Cuộc Sống & Nuôi Dạy Thế Hệ Sau",
+          "stance": "TRÁI TIM",
+          "description": "Từ chối các chuyến công tác xa, giữ nguyên quy mô an toàn để đồng hành cùng con cái và bạn đời.",
+          "knowledge_requirements": [
+            "family_harmony_priority"
+          ],
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Ngôi nhà luôn rộn rã tiếng cười. Con cái noi gương hiếu học và gia đạo hưng thịnh vững bền.",
+              "stat_deltas": {
+                "karma": 20,
+                "burnout": -20,
+                "vitality": 5
+              },
+              "commitments": [
+                "Gia phong mẫu mực, gia đạo hưng long"
+              ]
+            }
+          }
+        },
+        {
+          "id": "CHOICE_HEALTH_FIRST",
+          "title": "Giảm Tải Công Việc & Dưỡng Sinh Bảo Mệnh",
+          "stance": "BẢN NĂNG",
+          "description": "Chuyển giao việc điều hành hàng ngày cho cấp phó, tập trung rèn luyện thân thể và thiền dưỡng sinh.",
+          "knowledge_requirements": [],
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Sức khỏe phục hồi rõ rệt! Thần thái minh mẫn, huyết áp ổn định và sinh mệnh được bảo tồn nguyên vẹn.",
+              "stat_deltas": {
+                "vitality": 15,
+                "burnout": -30,
+                "karma": 5
+              },
+              "commitments": [
+                "Dưỡng sinh tráng kiện"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

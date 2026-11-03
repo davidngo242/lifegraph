@@ -186,6 +186,16 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [playerX, showMindStage, activeDialogue, currentSceneId, scenario]);
 
+  const getSceneThemeBg = (theme?: string, sceneId?: string) => {
+    if (theme?.includes('nursery') || sceneId?.includes('nursery')) return 'bg-gradient-to-b from-slate-900 via-pink-950/20 to-slate-950 border-pink-500/30 shadow-pink-950/20';
+    if (theme?.includes('school') || theme?.includes('class') || sceneId?.includes('school')) return 'bg-gradient-to-b from-slate-900 via-emerald-950/25 to-slate-950 border-emerald-500/30 shadow-emerald-950/20';
+    if (theme?.includes('office') || sceneId?.includes('office')) return 'bg-gradient-to-b from-slate-900 via-blue-950/30 to-slate-950 border-blue-500/30 shadow-blue-950/20';
+    if (theme?.includes('cafe') || sceneId?.includes('cafe')) return 'bg-gradient-to-b from-slate-900 via-amber-900/30 to-amber-950 border-amber-600/40 shadow-amber-950/30';
+    if (theme?.includes('workshop') || theme?.includes('kiln') || sceneId?.includes('workshop')) return 'bg-gradient-to-b from-slate-900 via-orange-950/30 to-stone-950 border-orange-500/30 shadow-orange-950/20';
+    if (theme?.includes('legacy') || theme?.includes('study') || sceneId?.includes('legacy')) return 'bg-gradient-to-b from-slate-900 via-purple-950/30 to-slate-950 border-purple-500/30 shadow-purple-950/20';
+    return 'bg-gradient-to-b from-slate-900 via-amber-950/20 to-stone-950 border-amber-500/30 shadow-amber-950/20';
+  };
+
   const currentScene = scenario?.scenes.find(s => s.id === currentSceneId) || scenario?.scenes[0];
 
   // Click on floor to walk
@@ -296,50 +306,46 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
         <div>
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold">
-              Chương 1: Giữ Nghề Hay Đổi Đời?
+              {scenario.title}
             </span>
-            <span className="text-xs text-slate-400 font-medium">An (28 tuổi)</span>
+            <span className="text-xs text-slate-400 font-medium">
+              {character?.name || "Nhân vật"} ({character?.age || 25} tuổi)
+            </span>
           </div>
           <h2 className="text-lg font-bold text-white mt-0.5 flex items-center gap-2">
             <span>{currentScene.name}</span>
           </h2>
         </div>
 
-        {/* Travel Scene Navigation Buttons */}
-        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-950/80 border border-slate-800">
-          <button
-            onClick={() => handleSwitchScene('scene_home')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
-              currentSceneId === 'scene_home'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <Home className="w-3.5 h-3.5" />
-            <span>Nhà</span>
-          </button>
-          <button
-            onClick={() => handleSwitchScene('scene_office')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
-              currentSceneId === 'scene_office'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <Briefcase className="w-3.5 h-3.5" />
-            <span>Công Ty</span>
-          </button>
-          <button
-            onClick={() => handleSwitchScene('scene_cafe')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
-              currentSceneId === 'scene_cafe'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <Coffee className="w-3.5 h-3.5" />
-            <span>Quán Cafe</span>
-          </button>
+        {/* Dynamic Scene Switcher Tabs */}
+        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-950/80 border border-slate-800 flex-wrap">
+          {scenario.scenes.map(s => {
+            const isActive = s.id === currentSceneId;
+            return (
+              <button
+                key={s.id}
+                onClick={() => handleSwitchScene(s.id)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
+                  isActive
+                    ? 'bg-indigo-600 text-white shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                {s.background_theme?.includes('home') || s.id.includes('home') || s.id.includes('nursery') ? (
+                  <Home className="w-3.5 h-3.5" />
+                ) : s.background_theme?.includes('school') || s.id.includes('school') || s.id.includes('class') ? (
+                  <BookOpen className="w-3.5 h-3.5" />
+                ) : s.background_theme?.includes('office') || s.id.includes('office') ? (
+                  <Briefcase className="w-3.5 h-3.5" />
+                ) : s.background_theme?.includes('cafe') || s.id.includes('cafe') ? (
+                  <Coffee className="w-3.5 h-3.5" />
+                ) : (
+                  <Compass className="w-3.5 h-3.5" />
+                )}
+                <span>{s.name}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Quick Indicators: AP & Clues */}
@@ -347,10 +353,10 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
           <button
             onClick={() => setShowJournal(true)}
             className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-1.5 transition"
-            title="Xem Sổ tay Manh mối đã khám phá"
+            title="Xem Sổ tay Tri thức đã ghi nhận"
           >
             <BookOpen className="w-3.5 h-3.5 text-amber-400" />
-            <span>Manh Mối: {knowledgeBase.length}/6</span>
+            <span>Tri Thức Ghi Nhận ({knowledgeBase.length})</span>
           </button>
 
           <div className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs font-mono font-bold text-emerald-300 flex items-center gap-1.5">
@@ -362,7 +368,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
             className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-purple-600/30 flex items-center gap-1.5 transition active:scale-95"
           >
             <Brain className="w-3.5 h-3.5" />
-            <span>Vào Sân Khấu Tâm Trí</span>
+            <span>Cân Nhắc Quyết Định</span>
           </button>
         </div>
       </div>
@@ -370,13 +376,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
       {/* 2. 2D Interactive Stage Window */}
       <div
         onClick={handleFloorClick}
-        className={`w-full h-80 md:h-96 rounded-3xl relative overflow-hidden select-none cursor-pointer border-2 shadow-2xl transition-all duration-500 ${
-          currentSceneId === 'scene_home'
-            ? 'bg-gradient-to-b from-slate-900 via-amber-950/20 to-stone-950 border-amber-500/30 shadow-amber-950/20'
-            : currentSceneId === 'scene_office'
-            ? 'bg-gradient-to-b from-slate-900 via-blue-950/30 to-slate-950 border-blue-500/30 shadow-blue-950/20'
-            : 'bg-gradient-to-b from-slate-900 via-amber-900/30 to-amber-950 border-amber-600/40 shadow-amber-950/30'
-        }`}
+        className={`w-full h-80 md:h-96 rounded-3xl relative overflow-hidden select-none cursor-pointer border-2 shadow-2xl transition-all duration-500 ${getSceneThemeBg(currentScene?.background_theme, currentSceneId)}`}
       >
         {/* Background Environment Elements */}
         <div className="absolute inset-0 pointer-events-none opacity-40">
@@ -426,7 +426,14 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                 {h.icon === 'briefcase' && <Briefcase className="w-3 h-3 text-blue-400" />}
                 {h.icon === 'sparkles' && <Sparkles className="w-3 h-3 text-amber-400" />}
                 {h.icon === 'ledger' && <BookOpen className="w-3 h-3 text-emerald-400" />}
+                {h.icon === 'book' && <BookOpen className="w-3 h-3 text-indigo-400" />}
+                {h.icon === 'award' && <Sparkles className="w-3 h-3 text-amber-300" />}
+                {h.icon === 'coffee' && <Coffee className="w-3 h-3 text-amber-400" />}
+                {h.icon === 'star' && <Sparkles className="w-3 h-3 text-yellow-300" />}
                 <span>{h.label}</span>
+                {h.dialogue?.granted_knowledge && knowledgeBase.includes(h.dialogue.granted_knowledge) && (
+                  <CheckCircle className="w-3 h-3 text-emerald-400 shrink-0" />
+                )}
               </div>
 
               {/* Hotspot Object Pillar */}
@@ -435,7 +442,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                   ? 'bg-indigo-950/80 border-indigo-400 text-white shadow-lg shadow-indigo-500/30'
                   : 'bg-slate-900/80 border-slate-800 text-slate-400 group-hover:border-slate-600'
               }`}>
-                {h.npc_role === 'partner' ? '👩‍💼' : h.npc_role === 'manager' ? '👨‍💼' : h.npc_role === 'friend' ? '🧑‍💻' : '📦'}
+                {h.npc_role === 'teacher' ? '👩‍🏫' : h.npc_role === 'classmate' ? '🧒' : h.npc_role === 'parent' ? '👨‍👩‍👧' : h.npc_role === 'mentor' ? '🧙‍♂️' : h.npc_role === 'heir' ? '🧑' : h.npc_role === 'partner' ? '👩‍💼' : h.npc_role === 'manager' ? '👨‍💼' : h.npc_role === 'friend' ? '🧑‍💻' : '📦'}
               </div>
 
               {isNear && (
@@ -633,30 +640,28 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                 <div className="space-y-2.5">
                   {scenario.choices.map(choice => {
                     const missingKnowledge = (choice.knowledge_requirements || []).filter(k => !knowledgeBase.includes(k));
-                    const isLocked = missingKnowledge.length > 0;
-                    const cleanChoiceTitle = choice.title.replace(/^\[[^\]]+\]\s*/, '').trim();
+                    const isUnderUncertainty = missingKnowledge.length > 0;
+                    const cleanChoiceTitle = choice.title.replace(/^[[^]]+]s*/, '').trim();
 
                     return (
                       <div
                         key={choice.id}
-                        onClick={() => {
-                          if (!isLocked) setSelectedChoiceId(choice.id);
-                        }}
-                        className={`p-3.5 rounded-2xl border transition-all ${
-                          isLocked
-                            ? 'bg-slate-900/40 border-slate-800/80 opacity-60 cursor-not-allowed'
-                            : selectedChoiceId === choice.id
-                            ? 'bg-purple-950/50 border-purple-500 shadow-lg shadow-purple-900/20 cursor-pointer'
-                            : 'bg-slate-900 border-slate-800 hover:border-slate-700 cursor-pointer'
+                        onClick={() => setSelectedChoiceId(choice.id)}
+                        className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${
+                          selectedChoiceId === choice.id
+                            ? 'bg-purple-950/60 border-purple-500 shadow-lg shadow-purple-900/20'
+                            : isUnderUncertainty
+                            ? 'bg-slate-900/70 border-amber-500/30 hover:border-amber-500/60'
+                            : 'bg-slate-900 border-slate-800 hover:border-slate-700'
                         }`}
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div className="space-y-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="font-bold text-sm text-white">{cleanChoiceTitle}</span>
-                              {isLocked ? (
-                                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800/50 flex items-center gap-1">
-                                  <Lock className="w-3 h-3" /> Chưa đủ manh mối
+                              {isUnderUncertainty ? (
+                                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-500/40 flex items-center gap-1 font-semibold">
+                                  <span>⚡ Bất định (+{missingKnowledge.length * 2} DC)</span>
                                 </span>
                               ) : (
                                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800/50 font-semibold">
@@ -670,20 +675,20 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                           {choice.check && (
                             <div className="shrink-0 text-right">
                               <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30 font-bold">
-                                DC {choice.check.target_dc} ({choice.check.stat})
+                                DC {choice.check.target_dc + (missingKnowledge.length * 2)} ({choice.check.stat})
                               </span>
                             </div>
                           )}
                         </div>
 
-                        {isLocked && (
-                          <div className="mt-2 text-[11px] text-rose-400/90 flex items-center gap-1.5">
-                            <AlertCircle className="w-3 h-3 shrink-0" />
-                            <span>Cần thêm: {missingKnowledge.map(k => KNOWLEDGE_LABELS[k]?.label || k).join(', ')}</span>
+                        {isUnderUncertainty && (
+                          <div className="mt-2 text-[11px] text-amber-300/90 flex items-center gap-1.5 font-sans">
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+                            <span>Chưa xác minh: {missingKnowledge.map(k => KNOWLEDGE_LABELS[k]?.label || k).join(', ')} (Hành động sớm sẽ tăng độ khó thử thách).</span>
                           </div>
                         )}
 
-                        {selectedChoiceId === choice.id && !isLocked && (
+                        {selectedChoiceId === choice.id && (
                           <div className="mt-4 pt-3 border-t border-purple-500/30 flex flex-wrap items-center justify-between gap-3 animate-in fade-in">
                             <div className="flex items-center gap-2">
                               <span className="text-xs text-slate-400">Đầu tư thêm AP:</span>
@@ -722,6 +727,43 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                       </div>
                     );
                   })}
+
+                  {/* Flexible Alternative Option: Postpone / Observe Further */}
+                  <div
+                    onClick={() => setSelectedChoiceId('CHOICE_POSTPONE_OBSERVE')}
+                    className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${
+                      selectedChoiceId === 'CHOICE_POSTPONE_OBSERVE'
+                        ? 'bg-slate-800/80 border-indigo-400 shadow-md'
+                        : 'bg-slate-900/60 border-slate-800/80 hover:border-slate-700'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <div className="font-bold text-sm text-slate-200 flex items-center gap-2">
+                          <span>Trì Hoãn Quyết Định & Tiếp Tục Quan Sát</span>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">0 AP</span>
+                        </div>
+                        <p className="text-xs text-slate-400 font-serif">
+                          Chưa vội vàng cam kết khi chưa sẵn sàng. Giữ vững quyền tự chủ và tiếp tục tìm hiểu thêm trong các cảnh 2D.
+                        </p>
+                      </div>
+                    </div>
+
+                    {selectedChoiceId === 'CHOICE_POSTPONE_OBSERVE' && (
+                      <div className="mt-3 pt-3 border-t border-slate-800 flex justify-end">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleConfirmChoice('CHOICE_POSTPONE_OBSERVE');
+                          }}
+                          disabled={isResolving}
+                          className="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs uppercase tracking-wider transition"
+                        >
+                          Xác Nhận Trì Hoãn & Quay Lại Cảnh
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

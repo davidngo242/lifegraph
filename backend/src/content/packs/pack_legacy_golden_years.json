@@ -1,0 +1,169 @@
+{
+  "pack_id": "pack_legacy_golden_years",
+  "name": "Tuyến Hoàng Hôn: Di Sản Muôn Đời (56+ Tuổi)",
+  "version": "1.0.0",
+  "description": "Năm tháng hoàng hôn: Chuyển giao cơ nghiệp, ghi chép hồi ký và chuẩn bị hành trang thanh thản cho linh hồn.",
+  "scenarios": [
+    {
+      "id": "scenario_legacy_golden_years",
+      "arc_id": "arc_legacy_fulfillment",
+      "stage": 1,
+      "title": "Hoàng Hôn Cuộc Đời: Trao Quyền Kế Nghiệp & Trọn Vẹn Di Sản",
+      "description": "Trước ngưỡng cửa tuổi già, bạn đối diện với bài toán chuyển giao gia sản thừa kế cho hậu duệ và lưu danh muôn thuở.",
+      "location_id": "ancestral_estate",
+      "roles": {
+        "heir": "Hậu duệ trưởng (Sẵn sàng tiếp nối)",
+        "clan_elder": "Trưởng bối dòng tộc (Chứng kiến chúc thư)"
+      },
+      "prerequisites": {
+        "min_age": 56,
+        "max_age": 120,
+        "required_flags": [],
+        "excluded_flags": [
+          "legacy_resolved"
+        ]
+      },
+      "scenes": [
+        {
+          "id": "scene_legacy_study",
+          "name": "Thư phòng gia tộc",
+          "background_theme": "legacy_study",
+          "hotspots": [
+            {
+              "id": "hs_testament_draft",
+              "label": "Bàn thảo di chúc & Chúc thư",
+              "icon": "ledger",
+              "position_x": 300,
+              "dialogue": {
+                "speaker": "Bản thảo di chúc",
+                "text": "Chúc thư phân chia gia sản rõ ràng sẽ bảo vệ con cháu khỏi tranh chấp và tối ưu hóa thuế thừa kế cho dòng họ.",
+                "granted_knowledge": "estate_tax_planning_wisdom",
+                "cost_ap": 1
+              }
+            },
+            {
+              "id": "hs_memoir_journal",
+              "label": "Tủ sách & Hồi ký một đời",
+              "icon": "book",
+              "position_x": 680,
+              "dialogue": {
+                "speaker": "Bộ hồi ký cuộc đời",
+                "text": "Từng thăng trầm, bài học kinh nghiệm và tâm huyết cả đời đúc kết thành trang sách để hậu thế noi theo.",
+                "granted_knowledge": "ancestral_wisdom_manuscript",
+                "cost_ap": 0
+              }
+            }
+          ]
+        },
+        {
+          "id": "scene_ancestral_garden",
+          "name": "Vườn trà & Gian thờ tiên hiền",
+          "background_theme": "garden_peaceful",
+          "hotspots": [
+            {
+              "id": "hs_clan_reflection",
+              "label": "Gian thờ bái vọng tổ tiên",
+              "icon": "sparkles",
+              "position_x": 450,
+              "dialogue": {
+                "speaker": "Nén hương bái vọng",
+                "text": "Nhìn lại kiếp người đã đi qua, phước đức tích lũy là hành trang sáng nhất khi bước qua ngưỡng cửa vô thường.",
+                "granted_knowledge": "karmic_peace_reflection",
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Thời gian không còn nhiều, tâm nguyện lớn nhất trước lúc nhắm mắt xuôi tay của bạn là gì?",
+          "rational": "Hoàn tất thủ tục pháp lý di chúc minh bạch để bảo toàn gia tộc và hỗ trợ con cháu tiếp quản cơ nghiệp trơn tru.",
+          "empathy": "Dành trọn vẹn những ngày tháng êm đềm bên con cháu, dặn dò truyền thống hiếu đễ của dòng dõi.",
+          "instinct": "Buông bỏ vướng bận trần thế, giữ tâm hồn an nhiên tịch tịnh để linh hồn đắc đạo Niết Bàn."
+        }
+      },
+      "choices": [
+        {
+          "id": "CHOICE_ESTATE_TRANSFER",
+          "title": "Bàn Giao Cơ Nghiệp & Thiết Lập Quỹ Khuyến Học Gia Tộc",
+          "stance": "LÝ TRÍ",
+          "description": "Trao quyền thừa kế cho con cháu, thành lập quỹ tín thác gia tộc để muôn đời con cháu được chu cấp học vấn.",
+          "knowledge_requirements": [
+            "estate_tax_planning_wisdom"
+          ],
+          "cost_ap": 1,
+          "check": {
+            "type": "LEGACY",
+            "stat": "EQ",
+            "target_dc": 11,
+            "bonus_traits": [
+              "Uy tín dòng tộc",
+              "Đức cao vọng trọng"
+            ]
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Lễ chuyển giao diễn ra trang nghiêm, con cháu đồng lòng khấu đầu tạ ơn đức hy sinh của bạn. Gia tộc bước lên tầm cao mới.",
+              "stat_deltas": {
+                "karma": 30
+              },
+              "commitments": [
+                "Gia sản chuyển giao hoàn hảo, Di sản trường tồn"
+              ]
+            },
+            "failure": {
+              "narration": "Dù có chút bất đồng nhỏ giữa các nhánh con cháu, di chúc của bạn vẫn được thực thi nghiêm minh.",
+              "stat_deltas": {
+                "karma": 15
+              }
+            }
+          }
+        },
+        {
+          "id": "CHOICE_PUBLISH_MEMOIR",
+          "title": "Lưu Truyền Hồi Ký & Khắc Bia Gia Phả",
+          "stance": "TRÁI TIM",
+          "description": "Hoàn tất pho hồi ký cuộc đời, truyền lại tri thức và triết lý sống cho hậu thế muôn đời sau.",
+          "knowledge_requirements": [
+            "ancestral_wisdom_manuscript"
+          ],
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Hồi ký được lưu truyền trong điện thờ gia phả, tên tuổi bạn được khắc vàng trên bảng vàng tiên hiền.",
+              "stat_deltas": {
+                "karma": 25
+              },
+              "commitments": [
+                "Bảng Vàng Tiên Hiền Lưu Danh"
+              ]
+            }
+          }
+        },
+        {
+          "id": "CHOICE_NIRVANA_CONTEMPLATION",
+          "title": "An Lạc Tu Tâm & Hướng Về Cõi Tịch Tịnh",
+          "stance": "BẢN NĂNG",
+          "description": "Buông bỏ mọi tài sản phù du, tâm hồn nhẹ tựa mây trời sẵn sàng cho chuyến bay về cõi Niết Bàn tịch tịnh.",
+          "knowledge_requirements": [
+            "karmic_peace_reflection"
+          ],
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Tâm hồn bạn đạt đến trạng thái tự tại vô ngại, ánh sáng công đức bao bọc linh hồn chuẩn bị đắc đạo.",
+              "stat_deltas": {
+                "karma": 40,
+                "burnout": -50
+              },
+              "commitments": [
+                "Tâm Hồn Giác Ngộ Tự Tại"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
