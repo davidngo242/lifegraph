@@ -106,42 +106,41 @@ export default function LifeGraphHomePortal({
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6 animate-in fade-in duration-300 pb-16">
-      {/* 1. NIRVANA SOLACE BANNER (IF PLAYER JUST ATTAINED NIRVANA) */}
+      {/* 1. NIRVANA SOLACE POPUP MODAL (IF PLAYER JUST ATTAINED NIRVANA) */}
       {nirvanaBanner && (
-        <div className="p-5 md:p-6 rounded-3xl bg-gradient-to-r from-amber-950/90 via-purple-950/80 to-slate-900 border-2 border-amber-400 shadow-2xl backdrop-blur-xl relative overflow-hidden animate-in slide-in-from-top-4">
-          <div className="absolute top-0 right-0 w-96 h-40 bg-amber-400/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">
+          <div className="max-w-lg w-full bg-slate-950 border-2 border-amber-400/80 rounded-3xl p-6 sm:p-8 text-center shadow-2xl relative overflow-hidden space-y-4 animate-in zoom-in-95">
+            <div className="absolute top-0 right-0 w-80 h-36 bg-amber-400/20 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative z-10">
-            <div className="flex items-start gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center text-3xl shadow-lg shadow-amber-500/20 shrink-0">
-                🕊️
-              </div>
-              <div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
-                    Đắc Đạo Niết Bàn Tịch Tịnh
-                  </span>
-                  <span className="text-xs font-mono font-bold text-emerald-400">
-                    +{nirvanaBanner.solace_karma || 150} Karma Vĩnh Cửu
-                  </span>
-                </div>
-                <h3 className="text-base md:text-lg font-bold text-white mt-1">
-                  {nirvanaBanner.soul_title || "Đấng Giác Ngộ Tự Tại (Ascended Sovereign)"}
-                </h3>
-                <p className="text-xs text-slate-300 font-serif italic mt-0.5 max-w-2xl">
-                  "{nirvanaBanner.message || "Linh hồn bạn đã buông bỏ bánh xe luân hồi, an trú cõi tịch tịnh muôn thu."}"
-                </p>
-              </div>
+            <div className="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center text-4xl shadow-lg shadow-amber-500/20 mx-auto">
+              🕊️
             </div>
 
-            {onClearNirvanaBanner && (
+            <div className="space-y-1.5 relative z-10">
+              <div className="flex items-center justify-center gap-2 flex-wrap">
+                <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                  Đắc Đạo Niết Bàn Tịch Tịnh
+                </span>
+                <span className="text-xs font-mono font-bold text-emerald-400">
+                  +{nirvanaBanner.solace_karma || 150} Karma Vĩnh Cửu
+                </span>
+              </div>
+              <h3 className="text-lg md:text-xl font-bold text-white">
+                {nirvanaBanner.soul_title || "Đấng Giác Ngộ Tự Tại (Ascended Sovereign)"}
+              </h3>
+              <p className="text-xs text-slate-300 font-serif italic max-w-md mx-auto leading-relaxed">
+                "{nirvanaBanner.message || "Linh hồn bạn đã buông bỏ bánh xe luân hồi, an trú cõi tịch tịnh muôn thu."}"
+              </p>
+            </div>
+
+            <div className="pt-2 relative z-10">
               <button
                 onClick={onClearNirvanaBanner}
-                className="px-4 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition shrink-0"
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-amber-500/20 active:scale-95"
               >
-                Đóng Thông Báo
+                Đã Hiểu & Lưu Danh Sử Sách
               </button>
-            )}
+            </div>
           </div>
         </div>
       )}
@@ -368,9 +367,22 @@ export default function LifeGraphHomePortal({
         </div>
 
         {incenseMessage && (
-          <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-500/50 text-amber-200 text-xs flex items-center gap-2 animate-in fade-in">
-            <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-            <span>{incenseMessage}</span>
+          <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+            <div className="max-w-sm w-full bg-slate-900 border border-amber-500/50 rounded-3xl p-6 text-center shadow-2xl space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center text-2xl mx-auto shadow-md">
+                🪔
+              </div>
+              <h4 className="font-bold text-sm text-white">Khói Hương Tưởng Nhớ</h4>
+              <p className="text-xs text-amber-200 font-serif leading-relaxed">
+                {incenseMessage}
+              </p>
+              <button
+                onClick={() => setIncenseMessage(null)}
+                className="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition"
+              >
+                Tiếp Tục
+              </button>
+            </div>
           </div>
         )}
 

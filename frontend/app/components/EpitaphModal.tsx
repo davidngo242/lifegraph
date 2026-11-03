@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Skull, Sparkles, UserCheck, RotateCcw, Film, Home, X, Layers } from 'lucide-react';
+import { Skull, Sparkles, UserCheck, RotateCcw, Film, Home, X, Layers, AlertTriangle } from 'lucide-react';
 import DeathRecapVideoModal from './DeathRecapVideoModal';
 import LifeTarotCardModal from './LifeTarotCardModal';
 
@@ -42,6 +42,7 @@ export default function EpitaphModal({
   const [showTarotCard, setShowTarotCard] = useState<boolean>(false);
   const [isAscendingNirvana, setIsAscendingNirvana] = useState<boolean>(false);
   const [nirvanaMessage, setNirvanaMessage] = useState<string | null>(null);
+  const [nirvanaError, setNirvanaError] = useState<string | null>(null);
 
   const canAscendNirvana = (age >= 45 && karma >= 70) || Boolean(character?.life_aspiration_completed);
 
@@ -60,7 +61,7 @@ export default function EpitaphModal({
         else window.location.reload();
       }, 2500);
     } catch (err: any) {
-      alert(err.message || "Chưa đủ duyên lành Niết Bàn.");
+      setNirvanaError(err.message || "Chưa đủ duyên lành Niết Bàn.");
       setIsAscendingNirvana(false);
     }
   };
@@ -214,6 +215,34 @@ export default function EpitaphModal({
           deathCause={cause}
           onClose={() => setShowTarotCard(false)}
         />
+      )}
+
+      {/* Nirvana Error Popup Modal */}
+      {nirvanaError && (
+        <div className="fixed inset-0 z-[120] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+          <div className="w-full max-w-sm bg-slate-900 border border-amber-500/50 rounded-2xl p-5 shadow-2xl space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+              <h4 className="font-bold text-sm text-amber-300 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-400" />
+                Thông Báo Đắc Đạo
+              </h4>
+              <button onClick={() => setNirvanaError(null)} className="text-slate-400 hover:text-white p-1">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <p className="text-xs text-slate-300 font-serif leading-relaxed">
+              {nirvanaError}
+            </p>
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={() => setNirvanaError(null)}
+                className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition"
+              >
+                Đã hiểu
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

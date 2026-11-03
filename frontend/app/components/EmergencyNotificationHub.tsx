@@ -1,7 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Megaphone, AlertTriangle, Skull, TrendingDown, ShieldAlert, X, ChevronDown, CheckCircle2, HeartPulse, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  Megaphone,
+  AlertTriangle,
+  Skull,
+  ShieldAlert,
+  X,
+  CheckCircle2,
+  Sparkles,
+  Info,
+  ArrowRight
+} from 'lucide-react';
+import Tooltip from './Tooltip';
 
 export interface EmergencyAlert {
   id: string;
@@ -19,138 +30,191 @@ interface EmergencyNotificationHubProps {
 
 export default function EmergencyNotificationHub({ alerts, onDismiss }: EmergencyNotificationHubProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [lastAlertCount, setLastAlertCount] = useState(0);
 
   const criticalCount = alerts.filter(a => a.type === 'critical' || a.type === 'vendetta').length;
   const totalCount = alerts.length;
 
-  if (totalCount === 0) {
-    return (
-      <div className="relative">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5 text-xs"
-          title="Không có cảnh báo khẩn cấp"
-        >
-          <Megaphone className="w-4 h-4 opacity-70" />
-          <span className="hidden md:inline font-sans text-[11px]">Bình yên</span>
-        </button>
+  // Auto-popup modal when a new critical alert arrives
+  useEffect(() => {
+    if (criticalCount > 0 && alerts.length > lastAlertCount) {
+      setIsOpen(true);
+    }
+    setLastAlertCount(alerts.length);
+  }, [alerts.length, criticalCount]);
 
-        {isOpen && (
-          <div className="absolute right-0 top-11 w-72 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-800 text-xs font-bold text-white mb-2">
-              <span className="flex items-center gap-1.5 text-emerald-400">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Trạng Thái An Toàn
-              </span>
-              <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-white">
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Hiện tại không có biến cố nguy hiểm hay khủng hoảng tài chính đe dọa sinh mạng.
-            </p>
-          </div>
-        )}
-      </div>
-    );
-  }
+  const handleDismissAll = () => {
+    alerts.forEach(a => onDismiss(a.id));
+    setIsOpen(false);
+  };
 
   return (
-    <div className="relative">
-      {/* Dynamic Animated Loudspeaker Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-2 transition-all active:scale-95 ${
-          criticalCount > 0
-            ? 'bg-rose-950/80 hover:bg-rose-900/90 border-rose-500/70 text-rose-200 shadow-lg shadow-rose-950/50 animate-pulse'
-            : 'bg-amber-950/70 hover:bg-amber-900/80 border-amber-500/60 text-amber-200 shadow-md shadow-amber-950/40'
-        }`}
+    <>
+      {/* Header Notification Pill Button */}
+      <Tooltip
+        position="bottom"
+        content={
+          totalCount > 0
+            ? `Có ${totalCount} thông báo & biến cố cần lưu ý`
+            : "Trạng thái nhân vật bình yên, không có biến cố nguy hiểm"
+        }
       >
-        <div className="relative">
-          <Megaphone className={`w-4 h-4 ${criticalCount > 0 ? 'text-rose-400 animate-bounce' : 'text-amber-400'}`} />
-          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-        </div>
-        <span className="font-sans font-bold">
-          {criticalCount > 0 ? 'BÁO ĐỘNG ĐỎ' : 'THÔNG BÁO KHẨN'} ({totalCount})
-        </span>
-        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
-
-      {/* Floating High-Tech Emergency Dropdown Panel */}
-      {isOpen && (
-        <div className="absolute right-0 top-11 w-80 sm:w-96 bg-slate-950/95 border border-rose-500/50 rounded-3xl p-4 shadow-2xl backdrop-blur-xl z-50 animate-in fade-in slide-in-from-top-2 overflow-hidden">
-          {/* Ambient Top Glow */}
-          <div className="absolute top-0 right-0 w-48 h-20 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
-
-          {/* Header */}
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3 text-xs">
-            <div className="flex items-center gap-2 font-bold text-white">
-              <span className="p-1.5 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30">
-                <ShieldAlert className="w-4 h-4" />
-              </span>
-              <span>BẢNG ĐIỀU PHỐI KHỦNG HOẢNG</span>
-            </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
+        <button
+          onClick={() => setIsOpen(true)}
+          className={`px-2.5 sm:px-3 py-1 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-95 shadow-sm ${
+            criticalCount > 0
+              ? 'bg-rose-950/80 hover:bg-rose-900 border-rose-500/70 text-rose-200 shadow-md shadow-rose-950/50 animate-pulse'
+              : totalCount > 0
+              ? 'bg-amber-950/70 hover:bg-amber-900 border-amber-500/60 text-amber-200'
+              : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-300'
+          }`}
+        >
+          <div className="relative flex items-center">
+            <Megaphone className={`w-3.5 h-3.5 ${criticalCount > 0 ? 'text-rose-400 animate-bounce' : totalCount > 0 ? 'text-amber-400' : 'text-slate-400'}`} />
+            {criticalCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+            )}
           </div>
+          <span className="font-sans text-[11px] font-bold">
+            {criticalCount > 0
+              ? `Báo Động (${totalCount})`
+              : totalCount > 0
+              ? `Thông Báo (${totalCount})`
+              : 'Bình yên'}
+          </span>
+        </button>
+      </Tooltip>
 
-          {/* Scrollable Alerts List */}
-          <div className="space-y-2.5 max-h-80 overflow-y-auto pr-1">
-            {alerts.map(alert => {
-              const isCrit = alert.type === 'critical';
-              const isVen = alert.type === 'vendetta';
-
-              return (
-                <div
-                  key={alert.id}
-                  className={`p-3 rounded-2xl border text-xs relative overflow-hidden transition-all ${
-                    isCrit
-                      ? 'bg-rose-950/60 border-rose-500/50 text-rose-200'
-                      : isVen
-                      ? 'bg-purple-950/60 border-purple-500/50 text-purple-200'
-                      : 'bg-amber-950/50 border-amber-500/40 text-amber-200'
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-2 mb-1">
-                    <div className="flex items-center gap-1.5 font-bold">
-                      {isCrit ? (
-                        <Skull className="w-3.5 h-3.5 text-rose-400 shrink-0" />
-                      ) : isVen ? (
-                        <Sparkles className="w-3.5 h-3.5 text-purple-400 shrink-0" />
-                      ) : (
-                        <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                      )}
-                      <span className="text-white text-[12px]">{alert.title}</span>
-                    </div>
-
-                    <button
-                      onClick={() => onDismiss(alert.id)}
-                      className="text-slate-400 hover:text-white p-0.5 rounded transition"
-                      title="Bỏ qua thông báo này"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
-
-                  <p className="text-[11px] opacity-90 leading-relaxed mb-1.5">
-                    {alert.message}
-                  </p>
-
-                  {alert.actionHint && (
-                    <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800/80 text-[10px] text-slate-300 flex items-center gap-1.5 font-sans">
-                      <span className="text-amber-300 font-bold">💡 Chiến Lược:</span>
-                      <span>{alert.actionHint}</span>
-                    </div>
+      {/* POPUP MODAL DIALOG (Thay vì thông báo lơ lửng trên web) */}
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-in fade-in">
+          <div className="relative w-full max-w-lg bg-slate-950 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col max-h-[88vh] overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3.5 border-b border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className={`p-2 rounded-2xl border ${
+                  criticalCount > 0
+                    ? 'bg-rose-500/20 text-rose-400 border-rose-500/30'
+                    : totalCount > 0
+                    ? 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+                    : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                }`}>
+                  {criticalCount > 0 ? (
+                    <ShieldAlert className="w-5 h-5" />
+                  ) : totalCount > 0 ? (
+                    <Megaphone className="w-5 h-5" />
+                  ) : (
+                    <CheckCircle2 className="w-5 h-5" />
                   )}
                 </div>
-              );
-            })}
+
+                <div>
+                  <h3 className="font-bold text-white text-base">
+                    {criticalCount > 0
+                      ? 'Thông Báo Khẩn & Nguy Cấp'
+                      : totalCount > 0
+                      ? 'Trung Tâm Thông Báo Biến Cố'
+                      : 'Trạng Thái Bình Yên'}
+                  </h3>
+                  <p className="text-[11px] text-slate-400">
+                    {totalCount > 0 ? `Có ${totalCount} việc cần bạn lưu tâm xử lý` : 'Mọi chỉ số đều trong tầm kiểm soát'}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Body / Alerts List */}
+            <div className="flex-1 overflow-y-auto py-4 space-y-3 pr-1">
+              {totalCount === 0 ? (
+                <div className="p-8 rounded-2xl bg-slate-900/40 border border-slate-800 text-center space-y-2">
+                  <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
+                  <h4 className="font-bold text-sm text-slate-200">Không có biến cố nào</h4>
+                  <p className="text-xs text-slate-400 font-serif leading-relaxed">
+                    Hiện tại nhân vật không gặp nguy cơ nợ nần, kiệt sức hay hiểm họa đe dọa sinh mạng. Bạn có thể an tâm tiếp tục hành trình cuộc đời.
+                  </p>
+                </div>
+              ) : (
+                alerts.map(alert => {
+                  const isCrit = alert.type === 'critical';
+                  const isVen = alert.type === 'vendetta';
+
+                  return (
+                    <div
+                      key={alert.id}
+                      className={`p-4 rounded-2xl border text-xs space-y-2 transition-all ${
+                        isCrit
+                          ? 'bg-rose-950/50 border-rose-500/50 text-rose-200'
+                          : isVen
+                          ? 'bg-purple-950/50 border-purple-500/50 text-purple-200'
+                          : 'bg-amber-950/40 border-amber-500/40 text-amber-200'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center gap-2 font-bold text-sm text-white">
+                          {isCrit ? (
+                            <Skull className="w-4 h-4 text-rose-400 shrink-0" />
+                          ) : isVen ? (
+                            <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
+                          ) : (
+                            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                          )}
+                          <span>{alert.title}</span>
+                        </div>
+
+                        <button
+                          onClick={() => onDismiss(alert.id)}
+                          className="px-2 py-0.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-300 text-[10px] font-semibold transition"
+                        >
+                          Đã hiểu
+                        </button>
+                      </div>
+
+                      <p className="text-xs text-slate-300 leading-relaxed font-serif">
+                        {alert.message}
+                      </p>
+
+                      {alert.actionHint && (
+                        <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-300 flex items-center gap-1.5">
+                          <span className="text-amber-300 font-bold shrink-0">💡 Gợi ý:</span>
+                          <span className="font-serif">{alert.actionHint}</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
+              {totalCount > 1 ? (
+                <button
+                  onClick={handleDismissAll}
+                  className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white text-xs font-semibold transition"
+                >
+                  Xác nhận tất cả
+                </button>
+              ) : (
+                <span />
+              )}
+
+              <button
+                onClick={() => setIsOpen(false)}
+                className="px-5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-md shadow-indigo-600/30 active:scale-95"
+              >
+                Đóng Thông Báo
+              </button>
+            </div>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

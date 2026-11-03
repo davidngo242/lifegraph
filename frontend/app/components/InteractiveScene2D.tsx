@@ -135,6 +135,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
 
   // Journal Drawer
   const [showJournal, setShowJournal] = useState<boolean>(false);
+  const [sceneNotice, setSceneNotice] = useState<{ title: string; message: string } | null>(null);
 
   // Load Scenario Data from Backend
   useEffect(() => {
@@ -228,7 +229,10 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
       });
       if (!res.ok) {
         const err = await res.json();
-        alert(err.error || "Tương tác thất bại");
+        setSceneNotice({
+          title: "Thông Báo Khám Phá",
+          message: err.error || "Tương tác thất bại hoặc đã hết điểm hành động."
+        });
         return;
       }
       const data = await res.json();
@@ -236,7 +240,10 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
       if (data.knowledge_base) setKnowledgeBase(data.knowledge_base);
       if (typeof data.ap_remaining === 'number') setActionPoints(data.ap_remaining);
     } catch (err: any) {
-      alert(err.message || "Lỗi tương tác.");
+      setSceneNotice({
+        title: "Lỗi Kết Nối",
+        message: err.message || "Không thể thực hiện tương tác lúc này."
+      });
     }
   };
 
@@ -260,7 +267,10 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
       if (data.character_state?.action_points) setActionPoints(data.character_state.action_points);
       if (onScenarioResolved) onScenarioResolved(data);
     } catch (err: any) {
-      alert(err.message || "Lỗi xử lý quyết định");
+      setSceneNotice({
+        title: "Thông Báo Quyết Định",
+        message: err.message || "Không thể thực hiện quyết định này."
+      });
     } finally {
       setIsResolving(false);
     }
@@ -762,6 +772,34 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
             >
               Đóng Sổ Tay
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Interactive Scene Notice Popup Modal */}
+      {sceneNotice && (
+        <div className="fixed inset-0 z-[120] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+          <div className="w-full max-w-sm bg-slate-900 border border-slate-700 rounded-2xl p-5 shadow-2xl space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+              <h4 className="font-bold text-sm text-white flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-amber-400" />
+                {sceneNotice.title}
+              </h4>
+              <button onClick={() => setSceneNotice(null)} className="text-slate-400 hover:text-white p-1">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <p className="text-xs text-slate-300 font-serif leading-relaxed">
+              {sceneNotice.message}
+            </p>
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={() => setSceneNotice(null)}
+                className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition"
+              >
+                Đã hiểu
+              </button>
+            </div>
           </div>
         </div>
       )}
