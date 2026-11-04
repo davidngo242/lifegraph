@@ -18,7 +18,6 @@ import {
   ChevronUp
 } from 'lucide-react';
 import Tooltip from './Tooltip';
-import FateDiceCheck from './FateDiceCheck';
 
 interface Option {
   id: string;
@@ -63,7 +62,6 @@ export default function EventCard({
   const [resolveError, setResolveError] = useState<string | null>(null);
 
   // Active Fate Dice Roll Stage
-  const [rollingOption, setRollingOption] = useState<Option | null>(null);
 
   // Mind Voices Expansion State
   const [activeVoice, setActiveVoice] = useState<'logic' | 'heart' | 'primal'>('logic');
@@ -75,24 +73,6 @@ export default function EventCard({
         <Compass className="w-7 h-7 animate-spin text-indigo-400/80 mb-2" />
         <p className="text-xs uppercase font-sans font-medium text-slate-400">Đang điều phối bước ngoặt cuộc đời...</p>
       </div>
-    );
-  }
-
-  // If player is currently rolling fate dice for an option, show the FateDiceCheck stage
-  if (rollingOption) {
-    return (
-      <FateDiceCheck
-        option={rollingOption}
-        character={character}
-        dilemmaTitle={dilemma.title}
-        onComplete={() => {
-          const optId = rollingOption.id;
-          setRollingOption(null);
-          onSelectOption(optId);
-        }}
-        onCancel={() => setRollingOption(null)}
-        isLoading={isLoading}
-      />
     );
   }
 
@@ -180,13 +160,9 @@ export default function EventCard({
   };
 
   const handleOptionClick = (option: Option) => {
-    const stance = getOptionStance(option, 0);
-    // If option has risk or is high stake, trigger the Fate Dice Roll stage
-    if (stance.needsRoll || option.risk_percent >= 25 || (option.cost_ap && option.cost_ap >= 2)) {
-      setRollingOption(option);
-    } else {
-      onSelectOption(option.id);
-    }
+    // Legacy options already carry a server-defined effect. Do not display a client-only
+    // success/failure roll that cannot affect that result.
+    if (!isLoading) onSelectOption(option.id);
   };
 
   const handleSendCustomAction = async () => {
@@ -491,3 +467,4 @@ export default function EventCard({
     </div>
   );
 }
+

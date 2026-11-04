@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Home,
   Briefcase,
@@ -73,10 +73,12 @@ interface ScenarioData {
     };
   };
   choices: ScenarioChoice[];
+  knowledge_labels?: Record<string, { label: string; desc: string; icon?: string }>;
 }
 
 interface InteractiveScene2DProps {
   onScenarioResolved?: (result: any) => void;
+  onAdvanceYear?: () => Promise<void>;
   character?: any;
 }
 
@@ -113,7 +115,13 @@ const KNOWLEDGE_LABELS: { [key: string]: { label: string; icon: string; desc: st
   }
 };
 
-export default function InteractiveScene2D({ onScenarioResolved, character }: InteractiveScene2DProps) {
+export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, character }: InteractiveScene2DProps) {
+  const [nextScenarioAge, setNextScenarioAge] = useState<number | null>(null);
+  const [lastResolution, setLastResolution] = useState<any>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const [isAdvancing, setIsAdvancing] = useState(false);
+  const interactionPending = useRef(false);
   const [scenario, setScenario] = useState<ScenarioData | null>(null);
   const [currentSceneId, setCurrentSceneId] = useState<string>("scene_home");
   const [knowledgeBase, setKnowledgeBase] = useState<string[]>([]);
@@ -137,34 +145,83 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
   const [showJournal, setShowJournal] = useState<boolean>(false);
   const [sceneNotice, setSceneNotice] = useState<{ title: string; message: string } | null>(null);
 
-  // Load Scenario Data from Backend
+  const loadScenario = useCallback(async (signal?: AbortSignal) => {
+    setIsLoading(true); setLoadError(null);
+    try {
+      const res = await fetch('/api/game/scenario/current', { signal });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Không thể tải kịch bản.');
+      if (signal?.aborted) return;
+      setScenario(data.scenario ?? null);
+      setCurrentSceneId(data.current_scene_id ?? '');
+      setKnowledgeBase(data.knowledge_base ?? []);
+      setCommitments(data.commitments ?? []);
+      setActionPoints(data.action_points ?? 0);
+      setLastResolution(data.last_resolution ?? null);
+      setNextScenarioAge(data.next_scenario_age ?? null);
+      setActiveDialogue(null); setSelectedChoiceId(null); setApInvestment(0);
+    } catch (err: any) {
+      if (!signal?.aborted) setLoadError(err.message ?? 'Kết nối bị gián đoạn.');
+    } finally { if (!signal?.aborted) setIsLoading(false); }
+  }, [character?.id, character?.age]);
   useEffect(() => {
-    async function fetchScenario() {
-      try {
-        setIsLoading(true);
-        const res = await fetch('/api/game/scenario/current');
-        if (!res.ok) throw new Error("Không thể tải kịch bản.");
-        const data = await res.json();
-        if (data.scenario) {
-          setScenario(data.scenario);
-          setCurrentSceneId(data.current_scene_id || "scene_home");
-          setKnowledgeBase(data.knowledge_base || []);
-          setCommitments(data.commitments || []);
-          setActionPoints(data.action_points ?? 3);
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchScenario();
-  }, []);
+    const controller = new AbortController();
+    loadScenario(controller.signal);
+    return () => controller.abort();
+  }, [loadScenario]);
+  useEffect(() => {
+    setActionPoints(character?.action_points ?? 0);
+    setCommitments(character?.commitments ?? []);
+  }, [character?.action_points, character?.commitments]);
+
+  const advanceYear = async () => {
+    if (!onAdvanceYear || isAdvancing) return;
+    setIsAdvancing(true);
+    try { await onAdvanceYear(); } finally { setIsAdvancing(false); }
+  };
+  const completePromise = async (id: string) => {
+    if (interactionPending.current) return;
+    interactionPending.current = true; setIsInteracting(true);
+    try {
+      const res = await fetch('/api/game/scenario/commitment', { method: 'POST',
+        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ commitment_id: id }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setCommitments(data.commitments ?? []);
+      setActionPoints(data.character_state?.action_points ?? 0);
+      onScenarioResolved?.(data);
+    } catch (err: any) { setSceneNotice({ title: 'Cam kết', message: err.message }); }
+    finally { interactionPending.current = false; setIsInteracting(false); }
+  };
+  const promises = () => commitments.length > 0 && <div className="rounded-2xl border border-slate-700 bg-slate-900 p-4 space-y-3">
+    <h3 className="font-bold text-white">Cam kết của bạn</h3>
+    {commitments.map(c => <div key={c.id} className="flex items-center justify-between gap-3 text-sm">
+      <div><div className="text-slate-200">{c.title}</div><div className="text-xs text-slate-400">
+        {c.to_npc} · {c.status === 'fulfilled' ? 'Đã giữ lời' : c.status === 'broken' ? 'Đã quá hạn' : `Hạn: ${c.due_age} tuổi`}
+      </div></div>
+      {c.status === 'active' && <button type="button" disabled={actionPoints < 1 || isInteracting}
+        onClick={() => completePromise(c.id)} className="shrink-0 rounded-lg bg-indigo-600 px-3 py-2 text-white disabled:opacity-40">
+        Thực hiện · 1 AP
+      </button>}
+    </div>)}
+    <p className="text-xs text-slate-400">Dành 1 AP để thực hiện một cam kết trước hạn (+5 Karma). Sang năm, cam kết chưa hoàn thành sẽ được đánh giá.</p>
+  </div>;
+  const changesView = (result: any) => result?.changes && <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+    {Object.entries(result.changes).map(([key, raw]) => {
+      const value = raw as { before: number; after: number };
+      const labels: Record<string, string> = { cash: 'Tiền (USD)', vitality: 'Sinh lực', karma: 'Karma tại thế', burnout: 'Căng thẳng', action_points: 'AP' };
+      return <div key={key} className="rounded-lg bg-slate-950 p-2 text-xs"><div className="text-slate-400">{labels[key] ?? key}</div>
+        <div className="font-mono text-white">{value.before.toLocaleString()} → {value.after.toLocaleString()}</div></div>;
+    })}
+  </div>;
 
   // Keyboard navigation (A/D or ArrowLeft/ArrowRight)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (showMindStage || activeDialogue) return;
+      const target = e.target as HTMLElement;
+      if (target?.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(target?.tagName)) return;
+      if (['ArrowRight', 'ArrowLeft'].includes(e.key)) e.preventDefault();
+      if (showMindStage || activeDialogue || showJournal || interactionPending.current) return;
 
       const SPEED = 25;
       if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
@@ -184,7 +241,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [playerX, showMindStage, activeDialogue, currentSceneId, scenario]);
+  }, [playerX, showMindStage, activeDialogue, currentSceneId, scenario, showJournal]);
 
   const getSceneThemeBg = (theme?: string, sceneId?: string) => {
     if (theme?.includes('nursery') || sceneId?.includes('nursery')) return 'bg-gradient-to-b from-slate-900 via-pink-950/20 to-slate-950 border-pink-500/30 shadow-pink-950/20';
@@ -200,7 +257,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
 
   // Click on floor to walk
   const handleFloorClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (showMindStage || activeDialogue) return;
+    if (showMindStage || activeDialogue || showJournal || interactionPending.current) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
     const targetX = Math.max(70, Math.min(840, (clickX / rect.width) * 900));
@@ -209,52 +266,29 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
   };
 
   const handleSwitchScene = async (sceneId: string) => {
-    setActiveDialogue(null);
-    setCurrentSceneId(sceneId);
-    setPlayerX(120);
+    if (interactionPending.current) return;
+    interactionPending.current = true; setIsInteracting(true);
     try {
-      await fetch('/api/game/scenario/transition', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scene_id: sceneId })
-      });
-    } catch (err) {
-      console.error(err);
-    }
+      const res = await fetch('/api/game/scenario/transition', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scene_id: sceneId }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setActiveDialogue(null); setCurrentSceneId(data.current_scene_id); setPlayerX(120);
+    } catch (err: any) { setSceneNotice({ title: 'Không thể đổi cảnh', message: err.message }); }
+    finally { interactionPending.current = false; setIsInteracting(false); }
   };
 
   const handleTriggerHotspot = async (hotspot: Hotspot) => {
-    // Walk to hotspot
-    setFacingDirection(hotspot.position_x > playerX ? 'right' : 'left');
-    setPlayerX(hotspot.position_x);
-
+    if (interactionPending.current) return;
+    interactionPending.current = true; setIsInteracting(true);
+    setFacingDirection(hotspot.position_x > playerX ? 'right' : 'left'); setPlayerX(hotspot.position_x);
     try {
-      const res = await fetch('/api/game/scenario/interact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          scene_id: currentSceneId,
-          hotspot_id: hotspot.id
-        })
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        setSceneNotice({
-          title: "Thông Báo Khám Phá",
-          message: err.error || "Tương tác thất bại hoặc đã hết điểm hành động."
-        });
-        return;
-      }
+      const res = await fetch('/api/game/scenario/interact', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scene_id: currentSceneId, hotspot_id: hotspot.id }) });
       const data = await res.json();
-      setActiveDialogue(data);
-      if (data.knowledge_base) setKnowledgeBase(data.knowledge_base);
-      if (typeof data.ap_remaining === 'number') setActionPoints(data.ap_remaining);
-    } catch (err: any) {
-      setSceneNotice({
-        title: "Lỗi Kết Nối",
-        message: err.message || "Không thể thực hiện tương tác lúc này."
-      });
-    }
+      if (!res.ok) throw new Error(data.error ?? 'Không thể tương tác.');
+      setActiveDialogue(data); setKnowledgeBase(data.knowledge_base ?? []); setActionPoints(data.ap_remaining ?? 0);
+    } catch (err: any) { setSceneNotice({ title: 'Khám phá', message: err.message }); }
+    finally { interactionPending.current = false; setIsInteracting(false); }
   };
 
   // Resolve Mind Stage Choice (Server-side D20)
@@ -266,15 +300,17 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           choice_id: choiceId,
+          scenario_id: scenario?.id,
           ap_investment: apInvestment
         })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Không thể thực hiện lựa chọn");
 
+      if (data.postponed) { setShowMindStage(false); setSelectedChoiceId(null); setApInvestment(0); return; }
       setRollResult(data);
       if (data.commitments) setCommitments(data.commitments);
-      if (data.character_state?.action_points) setActionPoints(data.character_state.action_points);
+      if (typeof data.character_state?.action_points === 'number') setActionPoints(data.character_state.action_points);
       if (onScenarioResolved) onScenarioResolved(data);
     } catch (err: any) {
       setSceneNotice({
@@ -295,9 +331,21 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
     );
   }
 
-  if (!scenario || !currentScene) {
-    return null;
-  }
+  if (loadError) return <div role="alert" className="rounded-2xl border border-rose-600 bg-slate-900 p-6 text-white">
+    <p>{loadError}</p><button onClick={() => loadScenario()} className="mt-3 rounded-lg bg-indigo-600 px-4 py-2">Thử tải lại kịch bản</button>
+  </div>;
+  if (!scenario || !currentScene) return <div className="space-y-4">
+    <div className="rounded-2xl border border-emerald-800 bg-slate-900 p-6 space-y-4">
+      <h2 className="text-xl font-bold text-white">Bạn đã hoàn thành các kịch bản hiện tại</h2>
+      {lastResolution && <><p className="text-slate-200">{lastResolution.narration}</p>{changesView(lastResolution)}</>}
+      <p className="text-slate-300">Thực hiện cam kết còn lại hoặc sang năm để tiếp tục cuộc đời. Thời gian sẽ tăng 1 tuổi, cập nhật thu nhập, sức khỏe và quan hệ.</p>
+      {nextScenarioAge !== null && <p className="text-sm text-indigo-300">Kịch bản tiếp theo dự kiến mở ở {nextScenarioAge} tuổi. Hiện tại: {character?.age ?? 0} tuổi.</p>}
+      <button disabled={isAdvancing || !onAdvanceYear} onClick={advanceYear} className="rounded-xl bg-indigo-600 px-5 py-3 font-bold text-white disabled:opacity-50">
+        {isAdvancing ? 'Đang sang năm…' : 'Sang năm tiếp theo · +1 tuổi'}
+      </button><span className="ml-3 text-sm text-slate-400">Còn {actionPoints} AP</span>
+    </div>{promises()}
+    {sceneNotice && <div role="alert" className="rounded-xl bg-amber-950 p-4 text-amber-200">{sceneNotice.message}<button className="ml-3 underline" onClick={() => setSceneNotice(null)}>Đóng</button></div>}
+  </div>;
 
   return (
     <div className="space-y-4">
@@ -309,7 +357,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
               {scenario.title}
             </span>
             <span className="text-xs text-slate-400 font-medium">
-              {character?.name || "Nhân vật"} ({character?.age || 25} tuổi)
+              {character?.name || "Nhân vật"} ({character?.age ?? 0} tuổi)
             </span>
           </div>
           <h2 className="text-lg font-bold text-white mt-0.5 flex items-center gap-2">
@@ -409,6 +457,8 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
           return (
             <div
               key={h.id}
+              role="button" tabIndex={0} aria-label={`${h.label} · ${knowledgeBase.includes(h.dialogue?.granted_knowledge ?? '') ? 0 : h.dialogue?.cost_ap ?? 0} AP`}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTriggerHotspot(h); } }}
               onClick={(e) => {
                 e.stopPropagation();
                 handleTriggerHotspot(h);
@@ -430,7 +480,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                 {h.icon === 'award' && <Sparkles className="w-3 h-3 text-amber-300" />}
                 {h.icon === 'coffee' && <Coffee className="w-3 h-3 text-amber-400" />}
                 {h.icon === 'star' && <Sparkles className="w-3 h-3 text-yellow-300" />}
-                <span>{h.label}</span>
+                <span>{h.label} · {knowledgeBase.includes(h.dialogue?.granted_knowledge ?? "") ? 0 : h.dialogue?.cost_ap ?? 0} AP</span>
                 {h.dialogue?.granted_knowledge && knowledgeBase.includes(h.dialogue.granted_knowledge) && (
                   <CheckCircle className="w-3 h-3 text-emerald-400 shrink-0" />
                 )}
@@ -461,7 +511,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
         >
           {/* Player Tag */}
           <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold mb-1 shadow">
-            An (Bạn)
+            {character?.name ?? "Bạn"} (Bạn)
           </span>
 
           {/* 2D Avatar Body */}
@@ -514,25 +564,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
         </div>
       )}
 
-      {/* 4. Active Commitments Bar (Lời Hứa Đang Thực Hiện) */}
-      {commitments.length > 0 && (
-        <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center gap-3 overflow-x-auto">
-          <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider shrink-0 font-bold">
-            Cam Kết Hiện Hành:
-          </span>
-          <div className="flex items-center gap-2">
-            {commitments.map((c, i) => (
-              <span
-                key={i}
-                className="px-2.5 py-1 rounded-lg bg-indigo-950/60 border border-indigo-500/30 text-[11px] text-indigo-300 flex items-center gap-1.5 whitespace-nowrap"
-              >
-                <CheckCircle className="w-3 h-3 text-indigo-400" />
-                <span>{c.title} (Với {c.to_npc})</span>
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
+      {promises()}
 
       {/* 5. Mind Stage Overlay Modal */}
       {showMindStage && (
@@ -595,11 +627,11 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
 
             {/* Roll Result Display (If resolved) */}
             {rollResult ? (
-              <div className="p-5 rounded-2xl bg-slate-900 border-2 border-emerald-500/60 shadow-xl space-y-3 animate-in zoom-in-95">
+              <div className={`p-5 rounded-2xl bg-slate-900 border-2 shadow-xl space-y-3 ${rollResult.outcome_key === 'failure' ? 'border-amber-500/60' : 'border-emerald-500/60'}`}>
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                   <div>
                     <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">
-                      Kết Quả Định Mệnh ({rollResult.outcome_key?.toUpperCase()})
+                      Kết quả: {rollResult.outcome_key === 'failure' ? 'Chưa thành công' : rollResult.outcome_key === 'critical_success' ? 'Thành công xuất sắc' : 'Thành công'}
                     </span>
                     <h3 className="text-base font-bold text-white mt-1">{rollResult.choice_title}</h3>
                   </div>
@@ -618,15 +650,18 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                   "{rollResult.narration}"
                 </p>
 
+                {changesView(rollResult)}
+                <p className="text-xs text-slate-400">Kết quả đã được lưu. Lựa chọn này chỉ nhận thưởng một lần.</p>
                 <div className="flex justify-end">
                   <button
                     onClick={() => {
                       setShowMindStage(false);
                       setRollResult(null);
+                      loadScenario();
                     }}
                     className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition"
                   >
-                    Tiếp Tục Hành Trình
+                    Xem bước tiếp theo
                   </button>
                 </div>
               </div>
@@ -641,12 +676,12 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                   {scenario.choices.map(choice => {
                     const missingKnowledge = (choice.knowledge_requirements || []).filter(k => !knowledgeBase.includes(k));
                     const isUnderUncertainty = missingKnowledge.length > 0;
-                    const cleanChoiceTitle = choice.title.replace(/^[[^]]+]s*/, '').trim();
+                    const cleanChoiceTitle = choice.title.trim();
 
                     return (
                       <div
                         key={choice.id}
-                        onClick={() => setSelectedChoiceId(choice.id)}
+                        onClick={() => { setSelectedChoiceId(choice.id); setApInvestment(0); }}
                         className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${
                           selectedChoiceId === choice.id
                             ? 'bg-purple-950/60 border-purple-500 shadow-lg shadow-purple-900/20'
@@ -684,7 +719,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                         {isUnderUncertainty && (
                           <div className="mt-2 text-[11px] text-amber-300/90 flex items-center gap-1.5 font-sans">
                             <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-                            <span>Chưa xác minh: {missingKnowledge.map(k => KNOWLEDGE_LABELS[k]?.label || k).join(', ')} (Hành động sớm sẽ tăng độ khó thử thách).</span>
+                            <span>Chưa xác minh: {missingKnowledge.map(k => (scenario.knowledge_labels?.[k] ?? KNOWLEDGE_LABELS[k])?.label || k).join(', ')} (Hành động sớm sẽ tăng độ khó thử thách).</span>
                           </div>
                         )}
 
@@ -695,6 +730,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                               {[0, 1, 2].map(ap => (
                                 <button
                                   key={ap}
+                                  disabled={actionPoints < (choice.cost_ap ?? 0) + ap || (!choice.check && ap > 0)}
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     if (actionPoints >= (choice.cost_ap || 0) + ap) {
@@ -717,10 +753,10 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                                 e.stopPropagation();
                                 handleConfirmChoice(choice.id);
                               }}
-                              disabled={isResolving}
+                              disabled={isResolving || actionPoints < (choice.cost_ap ?? 0) + apInvestment}
                               className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg active:scale-95"
                             >
-                              {isResolving ? "Đang Gieo Xúc Xắc..." : "Xác Nhận & Tung Xúc Xắc D20"}
+                              {isResolving ? "Đang xử lý…" : `${choice.check ? "Xác nhận & kiểm tra D20" : "Xác nhận"} · ${(choice.cost_ap ?? 0) + apInvestment} AP`}
                             </button>
                           </div>
                         )}
@@ -796,11 +832,11 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                   knowledgeBase.map((k, i) => (
                     <div key={i} className="p-3 rounded-xl bg-slate-900 border border-amber-500/30 space-y-1">
                       <div className="font-bold text-xs text-amber-300 flex items-center gap-1.5">
-                        <span>{KNOWLEDGE_LABELS[k]?.icon || "💡"}</span>
-                        <span>{KNOWLEDGE_LABELS[k]?.label || k}</span>
+                        <span>{(scenario.knowledge_labels?.[k] ?? KNOWLEDGE_LABELS[k])?.icon || "💡"}</span>
+                        <span>{(scenario.knowledge_labels?.[k] ?? KNOWLEDGE_LABELS[k])?.label || k}</span>
                       </div>
                       <p className="text-[11px] text-slate-400 leading-relaxed font-serif">
-                        {KNOWLEDGE_LABELS[k]?.desc || "Thông tin đã ghi nhận từ trải nghiệm thực tế."}
+                        {(scenario.knowledge_labels?.[k] ?? KNOWLEDGE_LABELS[k])?.desc || "Thông tin đã ghi nhận từ trải nghiệm thực tế."}
                       </p>
                     </div>
                   ))
@@ -848,3 +884,4 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
     </div>
   );
 }
+

@@ -98,24 +98,24 @@
             "stat": "EQ",
             "target_dc": 11,
             "bonus_traits": [
-              "Uy tín dòng tộc",
-              "Đức cao vọng trọng"
+              "phong_thái_lãnh_đạo",
+              "giác_ngộ_tâm_linh_tiên_thiên"
             ]
           },
           "outcomes": {
             "success": {
               "narration": "Lễ chuyển giao diễn ra trang nghiêm, con cháu đồng lòng khấu đầu tạ ơn đức hy sinh của bạn. Gia tộc bước lên tầm cao mới.",
-              "stat_deltas": {
-                "karma": 30
-              },
               "commitments": [
                 "Gia sản chuyển giao hoàn hảo, Di sản trường tồn"
-              ]
+              ],
+              "effects": {
+                "karma_delta": 30
+              }
             },
             "failure": {
               "narration": "Dù có chút bất đồng nhỏ giữa các nhánh con cháu, di chúc của bạn vẫn được thực thi nghiêm minh.",
-              "stat_deltas": {
-                "karma": 15
+              "effects": {
+                "karma_delta": 15
               }
             }
           }
@@ -132,12 +132,12 @@
           "outcomes": {
             "success": {
               "narration": "Hồi ký được lưu truyền trong điện thờ gia phả, tên tuổi bạn được khắc vàng trên bảng vàng tiên hiền.",
-              "stat_deltas": {
-                "karma": 25
-              },
               "commitments": [
                 "Bảng Vàng Tiên Hiền Lưu Danh"
-              ]
+              ],
+              "effects": {
+                "karma_delta": 25
+              }
             }
           }
         },
@@ -153,17 +153,33 @@
           "outcomes": {
             "success": {
               "narration": "Tâm hồn bạn đạt đến trạng thái tự tại vô ngại, ánh sáng công đức bao bọc linh hồn chuẩn bị đắc đạo.",
-              "stat_deltas": {
-                "karma": 40,
-                "burnout": -50
-              },
               "commitments": [
                 "Tâm Hồn Giác Ngộ Tự Tại"
-              ]
+              ],
+              "effects": {
+                "karma_delta": 40,
+                "burnout_delta": -50
+              }
             }
           }
         }
-      ]
+      ],
+      "priority": 100,
+      "completion_flag": "legacy_resolved",
+      "knowledge_labels": {
+        "estate_tax_planning_wisdom": {
+          "label": "Bàn thảo di chúc & Chúc thư",
+          "desc": "Chúc thư phân chia gia sản rõ ràng sẽ bảo vệ con cháu khỏi tranh chấp và tối ưu hóa thuế thừa kế cho dòng họ."
+        },
+        "ancestral_wisdom_manuscript": {
+          "label": "Tủ sách & Hồi ký một đời",
+          "desc": "Từng thăng trầm, bài học kinh nghiệm và tâm huyết cả đời đúc kết thành trang sách để hậu thế noi theo."
+        },
+        "karmic_peace_reflection": {
+          "label": "Gian thờ bái vọng tổ tiên",
+          "desc": "Nhìn lại kiếp người đã đi qua, phước đức tích lũy là hành trang sáng nhất khi bước qua ngưỡng cửa vô thường."
+        }
+      }
     }
   ]
 }

@@ -1,6 +1,8 @@
 import express from 'express';
 import {
   getLatestCharacter,
+  getSessionData,
+  updateNpc,
   updateCharacter,
   getAssets,
   updateAsset,
@@ -22,7 +24,7 @@ import {
   addAncestralMemorial
 } from '../db/db.js';
 import { processPassivePhase, calculateMaxVitality } from '../engine/tickEngine.js';
-import { getCurrentScenarioForCharacter, interactWithHotspot, resolveMindStageChoice } from '../engine/scenarioEngine.js';
+import { getCurrentScenarioForCharacter, interactWithHotspot, resolveMindStageChoice, fulfillCommitment, evaluateCommitments, getNextScenarioAge } from '../engine/scenarioEngine.js';
 import { compileSystemPrompt } from '../engine/promptCompiler.js';
 import { generateDilemma } from '../engine/aiGameMaster.js';
 import { getChildhoodMilestones, generateLocalizedName, NAMES_BY_COUNTRY } from '../engine/rebirthEngine.js';
@@ -48,8 +50,11 @@ import {
   getTuitionFee
 } from '../engine/skillEngine.js';
 
+import crypto from 'node:crypto';
+import { sessionMutations } from '../middleware/sessionMutations.js';
+
 const router = express.Router();
-let currentDilemma = null;
+router.use(sessionMutations);
 
 // GET /api/game/diagnostic
 router.get('/diagnostic', async (req, res) => {
@@ -154,16 +159,16 @@ router.get('/state', async (req, res) => {
     const netWorth = (Number(character.cash) || 0) + totalAssets;
 
     // Invalidate stale or age-inappropriate dilemmas (e.g. parent passing at age 60+)
-    const isStaleDilemma = currentDilemma && (
-      (currentDilemma.id === 'ill_parent_passing' && character.age >= 60) ||
-      (currentDilemma.min_age && character.age < currentDilemma.min_age) ||
-      (currentDilemma.max_age && character.age > currentDilemma.max_age)
+    const isStaleDilemma = getSessionData().currentDilemma && (
+      (getSessionData().currentDilemma.id === 'ill_parent_passing' && character.age >= 60) ||
+      (getSessionData().currentDilemma.min_age && character.age < getSessionData().currentDilemma.min_age) ||
+      (getSessionData().currentDilemma.max_age && character.age > getSessionData().currentDilemma.max_age)
     );
 
-    if ((!currentDilemma || isStaleDilemma) && !character.is_deceased) {
+    if ((!getSessionData().currentDilemma || isStaleDilemma) && !character.is_deceased) {
       const prompt = compileSystemPrompt(character, assets, relationships);
-      currentDilemma = await generateDilemma(prompt, character, assets, relationships);
-      await cacheTickEvent(character.id, character.age, currentDilemma);
+      getSessionData().currentDilemma = await generateDilemma(prompt, character, assets, relationships);
+      await cacheTickEvent(character.id, character.age, getSessionData().currentDilemma);
     }
 
     const visuals = generateCharacterVisuals(character, assets);
@@ -261,7 +266,7 @@ router.get('/state', async (req, res) => {
       assets,
       relationships,
       npcs,
-      dilemma: currentDilemma,
+      dilemma: getSessionData().currentDilemma,
       net_worth: netWorth,
       can_transhuman: canTranshuman,
       aspiration,
@@ -454,8 +459,8 @@ router.post('/childhood-fastforward', async (req, res) => {
 
     // Generate dilemma matching new age
     const prompt = compileSystemPrompt(character, assets, relationships);
-    currentDilemma = await generateDilemma(prompt, character, assets, relationships);
-    await cacheTickEvent(character.id, character.age, currentDilemma);
+    getSessionData().currentDilemma = await generateDilemma(prompt, character, assets, relationships);
+    await cacheTickEvent(character.id, character.age, getSessionData().currentDilemma);
 
     const visuals = generateCharacterVisuals(character, assets);
 
@@ -466,7 +471,7 @@ router.post('/childhood-fastforward', async (req, res) => {
       assets,
       relationships,
       npcs,
-      dilemma: currentDilemma
+      dilemma: getSessionData().currentDilemma
     });
   } catch (err) {
     console.error('Childhood fastforward error:', err);
@@ -479,37 +484,7 @@ router.post('/rebirth', async (req, res) => {
   try {
     const { karma_perks = {}, lineage_parent_id = null, character: directChar } = req.body;
     
-    // If client already fast-forwarded and sent the complete new character, sync and return
-    if (directChar && directChar.id) {
-      // Server-Authoritative Anti-Cheat: Khóa chặt giới hạn chỉ số, chống giả mạo gói tin
-      directChar.vitality = Math.max(0, Math.min(100, Number(directChar.vitality) || 100));
-      directChar.max_vitality = Math.max(50, Math.min(100, Number(directChar.max_vitality) || 100));
-      directChar.action_points = Math.max(0, Math.min(6, Number(directChar.action_points) || 3));
-      directChar.burnout = Math.max(0, Math.min(100, Number(directChar.burnout) || 0));
-      directChar.cash = Math.max(0, Math.min(5000000, Number(directChar.cash) || 0)); // Chống bơm tiền ảo lúc tái sinh
-
-      await updateCharacter(directChar.id, directChar);
-      const assets = await getAssets(directChar.id);
-      const relationships = await getRelationships(directChar.id);
-      const npcs = await getNpcs(directChar.id);
-      const visuals = generateCharacterVisuals(directChar, assets);
-      const account = await getPlayerAccount();
-      
-      const prompt = compileSystemPrompt(directChar, assets, relationships);
-      currentDilemma = await generateDilemma(prompt, directChar, assets, relationships);
-      await cacheTickEvent(directChar.id, directChar.age, currentDilemma);
-
-      return res.json({
-        success: true,
-        character: directChar,
-        player_account: account,
-        visuals,
-        assets,
-        relationships,
-        npcs,
-        dilemma: currentDilemma
-      });
-    }
+    if (directChar) return res.status(400).json({ error: 'Nhân vật phải được tạo và cập nhật bởi máy chủ.' });
 
     // Otherwise, perform fresh rebirth
     let lineageParent = null;
@@ -521,8 +496,8 @@ router.post('/rebirth', async (req, res) => {
     const { character, assets, relationships, npcs, player_account } = await startNewRebirthGame(karma_perks, lineageParent);
     const visuals = generateCharacterVisuals(character, assets);
     const prompt = compileSystemPrompt(character, assets, relationships);
-    currentDilemma = await generateDilemma(prompt, character, assets, relationships);
-    await cacheTickEvent(character.id, character.age, currentDilemma);
+    getSessionData().currentDilemma = await generateDilemma(prompt, character, assets, relationships);
+    await cacheTickEvent(character.id, character.age, getSessionData().currentDilemma);
 
     res.json({
       success: true,
@@ -532,7 +507,7 @@ router.post('/rebirth', async (req, res) => {
       assets,
       relationships,
       npcs,
-      dilemma: currentDilemma
+      dilemma: getSessionData().currentDilemma
     });
   } catch (err) {
     console.error('Direct rebirth error:', err);
@@ -546,6 +521,7 @@ router.post('/rebirth/surrender', async (req, res) => {
     const character = await getLatestCharacter();
     if (!character) return res.status(400).json({ error: "Không tìm thấy nhân vật hiện tại" });
 
+    if (character.is_deceased) return res.status(409).json({ error: 'Kiếp sống này đã kết thúc.' });
     const assets = await getAssets(character.id);
     const totalAssetValue = assets.reduce((sum, a) => sum + Number(a.current_value || 0), 0);
     const netWorth = Math.max(0, (Number(character.cash) || 0) + totalAssetValue);
@@ -568,6 +544,7 @@ router.post('/rebirth/surrender', async (req, res) => {
     await updatePlayerAccount({ total_karma: updatedTotal });
 
     // Mark current character as retired/ascended
+    character.life_settled = true;
     character.is_deceased = true;
     character.death_age = character.age;
     character.death_cause = "Buông bỏ hồng trần, quy hồi hư không chuyển kiếp mới";
@@ -597,6 +574,7 @@ router.post('/rebirth/surrender', async (req, res) => {
 router.post('/rebirth/nirvana', async (req, res) => {
   try {
     const character = await getLatestCharacter();
+    if (!character || character.nirvana_ascended) return res.status(409).json({ error: 'Kiếp sống này đã được ghi danh.' });
     const account = await getPlayerAccount();
     const assets = await getAssets(character.id);
     const totalAssets = assets.reduce((sum, a) => sum + Number(a.current_value || 0), 0);
@@ -749,16 +727,18 @@ const handleHeirRebirth = async (req, res) => {
       return res.status(400).json({ error: "Không tìm thấy dữ liệu nhân vật cha mẹ tiền kiếp." });
     }
 
+    if (!parent.is_deceased || parent.heir_transferred) return res.status(409).json({ error: 'Chỉ chuyển giao một kiếp đã kết thúc và chưa có người kế thừa.' });
     let parentAssets = await getAssets(parent.id);
     let parentRelationships = await getRelationships(parent.id);
     let parentNpcs = await getNpcs(parent.id);
 
     // Find chosen child or first living child
-    let childRecord = (parentRelationships || []).find(r => r.id === child_id && r.type === 'child');
+    let childRecord = (parentRelationships || []).find(r => r.id === child_id && r.type === 'child' && r.status !== 'deceased');
     if (!childRecord) {
       childRecord = (parentRelationships || []).find(r => r.type === 'child' && r.status !== 'deceased');
     }
 
+    if (!childRecord || (child_id && childRecord.id !== child_id)) return res.status(400).json({ error: 'Không có người con hợp lệ để kế thừa.' });
     const childName = childRecord?.name || "Hậu Duệ Thừa Kế";
     const childAge = typeof childRecord?.age === 'number' ? childRecord.age : 0;
 
@@ -766,7 +746,8 @@ const handleHeirRebirth = async (req, res) => {
     const totalAssetValue = parentAssets.reduce((sum, a) => sum + Number(a.current_value || 0), 0);
     const parentNetWorth = Math.max(0, (Number(parent.cash) || 0) + totalAssetValue);
     const estateTax = Math.round(parentNetWorth * 0.30);
-    const inheritedNetWorth = Math.max(1000, parentNetWorth - estateTax);
+    const inheritedNetWorth = Math.max(0, parentNetWorth - estateTax);
+    const inheritedCash = Math.max(0, Math.round(Number(parent.cash ?? 0) * 0.70));
 
     // 2. Vendetta Transfer (Sổ Thù Vặt Dòng Tộc)
     const inheritedNpcs = [];
@@ -836,8 +817,8 @@ const handleHeirRebirth = async (req, res) => {
       vitality: 95,
       max_vitality: calculateMaxVitality(childAge),
       // Cash locked in family_endowment until age 18 if minor
-      cash: isAdult ? inheritedNetWorth : 0,
-      family_endowment: isAdult ? 0 : inheritedNetWorth,
+      cash: isAdult ? inheritedCash : 0,
+      family_endowment: isAdult ? 0 : inheritedCash,
       burnout: 0,
       karma: Math.min(100, Math.round((parent.karma || 50) * 0.7) + 20),
       action_points: 3,
@@ -883,7 +864,7 @@ const handleHeirRebirth = async (req, res) => {
     for (const asset of parentAssets) {
       const discountedValue = Math.round(Number(asset.current_value || 0) * 0.70);
       const newAsset = {
-        id: crypto.randomUUID(),
+        id: asset.id,
         character_id: newCharacter.id,
         name: `${asset.name} (Thừa kế đời ${generation})`,
         type: asset.type,
@@ -893,6 +874,7 @@ const handleHeirRebirth = async (req, res) => {
         maintenance_cost: Number(asset.maintenance_cost || 0),
         age_acquired: childAge
       };
+      await deleteAsset(asset.id);
       await addAsset(newAsset);
       childAssets.push(newAsset);
     }
@@ -938,8 +920,8 @@ const handleHeirRebirth = async (req, res) => {
     const visuals = generateCharacterVisuals(newCharacter, childAssets);
     const milestones = childAge < 18 ? getChildhoodMilestones(newCharacter) : null;
     const prompt = compileSystemPrompt(newCharacter, childAssets, childRelationships);
-    currentDilemma = await generateDilemma(prompt, newCharacter, childAssets, childRelationships);
-    await cacheTickEvent(newCharacter.id, newCharacter.age, currentDilemma);
+    getSessionData().currentDilemma = await generateDilemma(prompt, newCharacter, childAssets, childRelationships);
+    await cacheTickEvent(newCharacter.id, newCharacter.age, getSessionData().currentDilemma);
 
     res.json({
       success: true,
@@ -949,7 +931,7 @@ const handleHeirRebirth = async (req, res) => {
       relationships: childRelationships,
       npcs: inheritedNpcs,
       childhood_milestones: milestones,
-      dilemma: currentDilemma,
+      dilemma: getSessionData().currentDilemma,
       player_account: await getPlayerAccount(),
       inheritance_summary: {
         parent_name: parent.name,
@@ -1443,7 +1425,7 @@ router.post('/action/custom-resolve', async (req, res) => {
 
     const resolution = await resolveCustomAction({
       character,
-      dilemma: currentDilemma,
+      dilemma: getSessionData().currentDilemma,
       userActionText: user_action_text
     });
 
@@ -2207,6 +2189,7 @@ router.post('/action/skill-train', async (req, res) => {
     const minigameType = getExamMinigameType(skill_id, character.age);
 
     character.pending_skill_exam = {
+      id: crypto.randomUUID(),
       skill_id,
       target_level: targetLevel,
       minigame_type: minigameType,
@@ -2229,6 +2212,7 @@ router.post('/action/skill-train', async (req, res) => {
       success: true,
       message: `Đăng ký kỳ thi sát hạch ${def.name} Cấp ${targetLevel} thành công!`,
       exam: {
+        id: character.pending_skill_exam.id,
         skill_id,
         skill_name: def.name,
         target_level: targetLevel,
@@ -2243,18 +2227,44 @@ router.post('/action/skill-train', async (req, res) => {
   }
 });
 
+const MINIGAME_AGES = { plant_care_6yo: 6, logic_circuit_6yo: 6, stock_trader_20yo: 18,
+  negotiation_duel: 18, survival_escape: 6, life_tightrope_35yo: 18, cardio_beat_55yo: 18, memory_mosaic_75yo: 18 };
+router.post('/action/minigame-start', async (req, res) => {
+  try {
+    const c = await getLatestCharacter();
+    const type = req.body.minigame_type;
+    if (!c || c.is_deceased) throw new Error('Không có kiếp sống đang hoạt động.');
+    if (!(type in MINIGAME_AGES) || c.age < MINIGAME_AGES[type]) throw new Error('Thử thách chưa phù hợp với độ tuổi.');
+    if ((c.completed_minigames ?? []).includes(type)) throw new Error('Thử thách này đã được ghi nhận trong kiếp này.');
+    if (c.pending_skill_exam) throw new Error('Hãy hoàn thành kỳ thi kỹ năng đang đăng ký trước.');
+    c.pending_minigame = { id: crypto.randomUUID(), minigame_type: type, started_at: Date.now() };
+    await updateCharacter(c.id, c);
+    res.json({ success: true, challenge: c.pending_minigame });
+  } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
 // POST /api/game/action/minigame-result
 router.post('/action/minigame-result', async (req, res) => {
   try {
     const minigame_id = req.body.minigame_id || req.body.minigame_type;
-    const outcome = req.body.outcome || req.body.status || 'fair';
+    const reportedOutcome = req.body.outcome ?? req.body.status ?? 'fair';
+    const outcome = reportedOutcome === 'fail' ? 'failure' : reportedOutcome;
     const score = req.body.score || 0;
     let character = await getLatestCharacter();
+    if (!character || character.is_deceased) return res.status(409).json({ error: 'Không có kiếp sống đang hoạt động.' });
+    if (!['success', 'fair', 'failure'].includes(outcome)) return res.status(400).json({ error: 'Kết quả thử thách không hợp lệ.' });
+    const played = character.completed_minigames ?? [];
+    if (!character.pending_skill_exam && played.includes(minigame_id)) return res.status(409).json({ error: 'Thử thách này đã được ghi nhận trong kiếp này.' });
     const history = character.history_log || [];
     const flags = new Set(character.hidden_flags || []);
     let feedback = "";
 
     const pendingExam = character.pending_skill_exam;
+    const pendingChallenge = pendingExam ?? character.pending_minigame;
+    if (!pendingChallenge || pendingChallenge.id !== req.body.challenge_id || pendingChallenge.minigame_type !== minigame_id)
+      return res.status(409).json({ error: 'Kết quả không thuộc thử thách đang hoạt động.' });
+    if (!Number.isFinite(Number(score)) || Number(score) < 0) return res.status(400).json({ error: 'Điểm không hợp lệ.' });
+
     const targetSkillId = req.body.skill_id || pendingExam?.skill_id;
 
     if (pendingExam && (pendingExam.skill_id === targetSkillId || !targetSkillId)) {
@@ -2436,6 +2446,8 @@ router.post('/action/minigame-result', async (req, res) => {
       event: `Thử thách kỹ năng [${minigame_id}]`,
       choice: feedback
     });
+    character.pending_minigame = null;
+    if (!pendingExam) character.completed_minigames = [...new Set([...played, minigame_id])];
     character.history_log = history;
     character.hidden_flags = Array.from(flags);
 
@@ -2455,11 +2467,13 @@ router.post('/action/minigame-result', async (req, res) => {
 // POST /api/game/tick - Advance simulation
 router.post('/tick', async (req, res) => {
   try {
-    const { choice_id, interaction_type, interaction_result, previous_dilemma } = req.body;
+    const { choice_id, interaction_type, interaction_result, advance_only } = req.body;
+    const previous_dilemma = advance_only ? null : getSessionData().currentDilemma;
     let character = await getLatestCharacter();
     if (!character) {
       return res.status(400).json({ error: "Không tìm thấy nhân vật đang hoạt động. Vui lòng bắt đầu kiếp sống mới!" });
     }
+    if (character.is_deceased) return res.status(409).json({ error: 'Kiếp sống đã kết thúc.' });
     let assets = await getAssets(character.id);
     let relationships = await getRelationships(character.id);
     let npcs = await getNpcs(character.id);
@@ -2496,7 +2510,7 @@ router.post('/tick', async (req, res) => {
       } else if (type === "ILLUSION") {
         const drain = previous_dilemma.illusion_data?.drain_ratio || 0.25;
         const lossAmount = Math.round(Math.max(5000, character.cash) * drain);
-        character.cash = Math.max(1000, character.cash - lossAmount);
+        character.cash = Math.max(0, character.cash - lossAmount);
         character.karma = Math.min(100, character.karma + (previous_dilemma.illusion_data?.karma_gain || 10));
 
         lastChoiceOutcome = previous_dilemma.illusion_data?.button_text || "Tiếp nhận hiện thực";
@@ -2583,7 +2597,7 @@ router.post('/tick', async (req, res) => {
         const selectedOption = previous_dilemma.options.find(o => o.id === choice_id);
         if (selectedOption) {
           lastChoiceOutcome = selectedOption.action_title || selectedOption.label || "";
-          const costAP = selectedOption.cost_ap || 1;
+          const costAP = selectedOption.cost_ap ?? 1;
 
           if (character.action_points >= costAP) {
             const effects = selectedOption.effects || {};
@@ -2636,7 +2650,7 @@ router.post('/tick', async (req, res) => {
     }
 
     // Tự động giải ngân quỹ bảo trợ gia đình khi tròn 18 tuổi
-    if (character.age === 18 && Number(character.family_endowment || 0) > 0) {
+    if (character.age >= 18 && Number(character.family_endowment ?? 0) > 0) {
       const endowment = Number(character.family_endowment || 0);
       character.cash = Number(character.cash || 0) + endowment;
       character.family_endowment = 0;
@@ -2696,6 +2710,9 @@ router.post('/tick', async (req, res) => {
       });
     }
 
+    evaluateCommitments(character, npcs);
+    for (const npc of npcs) await updateNpc(npc.id, npc);
+
     // 2. Check Long-term NPC Memory Arcs
     const npcArc = evaluateNpcLongTermArc(character, npcs);
     let dilemma = null;
@@ -2712,7 +2729,7 @@ router.post('/tick', async (req, res) => {
       dilemma = await generateDilemma(systemPrompt, character, assets, relationships);
     }
 
-    currentDilemma = dilemma;
+    getSessionData().currentDilemma = dilemma;
 
     // 4. Cache & Save
     await cacheTickEvent(character.id, character.age, dilemma);
@@ -2748,8 +2765,8 @@ router.post('/reset', async (req, res) => {
   try {
     const { character, assets, relationships, npcs, player_account } = await startNewRebirthGame();
     const prompt = compileSystemPrompt(character, assets, relationships);
-    currentDilemma = await generateDilemma(prompt, character, assets, relationships);
-    await cacheTickEvent(character.id, character.age, currentDilemma);
+    getSessionData().currentDilemma = await generateDilemma(prompt, character, assets, relationships);
+    await cacheTickEvent(character.id, character.age, getSessionData().currentDilemma);
 
     const visuals = generateCharacterVisuals(character, assets);
 
@@ -2761,7 +2778,7 @@ router.post('/reset', async (req, res) => {
       assets,
       relationships,
       npcs,
-      dilemma: currentDilemma
+      dilemma: getSessionData().currentDilemma
     });
   } catch (err) {
     console.error('Reset failed:', err);
@@ -2774,81 +2791,76 @@ router.post('/reset', async (req, res) => {
 // 2D INTERACTIVE SCENARIO & MIND STAGE ROUTES
 // =========================================================================
 
-// GET /api/game/scenario/current - Lấy kịch bản & cảnh 2D hiện thời
+async function scenarioNpcs(character, scenario) {
+  const npcs = await getNpcs(character.id);
+  for (const scene of scenario?.scenes ?? []) for (const hotspot of scene.hotspots) {
+    if (!hotspot.npc_role || !hotspot.dialogue?.speaker) continue;
+    if (!npcs.some(n => n.scenario_key === hotspot.id || n.name === hotspot.dialogue.speaker)) {
+      npcs.push(await addNpc({ character_id: character.id, name: hotspot.dialogue.speaker,
+        role: hotspot.npc_role, scenario_key: hotspot.id, status: 'alive', affinity: 50, trust: 50 }));
+    }
+  }
+  return npcs;
+}
+
 router.get('/scenario/current', async (req, res) => {
   try {
     const character = await getLatestCharacter();
-    if (!character) return res.status(400).json({ error: "Không tìm thấy nhân vật." });
-    const npcs = await getNpcs(character.id);
+    if (!character) return res.status(400).json({ error: 'Không có nhân vật.' });
     const scenario = getCurrentScenarioForCharacter(character);
-    const currentSceneId = character.current_scene_id || scenario?.scenes[0]?.id || "scene_home";
-
-    res.json({
-      success: true,
-      scenario,
-      current_scene_id: currentSceneId,
-      knowledge_base: character.knowledge_base || [],
-      commitments: character.commitments || [],
-      action_points: character.action_points || 3,
-      npcs
-    });
-  } catch (err) {
-    console.error('Scenario fetch error:', err);
-    res.status(500).json({ error: err.message });
-  }
+    const npcs = await getNpcs(character.id);
+    const scene = scenario?.scenes.find(s => s.id === character.current_scene_id) ?? scenario?.scenes[0];
+    res.json({ success: true, scenario, current_scene_id: scene?.id ?? null,
+      knowledge_base: character.knowledge_base ?? [], commitments: character.commitments ?? [],
+      action_points: character.action_points ?? 3, npcs,
+      next_scenario_age: getNextScenarioAge(character),
+      last_resolution: Object.values(character.scenario_resolutions ?? {}).at(-1) ?? null });
+  } catch (err) { res.status(400).json({ error: err.message }); }
 });
 
-// POST /api/game/scenario/interact - Tương tác với hotspot trong cảnh 2D
 router.post('/scenario/interact', async (req, res) => {
   try {
-    const { scene_id, hotspot_id } = req.body;
     const character = await getLatestCharacter();
-    if (!character) return res.status(400).json({ error: "Không tìm thấy nhân vật." });
-    const npcs = await getNpcs(character.id);
-
-    const result = interactWithHotspot(character, scene_id, hotspot_id, npcs);
+    const npcs = await scenarioNpcs(character, getCurrentScenarioForCharacter(character));
+    const result = interactWithHotspot(character, req.body.scene_id, req.body.hotspot_id, npcs);
+    if (result.affected_npc) await updateNpc(result.affected_npc.id, result.affected_npc);
     await updateCharacter(character.id, character);
-
     res.json(result);
-  } catch (err) {
-    console.error('Scenario interact error:', err);
-    res.status(400).json({ error: err.message });
-  }
+  } catch (err) { res.status(400).json({ error: err.message }); }
 });
 
-// POST /api/game/scenario/resolve-mindstage - Giải quyết lựa chọn Mind Stage server-side
 router.post('/scenario/resolve-mindstage', async (req, res) => {
   try {
-    const { choice_id, ap_investment } = req.body;
     const character = await getLatestCharacter();
-    if (!character) return res.status(400).json({ error: "Không tìm thấy nhân vật." });
-    const npcs = await getNpcs(character.id);
-
-    const result = resolveMindStageChoice(character, choice_id, ap_investment, npcs);
+    const npcs = await scenarioNpcs(character, getCurrentScenarioForCharacter(character));
+    const result = resolveMindStageChoice(character, req.body.choice_id, req.body.ap_investment ?? 0, npcs, req.body.scenario_id);
+    for (const npc of result.npc_updates ?? []) await updateNpc(npc.id, npc);
     await updateCharacter(character.id, character);
-
     res.json(result);
-  } catch (err) {
-    console.error('Scenario resolve error:', err);
-    res.status(400).json({ error: err.message });
-  }
+  } catch (err) { res.status(400).json({ error: err.message }); }
 });
 
-// POST /api/game/scenario/transition - Chuyển đổi cảnh 2D
+router.post('/scenario/commitment', async (req, res) => {
+  try {
+    const character = await getLatestCharacter();
+    const npcs = await getNpcs(character.id);
+    const result = fulfillCommitment(character, req.body.commitment_id, npcs);
+    for (const npc of result.npc_updates ?? []) await updateNpc(npc.id, npc);
+    await updateCharacter(character.id, character);
+    res.json({ ...result, commitments: character.commitments, character_state: {
+      action_points: character.action_points, karma: character.karma } });
+  } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
 router.post('/scenario/transition', async (req, res) => {
   try {
-    const { scene_id } = req.body;
     const character = await getLatestCharacter();
-    if (!character) return res.status(400).json({ error: "Không tìm thấy nhân vật." });
-
-    character.current_scene_id = scene_id;
+    const scenario = getCurrentScenarioForCharacter(character);
+    if (!scenario?.scenes.some(s => s.id === req.body.scene_id)) throw new Error('Cảnh không thuộc kịch bản hiện tại.');
+    character.current_scene_id = req.body.scene_id;
     await updateCharacter(character.id, character);
-
-    res.json({ success: true, current_scene_id: scene_id });
-  } catch (err) {
-    console.error('Scenario transition error:', err);
-    res.status(400).json({ error: err.message });
-  }
+    res.json({ success: true, current_scene_id: character.current_scene_id });
+  } catch (err) { res.status(400).json({ error: err.message }); }
 });
 
 export default router;
