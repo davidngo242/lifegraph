@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import Tooltip from './Tooltip';
 
-const Dynamic3DAvatar = dynamic(() => import('./Dynamic3DAvatar'), {
+const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full flex items-center justify-center bg-slate-950 rounded-2xl">
@@ -375,7 +375,7 @@ export default function CharacterHeroBanner({
             {/* Permanent 3D Live Badge (Bỏ nút chuyển 2D) */}
             <div className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-md bg-black/85 text-[8.5px] font-mono font-bold text-indigo-300 border border-indigo-500/40 backdrop-blur-md flex items-center gap-1 shadow z-20 pointer-events-none select-none">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>3D LIVE</span>
+              <span>NHÂN VẬT</span>
             </div>
 
             {/* 360 Fullscreen Trigger */}
@@ -501,3 +501,4 @@ export default function CharacterHeroBanner({
     </div>
   );
 }
+

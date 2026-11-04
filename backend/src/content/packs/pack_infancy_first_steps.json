@@ -76,13 +76,13 @@
           "outcomes": {
             "success": {
               "narration": "Bạn đã tự mình bước được 5 bước vững vàng! Cha mẹ rơi nước mắt vì hạnh phúc.",
-              "stat_deltas": {
-                "vitality": 5,
-                "karma": 5
-              },
               "commitments": [
                 "Vững bước đầu đời"
-              ]
+              ],
+              "effects": {
+                "vitality_delta": 5,
+                "karma_delta": 5
+              }
             }
           }
         },
@@ -98,16 +98,28 @@
           "outcomes": {
             "success": {
               "narration": "Tiếng gọi đầu đời vang lên trong trẻo, gắn kết sợi dây tình thân ruột thịt thiêng liêng.",
-              "stat_deltas": {
-                "karma": 10
-              },
               "commitments": [
                 "Tình thân gia đình bền chặt"
-              ]
+              ],
+              "effects": {
+                "karma_delta": 10
+              }
             }
           }
         }
-      ]
+      ],
+      "priority": 100,
+      "completion_flag": "infancy_resolved",
+      "knowledge_labels": {
+        "infant_curiosity": {
+          "label": "Đồ chơi phát triển trí tuệ",
+          "desc": "Những khối hình màu sắc giúp bạn nhận diện không gian và kích thích trí tò mò từ thuở lọt lòng."
+        },
+        "parental_unconditional_love": {
+          "label": "Vòng tay phụ mẫu",
+          "desc": "Ngoan nào con yêu. Ba mẹ sẽ luôn là điểm tựa bình yên nhất che chở cho con khôn lớn."
+        }
+      }
     }
   ]
 }

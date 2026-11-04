@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
 import { X } from 'lucide-react';
 
-const Dynamic3DAvatar = dynamic(() => import('./Dynamic3DAvatar'), {
+const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full flex items-center justify-center bg-slate-950 rounded-2xl">
@@ -125,3 +125,4 @@ export default function AvatarInspectorModal({
     </div>
   );
 }
+

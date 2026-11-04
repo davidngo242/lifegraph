@@ -22,11 +22,11 @@ export default function LifeTarotCardModal({
   const [isExporting, setIsExporting] = useState<boolean>(false);
 
   const name = character?.name || "Kẻ Phiêu Lãng";
-  const age = character?.age || 20;
+  const age = character?.age ?? 0;
   const nationality = character?.nationality || "Việt Nam";
   const currentCity = character?.current_city || nationality;
   const cash = Number(character?.cash) || 0;
-  const karma = Number(character?.karma) || 100;
+  const karma = Number(character?.karma ?? 0);
   const skills = character?.skills || {};
   const relationships = character?.relationships || [];
   const flags: string[] = character?.hidden_flags || [];
@@ -98,7 +98,7 @@ export default function LifeTarotCardModal({
 📜 3 Cột Mốc Đời Người:
 ${topMoments.map(m => `  • [Năm ${m.age}t]: ${m.text}`).join('\n')}
 ━━━━━━━━━━━━━━━━━━━━━━━━━
-👉 Khám phá và đầu thai kiếp mới tại: https://lifegraph.loca.lt`;
+👉 Khám phá và đầu thai kiếp mới tại: ${window.location.origin}`;
 
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -346,3 +346,4 @@ ${topMoments.map(m => `  • [Năm ${m.age}t]: ${m.text}`).join('\n')}
     </div>
   );
 }
+

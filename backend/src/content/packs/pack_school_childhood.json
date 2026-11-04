@@ -119,34 +119,34 @@
             "stat": "IQ",
             "target_dc": 10,
             "bonus_traits": [
-              "Thông minh thiên bẩm",
-              "Ham học hỏi"
+              "thiên_tài_toán_học",
+              "trí_nhớ_siêu_phàm"
             ]
           },
           "outcomes": {
             "critical_success": {
               "narration": "Bạn xuất sắc đạt giải cao trong kỳ thi học sinh giỏi! Thầy cô khen ngợi, cha mẹ hãnh diện.",
-              "stat_deltas": {
-                "karma": 10,
-                "cash": 500
-              },
               "commitments": [
                 "Danh hiệu học sinh ưu tú"
-              ]
+              ],
+              "effects": {
+                "karma_delta": 10,
+                "cash_delta": 500
+              }
             },
             "success": {
               "narration": "Bạn hoàn thành kỳ thi với kết quả giỏi, tiếp thu vững vàng kiến thức nền tảng.",
-              "stat_deltas": {
-                "karma": 5
-              },
               "commitments": [
                 "Nền tảng học thuật vững chắc"
-              ]
+              ],
+              "effects": {
+                "karma_delta": 5
+              }
             },
             "failure": {
               "narration": "Đề thi có một vài câu hóc búa, nhưng bạn đã nỗ lực hết sức và rút ra nhiều kinh nghiệm.",
-              "stat_deltas": {
-                "burnout": 5
+              "effects": {
+                "burnout_delta": 5
               }
             }
           }
@@ -165,24 +165,23 @@
             "stat": "EQ",
             "target_dc": 9,
             "bonus_traits": [
-              "Hòa đồng",
-              "Ấm áp"
+              "thấu_cảm_xã_hội"
             ]
           },
           "outcomes": {
             "success": {
               "narration": "Bạn trở thành người bạn thân thiết được cả lớp yêu mến, cùng nhau lưu giữ kỷ niệm tuổi thơ tuyệt đẹp.",
-              "stat_deltas": {
-                "karma": 8
-              },
               "commitments": [
                 "Tình bạn tri kỷ trường lớp"
-              ]
+              ],
+              "effects": {
+                "karma_delta": 8
+              }
             },
             "failure": {
               "narration": "Đôi lúc giữa bạn bè có chút hiểu lầm trẻ con, nhưng mọi người nhanh chóng làm hòa.",
-              "stat_deltas": {
-                "karma": 2
+              "effects": {
+                "karma_delta": 2
               }
             }
           }
@@ -197,17 +196,37 @@
           "outcomes": {
             "success": {
               "narration": "Một tuổi thơ tràn ngập tiếng cười và sức khỏe dồi dào, tâm hồn luôn rạng rỡ và tràn đầy sinh khí.",
-              "stat_deltas": {
-                "vitality": 10,
-                "burnout": -10
-              },
               "commitments": [
                 "Tâm hồn tự do phóng khoáng"
-              ]
+              ],
+              "effects": {
+                "vitality_delta": 10,
+                "burnout_delta": -10
+              }
             }
           }
         }
-      ]
+      ],
+      "priority": 100,
+      "completion_flag": "school_decade_resolved",
+      "knowledge_labels": {
+        "knowledge_school_curriculum": {
+          "label": "Bàn học & Cặp sách",
+          "desc": "Sách vở được sắp xếp ngăn nắp. Ôn tập kỹ các bài toán và chính tả giúp bạn tự tin trước kỳ thi kiểm tra chất lượng."
+        },
+        "peer_trust_friendship": {
+          "label": "Bạn cùng bàn",
+          "desc": "Cậu có muốn cùng tớ giải câu đố vui này không? Cùng học cùng chơi bao giờ cũng vui hơn một mình!"
+        },
+        "teacher_academic_guidance": {
+          "label": "Cô giáo chủ nhiệm",
+          "desc": "Kiến thức như mầm non cần được tưới tắm mỗi ngày. Sự trung thực và kiên trì mới là điểm số quý giá nhất."
+        },
+        "family_encouragement": {
+          "label": "Bàn trà cùng cha mẹ",
+          "desc": "Con cứ cố gắng hết sức là ba mẹ tự hào rồi. Nhớ giữ gìn sức khỏe, đừng thức quá khuya con nhé."
+        }
+      }
     }
   ]
 }

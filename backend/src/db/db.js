@@ -17,7 +17,7 @@ let useMock = true;
 // =========================================================================
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DATA_DIR = path.resolve(__dirname, '../../data');
+const DATA_DIR = process.env.LIFEGRAPH_DATA_DIR || path.resolve(__dirname, '../../data');
 const CACHE_FILE = path.join(DATA_DIR, 'sessions_cache.json');
 
 let isDirty = false;
@@ -29,7 +29,9 @@ export function persistSessionsToDisk() {
       fs.mkdirSync(DATA_DIR, { recursive: true });
     }
     const serialized = JSON.stringify(Array.from(sessions.entries()), null, 2);
-    fs.writeFileSync(CACHE_FILE, serialized, 'utf-8');
+    const temporary = CACHE_FILE + '.tmp';
+    fs.writeFileSync(temporary, serialized, { encoding: 'utf-8', mode: 0o600 });
+    fs.renameSync(temporary, CACHE_FILE);
     isDirty = false;
   } catch (err) {
     console.error('[Storage Cache] Lỗi lưu sessions ra đĩa:', err.message);
@@ -228,11 +230,16 @@ export async function initDb() {
       const client = await pool.connect();
       console.log('✅ [Database] Successfully connected to PostgreSQL.');
       client.release();
+      // Persist extensible game state without assuming every runtime field is a SQL column.
+      await pool.query(fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8'));
+      for (const table of ['characters', 'assets', 'relationships', 'npcs'])
+        await pool.query(`ALTER TABLE ${table} ADD COLUMN IF NOT EXISTS state JSONB NOT NULL DEFAULT '{}'::jsonb`);
+      await pool.query("ALTER TABLE player_accounts ADD COLUMN IF NOT EXISTS ancestral_lineage JSONB NOT NULL DEFAULT '[]'::jsonb");
       useMock = false;
       return;
     } catch (err) {
       console.warn('⚠️ [Database] Falling back to In-Memory DB Mode:', err.message);
-      useMock = true;
+      throw new Error('Configured database is unavailable; refusing to replace saved progress with a temporary session.', { cause: err });
     }
   } else {
     useMock = true;
@@ -246,12 +253,12 @@ export async function getPlayerAccount() {
     return { ...store.playerAccount };
   }
   try {
-    const res = await pool.query('SELECT * FROM player_accounts WHERE id = $1', ['primary_player']);
+    const res = await pool.query('SELECT * FROM player_accounts WHERE id = $1', [getCurrentSessionId()]);
     if (res.rows.length === 0) {
       const store = getSessionData();
       await pool.query(
         'INSERT INTO player_accounts (id, total_karma, unlocked_perks, reincarnation_count, lifetime_stats) VALUES ($1, $2, $3, $4, $5)',
-        ['primary_player', store.playerAccount.total_karma, JSON.stringify(store.playerAccount.unlocked_perks), store.playerAccount.reincarnation_count, JSON.stringify(store.playerAccount.lifetime_stats)]
+        [getCurrentSessionId(), store.playerAccount.total_karma, JSON.stringify(store.playerAccount.unlocked_perks), store.playerAccount.reincarnation_count, JSON.stringify(store.playerAccount.lifetime_stats)]
       );
       return { ...store.playerAccount };
     }
@@ -279,7 +286,7 @@ export async function updatePlayerAccount(fields) {
       values.push(typeof value === 'object' ? JSON.stringify(value) : value);
       index++;
     }
-    values.push('primary_player');
+    values.push(getCurrentSessionId());
     const res = await pool.query(`UPDATE player_accounts SET ${setClauses.join(', ')} WHERE id = $${index} RETURNING *`, values);
     return res.rows[0];
   } catch (err) {
@@ -370,217 +377,130 @@ export function ensureCharacterSkills(char) {
   return char;
 }
 
-export async function getLatestCharacter() {
-  if (useMock || !pool) {
-    const store = getSessionData();
-    if (!store.character) return null;
-    return ensureCharacterSkills({ ...store.character });
+const entityTables = new Set(['characters', 'assets', 'relationships', 'npcs']);
+const hydrate = row => row ? { ...row, ...(row.state ?? {}), id: row.id } : null;
+async function ownedRows(table, characterId = null) {
+  if (!entityTables.has(table)) throw new Error('Invalid entity table');
+  const result = table === 'characters'
+    ? await pool.query('SELECT * FROM characters WHERE player_account_id = $1 ORDER BY created_at DESC', [getCurrentSessionId()])
+    : await pool.query(`SELECT e.* FROM ${table} e JOIN characters c ON c.id = e.character_id WHERE c.player_account_id = $1 AND e.character_id = $2`, [getCurrentSessionId(), characterId]);
+  return result.rows.map(hydrate);
+}
+async function persistEntity(table, id, fields) {
+  if (!entityTables.has(table)) throw new Error('Invalid entity table');
+  const old = await pool.query(`SELECT * FROM ${table} WHERE id = $1`, [id]);
+  if (old.rows[0]) {
+    const ownerId = table === 'characters' ? old.rows[0].id : old.rows[0].character_id;
+    const owner = await pool.query('SELECT id FROM characters WHERE id = $1 AND player_account_id = $2', [ownerId, getCurrentSessionId()]);
+    if (!owner.rows.length) throw new Error('Entity does not belong to this session');
   }
+  const entity = { ...hydrate(old.rows[0]), ...fields, id };
+  if (table === 'characters') {
+    entity.player_account_id = getCurrentSessionId();
+    await getPlayerAccount();
+    const res = await pool.query(`INSERT INTO characters (id, player_account_id, name, age, state) VALUES ($1,$2,$3,$4,$5)
+      ON CONFLICT (id) DO UPDATE SET state = EXCLUDED.state, name = EXCLUDED.name, age = EXCLUDED.age, updated_at = NOW()
+      WHERE characters.player_account_id = $2 RETURNING *`, [id, getCurrentSessionId(), entity.name ?? 'Nhân vật', entity.age ?? 0, JSON.stringify(entity)]);
+    if (!res.rows.length) throw new Error('Character update rejected');
+    return hydrate(res.rows[0]);
+  }
+  if (old.rows.length && entity.character_id !== old.rows[0].character_id) throw new Error('Cannot transfer ownership through an update');
+  const owner = await pool.query('SELECT id FROM characters WHERE id = $1 AND player_account_id = $2', [entity.character_id, getCurrentSessionId()]);
+  if (!owner.rows.length) throw new Error('Character does not belong to this session');
+  const roleColumn = table === 'npcs' ? 'role' : 'type';
+  const res = await pool.query(`INSERT INTO ${table} (id, character_id, name, ${roleColumn}, state) VALUES ($1,$2,$3,$4,$5)
+    ON CONFLICT (id) DO UPDATE SET state = EXCLUDED.state WHERE ${table}.character_id = $2 RETURNING *`,
+    [id, entity.character_id, entity.name ?? 'Đối tượng', entity[roleColumn] ?? 'other', JSON.stringify(entity)]);
+  if (!res.rows.length) throw new Error('Entity update rejected');
+  return hydrate(res.rows[0]);
+}
 
-  try {
-    const res = await pool.query('SELECT * FROM characters ORDER BY created_at DESC LIMIT 1');
-    if (res.rows.length === 0) {
-      return null;
-    }
-    return ensureCharacterSkills(res.rows[0]);
-  } catch (err) {
-    console.error('Error fetching character from PG:', err);
-    const store = getSessionData();
-    return ensureCharacterSkills(store.character);
-  }
+export async function getLatestCharacter() {
+  if (!useMock && pool) return ensureCharacterSkills((await ownedRows('characters'))[0] ?? null);
+  const c = getSessionData().character;
+  return c ? ensureCharacterSkills(structuredClone(c)) : null;
 }
 
 export async function updateCharacter(id, fields) {
-  if (useMock || !pool) {
-    const store = getSessionData();
-    if (store.character) {
-      store.character = {
-        ...store.character,
-        ...fields
-      };
-      scheduleDiskPersist();
-      return { ...store.character };
-    }
-    return null;
-  }
-
-  const setClauses = [];
-  const values = [];
-  let index = 1;
-
-  for (const [key, value] of Object.entries(fields)) {
-    setClauses.push(`${key} = $${index}`);
-    values.push(
-      key === 'hidden_flags' || key === 'history_log' || key === 'innate_traits' || key === 'personality_flags' || key === 'global_indices' || key === 'timeline_snapshots' || key === 'recent_event_tags' || key === 'experienced_scenarios'
-        ? JSON.stringify(value)
-        : value
-    );
-    index++;
-  }
-  values.push(id);
-
-  try {
-    const res = await pool.query(`UPDATE characters SET ${setClauses.join(', ')} WHERE id = $${index} RETURNING *`, values);
-    return res.rows[0];
-  } catch (err) {
-    console.error('Error updating character in PG:', err);
-    const store = getSessionData();
-    if (store.character) {
-      store.character = { ...store.character, ...fields };
-      return { ...store.character };
-    }
-    return null;
-  }
+  if (!useMock && pool) return persistEntity('characters', id, fields);
+  const store = getSessionData();
+  store.character = store.character?.id === id ? { ...store.character, ...fields, id } : { ...fields, id };
+  scheduleDiskPersist();
+  return structuredClone(store.character);
 }
 
 export async function getAssets(characterId) {
-  if (useMock || !pool) {
-    const store = getSessionData();
-    return [...store.assets];
-  }
-  const res = await pool.query('SELECT * FROM assets WHERE character_id = $1', [characterId]);
-  return res.rows;
+  if (!useMock && pool) return ownedRows('assets', characterId);
+  return structuredClone(getSessionData().assets.filter(e => e.character_id === characterId));
 }
 
 export async function updateAsset(id, fields) {
-  if (useMock || !pool) {
-    const store = getSessionData();
-    const asset = store.assets.find(a => a.id === id);
-    if (asset) Object.assign(asset, fields);
-    scheduleDiskPersist();
-    return asset;
-  }
-  const setClauses = [];
-  const values = [];
-  let index = 1;
-  for (const [key, value] of Object.entries(fields)) {
-    setClauses.push(`${key} = $${index}`);
-    values.push(value);
-    index++;
-  }
-  values.push(id);
-  const res = await pool.query(`UPDATE assets SET ${setClauses.join(', ')} WHERE id = $${index} RETURNING *`, values);
-  return res.rows[0];
+  if (!useMock && pool) return persistEntity('assets', id, fields);
+  const entity = getSessionData().assets.find(e => e.id === id);
+  if (!entity) throw new Error('Không tìm thấy đối tượng thuộc phiên này.');
+  Object.assign(entity, fields); scheduleDiskPersist(); return structuredClone(entity);
 }
 
-export async function addAsset(asset) {
-  if (useMock || !pool) {
-    const store = getSessionData();
-    const item = { id: crypto.randomUUID(), ...asset };
-    store.assets.push(item);
-    scheduleDiskPersist();
-    return item;
-  }
-  const res = await pool.query(
-    'INSERT INTO assets (character_id, type, name, current_value, liquidity_status, maintenance_cost_per_tick) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-    [asset.character_id, asset.type, asset.name, asset.current_value, asset.liquidity_status || 'liquid', asset.maintenance_cost_per_tick || 0]
-  );
-  return res.rows[0];
+export async function addAsset(fields) {
+  const entity = { ...fields, id: fields.id ?? crypto.randomUUID() };
+  if (!useMock && pool) return persistEntity('assets', entity.id, entity);
+  const store = getSessionData();
+  if (entity.character_id !== store.character?.id) throw new Error('Đối tượng không thuộc kiếp sống hiện tại.');
+  if (store.assets.some(e => e.id === entity.id)) throw new Error('Đối tượng đã tồn tại.');
+  store.assets.push(entity); scheduleDiskPersist(); return structuredClone(entity);
 }
 
 export async function deleteAsset(id) {
-  if (useMock || !pool) {
-    const store = getSessionData();
-    const index = store.assets.findIndex(a => a.id === id);
-    if (index !== -1) {
-      const removed = store.assets.splice(index, 1)[0];
-      scheduleDiskPersist();
-      return removed;
-    }
-    return null;
+  if (!useMock && pool) {
+    const res = await pool.query(`DELETE FROM assets a USING characters c WHERE a.id=$1 AND c.id=a.character_id AND c.player_account_id=$2 RETURNING a.*`, [id, getCurrentSessionId()]);
+    return hydrate(res.rows[0]);
   }
-  const res = await pool.query('DELETE FROM assets WHERE id = $1 RETURNING *', [id]);
-  return res.rows[0];
+  const store = getSessionData();
+  const index = store.assets.findIndex(a => a.id === id);
+  if (index < 0) return null;
+  const [asset] = store.assets.splice(index, 1); scheduleDiskPersist(); return asset;
 }
 
-export async function addRelationship(rel) {
-  if (useMock || !pool) {
-    const store = getSessionData();
-    const item = { id: crypto.randomUUID(), ...rel };
-    store.relationships.push(item);
-    scheduleDiskPersist();
-    return item;
-  }
-  const res = await pool.query(
-    'INSERT INTO relationships (character_id, type, name, affection_level, monthly_cost, inherited_traits) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-    [rel.character_id, rel.type, rel.name, rel.affection_level || 70, rel.monthly_cost || 0, JSON.stringify(rel.inherited_traits || [])]
-  );
-  return res.rows[0];
+export async function addRelationship(fields) {
+  const entity = { ...fields, id: fields.id ?? crypto.randomUUID() };
+  if (!useMock && pool) return persistEntity('relationships', entity.id, entity);
+  const store = getSessionData();
+  if (entity.character_id !== store.character?.id) throw new Error('Đối tượng không thuộc kiếp sống hiện tại.');
+  if (store.relationships.some(e => e.id === entity.id)) throw new Error('Đối tượng đã tồn tại.');
+  store.relationships.push(entity); scheduleDiskPersist(); return structuredClone(entity);
 }
 
 export async function updateRelationship(id, fields) {
-  if (useMock || !pool) {
-    const store = getSessionData();
-    const rel = store.relationships.find(r => r.id === id);
-    if (rel) Object.assign(rel, fields);
-    scheduleDiskPersist();
-    return rel;
-  }
-  const setClauses = [];
-  const values = [];
-  let index = 1;
-  for (const [key, value] of Object.entries(fields)) {
-    setClauses.push(`${key} = $${index}`);
-    values.push(typeof value === 'object' ? JSON.stringify(value) : value);
-    index++;
-  }
-  values.push(id);
-  const res = await pool.query(`UPDATE relationships SET ${setClauses.join(', ')} WHERE id = $${index} RETURNING *`, values);
-  return res.rows[0];
+  if (!useMock && pool) return persistEntity('relationships', id, fields);
+  const entity = getSessionData().relationships.find(e => e.id === id);
+  if (!entity) throw new Error('Không tìm thấy đối tượng thuộc phiên này.');
+  Object.assign(entity, fields); scheduleDiskPersist(); return structuredClone(entity);
 }
 
 export async function getRelationships(characterId) {
-  if (useMock || !pool) {
-    const store = getSessionData();
-    return [...store.relationships];
-  }
-  const res = await pool.query('SELECT * FROM relationships WHERE character_id = $1', [characterId]);
-  return res.rows;
+  if (!useMock && pool) return ownedRows('relationships', characterId);
+  return structuredClone(getSessionData().relationships.filter(e => e.character_id === characterId));
 }
 
 export async function getNpcs(characterId) {
-  if (useMock || !pool) {
-    const store = getSessionData();
-    return [...store.npcs];
-  }
-  const res = await pool.query('SELECT * FROM npcs WHERE character_id = $1', [characterId]);
-  return res.rows;
+  if (!useMock && pool) return ownedRows('npcs', characterId);
+  return structuredClone(getSessionData().npcs.filter(e => e.character_id === characterId));
 }
 
-export async function addNpc(npc) {
-  if (useMock || !pool) {
-    const store = getSessionData();
-    const item = { id: crypto.randomUUID(), ...npc };
-    store.npcs.push(item);
-    scheduleDiskPersist();
-    return item;
-  }
-  const res = await pool.query(
-    'INSERT INTO npcs (character_id, name, role, status, affinity, memory_notes, avatar_color) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-    [npc.character_id, npc.name, npc.role, npc.status || 'alive', npc.affinity || 50, npc.memory_notes || '', npc.avatar_color || '#6366f1']
-  );
-  return res.rows[0];
+export async function addNpc(fields) {
+  const entity = { ...fields, id: fields.id ?? crypto.randomUUID() };
+  if (!useMock && pool) return persistEntity('npcs', entity.id, entity);
+  const store = getSessionData();
+  if (entity.character_id !== store.character?.id) throw new Error('Đối tượng không thuộc kiếp sống hiện tại.');
+  if (store.npcs.some(e => e.id === entity.id)) throw new Error('Đối tượng đã tồn tại.');
+  store.npcs.push(entity); scheduleDiskPersist(); return structuredClone(entity);
 }
 
 export async function updateNpc(id, fields) {
-  if (useMock || !pool) {
-    const store = getSessionData();
-    const npc = store.npcs.find(n => n.id === id);
-    if (npc) Object.assign(npc, fields);
-    scheduleDiskPersist();
-    return npc;
-  }
-  const setClauses = [];
-  const values = [];
-  let index = 1;
-  for (const [key, value] of Object.entries(fields)) {
-    setClauses.push(`${key} = $${index}`);
-    values.push(value);
-    index++;
-  }
-  values.push(id);
-  const res = await pool.query(`UPDATE npcs SET ${setClauses.join(', ')} WHERE id = $${index} RETURNING *`, values);
-  return res.rows[0];
+  if (!useMock && pool) return persistEntity('npcs', id, fields);
+  const entity = getSessionData().npcs.find(e => e.id === id);
+  if (!entity) throw new Error('Không tìm thấy đối tượng thuộc phiên này.');
+  Object.assign(entity, fields); scheduleDiskPersist(); return structuredClone(entity);
 }
 
 export async function cacheTickEvent(characterId, tickNumber, eventData) {
@@ -613,7 +533,8 @@ export async function startNewRebirthGame(karmaPerks = {}, lineageParent = null)
   if ((karmaPerks.guarantee_middle_class || karmaPerks.golden_cradle) && !unlocked.includes('guarantee_middle_class')) spentKarma += 250;
   if (karmaPerks.choose_trait && !unlocked.includes('choose_trait')) spentKarma += 400;
 
-  const updatedTotalKarma = Math.max(0, (account.total_karma || 0) - spentKarma);
+  if ((account.total_karma ?? 0) < spentKarma) throw new Error('Không đủ Karma để mua các đặc quyền đã chọn.');
+  const updatedTotalKarma = (account.total_karma ?? 0) - spentKarma;
 
   // Add perks to account unlocked_perks
   const newUnlockedSet = new Set(unlocked);
@@ -623,13 +544,19 @@ export async function startNewRebirthGame(karmaPerks = {}, lineageParent = null)
   if (karmaPerks.choose_trait) newUnlockedSet.add('choose_trait');
 
   await updatePlayerAccount({
-    reincarnation_count: (account.reincarnation_count || 1) + 1,
+    reincarnation_count: (account.reincarnation_count ?? 0) + 1,
     total_karma: updatedTotalKarma,
     unlocked_perks: Array.from(newUnlockedSet)
   });
 
   const freshChar = seedInitialData(lineageParent, karmaPerks);
   const store = getSessionData();
+  if (!useMock && pool) {
+    await updateCharacter(freshChar.id, freshChar);
+    for (const asset of store.assets) await addAsset(asset);
+    for (const relationship of store.relationships) await addRelationship(relationship);
+    for (const npc of store.npcs) await addNpc(npc);
+  }
   return {
     character: freshChar,
     assets: store.assets,
@@ -642,3 +569,4 @@ export async function startNewRebirthGame(karmaPerks = {}, lineageParent = null)
 export async function resetGame() {
   return seedInitialData();
 }
+

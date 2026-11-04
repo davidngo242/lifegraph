@@ -115,12 +115,12 @@ async function refreshRealWorldData() {
 }
 
 // Initial background sync
-refreshRealWorldData().catch(() => {});
+if (process.env.NODE_ENV !== 'test') refreshRealWorldData().catch(() => {});
 
 // Recurring background worker every 15 minutes
 setInterval(() => {
   refreshRealWorldData().catch(() => {});
-}, 15 * 60 * 1000);
+}, 15 * 60 * 1000).unref();
 
 /**
  * Retrieve synchronized real-world weather and market snapshot
@@ -164,3 +164,4 @@ export async function getRealWorldSyncData(cityName = "", countryName = "Việt 
     synced_at: cacheStore.lastUpdated
   };
 }
+

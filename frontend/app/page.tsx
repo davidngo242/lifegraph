@@ -52,6 +52,7 @@ if (typeof window !== 'undefined') {
       localStorage.setItem('lifegraph_session_id', sid);
     }
     const headers = new Headers(init?.headers || {});
+    if ((init?.method ?? 'GET').toUpperCase() === 'POST' && !headers.has('x-action-id')) headers.set('x-action-id', crypto.randomUUID());
     if (!headers.has('x-session-id')) {
       headers.set('x-session-id', sid);
     }
@@ -86,6 +87,7 @@ export default function LifeGraphPage() {
   const [lineage, setLineage] = useState<any[]>([]);
   const [nirvanaBanner, setNirvanaBanner] = useState<any | null>(null);
   const [dismissedAlerts, setDismissedAlerts] = useState<string[]>([]);
+  const [activeChallengeId, setActiveChallengeId] = useState<string | null>(null);
   const [activeMiniGame, setActiveMiniGame] = useState<MiniGameType | null>(null);
   const [activeExamSkillId, setActiveExamSkillId] = useState<string | null>(null);
   const [activeExamTargetLevel, setActiveExamTargetLevel] = useState<number>(1);
@@ -168,7 +170,7 @@ export default function LifeGraphPage() {
         setActiveView('home');
       }
     } catch (err: any) {
-      console.warn("Using offline fallback:", err);
+      setErrorMsg(err instanceof Error ? err.message : "Không tải được tiến trình. Hãy thử lại.");
     } finally {
       setLoading(false);
     }
@@ -196,6 +198,7 @@ export default function LifeGraphPage() {
     choice_id?: string;
     interaction_type?: string;
     interaction_result?: any;
+    advance_only?: boolean;
   }) => {
     setLoading(true);
     setErrorMsg(null);
@@ -205,7 +208,7 @@ export default function LifeGraphPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...payload,
-          previous_dilemma: dilemma
+          previous_dilemma: payload.advance_only ? null : dilemma
         })
       });
 
@@ -317,26 +320,9 @@ export default function LifeGraphPage() {
       if (rebirthData.dilemma) setDilemma(rebirthData.dilemma);
     }
 
-    // 2. Server synchronization call
-    try {
-      const res = await fetch(`${API_BASE}/rebirth`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(rebirthData)
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.character) setCharacter(data.character);
-        if (data.player_account) setPlayerAccount(data.player_account);
-        if (data.visuals) setVisuals(data.visuals);
-        if (data.assets) setAssets(data.assets);
-        if (data.relationships) setRelationships(data.relationships);
-        if (data.npcs) setNpcs(data.npcs);
-        if (data.dilemma) setDilemma(data.dilemma);
-      }
-    } catch (err: any) {
-      console.warn("Rebirth sync notice:", err);
-    }
+    // /start already persisted this life. Read it back instead of posting a client snapshot
+    // or creating/charging for another life during synchronization.
+    await loadState();
   };
 
   // Transhumanism Black-market Surgery
@@ -748,6 +734,7 @@ export default function LifeGraphPage() {
       }
       const data = await res.json();
       setCharacter(data.character);
+      setActiveChallengeId(data.exam?.id ?? null);
       setActiveExamSkillId(skillId);
       setActiveExamTargetLevel(data.exam?.target_level || 1);
       setShowSkillSelector(false);
@@ -758,6 +745,16 @@ export default function LifeGraphPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const launchMiniGame = async (type: MiniGameType) => {
+    try {
+      const res = await fetch(`${API_BASE}/action/minigame-start`, { method: 'POST',
+        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ minigame_type: type }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setActiveChallengeId(data.challenge.id); setActiveExamSkillId(null); setActiveMiniGame(type);
+    } catch (err: any) { setErrorMsg(err.message ?? 'Không mở được thử thách.'); }
   };
 
   const handleMiniGameComplete = async (result: {
@@ -773,6 +770,7 @@ export default function LifeGraphPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           minigame_type: activeMiniGame,
+          challenge_id: activeChallengeId,
           status: result.status,
           score: result.score,
           summary: result.summary,
@@ -1029,7 +1027,7 @@ export default function LifeGraphPage() {
           onRegisterExam={handleRegisterSkillExam}
           onSelectSkill={(gameType) => {
             setShowSkillSelector(false);
-            setActiveMiniGame(gameType);
+            launchMiniGame(gameType);
           }}
           onClose={() => setShowSkillSelector(false)}
         />
@@ -1416,7 +1414,11 @@ export default function LifeGraphPage() {
       {/* Main Container: Dynamic View Router */}
       <main className="flex-1 max-w-[1720px] w-full mx-auto p-3 md:p-5 z-10 relative">
         {/* 1. Trang Chủ (Home Portal) View - Luôn tích hợp toàn bộ Gia Phả các kiếp */}
-        {activeView === 'home' && (
+        {errorMsg && <div role="alert" className="mb-4 rounded-xl border border-rose-700 bg-slate-900 p-4 text-rose-200">
+          <p>{errorMsg}</p><button onClick={() => loadState()} className="mt-2 rounded-lg bg-indigo-600 px-4 py-2 text-white">Thử tải lại tiến trình</button>
+        </div>}
+        {loading && !character && <div role="status" className="p-8 text-center text-slate-300">Đang tải tiến trình đã lưu…</div>}
+        {activeView === 'home' && !loading && !errorMsg && (
           <LifeGraphHomePortal
             character={character}
             playerAccount={playerAccount}
@@ -1518,7 +1520,7 @@ export default function LifeGraphPage() {
 
             {gameMode === '2d_scene' ? (
               <div className="mb-6">
-                <InteractiveScene2D onScenarioResolved={() => loadState()} character={character} />
+                <InteractiveScene2D onScenarioResolved={() => loadState()} character={character} onAdvanceYear={() => submitInteraction({ advance_only: true })} />
               </div>
             ) : (
               /* 3-Column Responsive Grid Cockpit */
@@ -1567,7 +1569,7 @@ export default function LifeGraphPage() {
                     onNetwork={handleNetworkAction}
                     onTimeSkip={handleTimeSkipContinue}
                     onOpenSkillHub={() => setShowSkillSelector(true)}
-                    onLaunchMiniGame={(type) => setActiveMiniGame(type)}
+                    onLaunchMiniGame={(type) => launchMiniGame(type)}
                     hiddenFlags={character.hidden_flags || []}
                     isLoading={loading}
                   />
@@ -1625,7 +1627,7 @@ export default function LifeGraphPage() {
                   currentAge={character?.age || 0}
                   annualDigest={annualDigest}
                   nationality={character?.nationality}
-                  onLaunchMiniGame={(type) => setActiveMiniGame(type)}
+                  onLaunchMiniGame={(type) => launchMiniGame(type)}
                   onCloseDigest={() => setAnnualDigest(null)}
                   onOpenAssets={() => setShowAssetModal(true)}
                   onOpenFamily={() => setShowFamilyModal(true)}
@@ -1639,3 +1641,4 @@ export default function LifeGraphPage() {
     </div>
   );
 }
+
