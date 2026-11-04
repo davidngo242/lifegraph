@@ -2843,6 +2843,7 @@ router.post('/scenario/resolve-mindstage', async (req, res) => {
 router.post('/scenario/commitment', async (req, res) => {
   try {
     const character = await getLatestCharacter();
+    if (!character || character.is_deceased) return res.status(400).json({ error: 'Không có kiếp sống đang hoạt động.' });
     const npcs = await getNpcs(character.id);
     const result = fulfillCommitment(character, req.body.commitment_id, npcs);
     for (const npc of result.npc_updates ?? []) await updateNpc(npc.id, npc);

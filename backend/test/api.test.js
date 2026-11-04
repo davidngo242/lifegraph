@@ -110,6 +110,16 @@ test('client snapshots cannot overwrite character state', async () => {
   const after = await request('qa_payload', '/state'); assert.equal(after.data.character.cash, c.cash);
 });
 
+test('commitment action without a living character returns a clear error', async () => {
+  const empty = await request('qa_empty_commitment', '/scenario/commitment', {});
+  assert.equal(empty.status, 400);
+  assert.equal(empty.data.error, 'Không có kiếp sống đang hoạt động.');
+  await seed('qa_dead_commitment', { is_deceased: true });
+  const dead = await request('qa_dead_commitment', '/scenario/commitment', {});
+  assert.equal(dead.status, 400);
+  assert.equal(dead.data.error, empty.data.error);
+});
+
 test('the post-scenario journey fulfills a promise, advances years, and opens school', async () => {
   await seed('qa_journey', { age: 0, action_points: 3 });
   const initial = await request('qa_journey', '/scenario/current');
