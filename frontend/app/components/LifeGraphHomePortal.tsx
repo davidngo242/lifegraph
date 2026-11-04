@@ -118,17 +118,17 @@ export default function LifeGraphHomePortal({
 
             <div className="space-y-1.5 relative z-10">
               <div className="flex items-center justify-center gap-2 flex-wrap">
-                <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
                   Đắc Đạo Niết Bàn Tịch Tịnh
                 </span>
-                <span className="text-xs font-mono font-bold text-emerald-400">
+                <span className="text-xs font-sans tabular-nums font-bold text-emerald-400">
                   +{nirvanaBanner.solace_karma || 150} Karma Vĩnh Cửu
                 </span>
               </div>
               <h3 className="text-lg md:text-xl font-bold text-white">
                 {nirvanaBanner.soul_title || "Đấng Giác Ngộ Tự Tại (Ascended Sovereign)"}
               </h3>
-              <p className="text-xs text-slate-300 font-serif italic max-w-md mx-auto leading-relaxed">
+              <p className="text-xs text-slate-300 font-sans italic max-w-md mx-auto leading-relaxed">
                 "{nirvanaBanner.message || "Linh hồn bạn đã buông bỏ bánh xe luân hồi, an trú cõi tịch tịnh muôn thu."}"
               </p>
             </div>
@@ -136,7 +136,7 @@ export default function LifeGraphHomePortal({
             <div className="pt-2 relative z-10">
               <button
                 onClick={onClearNirvanaBanner}
-                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-amber-500/20 active:scale-95"
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-amber-500/20 active:scale-95"
               >
                 Đã Hiểu & Lưu Danh Sử Sách
               </button>
@@ -160,21 +160,21 @@ export default function LifeGraphHomePortal({
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold">
+                  <span className="text-[12px] font-sans tabular-nums normal-case px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold">
                     LifeGraph 2.0 • Điện Thần Luân Hồi
                   </span>
-                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${dynastyTier.color}`}>
+                  <span className={`text-[12px] font-semibold px-2 py-0.5 rounded-full border ${dynastyTier.color}`}>
                     {dynastyTier.icon} {dynastyTier.title}
                   </span>
                 </div>
                 <h1 className="text-xl md:text-2xl font-extrabold text-white mt-0.5 tracking-tight">
-                  Đại Sảnh Vận Mệnh & Gia Phả Dòng Tộc
+                  Hành trình & gia phả
                 </h1>
               </div>
             </div>
 
-            <p className="text-xs md:text-sm text-slate-300 font-serif italic max-w-3xl leading-relaxed">
-              "Thân xác phàm trần qua đi nhưng công đức và huyết mạch đời đời bất diệt. Nơi đây khắc ghi từng kiếp sống của linh hồn bạn trong cõi nhân gian, tích lũy phước lành để khai phóng vận mệnh cho đời sau."
+            <p className="text-xs md:text-sm text-slate-300 font-sans italic max-w-3xl leading-relaxed">
+              Nhìn lại các thế hệ, tiếp nối di sản và chọn khởi đầu cho kiếp sống mới.
             </p>
           </div>
 
@@ -182,37 +182,37 @@ export default function LifeGraphHomePortal({
           <div className="pt-4 border-t border-slate-800/80">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 hover:border-slate-700 backdrop-blur-md transition">
-                <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Tổng Đời Lưu Truyền</div>
-                <div className="text-lg md:text-xl font-bold font-mono text-white mt-1">
+                <div className="text-[12px] text-slate-400 normal-case tracking-normal font-semibold">Số thế hệ</div>
+                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-white mt-1">
                   Đời Thứ {totalGenerations}
                 </div>
-                <div className="text-[10px] text-slate-500 mt-0.5">{lineage.length} tiền nhân đã lưu danh</div>
+                <div className="text-[12px] text-slate-500 mt-0.5">{lineage.length} tiền nhân đã lưu danh</div>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-950/60 border border-purple-500/30 hover:border-purple-500/50 backdrop-blur-md transition">
-                <div className="text-[10px] text-purple-300 uppercase tracking-wider font-semibold">Đắc Đạo Niết Bàn</div>
-                <div className="text-lg md:text-xl font-bold font-mono text-purple-300 mt-1">
+                <div className="text-[12px] text-purple-300 normal-case tracking-normal font-semibold">Đắc Đạo Niết Bàn</div>
+                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-purple-300 mt-1">
                   {nirvanaCount} Tiền Nhân
                 </div>
-                <div className="text-[10px] text-slate-500 mt-0.5">Thoát khỏi trầm luân</div>
+                <div className="text-[12px] text-slate-500 mt-0.5">Thoát khỏi trầm luân</div>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-950/60 border border-teal-500/30 hover:border-teal-500/50 backdrop-blur-md transition">
-                <div className="text-[10px] text-teal-300 uppercase tracking-wider font-semibold">Gia Sản Kỷ Lục</div>
-                <div className="text-lg md:text-xl font-bold font-mono text-teal-300 mt-1 truncate">
+                <div className="text-[12px] text-teal-300 normal-case tracking-normal font-semibold">Gia Sản Kỷ Lục</div>
+                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-teal-300 mt-1 truncate">
                   ${maxNetWorthEver.toLocaleString()}
                 </div>
-                <div className="text-[10px] text-slate-500 mt-0.5 truncate">
+                <div className="text-[12px] text-slate-500 mt-0.5 truncate">
                   {formatCurrency(maxNetWorthEver, "Việt Nam").secondaryVnd}
                 </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-950/60 border border-amber-500/30 hover:border-amber-500/50 backdrop-blur-md transition">
-                <div className="text-[10px] text-amber-300 uppercase tracking-wider font-semibold">Nghiệp Lực Vĩnh Cửu</div>
-                <div className="text-lg md:text-xl font-bold font-mono text-amber-300 mt-1">
+                <div className="text-[12px] text-amber-300 normal-case tracking-normal font-semibold">Nghiệp Lực Vĩnh Cửu</div>
+                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-amber-300 mt-1">
                   {eternalKarma} Karma
                 </div>
-                <div className="text-[10px] text-slate-500 mt-0.5">Phước đức vĩnh viễn</div>
+                <div className="text-[12px] text-slate-500 mt-0.5">Phước đức vĩnh viễn</div>
               </div>
             </div>
           </div>
@@ -230,10 +230,10 @@ export default function LifeGraphHomePortal({
             <div className="space-y-2 text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-                <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">
+                <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">
                   Đang Có Kiếp Sống Diễn Ra
                 </span>
-                <span className="text-xs font-mono font-bold text-amber-400">
+                <span className="text-xs font-sans tabular-nums font-bold text-amber-400">
                   Đời Thứ {character.generation || 1}
                 </span>
               </div>
@@ -248,7 +248,7 @@ export default function LifeGraphHomePortal({
             <div className="shrink-0 w-full md:w-auto flex flex-col sm:flex-row items-center gap-3">
               <button
                 onClick={onEnterGame}
-                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600 hover:from-emerald-400 hover:to-indigo-500 text-slate-950 font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition shadow-xl shadow-emerald-500/30 active:scale-95 whitespace-nowrap"
+                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600 hover:from-emerald-400 hover:to-indigo-500 text-slate-950 font-black text-xs md:text-sm normal-case tracking-normal flex items-center justify-center gap-2 transition shadow-xl shadow-emerald-500/30 active:scale-95 whitespace-nowrap"
               >
                 <Play className="w-4 h-4 fill-slate-950" />
                 <span>Tiếp Tục ({character.name}, {character.age ?? 0}t)</span>
@@ -257,7 +257,7 @@ export default function LifeGraphHomePortal({
 
               <button
                 onClick={onOpenRebirth}
-                className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-slate-900 hover:bg-purple-950/60 border border-purple-500/50 hover:border-purple-400 text-purple-300 hover:text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-purple-950/40 whitespace-nowrap"
+                className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-slate-900 hover:bg-purple-950/60 border border-purple-500/50 hover:border-purple-400 text-purple-300 hover:text-white font-bold text-xs normal-case tracking-normal flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-purple-950/40 whitespace-nowrap"
               >
                 <RotateCcw className="w-4 h-4 text-purple-400" />
                 <span>Bắt Đầu Kiếp Mới</span>
@@ -267,10 +267,10 @@ export default function LifeGraphHomePortal({
         ) : (
           <div className="relative z-10 flex flex-col items-center justify-center text-center space-y-5 py-2">
             <div className="flex items-center justify-center gap-2 flex-wrap">
-              <span className="text-[10px] font-mono uppercase px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold tracking-wide">
+              <span className="text-[12px] font-sans tabular-nums normal-case px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold tracking-wide">
                 Không Còn Kiếp Nào Đang Sống
               </span>
-              <span className="text-xs font-mono font-bold text-amber-400 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30">
+              <span className="text-xs font-sans tabular-nums font-bold text-amber-400 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30">
                 Sẵn Sàng Khởi Đầu Kiếp Thứ {totalGenerations + 1}
               </span>
             </div>
@@ -289,7 +289,7 @@ export default function LifeGraphHomePortal({
             <div className="flex flex-col items-center gap-2.5 w-full max-w-xl pt-1">
               <button
                 onClick={onOpenRebirth}
-                className="w-full px-6 sm:px-10 py-4 md:py-5 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-black text-sm md:text-base uppercase tracking-wider flex items-center justify-center gap-3 transition-all duration-300 shadow-2xl shadow-purple-600/40 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-95 border border-amber-300/30 group whitespace-nowrap"
+                className="w-full px-6 sm:px-10 py-4 md:py-5 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-black text-sm md:text-base normal-case tracking-normal flex items-center justify-center gap-3 transition-all duration-300 shadow-2xl shadow-purple-600/40 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-95 border border-amber-300/30 group whitespace-nowrap"
               >
                 <Sparkles className="w-5 h-5 text-amber-200 fill-amber-300 group-hover:rotate-12 transition shrink-0" />
                 <span>Bắt Đầu Kiếp Mới (Quay Profile)</span>
@@ -373,7 +373,7 @@ export default function LifeGraphHomePortal({
                 🪔
               </div>
               <h4 className="font-bold text-sm text-white">Khói Hương Tưởng Nhớ</h4>
-              <p className="text-xs text-amber-200 font-serif leading-relaxed">
+              <p className="text-xs text-amber-200 font-sans leading-relaxed">
                 {incenseMessage}
               </p>
               <button
@@ -426,10 +426,10 @@ export default function LifeGraphHomePortal({
                           <span className="text-base md:text-lg font-bold text-white">
                             {item.name}
                           </span>
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
+                          <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
                             ĐỜI THỨ {item.generation}
                           </span>
-                          <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${
+                          <span className={`text-[12px] font-medium px-2 py-0.5 rounded-full border ${
                             isNirvana
                               ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold'
                               : 'bg-slate-800 text-slate-300 border-slate-700'
@@ -458,11 +458,11 @@ export default function LifeGraphHomePortal({
 
                     {/* Right: Net Worth & Residual Blessings */}
                     <div className="flex md:flex-col items-end justify-between md:justify-start gap-0.5 shrink-0 text-right">
-                      <div className="text-[10px] text-slate-400 uppercase tracking-wider">Gia Sản Để Lại</div>
-                      <div className="text-sm md:text-base font-mono font-bold text-teal-300">
+                      <div className="text-[12px] text-slate-400 normal-case tracking-normal">Gia Sản Để Lại</div>
+                      <div className="text-sm md:text-base font-sans tabular-nums font-bold text-teal-300">
                         {formattedWorth.primary}
                       </div>
-                      <div className="text-[9px] font-mono text-slate-500">
+                      <div className="text-[12px] font-sans tabular-nums text-slate-500">
                         {formattedWorth.secondaryVnd}
                       </div>
                     </div>
@@ -470,7 +470,7 @@ export default function LifeGraphHomePortal({
 
                   {/* Ancestral Epitaph Quote (Di huấn khắc bia mộ) */}
                   {item.epitaph_quote && (
-                    <div className="mt-3 p-3 rounded-2xl bg-slate-950/80 border border-slate-800/70 text-xs text-slate-400 font-serif italic leading-relaxed tracking-wide shadow-inner">
+                    <div className="mt-3 p-3 rounded-2xl bg-slate-950/80 border border-slate-800/70 text-xs text-slate-400 font-sans italic leading-relaxed tracking-wide shadow-inner">
                       "{item.epitaph_quote}"
                     </div>
                   )}
@@ -482,7 +482,7 @@ export default function LifeGraphHomePortal({
                         <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                         <span>Ân đức gia trì: {item.blessing}</span>
                       </span>
-                      <span className="text-[10px] font-mono text-slate-500">
+                      <span className="text-[12px] font-sans tabular-nums text-slate-500">
                         {item.recorded_at ? new Date(item.recorded_at).toLocaleDateString('vi-VN') : ''}
                       </span>
                     </div>
@@ -496,3 +496,4 @@ export default function LifeGraphHomePortal({
     </div>
   );
 }
+

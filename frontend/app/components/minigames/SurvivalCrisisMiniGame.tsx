@@ -194,7 +194,7 @@ export default function SurvivalCrisisMiniGame({
             <div className="w-16 h-16 rounded-3xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-3xl mb-4 shadow-xl shadow-rose-500/20">
               🚨
             </div>
-            <div className="text-xs font-mono uppercase tracking-widest text-rose-400 font-bold mb-1">
+            <div className="text-xs font-sans tabular-nums normal-case tracking-wide text-rose-400 font-bold mb-1">
               Báo Động Sinh Tồn Thực Địa • {currentCity} ({nationality})
             </div>
             <h2 className="text-2xl font-black text-white tracking-tight mb-2">
@@ -207,20 +207,20 @@ export default function SurvivalCrisisMiniGame({
 
             <div className="grid grid-cols-2 gap-3 w-full max-w-md mb-6 text-left text-xs">
               <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800">
-                <div className="text-[10px] text-slate-400 uppercase font-bold">Thoát Nạn An Toàn</div>
+                <div className="text-[12px] text-slate-400 normal-case font-bold">Thoát Nạn An Toàn</div>
                 <div className="text-emerald-400 font-bold mt-0.5">Vượt 4 Trạm & Thể Lực ≥ 50%</div>
-                <div className="text-[10px] text-slate-400 mt-1">↳ +25 Karma, +20 Sinh Lực, cờ 'Chuyên Gia Sinh Tồn'</div>
+                <div className="text-[12px] text-slate-400 mt-1">↳ +25 Karma, +20 Sinh Lực, cờ 'Chuyên Gia Sinh Tồn'</div>
               </div>
               <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800">
-                <div className="text-[10px] text-slate-400 uppercase font-bold">Mắc Kẹt Nguy Hiểm</div>
+                <div className="text-[12px] text-slate-400 normal-case font-bold">Mắc Kẹt Nguy Hiểm</div>
                 <div className="text-rose-400 font-bold mt-0.5">Hết Giờ Hoặc Thể Lực Tụt 0%</div>
-                <div className="text-[10px] text-slate-400 mt-1">↳ -15 Sinh lực, mất mát tài sản tích trữ</div>
+                <div className="text-[12px] text-slate-400 mt-1">↳ -15 Sinh lực, mất mát tài sản tích trữ</div>
               </div>
             </div>
 
             <button
               onClick={() => setStage('playing')}
-              className="py-3.5 px-8 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-black text-xs uppercase tracking-wider transition shadow-lg shadow-rose-600/30 active:scale-95 flex items-center gap-2"
+              className="py-3.5 px-8 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-black text-xs normal-case tracking-normal transition shadow-lg shadow-rose-600/30 active:scale-95 flex items-center gap-2"
             >
               <Play className="w-4 h-4 fill-current" />
               <span>Bắt Đầu Chiến Dịch Sơ Tán (15s)</span>
@@ -234,18 +234,18 @@ export default function SurvivalCrisisMiniGame({
             {/* Top Status Bar: Timer & Vitality */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-rose-400">
+                <div className="flex items-center gap-1.5 text-xs font-sans tabular-nums font-bold text-rose-400">
                   <Heart className="w-4 h-4 text-rose-500 fill-current animate-pulse" />
                   <span>Thể Lực: {vitalityLeft}%</span>
                 </div>
                 <span className="text-slate-600">|</span>
-                <span className="text-[11px] text-slate-400">
+                <span className="text-[12px] text-slate-400">
                   📍 {currentCity}
                 </span>
               </div>
 
               {/* Big Countdown Badge */}
-              <div className={`px-3 py-1 rounded-xl font-mono font-black text-xs border flex items-center gap-1.5 ${
+              <div className={`px-3 py-1 rounded-xl font-sans tabular-nums font-black text-xs border flex items-center gap-1.5 ${
                 timeLeft <= 5
                   ? 'bg-rose-500/20 text-rose-300 border-rose-500/50 animate-bounce'
                   : 'bg-slate-900 text-amber-300 border-slate-700'
@@ -260,7 +260,7 @@ export default function SurvivalCrisisMiniGame({
               {checkpoints.map((cp, idx) => (
                 <div
                   key={cp.id}
-                  className={`p-2 rounded-xl text-center border text-[10px] transition ${
+                  className={`p-2 rounded-xl text-center border text-[12px] transition ${
                     idx === currentStep
                       ? 'bg-rose-500/20 border-rose-500 text-rose-200 font-bold shadow-md shadow-rose-950'
                       : idx < currentStep
@@ -282,7 +282,7 @@ export default function SurvivalCrisisMiniGame({
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
                   <h3 className="text-sm font-bold text-white">{activeCheckpoint.name}</h3>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                  <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
                     Mức độ: {activeCheckpoint.dangerLevel}
                   </span>
                 </div>
@@ -302,7 +302,7 @@ export default function SurvivalCrisisMiniGame({
                   <ShieldCheck className="w-4 h-4" />
                   <span>Di Chuyển Thận Trọng</span>
                 </div>
-                <div className="text-[10px] text-slate-400">
+                <div className="text-[12px] text-slate-400">
                   Ít mất máu (-5~8 HP), an toàn cho người thân nhưng tốn thời gian.
                 </div>
               </button>
@@ -315,7 +315,7 @@ export default function SurvivalCrisisMiniGame({
                   <Flame className="w-4 h-4" />
                   <span>Bứt Tốc Vượt Rào</span>
                 </div>
-                <div className="text-[10px] text-rose-200">
+                <div className="text-[12px] text-rose-200">
                   Tiến thẳng trạm kế ngay lập tức nhưng rủi ro va quẹt (-10~20 HP).
                 </div>
               </button>
@@ -336,7 +336,7 @@ export default function SurvivalCrisisMiniGame({
               {finalStatus === 'success' ? '🛡️' : finalStatus === 'fair' ? '🏃' : '💥'}
             </div>
 
-            <div className="text-xs font-mono uppercase tracking-widest font-bold mb-1">
+            <div className="text-xs font-sans tabular-nums normal-case tracking-wide font-bold mb-1">
               {finalStatus === 'success' ? (
                 <span className="text-emerald-400">Sinh Tồn Oanh Liệt</span>
               ) : finalStatus === 'fair' ? (
@@ -354,9 +354,9 @@ export default function SurvivalCrisisMiniGame({
             </p>
 
             <div className="w-full max-w-md p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-left text-xs space-y-1.5 mb-6">
-              <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Nhật Ký Đường Chạy:</div>
+              <div className="text-[12px] normal-case font-bold text-slate-400 tracking-normal mb-1">Nhật Ký Đường Chạy:</div>
               {logEvents.map((item, idx) => (
-                <div key={idx} className="text-slate-300 text-[11px] font-mono">
+                <div key={idx} className="text-slate-300 text-[12px] font-sans tabular-nums">
                   • {item}
                 </div>
               ))}
@@ -364,7 +364,7 @@ export default function SurvivalCrisisMiniGame({
 
             <button
               onClick={handleClaim}
-              className="py-3.5 px-8 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-black text-xs uppercase tracking-wider transition shadow-lg shadow-rose-600/30 active:scale-95 flex items-center gap-2"
+              className="py-3.5 px-8 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-black text-xs normal-case tracking-normal transition shadow-lg shadow-rose-600/30 active:scale-95 flex items-center gap-2"
             >
               <span>Ghi Nhận Bản Lĩnh Sống</span>
               <ArrowRight className="w-4 h-4" />
@@ -375,3 +375,4 @@ export default function SurvivalCrisisMiniGame({
     </div>
   );
 }
+

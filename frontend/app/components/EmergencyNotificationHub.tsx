@@ -75,7 +75,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
               <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-rose-500 animate-ping" />
             )}
           </div>
-          <span className="font-sans text-[11px] font-bold">
+          <span className="font-sans text-[12px] font-bold">
             {criticalCount > 0
               ? `Báo Động (${totalCount})`
               : totalCount > 0
@@ -116,7 +116,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
                       ? 'Trung Tâm Thông Báo Biến Cố'
                       : 'Trạng Thái Bình Yên'}
                   </h3>
-                  <p className="text-[11px] text-slate-400">
+                  <p className="text-[12px] text-slate-400">
                     {totalCount > 0 ? `Có ${totalCount} việc cần bạn lưu tâm xử lý` : 'Mọi chỉ số đều trong tầm kiểm soát'}
                   </p>
                 </div>
@@ -136,7 +136,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
                 <div className="p-8 rounded-2xl bg-slate-900/40 border border-slate-800 text-center space-y-2">
                   <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
                   <h4 className="font-bold text-sm text-slate-200">Không có biến cố nào</h4>
-                  <p className="text-xs text-slate-400 font-serif leading-relaxed">
+                  <p className="text-xs text-slate-400 font-sans leading-relaxed">
                     Hiện tại nhân vật không gặp nguy cơ nợ nần, kiệt sức hay hiểm họa đe dọa sinh mạng. Bạn có thể an tâm tiếp tục hành trình cuộc đời.
                   </p>
                 </div>
@@ -170,20 +170,20 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
 
                         <button
                           onClick={() => onDismiss(alert.id)}
-                          className="px-2 py-0.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-300 text-[10px] font-semibold transition"
+                          className="px-2 py-0.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-300 text-[12px] font-semibold transition"
                         >
                           Đã hiểu
                         </button>
                       </div>
 
-                      <p className="text-xs text-slate-300 leading-relaxed font-serif">
+                      <p className="text-xs text-slate-300 leading-relaxed font-sans">
                         {alert.message}
                       </p>
 
                       {alert.actionHint && (
-                        <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-300 flex items-center gap-1.5">
+                        <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[12px] text-slate-300 flex items-center gap-1.5">
                           <span className="text-amber-300 font-bold shrink-0">💡 Gợi ý:</span>
-                          <span className="font-serif">{alert.actionHint}</span>
+                          <span className="font-sans">{alert.actionHint}</span>
                         </div>
                       )}
                     </div>
@@ -207,7 +207,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
 
               <button
                 onClick={() => setIsOpen(false)}
-                className="px-5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-md shadow-indigo-600/30 active:scale-95"
+                className="px-5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-md shadow-indigo-600/30 active:scale-95"
               >
                 Đóng Thông Báo
               </button>
@@ -218,3 +218,4 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
     </>
   );
 }
+

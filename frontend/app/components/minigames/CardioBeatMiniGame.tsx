@@ -163,7 +163,7 @@ export default function CardioBeatMiniGame({
             </div>
 
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/30">
+              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/30">
                 Sức Khỏe Tuổi Xế Chiều (49–68 Tuổi)
               </span>
             </div>
@@ -175,15 +175,15 @@ export default function CardioBeatMiniGame({
 
             {/* How to play card */}
             <div className="w-full bg-slate-950/80 border border-slate-800 rounded-2xl p-4 mb-4 text-left space-y-2.5 text-xs">
-              <div className="font-bold text-rose-400 flex items-center gap-1.5 uppercase text-[11px] tracking-wider">
+              <div className="font-bold text-rose-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
                 <Sparkles className="w-4 h-4" /> Hướng Dẫn & Thao Tác:
               </div>
               <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">
-                <span className="text-[11px] text-slate-300">
-                  Quan sát đường quét ECG màu đỏ chạy từ trái sang phải. Khi đỉnh sóng chạm vào <strong>Vạch Xanh Chuẩn (Target Zone)</strong>, hãy nhấn nút hoặc bấm phím <strong className="text-amber-300 font-mono">[Space]</strong> để kích nhịp tim hoàn hảo!
+                <span className="text-[12px] text-slate-300">
+                  Quan sát đường quét ECG màu đỏ chạy từ trái sang phải. Khi đỉnh sóng chạm vào <strong>Vạch Xanh Chuẩn (Target Zone)</strong>, hãy nhấn nút hoặc bấm phím <strong className="text-amber-300 font-sans tabular-nums">[Space]</strong> để kích nhịp tim hoàn hảo!
                 </span>
               </div>
-              <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-[11px] text-slate-400">
+              <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-[12px] text-slate-400">
                 🩺 <strong>Mục tiêu:</strong> Có tổng cộng 10 nhịp đập. Đạt từ 7 nhịp hoàn hảo trở lên để hạ áp về ngưỡng vàng 120/80 mmHg.
               </div>
             </div>
@@ -192,11 +192,11 @@ export default function CardioBeatMiniGame({
             <div className="w-full bg-slate-950/50 border border-slate-800/80 rounded-2xl p-3 mb-5 text-xs text-left grid grid-cols-2 gap-3">
               <div>
                 <span className="text-emerald-400 font-bold block mb-0.5">🌟 Nhịp Đập Thép (≥7/10):</span>
-                <span className="text-[11px] text-slate-400">+10 Max Vitality, +15 Sinh lực, Cờ &quot;Trái Tim Sắt Thép&quot;.</span>
+                <span className="text-[12px] text-slate-400">+10 Max Vitality, +15 Sinh lực, Cờ &quot;Trái Tim Sắt Thép&quot;.</span>
               </div>
               <div>
                 <span className="text-rose-400 font-bold block mb-0.5">⚠️ Rối Loạn Nhịp Tim:</span>
-                <span className="text-[11px] text-slate-400">-12 Sinh lực, cấp cứu viện phí -$2.000.</span>
+                <span className="text-[12px] text-slate-400">-12 Sinh lực, cấp cứu viện phí -$2.000.</span>
               </div>
             </div>
 
@@ -212,7 +212,7 @@ export default function CardioBeatMiniGame({
                 setBloodPressure({ sys: 125, dia: 82 });
                 setStage('playing');
               }}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-rose-500/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-rose-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <Play className="w-4 h-4 fill-current" />
               <span>Bắt Đầu Đo Điện Tâm Đồ (10 Nhịp)</span>
@@ -230,7 +230,7 @@ export default function CardioBeatMiniGame({
               <span className="px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-300 font-medium border border-rose-500/20 flex items-center gap-1.5">
                 <Activity className="w-3.5 h-3.5" /> Máy Theo Dõi Điện Tâm Đồ (ECG)
               </span>
-              <div className="flex items-center gap-2 font-mono">
+              <div className="flex items-center gap-2 font-sans tabular-nums">
                 <span className="text-slate-400">Nhịp tim:</span>
                 <span className="px-2 py-0.5 rounded font-bold bg-amber-500/20 text-amber-300">
                   {pulseCount}/10
@@ -242,8 +242,8 @@ export default function CardioBeatMiniGame({
             <div className="w-full grid grid-cols-2 gap-3 mb-4">
               <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center justify-between">
                 <div>
-                  <div className="text-[10px] text-slate-400">HUYẾT ÁP (BP)</div>
-                  <div className={`text-xl font-mono font-bold ${
+                  <div className="text-[12px] text-slate-400">HUYẾT ÁP (BP)</div>
+                  <div className={`text-xl font-sans tabular-nums font-bold ${
                     bloodPressure.sys > 140 ? 'text-rose-400 animate-pulse' : 'text-emerald-400'
                   }`}>
                     {bloodPressure.sys}/{bloodPressure.dia} <span className="text-xs text-slate-500 font-normal">mmHg</span>
@@ -254,8 +254,8 @@ export default function CardioBeatMiniGame({
 
               <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center justify-between">
                 <div>
-                  <div className="text-[10px] text-slate-400">NHỊP BẮT CHUẨN</div>
-                  <div className="text-xl font-mono font-bold text-amber-300">
+                  <div className="text-[12px] text-slate-400">NHỊP BẮT CHUẨN</div>
+                  <div className="text-xl font-sans tabular-nums font-bold text-amber-300">
                     {targetHits} <span className="text-xs text-slate-500 font-normal">/ 10 nhịp</span>
                   </div>
                 </div>
@@ -273,7 +273,7 @@ export default function CardioBeatMiniGame({
                 className="absolute top-0 bottom-0 border-x-2 border-dashed border-emerald-400 bg-emerald-500/15 pointer-events-none z-0"
                 style={{ left: '71%', width: '12%' }}
               >
-                <span className="absolute top-1 left-1 text-[8px] font-mono text-emerald-300 font-bold">
+                <span className="absolute top-1 left-1 text-[12px] font-sans tabular-nums text-emerald-300 font-bold">
                   TARGET
                 </span>
               </div>
@@ -300,7 +300,7 @@ export default function CardioBeatMiniGame({
             {/* Beat Action Trigger Button */}
             <button
               onClick={triggerBeat}
-              className={`w-full py-4 rounded-2xl font-bold text-sm uppercase tracking-wider transition shadow-xl active:scale-95 flex items-center justify-center gap-2 ${
+              className={`w-full py-4 rounded-2xl font-bold text-sm normal-case tracking-normal transition shadow-xl active:scale-95 flex items-center justify-center gap-2 ${
                 isBeating
                   ? 'bg-rose-500 text-white shadow-rose-500/40 scale-105'
                   : 'bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white shadow-rose-600/30'
@@ -308,7 +308,7 @@ export default function CardioBeatMiniGame({
             >
               <Heart className={`w-5 h-5 ${isBeating ? 'animate-ping' : ''}`} />
               <span>BẮT NHỊP TIM (PULSE BEAT)</span>
-              <span className="text-[10px] font-mono bg-slate-950/30 px-2 py-0.5 rounded">[Space]</span>
+              <span className="text-[12px] font-sans tabular-nums bg-slate-950/30 px-2 py-0.5 rounded">[Space]</span>
             </button>
           </div>
         )}
@@ -338,7 +338,7 @@ export default function CardioBeatMiniGame({
                 : "Cơn Co Thắt Cấp Cứu"}
             </h3>
 
-            <div className="font-mono text-sm text-slate-300 mb-3">
+            <div className="font-sans tabular-nums text-sm text-slate-300 mb-3">
               Chỉ số huyết áp: <strong className="text-white font-bold">{bloodPressure.sys}/{bloodPressure.dia} mmHg</strong> (Bắt trúng: {targetHits}/10)
             </div>
 
@@ -352,7 +352,7 @@ export default function CardioBeatMiniGame({
 
             <button
               onClick={handleReturnToLife}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-rose-500/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-rose-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <span>Tiếp Tục Cuộc Đời</span>
               <ArrowRight className="w-4 h-4" />
@@ -363,3 +363,4 @@ export default function CardioBeatMiniGame({
     </div>
   );
 }
+

@@ -36,19 +36,19 @@ export default function AspirationProgressBar({ aspiration }: AspirationProgress
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/25 font-bold tracking-wider">
+              <span className="text-[12px] font-sans tabular-nums normal-case px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/25 font-bold tracking-normal">
                 Khát Vọng Đời Người
               </span>
               <h4 className="text-xs md:text-sm font-bold text-white tracking-wide">
                 {aspiration.title}
               </h4>
               {isCompleted && (
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 font-bold animate-bounce">
+                <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 font-bold animate-bounce">
                   <CheckCircle2 className="w-3 h-3" /> Đạt Thành Tựu!
                 </span>
               )}
             </div>
-            <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">
+            <p className="text-[12px] text-slate-400 mt-0.5 line-clamp-1">
               {aspiration.target_summary}
             </p>
           </div>
@@ -57,8 +57,8 @@ export default function AspirationProgressBar({ aspiration }: AspirationProgress
         {/* Right: Progress Meter */}
         <div className="flex flex-col sm:items-end gap-1 shrink-0 min-w-[180px]">
           <div className="flex items-center justify-between sm:justify-end gap-2 text-xs w-full">
-            <span className="text-slate-400 text-[11px]">Tiến độ cuộc đời:</span>
-            <span className={`font-mono font-bold ${isCompleted ? 'text-emerald-400' : 'text-purple-300'}`}>
+            <span className="text-slate-400 text-[12px]">Tiến độ cuộc đời:</span>
+            <span className={`font-sans tabular-nums font-bold ${isCompleted ? 'text-emerald-400' : 'text-purple-300'}`}>
               {aspiration.progress}%
             </span>
           </div>
@@ -75,7 +75,7 @@ export default function AspirationProgressBar({ aspiration }: AspirationProgress
           </div>
 
           {aspiration.milestones_achieved && aspiration.milestones_achieved.length > 0 && (
-            <span className="text-[10px] text-emerald-400/90 font-medium truncate max-w-xs">
+            <span className="text-[12px] text-emerald-400/90 font-medium truncate max-w-xs">
               ✓ {aspiration.milestones_achieved[aspiration.milestones_achieved.length - 1]}
             </span>
           )}
@@ -84,3 +84,4 @@ export default function AspirationProgressBar({ aspiration }: AspirationProgress
     </div>
   );
 }
+

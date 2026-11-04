@@ -196,11 +196,11 @@ export default function ActionPointHub({
       {/* Trilemma Focus Banner */}
       {isTrilemmaActive && (
         <div className="mb-2.5 p-2 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs flex items-center justify-between gap-2 shadow-sm animate-pulse">
-          <span className="flex items-center gap-1.5 font-bold text-[11px]">
+          <span className="flex items-center gap-1.5 font-bold text-[12px]">
             <span>⚖️ BƯỚC NGOẶT ĐỊNH MỆNH:</span>
             <span className="font-normal text-amber-200">Hãy đưa ra quyết định ở Tam Giác Vận Mệnh bên dưới.</span>
           </span>
-          <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-950 text-amber-400 border border-amber-500/30 font-bold shrink-0">
+          <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-950 text-amber-400 border border-amber-500/30 font-bold shrink-0">
             ƯU TIÊN
           </span>
         </div>
@@ -230,10 +230,10 @@ export default function ActionPointHub({
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold text-white tracking-wide uppercase font-sans">
+              <span className="text-xs font-bold text-white tracking-wide normal-case font-sans">
                 Hoạt Động
               </span>
-              <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-slate-800 text-amber-300 border border-slate-700">
+              <span className="text-[12px] font-sans tabular-nums px-2 py-0.2 rounded-full bg-slate-800 text-amber-300 border border-slate-700">
                 {characterAge <= 5
                   ? "0–5 tuổi · Ấu thơ"
                   : characterAge <= 17
@@ -243,8 +243,8 @@ export default function ActionPointHub({
                   : "18+ tuổi · Lập nghiệp"}
               </span>
             </div>
-            <Tooltip content={<div className="text-[10px]">Điểm AP chưa dùng khi hết năm sẽ tự động chuyển hóa thành dưỡng sinh nhẹ (+hồi phục thể lực, giảm bớt căng thẳng).</div>}>
-              <span className="text-[10px] text-slate-400 hover:text-slate-300 cursor-help flex items-center gap-1 mt-0.5">
+            <Tooltip content={<div className="text-[12px]">Điểm AP chưa dùng khi hết năm sẽ tự động chuyển hóa thành dưỡng sinh nhẹ (+hồi phục thể lực, giảm bớt căng thẳng).</div>}>
+              <span className="text-[12px] text-slate-400 hover:text-slate-300 cursor-help flex items-center gap-1 mt-0.5">
                 <Info className="w-3 h-3 text-amber-400/80" /> AP dư tự chuyển hóa dưỡng sinh
               </span>
             </Tooltip>
@@ -252,7 +252,7 @@ export default function ActionPointHub({
         </div>
 
         {/* AP Pips Counter with Tooltip */}
-        <Tooltip content={<div className="text-[10px]">Bạn có <strong>{actionPoints}/{totalAp} AP</strong> khả dụng trong năm. Các hoạt động tốn AP giúp phát triển tài chính, sức khỏe, học vấn và mở rộng mạng lưới quan hệ.</div>}>
+        <Tooltip content={<div className="text-[12px]">Bạn có <strong>{actionPoints}/{totalAp} AP</strong> khả dụng trong năm. Các hoạt động tốn AP giúp phát triển tài chính, sức khỏe, học vấn và mở rộng mạng lưới quan hệ.</div>}>
           <div className="flex items-center gap-1.5 bg-slate-950/80 px-2.5 py-1.5 rounded-2xl border border-slate-800 cursor-help">
             <div className="flex items-center gap-1">
               {Array.from({ length: totalAp }).map((_, idx) => {
@@ -262,7 +262,7 @@ export default function ActionPointHub({
 
                 if (isLocked) {
                   return (
-                    <span key={pt} className="w-3.5 h-3.5 rounded-full border border-rose-500/50 bg-rose-950/60 text-[8px] text-rose-300 font-bold flex items-center justify-center">
+                    <span key={pt} className="w-3.5 h-3.5 rounded-full border border-rose-500/50 bg-rose-950/60 text-[12px] text-rose-300 font-bold flex items-center justify-center">
                       🔒
                     </span>
                   );
@@ -280,7 +280,7 @@ export default function ActionPointHub({
                 );
               })}
             </div>
-            <span className="text-xs font-mono font-bold text-amber-400 ml-1">
+            <span className="text-xs font-sans tabular-nums font-bold text-amber-400 ml-1">
               {actionPoints}/{totalAp} AP
             </span>
           </div>
@@ -303,42 +303,42 @@ export default function ActionPointHub({
                 <div>
                   <h4 className="text-xs font-bold text-white flex items-center gap-2">
                     Mái Ấm Gia Đình Nuôi Dưỡng (0–5 Tuổi)
-                    <span className="text-[9px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    <span className="text-[12px] font-sans tabular-nums font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                       Tự Động Nuôi Lớn
                     </span>
                   </h4>
-                  <p className="text-[10px] text-slate-400 mt-0.5">
+                  <p className="text-[12px] text-slate-400 mt-0.5">
                     Dưới 6 tuổi, bé được phụ mẫu toàn tâm chăm bẵm, thể chất & trí tuệ tự nhiên phát triển không cần tiêu hao sức lực tự thân.
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded-xl border border-slate-800">
+              <div className="flex items-center gap-1.5 text-[12px] font-sans tabular-nums text-slate-400 bg-slate-900 px-2.5 py-1 rounded-xl border border-slate-800">
                 <Shield className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Bảo bọc 100% chi phí</span>
               </div>
             </div>
 
             {/* Development status pills */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3 text-[11px]">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3 text-[12px]">
               <div className="p-2 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-2">
                 <span className="text-base">🍼</span>
                 <div>
-                  <div className="text-white font-semibold text-[10px]">Dinh Dưỡng Bú Mẹ</div>
-                  <div className="text-[9px] text-emerald-400">+15 Thể chất tự động / năm</div>
+                  <div className="text-white font-semibold text-[12px]">Dinh Dưỡng Bú Mẹ</div>
+                  <div className="text-[12px] text-emerald-400">+15 Thể chất tự động / năm</div>
                 </div>
               </div>
               <div className="p-2 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-2">
                 <span className="text-base">🧸</span>
                 <div>
-                  <div className="text-white font-semibold text-[10px]">Tập Đi & Khám Phá</div>
-                  <div className="text-[9px] text-sky-400">Phát triển nhận thức tự nhiên</div>
+                  <div className="text-white font-semibold text-[12px]">Tập Đi & Khám Phá</div>
+                  <div className="text-[12px] text-sky-400">Phát triển nhận thức tự nhiên</div>
                 </div>
               </div>
               <div className="p-2 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-2">
                 <span className="text-base">🏡</span>
                 <div>
-                  <div className="text-white font-semibold text-[10px]">Vòng Tay Phụ Mẫu</div>
-                  <div className="text-[9px] text-pink-400">Bình an ấm êm vô lo</div>
+                  <div className="text-white font-semibold text-[12px]">Vòng Tay Phụ Mẫu</div>
+                  <div className="text-[12px] text-pink-400">Bình an ấm êm vô lo</div>
                 </div>
               </div>
             </div>
@@ -353,10 +353,10 @@ export default function ActionPointHub({
                         <span className="text-base">🎂</span>
                         <div>
                           <span className="text-xs font-bold text-amber-300">Lễ Thôi Nôi (1 Tuổi): Mâm Cỗ Bốc Đồ Vật Đầu Đời</span>
-                          <p className="text-[10px] text-slate-300">Tục lệ cổ truyền định hướng mầm non tương lai (chọn 1 vật phẩm may mắn):</p>
+                          <p className="text-[12px] text-slate-300">Tục lệ cổ truyền định hướng mầm non tương lai (chọn 1 vật phẩm may mắn):</p>
                         </div>
                       </div>
-                      <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold animate-pulse">
+                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold animate-pulse">
                         Cột mốc 1 lần duy nhất
                       </span>
                     </div>
@@ -370,7 +370,7 @@ export default function ActionPointHub({
                         <div className="text-xs font-bold text-white group-hover:text-sky-300 flex items-center gap-1.5">
                           <span>📚</span> Sách Bút & Thước Kẻ
                         </div>
-                        <div className="text-[9.5px] text-sky-400 mt-1 font-mono">+15 Karma Tri Thức & Công Danh</div>
+                        <div className="text-[12px] text-sky-400 mt-1 font-sans tabular-nums">+15 Karma Tri Thức & Công Danh</div>
                       </button>
 
                       <button
@@ -381,7 +381,7 @@ export default function ActionPointHub({
                         <div className="text-xs font-bold text-white group-hover:text-amber-300 flex items-center gap-1.5">
                           <span>🪙</span> Tiền Vàng & Bàn Tính
                         </div>
-                        <div className="text-[9.5px] text-amber-400 mt-1 font-mono">+$100 Tiền mừng & Trực giác kinh doanh</div>
+                        <div className="text-[12px] text-amber-400 mt-1 font-sans tabular-nums">+$100 Tiền mừng & Trực giác kinh doanh</div>
                       </button>
 
                       <button
@@ -392,12 +392,12 @@ export default function ActionPointHub({
                         <div className="text-xs font-bold text-white group-hover:text-emerald-300 flex items-center gap-1.5">
                           <span>⚽</span> Quả Bóng & Đồ Chơi
                         </div>
-                        <div className="text-[9.5px] text-emerald-400 mt-1 font-mono">+15 Thể chất, +3 Max HP</div>
+                        <div className="text-[12px] text-emerald-400 mt-1 font-sans tabular-nums">+15 Thể chất, +3 Max HP</div>
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <div className="p-2.5 rounded-xl bg-slate-900/70 border border-amber-500/40 text-[11px] text-amber-300 flex items-center gap-2">
+                  <div className="p-2.5 rounded-xl bg-slate-900/70 border border-amber-500/40 text-[12px] text-amber-300 flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-amber-400" />
                     <span>
                       {hiddenFlags.includes('thoi_noi_hoc_thuat') ? 'Lễ Thôi Nôi: Đã bốc Sách Bút & Thước Kẻ (Tố chất học vấn sáng lạn)' :
@@ -438,7 +438,7 @@ export default function ActionPointHub({
                 )}
               </div>
 
-              <div className="text-[10px] text-slate-400 italic">
+              <div className="text-[12px] text-slate-400 italic">
                 * Không cần click lẻ tẻ từng hành động em bé
               </div>
             </div>
@@ -454,11 +454,11 @@ export default function ActionPointHub({
               <div className="flex items-center gap-1.5">
                 <Zap className="w-3.5 h-3.5 text-amber-400" />
                 <span className="text-xs font-bold text-white">Chế Độ Trọng Tâm Năm (1-Click Strategy)</span>
-                <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                   3 AP
                 </span>
               </div>
-              <span className="text-[10px] text-slate-400 hidden sm:inline">Dùng 3 AP định hình cả năm, chừa 1 AP minigame / quan hệ</span>
+              <span className="text-[12px] text-slate-400 hidden sm:inline">Dùng 3 AP định hình cả năm, chừa 1 AP minigame / quan hệ</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -471,9 +471,9 @@ export default function ActionPointHub({
                   <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
                     <span>💼</span> {characterAge >= 18 ? 'Cày Cuốc Hết Mình' : characterAge >= 13 ? 'Làm Thêm & Tự Lập' : 'Vận Động Năng Lượng'}
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
                 </div>
-                <div className="text-[9.5px] text-slate-400 group-hover:text-amber-200 truncate">
+                <div className="text-[12px] text-slate-400 group-hover:text-amber-200 truncate">
                   {characterAge >= 18 ? '+$3,500-$7,000 Thặng dư' : characterAge >= 13 ? '+$250 tiền túi tuổi teen' : '+15 Thể chất, sảng khoái'}
                 </div>
               </button>
@@ -487,9 +487,9 @@ export default function ActionPointHub({
                   <span className="text-xs font-bold text-sky-300 flex items-center gap-1.5">
                     <span>📖</span> Đèn Sách Tri Thức
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
                 </div>
-                <div className="text-[9.5px] text-slate-400 group-hover:text-sky-200 truncate">
+                <div className="text-[12px] text-slate-400 group-hover:text-sky-200 truncate">
                   +22 Karma học thuật, đỗ đạt
                 </div>
               </button>
@@ -503,9 +503,9 @@ export default function ActionPointHub({
                   <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
                     <span>🌿</span> Dưỡng Sinh & Chữa Lành
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
                 </div>
-                <div className="text-[9.5px] text-slate-400 group-hover:text-emerald-200 truncate">
+                <div className="text-[12px] text-slate-400 group-hover:text-emerald-200 truncate">
                   +25 Sinh lực, xóa sạch 45 Stress
                 </div>
               </button>
@@ -519,7 +519,7 @@ export default function ActionPointHub({
         {characterAge >= 6 && characterAge <= 12 && (
           <>
             {/* Tile 1: Học tập ở trường */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Học Bài Ở Trường:</strong> Chăm chỉ nghe giảng, giành danh hiệu cháu ngoan trò giỏi (+12 Karma, cờ Chăm ngoan).</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Học Bài Ở Trường:</strong> Chăm chỉ nghe giảng, giành danh hiệu cháu ngoan trò giỏi (+12 Karma, cờ Chăm ngoan).</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1}
                 onClick={() => handleChildActionTrigger('school_study', 0)}
@@ -527,15 +527,15 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs">🎒</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
-                <div className="font-bold text-white group-hover:text-sky-300 text-[11px] truncate">Học Bài Ở Trường</div>
-                <div className="text-[9px] text-sky-400 font-mono truncate mt-0.5">+12 Karma học vấn</div>
+                <div className="font-bold text-white group-hover:text-sky-300 text-[12px] truncate">Học Bài Ở Trường</div>
+                <div className="text-[12px] text-sky-400 font-sans tabular-nums truncate mt-0.5">+12 Karma học vấn</div>
               </button>
             </Tooltip>
 
             {/* Tile 2: Làm việc nhà phụ cha mẹ */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Làm Việc Nhà Phụ Mẹ:</strong> Quét nhà rửa bát, phụ giúp gia đình và được cha mẹ thưởng tiền tiêu vặt (+ $25 USD).</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Làm Việc Nhà Phụ Mẹ:</strong> Quét nhà rửa bát, phụ giúp gia đình và được cha mẹ thưởng tiền tiêu vặt (+ $25 USD).</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1}
                 onClick={() => handleChildActionTrigger('help_chores', 0)}
@@ -543,15 +543,15 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs">🧹</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
-                <div className="font-bold text-white group-hover:text-emerald-300 text-[11px] truncate">Việc Nhà Phụ Mẹ</div>
-                <div className="text-[9px] text-emerald-400 font-mono truncate mt-0.5">+$25 tiền tiêu vặt</div>
+                <div className="font-bold text-white group-hover:text-emerald-300 text-[12px] truncate">Việc Nhà Phụ Mẹ</div>
+                <div className="text-[12px] text-emerald-400 font-sans tabular-nums truncate mt-0.5">+$25 tiền tiêu vặt</div>
               </button>
             </Tooltip>
 
             {/* Tile 3: Chơi đá bóng, đuổi bắt cùng bạn */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Đá Bóng Cùng Bạn:</strong> Rèn luyện thể lực sân trường, xả bớt áp lực bài vở (+10 Thể chất, -20 Stress).</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Đá Bóng Cùng Bạn:</strong> Rèn luyện thể lực sân trường, xả bớt áp lực bài vở (+10 Thể chất, -20 Stress).</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1}
                 onClick={() => handleChildActionTrigger('play_friends', 0)}
@@ -559,16 +559,16 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs">⚽</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
-                <div className="font-bold text-white group-hover:text-teal-300 text-[11px] truncate">Đá Bóng Cùng Bạn</div>
-                <div className="text-[9px] text-teal-400 font-mono truncate mt-0.5">+10 HP · -20 Stress</div>
+                <div className="font-bold text-white group-hover:text-teal-300 text-[12px] truncate">Đá Bóng Cùng Bạn</div>
+                <div className="text-[12px] text-teal-400 font-sans tabular-nums truncate mt-0.5">+10 HP · -20 Stress</div>
               </button>
             </Tooltip>
 
             {/* Tile 4: Hành động năng khiếu bẩm sinh */}
             {hasTradeTrait ? (
-              <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Buôn Đồ Chơi Nhí:</strong> Đổi truyện tranh, bán đồ chơi cũ cho bạn cùng lớp (+ $60 USD).</div>}>
+              <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Buôn Đồ Chơi Nhí:</strong> Đổi truyện tranh, bán đồ chơi cũ cho bạn cùng lớp (+ $60 USD).</div>}>
                 <button
                   disabled={isLoading || activeButton !== null || actionPoints < 1}
                   onClick={() => handleChildActionTrigger('prodigy_trade', 0)}
@@ -576,14 +576,14 @@ export default function ActionPointHub({
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs">🪙</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500 text-slate-950">Mã Gen</span>
+                    <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500 text-slate-950">Mã Gen</span>
                   </div>
-                  <div className="font-bold text-amber-300 text-[11px] truncate">Buôn Đồ Chơi Nhí</div>
-                  <div className="text-[9px] text-amber-400/90 font-mono truncate mt-0.5">+$60 vốn túi</div>
+                  <div className="font-bold text-amber-300 text-[12px] truncate">Buôn Đồ Chơi Nhí</div>
+                  <div className="text-[12px] text-amber-400/90 font-sans tabular-nums truncate mt-0.5">+$60 vốn túi</div>
                 </button>
               </Tooltip>
             ) : hasMathTrait ? (
-              <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Giải Cờ Thế & Toán:</strong> Đạt giải thi toán tiểu học, nhận học bổng sớm (+18 Karma).</div>}>
+              <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Giải Cờ Thế & Toán:</strong> Đạt giải thi toán tiểu học, nhận học bổng sớm (+18 Karma).</div>}>
                 <button
                   disabled={isLoading || activeButton !== null || actionPoints < 1}
                   onClick={() => handleChildActionTrigger('prodigy_math', 0)}
@@ -591,14 +591,14 @@ export default function ActionPointHub({
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs">♟️</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-sky-500 text-slate-950">Mã Gen</span>
+                    <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-sky-500 text-slate-950">Mã Gen</span>
                   </div>
-                  <div className="font-bold text-sky-300 text-[11px] truncate">Giải Cờ Thế & Toán</div>
-                  <div className="text-[9px] text-sky-400/90 font-mono truncate mt-0.5">+18K Học bổng</div>
+                  <div className="font-bold text-sky-300 text-[12px] truncate">Giải Cờ Thế & Toán</div>
+                  <div className="text-[12px] text-sky-400/90 font-sans tabular-nums truncate mt-0.5">+18K Học bổng</div>
                 </button>
               </Tooltip>
             ) : hasArtTrait ? (
-              <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Vẽ Tranh Triển Lãm:</strong> Tranh được treo báo tường trường học, kích phát danh tiếng nhí (+15 Karma).</div>}>
+              <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Vẽ Tranh Triển Lãm:</strong> Tranh được treo báo tường trường học, kích phát danh tiếng nhí (+15 Karma).</div>}>
                 <button
                   disabled={isLoading || activeButton !== null || actionPoints < 1}
                   onClick={() => handleChildActionTrigger('prodigy_art', 0)}
@@ -606,14 +606,14 @@ export default function ActionPointHub({
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs">🎨</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-purple-500 text-slate-950">Mã Gen</span>
+                    <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-purple-500 text-slate-950">Mã Gen</span>
                   </div>
-                  <div className="font-bold text-purple-300 text-[11px] truncate">Vẽ Tranh Báo Tường</div>
-                  <div className="text-[9px] text-purple-400/90 font-mono truncate mt-0.5">+15 Karma mỹ thuật</div>
+                  <div className="font-bold text-purple-300 text-[12px] truncate">Vẽ Tranh Báo Tường</div>
+                  <div className="text-[12px] text-purple-400/90 font-sans tabular-nums truncate mt-0.5">+15 Karma mỹ thuật</div>
                 </button>
               </Tooltip>
             ) : (
-              <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Khám Phá Tự Nhiên:</strong> Bắt bướm, trồng cây, nuôi dưỡng tâm hồn yêu thiên nhiên (+Sinh khí).</div>}>
+              <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Khám Phá Tự Nhiên:</strong> Bắt bướm, trồng cây, nuôi dưỡng tâm hồn yêu thiên nhiên (+Sinh khí).</div>}>
                 <button
                   disabled={isLoading || activeButton !== null || actionPoints < 1}
                   onClick={() => handleChildActionTrigger('explore_nature', 0)}
@@ -621,16 +621,16 @@ export default function ActionPointHub({
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs">🌳</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                    <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                   </div>
-                  <div className="font-bold text-white group-hover:text-amber-300 text-[11px] truncate">Khám Phá Thiên Nhiên</div>
-                  <div className="text-[9px] text-amber-400 font-mono truncate mt-0.5">Nuôi dưỡng sinh thái</div>
+                  <div className="font-bold text-white group-hover:text-amber-300 text-[12px] truncate">Khám Phá Thiên Nhiên</div>
+                  <div className="text-[12px] text-amber-400 font-sans tabular-nums truncate mt-0.5">Nuôi dưỡng sinh thái</div>
                 </button>
               </Tooltip>
             )}
 
             {/* Tile 5: Tâm sự cùng cha mẹ */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Tâm Sự Cùng Cha Mẹ:</strong> Chia sẻ những khúc mắc trường lớp, củng cố sợi dây liên kết phụ mẫu ấm êm.</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Tâm Sự Cùng Cha Mẹ:</strong> Chia sẻ những khúc mắc trường lớp, củng cố sợi dây liên kết phụ mẫu ấm êm.</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1}
                 onClick={() => handleChildActionTrigger('cuddle_parents', 0)}
@@ -638,10 +638,10 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs">👨‍👩‍👧</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
-                <div className="font-bold text-white group-hover:text-pink-300 text-[11px] truncate">Tâm Sự Cha Mẹ</div>
-                <div className="text-[9px] text-pink-400 font-mono truncate mt-0.5">Gia đạo thuận hòa</div>
+                <div className="font-bold text-white group-hover:text-pink-300 text-[12px] truncate">Tâm Sự Cha Mẹ</div>
+                <div className="text-[12px] text-pink-400 font-sans tabular-nums truncate mt-0.5">Gia đạo thuận hòa</div>
               </button>
             </Tooltip>
           </>
@@ -653,7 +653,7 @@ export default function ActionPointHub({
         {characterAge >= 13 && characterAge <= 17 && (
           <>
             {/* Tile 1: Luyện thi chuyển cấp / đại học */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Luyện Thi Đại Học:</strong> Đêm ngày ôn luyện đèn sách, chuẩn bị bước ngoặt học vấn vào đời (+10 Karma, cờ Tri thức).</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Luyện Thi Đại Học:</strong> Đêm ngày ôn luyện đèn sách, chuẩn bị bước ngoặt học vấn vào đời (+10 Karma, cờ Tri thức).</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1}
                 onClick={() => handleAction('study', onStudy, 1, 0)}
@@ -661,15 +661,15 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs">📖</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
-                <div className="font-bold text-white group-hover:text-sky-300 text-[11px] truncate">Luyện Thi Đại Học</div>
-                <div className="text-[9px] text-sky-400 font-mono truncate mt-0.5">+10 Karma tri thức</div>
+                <div className="font-bold text-white group-hover:text-sky-300 text-[12px] truncate">Luyện Thi Đại Học</div>
+                <div className="text-[12px] text-sky-400 font-sans tabular-nums truncate mt-0.5">+10 Karma tri thức</div>
               </button>
             </Tooltip>
 
             {/* Tile 2: Làm thêm tuổi teen */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Làm Thêm Phụ Quán:</strong> Bưng bê phục vụ sau giờ học, học cách tự lập dòng tiền (+ $100 USD).</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Làm Thêm Phụ Quán:</strong> Bưng bê phục vụ sau giờ học, học cách tự lập dòng tiền (+ $100 USD).</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1}
                 onClick={() => handleChildActionTrigger('teen_part_time', 0)}
@@ -677,15 +677,15 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs">🚴</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
-                <div className="font-bold text-white group-hover:text-emerald-300 text-[11px] truncate">Làm Thêm Phụ Quán</div>
-                <div className="text-[9px] text-emerald-400 font-mono truncate mt-0.5">+$100 tiền túi tự lập</div>
+                <div className="font-bold text-white group-hover:text-emerald-300 text-[12px] truncate">Làm Thêm Phụ Quán</div>
+                <div className="text-[12px] text-emerald-400 font-sans tabular-nums truncate mt-0.5">+$100 tiền túi tự lập</div>
               </button>
             </Tooltip>
 
             {/* Tile 3: Rèn luyện thể chất */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Thể Thao Dậy Thì:</strong> Tập gym, bơi lội hoặc chạy bộ phát triển chiều cao vượt trội (+10 Thể chất).</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Thể Thao Dậy Thì:</strong> Tập gym, bơi lội hoặc chạy bộ phát triển chiều cao vượt trội (+10 Thể chất).</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1}
                 onClick={() => handleChildActionTrigger('teen_sports', 0)}
@@ -693,16 +693,16 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs">🏃</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
-                <div className="font-bold text-white group-hover:text-teal-300 text-[11px] truncate">Thể Thao Dậy Thì</div>
-                <div className="text-[9px] text-teal-400 font-mono truncate mt-0.5">+10 Thể chất</div>
+                <div className="font-bold text-white group-hover:text-teal-300 text-[12px] truncate">Thể Thao Dậy Thì</div>
+                <div className="text-[12px] text-teal-400 font-sans tabular-nums truncate mt-0.5">+10 Thể chất</div>
               </button>
             </Tooltip>
 
             {/* Tile 4: Tố chất bẩm sinh */}
             {hasTradeTrait ? (
-              <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Bán Hàng Online Sớm:</strong> Tận dụng mạng xã hội bán phụ kiện, tích lũy vốn lập nghiệp sớm (+ $150 USD).</div>}>
+              <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Bán Hàng Online Sớm:</strong> Tận dụng mạng xã hội bán phụ kiện, tích lũy vốn lập nghiệp sớm (+ $150 USD).</div>}>
                 <button
                   disabled={isLoading || activeButton !== null || actionPoints < 1}
                   onClick={() => handleChildActionTrigger('teen_online_sales', 0)}
@@ -710,14 +710,14 @@ export default function ActionPointHub({
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs">🪙</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500 text-slate-950">Mã Gen</span>
+                    <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500 text-slate-950">Mã Gen</span>
                   </div>
-                  <div className="font-bold text-amber-300 text-[11px] truncate">Bán Hàng Online</div>
-                  <div className="text-[9px] text-amber-400/90 font-mono truncate mt-0.5">+$150 tích lũy vốn</div>
+                  <div className="font-bold text-amber-300 text-[12px] truncate">Bán Hàng Online</div>
+                  <div className="text-[12px] text-amber-400/90 font-sans tabular-nums truncate mt-0.5">+$150 tích lũy vốn</div>
                 </button>
               </Tooltip>
             ) : (
-              <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Giải Trí Thư Giãn:</strong> Xem phim, nghe nhạc giải tỏa áp lực thi cử và những biến động tâm sinh lý.</div>}>
+              <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Giải Trí Thư Giãn:</strong> Xem phim, nghe nhạc giải tỏa áp lực thi cử và những biến động tâm sinh lý.</div>}>
                 <button
                   disabled={isLoading || activeButton !== null || actionPoints < 1}
                   onClick={() => handleAction('wellness', onWellness, 1, 0)}
@@ -725,17 +725,17 @@ export default function ActionPointHub({
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs">🧘</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                    <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                   </div>
-                  <div className="font-bold text-white group-hover:text-indigo-300 text-[11px] truncate">Giải Trí Thư Giãn</div>
-                  <div className="text-[9px] text-indigo-400 font-mono truncate mt-0.5">Xả áp lực thi cử</div>
+                  <div className="font-bold text-white group-hover:text-indigo-300 text-[12px] truncate">Giải Trí Thư Giãn</div>
+                  <div className="text-[12px] text-indigo-400 font-sans tabular-nums truncate mt-0.5">Xả áp lực thi cử</div>
                 </button>
               </Tooltip>
             )}
 
             {/* Tile 5: Bạn bè & Mối tình đầu */}
             {onNetwork && (
-              <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Bạn Bè Tuổi Học Trò:</strong> Giao lưu bạn bè, xây đắp những kỷ niệm và mối tình đầu trong sáng.</div>}>
+              <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Bạn Bè Tuổi Học Trò:</strong> Giao lưu bạn bè, xây đắp những kỷ niệm và mối tình đầu trong sáng.</div>}>
                 <button
                   disabled={isLoading || activeButton !== null || actionPoints < 1}
                   onClick={() => handleAction('network', onNetwork, 1, 0)}
@@ -743,10 +743,10 @@ export default function ActionPointHub({
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs">💌</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                    <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                   </div>
-                  <div className="font-bold text-white group-hover:text-pink-300 text-[11px] truncate">Bạn Bè Học Trò</div>
-                  <div className="text-[9px] text-pink-400 font-mono truncate mt-0.5">Tri kỷ thanh xuân</div>
+                  <div className="font-bold text-white group-hover:text-pink-300 text-[12px] truncate">Bạn Bè Học Trò</div>
+                  <div className="text-[12px] text-pink-400 font-sans tabular-nums truncate mt-0.5">Tri kỷ thanh xuân</div>
                 </button>
               </Tooltip>
             )}
@@ -759,7 +759,7 @@ export default function ActionPointHub({
         {characterAge >= 18 && characterAge < 60 && (
           <>
             {/* Tile 1: Overtime */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Cày Việc:</strong> Làm thêm giờ kiếm thu nhập cao (+ $1.5k–$7k, +12 Stress).</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Cày Việc:</strong> Làm thêm giờ kiếm thu nhập cao (+ $1.5k–$7k, +12 Stress).</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1}
                 onClick={() => handleAction('overtime', onOvertime, 1, 0)}
@@ -767,15 +767,15 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-base">💼</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
                 <div className="font-bold text-white group-hover:text-emerald-300 text-xs truncate">Cày Việc</div>
-                <div className="text-[9.5px] text-emerald-400 font-mono font-semibold truncate mt-0.5">+$1.5k~$7k</div>
+                <div className="text-[12px] text-emerald-400 font-sans tabular-nums font-semibold truncate mt-0.5">+$1.5k~$7k</div>
               </button>
             </Tooltip>
 
             {/* Tile 2: Wellness */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Dưỡng Sinh:</strong> Nghỉ ngơi trị liệu, hồi phục thể lực và giảm mạnh căng thẳng (-$800, +15 Máu, -35 Stress).</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Dưỡng Sinh:</strong> Nghỉ ngơi trị liệu, hồi phục thể lực và giảm mạnh căng thẳng (-$800, +15 Máu, -35 Stress).</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1 || cash < 800}
                 onClick={() => handleAction('wellness', onWellness, 1, 800)}
@@ -783,15 +783,15 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-base">🌱</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
                 <div className="font-bold text-white group-hover:text-teal-300 text-xs truncate">Dưỡng Sinh</div>
-                <div className="text-[9.5px] text-teal-400 font-mono font-semibold truncate mt-0.5">-$800 • Hồi sức</div>
+                <div className="text-[12px] text-teal-400 font-sans tabular-nums font-semibold truncate mt-0.5">-$800 • Hồi sức</div>
               </button>
             </Tooltip>
 
             {/* Tile 3: Study */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Đọc Sách:</strong> Trau dồi tri thức, mở mang tầm nhìn (-$500, +8 Karma).</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Đọc Sách:</strong> Trau dồi tri thức, mở mang tầm nhìn (-$500, +8 Karma).</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1 || cash < 500}
                 onClick={() => handleAction('study', onStudy, 1, 500)}
@@ -799,15 +799,15 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-base">📚</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
                 <div className="font-bold text-white group-hover:text-sky-300 text-xs truncate">Đọc Sách</div>
-                <div className="text-[9.5px] text-sky-400 font-mono font-semibold truncate mt-0.5">-$500 • +8 Karma</div>
+                <div className="text-[12px] text-sky-400 font-sans tabular-nums font-semibold truncate mt-0.5">-$500 • +8 Karma</div>
               </button>
             </Tooltip>
 
             {/* Tile 4: Gamble */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Thử Vận May:</strong> Mua vé số hoặc lướt sóng tài chính rủi ro cao (-$300).</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Thử Vận May:</strong> Mua vé số hoặc lướt sóng tài chính rủi ro cao (-$300).</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1 || cash < 300}
                 onClick={() => handleAction('gamble', onGamble, 1, 300)}
@@ -815,16 +815,16 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-base">🎲</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
                 <div className="font-bold text-white group-hover:text-purple-300 text-xs truncate">May Rủi</div>
-                <div className="text-[9.5px] text-purple-400 font-mono font-semibold truncate mt-0.5">-$300 • Lướt sóng</div>
+                <div className="text-[12px] text-purple-400 font-sans tabular-nums font-semibold truncate mt-0.5">-$300 • Lướt sóng</div>
               </button>
             </Tooltip>
 
             {/* Tile 5: Networking */}
             {onNetwork && (
-              <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Mở Rộng Mạng Lưới:</strong> Tham gia tiệc rượu và hiệp hội kinh doanh, kết bạn cùng quý nhân xã hội (-$400).</div>}>
+              <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Mở Rộng Mạng Lưới:</strong> Tham gia tiệc rượu và hiệp hội kinh doanh, kết bạn cùng quý nhân xã hội (-$400).</div>}>
                 <button
                   disabled={isLoading || activeButton !== null || actionPoints < 1 || cash < 400}
                   onClick={() => handleAction('network', onNetwork, 1, 400)}
@@ -832,10 +832,10 @@ export default function ActionPointHub({
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-base">🤝</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                    <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                   </div>
                   <div className="font-bold text-white group-hover:text-indigo-300 text-xs truncate">Kết Bạn</div>
-                  <div className="text-[9.5px] text-indigo-400 font-mono font-semibold truncate mt-0.5">-$400 • Tri kỷ</div>
+                  <div className="text-[12px] text-indigo-400 font-sans tabular-nums font-semibold truncate mt-0.5">-$400 • Tri kỷ</div>
                 </button>
               </Tooltip>
             )}
@@ -848,7 +848,7 @@ export default function ActionPointHub({
         {characterAge >= 60 && (
           <>
             {/* Tile 1: Thái cực quyền / Dưỡng lão */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Thái Cực Quyền:</strong> Tập luyện khí công dưỡng sinh, ổn định huyết áp tim mạch và bảo toàn tuổi thọ.</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Thái Cực Quyền:</strong> Tập luyện khí công dưỡng sinh, ổn định huyết áp tim mạch và bảo toàn tuổi thọ.</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1}
                 onClick={() => handleAction('wellness', onWellness, 1, 0)}
@@ -856,15 +856,15 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs">🍵</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
-                <div className="font-bold text-white group-hover:text-emerald-300 text-[11px] truncate">Thái Cực Quyền</div>
-                <div className="text-[9px] text-emerald-400 font-mono truncate mt-0.5">Dưỡng sinh tim mạch</div>
+                <div className="font-bold text-white group-hover:text-emerald-300 text-[12px] truncate">Thái Cực Quyền</div>
+                <div className="text-[12px] text-emerald-400 font-sans tabular-nums truncate mt-0.5">Dưỡng sinh tim mạch</div>
               </button>
             </Tooltip>
 
             {/* Tile 2: Chăm sóc cây cảnh & Tản bộ */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Chăm Cây Cảnh:</strong> Cắt tỉa bonsai, tản bộ thanh nhàn, tâm hồn an nhiên không vướng bận.</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Chăm Cây Cảnh:</strong> Cắt tỉa bonsai, tản bộ thanh nhàn, tâm hồn an nhiên không vướng bận.</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1}
                 onClick={() => handleAction('wellness', onWellness, 1, 0)}
@@ -872,15 +872,15 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs">🪴</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
-                <div className="font-bold text-white group-hover:text-teal-300 text-[11px] truncate">Chăm Cây Cảnh</div>
-                <div className="text-[9px] text-teal-400 font-mono truncate mt-0.5">Tâm trí an nhiên</div>
+                <div className="font-bold text-white group-hover:text-teal-300 text-[12px] truncate">Chăm Cây Cảnh</div>
+                <div className="text-[12px] text-teal-400 font-sans tabular-nums truncate mt-0.5">Tâm trí an nhiên</div>
               </button>
             </Tooltip>
 
             {/* Tile 3: Chơi cùng con cháu */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Chơi Với Con Cháu:</strong> Sum vầy đại gia đình, trao truyền hơi ấm yêu thương cho đời sau (+15 Karma).</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Chơi Với Con Cháu:</strong> Sum vầy đại gia đình, trao truyền hơi ấm yêu thương cho đời sau (+15 Karma).</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1}
                 onClick={() => handleAction('study', onStudy, 1, 0)}
@@ -888,15 +888,15 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs">👨‍👩‍👧‍👦</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
-                <div className="font-bold text-white group-hover:text-pink-300 text-[11px] truncate">Chơi Với Con Cháu</div>
-                <div className="text-[9px] text-pink-400 font-mono truncate mt-0.5">+15 Karma sum vầy</div>
+                <div className="font-bold text-white group-hover:text-pink-300 text-[12px] truncate">Chơi Với Con Cháu</div>
+                <div className="text-[12px] text-pink-400 font-sans tabular-nums truncate mt-0.5">+15 Karma sum vầy</div>
               </button>
             </Tooltip>
 
             {/* Tile 4: Viết hồi ký & Di chúc */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Hồi Ký & Di Chúc:</strong> Ghi chép tinh hoa cuộc đời và dặn dò việc thừa kế tài sản cho con cháu.</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Hồi Ký & Di Chúc:</strong> Ghi chép tinh hoa cuộc đời và dặn dò việc thừa kế tài sản cho con cháu.</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1}
                 onClick={() => handleAction('study', onStudy, 1, 0)}
@@ -904,15 +904,15 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs">📜</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
-                <div className="font-bold text-white group-hover:text-sky-300 text-[11px] truncate">Hồi Ký & Di Chúc</div>
-                <div className="text-[9px] text-sky-400 font-mono truncate mt-0.5">Truyền thừa hậu thế</div>
+                <div className="font-bold text-white group-hover:text-sky-300 text-[12px] truncate">Hồi Ký & Di Chúc</div>
+                <div className="text-[12px] text-sky-400 font-sans tabular-nums truncate mt-0.5">Truyền thừa hậu thế</div>
               </button>
             </Tooltip>
 
             {/* Tile 5: Khám sức khỏe định kỳ */}
-            <Tooltip className="w-full" content={<div className="text-[10px]"><strong>Khám Sức Khỏe:</strong> Kiểm tra chỉ số tim mạch và tầm soát bệnh tật người già (-$300, kéo dài tuổi thọ).</div>}>
+            <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Khám Sức Khỏe:</strong> Kiểm tra chỉ số tim mạch và tầm soát bệnh tật người già (-$300, kéo dài tuổi thọ).</div>}>
               <button
                 disabled={isLoading || activeButton !== null || actionPoints < 1 || cash < 300}
                 onClick={() => handleAction('wellness', onWellness, 1, 300)}
@@ -920,10 +920,10 @@ export default function ActionPointHub({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs">🏥</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
                 </div>
-                <div className="font-bold text-white group-hover:text-rose-300 text-[11px] truncate">Khám Sức Khỏe</div>
-                <div className="text-[9px] text-rose-400 font-mono truncate mt-0.5">-$300 · Tầm soát y tế</div>
+                <div className="font-bold text-white group-hover:text-rose-300 text-[12px] truncate">Khám Sức Khỏe</div>
+                <div className="text-[12px] text-rose-400 font-sans tabular-nums truncate mt-0.5">-$300 · Tầm soát y tế</div>
               </button>
             </Tooltip>
           </>
@@ -934,7 +934,7 @@ export default function ActionPointHub({
       <div className="pt-2.5 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2.5">
         <div className="flex items-center gap-2 flex-wrap">
           {/* Sàn Tài Sản */}
-          <Tooltip content={<div className="text-[10px]"><strong>Sàn Tài Sản:</strong> {characterAge < 18 ? "Chưa đủ 18 tuổi. Thị trường tài sản & bất động sản sẽ mở khóa khi bạn trưởng thành." : "Mua bán bất động sản, cổ phiếu, kinh doanh và quản lý nơi cư trú."}</div>}>
+          <Tooltip content={<div className="text-[12px]"><strong>Sàn Tài Sản:</strong> {characterAge < 18 ? "Chưa đủ 18 tuổi. Thị trường tài sản & bất động sản sẽ mở khóa khi bạn trưởng thành." : "Mua bán bất động sản, cổ phiếu, kinh doanh và quản lý nơi cư trú."}</div>}>
             <button
               onClick={onOpenAssets}
               disabled={isLoading || characterAge < 18}
@@ -949,9 +949,9 @@ export default function ActionPointHub({
               </div>
               <span>Sàn Tài Sản</span>
               {characterAge < 18 ? (
-                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-slate-800/80 text-slate-400 border border-slate-700/60 font-semibold">18t</span>
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-slate-800/80 text-slate-400 border border-slate-700/60 font-semibold">18t</span>
               ) : (
-                <span className="text-[9.5px] font-mono px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/30 font-bold">
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/30 font-bold">
                   {character?.assets?.length || 0}
                 </span>
               )}
@@ -959,7 +959,7 @@ export default function ActionPointHub({
           </Tooltip>
 
           {/* Gia Tộc & Nhân Thân */}
-          <Tooltip content={<div className="text-[10px]"><strong>Gia Tộc & Nhân Thân:</strong> Quản lý phụ mẫu, bạn đời, con cái kế vị và người thừa kế gia tài đời sau.</div>}>
+          <Tooltip content={<div className="text-[12px]"><strong>Gia Tộc & Nhân Thân:</strong> Quản lý phụ mẫu, bạn đời, con cái kế vị và người thừa kế gia tài đời sau.</div>}>
             <button
               onClick={onOpenFamily}
               disabled={isLoading}
@@ -969,14 +969,14 @@ export default function ActionPointHub({
                 <Users className="w-3.5 h-3.5" />
               </div>
               <span>Gia Tộc</span>
-              <span className="text-[9.5px] font-mono px-1.5 py-0.2 rounded bg-pink-950 text-pink-400 border border-pink-500/30 font-bold">
+              <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-pink-950 text-pink-400 border border-pink-500/30 font-bold">
                 {character?.relationships?.length || 0}
               </span>
             </button>
           </Tooltip>
 
           {/* Rèn Kỹ Năng / Học Viện Chuyên Môn */}
-          <Tooltip content={<div className="text-[10px]"><strong>Học Viện & Kỹ Năng:</strong> {characterAge < 6 ? "Giai đoạn ấu thơ: Bé phát triển thông qua vui chơi & vòng tay cha mẹ. Học viện mở từ 6 tuổi." : "Đầu tư AP và học phí để thi sát hạch Bằng Cấp (Công nghệ, Tài chính, Sinh lực, Ngoại giao), mở khóa quyền lợi thụ động vĩnh viễn suốt kiếp sống."}</div>}>
+          <Tooltip content={<div className="text-[12px]"><strong>Học Viện & Kỹ Năng:</strong> {characterAge < 6 ? "Giai đoạn ấu thơ: Bé phát triển thông qua vui chơi & vòng tay cha mẹ. Học viện mở từ 6 tuổi." : "Đầu tư AP và học phí để thi sát hạch Bằng Cấp (Công nghệ, Tài chính, Sinh lực, Ngoại giao), mở khóa quyền lợi thụ động vĩnh viễn suốt kiếp sống."}</div>}>
             <button
               onClick={() => {
                 if (characterAge >= 6) {
@@ -996,9 +996,9 @@ export default function ActionPointHub({
               </div>
               <span>{characterAge < 6 ? "Học Viện" : "Rèn Kỹ Năng"}</span>
               {characterAge < 6 ? (
-                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-slate-800/80 text-slate-400 border border-slate-700/60 font-semibold">6t</span>
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-slate-800/80 text-slate-400 border border-slate-700/60 font-semibold">6t</span>
               ) : (
-                <span className="text-[9.5px] font-mono px-1.5 py-0.2 rounded bg-amber-950 text-amber-400 border border-amber-500/30 font-bold">
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-950 text-amber-400 border border-amber-500/30 font-bold">
                   ★ {character?.degrees?.length || 0}/12
                 </span>
               )}
@@ -1011,7 +1011,7 @@ export default function ActionPointHub({
           <div className="pl-2 border-l border-slate-800/80">
             <Tooltip
               content={
-                <div className="text-[10px]">
+                <div className="text-[12px]">
                   {isTrilemmaActive ? (
                     <strong className="text-amber-300">⚠️ Bị Khóa: Định mệnh đang chờ bạn đưa ra Quyết Định Vận Mệnh trước khi thời gian có thể trôi dạt tiếp.</strong>
                   ) : (
@@ -1043,3 +1043,4 @@ export default function ActionPointHub({
     </div>
   );
 }
+

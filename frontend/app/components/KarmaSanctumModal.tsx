@@ -67,7 +67,7 @@ export default function KarmaSanctumModal({
               <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
                 Đền Thờ Nghiệp Quả (Karma Sanctum)
               </h2>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+              <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
                 Luân Hồi Đời {reincarnationCount}
               </span>
             </div>
@@ -80,21 +80,21 @@ export default function KarmaSanctumModal({
         {/* Karma Balance Strip */}
         <div className="grid grid-cols-3 gap-3 p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 mb-4 text-xs">
           <div>
-            <div className="text-[10px] text-slate-400 uppercase font-mono">Nghiệp Lực Vĩnh Cửu</div>
-            <div className="text-xl font-mono font-bold text-amber-300 mt-0.5 flex items-center gap-1">
+            <div className="text-[12px] text-slate-400 normal-case font-sans tabular-nums">Nghiệp Lực Vĩnh Cửu</div>
+            <div className="text-xl font-sans tabular-nums font-bold text-amber-300 mt-0.5 flex items-center gap-1">
               <Sparkles className="w-4 h-4 text-purple-400" />
               <span>{karma} Karma</span>
             </div>
           </div>
           <div>
-            <div className="text-[10px] text-slate-400 uppercase font-mono">Tổng Số Năm Đã Sống</div>
-            <div className="text-xl font-mono font-bold text-white mt-0.5">
+            <div className="text-[12px] text-slate-400 normal-case font-sans tabular-nums">Tổng Số Năm Đã Sống</div>
+            <div className="text-xl font-sans tabular-nums font-bold text-white mt-0.5">
               {lifetimeStats.total_years_lived || 0} năm
             </div>
           </div>
           <div>
-            <div className="text-[10px] text-slate-400 uppercase font-mono">Đỉnh Cao Net Worth</div>
-            <div className="text-xl font-mono font-bold text-emerald-400 mt-0.5">
+            <div className="text-[12px] text-slate-400 normal-case font-sans tabular-nums">Tài sản cao nhất</div>
+            <div className="text-xl font-sans tabular-nums font-bold text-emerald-400 mt-0.5">
               ${(lifetimeStats.max_net_worth || 0).toLocaleString()}
             </div>
           </div>
@@ -120,10 +120,10 @@ export default function KarmaSanctumModal({
         <div className="flex-1 overflow-y-auto space-y-4 pr-1">
           {/* Section 1: Ancestral Blessings (Dùng Karma Cứu Nguy) */}
           <div className="p-4 rounded-2xl bg-slate-900/70 border border-purple-500/20">
-            <h3 className="text-xs font-bold text-purple-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <h3 className="text-xs font-bold text-purple-300 normal-case tracking-normal mb-2 flex items-center gap-1.5">
               <HeartPulse className="w-4 h-4 text-rose-400" /> Thỉnh Cầu Phước Lành Tiền Kiếp
             </h3>
-            <p className="text-[11px] text-slate-400 mb-3 leading-relaxed">
+            <p className="text-[12px] text-slate-400 mb-3 leading-relaxed">
               Dùng Nghiệp Lực tích lũy qua các đời để giải cứu bản thân khi lâm nguy hoặc bế tắc tại thế.
             </p>
 
@@ -139,11 +139,11 @@ export default function KarmaSanctumModal({
                     <ShieldCheck className="w-4 h-4 text-rose-400" />
                     <span>Hộ Thể Kim Thân</span>
                   </div>
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
                     15 Karma
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-400 leading-snug">
+                <div className="text-[12px] text-slate-400 leading-snug">
                   Hồi phục ngay +25 Sinh lực và xả -35 Burnout khi thể xác kiệt quệ.
                 </div>
               </button>
@@ -159,11 +159,11 @@ export default function KarmaSanctumModal({
                     <Sparkles className="w-4 h-4 text-emerald-400" />
                     <span>Quý Nhân Phù Trợ</span>
                   </div>
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
                     25 Karma
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-400 leading-snug">
+                <div className="text-[12px] text-slate-400 leading-snug">
                   Nhận cờ &quot;Gia Tộc Hộ Mệnh&quot; (+20 Karma tại thế, tăng độ may mắn).
                 </div>
               </button>
@@ -172,17 +172,17 @@ export default function KarmaSanctumModal({
 
           {/* Section 2: Unlocked Perks Portfolio */}
           <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800">
-            <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <h3 className="text-xs font-bold text-slate-300 normal-case tracking-normal mb-2 flex items-center gap-1.5">
               <Award className="w-4 h-4 text-amber-400" /> Kho Tàng Đặc Quyền Vĩnh Cửu
             </h3>
             {unlockedPerks.length === 0 ? (
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[12px] text-slate-500">
                 Chưa mở khóa đặc quyền nào. Khi qua đời, bạn có thể dùng Karma tại Vòng Quay Luân Hồi để mua Perk vĩnh cửu.
               </p>
             ) : (
               <div className="flex flex-wrap gap-2">
                 {unlockedPerks.map((p: string, idx: number) => (
-                  <span key={idx} className="text-[11px] font-mono px-2.5 py-1 rounded-xl bg-purple-950/80 text-purple-300 border border-purple-500/30">
+                  <span key={idx} className="text-[12px] font-sans tabular-nums px-2.5 py-1 rounded-xl bg-purple-950/80 text-purple-300 border border-purple-500/30">
                     ✓ {p}
                   </span>
                 ))}
@@ -192,10 +192,10 @@ export default function KarmaSanctumModal({
 
           {/* Section 3: Early Rebirth (Chuyển Kiếp Sớm) */}
           <div className="p-4 rounded-2xl bg-rose-950/20 border border-rose-500/30">
-            <h3 className="text-xs font-bold text-rose-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <h3 className="text-xs font-bold text-rose-300 normal-case tracking-normal mb-1 flex items-center gap-1.5">
               <Flame className="w-4 h-4 text-rose-400" /> Kết Thúc Kiếp Này & Tái Sinh Sớm
             </h3>
-            <p className="text-[11px] text-slate-400 mb-3 leading-relaxed">
+            <p className="text-[12px] text-slate-400 mb-3 leading-relaxed">
               Nếu số phận hiện tại bế tắc hoàn toàn, bạn có thể chủ động quy y cửa phật để kết thúc kiếp này sớm và bước vào Vòng Quay Tái Sinh.
             </p>
 
@@ -231,3 +231,4 @@ export default function KarmaSanctumModal({
     </div>
   );
 }
+

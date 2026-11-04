@@ -96,11 +96,11 @@ export default function EpitaphModal({
             <Skull className="w-8 h-8 text-rose-500/80 animate-pulse" />
           </div>
 
-          <span className="text-[11px] font-sans font-semibold tracking-widest uppercase text-slate-500 block mb-1">
+          <span className="text-[12px] font-sans font-semibold tracking-wide normal-case text-slate-500 block mb-1">
             KẾT THÚC MỘT KIẾP NGƯỜI
           </span>
 
-          <h2 className="text-2xl font-serif font-bold text-white mb-1">
+          <h2 className="text-2xl font-sans font-bold text-white mb-1">
             {name}
           </h2>
           
@@ -111,15 +111,15 @@ export default function EpitaphModal({
           <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 mb-6 text-left space-y-2 text-xs">
             <div className="text-slate-400">
               <span className="text-slate-500 font-sans font-medium">Biến cố cuối cùng:</span>
-              <p className="text-slate-200 mt-0.5 font-serif italic text-sm">"{cause}"</p>
+              <p className="text-slate-200 mt-0.5 font-sans italic text-sm">"{cause}"</p>
             </div>
             <div className="text-slate-400 pt-2 border-t border-slate-800/50 flex justify-between items-center">
               <span className="text-slate-500 font-sans font-medium">Tổng ngã rẽ cuộc đời:</span>
-              <span className="font-mono text-slate-300 font-bold">{historyLength} quyết định</span>
+              <span className="font-sans tabular-nums text-slate-300 font-bold">{historyLength} quyết định</span>
             </div>
             <div className="text-slate-400 pt-1 flex justify-between items-center">
               <span className="text-slate-500 font-sans font-medium">Nghiệp lực tích lũy (Karma):</span>
-              <span className="font-mono text-purple-400 font-bold">+{karma} Karma</span>
+              <span className="font-sans tabular-nums text-purple-400 font-bold">+{karma} Karma</span>
             </div>
           </div>
 
@@ -166,7 +166,7 @@ export default function EpitaphModal({
             )}
 
             {nirvanaMessage && (
-              <div className="p-3.5 rounded-xl bg-purple-950/80 border border-purple-500/50 text-purple-200 text-xs text-center font-serif">
+              <div className="p-3.5 rounded-xl bg-purple-950/80 border border-purple-500/50 text-purple-200 text-xs text-center font-sans">
                 ✨ {nirvanaMessage}
               </div>
             )}
@@ -230,7 +230,7 @@ export default function EpitaphModal({
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <p className="text-xs text-slate-300 font-serif leading-relaxed">
+            <p className="text-xs text-slate-300 font-sans leading-relaxed">
               {nirvanaError}
             </p>
             <div className="flex justify-end pt-2">
@@ -247,3 +247,4 @@ export default function EpitaphModal({
     </>
   );
 }
+

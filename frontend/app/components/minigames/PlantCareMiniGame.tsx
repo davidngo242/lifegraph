@@ -162,7 +162,7 @@ export default function PlantCareMiniGame({
             </div>
 
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
                 Tuổi Thơ (6–12 Tuổi)
               </span>
             </div>
@@ -174,7 +174,7 @@ export default function PlantCareMiniGame({
 
             {/* How to play card */}
             <div className="w-full bg-slate-900/90 border border-slate-800 rounded-2xl p-4 mb-4 text-left space-y-2.5 text-xs">
-              <div className="font-bold text-emerald-400 flex items-center gap-1.5 uppercase text-[11px] tracking-wider">
+              <div className="font-bold text-emerald-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
                 <Sparkles className="w-4 h-4" /> Hướng Dẫn & Thao Tác:
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
@@ -182,16 +182,16 @@ export default function PlantCareMiniGame({
                   <div className="font-semibold text-white flex items-center gap-1.5 mb-0.5">
                     <Droplets className="w-3.5 h-3.5 text-sky-400" /> Tưới Nước:
                   </div>
-                  <span className="text-[11px] text-slate-400">Nhấn nút hoặc bấm <strong className="text-amber-300 font-mono">[Space]</strong> / <strong className="text-amber-300 font-mono">[W]</strong>. Duy trì độ ẩm 35%–75%.</span>
+                  <span className="text-[12px] text-slate-400">Nhấn nút hoặc bấm <strong className="text-amber-300 font-sans tabular-nums">[Space]</strong> / <strong className="text-amber-300 font-sans tabular-nums">[W]</strong>. Duy trì độ ẩm 35%–75%.</span>
                 </div>
                 <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800">
                   <div className="font-semibold text-white flex items-center gap-1.5 mb-0.5">
                     <Sun className="w-3.5 h-3.5 text-amber-400" /> Ánh Sáng:
                   </div>
-                  <span className="text-[11px] text-slate-400">Bật/tắt nắng bằng phím <strong className="text-amber-300 font-mono">[S]</strong>. Nắng giúp cây quang hợp lớn nhanh.</span>
+                  <span className="text-[12px] text-slate-400">Bật/tắt nắng bằng phím <strong className="text-amber-300 font-sans tabular-nums">[S]</strong>. Nắng giúp cây quang hợp lớn nhanh.</span>
                 </div>
               </div>
-              <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 text-[11px] text-slate-300 flex items-center gap-2">
+              <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 text-[12px] text-slate-300 flex items-center gap-2">
                 <Bug className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                 <span>Nhấp chuột trực tiếp vào con sâu bọ để bắt sâu bảo vệ tán lá non!</span>
               </div>
@@ -201,11 +201,11 @@ export default function PlantCareMiniGame({
             <div className="w-full bg-slate-900/50 border border-slate-800/80 rounded-2xl p-3 mb-5 text-xs text-left grid grid-cols-2 gap-3">
               <div>
                 <span className="text-emerald-400 font-bold block mb-0.5">🌟 Thành Công (≥70%):</span>
-                <span className="text-[11px] text-slate-400">+15 Sinh lực, +20 Karma, Cờ &quot;Mát Tay Nuôi Dưỡng&quot;.</span>
+                <span className="text-[12px] text-slate-400">+15 Sinh lực, +20 Karma, Cờ &quot;Mát Tay Nuôi Dưỡng&quot;.</span>
               </div>
               <div>
                 <span className="text-rose-400 font-bold block mb-0.5">⚠️ Thất Bại (&lt;40%):</span>
-                <span className="text-[11px] text-slate-400">-5 Sinh lực, cờ thờ ơ vô tâm.</span>
+                <span className="text-[12px] text-slate-400">-5 Sinh lực, cờ thờ ơ vô tâm.</span>
               </div>
             </div>
 
@@ -218,7 +218,7 @@ export default function PlantCareMiniGame({
                 setBugs([]);
                 setStage('playing');
               }}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-emerald-500/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-emerald-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <Play className="w-4 h-4 fill-current" />
               <span>Bắt Đầu Ươm Mầm (15 Giây)</span>
@@ -236,7 +236,7 @@ export default function PlantCareMiniGame({
               <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 font-medium border border-emerald-500/20">
                 🌱 Vườn Ươm Thiếu Thời
               </span>
-              <div className="flex items-center gap-2 font-mono">
+              <div className="flex items-center gap-2 font-sans tabular-nums">
                 <span className="text-slate-400">Thời gian:</span>
                 <span className={`px-2.5 py-0.5 rounded font-bold ${
                   timeLeft <= 4 ? 'bg-rose-500/20 text-rose-400 animate-pulse' : 'bg-amber-500/20 text-amber-300'
@@ -250,7 +250,7 @@ export default function PlantCareMiniGame({
             <div className="mb-4">
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-slate-400">Độ Lớn Của Cây:</span>
-                <span className="font-mono font-bold text-emerald-400">{Math.round(plantGrowth)}%</span>
+                <span className="font-sans tabular-nums font-bold text-emerald-400">{Math.round(plantGrowth)}%</span>
               </div>
               <div className="h-2.5 w-full bg-slate-900 rounded-full overflow-hidden border border-slate-800">
                 <div
@@ -300,7 +300,7 @@ export default function PlantCareMiniGame({
               </div>
 
               {/* Status Hint overlay */}
-              <div className="absolute bottom-2 left-3 text-[10px] text-slate-400">
+              <div className="absolute bottom-2 left-3 text-[12px] text-slate-400">
                 {!isIdealWater ? (
                   <span className="text-rose-400 font-semibold">⚠️ Độ ẩm không tốt ({Math.round(waterLevel)}%)</span>
                 ) : (
@@ -315,7 +315,7 @@ export default function PlantCareMiniGame({
                 <span className="text-slate-400 flex items-center gap-1">
                   <Droplets className="w-3.5 h-3.5 text-sky-400" /> Độ ẩm đất:
                 </span>
-                <span className="font-mono font-bold text-sky-400">{Math.round(waterLevel)}%</span>
+                <span className="font-sans tabular-nums font-bold text-sky-400">{Math.round(waterLevel)}%</span>
               </div>
               <div className="relative h-2 w-full bg-slate-950 rounded-full overflow-hidden">
                 {/* Ideal Zone background (35% to 75%) */}
@@ -327,7 +327,7 @@ export default function PlantCareMiniGame({
                   style={{ width: `${waterLevel}%` }}
                 />
               </div>
-              <div className="flex justify-between text-[9px] text-slate-500 mt-1">
+              <div className="flex justify-between text-[12px] text-slate-500 mt-1">
                 <span>0% (Khô cằn)</span>
                 <span className="text-emerald-400 font-medium">Vùng tốt (35%–75%)</span>
                 <span>100% (Úng nước)</span>
@@ -342,7 +342,7 @@ export default function PlantCareMiniGame({
               >
                 <Droplets className="w-4 h-4 text-sky-400" />
                 <span>Tưới Nước (+16%)</span>
-                <span className="hidden sm:inline text-[9px] font-mono text-sky-300 bg-sky-950 px-1.5 py-0.5 rounded">[Space]</span>
+                <span className="hidden sm:inline text-[12px] font-sans tabular-nums text-sky-300 bg-sky-950 px-1.5 py-0.5 rounded">[Space]</span>
               </button>
 
               <button
@@ -355,7 +355,7 @@ export default function PlantCareMiniGame({
               >
                 <Sun className="w-4 h-4" />
                 <span>Nắng: {sunOn ? 'Đang Bật' : 'Tắt Nắng'}</span>
-                <span className="hidden sm:inline text-[9px] font-mono bg-slate-900 px-1.5 py-0.5 rounded">[S]</span>
+                <span className="hidden sm:inline text-[12px] font-sans tabular-nums bg-slate-900 px-1.5 py-0.5 rounded">[S]</span>
               </button>
             </div>
           </div>
@@ -386,7 +386,7 @@ export default function PlantCareMiniGame({
                 : "Mầm Cây Bị Héo Khô"}
             </h3>
 
-            <div className="font-mono text-sm text-slate-300 mb-3">
+            <div className="font-sans tabular-nums text-sm text-slate-300 mb-3">
               Độ lớn cuối cùng: <strong className="text-white font-bold">{Math.round(plantGrowth)}%</strong>
             </div>
 
@@ -400,7 +400,7 @@ export default function PlantCareMiniGame({
 
             <button
               onClick={handleReturnToLife}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-emerald-500/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-emerald-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <span>Tiếp Tục Cuộc Đời</span>
               <ArrowRight className="w-4 h-4" />
@@ -411,3 +411,4 @@ export default function PlantCareMiniGame({
     </div>
   );
 }
+

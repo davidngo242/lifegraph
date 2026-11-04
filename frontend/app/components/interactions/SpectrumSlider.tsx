@@ -38,10 +38,10 @@ export default function SpectrumSlider({ dilemma, onSubmit, isLoading }: Spectru
       
       {/* Header Tag */}
       <div className="flex items-center justify-between mb-3">
-        <span className="text-[11px] font-mono tracking-widest uppercase px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center gap-1.5">
+        <span className="text-[12px] font-sans tabular-nums tracking-wide normal-case px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center gap-1.5">
           <Sliders className="w-3.5 h-3.5" /> Thanh Trượt Đánh Đổi (Spectrum Dilemma)
         </span>
-        <span className="text-xs font-mono text-slate-400">
+        <span className="text-xs font-sans tabular-nums text-slate-400">
           Tỷ lệ: <strong className="text-sky-400">{leftPct}%</strong> / <strong className="text-rose-400">{rightPct}%</strong>
         </span>
       </div>
@@ -50,7 +50,7 @@ export default function SpectrumSlider({ dilemma, onSubmit, isLoading }: Spectru
         {dilemma.title}
       </h2>
 
-      <div className="p-4 md:p-5 rounded-2xl bg-slate-950/80 border border-slate-800 mb-5 text-slate-200 text-sm md:text-base leading-relaxed font-serif italic">
+      <div className="p-4 md:p-5 rounded-2xl bg-slate-950/80 border border-slate-800 mb-5 text-slate-200 text-sm md:text-base leading-relaxed font-sans italic">
         "{dilemma.narrative}"
       </div>
 
@@ -58,10 +58,10 @@ export default function SpectrumSlider({ dilemma, onSubmit, isLoading }: Spectru
       <div className="p-4 md:p-5 rounded-2xl bg-slate-950/90 border border-slate-800 mb-5">
         <div className="flex justify-between text-xs md:text-sm font-semibold mb-3">
           <span className="text-sky-400 font-sans flex items-center gap-1.5">
-            ◀ {data.min_label} <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-sky-500/10 border border-sky-500/20">{leftPct}%</span>
+            ◀ {data.min_label} <span className="font-sans tabular-nums text-xs px-1.5 py-0.5 rounded bg-sky-500/10 border border-sky-500/20">{leftPct}%</span>
           </span>
           <span className="text-rose-400 font-sans flex items-center gap-1.5">
-            <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-rose-500/10 border border-rose-500/20">{rightPct}%</span> {data.max_label} ▶
+            <span className="font-sans tabular-nums text-xs px-1.5 py-0.5 rounded bg-rose-500/10 border border-rose-500/20">{rightPct}%</span> {data.max_label} ▶
           </span>
         </div>
 
@@ -81,7 +81,7 @@ export default function SpectrumSlider({ dilemma, onSubmit, isLoading }: Spectru
           {/* Thu Nhập / Tiền */}
           <div className="p-2 rounded-xl bg-slate-900/80 border border-slate-800/80 flex items-center justify-center gap-1.5">
             <DollarSign className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-            <span className={`font-mono font-bold text-xs ${projectedCashBonus > 3000 ? 'text-emerald-400' : 'text-slate-300'}`}>
+            <span className={`font-sans tabular-nums font-bold text-xs ${projectedCashBonus > 3000 ? 'text-emerald-400' : 'text-slate-300'}`}>
               {projectedCashBonus > 0 ? `+$${projectedCashBonus.toLocaleString()}` : '$0'}
             </span>
           </div>
@@ -89,7 +89,7 @@ export default function SpectrumSlider({ dilemma, onSubmit, isLoading }: Spectru
           {/* Căng Thẳng (Burnout) */}
           <div className="p-2 rounded-xl bg-slate-900/80 border border-slate-800/80 flex items-center justify-center gap-1.5">
             <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span className={`font-mono font-bold text-xs ${projectedBurnoutDelta > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
+            <span className={`font-sans tabular-nums font-bold text-xs ${projectedBurnoutDelta > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
               {projectedBurnoutDelta > 0 ? `+${projectedBurnoutDelta}% Stress` : `${projectedBurnoutDelta}% Stress`}
             </span>
           </div>
@@ -97,7 +97,7 @@ export default function SpectrumSlider({ dilemma, onSubmit, isLoading }: Spectru
           {/* Hạnh Phúc */}
           <div className="p-2 rounded-xl bg-slate-900/80 border border-slate-800/80 flex items-center justify-center gap-1.5">
             <Smile className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span className={`font-mono font-bold text-xs ${projectedHappinessDelta >= 0 ? 'text-amber-300' : 'text-slate-400'}`}>
+            <span className={`font-sans tabular-nums font-bold text-xs ${projectedHappinessDelta >= 0 ? 'text-amber-300' : 'text-slate-400'}`}>
               {projectedHappinessDelta >= 0 ? `+${projectedHappinessDelta}% Vui vẻ` : `${projectedHappinessDelta}% Vui vẻ`}
             </span>
           </div>
@@ -108,7 +108,7 @@ export default function SpectrumSlider({ dilemma, onSubmit, isLoading }: Spectru
       <button
         disabled={isLoading}
         onClick={() => onSubmit(sliderVal)}
-        className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-sm tracking-wide uppercase transition shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 active:scale-[0.99] border border-indigo-400/40"
+        className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-sm tracking-wide normal-case transition shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 active:scale-[0.99] border border-indigo-400/40"
       >
         <span>Xác Nhận Quyết Định ({leftPct}% / {rightPct}%)</span>
         <ArrowRight className="w-4 h-4" />
@@ -116,3 +116,4 @@ export default function SpectrumSlider({ dilemma, onSubmit, isLoading }: Spectru
     </div>
   );
 }
+

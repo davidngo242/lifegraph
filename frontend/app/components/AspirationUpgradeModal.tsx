@@ -113,10 +113,10 @@ export default function AspirationUpgradeModal({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
+                <span className="text-[12px] font-sans tabular-nums normal-case px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
                   Khát Vọng Đời Người • Thăng Hạng
                 </span>
-                <span className="text-xs font-mono font-bold text-purple-300">+60 Karma Thưởng</span>
+                <span className="text-xs font-sans tabular-nums font-bold text-purple-300">+60 Karma Thưởng</span>
               </div>
               <h2 className="text-lg md:text-xl font-bold text-white mt-1">
                 Nâng Trình Thử Thách Cuộc Đời
@@ -142,7 +142,7 @@ export default function AspirationUpgradeModal({
             <div className="flex-1 text-xs">
               <div className="font-bold text-white text-sm flex items-center gap-2">
                 <span>Chúc mừng! Bạn đã hoàn thành:</span>
-                <span className="text-purple-300 font-mono">[{currentAspiration?.title || "Mục Tiêu Đời Người"}]</span>
+                <span className="text-purple-300 font-sans tabular-nums">[{currentAspiration?.title || "Mục Tiêu Đời Người"}]</span>
               </div>
               <div className="text-slate-300 mt-1 leading-relaxed">
                 Tâm nguyện kiếp này đã trọn vẹn. Bạn được ban tặng <span className="font-bold text-amber-300">+60 Điểm Nghiệp Lực Vĩnh Cửu</span> tích lũy vào đền thờ dòng tộc. Hãy lựa chọn nấc thang khát vọng cao hơn để viết tiếp trang sử vàng!
@@ -150,7 +150,7 @@ export default function AspirationUpgradeModal({
             </div>
           </div>
 
-          <div className="text-xs font-bold uppercase tracking-wider text-slate-400 pt-1">
+          <div className="text-xs font-bold normal-case tracking-normal text-slate-400 pt-1">
             Chọn 1 trong các khát vọng thăng hoa tiếp theo:
           </div>
 
@@ -176,7 +176,7 @@ export default function AspirationUpgradeModal({
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-sm font-bold text-white">{opt.title}</span>
-                          <span className={`text-[9px] font-mono px-2 py-0.5 rounded-full border ${tierBadge.color}`}>
+                          <span className={`text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full border ${tierBadge.color}`}>
                             {tierBadge.label}
                           </span>
                         </div>
@@ -199,7 +199,7 @@ export default function AspirationUpgradeModal({
                   </div>
 
                   {/* Reward summary */}
-                  <div className="text-[11px] text-purple-300/90 flex items-center gap-1.5 font-medium">
+                  <div className="text-[12px] text-purple-300/90 flex items-center gap-1.5 font-medium">
                     <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                     <span>Phần thưởng: {opt.reward_summary}</span>
                   </div>
@@ -221,7 +221,7 @@ export default function AspirationUpgradeModal({
           <button
             onClick={handleConfirm}
             disabled={!selectedId || submitting}
-            className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition shadow-lg shadow-purple-600/30 active:scale-95 disabled:opacity-50"
+            className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-bold text-xs normal-case tracking-normal flex items-center justify-center gap-2 transition shadow-lg shadow-purple-600/30 active:scale-95 disabled:opacity-50"
           >
             {submitting ? (
               <span>Đang Cập Nhật...</span>
@@ -238,3 +238,4 @@ export default function AspirationUpgradeModal({
     </div>
   );
 }
+

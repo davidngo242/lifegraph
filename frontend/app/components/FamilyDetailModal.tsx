@@ -92,7 +92,7 @@ export default function FamilyDetailModal({
         {/* Resources Summary */}
         <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 mb-4 text-xs">
           <span className="text-slate-300">
-            Ngân sách: <strong className="text-emerald-400 font-mono">${cash.toLocaleString()}</strong> | AP hiện có: <strong className="text-amber-400 font-mono">{actionPoints}</strong>
+            Ngân sách: <strong className="text-emerald-400 font-sans tabular-nums">${cash.toLocaleString()}</strong> | AP hiện có: <strong className="text-amber-400 font-sans tabular-nums">{actionPoints}</strong>
           </span>
           <span className="text-slate-400">
             Tổng thành viên: <strong className="text-pink-400">{relationships.length} người</strong>
@@ -117,10 +117,10 @@ export default function FamilyDetailModal({
           >
             <div className="flex items-center justify-between mb-1">
               <Gift className="w-4 h-4 text-pink-400" />
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
+              <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
             </div>
             <div className="text-xs font-bold text-white">Báo Hiếu Cha Mẹ</div>
-            <div className="text-[10px] text-slate-400 mt-0.5">Chi $2.000 (Karma +20)</div>
+            <div className="text-[12px] text-slate-400 mt-0.5">Chi $2.000 (Karma +20)</div>
           </button>
 
           {/* Action 2: Hẹn hò (Yêu cầu >= 16 tuổi) */}
@@ -140,10 +140,10 @@ export default function FamilyDetailModal({
                 ) : (
                   <Heart className="w-4 h-4 text-rose-400" />
                 )}
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
               </div>
               <div className="text-xs font-bold text-white">Hẹn Hò Gặp Gỡ</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">
+              <div className="text-[12px] text-slate-400 mt-0.5">
                 {(characterAge ?? 18) < 16
                   ? `Khóa: Cần 16+ tuổi (Hiện tại: ${characterAge} tuổi)`
                   : 'Chi $1.500 (Tìm bạn đời)'}
@@ -168,10 +168,10 @@ export default function FamilyDetailModal({
                 ) : (
                   <Sparkles className="w-4 h-4 text-amber-400" />
                 )}
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">2 AP</span>
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">2 AP</span>
               </div>
               <div className="text-xs font-bold text-white">Tổ Chức Hôn Lễ</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">
+              <div className="text-[12px] text-slate-400 mt-0.5">
                 {(characterAge ?? 18) < 18
                   ? `Khóa: Cần 18+ tuổi (Hiện tại: ${characterAge} tuổi)`
                   : 'Chi $10.000 (Thành hôn)'}
@@ -196,10 +196,10 @@ export default function FamilyDetailModal({
                 ) : (
                   <Baby className="w-4 h-4 text-cyan-400" />
                 )}
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">2 AP</span>
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">2 AP</span>
               </div>
               <div className="text-xs font-bold text-white">Sinh Con Kế Thừa</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">
+              <div className="text-[12px] text-slate-400 mt-0.5">
                 {(characterAge ?? 18) < 18
                   ? `Khóa: Cần 18+ tuổi (Hiện tại: ${characterAge} tuổi)`
                   : 'Chi $8.000 (Dòng dõi)'}
@@ -216,10 +216,10 @@ export default function FamilyDetailModal({
             >
               <div className="flex items-center justify-between mb-1">
                 <Sparkles className="w-4 h-4 text-emerald-400" />
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
               </div>
               <div className="text-xs font-bold text-white">Dạy Dỗ Con Cái</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Chi $2.000 (Tình cảm +20)</div>
+              <div className="text-[12px] text-slate-400 mt-0.5">Chi $2.000 (Tình cảm +20)</div>
             </button>
           )}
         </div>
@@ -253,7 +253,7 @@ export default function FamilyDetailModal({
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <h4 className="text-sm font-bold text-white">{rel.name}</h4>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
+                        <span className={`text-[12px] px-2 py-0.5 rounded-full font-medium ${
                           rel.type === 'spouse' ? 'bg-pink-500/20 text-pink-300 border border-pink-500/30' :
                           rel.type === 'child' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' :
                           'bg-slate-800 text-slate-300'
@@ -265,23 +265,23 @@ export default function FamilyDetailModal({
                            rel.type === 'lover' || rel.type === 'partner' ? 'Người Yêu' : 'Người Thân'}
                         </span>
                         {typeof rel.age === 'number' && (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800/90 text-slate-300 border border-slate-700">
+                          <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-slate-800/90 text-slate-300 border border-slate-700">
                             {rel.age} tuổi
                           </span>
                         )}
                         {rel.type === 'child' && (
                           (rel.age || 0) < 18 ? (
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/30">
+                            <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/30">
                               🔒 Cầm tù 1 AP của cha mẹ
                             </span>
                           ) : (
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                            <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
                               🎓 Đã trưởng thành (Giải phóng AP)
                             </span>
                           )
                         )}
                         {isDeceased && (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-500 border border-slate-700">
+                          <span className="text-[12px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-500 border border-slate-700">
                             Đã Mất
                           </span>
                         )}
@@ -289,7 +289,7 @@ export default function FamilyDetailModal({
 
                       {/* Affinity Bar */}
                       <div className="flex items-center gap-2 mt-2 w-48 sm:w-64">
-                        <span className="text-[10px] text-slate-400">Gắn kết:</span>
+                        <span className="text-[12px] text-slate-400">Gắn kết:</span>
                         <div className="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden">
                           <div
                             className={`h-full transition-all duration-500 ${
@@ -300,7 +300,7 @@ export default function FamilyDetailModal({
                             style={{ width: `${affinity}%` }}
                           />
                         </div>
-                        <span className="text-[10px] font-mono text-slate-300">{affinity}%</span>
+                        <span className="text-[12px] font-sans tabular-nums text-slate-300">{affinity}%</span>
                       </div>
                     </div>
                   </div>
@@ -313,3 +313,4 @@ export default function FamilyDetailModal({
     </div>
   );
 }
+

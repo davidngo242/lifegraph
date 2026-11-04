@@ -242,7 +242,7 @@ export default function SkillSelectorModal({
                 <h2 className="text-lg md:text-2xl font-bold text-white tracking-tight">
                   Viện Phát Triển Bằng Cấp & Năng Lực Chuyên Môn
                 </h2>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
                   Tuổi {characterAge}
                 </span>
               </div>
@@ -258,18 +258,18 @@ export default function SkillSelectorModal({
           {/* Quick Stats Pill */}
           <div className="flex items-center gap-2.5 bg-slate-900/90 border border-slate-800 rounded-2xl px-3.5 py-2 shrink-0 self-start sm:self-center">
             <div className="text-center">
-              <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Điểm AP</span>
-              <span className="text-xs font-bold text-amber-400 font-mono">⚡ {characterAP} AP</span>
+              <span className="text-[12px] text-slate-400 normal-case tracking-normal block">Điểm AP</span>
+              <span className="text-xs font-bold text-amber-400 font-sans tabular-nums">⚡ {characterAP} AP</span>
             </div>
             <div className="h-6 w-px bg-slate-800" />
             <div className="text-center">
-              <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Tiền Mặt</span>
-              <span className="text-xs font-bold text-emerald-400 font-mono">${characterCash.toLocaleString()}</span>
+              <span className="text-[12px] text-slate-400 normal-case tracking-normal block">Tiền Mặt</span>
+              <span className="text-xs font-bold text-emerald-400 font-sans tabular-nums">${characterCash.toLocaleString()}</span>
             </div>
             <div className="h-6 w-px bg-slate-800" />
             <div className="text-center">
-              <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Tổng Cấp Độ</span>
-              <span className="text-xs font-bold text-sky-400 font-mono">★ {totalMasteryScore}/12</span>
+              <span className="text-[12px] text-slate-400 normal-case tracking-normal block">Tổng Cấp Độ</span>
+              <span className="text-xs font-bold text-sky-400 font-sans tabular-nums">★ {totalMasteryScore}/12</span>
             </div>
           </div>
         </div>
@@ -326,7 +326,7 @@ export default function SkillSelectorModal({
                           ))}
                         </div>
                         {/* Level badge */}
-                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${
+                        <span className={`text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full border ${
                           currentLevel === 3
                             ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
                             : currentLevel === 2
@@ -344,7 +344,7 @@ export default function SkillSelectorModal({
 
                   {/* Genetic Affinity Tag */}
                   {hasAffinity && (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-pink-950/40 border border-pink-500/30 text-[11px] text-pink-300 mb-2">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-pink-950/40 border border-pink-500/30 text-[12px] text-pink-300 mb-2">
                       <span>🧬</span>
                       <span>Hưởng ứng Mã Gen: <strong>{matchingTrait?.name}</strong></span>
                       <span className="text-pink-400 font-bold">• Giảm 50% Học Phí & Tăng Tỉ Lệ Đỗ</span>
@@ -354,23 +354,23 @@ export default function SkillSelectorModal({
                   {/* Perks Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
                     {/* Current Active Perk */}
-                    <div className="p-2.5 rounded-xl bg-slate-950/80 border border-emerald-500/30 text-[11px]">
+                    <div className="p-2.5 rounded-xl bg-slate-950/80 border border-emerald-500/30 text-[12px]">
                       <div className="flex items-center gap-1.5 text-emerald-400 font-semibold mb-0.5">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         <span>Quyền Lợi Đã Kích Hoạt ({currentLevel === 0 ? 'Chưa có' : `Cấp ${currentLevel}`}):</span>
                       </div>
-                      <p className="text-slate-300 text-[10.5px]">
+                      <p className="text-slate-300 text-[12px]">
                         {currentLevel === 0 ? 'Chưa có quyền lợi thụ động.' : activeLevelConfig?.perkDesc}
                       </p>
                     </div>
 
                     {/* Next Unlockable Perk */}
-                    <div className="p-2.5 rounded-xl bg-slate-950/80 border border-amber-500/30 text-[11px]">
+                    <div className="p-2.5 rounded-xl bg-slate-950/80 border border-amber-500/30 text-[12px]">
                       <div className="flex items-center gap-1.5 text-amber-400 font-semibold mb-0.5">
                         <Sparkles className="w-3.5 h-3.5" />
                         <span>Mục Tiêu Kế Tiếp ({isMaxed ? 'Đạt Max' : nextLevelConfig?.title}):</span>
                       </div>
-                      <p className="text-slate-300 text-[10.5px]">
+                      <p className="text-slate-300 text-[12px]">
                         {isMaxed ? 'Đã đạt cảnh giới Đại Sư tối cao, không thể nâng thêm.' : nextLevelConfig?.perkDesc}
                       </p>
                     </div>
@@ -383,16 +383,16 @@ export default function SkillSelectorModal({
                     <>
                       {/* Price Tag */}
                       <div className="text-right mb-2.5">
-                        <div className="text-[11px] text-slate-400">Chi phí sát hạch:</div>
+                        <div className="text-[12px] text-slate-400">Chi phí sát hạch:</div>
                         <div className="flex items-center gap-2 justify-end mt-0.5">
-                          <span className="text-xs font-mono font-bold text-amber-400 bg-amber-950/50 px-2 py-0.5 rounded border border-amber-500/30">
+                          <span className="text-xs font-sans tabular-nums font-bold text-amber-400 bg-amber-950/50 px-2 py-0.5 rounded border border-amber-500/30">
                             1 AP
                           </span>
-                          <span className="text-sm font-bold text-emerald-400 font-mono">
+                          <span className="text-sm font-bold text-emerald-400 font-sans tabular-nums">
                             ${finalTuition.toLocaleString()}
                           </span>
                           {hasAffinity && (
-                            <span className="text-[10px] text-slate-500 line-through">
+                            <span className="text-[12px] text-slate-500 line-through">
                               ${rawTuition.toLocaleString()}
                             </span>
                           )}
@@ -403,7 +403,7 @@ export default function SkillSelectorModal({
                       <button
                         onClick={() => handleStartExam(branch.id)}
                         disabled={!canAfford || submittingSkillId === branch.id}
-                        className={`w-full py-2.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-md ${
+                        className={`w-full py-2.5 px-4 rounded-xl font-bold text-xs normal-case tracking-normal transition flex items-center justify-center gap-1.5 shadow-md ${
                           canAfford && submittingSkillId !== branch.id
                             ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-amber-500/25 active:scale-95'
                             : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
@@ -425,11 +425,11 @@ export default function SkillSelectorModal({
                     </>
                   ) : (
                     <div className="w-full text-center p-3 rounded-xl bg-amber-500/10 border border-amber-500/30">
-                      <div className="text-amber-400 font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-1">
+                      <div className="text-amber-400 font-bold text-xs normal-case tracking-wide flex items-center justify-center gap-1">
                         <Sparkles className="w-3.5 h-3.5" />
                         <span>ĐẠI SƯ HOÀN MỸ</span>
                       </div>
-                      <span className="text-[10px] text-slate-400 block mt-0.5">Đạt cảnh giới tối cao</span>
+                      <span className="text-[12px] text-slate-400 block mt-0.5">Đạt cảnh giới tối cao</span>
                     </div>
                   )}
                 </div>
@@ -439,7 +439,7 @@ export default function SkillSelectorModal({
         </div>
 
         {/* Footer Info */}
-        <div className="mt-4 pt-3 border-t border-slate-800 text-center text-[11px] text-slate-400 flex items-center justify-center gap-2">
+        <div className="mt-4 pt-3 border-t border-slate-800 text-center text-[12px] text-slate-400 flex items-center justify-center gap-2">
           <BookOpen className="w-3.5 h-3.5 text-amber-400" />
           <span>Vượt qua kỳ sát hạch (Mini-Game) sẽ nhận bằng cấp và kích hoạt quyền lợi vĩnh viễn suốt kiếp sống.</span>
         </div>
@@ -447,3 +447,4 @@ export default function SkillSelectorModal({
     </div>
   );
 }
+

@@ -94,25 +94,25 @@ export default function NarrativeFeed({
             <div>
               <h3 className="font-bold text-white tracking-wide text-xs md:text-sm flex items-center gap-2">
                 <span>Nhật Ký Hành Trình</span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-normal">
+                <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-normal">
                   {history.length} sự kiện
                 </span>
               </h3>
-              <p className="text-[10px] text-slate-400">
+              <p className="text-[12px] text-slate-400">
                 Sự kiện mới nhất luôn hiển thị trên cùng
               </p>
             </div>
           </div>
 
           {isOldAge && (
-            <span className="text-[9px] font-sans px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 flex items-center gap-1 animate-pulse">
+            <span className="text-[12px] font-sans px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 flex items-center gap-1 animate-pulse">
               <EyeOff className="w-3 h-3" /> Trí nhớ mờ dần
             </span>
           )}
         </div>
 
         {/* Category Filters Bar */}
-        <div className="flex items-center gap-1.5 text-[11px] overflow-x-auto pb-1">
+        <div className="flex items-center gap-1.5 text-[12px] overflow-x-auto pb-1">
           <button
             onClick={() => setFilter('all')}
             className={`px-2.5 py-1 rounded-xl transition font-medium ${
@@ -171,10 +171,10 @@ export default function NarrativeFeed({
       {/* Narrative Feed Timeline (Newest on top, smooth scroll) */}
       <div className="flex-1 overflow-y-auto space-y-3 pr-1 mb-1 select-text custom-scrollbar">
         {displayHistory.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center text-slate-500 text-xs italic font-serif p-6">
+          <div className="h-full flex flex-col items-center justify-center text-center text-slate-500 text-xs italic font-sans p-6">
             <BookOpen className="w-8 h-8 opacity-30 mb-2 text-indigo-400" />
             <p>Chưa có ký ức nào trong danh mục này.</p>
-            <p className="text-[11px] text-slate-600 mt-0.5">Tiếp tục hành trình để bồi đắp dòng lịch sử.</p>
+            <p className="text-[12px] text-slate-600 mt-0.5">Tiếp tục hành trình để bồi đắp dòng lịch sử.</p>
           </div>
         ) : (
           displayHistory.map((item, idx) => {
@@ -210,7 +210,7 @@ export default function NarrativeFeed({
                   {/* Card Header: Age Badge & Event Category */}
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <div className="flex items-center gap-1.5">
-                      <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md border font-bold ${
+                      <span className={`text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-md border font-bold ${
                         isLatest 
                           ? 'bg-indigo-500/20 text-indigo-200 border-indigo-500/40' 
                           : 'bg-slate-900 text-slate-300 border-slate-700'
@@ -223,7 +223,7 @@ export default function NarrativeFeed({
                     </div>
 
                     {isLatest && (
-                      <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold animate-pulse flex items-center gap-1">
+                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold animate-pulse flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> Vừa xong
                       </span>
                     )}
@@ -236,7 +236,7 @@ export default function NarrativeFeed({
 
                   {/* Choice & Consequence */}
                   {item.choice && (
-                    <div className="text-[11px] text-slate-300 bg-slate-900/80 rounded-xl p-2 border border-slate-800/60 font-serif leading-relaxed">
+                    <div className="text-[12px] text-slate-300 bg-slate-900/80 rounded-xl p-2 border border-slate-800/60 font-sans leading-relaxed">
                       <span className="text-indigo-400 font-sans font-semibold mr-1">↳ Quyết định:</span>
                       <span>{item.choice}</span>
                     </div>
@@ -250,3 +250,4 @@ export default function NarrativeFeed({
     </div>
   );
 }
+
