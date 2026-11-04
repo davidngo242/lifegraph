@@ -246,13 +246,13 @@ ${topMoments.map(m => `  • [Năm ${m.age}t]: ${m.text}`).join('\n')}
         <div ref={cardRef} className="overflow-y-auto pr-1 flex-1 space-y-4">
           {/* Header Badge */}
           <div className="text-center">
-            <span className="text-[10px] font-mono tracking-widest uppercase px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold inline-block mb-2">
+            <span className="text-[12px] font-sans tabular-nums tracking-wide normal-case px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold inline-block mb-2">
               🎴 THẺ BÀI VẬN MỆNH • TAROT CUỘC ĐỜI
             </span>
-            <div className="p-2 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-indigo-300 font-bold text-xs uppercase tracking-wider mb-2">
+            <div className="p-2 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-indigo-300 font-bold text-xs normal-case tracking-normal mb-2">
               👑 {epithet}
             </div>
-            <h2 className="text-2xl md:text-3xl font-serif font-bold text-white tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-sans font-bold text-white tracking-tight">
               {name}
             </h2>
             <p className="text-xs text-slate-400 flex items-center justify-center gap-1.5 mt-0.5">
@@ -266,26 +266,26 @@ ${topMoments.map(m => `  • [Năm ${m.age}t]: ${m.text}`).join('\n')}
           {/* 4 Stats Quad */}
           <div className="grid grid-cols-2 gap-2.5">
             <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
-              <span className="text-[10px] text-slate-400 block uppercase tracking-wider">Tiền Tích Lũy</span>
-              <span className="text-sm md:text-base font-bold text-emerald-400 font-mono">
+              <span className="text-[12px] text-slate-400 block normal-case tracking-normal">Tiền Tích Lũy</span>
+              <span className="text-sm md:text-base font-bold text-emerald-400 font-sans tabular-nums">
                 ${cash.toLocaleString()}
               </span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
-              <span className="text-[10px] text-slate-400 block uppercase tracking-wider">Nghiệp Lực</span>
-              <span className="text-sm md:text-base font-bold text-purple-400 font-mono">
+              <span className="text-[12px] text-slate-400 block normal-case tracking-normal">Nghiệp Lực</span>
+              <span className="text-sm md:text-base font-bold text-purple-400 font-sans tabular-nums">
                 +{karma} Karma
               </span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
-              <span className="text-[10px] text-slate-400 block uppercase tracking-wider">Bằng Cấp Kỹ Năng</span>
-              <span className="text-sm md:text-base font-bold text-sky-400 font-mono">
+              <span className="text-[12px] text-slate-400 block normal-case tracking-normal">Bằng Cấp Kỹ Năng</span>
+              <span className="text-sm md:text-base font-bold text-sky-400 font-sans tabular-nums">
                 ★ {totalSkillsLevel}/12 Cấp
               </span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
-              <span className="text-[10px] text-slate-400 block uppercase tracking-wider">Hậu Duệ Gia Tộc</span>
-              <span className="text-sm md:text-base font-bold text-rose-400 font-mono">
+              <span className="text-[12px] text-slate-400 block normal-case tracking-normal">Hậu Duệ Gia Tộc</span>
+              <span className="text-sm md:text-base font-bold text-rose-400 font-sans tabular-nums">
                 {relationships.length} Người
               </span>
             </div>
@@ -293,22 +293,22 @@ ${topMoments.map(m => `  • [Năm ${m.age}t]: ${m.text}`).join('\n')}
 
           {/* 3 Defining Moments */}
           <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 space-y-2">
-            <div className="text-[11px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+            <div className="text-[12px] font-bold text-amber-400 normal-case tracking-normal flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5" /> Ba Cột Mốc Định Mệnh:
             </div>
             {topMoments.map((m, idx) => (
               <div key={idx} className="p-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs flex items-start gap-2">
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-950 text-sky-300 font-bold shrink-0">
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-sky-950 text-sky-300 font-bold shrink-0">
                   {m.age}t
                 </span>
-                <span className="text-slate-300 text-[11px] leading-snug">{m.text}</span>
+                <span className="text-slate-300 text-[12px] leading-snug">{m.text}</span>
               </div>
             ))}
           </div>
 
           {/* Death / Destiny footer */}
           {deathCause && (
-            <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-300 text-[11px] text-center italic">
+            <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-300 text-[12px] text-center italic">
               "Biến cố cuối cùng: {deathCause}"
             </div>
           )}
@@ -318,7 +318,7 @@ ${topMoments.map(m => `  • [Năm ${m.age}t]: ${m.text}`).join('\n')}
         <div className="mt-4 pt-3 border-t border-slate-800 flex items-center gap-2.5">
           <button
             onClick={handleCopySummary}
-            className="flex-1 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 active:scale-95"
+            className="flex-1 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold text-xs normal-case tracking-normal transition flex items-center justify-center gap-2 active:scale-95"
           >
             {copied ? (
               <>
@@ -336,7 +336,7 @@ ${topMoments.map(m => `  • [Năm ${m.age}t]: ${m.text}`).join('\n')}
           <button
             onClick={handleDownloadImage}
             disabled={isExporting}
-            className="flex-1 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-md shadow-amber-500/25 flex items-center justify-center gap-2 active:scale-95"
+            className="flex-1 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs normal-case tracking-normal transition shadow-md shadow-amber-500/25 flex items-center justify-center gap-2 active:scale-95"
           >
             <Download className="w-4 h-4" />
             <span>{isExporting ? 'Đang Xuất Ảnh...' : 'Tải Ảnh Thẻ Bài'}</span>

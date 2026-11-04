@@ -144,12 +144,12 @@ export default function NPCDialogCard({
       
       {/* Top Header & Mode Toggle */}
       <div className="flex items-center justify-between">
-        <span className="text-[10px] font-sans font-bold tracking-wide uppercase px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center gap-1.5">
+        <span className="text-[12px] font-sans font-bold tracking-wide normal-case px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center gap-1.5">
           <Users className="w-3.5 h-3.5" /> Sân Khấu Đối Thoại Nhân Vật
         </span>
 
         {/* Tab switch */}
-        <div className="flex items-center bg-slate-950/80 p-0.5 rounded-xl border border-slate-800 text-[11px]">
+        <div className="flex items-center bg-slate-950/80 p-0.5 rounded-xl border border-slate-800 text-[12px]">
           <button
             onClick={() => { setActiveTab('dialogue'); setCustomResult(null); }}
             className={`px-2.5 py-1 rounded-lg font-medium transition ${
@@ -182,9 +182,9 @@ export default function NPCDialogCard({
             <img src={characterVisuals?.portrait_url || '/placeholder.png'} alt="You" className="w-full h-full object-cover" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-mono text-indigo-400 font-bold uppercase truncate">BẠN</div>
+            <div className="text-[12px] font-sans tabular-nums text-indigo-400 font-bold normal-case truncate">BẠN</div>
             <div className="text-xs md:text-sm font-bold text-white truncate">{characterName}</div>
-            <div className="text-[10px] text-slate-400 font-sans">{characterAge} tuổi</div>
+            <div className="text-[12px] text-slate-400 font-sans">{characterAge} tuổi</div>
           </div>
         </div>
 
@@ -194,10 +194,10 @@ export default function NPCDialogCard({
             {npc.name ? npc.name.charAt(0) : 'N'}
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-sans text-slate-400 truncate">{npc.role}</div>
+            <div className="text-[12px] font-sans text-slate-400 truncate">{npc.role}</div>
             <div className="text-xs md:text-sm font-bold text-white truncate">{npc.name}</div>
-            <span className={`text-[9.5px] font-sans px-2 py-0.2 rounded-md border inline-block mt-0.5 ${affinityColor}`}>
-              Thiện cảm: <span className="font-mono">{npc.affinity > 0 ? `+${npc.affinity}` : npc.affinity}%</span>
+            <span className={`text-[12px] font-sans px-2 py-0.2 rounded-md border inline-block mt-0.5 ${affinityColor}`}>
+              Thiện cảm: <span className="font-sans tabular-nums">{npc.affinity > 0 ? `+${npc.affinity}` : npc.affinity}%</span>
             </span>
           </div>
         </div>
@@ -210,7 +210,7 @@ export default function NPCDialogCard({
         </h2>
 
         {/* Speech Bubble */}
-        <div className="p-3.5 rounded-2xl bg-indigo-950/30 border border-indigo-500/30 text-slate-200 text-xs md:text-sm leading-relaxed font-serif italic relative">
+        <div className="p-3.5 rounded-2xl bg-indigo-950/30 border border-indigo-500/30 text-slate-200 text-xs md:text-sm leading-relaxed font-sans italic relative">
           <span className="text-indigo-400 font-bold mr-1">"{npc.name}":</span>
           "{dilemma.narrative}"
         </div>
@@ -238,13 +238,13 @@ export default function NPCDialogCard({
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
-                      <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border flex items-center gap-1 ${stance.color}`}>
+                      <span className={`text-[12px] font-bold normal-case tracking-normal px-2 py-0.5 rounded-md border flex items-center gap-1 ${stance.color}`}>
                         {stance.icon}
                         <span>{stance.tag}</span>
                       </span>
 
                       {stance.needsRoll && (
-                        <span className="text-[9px] font-mono text-amber-400 flex items-center gap-0.5">
+                        <span className="text-[12px] font-sans tabular-nums text-amber-400 flex items-center gap-0.5">
                           <Dices className="w-2.5 h-2.5" /> Gieo Xúc Xắc
                         </span>
                       )}
@@ -254,13 +254,13 @@ export default function NPCDialogCard({
                       </span>
                     </div>
 
-                    <div className="text-[10.5px] text-slate-400 mt-0.5 truncate">
+                    <div className="text-[12px] text-slate-400 mt-0.5 truncate">
                       ↳ {option.consequence_hint || option.effects_hint || "Lời nói định hình thái độ đối phương."}
                     </div>
                   </div>
 
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <span className="text-[10px] font-mono font-bold text-amber-400 bg-slate-900 border border-slate-700 px-2 py-0.5 rounded-lg flex items-center gap-1">
+                    <span className="text-[12px] font-sans tabular-nums font-bold text-amber-400 bg-slate-900 border border-slate-700 px-2 py-0.5 rounded-lg flex items-center gap-1">
                       <Zap className="w-3 h-3 fill-amber-400" /> {option.cost_ap || 1} AP
                     </span>
                   </div>
@@ -279,7 +279,7 @@ export default function NPCDialogCard({
               <MessageSquare className="w-4 h-4 text-amber-400" />
               Bạn muốn nói gì hoặc đưa ra điều kiện gì với {npc.name}?
             </span>
-            <span className="text-[10px] font-mono text-amber-400 flex items-center gap-1 bg-slate-900 px-2 py-0.5 rounded-lg border border-slate-800">
+            <span className="text-[12px] font-sans tabular-nums text-amber-400 flex items-center gap-1 bg-slate-900 px-2 py-0.5 rounded-lg border border-slate-800">
               <Zap className="w-3 h-3 fill-amber-400" /> Tiêu hao: 1 AP
             </span>
           </div>
@@ -294,8 +294,8 @@ export default function NPCDialogCard({
           />
 
           {/* Dialogue suggestion chips */}
-          <div className="flex items-center gap-1.5 flex-wrap text-[10px]">
-            <span className="text-slate-500 font-mono">Gợi ý phát ngôn:</span>
+          <div className="flex items-center gap-1.5 flex-wrap text-[12px]">
+            <span className="text-slate-500 font-sans tabular-nums">Gợi ý phát ngôn:</span>
             {[
               `"Tôi đồng ý giúp, nhưng anh phải giữ bí mật"`,
               `"Hãy cho tôi xem giấy tờ và bằng chứng trước"`,
@@ -325,14 +325,14 @@ export default function NPCDialogCard({
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                 Phản Hồi Từ {npc.name}
               </div>
-              <p className="font-serif italic leading-relaxed text-slate-300">
+              <p className="font-sans italic leading-relaxed text-slate-300">
                 "{customResult.story_outcome || customResult.message || `${npc.name} đã lắng nghe và phản ứng theo lời nói của bạn.`}"
               </p>
             </div>
           )}
 
           <div className="flex items-center justify-between pt-1">
-            <span className="text-[10.5px] text-slate-400 font-sans italic">
+            <span className="text-[12px] text-slate-400 font-sans italic">
               Lời nói chân thật và tài hùng biện sẽ quyết định mức độ thiện cảm.
             </span>
             <button
@@ -354,3 +354,4 @@ export default function NPCDialogCard({
     </div>
   );
 }
+

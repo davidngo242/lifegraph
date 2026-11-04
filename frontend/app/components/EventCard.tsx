@@ -71,7 +71,7 @@ export default function EventCard({
     return (
       <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 flex flex-col items-center justify-center min-h-[220px] text-slate-500 backdrop-blur-md">
         <Compass className="w-7 h-7 animate-spin text-indigo-400/80 mb-2" />
-        <p className="text-xs uppercase font-sans font-medium text-slate-400">Đang điều phối bước ngoặt cuộc đời...</p>
+        <p className="text-xs normal-case font-sans font-medium text-slate-400">Đang điều phối bước ngoặt cuộc đời...</p>
       </div>
     );
   }
@@ -192,18 +192,18 @@ export default function EventCard({
       {/* Header Bar */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-semibold uppercase px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+          <span className="text-[12px] font-semibold normal-case px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
             Sân Khấu Tâm Thức & Biến Cố
           </span>
           {characterAge !== undefined && (
-            <span className="text-xs font-mono font-bold text-amber-400">
+            <span className="text-xs font-sans tabular-nums font-bold text-amber-400">
               Năm {characterAge} Tuổi
             </span>
           )}
         </div>
 
         {/* Tab Switcher: RPG Options vs Open-Text AI */}
-        <div className="flex items-center bg-slate-950/80 p-0.5 rounded-xl border border-slate-800 text-[11px]">
+        <div className="flex items-center bg-slate-950/80 p-0.5 rounded-xl border border-slate-800 text-[12px]">
           <button
             onClick={() => { setActiveTab('standard'); setCustomResult(null); }}
             className={`px-2.5 py-1 rounded-lg font-medium transition ${
@@ -234,19 +234,19 @@ export default function EventCard({
       </h2>
 
       {/* Narrative Context */}
-      <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800/90 text-slate-200 text-xs md:text-sm leading-relaxed font-serif italic">
+      <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800/90 text-slate-200 text-xs md:text-sm leading-relaxed font-sans italic">
         "{dilemma.narrative}"
       </div>
 
       {/* INTERNAL EGO VOICES CABINET (Bản Ngã Tranh Luận) */}
       <div className="rounded-2xl bg-slate-950/70 border border-indigo-500/20 p-2.5 transition">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[9.5px] uppercase font-mono font-bold text-slate-400 flex items-center gap-1">
+          <span className="text-[12px] normal-case font-sans tabular-nums font-bold text-slate-400 flex items-center gap-1">
             <Brain className="w-3 h-3 text-indigo-400" /> Bản Ngã Tranh Luận (Internal Voices)
           </span>
           <button
             onClick={() => setShowMindVoices(!showMindVoices)}
-            className="text-[10px] text-slate-500 hover:text-slate-300 flex items-center gap-0.5"
+            className="text-[12px] text-slate-500 hover:text-slate-300 flex items-center gap-0.5"
           >
             {showMindVoices ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
           </button>
@@ -255,7 +255,7 @@ export default function EventCard({
         {showMindVoices && (
           <div className="flex flex-col gap-2 pt-1 animate-in fade-in duration-200">
             {/* Voice Selectors */}
-            <div className="grid grid-cols-3 gap-1.5 text-[10px]">
+            <div className="grid grid-cols-3 gap-1.5 text-[12px]">
               <button
                 onClick={() => setActiveVoice('logic')}
                 className={`py-1 px-1.5 rounded-lg flex items-center justify-center gap-1 border transition ${
@@ -294,7 +294,7 @@ export default function EventCard({
             </div>
 
             {/* Active Voice Whisper */}
-            <div className="text-[11px] font-serif italic text-slate-300 p-2 rounded-xl bg-slate-900/90 border border-slate-800 flex items-start gap-2">
+            <div className="text-[12px] font-sans italic text-slate-300 p-2 rounded-xl bg-slate-900/90 border border-slate-800 flex items-start gap-2">
               <span className="text-xs">
                 {activeVoice === 'logic' ? '💡' : activeVoice === 'heart' ? '❤️' : '⚡'}
               </span>
@@ -332,12 +332,12 @@ export default function EventCard({
                 >
                   <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
                     {/* Roleplay Stance Badge */}
-                    <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${stance.color}`}>
+                    <span className={`text-[12px] font-bold normal-case tracking-normal px-2 py-0.5 rounded-md border ${stance.color}`}>
                       {stance.tag}
                     </span>
 
                     {stance.needsRoll && (
-                      <span className="text-[9px] font-mono text-amber-400 flex items-center gap-0.5">
+                      <span className="text-[12px] font-sans tabular-nums text-amber-400 flex items-center gap-0.5">
                         <Dices className="w-2.5 h-2.5" /> Thử thách
                       </span>
                     )}
@@ -348,7 +348,7 @@ export default function EventCard({
                   </div>
 
                   {consequence && (
-                    <div className="text-[10.5px] text-slate-400 group-hover:text-slate-300 font-sans truncate">
+                    <div className="text-[12px] text-slate-400 group-hover:text-slate-300 font-sans truncate">
                       ↳ {consequence}
                     </div>
                   )}
@@ -356,18 +356,18 @@ export default function EventCard({
 
                 {/* Right: Info Tooltip + Risk Badge + AP Cost */}
                 <div className="flex items-center gap-2 shrink-0">
-                  <Tooltip content={<div className="font-serif italic text-slate-300">{consequence}</div>}>
+                  <Tooltip content={<div className="font-sans italic text-slate-300">{consequence}</div>}>
                     <button className="text-slate-500 hover:text-indigo-300 transition p-1">
                       <HelpCircle className="w-3.5 h-3.5" />
                     </button>
                   </Tooltip>
 
-                  <span className={`text-[9px] font-medium px-2 py-0.5 rounded-full border ${risk.color}`}>
+                  <span className={`text-[12px] font-medium px-2 py-0.5 rounded-full border ${risk.color}`}>
                     {risk.text}
                   </span>
 
                   {costAp > 0 && (
-                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-lg flex items-center gap-1 border ${
+                    <span className={`text-[12px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-lg flex items-center gap-1 border ${
                       !hasEnoughAP
                         ? 'bg-rose-950/60 border-rose-500/40 text-rose-400'
                         : 'bg-slate-900 border-slate-700 text-amber-400'
@@ -391,7 +391,7 @@ export default function EventCard({
               <Sparkles className="w-4 h-4 text-amber-400" />
               Tự do nhập vai. Bạn sẽ xử lý tình huống này thế nào?
             </span>
-            <span className="text-[10px] font-mono text-amber-400 flex items-center gap-1 bg-slate-900 px-2 py-0.5 rounded-lg border border-slate-800">
+            <span className="text-[12px] font-sans tabular-nums text-amber-400 flex items-center gap-1 bg-slate-900 px-2 py-0.5 rounded-lg border border-slate-800">
               <Zap className="w-3 h-3 fill-amber-400" /> Tiêu hao: 1 AP
             </span>
           </div>
@@ -406,8 +406,8 @@ export default function EventCard({
           />
 
           {/* Inspirational Prompt Chips */}
-          <div className="flex items-center gap-1.5 flex-wrap text-[10px]">
-            <span className="text-slate-500 font-mono">Gợi ý:</span>
+          <div className="flex items-center gap-1.5 flex-wrap text-[12px]">
+            <span className="text-slate-500 font-sans tabular-nums">Gợi ý:</span>
             {[
               "Đàm phán chia đôi lợi ích",
               "Khéo léo xin thêm thời gian",
@@ -439,14 +439,14 @@ export default function EventCard({
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                 Phán Quyết Định Mệnh
               </div>
-              <p className="font-serif italic leading-relaxed text-slate-300">
+              <p className="font-sans italic leading-relaxed text-slate-300">
                 "{customResult.story_outcome || customResult.message || "Hành động độc bản của bạn đã được ghi nhận."}"
               </p>
             </div>
           )}
 
           <div className="flex items-center justify-between pt-1">
-            <span className="text-[10.5px] text-slate-400 font-sans italic">
+            <span className="text-[12px] text-slate-400 font-sans italic">
               AI Game Master sẽ phân giải xác suất dựa trên chỉ số nhân vật của bạn.
             </span>
             <button

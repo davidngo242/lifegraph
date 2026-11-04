@@ -172,7 +172,7 @@ export default function LifeTightropeMiniGame({
             </div>
 
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30">
+              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30">
                 Cân Bằng Trung Niên (29–48 Tuổi)
               </span>
             </div>
@@ -184,7 +184,7 @@ export default function LifeTightropeMiniGame({
 
             {/* How to play card */}
             <div className="w-full bg-slate-950/80 border border-slate-800 rounded-2xl p-4 mb-4 text-left space-y-2.5 text-xs">
-              <div className="font-bold text-amber-400 flex items-center gap-1.5 uppercase text-[11px] tracking-wider">
+              <div className="font-bold text-amber-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
                 <Sparkles className="w-4 h-4" /> Hướng Dẫn & Thao Tác:
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
@@ -192,20 +192,20 @@ export default function LifeTightropeMiniGame({
                   <div className="font-semibold text-pink-300 flex items-center gap-1.5 mb-1">
                     <ArrowLeft className="w-3.5 h-3.5 text-pink-400" /> Nghiêng Về Gia Đình:
                   </div>
-                  <span className="text-[11px] text-slate-400">
-                    Bấm nút hoặc phím <strong className="text-pink-300 font-mono">[⬅️ Mũi Tên Trái]</strong> hoặc <strong className="text-pink-300 font-mono">[A]</strong> để dồn tâm sức cho mái ấm.
+                  <span className="text-[12px] text-slate-400">
+                    Bấm nút hoặc phím <strong className="text-pink-300 font-sans tabular-nums">[⬅️ Mũi Tên Trái]</strong> hoặc <strong className="text-pink-300 font-sans tabular-nums">[A]</strong> để dồn tâm sức cho mái ấm.
                   </span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
                   <div className="font-semibold text-cyan-300 flex items-center gap-1.5 mb-1">
                     <ArrowRight className="w-3.5 h-3.5 text-cyan-400" /> Nghiêng Về Sự Nghiệp:
                   </div>
-                  <span className="text-[11px] text-slate-400">
-                    Bấm nút hoặc phím <strong className="text-cyan-300 font-mono">[➡️ Mũi Tên Phải]</strong> hoặc <strong className="text-cyan-300 font-mono">[D]</strong> để cày cuốc thăng tiến.
+                  <span className="text-[12px] text-slate-400">
+                    Bấm nút hoặc phím <strong className="text-cyan-300 font-sans tabular-nums">[➡️ Mũi Tên Phải]</strong> hoặc <strong className="text-cyan-300 font-sans tabular-nums">[D]</strong> để cày cuốc thăng tiến.
                   </span>
                 </div>
               </div>
-              <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-[11px] text-slate-400">
+              <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-[12px] text-slate-400">
                 💡 <strong>Mẹo:</strong> Đòn bập bênh sẽ rung lắc ngẫu nhiên khi có biến cố gia đình hoặc hạn deadline. Đừng nghiêng quá 42° kẻo ngã!
               </div>
             </div>
@@ -214,11 +214,11 @@ export default function LifeTightropeMiniGame({
             <div className="w-full bg-slate-950/50 border border-slate-800/80 rounded-2xl p-3 mb-5 text-xs text-left grid grid-cols-2 gap-3">
               <div>
                 <span className="text-emerald-400 font-bold block mb-0.5">🌟 Cân Bằng Đỉnh Cao:</span>
-                <span className="text-[11px] text-slate-400">Thanh lọc -40 Burnout, +10 Karma, Cờ &quot;Bậc Thầy Cân Bằng&quot;.</span>
+                <span className="text-[12px] text-slate-400">Thanh lọc -40 Burnout, +10 Karma, Cờ &quot;Bậc Thầy Cân Bằng&quot;.</span>
               </div>
               <div>
                 <span className="text-rose-400 font-bold block mb-0.5">⚠️ Rơi Khỏi Dây:</span>
-                <span className="text-[11px] text-slate-400">Khủng hoảng trung niên: +25 Burnout, -5 Sinh lực.</span>
+                <span className="text-[12px] text-slate-400">Khủng hoảng trung niên: +25 Burnout, -5 Sinh lực.</span>
               </div>
             </div>
 
@@ -232,7 +232,7 @@ export default function LifeTightropeMiniGame({
                 gameOverRef.current = false;
                 setStage('playing');
               }}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-amber-500/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-amber-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <Play className="w-4 h-4 fill-current" />
               <span>Bắt Đầu Giữ Thăng Bằng (15 Giây)</span>
@@ -250,7 +250,7 @@ export default function LifeTightropeMiniGame({
               <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300 font-medium border border-amber-500/20">
                 ⚖️ Thăng Bằng Cuộc Sống
               </span>
-              <div className="flex items-center gap-2 font-mono">
+              <div className="flex items-center gap-2 font-sans tabular-nums">
                 <span className="text-slate-400">Thời gian:</span>
                 <span className={`px-2.5 py-0.5 rounded font-bold ${
                   timeLeft <= 4 ? 'bg-rose-500/20 text-rose-400 animate-pulse' : 'bg-amber-500/20 text-amber-300'
@@ -280,7 +280,7 @@ export default function LifeTightropeMiniGame({
                 {/* Left Weight: Family */}
                 <div className="relative -top-8 flex flex-col items-center">
                   <span className="text-2xl filter drop-shadow">🏡</span>
-                  <span className="text-[10px] font-bold text-pink-300 bg-slate-900/90 px-1.5 py-0.5 rounded border border-pink-500/40 whitespace-nowrap">
+                  <span className="text-[12px] font-bold text-pink-300 bg-slate-900/90 px-1.5 py-0.5 rounded border border-pink-500/40 whitespace-nowrap">
                     Gia Đình
                   </span>
                 </div>
@@ -294,14 +294,14 @@ export default function LifeTightropeMiniGame({
                 {/* Right Weight: Career */}
                 <div className="relative -top-8 flex flex-col items-center">
                   <span className="text-2xl filter drop-shadow">💼</span>
-                  <span className="text-[10px] font-bold text-cyan-300 bg-slate-900/90 px-1.5 py-0.5 rounded border border-cyan-500/40 whitespace-nowrap">
+                  <span className="text-[12px] font-bold text-cyan-300 bg-slate-900/90 px-1.5 py-0.5 rounded border border-cyan-500/40 whitespace-nowrap">
                     Sự Nghiệp
                   </span>
                 </div>
               </div>
 
               {/* Tilt Angle Readout */}
-              <div className="absolute top-2 left-3 text-[10px] font-mono text-slate-400">
+              <div className="absolute top-2 left-3 text-[12px] font-sans tabular-nums text-slate-400">
                 Độ nghiêng: <strong className={Math.abs(angle) > 28 ? 'text-rose-400' : 'text-emerald-400'}>
                   {Math.round(angle)}°
                 </strong> (Giới hạn: ±42°)
@@ -316,7 +316,7 @@ export default function LifeTightropeMiniGame({
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Nghiêng Gia Đình</span>
-                <span className="hidden sm:inline text-[9px] font-mono text-pink-300 bg-pink-950 px-1.5 py-0.5 rounded">[⬅️/A]</span>
+                <span className="hidden sm:inline text-[12px] font-sans tabular-nums text-pink-300 bg-pink-950 px-1.5 py-0.5 rounded">[⬅️/A]</span>
               </button>
 
               <button
@@ -325,7 +325,7 @@ export default function LifeTightropeMiniGame({
               >
                 <span>Nghiêng Sự Nghiệp</span>
                 <ArrowRight className="w-4 h-4" />
-                <span className="hidden sm:inline text-[9px] font-mono text-cyan-300 bg-cyan-950 px-1.5 py-0.5 rounded">[➡️/D]</span>
+                <span className="hidden sm:inline text-[12px] font-sans tabular-nums text-cyan-300 bg-cyan-950 px-1.5 py-0.5 rounded">[➡️/D]</span>
               </button>
             </div>
           </div>
@@ -356,7 +356,7 @@ export default function LifeTightropeMiniGame({
                 : "Mất Thăng Bằng Cuộc Đời"}
             </h3>
 
-            <div className="font-mono text-sm text-slate-300 mb-3">
+            <div className="font-sans tabular-nums text-sm text-slate-300 mb-3">
               Điểm số cân bằng: <strong className="text-white font-bold">{Math.max(0, Math.round(100 - Math.abs(angle) * 2.2))}/100</strong>
             </div>
 
@@ -370,7 +370,7 @@ export default function LifeTightropeMiniGame({
 
             <button
               onClick={handleReturnToLife}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-amber-500/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-amber-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <span>Tiếp Tục Cuộc Đời</span>
               <ArrowRight className="w-4 h-4" />
@@ -381,3 +381,4 @@ export default function LifeTightropeMiniGame({
     </div>
   );
 }
+

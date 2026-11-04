@@ -211,7 +211,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
       const value = raw as { before: number; after: number };
       const labels: Record<string, string> = { cash: 'Tiền (USD)', vitality: 'Sinh lực', karma: 'Karma tại thế', burnout: 'Căng thẳng', action_points: 'AP' };
       return <div key={key} className="rounded-lg bg-slate-950 p-2 text-xs"><div className="text-slate-400">{labels[key] ?? key}</div>
-        <div className="font-mono text-white">{value.before.toLocaleString()} → {value.after.toLocaleString()}</div></div>;
+        <div className="font-sans tabular-nums text-white">{value.before.toLocaleString()} → {value.after.toLocaleString()}</div></div>;
     })}
   </div>;
 
@@ -353,7 +353,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
       <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 backdrop-blur-md flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold">
+            <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold">
               {scenario.title}
             </span>
             <span className="text-xs text-slate-400 font-medium">
@@ -404,10 +404,10 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
             title="Xem Sổ tay Tri thức đã ghi nhận"
           >
             <BookOpen className="w-3.5 h-3.5 text-amber-400" />
-            <span>Tri Thức Ghi Nhận ({knowledgeBase.length})</span>
+            <span>Manh mối ({knowledgeBase.length})</span>
           </button>
 
-          <div className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs font-mono font-bold text-emerald-300 flex items-center gap-1.5">
+          <div className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs font-sans tabular-nums font-bold text-emerald-300 flex items-center gap-1.5">
             <span>⚡ {actionPoints} AP</span>
           </div>
 
@@ -416,7 +416,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
             className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-purple-600/30 flex items-center gap-1.5 transition active:scale-95"
           >
             <Brain className="w-3.5 h-3.5" />
-            <span>Cân Nhắc Quyết Định</span>
+            <span>Chọn hành động</span>
           </button>
         </div>
       </div>
@@ -467,7 +467,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
               className="absolute bottom-16 -translate-x-1/2 flex flex-col items-center group cursor-pointer transition-all duration-300"
             >
               {/* Floating Indicator */}
-              <div className={`px-2.5 py-1 rounded-full text-[11px] font-bold mb-2 flex items-center gap-1 shadow-lg transition-transform ${
+              <div className={`px-2.5 py-1 rounded-full text-[12px] font-bold mb-2 flex items-center gap-1 shadow-lg transition-transform ${
                 isNear
                   ? 'bg-indigo-600 text-white scale-110 ring-4 ring-indigo-500/30 animate-bounce'
                   : 'bg-slate-900/90 text-slate-300 border border-slate-700'
@@ -496,7 +496,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
               </div>
 
               {isNear && (
-                <span className="text-[10px] font-mono text-indigo-300 mt-1 uppercase font-bold tracking-wider">
+                <span className="text-[12px] font-sans tabular-nums text-indigo-300 mt-1 normal-case font-bold tracking-normal">
                   [Bấm E / Nhấp Chuột]
                 </span>
               )}
@@ -510,7 +510,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
           className="absolute bottom-14 -translate-x-1/2 flex flex-col items-center pointer-events-none transition-all duration-150"
         >
           {/* Player Tag */}
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold mb-1 shadow">
+          <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold mb-1 shadow">
             {character?.name ?? "Bạn"} (Bạn)
           </span>
 
@@ -523,7 +523,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
         </div>
 
         {/* Movement Help Banner */}
-        <div className="absolute bottom-3 left-4 text-[11px] text-slate-400 font-sans pointer-events-none flex items-center gap-3">
+        <div className="absolute bottom-3 left-4 text-[12px] text-slate-400 font-sans pointer-events-none flex items-center gap-3">
           <span>⌨️ Phím: <b>A / D</b> hoặc <b>← / →</b> để đi lại</span>
           <span>•</span>
           <span>🖱️ Nhấp chuột bất kỳ đâu trên sàn để di chuyển</span>
@@ -546,7 +546,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
             </div>
             <div className="flex-1 space-y-2">
               <div className="font-bold text-white text-sm">{activeDialogue.speaker}</div>
-              <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-serif italic">
+              <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-sans italic">
                 "{activeDialogue.text}"
               </p>
 
@@ -584,12 +584,12 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Brain className="w-4 h-4 text-purple-400" />
-                <span className="text-[10px] font-mono uppercase tracking-wider text-purple-400 font-bold">
+                <span className="text-[12px] font-sans tabular-nums normal-case tracking-normal text-purple-400 font-bold">
                   Sân Khấu Tâm Trí · Ngã Rẽ Định Mệnh
                 </span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white font-serif">{scenario.title}</h2>
-              <p className="text-xs text-slate-300 mt-1 font-serif">{scenario.mind_stage?.whispers?.dilemma_prompt}</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-white font-sans">{scenario.title}</h2>
+              <p className="text-xs text-slate-300 mt-1 font-sans">{scenario.mind_stage?.whispers?.dilemma_prompt}</p>
             </div>
 
             {/* 3 Internal Ego Whispers */}
@@ -599,7 +599,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                   <Brain className="w-3.5 h-3.5 text-blue-400" />
                   <span>Lý Trí</span>
                 </div>
-                <p className="text-slate-300 leading-relaxed font-serif text-[11.5px]">
+                <p className="text-slate-300 leading-relaxed font-sans text-[12px]">
                   {(scenario.mind_stage?.whispers?.rational || '').replace(/^[^:]{1,25}:\s*['"]?/, '').replace(/['"]$/, '')}
                 </p>
               </div>
@@ -609,7 +609,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                   <Heart className="w-3.5 h-3.5 text-rose-400" />
                   <span>Trái Tim</span>
                 </div>
-                <p className="text-slate-300 leading-relaxed font-serif text-[11.5px]">
+                <p className="text-slate-300 leading-relaxed font-sans text-[12px]">
                   {(scenario.mind_stage?.whispers?.empathy || '').replace(/^[^:]{1,25}:\s*['"]?/, '').replace(/['"]$/, '')}
                 </p>
               </div>
@@ -619,7 +619,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                   <span>Bản Năng</span>
                 </div>
-                <p className="text-slate-300 leading-relaxed font-serif text-[11.5px]">
+                <p className="text-slate-300 leading-relaxed font-sans text-[12px]">
                   {(scenario.mind_stage?.whispers?.instinct || '').replace(/^[^:]{1,25}:\s*['"]?/, '').replace(/['"]$/, '')}
                 </p>
               </div>
@@ -630,7 +630,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
               <div className={`p-5 rounded-2xl bg-slate-900 border-2 shadow-xl space-y-3 ${rollResult.outcome_key === 'failure' ? 'border-amber-500/60' : 'border-emerald-500/60'}`}>
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                   <div>
-                    <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">
+                    <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">
                       Kết quả: {rollResult.outcome_key === 'failure' ? 'Chưa thành công' : rollResult.outcome_key === 'critical_success' ? 'Thành công xuất sắc' : 'Thành công'}
                     </span>
                     <h3 className="text-base font-bold text-white mt-1">{rollResult.choice_title}</h3>
@@ -638,15 +638,15 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
 
                   {rollResult.roll && (
                     <div className="text-right">
-                      <div className="text-[11px] text-slate-400">Xúc xắc D20</div>
-                      <div className="text-lg font-bold font-mono text-emerald-400">
+                      <div className="text-[12px] text-slate-400">Xúc xắc D20</div>
+                      <div className="text-lg font-bold font-sans tabular-nums text-emerald-400">
                         {rollResult.roll.d20_base} + {rollResult.roll.trait_bonus + rollResult.roll.stat_bonus + rollResult.roll.ap_bonus} = {rollResult.roll.total_score} (vs DC {rollResult.roll.target_dc})
                       </div>
                     </div>
                   )}
                 </div>
 
-                <p className="text-xs text-slate-200 font-serif leading-relaxed italic bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                <p className="text-xs text-slate-200 font-sans leading-relaxed italic bg-slate-950/60 p-3 rounded-xl border border-slate-800">
                   "{rollResult.narration}"
                 </p>
 
@@ -659,7 +659,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                       setRollResult(null);
                       loadScenario();
                     }}
-                    className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition"
+                    className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs normal-case tracking-normal transition"
                   >
                     Xem bước tiếp theo
                   </button>
@@ -668,7 +668,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
             ) : (
               /* Choices List */
               <div className="space-y-2.5">
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                <div className="text-xs font-bold text-slate-400 normal-case tracking-normal">
                   Chọn Phương Án Đối Diện Ngã Rẽ:
                 </div>
 
@@ -695,21 +695,21 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="font-bold text-sm text-white">{cleanChoiceTitle}</span>
                               {isUnderUncertainty ? (
-                                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-500/40 flex items-center gap-1 font-semibold">
+                                <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-500/40 flex items-center gap-1 font-semibold">
                                   <span>⚡ Bất định (+{missingKnowledge.length * 2} DC)</span>
                                 </span>
                               ) : (
-                                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800/50 font-semibold">
+                                <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800/50 font-semibold">
                                   {choice.stance}
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-slate-300 leading-relaxed font-serif">{choice.description}</p>
+                            <p className="text-xs text-slate-300 leading-relaxed font-sans">{choice.description}</p>
                           </div>
 
                           {choice.check && (
                             <div className="shrink-0 text-right">
-                              <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30 font-bold">
+                              <span className="text-[12px] font-sans tabular-nums text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30 font-bold">
                                 DC {choice.check.target_dc + (missingKnowledge.length * 2)} ({choice.check.stat})
                               </span>
                             </div>
@@ -717,7 +717,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                         </div>
 
                         {isUnderUncertainty && (
-                          <div className="mt-2 text-[11px] text-amber-300/90 flex items-center gap-1.5 font-sans">
+                          <div className="mt-2 text-[12px] text-amber-300/90 flex items-center gap-1.5 font-sans">
                             <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
                             <span>Chưa xác minh: {missingKnowledge.map(k => (scenario.knowledge_labels?.[k] ?? KNOWLEDGE_LABELS[k])?.label || k).join(', ')} (Hành động sớm sẽ tăng độ khó thử thách).</span>
                           </div>
@@ -737,7 +737,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                                       setApInvestment(ap);
                                     }
                                   }}
-                                  className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition ${
+                                  className={`px-2.5 py-1 rounded-lg text-xs font-sans tabular-nums font-bold transition ${
                                     apInvestment === ap
                                       ? 'bg-purple-600 text-white'
                                       : 'bg-slate-800 text-slate-400 hover:text-white'
@@ -754,7 +754,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                                 handleConfirmChoice(choice.id);
                               }}
                               disabled={isResolving || actionPoints < (choice.cost_ap ?? 0) + apInvestment}
-                              className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg active:scale-95"
+                              className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg active:scale-95"
                             >
                               {isResolving ? "Đang xử lý…" : `${choice.check ? "Xác nhận & kiểm tra D20" : "Xác nhận"} · ${(choice.cost_ap ?? 0) + apInvestment} AP`}
                             </button>
@@ -777,9 +777,9 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                       <div className="space-y-0.5">
                         <div className="font-bold text-sm text-slate-200 flex items-center gap-2">
                           <span>Trì Hoãn Quyết Định & Tiếp Tục Quan Sát</span>
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">0 AP</span>
+                          <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded bg-slate-800 text-slate-300">0 AP</span>
                         </div>
-                        <p className="text-xs text-slate-400 font-serif">
+                        <p className="text-xs text-slate-400 font-sans">
                           Chưa vội vàng cam kết khi chưa sẵn sàng. Giữ vững quyền tự chủ và tiếp tục tìm hiểu thêm trong các cảnh 2D.
                         </p>
                       </div>
@@ -793,7 +793,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                             handleConfirmChoice('CHOICE_POSTPONE_OBSERVE');
                           }}
                           disabled={isResolving}
-                          className="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs uppercase tracking-wider transition"
+                          className="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs normal-case tracking-normal transition"
                         >
                           Xác Nhận Trì Hoãn & Quay Lại Cảnh
                         </button>
@@ -835,7 +835,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                         <span>{(scenario.knowledge_labels?.[k] ?? KNOWLEDGE_LABELS[k])?.icon || "💡"}</span>
                         <span>{(scenario.knowledge_labels?.[k] ?? KNOWLEDGE_LABELS[k])?.label || k}</span>
                       </div>
-                      <p className="text-[11px] text-slate-400 leading-relaxed font-serif">
+                      <p className="text-[12px] text-slate-400 leading-relaxed font-sans">
                         {(scenario.knowledge_labels?.[k] ?? KNOWLEDGE_LABELS[k])?.desc || "Thông tin đã ghi nhận từ trải nghiệm thực tế."}
                       </p>
                     </div>
@@ -867,7 +867,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <p className="text-xs text-slate-300 font-serif leading-relaxed">
+            <p className="text-xs text-slate-300 font-sans leading-relaxed">
               {sceneNotice.message}
             </p>
             <div className="flex justify-end pt-2">

@@ -35,11 +35,11 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
 
       {/* Header Badge */}
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[10px] font-sans font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1.5">
+        <span className="text-[12px] font-sans font-bold tracking-wide normal-case px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1.5">
           <Triangle className="w-3 h-3 fill-amber-400/30" /> Tam Giác Bất Khả Thi (Trilemma)
         </span>
         {characterAge && (
-          <span className="text-xs font-mono font-bold text-amber-400">
+          <span className="text-xs font-sans tabular-nums font-bold text-amber-400">
             Năm {characterAge} Tuổi
           </span>
         )}
@@ -50,11 +50,11 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
       </h2>
 
       {/* Narrative Quote - Compact & Elegant */}
-      <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 mb-3 text-slate-200 text-xs md:text-sm leading-relaxed font-serif italic">
+      <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 mb-3 text-slate-200 text-xs md:text-sm leading-relaxed font-sans italic">
         "{dilemma.narrative}"
       </div>
 
-      <div className="text-[10px] font-sans text-slate-400 uppercase tracking-wider mb-2 font-medium flex items-center justify-between">
+      <div className="text-[12px] font-sans text-slate-400 normal-case tracking-normal mb-2 font-medium flex items-center justify-between">
         <span>Chọn 1 trong 3 con đường (Mỗi lựa chọn phải trả một cái giá đắt):</span>
       </div>
 
@@ -71,7 +71,7 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
             >
               <div>
                 <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                  <span className={`text-[9px] font-sans font-medium px-2 py-0.5 rounded-full border flex items-center gap-1 shrink-0 ${badge.color}`}>
+                  <span className={`text-[12px] font-sans font-medium px-2 py-0.5 rounded-full border flex items-center gap-1 shrink-0 ${badge.color}`}>
                     {badge.icon} {badge.label}
                   </span>
                 </div>
@@ -80,7 +80,7 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
                 </div>
               </div>
 
-              <div className="mt-2 pt-2 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-400 group-hover:text-slate-300">
+              <div className="mt-2 pt-2 border-t border-slate-800/60 flex items-center justify-between text-[12px] text-slate-400 group-hover:text-slate-300">
                 <span className="line-clamp-2">{opt.consequence_hint}</span>
                 <ArrowRight className="w-3.5 h-3.5 text-amber-400 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity ml-1" />
               </div>
@@ -91,3 +91,4 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
     </div>
   );
 }
+

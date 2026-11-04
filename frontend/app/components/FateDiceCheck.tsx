@@ -103,7 +103,7 @@ export default function FateDiceCheck({
             <Dices className="w-4 h-4 animate-bounce" />
           </div>
           <div>
-            <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-indigo-300 block">
+            <span className="text-[12px] normal-case font-sans tabular-nums font-bold tracking-normal text-indigo-300 block">
               Thử Thách Định Mệnh (Fate Skill Check)
             </span>
             <span className="text-xs text-slate-400 truncate max-w-[240px] block">
@@ -126,20 +126,20 @@ export default function FateDiceCheck({
       {/* Choice Context Card */}
       <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <span className="text-[9.5px] uppercase font-mono text-amber-400 font-bold block mb-0.5">
+          <span className="text-[12px] normal-case font-sans tabular-nums text-amber-400 font-bold block mb-0.5">
             Hành động đã chọn:
           </span>
           <span className="text-sm font-bold text-white block truncate">
             {actionText}
           </span>
-          <span className="text-[11px] text-slate-400 font-serif italic line-clamp-1">
+          <span className="text-[12px] text-slate-400 font-sans italic line-clamp-1">
             {option?.consequence_hint || option?.effects_hint || "Hệ quả sẽ được ghi vào biên niên sử"}
           </span>
         </div>
 
         <div className="text-right shrink-0">
-          <span className="text-[10px] uppercase font-mono text-slate-400 block font-semibold">Ngưỡng Vượt (DC)</span>
-          <span className="text-base font-black font-mono text-amber-300">
+          <span className="text-[12px] normal-case font-sans tabular-nums text-slate-400 block font-semibold">Ngưỡng Vượt (DC)</span>
+          <span className="text-base font-black font-sans tabular-nums text-amber-300">
             {dc}+
           </span>
         </div>
@@ -170,10 +170,10 @@ export default function FateDiceCheck({
                 : 'border-rose-400 bg-rose-950/80 text-rose-200'
               : 'border-slate-700 bg-slate-900 text-white'
           }`}>
-            <span className="text-3xl md:text-4xl font-black font-mono tracking-tight">
+            <span className="text-3xl md:text-4xl font-black font-sans tabular-nums tracking-tight">
               {currentDice}
             </span>
-            <span className="text-[9px] uppercase tracking-wider font-mono text-slate-400 mt-0.5">
+            <span className="text-[12px] normal-case tracking-normal font-sans tabular-nums text-slate-400 mt-0.5">
               D20
             </span>
           </div>
@@ -189,7 +189,7 @@ export default function FateDiceCheck({
         {/* Outcome Text Banner */}
         <div className="mt-4 min-h-[44px] flex flex-col items-center justify-center text-center">
           {rollState === 'rolling' && (
-            <span className="text-xs font-mono text-indigo-300 animate-pulse flex items-center gap-1.5 font-bold">
+            <span className="text-xs font-sans tabular-nums text-indigo-300 animate-pulse flex items-center gap-1.5 font-bold">
               <Dices className="w-3.5 h-3.5 animate-spin" /> Vòng xoay định mệnh đang lắc...
             </span>
           )}
@@ -198,21 +198,21 @@ export default function FateDiceCheck({
             <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
               <div className="flex items-center gap-2">
                 {finalScore.isCritical ? (
-                  <span className="text-sm font-black text-amber-300 uppercase tracking-wide flex items-center gap-1">
+                  <span className="text-sm font-black text-amber-300 normal-case tracking-wide flex items-center gap-1">
                     👑 ĐẠI THÀNH CÔNG (CRITICAL SUCCESS)!
                   </span>
                 ) : finalScore.isSuccess ? (
-                  <span className="text-sm font-bold text-emerald-300 uppercase tracking-wide flex items-center gap-1">
+                  <span className="text-sm font-bold text-emerald-300 normal-case tracking-wide flex items-center gap-1">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" /> THÀNH CÔNG NGOẠN MỤC!
                   </span>
                 ) : (
-                  <span className="text-sm font-bold text-rose-300 uppercase tracking-wide flex items-center gap-1">
+                  <span className="text-sm font-bold text-rose-300 normal-case tracking-wide flex items-center gap-1">
                     <AlertTriangle className="w-4 h-4 text-rose-400" /> BÀI HỌC GIAN NAN (THẤT THẾ)
                   </span>
                 )}
               </div>
 
-              <div className="text-[11px] font-mono text-slate-300 mt-1">
+              <div className="text-[12px] font-sans tabular-nums text-slate-300 mt-1">
                 Điểm xúc xắc: <span className="font-bold text-white">{finalScore.baseRoll}</span>
                 {finalScore.modifier > 0 && (
                   <span className="text-emerald-400 font-bold"> + {finalScore.modifier} (Bản Lĩnh)</span>
@@ -232,7 +232,7 @@ export default function FateDiceCheck({
       </div>
 
       {/* Breakdown Modifier Chips */}
-      <div className="flex items-center justify-center gap-2 flex-wrap pt-1 border-t border-slate-800/60 text-[10px] text-slate-400 font-mono">
+      <div className="flex items-center justify-center gap-2 flex-wrap pt-1 border-t border-slate-800/60 text-[12px] text-slate-400 font-sans tabular-nums">
         <span className="flex items-center gap-1 bg-slate-900 px-2 py-0.5 rounded-md border border-slate-800">
           <Shield className="w-3 h-3 text-indigo-400" /> Gen di truyền: +{traitsBonus}
         </span>
@@ -282,3 +282,4 @@ export default function FateDiceCheck({
     </div>
   );
 }
+

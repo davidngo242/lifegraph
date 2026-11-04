@@ -41,9 +41,9 @@ export default function StatBar({
         </div>
         <div className="flex-1">
           <div className="flex justify-between text-xs text-slate-400 mb-1 font-sans">
-            <span className="font-semibold tracking-wider text-[11px]">SỨC SỐNG</span>
-            <span className="text-slate-200 font-mono font-medium">
-              {vitality}<span className="text-slate-500 text-[11px]">/{maxVitality}</span>
+            <span className="font-semibold tracking-normal text-[12px]">SỨC SỐNG</span>
+            <span className="text-slate-200 font-sans tabular-nums font-medium">
+              {vitality}<span className="text-slate-500 text-[12px]">/{maxVitality}</span>
             </span>
           </div>
           <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700/50">
@@ -67,8 +67,8 @@ export default function StatBar({
           <DollarSign className="w-5 h-5" />
         </div>
         <div>
-          <div className="text-[11px] text-slate-400 font-semibold tracking-wider font-sans">TIỀN MẶT</div>
-          <div className={`text-base font-mono font-bold ${
+          <div className="text-[12px] text-slate-400 font-semibold tracking-normal font-sans">TIỀN MẶT</div>
+          <div className={`text-base font-sans tabular-nums font-bold ${
             cash < 0 ? 'text-rose-400 tracking-tight' : 'text-slate-100'
           }`}>
             {cash < 0 ? `-$${Math.abs(cash).toLocaleString()}` : `$${cash.toLocaleString()}`}
@@ -82,8 +82,8 @@ export default function StatBar({
           <DollarSign className="w-5 h-5" />
         </div>
         <div>
-          <div className="text-[11px] text-slate-400 font-semibold tracking-wider font-sans">TỔNG TÀI SẢN</div>
-          <div className="text-base font-mono font-bold text-teal-300">
+          <div className="text-[12px] text-slate-400 font-semibold tracking-normal font-sans">TỔNG TÀI SẢN</div>
+          <div className="text-base font-sans tabular-nums font-bold text-teal-300">
             ${displayNetWorth.toLocaleString()}
           </div>
         </div>
@@ -97,7 +97,7 @@ export default function StatBar({
           <AlertTriangle className={`w-5 h-5 ${burnout > 80 ? 'animate-bounce' : ''}`} />
         </div>
         <div>
-          <div className="text-[11px] text-slate-400 font-semibold tracking-wider font-sans">TÂM TRÍ</div>
+          <div className="text-[12px] text-slate-400 font-semibold tracking-normal font-sans">TÂM TRÍ</div>
           <div className={`text-sm font-sans font-medium ${stress.color}`}>
             {stress.label}
           </div>
@@ -110,8 +110,8 @@ export default function StatBar({
           <Sparkles className="w-5 h-5" />
         </div>
         <div>
-          <div className="text-[11px] text-slate-400 font-semibold tracking-wider font-sans">NGHIỆP LỰC</div>
-          <div className="text-sm font-mono font-bold text-purple-300">
+          <div className="text-[12px] text-slate-400 font-semibold tracking-normal font-sans">NGHIỆP LỰC</div>
+          <div className="text-sm font-sans tabular-nums font-bold text-purple-300">
             {karma}
           </div>
         </div>
@@ -119,3 +119,4 @@ export default function StatBar({
     </div>
   );
 }
+

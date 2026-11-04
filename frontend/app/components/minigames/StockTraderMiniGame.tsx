@@ -190,7 +190,7 @@ export default function StockTraderMiniGame({
             </div>
 
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
                 {marketName}
               </span>
             </div>
@@ -202,7 +202,7 @@ export default function StockTraderMiniGame({
 
             {/* How to play card */}
             <div className="w-full bg-slate-900/90 border border-slate-800 rounded-2xl p-4 mb-4 text-left space-y-2.5 text-xs">
-              <div className="font-bold text-cyan-400 flex items-center gap-1.5 uppercase text-[11px] tracking-wider">
+              <div className="font-bold text-cyan-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
                 <Sparkles className="w-4 h-4" /> Hướng Dẫn & Thao Tác:
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
@@ -210,16 +210,16 @@ export default function StockTraderMiniGame({
                   <div className="font-semibold text-emerald-400 flex items-center gap-1.5 mb-1">
                     Bước 1: Mua Vào (Buy)
                   </div>
-                  <span className="text-[11px] text-slate-400">
-                    Bấm nút hoặc phím <strong className="text-amber-300 font-mono">[Space]</strong> khi giá chạm đáy nến.
+                  <span className="text-[12px] text-slate-400">
+                    Bấm nút hoặc phím <strong className="text-amber-300 font-sans tabular-nums">[Space]</strong> khi giá chạm đáy nến.
                   </span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800">
                   <div className="font-semibold text-cyan-400 flex items-center gap-1.5 mb-1">
                     Bước 2: Chốt Lời (Sell)
                   </div>
-                  <span className="text-[11px] text-slate-400">
-                    Bấm tiếp <strong className="text-amber-300 font-mono">[Space]</strong> khi giá tăng vọt để bỏ túi lợi nhuận.
+                  <span className="text-[12px] text-slate-400">
+                    Bấm tiếp <strong className="text-amber-300 font-sans tabular-nums">[Space]</strong> khi giá tăng vọt để bỏ túi lợi nhuận.
                   </span>
                 </div>
               </div>
@@ -229,11 +229,11 @@ export default function StockTraderMiniGame({
             <div className="w-full bg-slate-900/50 border border-slate-800/80 rounded-2xl p-3 mb-5 text-xs text-left grid grid-cols-2 gap-3">
               <div>
                 <span className="text-emerald-400 font-bold block mb-0.5">🌟 Lợi Nhuận (≥20%):</span>
-                <span className="text-[11px] text-slate-400">Nhận +$15.000 tiền mặt & Cờ &quot;Trực Giác Đầu Cơ&quot;.</span>
+                <span className="text-[12px] text-slate-400">Nhận +$15.000 tiền mặt & Cờ &quot;Trực Giác Đầu Cơ&quot;.</span>
               </div>
               <div>
                 <span className="text-rose-400 font-bold block mb-0.5">⚠️ Đu Đỉnh Cắt Lỗ:</span>
-                <span className="text-[11px] text-slate-400">Thất thoát -$4.000 tiền mặt, tăng +20 Burnout.</span>
+                <span className="text-[12px] text-slate-400">Thất thoát -$4.000 tiền mặt, tăng +20 Burnout.</span>
               </div>
             </div>
 
@@ -249,7 +249,7 @@ export default function StockTraderMiniGame({
                 setSold(false);
                 setStage('playing');
               }}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-cyan-500/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-cyan-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <Play className="w-4 h-4 fill-current" />
               <span>Bắt Đầu Lướt Sóng (12 Giây)</span>
@@ -267,7 +267,7 @@ export default function StockTraderMiniGame({
               <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 font-medium border border-cyan-500/20">
                 ⚡ Sàn Giao Dịch Chứng Khoán
               </span>
-              <div className="flex items-center gap-2 font-mono">
+              <div className="flex items-center gap-2 font-sans tabular-nums">
                 <span className="text-slate-400">Thời gian:</span>
                 <span className={`px-2.5 py-0.5 rounded font-bold ${
                   timeLeft <= 3 ? 'bg-rose-500/20 text-rose-400 animate-pulse' : 'bg-amber-500/20 text-amber-300'
@@ -280,8 +280,8 @@ export default function StockTraderMiniGame({
             {/* Live Price Display & P&L */}
             <div className="flex items-center justify-between bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 mb-3">
               <div>
-                <div className="text-[10px] text-slate-400">GIÁ HIỆN TẠI (TICKER)</div>
-                <div className="text-2xl font-mono font-bold text-white flex items-center gap-1">
+                <div className="text-[12px] text-slate-400">GIÁ HIỆN TẠI (TICKER)</div>
+                <div className="text-2xl font-sans tabular-nums font-bold text-white flex items-center gap-1">
                   ${currentPrice}
                   <span className="text-xs font-normal text-slate-400">USD</span>
                 </div>
@@ -289,8 +289,8 @@ export default function StockTraderMiniGame({
 
               {hasBought && (
                 <div className="text-right">
-                  <div className="text-[10px] text-slate-400">LỢI NHUẬN RÒNG (P&L)</div>
-                  <div className={`text-xl font-mono font-bold flex items-center justify-end gap-1 ${
+                  <div className="text-[12px] text-slate-400">LỢI NHUẬN RÒNG (P&L)</div>
+                  <div className={`text-xl font-sans tabular-nums font-bold flex items-center justify-end gap-1 ${
                     profitPct >= 0 ? 'text-emerald-400' : 'text-rose-400'
                   }`}>
                     {profitPct >= 0 ? '+' : ''}{profitPct}%
@@ -310,7 +310,7 @@ export default function StockTraderMiniGame({
                     bottom: `${Math.max(5, Math.min(95, ((buyPrice - minPrice) / (maxPrice - minPrice || 1)) * 100))}%`
                   }}
                 >
-                  <span className="absolute right-2 -top-4 text-[9px] font-mono text-amber-300 bg-slate-900/90 px-1 rounded">
+                  <span className="absolute right-2 -top-4 text-[12px] font-sans tabular-nums text-amber-300 bg-slate-900/90 px-1 rounded">
                     Giá Mua: ${buyPrice}
                   </span>
                 </div>
@@ -345,20 +345,20 @@ export default function StockTraderMiniGame({
             {!hasBought ? (
               <button
                 onClick={handleBuy}
-                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-emerald-500/25 active:scale-95 flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-emerald-500/25 active:scale-95 flex items-center justify-center gap-2"
               >
                 <DollarSign className="w-4 h-4" />
                 <span>MUA VÀO TẠI ĐÂY (${currentPrice})</span>
-                <span className="text-[10px] font-mono bg-slate-950/20 px-2 py-0.5 rounded">[Space]</span>
+                <span className="text-[12px] font-sans tabular-nums bg-slate-950/20 px-2 py-0.5 rounded">[Space]</span>
               </button>
             ) : (
               <button
                 onClick={handleSell}
-                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-amber-500/25 active:scale-95 flex items-center justify-center gap-2 animate-pulse"
+                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-amber-500/25 active:scale-95 flex items-center justify-center gap-2 animate-pulse"
               >
                 <TrendingUp className="w-4 h-4" />
                 <span>CHỐT LỜI NGAY ({profitPct >= 0 ? `+${profitPct}%` : `${profitPct}%`})</span>
-                <span className="text-[10px] font-mono bg-slate-950/20 px-2 py-0.5 rounded">[Space]</span>
+                <span className="text-[12px] font-sans tabular-nums bg-slate-950/20 px-2 py-0.5 rounded">[Space]</span>
               </button>
             )}
           </div>
@@ -389,7 +389,7 @@ export default function StockTraderMiniGame({
                 : "Đu Đỉnh Cắt Lỗ Nặng Nề"}
             </h3>
 
-            <div className="font-mono text-sm text-slate-300 mb-3">
+            <div className="font-sans tabular-nums text-sm text-slate-300 mb-3">
               Hiệu suất thương vụ: <strong className={`font-bold ${profitPct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                 {profitPct >= 0 ? `+${profitPct}%` : `${profitPct}%`}
               </strong>
@@ -405,7 +405,7 @@ export default function StockTraderMiniGame({
 
             <button
               onClick={handleReturnToLife}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-cyan-500/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-cyan-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <span>Tiếp Tục Cuộc Đời</span>
               <ArrowRight className="w-4 h-4" />
@@ -416,3 +416,4 @@ export default function StockTraderMiniGame({
     </div>
   );
 }
+

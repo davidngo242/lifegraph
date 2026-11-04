@@ -133,8 +133,8 @@ export default function AssetDetailModal({
     const sign = showSign && usd > 0 ? "+" : "";
     return (
       <span className="inline-flex items-baseline gap-1">
-        <span className="font-mono font-bold">{sign}{c.primary}</span>
-        <span className="text-[10px] text-slate-400 font-sans font-normal">{c.secondaryVnd}</span>
+        <span className="font-sans tabular-nums font-bold">{sign}{c.primary}</span>
+        <span className="text-[12px] text-slate-400 font-sans font-normal">{c.secondaryVnd}</span>
       </span>
     );
   };
@@ -239,16 +239,16 @@ export default function AssetDetailModal({
               <h2 className="text-base md:text-lg font-bold text-white tracking-tight">
                 Quản Trị Tài Sản & Nơi Cư Trú
               </h2>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+              <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
                 Thị Trường {nationality}
               </span>
               {isMinor && (
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                <span className="text-[12px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1">
                   <Lock className="w-3 h-3" /> Vị Thành Niên ({age}T)
                 </span>
               )}
             </div>
-            <p className="text-[11px] text-slate-400 mt-0.5 truncate">
+            <p className="text-[12px] text-slate-400 mt-0.5 truncate">
               Định vị: <strong className="text-slate-300 font-medium">{currentCity}</strong> • Quản lý danh mục đầu tư tích lũy và điều kiện sinh hoạt
             </p>
           </div>
@@ -270,23 +270,23 @@ export default function AssetDetailModal({
         {/* 3. Overview Stats Bar: Bố cục chữ to chữ nhỏ hài hòa */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-3 rounded-2xl bg-slate-900/90 border border-slate-800 mb-3">
           <div className="flex flex-col">
-            <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Tổng Giá Trị Tài Sản</span>
+            <span className="text-[12px] normal-case font-semibold text-slate-400 tracking-normal">Tổng Giá Trị Tài Sản</span>
             <div className="text-sm md:text-base text-emerald-400 mt-0.5">
               {renderMoney(totalValue)}
             </div>
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Dòng Tiền Thuần / Năm</span>
+            <span className="text-[12px] normal-case font-semibold text-slate-400 tracking-normal">Dòng Tiền Thuần / Năm</span>
             <div className={`text-sm md:text-base mt-0.5 ${netAnnualFlow >= 0 ? 'text-teal-400' : 'text-rose-400'}`}>
               {renderMoney(netAnnualFlow, true)}
             </div>
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Nguồn Lực Hiện Có</span>
+            <span className="text-[12px] normal-case font-semibold text-slate-400 tracking-normal">Nguồn Lực Hiện Có</span>
             <div className="text-xs text-slate-300 mt-1 flex items-center gap-2 flex-wrap">
               <span>Tiền: {renderMoney(cash)}</span>
               <span>•</span>
-              <span>AP: <strong className="text-amber-400 font-mono">{actionPoints}</strong></span>
+              <span>AP: <strong className="text-amber-400 font-sans tabular-nums">{actionPoints}</strong></span>
             </div>
           </div>
         </div>
@@ -309,7 +309,7 @@ export default function AssetDetailModal({
         <div className="flex border-b border-slate-800 mb-2.5 gap-2">
           <button
             onClick={() => { setActiveTab('portfolio'); setErrorMsg(null); setSuccessMsg(null); }}
-            className={`pb-2 px-3 text-xs font-bold uppercase tracking-wider transition border-b-2 ${
+            className={`pb-2 px-3 text-xs font-bold normal-case tracking-normal transition border-b-2 ${
               activeTab === 'portfolio'
                 ? 'border-emerald-400 text-emerald-300'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -319,7 +319,7 @@ export default function AssetDetailModal({
           </button>
           <button
             onClick={() => { setActiveTab('market'); setErrorMsg(null); setSuccessMsg(null); }}
-            className={`pb-2 px-3 text-xs font-bold uppercase tracking-wider transition border-b-2 ${
+            className={`pb-2 px-3 text-xs font-bold normal-case tracking-normal transition border-b-2 ${
               activeTab === 'market'
                 ? 'border-emerald-400 text-emerald-300'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -329,7 +329,7 @@ export default function AssetDetailModal({
           </button>
           <button
             onClick={() => { setActiveTab('housing'); setErrorMsg(null); setSuccessMsg(null); }}
-            className={`pb-2 px-3 text-xs font-bold uppercase tracking-wider transition border-b-2 ${
+            className={`pb-2 px-3 text-xs font-bold normal-case tracking-normal transition border-b-2 ${
               activeTab === 'housing'
                 ? 'border-amber-400 text-amber-300'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -341,8 +341,8 @@ export default function AssetDetailModal({
 
         {/* Tier Filter Pills in Market */}
         {activeTab === 'market' && (
-          <div className="flex items-center gap-1 overflow-x-auto pb-2 mb-2 scrollbar-none text-[11px]">
-            <span className="text-slate-400 text-[10px] font-semibold uppercase tracking-wider mr-1 flex items-center gap-1 shrink-0">
+          <div className="flex items-center gap-1 overflow-x-auto pb-2 mb-2 scrollbar-none text-[12px]">
+            <span className="text-slate-400 text-[12px] font-semibold normal-case tracking-normal mr-1 flex items-center gap-1 shrink-0">
               <Layers className="w-3 h-3 text-indigo-400" /> Cấp Vốn:
             </span>
             {[
@@ -356,7 +356,7 @@ export default function AssetDetailModal({
               <button
                 key={pill.id}
                 onClick={() => setSelectedTierFilter(pill.id as any)}
-                className={`px-2.5 py-1 rounded-lg text-[11px] whitespace-nowrap transition ${
+                className={`px-2.5 py-1 rounded-lg text-[12px] whitespace-nowrap transition ${
                   selectedTierFilter === pill.id
                     ? 'bg-emerald-600 text-slate-950 font-bold'
                     : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
@@ -376,7 +376,7 @@ export default function AssetDetailModal({
               <div className="text-center py-10 text-slate-500">
                 <ShieldCheck className="w-10 h-10 mx-auto mb-2 opacity-30" />
                 <p className="text-xs md:text-sm font-medium">Bạn chưa sở hữu tài sản nào.</p>
-                <p className="text-[11px] text-slate-600 mt-0.5">
+                <p className="text-[12px] text-slate-600 mt-0.5">
                   {isMinor
                     ? `Hiện tại bạn đang ${age} tuổi. Hãy rèn luyện kỹ năng và học tập, khi đủ 18 tuổi bạn sẽ có thể tham gia đầu tư!`
                     : `Hãy chuyển sang tab "Sàn Đầu Tư Thị Trường" để mua cổ phiếu, vàng hoặc bất động sản tại ${currentCity}!`}
@@ -394,7 +394,7 @@ export default function AssetDetailModal({
                     </div>
                     <div>
                       <h4 className="text-xs md:text-sm font-semibold text-white">{asset.name}</h4>
-                      <div className="text-[11px] text-slate-400 flex items-center gap-3 mt-0.5 flex-wrap">
+                      <div className="text-[12px] text-slate-400 flex items-center gap-3 mt-0.5 flex-wrap">
                         <span>Giá trị: <strong className="text-emerald-300">{renderMoney(asset.current_value)}</strong></span>
                         {Number((asset as any).annual_cash_flow || (asset as any).cash_flow || 0) > 0 && (
                           <span className="text-teal-400">Thu về: {renderMoney(Number((asset as any).annual_cash_flow || (asset as any).cash_flow), true)}/năm</span>
@@ -409,7 +409,7 @@ export default function AssetDetailModal({
                   <button
                     disabled={loadingId === asset.id || isMinor || actionPoints < 1}
                     onClick={() => handleSell(asset.id)}
-                    className="px-3 py-1.5 rounded-xl bg-rose-950/60 hover:bg-rose-900 border border-rose-500/40 text-rose-300 hover:text-white text-[11px] font-semibold flex items-center gap-1.5 transition active:scale-95 disabled:opacity-40 shrink-0"
+                    className="px-3 py-1.5 rounded-xl bg-rose-950/60 hover:bg-rose-900 border border-rose-500/40 text-rose-300 hover:text-white text-[12px] font-semibold flex items-center gap-1.5 transition active:scale-95 disabled:opacity-40 shrink-0"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     Bán (-1 AP)
@@ -448,15 +448,15 @@ export default function AssetDetailModal({
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-base">{item.icon || '💼'}</span>
                       <h4 className="text-xs md:text-sm font-semibold text-white truncate">{item.name}</h4>
-                      <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+                      <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
                         {item.tier_label}
                       </span>
-                      <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                      <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">
                         {item.ap_cost} AP
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-400 mt-1 line-clamp-1">{item.desc}</p>
-                    <div className="text-[11px] text-slate-300 flex items-center gap-3.5 mt-1.5 flex-wrap">
+                    <p className="text-[12px] text-slate-400 mt-1 line-clamp-1">{item.desc}</p>
+                    <div className="text-[12px] text-slate-300 flex items-center gap-3.5 mt-1.5 flex-wrap">
                       <span>Giá: <strong className="text-emerald-400">{renderMoney(item.cost)}</strong></span>
                       {item.cash_flow > 0 && (
                         <span className="text-teal-400">Lợi tức: {renderMoney(item.cash_flow, true)}/năm</span>
@@ -465,7 +465,7 @@ export default function AssetDetailModal({
                         <span className="text-rose-400">Bảo trì: -{renderMoney(item.maintenance)}/năm</span>
                       )}
                       {item.risk_level && (
-                        <span className="text-slate-400 text-[10px]">Rủi ro: <strong className="text-slate-300">{item.risk_level}</strong></span>
+                        <span className="text-slate-400 text-[12px]">Rủi ro: <strong className="text-slate-300">{item.risk_level}</strong></span>
                       )}
                     </div>
                   </div>
@@ -501,11 +501,11 @@ export default function AssetDetailModal({
                     <Home className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[10px] uppercase font-bold text-amber-400 tracking-wider">
+                    <div className="text-[12px] normal-case font-bold text-amber-400 tracking-normal">
                       Nơi Ở Hiện Tại ({currentHousing.status === 'owned' ? 'Chính Chủ' : isMinor ? 'Gia Đình Giám Hộ' : 'Thuê Nhà'})
                     </div>
                     <h3 className="text-xs md:text-sm font-bold text-white truncate mt-0.5">{currentHousing.name}</h3>
-                    <p className="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5 truncate">
+                    <p className="text-[12px] text-slate-400 flex items-center gap-1.5 mt-0.5 truncate">
                       <MapPin className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                       <span className="truncate">{currentHousing.address || `Khu dân cư, ${currentCity}`}</span>
                     </p>
@@ -515,7 +515,7 @@ export default function AssetDetailModal({
 
               {/* Housing Tiers Roadmap */}
               <div className="space-y-2.5">
-                <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                <div className="text-[12px] font-bold text-slate-300 normal-case tracking-normal flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                   Lộ Trình Cư Trú ({currentCity}):
                 </div>
@@ -539,18 +539,18 @@ export default function AssetDetailModal({
                     >
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-800 text-slate-300">
+                          <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-slate-800 text-slate-300">
                             Cấp {ht.tier}
                           </span>
                           <h4 className="text-xs md:text-sm font-semibold text-white">{ht.name}</h4>
                           {isCurrent && (
-                            <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                            <span className="text-[12px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
                               Đang Ở
                             </span>
                           )}
                         </div>
-                        <p className="text-[11px] text-slate-400 mt-1">{ht.description}</p>
-                        <div className="text-[11px] text-slate-300 flex items-center gap-3 mt-1.5 flex-wrap">
+                        <p className="text-[12px] text-slate-400 mt-1">{ht.description}</p>
+                        <div className="text-[12px] text-slate-300 flex items-center gap-3 mt-1.5 flex-wrap">
                           <span>Chi phí: <strong className="text-emerald-400">{renderMoney(cost)}</strong> {ht.buy_price ? '(Sở hữu)' : '/năm'}</span>
                           <span className="text-teal-300">Hạnh phúc: +{ht.happiness_bonus}%</span>
                           <span className="text-rose-300">Sức khỏe: +{ht.health_bonus} HP</span>
@@ -559,11 +559,11 @@ export default function AssetDetailModal({
 
                       <div className="shrink-0">
                         {isCurrent ? (
-                          <div className="text-[11px] font-bold text-amber-400 py-1.5 px-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-center">
+                          <div className="text-[12px] font-bold text-amber-400 py-1.5 px-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-center">
                             Đang Sinh Sống
                           </div>
                         ) : isPast ? (
-                          <div className="text-[11px] text-slate-500 py-1.5 px-3 text-center">
+                          <div className="text-[12px] text-slate-500 py-1.5 px-3 text-center">
                             Đã Vượt Qua
                           </div>
                         ) : (
@@ -601,3 +601,4 @@ export default function AssetDetailModal({
     </div>
   );
 }
+
