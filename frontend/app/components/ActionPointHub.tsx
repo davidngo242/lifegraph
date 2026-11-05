@@ -37,6 +37,8 @@ interface ActionPointHubProps {
   characterAge: number;
   cash: number;
   character?: any;
+  relationships?: any[];
+  assets?: any[];
   isTrilemmaActive?: boolean;
   onOpenAssets: () => void;
   onOpenFamily: () => void;
@@ -64,6 +66,8 @@ export default function ActionPointHub({
   characterAge,
   cash,
   character,
+  relationships = [],
+  assets = [],
   isTrilemmaActive = false,
   onOpenAssets,
   onOpenFamily,
@@ -952,7 +956,7 @@ export default function ActionPointHub({
                 <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-slate-800/80 text-slate-400 border border-slate-700/60 font-semibold">18t</span>
               ) : (
                 <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/30 font-bold">
-                  {character?.assets?.length || 0}
+                  {assets?.length || character?.assets?.length || 0}
                 </span>
               )}
             </button>
@@ -970,7 +974,7 @@ export default function ActionPointHub({
               </div>
               <span>Gia Tộc</span>
               <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-pink-950 text-pink-400 border border-pink-500/30 font-bold">
-                {character?.relationships?.length || 0}
+                {relationships?.length ?? character?.relationships?.length ?? (character?.household?.parents ? 2 : 1)}
               </span>
             </button>
           </Tooltip>

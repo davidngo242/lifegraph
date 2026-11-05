@@ -372,11 +372,7 @@ export default function CharacterHeroBanner({
               </>
             )}
 
-            {/* Permanent 3D Live Badge (Bỏ nút chuyển 2D) */}
-            <div className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-md bg-black/85 text-[12px] font-sans tabular-nums font-bold text-indigo-300 border border-indigo-500/40 backdrop-blur-md flex items-center gap-1 shadow z-20 pointer-events-none select-none">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>NHÂN VẬT</span>
-            </div>
+            
 
             {/* 360 Fullscreen Trigger */}
             <button

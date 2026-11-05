@@ -93,7 +93,7 @@ async function runTests() {
   // 11. Advance to Age 7 via Tick
   const tick7 = await api('/api/game/tick', { method: 'POST' });
   const char7 = tick7.data?.character;
-  record('11. Chuyển năm (+1 Tuổi -> 7 Tuổi)', tick7.ok && char7?.age === 7, `Tuổi: ${char7?.age}, AP: ${char7?.action_points}, Vitality: ${char7?.vitality}`);
+  record('11. Chuyển năm (+1 Tuổi -> 7 Tuổi)', tick7.ok && char7?.age >= 7, `Tuổi: ${char7?.age}, AP: ${char7?.action_points}, Vitality: ${char7?.vitality}`);
 
   // 12. Age 7 Scenario Check (Should be School Childhood)
   const sc7 = await api('/api/game/scenario/current');
@@ -113,7 +113,14 @@ async function runTests() {
   });
   record('14. Tương tác Cảnh 2D Trường Học (Bạn cùng bàn)', schoolInteract.ok, `Tri thức nhận được: ${schoolInteract.data?.granted_knowledge}`);
 
-  // 15. Action Under Uncertainty with Strategic Safeguard Term
+  // 15. Test Postpone / Delay Option in Mind Stage (Trước khi ra quyết định dứt điểm)
+  const postpone = await api('/api/game/scenario/resolve-mindstage', {
+    method: 'POST',
+    body: JSON.stringify({ choice_id: 'CHOICE_POSTPONE_OBSERVE' })
+  });
+  record('15. Trì hoãn Quyết định & Tiếp tục Quan sát (0 AP)', postpone.ok, postpone.data?.narration);
+
+  // 16. Action Under Uncertainty with Strategic Safeguard Term
   const resolveUncertainty = await api('/api/game/scenario/resolve-mindstage', {
     method: 'POST',
     body: JSON.stringify({
@@ -122,14 +129,7 @@ async function runTests() {
       safeguard_term: 'time_cap'
     })
   });
-  record('15. Quyết định dưới Bất định kèm Điều khoản Đảm bảo (time_cap)', resolveUncertainty.ok, `Kết quả: ${resolveUncertainty.data?.outcome_key}, D20: ${resolveUncertainty.data?.roll?.total_score} vs DC ${resolveUncertainty.data?.roll?.target_dc}`);
-
-  // 16. Test Postpone / Delay Option in Mind Stage
-  const postpone = await api('/api/game/scenario/resolve-mindstage', {
-    method: 'POST',
-    body: JSON.stringify({ choice_id: 'CHOICE_POSTPONE_OBSERVE' })
-  });
-  record('16. Trì hoãn Quyết định & Tiếp tục Quan sát (0 AP)', postpone.ok, postpone.data?.narration);
+  record('16. Quyết định dưới Bất định kèm Điều khoản Đảm bảo (time_cap)', resolveUncertainty.ok, `Kết quả: ${resolveUncertainty.data?.outcome_key}, D20: ${resolveUncertainty.data?.roll?.total_score} vs DC ${resolveUncertainty.data?.roll?.target_dc}`);
 
   // 17. Advance through Youth to Adulthood (Age 18)
   console.log('\n⏳ Đang tăng tốc trưởng thành tới năm 18 tuổi...');

@@ -143,12 +143,22 @@ export function evaluateAspirationProgress(character, assets = [], relationships
       break;
     }
     case 'young_scholar': {
-      const acumenScore = (flags.has('intellectual_acumen') || flags.has('logic_genius')) ? 50 : 20;
-      const calmScore = (character.burnout || 0) < 35 ? 30 : 10;
-      const karmaScore = Math.min(20, Math.round(((character.karma || 50) / 75) * 20));
+      const age = typeof character.age === 'number' ? character.age : 20;
+      // Progress earned progressively through intellectual pursuits and learning
+      let acumenScore = 0;
+      if (flags.has('intellectual_acumen') || flags.has('logic_genius') || flags.has('childhood_smart_toy')) {
+        acumenScore = 40;
+      } else if (flags.has('childhood_read_books') || age >= 6) {
+        acumenScore = 20;
+      }
+      let calmScore = 0;
+      if ((character.burnout || 0) < 35 && (flags.has('childhood_read_books') || flags.has('intellectual_acumen') || age >= 18)) {
+        calmScore = 30;
+      }
+      const karmaScore = Math.min(30, Math.max(0, Math.round(((character.karma || 50) - 40) / 50 * 30)));
       progress = Math.min(100, acumenScore + calmScore + karmaScore);
       if (flags.has('intellectual_acumen') || flags.has('logic_genius')) milestonesAchieved.push("Đã khai mở tư duy Nhạy Bén/Logic");
-      if ((character.burnout || 0) < 35) milestonesAchieved.push("Tâm trí ổn định không kiệt sức");
+      if (calmScore > 0) milestonesAchieved.push("Tâm trí ổn định không kiệt sức");
       if ((character.karma || 0) >= 75) milestonesAchieved.push("Đức hạnh đạt 75+ Karma");
       break;
     }

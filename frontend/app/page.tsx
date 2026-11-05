@@ -1182,7 +1182,7 @@ export default function LifeGraphPage() {
 
       <a href="/workshop" className="block bg-amber-950/70 border-b border-amber-700 text-amber-200 text-center p-3 text-sm">🔧 Chơi thử chương mới: Tiệm của cha · 2 ngày</a>
       {/* Slim Top Navigation */}
-      <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex flex-wrap items-center justify-between sticky top-0 z-50 gap-3 max-w-full overflow-visible">
+      <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-50 gap-3 max-w-full overflow-visible">
         {/* 1. Left Zone: Brand Logo & View Switcher Tabs (Đẩy sát sang trái) */}
         <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-wrap">
           <div className="flex items-center gap-2.5">
@@ -1251,6 +1251,90 @@ export default function LifeGraphPage() {
           </div>
         </div>
 
+        {/* 2. Center Zone: Beautiful Detailed Aspiration Hub (Bố cục giữa gọn gàng trên 1 dòng) */}
+        {aspiration && activeView === 'game' && (
+          <div className="hidden lg:flex items-center justify-center min-w-0 flex-1 px-2">
+            <Tooltip
+              position="bottom"
+              content={
+                <div className="space-y-1.5 p-1 max-w-xs">
+                  <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1">
+                    <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
+                      <span>{aspiration.icon || '🎯'}</span>
+                      <span>{aspiration.title}</span>
+                    </span>
+                    <span className="font-sans tabular-nums font-bold text-purple-300 text-xs">
+                      {aspiration.progress}%
+                    </span>
+                  </div>
+                  <div className="text-[12px] text-slate-300 font-sans italic leading-relaxed">
+                    {aspiration.target_summary}
+                  </div>
+                  {aspiration.progress >= 100 ? (
+                    <div className="text-[12px] font-bold text-emerald-400 pt-1 border-t border-slate-800 flex items-center gap-1 animate-pulse">
+                      ✨ Tâm nguyện đã trọn vẹn! Bấm để nâng cấp khát vọng (+60 Karma vĩnh cửu).
+                    </div>
+                  ) : (
+                    <div className="text-[12px] text-slate-400 pt-1 border-t border-slate-800/80 flex items-center justify-between">
+                      <span>Tiến độ hoàn thành:</span>
+                      <span className="font-bold text-amber-400">{aspiration.progress}% / 100%</span>
+                    </div>
+                  )}
+                </div>
+              }
+            >
+              <button
+                onClick={() => {
+                  if (aspiration.progress >= 100 || aspiration.is_completed) {
+                    setShowAspirationUpgradeModal(true);
+                  }
+                }}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-2xl border transition-all duration-300 group cursor-pointer max-w-full ${
+                  aspiration.progress >= 100 || aspiration.is_completed
+                    ? 'bg-gradient-to-r from-amber-500/20 via-purple-500/20 to-emerald-500/20 border-amber-400/70 text-amber-300 shadow-lg shadow-amber-500/20 animate-pulse'
+                    : 'bg-slate-950/90 hover:bg-slate-900 border-purple-500/35 hover:border-purple-400/60 text-slate-200 shadow-md'
+                }`}
+              >
+                <div className="w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center shrink-0">
+                  <span className="text-xs">{aspiration.icon || '🎯'}</span>
+                </div>
+
+                <div className="flex items-center gap-1.5 min-w-0 pr-1">
+                  <span className="text-[11px] font-mono text-purple-300 font-bold uppercase tracking-wider hidden xl:inline">
+                    Khát Vọng:
+                  </span>
+                  <span className="font-bold text-white text-xs truncate max-w-[130px] xl:max-w-[170px]">
+                    {aspiration.title}
+                  </span>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <div className="w-16 xl:w-24 h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        aspiration.progress >= 100
+                          ? 'bg-gradient-to-r from-amber-400 to-emerald-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
+                          : 'bg-gradient-to-r from-purple-500 via-indigo-400 to-amber-300'
+                      }`}
+                      style={{ width: `${Math.min(100, aspiration.progress)}%` }}
+                    />
+                  </div>
+                  <span className="font-sans tabular-nums font-bold text-xs text-amber-300 shrink-0">
+                    {aspiration.progress}%
+                  </span>
+                </div>
+
+                {aspiration.progress >= 100 && (
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 normal-case tracking-normal animate-bounce shadow-md shrink-0">
+                    Thăng Hạng
+                  </span>
+                )}
+              </button>
+            </Tooltip>
+          </div>
+        )}
+
         {/* 3. Right Zone: Đền Thờ Nghiệp Quả + Notifications + Audio */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
           {/* Đền Thờ Nghiệp Quả (Karma Sanctum) Header Button */}
@@ -1317,100 +1401,7 @@ export default function LifeGraphPage() {
             audioRef={audioRef}
           />
         </div>
-        {/* 2. Center Zone: Beautiful Detailed Aspiration Hub (Bố cục giữa nổi bật & chi tiết) */}
-        <div className="w-full min-w-0 border-t border-slate-800 pt-2 flex justify-start">
-          {aspiration && activeView === 'game' && (
-            <Tooltip
-              position="bottom"
-              content={
-                <div className="space-y-1.5 p-1 max-w-xs">
-                  <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1">
-                    <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
-                      <span>{aspiration.icon || '🎯'}</span>
-                      <span>{aspiration.title}</span>
-                    </span>
-                    <span className="font-sans tabular-nums font-bold text-purple-300 text-xs">
-                      {aspiration.progress}%
-                    </span>
-                  </div>
-                  <div className="text-[12px] text-slate-300 font-sans italic leading-relaxed">
-                    {aspiration.target_summary}
-                  </div>
-                  {aspiration.progress >= 100 ? (
-                    <div className="text-[12px] font-bold text-emerald-400 pt-1 border-t border-slate-800 flex items-center gap-1 animate-pulse">
-                      ✨ Tâm nguyện đã trọn vẹn! Bấm để nâng cấp khát vọng (+60 Karma vĩnh cửu).
-                    </div>
-                  ) : (
-                    <div className="text-[12px] text-slate-400 pt-1 border-t border-slate-800/80 flex items-center justify-between">
-                      <span>Tiến độ hoàn thành:</span>
-                      <span className="font-bold text-amber-400">{aspiration.progress}% / 100%</span>
-                    </div>
-                  )}
-                </div>
-              }
-            >
-              <button
-                onClick={() => {
-                  if (aspiration.progress >= 100 || aspiration.is_completed) {
-                    setShowAspirationUpgradeModal(true);
-                  }
-                }}
-                className={`flex items-center gap-2 sm:gap-2.5 px-3 py-1.5 rounded-2xl border transition-all duration-300 group cursor-pointer max-w-full ${
-                  aspiration.progress >= 100 || aspiration.is_completed
-                    ? 'bg-gradient-to-r from-amber-500/20 via-purple-500/20 to-emerald-500/20 border-amber-400/70 text-amber-300 shadow-lg shadow-amber-500/20 animate-pulse'
-                    : 'bg-slate-950/90 hover:bg-slate-900 border-purple-500/35 hover:border-purple-400/60 text-slate-200 shadow-md'
-                }`}
-              >
-                {/* Icon halo */}
-                <div className="w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center shrink-0">
-                  <span className="text-xs">{aspiration.icon || '🔥'}</span>
-                </div>
-
-                <div className="flex flex-col items-start min-w-0 pr-1">
-                  <div className="flex items-center gap-1.5 w-full">
-                    <span className="text-[12px] normal-case tracking-normal text-purple-300 font-extrabold hidden lg:inline">
-                      Khát Vọng:
-                    </span>
-                    <span className="font-bold text-white text-xs truncate max-w-[110px] sm:max-w-[150px] md:max-w-[200px]">
-                      {aspiration.title}
-                    </span>
-                  </div>
-
-                  {/* Subtext description on medium+ screens */}
-                  <div className="text-[12px] text-slate-400 font-sans italic truncate max-w-[110px] sm:max-w-[150px] md:max-w-[200px] hidden sm:block">
-                    {aspiration.target_summary}
-                  </div>
-                </div>
-
-                {/* Progress Mini Meter with Glow */}
-                <div className="flex items-center gap-2 shrink-0">
-                  <div className="w-14 sm:w-20 md:w-28 h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800 p-0.5">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ${
-                        aspiration.progress >= 100
-                          ? 'bg-gradient-to-r from-amber-400 to-emerald-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
-                          : 'bg-gradient-to-r from-purple-500 via-indigo-400 to-amber-300'
-                      }`}
-                      style={{ width: `${Math.min(100, aspiration.progress)}%` }}
-                    />
-                  </div>
-
-                  <span className="font-sans tabular-nums font-bold text-xs text-amber-300 shrink-0">
-                    {aspiration.progress}%
-                  </span>
-                </div>
-
-                {aspiration.progress >= 100 && (
-                  <span className="text-[12px] font-bold px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 normal-case tracking-normal animate-bounce shadow-md shrink-0">
-                    Thăng Hạng
-                  </span>
-                )}
-              </button>
-            </Tooltip>
-          )}
-        </div>
-
-      </header>
+        </header>
 
       {/* Main Container: Dynamic View Router */}
       <main className="flex-1 max-w-[1720px] w-full mx-auto p-3 md:p-5 z-10 relative">
@@ -1561,6 +1552,8 @@ export default function LifeGraphPage() {
                     characterAge={character.age || 0}
                     cash={Number(character.cash || 0)}
                     character={character}
+                    relationships={relationships}
+                    assets={assets}
                     isTrilemmaActive={dilemma?.interaction_type === 'TRILEMMA'}
                     onChildhoodAction={handleChildhoodAction}
                     onFastForwardToSchool={handleFastForwardToSchool}
