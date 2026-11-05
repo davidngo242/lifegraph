@@ -65,6 +65,20 @@ export function validateContentPack(pack) {
           choice.knowledge_requirements.forEach(k => allKnowledgeRequired.add(k));
         }
 
+        if (!Number.isInteger(choice.cost_ap ?? 0) || (choice.cost_ap ?? 0) < 0) errors.push(`${choicePath}: Invalid AP cost.`);
+        for (const [tier, outcome] of Object.entries(choice.outcomes ?? {})) {
+          if (outcome.stat_deltas) errors.push(`${choicePath}.${tier}: Use effects with *_delta keys, not stat_deltas.`);
+          for (const [key, value] of Object.entries(outcome.effects ?? {})) {
+            if (key === 'delayed_domino') {
+              if (typeof value !== 'object' || value === null) {
+                errors.push(`${choicePath}.${tier}: delayed_domino must be an object.`);
+              }
+              continue;
+            }
+            if (!['cash_delta', 'vitality_delta', 'burnout_delta', 'karma_delta'].includes(key) || !Number.isFinite(value))
+              errors.push(`${choicePath}.${tier}: Unsupported or invalid effect '${key}'.`);
+          }
+        }
         if (choice.check) {
           if (!choice.check.target_dc || choice.check.target_dc < 1) {
             errors.push(`${choicePath}: Target DC must be a positive integer.`);
@@ -96,3 +110,4 @@ export function validateContentPack(pack) {
     }
   };
 }
+

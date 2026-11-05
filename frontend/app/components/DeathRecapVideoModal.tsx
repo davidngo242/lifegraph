@@ -279,7 +279,7 @@ export default function DeathRecapVideoModal({
               <span>Phát Lại</span>
             </button>
 
-            <span className="text-xs font-mono text-slate-500">
+            <span className="text-xs font-sans tabular-nums text-slate-500">
               {Math.round(progress * 15)}s / 15s
             </span>
           </div>
@@ -301,3 +301,4 @@ export default function DeathRecapVideoModal({
     </div>
   );
 }
+

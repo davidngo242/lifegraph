@@ -101,17 +101,17 @@ export default function AncestralMemorialModal({
 
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold flex items-center gap-1.5">
+                <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold flex items-center gap-1.5">
                   <Feather className="w-3 h-3" /> Đài Tưởng Niệm Gia Phả & Bảng Vàng Dòng Họ
                 </span>
-                <span className="text-xs font-mono font-bold text-purple-300">
+                <span className="text-xs font-sans tabular-nums font-bold text-purple-300">
                   {lineage.length} Tiền Nhân Đã Lưu Danh
                 </span>
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-white mt-1">
                 Từ Đường Dòng Tộc & Đại Điện Tiên Hiền
               </h1>
-              <p className="text-xs text-slate-300 font-serif italic mt-0.5 max-w-xl">
+              <p className="text-xs text-slate-300 font-sans italic mt-0.5 max-w-xl">
                 "Cây có cội mới nở cành xanh ngọn, nước có nguồn mới biển rộng sông sâu. Công đức tổ tiên muôn đời rạng rỡ."
               </p>
             </div>
@@ -122,7 +122,7 @@ export default function AncestralMemorialModal({
             <button
               onClick={handleIncenseClick}
               disabled={incenseLoading || incenseOffered}
-              className={`w-full md:w-auto px-4 py-2.5 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition shadow-lg active:scale-95 ${
+              className={`w-full md:w-auto px-4 py-2.5 rounded-2xl font-bold text-xs normal-case tracking-normal flex items-center justify-center gap-2 transition shadow-lg active:scale-95 ${
                 incenseOffered
                   ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 cursor-default'
                   : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-amber-500/25'
@@ -155,37 +155,37 @@ export default function AncestralMemorialModal({
       {/* 2. STATS OVERVIEW CARDS */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 backdrop-blur-md">
-          <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Tổng Đời Lưu Truyền</div>
-          <div className="text-lg md:text-xl font-bold font-mono text-white mt-0.5">
+          <div className="text-[12px] text-slate-400 normal-case tracking-normal font-semibold">Số thế hệ</div>
+          <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-white mt-0.5">
             Đời Thứ {lineage.length > 0 ? Math.max(...lineage.map(i => i.generation || 1)) : 1}
           </div>
-          <div className="text-[10px] text-slate-500 mt-0.5">Huyết mạch kế tục</div>
+          <div className="text-[12px] text-slate-500 mt-0.5">Huyết mạch kế tục</div>
         </div>
 
         <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-purple-500/30 backdrop-blur-md">
-          <div className="text-[10px] text-purple-300 uppercase tracking-wider font-semibold">Đắc Đạo Niết Bàn</div>
-          <div className="text-lg md:text-xl font-bold font-mono text-purple-300 mt-0.5">
+          <div className="text-[12px] text-purple-300 normal-case tracking-normal font-semibold">Đắc Đạo Niết Bàn</div>
+          <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-purple-300 mt-0.5">
             {nirvanaCount} Tiền Nhân
           </div>
-          <div className="text-[10px] text-slate-500 mt-0.5">Thoát khỏi vòng luân hồi</div>
+          <div className="text-[12px] text-slate-500 mt-0.5">Thoát khỏi vòng luân hồi</div>
         </div>
 
         <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-teal-500/30 backdrop-blur-md">
-          <div className="text-[10px] text-teal-300 uppercase tracking-wider font-semibold">Gia Sản Đỉnh Cao</div>
-          <div className="text-lg md:text-xl font-bold font-mono text-teal-300 mt-0.5 truncate">
+          <div className="text-[12px] text-teal-300 normal-case tracking-normal font-semibold">Gia Sản Đỉnh Cao</div>
+          <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-teal-300 mt-0.5 truncate">
             ${maxNetWorthEver.toLocaleString()}
           </div>
-          <div className="text-[10px] text-slate-500 mt-0.5 truncate">
+          <div className="text-[12px] text-slate-500 mt-0.5 truncate">
             {formatCurrency(maxNetWorthEver, "Việt Nam").secondaryVnd}
           </div>
         </div>
 
         <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-amber-500/30 backdrop-blur-md">
-          <div className="text-[10px] text-amber-300 uppercase tracking-wider font-semibold">Nghiệp Lực Dòng Tộc</div>
-          <div className="text-lg md:text-xl font-bold font-mono text-amber-300 mt-0.5">
+          <div className="text-[12px] text-amber-300 normal-case tracking-normal font-semibold">Nghiệp Lực Dòng Tộc</div>
+          <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-amber-300 mt-0.5">
             {playerAccount?.total_karma ?? 250} Karma
           </div>
-          <div className="text-[10px] text-slate-500 mt-0.5">Phúc đức tích lũy</div>
+          <div className="text-[12px] text-slate-500 mt-0.5">Phúc đức tích lũy</div>
         </div>
       </div>
 
@@ -266,10 +266,10 @@ export default function AncestralMemorialModal({
                         <span className="text-base md:text-lg font-bold text-white">
                           {item.name}
                         </span>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
+                        <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
                           ĐỜI THỨ {item.generation}
                         </span>
-                        <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${
+                        <span className={`text-[12px] font-medium px-2 py-0.5 rounded-full border ${
                           isNirvana
                             ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold'
                             : 'bg-slate-800 text-slate-300 border-slate-700'
@@ -298,11 +298,11 @@ export default function AncestralMemorialModal({
 
                   {/* Right: Net Worth & Residual Blessings */}
                   <div className="flex md:flex-col items-end justify-between md:justify-start gap-1 shrink-0 text-right">
-                    <div className="text-[10px] text-slate-400 uppercase tracking-wider">Gia Sản Để Lại</div>
-                    <div className="text-sm md:text-base font-mono font-bold text-teal-300">
+                    <div className="text-[12px] text-slate-400 normal-case tracking-normal">Gia Sản Để Lại</div>
+                    <div className="text-sm md:text-base font-sans tabular-nums font-bold text-teal-300">
                       {formattedWorth.primary}
                     </div>
-                    <div className="text-[9px] font-mono text-slate-500">
+                    <div className="text-[12px] font-sans tabular-nums text-slate-500">
                       {formattedWorth.secondaryVnd}
                     </div>
                   </div>
@@ -310,7 +310,7 @@ export default function AncestralMemorialModal({
 
                 {/* Ancestral Epitaph Quote */}
                 {item.epitaph_quote && (
-                  <div className="mt-3 p-3 rounded-2xl bg-slate-950/70 border border-slate-800/80 text-xs text-slate-300 font-serif italic leading-relaxed">
+                  <div className="mt-3 p-3 rounded-2xl bg-slate-950/70 border border-slate-800/80 text-xs text-slate-300 font-sans italic leading-relaxed">
                     "{item.epitaph_quote}"
                   </div>
                 )}
@@ -322,7 +322,7 @@ export default function AncestralMemorialModal({
                       <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                       <span>Ân đức gia trì: {item.blessing}</span>
                     </span>
-                    <span className="text-[10px] font-mono text-slate-500">
+                    <span className="text-[12px] font-sans tabular-nums text-slate-500">
                       {item.recorded_at ? new Date(item.recorded_at).toLocaleDateString('vi-VN') : ''}
                     </span>
                   </div>
@@ -335,3 +335,4 @@ export default function AncestralMemorialModal({
     </div>
   );
 }
+

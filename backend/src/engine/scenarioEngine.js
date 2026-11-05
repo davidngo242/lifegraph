@@ -51,317 +51,312 @@ export function getScenarioById(scenarioId) {
   return scenarioIndex.get(scenarioId) || null;
 }
 
-export function getCurrentScenarioForCharacter(character) {
-  if (scenarioIndex.size === 0) loadAllContentPacks();
-
-  const characterAge = Number(character?.age ?? 25);
-
-  // 1. Check if character already has an explicitly pinned active scenario matching their age
-  const activeId = character?.hidden_flags?.find(f => typeof f === 'string' && f.startsWith('active_scenario:'))?.split(':')[1];
-  if (activeId && scenarioIndex.has(activeId)) {
-    const sc = scenarioIndex.get(activeId);
-    const minAge = sc.prerequisites?.min_age ?? 0;
-    const maxAge = sc.prerequisites?.max_age ?? 120;
-    if (characterAge >= minAge && characterAge <= maxAge) {
-      return personalizeScenario(sc, character);
-    }
-  }
-
-  // 2. Dynamic age matching: find scenario matching current age phase
-  const matchingScenarios = Array.from(scenarioIndex.values()).filter(sc => {
-    const minAge = sc.prerequisites?.min_age ?? 0;
-    const maxAge = sc.prerequisites?.max_age ?? 120;
-    return characterAge >= minAge && characterAge <= maxAge;
-  });
-
-  if (matchingScenarios.length > 0) {
-    return personalizeScenario(matchingScenarios[0], character);
-  }
-
-  // Fallback to default Chapter 1
-  const defaultScenario = scenarioIndex.get('scenario_career_crossroads_28') || Array.from(scenarioIndex.values())[0] || null;
-  return defaultScenario ? personalizeScenario(defaultScenario, character) : null;
+function isResolved(character, scenario) {
+  const flags = new Set(character.hidden_flags ?? []);
+  return Boolean(character.scenario_resolutions?.[scenario.id]) ||
+    flags.has(`scenario_resolved:${scenario.id}`) ||
+    scenario.choices.some(choice => flags.has(`choice:${choice.id}`));
 }
 
-// Personalize names and dynamic references
+export function getCurrentScenarioForCharacter(character) {
+  if (!character || character.is_deceased) return null;
+  if (!scenarioIndex.size) loadAllContentPacks();
+  const age = Number(character.age ?? 0);
+  const flags = new Set(character.hidden_flags ?? []);
+  // Older builds wrote this career flag for every childhood outcome.
+  if (!character.scenario_resolutions?.scenario_career_crossroads_28 &&
+      !scenarioIndex.get('scenario_career_crossroads_28')?.choices.some(c => flags.has(`choice:${c.id}`))) {
+    flags.delete('career_crossroads_resolved');
+  }
+  const eligible = [...scenarioIndex.values()].filter(sc =>
+    age >= (sc.prerequisites?.min_age ?? 0) && age <= (sc.prerequisites?.max_age ?? 120) &&
+    (sc.prerequisites?.required_flags ?? []).every(f => flags.has(f)) &&
+    !(sc.prerequisites?.excluded_flags ?? []).some(f => flags.has(f)) && !isResolved(character, sc));
+  const pinned = [...flags].find(f => typeof f === 'string' && f.startsWith('active_scenario:'))?.slice(16);
+  eligible.sort((a, b) => Number(b.id === pinned) - Number(a.id === pinned) ||
+    (b.priority ?? 0) - (a.priority ?? 0) || a.id.localeCompare(b.id));
+  return eligible.length ? personalizeScenario(eligible[0], character) : null;
+}
+
+export function getNextScenarioAge(character) {
+  if (!character || character.is_deceased) return null;
+  for (let age = Number(character.age ?? 0) + 1; age <= 120; age++) {
+    if (getCurrentScenarioForCharacter({ ...character, age })) return age;
+  }
+  return null;
+}
+
 function personalizeScenario(scenario, character) {
-  if (!character || !scenario) return scenario;
-  const charName = character.name || "Nhân vật";
-
-  // Deep clone to avoid mutating pack master template
   const cloned = JSON.parse(JSON.stringify(scenario));
-
-  // Dynamically replace generic names like 'An' with actual character name
   cloned.scenes.forEach(scene => {
-    if (scene.name) scene.name = scene.name.replace(/\bAn\b/g, charName);
+    scene.name = scene.name?.replace(/\bAn\b/g, character.name ?? 'Nhân vật');
     scene.hotspots.forEach(h => {
-      if (h.dialogue?.speaker && (h.dialogue.speaker === 'An' || h.dialogue.speaker.startsWith('An '))) {
-        h.dialogue.speaker = h.dialogue.speaker.replace(/\bAn\b/g, charName);
-      }
+      if (h.dialogue?.speaker === 'An') h.dialogue.speaker = character.name;
     });
   });
-
   return cloned;
 }
 
+function living(character) {
+  if (!character || character.is_deceased) throw new Error('Kiếp sống đã kết thúc. Hãy chọn tái sinh hoặc người kế thừa.');
+}
+const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
+const stateOf = c => Object.fromEntries(['cash', 'vitality', 'burnout', 'karma', 'action_points'].map(k => [k, c[k] ?? 0]));
+function npcFor(npcs, hotspot) {
+  return npcs.find(n => n.status !== 'deceased' &&
+    (n.scenario_key === hotspot.id || n.name === hotspot.dialogue?.speaker));
+}
+
 export function interactWithHotspot(character, sceneId, hotspotId, npcs = []) {
+  living(character);
   const scenario = getCurrentScenarioForCharacter(character);
-  if (!scenario) throw new Error("Không tìm thấy kịch bản khả dụng.");
+  const scene = scenario?.scenes.find(s => s.id === sceneId);
+  const hotspot = scene?.hotspots.find(h => h.id === hotspotId);
+  if (!hotspot) throw new Error('Điểm tương tác không còn thuộc kịch bản hiện tại. Hãy tải lại cảnh.');
+  const dialogue = hotspot.dialogue ?? {};
+  character.scenario_interactions ??= [];
+  const key = `${scenario.id}:${hotspot.id}`;
+  const seen = character.scenario_interactions.includes(key);
+  const cost = seen ? 0 : Number(dialogue.cost_ap ?? 0);
+  if ((character.action_points ?? 0) < cost) throw new Error(`Cần ${cost} AP. Xem lại manh mối đã biết không tốn AP.`);
+  character.action_points = (character.action_points ?? 0) - cost;
+  character.knowledge_base ??= [];
+  const fresh = dialogue.granted_knowledge && !character.knowledge_base.includes(dialogue.granted_knowledge);
+  if (fresh) character.knowledge_base.push(dialogue.granted_knowledge);
+  const npc = npcFor(npcs, hotspot);
+  if (!seen && npc) {
+    npc.affinity = clamp((npc.affinity ?? 50) + (dialogue.affinity_delta ?? 0), -100, 100);
+    npc.trust = clamp((npc.trust ?? 50) + (dialogue.trust_delta ?? 0), 0, 100);
+  }
+  if (!seen) character.scenario_interactions.push(key);
+  character.current_scene_id = sceneId;
+  return { success: true, speaker: dialogue.speaker ?? hotspot.label, text: dialogue.text ?? '',
+    granted_knowledge: fresh ? dialogue.granted_knowledge : null, ap_remaining: character.action_points,
+    affected_npc: npc ?? null, knowledge_base: character.knowledge_base, revisited: seen };
+}
 
-  const scene = scenario.scenes.find(s => s.id === sceneId);
-  if (!scene) throw new Error(`Không tìm thấy cảnh 2D: ${sceneId}`);
-
-  const hotspot = scene.hotspots.find(h => h.id === hotspotId);
-  if (!hotspot) throw new Error(`Không tìm thấy điểm tương tác: ${hotspotId}`);
-
-  const dialogue = hotspot.dialogue || {};
-  const costAp = Number(dialogue.cost_ap || 0);
-
-  if (costAp > 0 && (character.action_points || 0) < costAp) {
-    throw new Error(`Bạn cần tối thiểu ${costAp} Điểm Hành Động (AP) để thực hiện hành động này.`);
+export function resolveMindStageChoice(character, choiceId, apInvestment = 0, npcs = [], arg4 = null, arg5 = null) {
+  living(character);
+  if (!Number.isInteger(apInvestment) || apInvestment < 0 || apInvestment > 2) {
+    throw new Error('AP đầu tư phải là số nguyên từ 0 đến 2.');
   }
 
-  // Deduct AP if needed
-  if (costAp > 0) {
-    character.action_points = Math.max(0, (character.action_points || 3) - costAp);
-  }
-
-  // Handle Knowledge Granting
-  if (!Array.isArray(character.knowledge_base)) {
-    character.knowledge_base = [];
-  }
-  let newlyDiscoveredKnowledge = null;
-  if (dialogue.granted_knowledge && !character.knowledge_base.includes(dialogue.granted_knowledge)) {
-    character.knowledge_base.push(dialogue.granted_knowledge);
-    newlyDiscoveredKnowledge = dialogue.granted_knowledge;
-  }
-
-  // Handle NPC Affinity / Trust Delta
-  let affectedNpc = null;
-  if (hotspot.npc_role && npcs.length > 0) {
-    const roleLower = hotspot.npc_role.toLowerCase();
-    const npc = npcs.find(n => n.role?.toLowerCase().includes(roleLower) || n.name?.toLowerCase().includes(roleLower));
-    if (npc) {
-      if (typeof npc.trust !== 'number') npc.trust = 50;
-      if (typeof npc.affinity !== 'number') npc.affinity = 50;
-
-      if (dialogue.affinity_delta) {
-        npc.affinity = Math.max(-100, Math.min(100, npc.affinity + dialogue.affinity_delta));
-      }
-      if (dialogue.trust_delta) {
-        npc.trust = Math.max(0, Math.min(100, npc.trust + dialogue.trust_delta));
-      }
-
-      if (!Array.isArray(npc.known_facts)) npc.known_facts = [];
-      if (dialogue.granted_knowledge && !npc.known_facts.includes(dialogue.granted_knowledge)) {
-        npc.known_facts.push(dialogue.granted_knowledge);
-      }
-
-      affectedNpc = npc;
+  let safeguardTerm = 'standard';
+  let scenarioId = null;
+  if (typeof arg4 === 'string') {
+    if (['standard', 'deposit', 'time_cap', 'penalty'].includes(arg4)) {
+      safeguardTerm = arg4;
+      scenarioId = arg5;
+    } else {
+      scenarioId = arg4;
+      safeguardTerm = arg5 || 'standard';
     }
   }
 
-  // Handle Scene Position Memory
-  character.current_scene_id = sceneId;
-
-  return {
-    success: true,
-    speaker: dialogue.speaker || hotspot.label,
-    text: dialogue.text || "",
-    granted_knowledge: newlyDiscoveredKnowledge,
-    ap_remaining: character.action_points,
-    affected_npc: affectedNpc,
-    knowledge_base: character.knowledge_base
-  };
-}
-
-export function resolveMindStageChoice(character, choiceId, apInvestment = 0, npcs = [], safeguardTerm = 'standard') {
-  const scenario = getCurrentScenarioForCharacter(character);
-  if (!scenario) throw new Error("Không tìm thấy kịch bản khả dụng.");
+  const scenario = scenarioId ? (getScenarioById(scenarioId) || getCurrentScenarioForCharacter(character)) : getCurrentScenarioForCharacter(character);
+  if (!scenario) throw new Error('Không tìm thấy kịch bản khả dụng.');
 
   // 0. Handle Postpone / Continue Observing
   if (choiceId === 'CHOICE_POSTPONE_OBSERVE') {
     return {
       success: true,
+      postponed: true,
+      completed: false,
       choice_id: choiceId,
       choice_title: "Trì Hoãn Quyết Định & Tiếp Tục Quan Sát",
       narration: "Bạn quyết định tạm thời giữ nguyên hiện trạng, không vội vàng cam kết khi chưa sẵn sàng. Hãy tiếp tục quan sát và tích lũy thêm trải nghiệm.",
       commitments: character.commitments || [],
-      character_state: {
-        action_points: character.action_points,
-        cash: character.cash,
-        burnout: character.burnout,
-        vitality: character.vitality
-      }
+      character_state: stateOf(character)
     };
+  }
+
+  if (character.scenario_resolutions?.[scenario.id]) {
+    if (choiceId && choiceId !== character.scenario_resolutions[scenario.id].choice_id) {
+      throw new Error('Kịch bản này đã được hoàn thành với lựa chọn khác.');
+    }
+    return { ...character.scenario_resolutions[scenario.id], replayed: true };
   }
 
   const choice = scenario.choices.find(c => c.id === choiceId);
-  if (!choice) throw new Error(`Lựa chọn '${choiceId}' không hợp lệ trong tình huống này.`);
+  if (!choice) throw new Error(`Lựa chọn '${choiceId}' không hợp lệ trong kịch bản này.`);
 
-  // 1. Check Knowledge Requirements & Calculate Uncertainty Penalty
-  let missingKnowledgeCount = 0;
+  const before = stateOf(character);
+  const cost = Number(choice.cost_ap ?? 0) + Number(apInvestment ?? 0);
+  if ((character.action_points ?? 0) < cost) {
+    throw new Error(`Cần ${cost} AP để chọn phương án này.`);
+  }
+
+  // Calculate missing knowledge penalty
+  let missingCount = 0;
   if (Array.isArray(choice.knowledge_requirements) && choice.knowledge_requirements.length > 0) {
-    const currentKnowledge = new Set(character.knowledge_base || []);
-    const missing = choice.knowledge_requirements.filter(k => !currentKnowledge.has(k));
-    missingKnowledgeCount = missing.length;
+    const known = new Set(character.knowledge_base ?? []);
+    missingCount = choice.knowledge_requirements.filter(k => !known.has(k)).length;
   }
 
-  // 2. Verify and Deduct Action Points
-  const totalApCost = Number(choice.cost_ap || 0) + Number(apInvestment || 0);
-  if ((character.action_points || 0) < totalApCost) {
-    throw new Error(`Không đủ Điểm Hành Động. Cần: ${totalApCost} AP, hiện có: ${character.action_points || 0} AP.`);
-  }
-  character.action_points = Math.max(0, (character.action_points || 0) - totalApCost);
-
-  // 3. Server-side D20 Roll & Bonus Calculation
-  let rollBreakdown = null;
-  let outcomeKey = "success";
+  let roll = null;
+  let tier = 'success';
 
   if (choice.check) {
-    const baseDc = Number(choice.check.target_dc || 12);
-    // Uncertainty penalty for choosing without complete knowledge (+2 DC per missing clue)
-    const targetDc = baseDc + (missingKnowledgeCount * 2);
-    // True Server Random D20
-    const d20Base = Math.floor(Math.random() * 20) + 1;
+    const dc = Number(choice.check.target_dc ?? 12) + (missingCount * 2);
+    const d20 = Math.floor(Math.random() * 20) + 1;
+    const normalize = t => typeof t === 'string' ? t.toLowerCase().replace(/[\s-]+/g, '_').trim() : '';
+    const traits = new Set((character.innate_traits ?? []).map(normalize));
+    const traitBonus = [...new Set((choice.check.bonus_traits ?? []).map(normalize))].filter(t => traits.has(t)).length * 2;
 
-    // Trait modifiers
-    let traitBonus = 0;
-    const characterTraits = Array.isArray(character.innate_traits) ? character.innate_traits : [];
-    if (Array.isArray(choice.check.bonus_traits)) {
-      choice.check.bonus_traits.forEach(traitName => {
-        if (characterTraits.some(t => typeof t === 'string' && t.includes(traitName))) {
-          traitBonus += 2;
-        }
-      });
-    }
+    const stat = choice.check.stat;
+    const statValue = stat === 'VITALITY' ? (character.vitality ?? 0) :
+      (stat === 'EQ' || stat === 'CHARISMA') ? (character.eq ?? character.charisma ?? 100) : (character.iq ?? 100);
+    const statBonus = statValue > (stat === 'VITALITY' ? 85 : 110) ? 2 : 1;
 
-    // Stat bonus
-    let statBonus = 1;
-    if (choice.check.stat === "IQ" && (character.iq || 100) > 110) statBonus = 2;
-    if (choice.check.stat === "CHARISMA" && (character.eq || 100) > 110) statBonus = 2;
-    if (choice.check.stat === "VITALITY" && (character.vitality || 80) > 85) statBonus = 2;
+    const apBonus = apInvestment * 2;
+    const total = d20 + traitBonus + statBonus + apBonus;
 
-    const apBonus = Number(apInvestment || 0) * 2;
-    const totalScore = d20Base + traitBonus + statBonus + apBonus;
+    tier = d20 === 20 || total >= dc + 5 ? 'critical_success' : total >= dc ? 'success' : 'failure';
+    if (tier === 'critical_success' && !choice.outcomes?.critical_success) tier = 'success';
 
-    if (d20Base === 20 || totalScore >= targetDc + 5) {
-      outcomeKey = "critical_success";
-    } else if (totalScore >= targetDc) {
-      outcomeKey = "success";
-    } else {
-      outcomeKey = "failure";
-    }
-
-    rollBreakdown = {
-      d20_base: d20Base,
+    roll = {
+      d20_base: d20,
       trait_bonus: traitBonus,
       stat_bonus: statBonus,
       ap_bonus: apBonus,
-      total_score: totalScore,
-      target_dc: targetDc,
-      result_tier: outcomeKey
+      total_score: total,
+      target_dc: dc,
+      result_tier: tier
     };
   }
 
-  // 4. Extract and apply outcome effects
-  const outcomeData = choice.outcomes?.[outcomeKey] || choice.outcomes?.success || {};
-  const effects = outcomeData.effects || choice.effects || {};
+  const outcome = choice.outcomes?.[tier] ?? choice.outcomes?.success ?? {};
+  const effects = outcome.effects ?? choice.effects ?? {};
 
-  if (effects.cash_delta) {
+  character.action_points = Math.max(0, (character.action_points ?? 0) - cost);
+
+  if (effects.cash_delta !== undefined) {
     let cashChange = Number(effects.cash_delta);
     if (safeguardTerm === 'deposit' && cashChange > 0) {
       cashChange = Math.round(cashChange * 1.1); // +10% cash bonus when demanding advance deposit
     }
-    character.cash = Math.max(0, Number(character.cash || 0) + cashChange);
+    character.cash = Math.max(0, Number(character.cash ?? 0) + cashChange);
   }
-  if (effects.vitality_delta) {
-    const maxVit = character.max_vitality || 100;
-    character.vitality = Math.max(10, Math.min(maxVit, (character.vitality || 80) + Number(effects.vitality_delta)));
+
+  if (effects.vitality_delta !== undefined) {
+    character.vitality = clamp((character.vitality ?? 0) + Number(effects.vitality_delta), 0, character.max_vitality ?? 100);
   }
-  if (effects.burnout_delta) {
+
+  if (effects.burnout_delta !== undefined) {
     let burnoutChange = Number(effects.burnout_delta);
-    if (safeguardTerm === 'time_cap' && burnoutChange > 0) {
-      burnoutChange = Math.round(burnoutChange * 0.5); // 50% burnout reduction from 15h/week time cap
+    if (safeguardTerm === 'penalty' && burnoutChange > 0) {
+      burnoutChange = Math.max(0, Math.round(burnoutChange * 0.7)); // -30% burnout when enforcing penalty clause
     }
-    character.burnout = Math.max(0, Math.min(100, (character.burnout || 0) + burnoutChange));
-  }
-  if (effects.karma_delta) {
-    character.karma = Math.max(0, Math.min(100, (character.karma || 80) + Number(effects.karma_delta)));
+    character.burnout = clamp((character.burnout ?? 0) + burnoutChange, 0, 100);
   }
 
-  // 5. Update NPC Trust / Affinity from Outcome
-  if (outcomeData.npc_trust_delta && npcs.length > 0) {
-    Object.entries(outcomeData.npc_trust_delta).forEach(([npcName, delta]) => {
-      const npc = npcs.find(n => n.name.includes(npcName) || n.role.includes(npcName));
-      if (npc) {
-        if (typeof npc.trust !== 'number') npc.trust = 50;
-        npc.trust = Math.max(0, Math.min(100, npc.trust + delta));
-      }
-    });
+  if (effects.karma_delta !== undefined) {
+    character.karma = clamp((character.karma ?? 0) + Number(effects.karma_delta), 0, 100);
   }
 
-  // 6. Record Commitments & Delayed Domino Fuses
-  if (!Array.isArray(character.commitments)) character.commitments = [];
-  if (Array.isArray(choice.commitments)) {
-    choice.commitments.forEach(c => {
-      const formattedTitle = safeguardTerm === 'time_cap'
-        ? `${c.title} (Có giới hạn 15h/tuần)`
-        : safeguardTerm === 'deposit'
-        ? `${c.title} (Có tạm ứng bảo đảm)`
-        : c.title;
-
-      character.commitments.push({
-        ...c,
-        title: formattedTitle,
-        safeguard_term: safeguardTerm,
-        status: "active",
-        created_age: character.age,
-        due_age: (character.age || 28) + (c.due_ticks || 1)
-      });
-    });
-  }
-
-  // Handle Delayed Domino Fuses from outcome effects
-  if (effects.delayed_domino) {
-    if (!Array.isArray(character.delayed_flags)) character.delayed_flags = [];
+  // Handle Delayed Domino Fuses from outcome
+  const domino = outcome.delayed_domino || effects.delayed_domino;
+  if (domino) {
+    character.delayed_flags ??= [];
     character.delayed_flags.push({
-      ...effects.delayed_domino,
-      trigger_at_age: (character.age || 28) + (effects.delayed_domino.in_years || 2)
+      ...domino,
+      trigger_at_age: (character.age ?? 28) + (domino.in_years ?? 2)
     });
   }
 
-  // 7. Record History and Flags
-  if (!Array.isArray(character.hidden_flags)) character.hidden_flags = [];
-  character.hidden_flags.push(`choice:${choice.id}`);
-  character.hidden_flags.push("career_crossroads_resolved");
+  const npcUpdates = [];
+  for (const [name, delta] of Object.entries(outcome.npc_trust_delta ?? {})) {
+    const npc = npcs.find(n => n.name === name && n.status !== 'deceased');
+    if (npc) {
+      npc.trust = clamp((npc.trust ?? 50) + delta, 0, 100);
+      npcUpdates.push(npc);
+    }
+  }
 
-  if (!Array.isArray(character.history_log)) character.history_log = [];
-  character.history_log.push({
-    age: character.age || 28,
-    event: scenario.title,
-    choice: choice.title,
-    stance: choice.stance,
-    outcome_tier: outcomeKey,
-    narration: outcomeData.narration || choice.description,
-    roll: rollBreakdown
+  character.commitments ??= [];
+  const promises = tier === 'failure' ? [] : [...(choice.commitments ?? []), ...(outcome.commitments ?? [])];
+  promises.forEach((p, i) => {
+    const item = typeof p === 'string' ? { title: p, to_npc: 'Bản thân', due_ticks: 1 } : p;
+    const id = `${scenario.id}:${item.id ?? choice.id + ':' + i}`;
+    if (!character.commitments.some(c => c.id === id)) {
+      character.commitments.push({
+        ...item,
+        id,
+        scenario_id: scenario.id,
+        status: 'active',
+        created_age: character.age ?? 0,
+        due_age: (character.age ?? 0) + (item.due_ticks ?? 1)
+      });
+    }
   });
 
-  return {
+  const flags = new Set(character.hidden_flags ?? []);
+  flags.add(`choice:${choice.id}`);
+  flags.add(`scenario_resolved:${scenario.id}`);
+  if (scenario.completion_flag) flags.add(scenario.completion_flag);
+  character.hidden_flags = [...flags];
+
+  const narration = outcome.narration ?? choice.description;
+  character.history_log ??= [];
+  character.history_log.push({
+    age: character.age ?? 0,
+    scenario_id: scenario.id,
+    event: scenario.title,
+    choice: choice.title,
+    outcome_tier: tier,
+    narration,
+    roll
+  });
+
+  const result = {
     success: true,
+    completed: true,
+    scenario_id: scenario.id,
     choice_id: choice.id,
     choice_title: choice.title,
-    outcome_key: outcomeKey,
-    narration: outcomeData.narration || choice.description,
+    outcome_key: tier,
+    narration,
     effects,
-    roll: rollBreakdown,
+    roll,
+    npc_updates: npcUpdates,
+    changes: Object.fromEntries(Object.keys(before).map(k => [k, { before: before[k], after: stateOf(character)[k] }])),
     commitments: character.commitments,
-    character_state: {
-      cash: character.cash,
-      vitality: character.vitality,
-      burnout: character.burnout,
-      karma: character.karma,
-      action_points: character.action_points
-    }
+    character_state: stateOf(character)
   };
+
+  character.scenario_resolutions ??= {};
+  character.scenario_resolutions[scenario.id] = JSON.parse(JSON.stringify(result));
+  return result;
+}
+
+export function fulfillCommitment(character, commitmentId, npcs = []) {
+  living(character);
+  const item = character.commitments?.find(c => c.id === commitmentId);
+  if (!item) throw new Error('Không tìm thấy cam kết.');
+  if (item.status !== 'active') return { success: true, replayed: true, commitment: item };
+  if ((character.age ?? 0) >= item.due_age) throw new Error('Cam kết đã quá hạn.');
+  if ((character.action_points ?? 0) < 1) throw new Error('Cần 1 AP để dành thời gian thực hiện cam kết.');
+  character.action_points -= 1;
+  character.karma = Math.min(100, (character.karma ?? 0) + 5);
+  item.status = 'fulfilled'; item.fulfilled_age = character.age;
+  const npc = npcs.find(n => n.name === item.to_npc && n.status !== 'deceased');
+  if (npc) npc.trust = Math.min(100, (npc.trust ?? 50) + 5);
+  character.history_log ??= [];
+  character.history_log.push({ age: character.age, event: `Giữ lời hứa: ${item.title}`, choice: 'Dành 1 AP thực hiện (+5 Karma).' });
+  return { success: true, commitment: item, npc_updates: npc ? [npc] : [], character_state: stateOf(character) };
+}
+
+export function evaluateCommitments(character, npcs = []) {
+  for (const item of character.commitments ?? []) {
+    if (item.status !== 'active' || (character.age ?? 0) < item.due_age) continue;
+    item.status = 'broken'; item.resolved_age = character.age;
+    const npc = npcs.find(n => n.name === item.to_npc);
+    if (npc) {
+      npc.trust = Math.max(0, (npc.trust ?? 50) - (item.consequence_on_break?.trust_penalty ?? 5));
+      npc.affinity = Math.max(-100, (npc.affinity ?? 50) - (item.consequence_on_break?.affinity_penalty ?? 0));
+    }
+    if (item.consequence_on_break?.flag) character.hidden_flags = [...new Set([...(character.hidden_flags ?? []), item.consequence_on_break.flag])];
+    character.history_log ??= [];
+    character.history_log.push({ age: character.age, event: `Cam kết chưa hoàn thành: ${item.title}`, choice: 'Đã hết hạn; quan hệ thay đổi theo cam kết.' });
+  }
 }

@@ -24,11 +24,11 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
   return (
     <div className="bg-slate-900/95 border border-sky-500/40 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl">
       <div className="flex items-center justify-between mb-4">
-        <span className="text-[11px] font-sans font-medium tracking-wide uppercase px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center gap-1.5">
+        <span className="text-[12px] font-sans font-medium tracking-wide normal-case px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center gap-1.5">
           <FastForward className="w-3.5 h-3.5 animate-pulse" /> Khoảng Lặng Cuộc Đời (Time Skip)
         </span>
         <span className="text-xs font-sans text-sky-400 font-bold">
-          <span className="font-mono">+{yearsJump}</span> Tuổi trôi qua
+          <span className="font-sans tabular-nums">+{yearsJump}</span> Tuổi trôi qua
         </span>
       </div>
 
@@ -36,7 +36,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
         {dilemma?.title || "Những Năm Tháng Trôi Qua Êm Đềm"}
       </h2>
 
-      <div className="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 mb-6 text-slate-200 text-sm md:text-base leading-relaxed font-serif italic">
+      <div className="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 mb-6 text-slate-200 text-sm md:text-base leading-relaxed font-sans italic">
         "{dilemma?.narrative || "Thời gian trôi qua không một biến cố nào quá lớn, để lại những trải nghiệm định hình cuộc đời."}"
       </div>
 
@@ -86,7 +86,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
                 : `Tập trung làm việc cật lực và học thêm. Thu về thêm thặng dư tiền mặt sau ${yearsJump} năm.`}
             </p>
           </div>
-          <div className="mt-3 text-[11px] font-mono text-sky-300 font-medium">
+          <div className="mt-3 text-[12px] font-sans tabular-nums text-sky-300 font-medium">
             {isInfant
               ? "+15 Sinh Lực · +3 Max HP · Đề kháng vàng"
               : isMinor
@@ -128,7 +128,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
                 : `Trân trọng từng bữa cơm bên người thân. Thanh lọc hoàn toàn kiệt sức và tăng cường thể chất.`}
             </p>
           </div>
-          <div className="mt-3 text-[11px] font-mono text-emerald-300 font-medium">
+          <div className="mt-3 text-[12px] font-sans tabular-nums text-emerald-300 font-medium">
             {isInfant
               ? "+15 Karma · Xua tan quấy khóc · Ấm áp tình thân"
               : isMinor
@@ -140,3 +140,4 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
     </div>
   );
 }
+

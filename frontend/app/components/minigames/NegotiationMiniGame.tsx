@@ -234,7 +234,7 @@ export default function NegotiationMiniGame({
             <div className="w-16 h-16 rounded-3xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl mb-4 shadow-xl shadow-amber-500/20">
               🤝
             </div>
-            <div className="text-xs font-mono uppercase tracking-widest text-amber-400 font-bold mb-1">
+            <div className="text-xs font-sans tabular-nums normal-case tracking-wide text-amber-400 font-bold mb-1">
               Thử Thách Thương Trường • {currentCity}
             </div>
             <h2 className="text-2xl font-black text-white tracking-tight mb-2">
@@ -247,20 +247,20 @@ export default function NegotiationMiniGame({
 
             <div className="grid grid-cols-2 gap-3 w-full max-w-md mb-6 text-left text-xs">
               <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800">
-                <div className="text-[10px] text-slate-400 uppercase font-bold">Thành Công Vang Dội</div>
+                <div className="text-[12px] text-slate-400 normal-case font-bold">Thành Công Vang Dội</div>
                 <div className="text-emerald-400 font-bold mt-0.5">Uy Thế ≥ 75% & Hòa Khí {'>'} 30%</div>
-                <div className="text-[10px] text-slate-400 mt-1">↳ Thưởng +$12.000 tiền mặt & Nhận cờ 'Bậc Thầy Đàm Phán'</div>
+                <div className="text-[12px] text-slate-400 mt-1">↳ Thưởng +$12.000 tiền mặt & Nhận cờ 'Bậc Thầy Đàm Phán'</div>
               </div>
               <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800">
-                <div className="text-[10px] text-slate-400 uppercase font-bold">Thất Bại Lật Bàn</div>
+                <div className="text-[12px] text-slate-400 normal-case font-bold">Thất Bại Lật Bàn</div>
                 <div className="text-rose-400 font-bold mt-0.5">Kiên Nhẫn Về 0% Hoặc Bị Ép</div>
-                <div className="text-[10px] text-slate-400 mt-1">↳ Tăng +15 Burnout và mất cơ hội kinh doanh</div>
+                <div className="text-[12px] text-slate-400 mt-1">↳ Tăng +15 Burnout và mất cơ hội kinh doanh</div>
               </div>
             </div>
 
             <button
               onClick={() => setStage('playing')}
-              className="py-3.5 px-8 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-400 hover:to-amber-600 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg shadow-amber-500/25 active:scale-95 flex items-center gap-2"
+              className="py-3.5 px-8 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-400 hover:to-amber-600 text-slate-950 font-black text-xs normal-case tracking-normal transition shadow-lg shadow-amber-500/25 active:scale-95 flex items-center gap-2"
             >
               <Play className="w-4 h-4 fill-current" />
               <span>Bước Vào Cuộc Đàm Phán</span>
@@ -274,12 +274,12 @@ export default function NegotiationMiniGame({
             {/* Round & Context Banner */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2">
-                <span className="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-300 font-mono font-bold flex items-center justify-center text-xs border border-amber-500/40">
+                <span className="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-300 font-sans tabular-nums font-bold flex items-center justify-center text-xs border border-amber-500/40">
                   {currentRound.round}/3
                 </span>
                 <span className="text-sm font-bold text-white">Vòng {currentRound.round}: Đấu Trí Thương Mại</span>
               </div>
-              <span className="text-[11px] font-mono text-slate-400">
+              <span className="text-[12px] font-sans tabular-nums text-slate-400">
                 Địa điểm: <strong className="text-indigo-300">{currentCity}</strong>
               </span>
             </div>
@@ -292,7 +292,7 @@ export default function NegotiationMiniGame({
                   <span className="text-indigo-300 font-bold flex items-center gap-1">
                     <Scale className="w-3.5 h-3.5" /> Uy Thế Của Bạn
                   </span>
-                  <span className="font-mono font-bold text-indigo-400">{myLeverage}%</span>
+                  <span className="font-sans tabular-nums font-bold text-indigo-400">{myLeverage}%</span>
                 </div>
                 <div className="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden border border-indigo-500/30">
                   <div
@@ -308,7 +308,7 @@ export default function NegotiationMiniGame({
                   <span className="text-amber-300 font-bold flex items-center gap-1">
                     <Brain className="w-3.5 h-3.5" /> Kiên Nhẫn Đối Tác
                   </span>
-                  <span className={`font-mono font-bold ${partnerPatience < 25 ? 'text-rose-400 animate-pulse' : 'text-amber-400'}`}>
+                  <span className={`font-sans tabular-nums font-bold ${partnerPatience < 25 ? 'text-rose-400 animate-pulse' : 'text-amber-400'}`}>
                     {partnerPatience}%
                   </span>
                 </div>
@@ -344,14 +344,14 @@ export default function NegotiationMiniGame({
                       <h4 className="text-xs md:text-sm font-bold text-white group-hover:text-amber-300 transition">
                         {card.title}
                       </h4>
-                      <div className="flex items-center gap-2 text-[10px] font-mono">
+                      <div className="flex items-center gap-2 text-[12px] font-sans tabular-nums">
                         <span className="text-indigo-300">+{card.leverageChange}% Uy thế</span>
                         <span className={card.patienceImpact >= 0 ? 'text-emerald-400' : 'text-rose-400'}>
                           {card.patienceImpact >= 0 ? `+${card.patienceImpact}%` : `${card.patienceImpact}%`} Kiên nhẫn
                         </span>
                       </div>
                     </div>
-                    <p className="text-[11px] text-slate-400 leading-snug">
+                    <p className="text-[12px] text-slate-400 leading-snug">
                       {card.desc}
                     </p>
                   </div>
@@ -374,7 +374,7 @@ export default function NegotiationMiniGame({
               {finalStatus === 'success' ? '👑' : finalStatus === 'fair' ? '🤝' : '💥'}
             </div>
 
-            <div className="text-xs font-mono uppercase tracking-widest font-bold mb-1">
+            <div className="text-xs font-sans tabular-nums normal-case tracking-wide font-bold mb-1">
               {finalStatus === 'success' ? (
                 <span className="text-emerald-400">Đại Thắng Thương Trường</span>
               ) : finalStatus === 'fair' ? (
@@ -392,9 +392,9 @@ export default function NegotiationMiniGame({
             </p>
 
             <div className="w-full max-w-md p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-left text-xs space-y-1.5 mb-6">
-              <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Nhật Ký Đấu Trí:</div>
+              <div className="text-[12px] normal-case font-bold text-slate-400 tracking-normal mb-1">Nhật Ký Đấu Trí:</div>
               {logHistory.map((item, idx) => (
-                <div key={idx} className="text-slate-300 text-[11px] font-mono">
+                <div key={idx} className="text-slate-300 text-[12px] font-sans tabular-nums">
                   • {item}
                 </div>
               ))}
@@ -402,7 +402,7 @@ export default function NegotiationMiniGame({
 
             <button
               onClick={handleClaim}
-              className="py-3.5 px-8 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg shadow-amber-500/25 active:scale-95 flex items-center gap-2"
+              className="py-3.5 px-8 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs normal-case tracking-normal transition shadow-lg shadow-amber-500/25 active:scale-95 flex items-center gap-2"
             >
               <span>Tiếp Nhận Kết Quả Cuộc Đời</span>
               <ArrowRight className="w-4 h-4" />
@@ -413,3 +413,4 @@ export default function NegotiationMiniGame({
     </div>
   );
 }
+

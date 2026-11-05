@@ -8,7 +8,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: [
-          '"Be Vietnam Pro"',
+          '"Inter"',
           'system-ui',
           '-apple-system',
           'BlinkMacSystemFont',
@@ -56,3 +56,4 @@ module.exports = {
   },
   plugins: [],
 };
+

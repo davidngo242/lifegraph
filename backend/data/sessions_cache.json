@@ -3,22 +3,22 @@
     "default",
     {
       "character": {
-        "id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
-        "name": "Michał Lewandowski",
+        "id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
+        "name": "Huỳnh Văn An",
         "gender": "male",
         "age": 25,
         "generation": 1,
         "parent_name": null,
-        "nationality": "Ba Lan",
-        "nationality_code": "T2_Poland",
-        "country_flag": "🇵🇱",
+        "nationality": "Việt Nam",
+        "nationality_code": "T2_Vietnam",
+        "country_flag": "🇻🇳",
         "country_tier": "T2",
-        "current_city": "Kraków (Khu phố Stare Miasto)",
+        "current_city": "Đà Nẵng (Quận Hải Châu)",
         "housing": {
           "tier": 1,
           "id": "slum_shared",
           "name": "Phòng trọ / Mái ấm bình dân",
-          "address": "Hẻm lao động, Kraków (Khu phố Stare Miasto)",
+          "address": "Hẻm lao động, Đà Nẵng (Quận Hải Châu)",
           "status": "rented"
         },
         "background": "Mồ côi / Lớn lên từ mái ấm tình thương",
@@ -33,30 +33,28 @@
           "family_meals_available": 1
         },
         "innate_traits": [
-          "khỏe_mạnh_vô_song",
-          "gen_trường_thọ_bách_niên"
+          "ngoại_hình_xuất_chúng",
+          "bộ_não_kỹ_thuật"
         ],
         "traits_detailed": [
           {
-            "id": "khỏe_mạnh_vô_song",
-            "name": "Khung xương kim cương",
-            "desc": "Cơ địa dẻo dai bẩm sinh, +15 Max Sinh Lực, đề kháng vượt trội với biến đổi thời tiết",
-            "category": "physical",
+            "id": "ngoại_hình_xuất_chúng",
+            "name": "Dung mạo khuynh thành / tuấn tú",
+            "desc": "Tỷ lệ gương mặt vàng thu hút ánh nhìn, luôn tạo ấn tượng tốt đẹp trong mọi giao tiếp xã hội",
+            "category": "social",
             "rarity": "rare",
             "effects": {
-              "max_vitality_delta": 15,
-              "disease_resistance": 0.4
+              "charm_bonus": 0.3
             }
           },
           {
-            "id": "gen_trường_thọ_bách_niên",
-            "name": "Gen trường thọ bách niên (FOX03)",
-            "desc": "Tế bào làm chậm quá trình lão hóa sau tuổi 60, kéo dài tuổi thọ sinh học, +20 Max Sinh Lực",
-            "category": "physical",
-            "rarity": "legendary",
+            "id": "bộ_não_kỹ_thuật",
+            "name": "Bộ não kỹ thuật & sáng chế",
+            "desc": "Thấu hiểu máy móc, điện toán và công nghệ tự động hóa, dễ thăng tiến ngành công nghệ cao",
+            "category": "intellect",
+            "rarity": "uncommon",
             "effects": {
-              "max_vitality_delta": 20,
-              "aging_drag_reduction": 0.5
+              "tech_prodigy": true
             }
           }
         ],
@@ -65,7 +63,7 @@
         "max_vitality": 100,
         "transhuman_frozen_until_age": null,
         "is_transhuman": false,
-        "cash": 42890,
+        "cash": 42880,
         "family_endowment": 0,
         "burnout": 0,
         "karma": 100,
@@ -91,38 +89,37 @@
         "hidden_flags": [
           "orphan_lone_wolf",
           "childhood_year_0",
-          "prodigy_athlete",
-          "childhood_year_6",
+          "childhood_year_3",
+          "prodigy_stunning_look",
           "childhood_year_9",
           "childhood_year_12",
-          "childhood_year_15",
           "abroad_graduation_honor"
         ],
         "delayed_flags": [],
         "recent_event_tags": [
           "infancy_milestone",
           "childhood_peaceful_leap",
-          "dyn_childhood_4_38",
+          "dyn_childhood_4_246",
           "childhood_growth",
-          "dyn_childhood_10_46",
+          "dyn_childhood_10_251",
           "teen_study_vs_passion",
-          "dyn_adolescence_16_52",
+          "dyn_adolescence_16_255",
           "youth_scholar_climax",
-          "passion_vs_salary",
-          "scholar_spectrum"
+          "intellectual_theft_loss",
+          "youth_peaceful_leap"
         ],
         "experienced_scenarios": [
           "child_early_years",
           "tri_career_love_study",
           "skip_childhood_peace",
-          "dyn_1793854673038",
+          "dyn_1793857808246",
           "child_primary_school",
-          "dyn_1793854673046",
+          "dyn_1793857808251",
           "child_highschool_exam",
-          "dyn_1793854673052",
+          "dyn_1793857808255",
           "tri_scholar_crossroads",
-          "spec_passion_salary",
-          "spec_academic_vs_market"
+          "ill_startup_patent_theft",
+          "skip_youth_grind"
         ],
         "timeline_snapshots": [
           {
@@ -130,18 +127,18 @@
             "net_worth": 0,
             "vitality": 90,
             "burnout": 0,
-            "event": "Chào đời tại Ba Lan (🇵🇱)"
+            "event": "Chào đời tại Việt Nam (🇻🇳)"
           },
           {
             "age": 10,
-            "net_worth": 130,
+            "net_worth": 235,
             "vitality": 100,
             "burnout": 0,
             "event": "Năm 10 tuổi"
           },
           {
             "age": 25,
-            "net_worth": 42890,
+            "net_worth": 42880,
             "vitality": 100,
             "burnout": 0,
             "event": "Năm 25 tuổi"
@@ -155,7 +152,7 @@
         "history_log": [
           {
             "age": 0,
-            "event": "Chào đời tại Ba Lan 🇵🇱 trong một mồ côi / lớn lên từ mái ấm tình thương.",
+            "event": "Chào đời tại Việt Nam 🇻🇳 trong một mồ côi / lớn lên từ mái ấm tình thương.",
             "choice": "Cất tiếng khóc chào đời"
           },
           {
@@ -165,8 +162,8 @@
           },
           {
             "age": 1,
-            "event": "🌧️ Thắt Lưng Buộc Bụng (0 Tuổi)",
-            "choice": "Năm nay kinh tế gia đình gặp chững lại. Nhìn cha mẹ làm việc vất vả, bạn ngoan ngoãn phụ giúp việc nhà và không đòi hỏi mua sắm xa xỉ. Bạn học được bài học đầu đời về sự sẻ chia."
+            "event": "👨‍👩‍👧 Ấm Áp Bữa Cơm Gia Đình (0 Tuổi)",
+            "choice": "Dưới sự chăm sóc của Cha và Mẹ, bạn lớn lên trong tình thương ấm áp. Tiền trợ cấp gia đình nuôi nấng bạn khôn lớn từng ngày."
           },
           {
             "age": 3,
@@ -175,8 +172,8 @@
           },
           {
             "age": 4,
-            "event": "🏃 Thể Chất Vàng Bẩm Sinh (3 Tuổi)",
-            "choice": "Nhờ thể trạng [Khỏe mạnh vô song], bạn chạy nhảy không biết mệt, đạt giải nhất cuộc thi vận động thiếu nhi tại địa phương. Thể chất vượt trội bạn cùng trang lứa."
+            "event": "📈 Gia Đình Cải Thiện Thu Nhập (3 Tuổi)",
+            "choice": "Công việc làm ăn của Cha (gia đình) thuận lợi hơn, bữa cơm gia đình có thêm món ngon và bạn được mua thêm quần áo mới."
           },
           {
             "age": 6,
@@ -185,8 +182,8 @@
           },
           {
             "age": 7,
-            "event": "🌧️ Thắt Lưng Buộc Bụng (6 Tuổi)",
-            "choice": "Năm nay kinh tế gia đình gặp chững lại. Nhìn cha mẹ làm việc vất vả, bạn ngoan ngoãn phụ giúp việc nhà và không đòi hỏi mua sắm xa xỉ. Bạn học được bài học đầu đời về sự sẻ chia."
+            "event": "✨ Dung Mạo Khôi Ngô / Khuynh Thành (6 Tuổi)",
+            "choice": "Nhờ sở hữu [Dung mạo xuất chúng], nụ cười sáng trong của bạn làm bừng sáng mọi nơi bạn đến. Đi chợ cùng mẹ luôn được các cô bác tiểu thương yêu quý tặng thêm quà bánh."
           },
           {
             "age": 9,
@@ -215,8 +212,8 @@
           },
           {
             "age": 16,
-            "event": "📈 Gia Đình Cải Thiện Thu Nhập (15 Tuổi)",
-            "choice": "Công việc làm ăn của Cha (gia đình) thuận lợi hơn, bữa cơm gia đình có thêm món ngon và bạn được mua thêm quần áo mới."
+            "event": "✨ Dung Mạo Khôi Ngô / Khuynh Thành (15 Tuổi)",
+            "choice": "Nhờ sở hữu [Dung mạo xuất chúng], nụ cười sáng trong của bạn làm bừng sáng mọi nơi bạn đến. Đi chợ cùng mẹ luôn được các cô bác tiểu thương yêu quý tặng thêm quà bánh."
           },
           {
             "age": 18,
@@ -242,7 +239,7 @@
         "is_deceased": false,
         "death_cause": "",
         "death_age": null,
-        "created_at": "2026-11-05T04:57:53.030Z",
+        "created_at": "2026-11-05T05:50:08.239Z",
         "pacing_state": {
           "cycle_turn": 1,
           "turns_since_major": 2
@@ -255,8 +252,8 @@
       "relationships": [],
       "npcs": [
         {
-          "id": "2a67e36c-9044-46ca-8972-5eb23f4ffc95",
-          "character_id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
+          "id": "a77b59df-da9a-4a47-b4c1-2dae700f2f56",
+          "character_id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
           "name": "Lê Hoàng",
           "role": "Bạn nối khố / Đồng nghiệp đầu đời",
           "status": "alive",
@@ -266,8 +263,8 @@
           "avatar_color": "#38bdf8"
         },
         {
-          "id": "8720af51-603e-415e-8b5b-4a57ac2f258c",
-          "character_id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
+          "id": "da7b8259-9dc6-4e1a-9e97-e602960457b9",
+          "character_id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
           "name": "Bác Ba 'Cơm Tấm'",
           "role": "Ân nhân xóm nghèo",
           "status": "alive",
@@ -279,8 +276,8 @@
       ],
       "tickEvents": [
         {
-          "id": "25a3ed08-5a0c-4934-b10e-ac2fc5970255",
-          "character_id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
+          "id": "11f5aa6d-c28a-4a72-ac6c-0cc578372a13",
+          "character_id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
           "tick_number": 0,
           "event_data": {
             "id": "child_early_years",
@@ -330,11 +327,11 @@
             },
             "source": "Million-Vector Engine (<20ms)"
           },
-          "created_at": "2026-11-05T04:57:53.031Z"
+          "created_at": "2026-11-05T05:50:08.239Z"
         },
         {
-          "id": "dabb44b1-dbb7-4da0-95ec-cffb72905ca8",
-          "character_id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
+          "id": "d4c23687-483f-49b0-8cfd-48b5bde812fb",
+          "character_id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
           "tick_number": 1,
           "event_data": {
             "id": "skip_childhood_peace",
@@ -360,18 +357,18 @@
             },
             "source": "Million-Vector Engine (<20ms)"
           },
-          "created_at": "2026-11-05T04:57:53.035Z"
+          "created_at": "2026-11-05T05:50:08.243Z"
         },
         {
-          "id": "853c3e78-a5af-41ba-b0e7-5233c1803bf7",
-          "character_id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
+          "id": "6332aeea-6721-4afc-88ef-352c99f7f888",
+          "character_id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
           "tick_number": 4,
           "event_data": {
-            "id": "dyn_1793854673038",
+            "id": "dyn_1793857808246",
             "interaction_type": "STANDARD",
-            "tag": "dyn_childhood_4_38",
-            "title": "Kỷ Niệm Thuở Bé & Vòng Tay Gia Đình",
-            "narrative": "Tuổi ấu thơ trôi qua với những buổi chiều chạy nhảy trước sân nhà. Cha mẹ ân cần dạy bạn từng con chữ và cách ứng xử tử tế với xóm giềng.",
+            "tag": "dyn_childhood_4_246",
+            "title": "Bệnh Cảm Sốt Đầu Đời",
+            "narrative": "Thời tiết giao mùa khiến bạn bị sốt cao. Bát cháo hành nóng hổi của mẹ và bàn tay chăm sóc của gia đình giúp bạn vượt qua cơn mệt mỏi.",
             "spectrum_data": null,
             "illusion_data": null,
             "trilemma_options": null,
@@ -379,8 +376,8 @@
             "options": [
               {
                 "id": "A",
-                "action_title": "Ngoan Ngoãn Học Bài",
-                "consequence_hint": "Được cha mẹ khen ngợi, bồi đắp tri thức đầu đời (+10 Thể lực, +15 Karma).",
+                "action_title": "Chịu Khó Uống Thuốc Đắng",
+                "consequence_hint": "Hồi phục nhanh chóng, thấu hiểu tình thương của mẹ (+12 Thể lực).",
                 "risk_percent": 15,
                 "cost_ap": 0,
                 "effects": {
@@ -391,8 +388,8 @@
               },
               {
                 "id": "B",
-                "action_title": "Thỏa Sức Khám Phá Xung Quanh",
-                "consequence_hint": "Rèn luyện thể chất năng động và sự tò mò vô tận (+8 Thể lực, -15 Burnout).",
+                "action_title": "Đòi Mẹ Ôm Cả Đêm",
+                "consequence_hint": "Cảm nhận sự che chở ấm áp tuyệt đối (+6 Thể lực, +10 Karma).",
                 "risk_percent": 40,
                 "cost_ap": 0,
                 "effects": {
@@ -409,11 +406,11 @@
             },
             "source": "Million-Vector Engine (<20ms)"
           },
-          "created_at": "2026-11-05T04:57:53.038Z"
+          "created_at": "2026-11-05T05:50:08.246Z"
         },
         {
-          "id": "372fe27e-69e4-4a5f-ae47-c444963861e7",
-          "character_id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
+          "id": "d1f70f47-5f70-41a9-be4f-127af42519d4",
+          "character_id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
           "tick_number": 7,
           "event_data": {
             "id": "child_primary_school",
@@ -462,16 +459,16 @@
             },
             "source": "Million-Vector Engine (<20ms)"
           },
-          "created_at": "2026-11-05T04:57:53.042Z"
+          "created_at": "2026-11-05T05:50:08.249Z"
         },
         {
-          "id": "60672a71-ca47-4838-8638-e54ce463366a",
-          "character_id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
+          "id": "e1e0a399-1627-41d6-9762-726ea93b1d45",
+          "character_id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
           "tick_number": 10,
           "event_data": {
-            "id": "dyn_1793854673046",
+            "id": "dyn_1793857808251",
             "interaction_type": "STANDARD",
-            "tag": "dyn_childhood_10_46",
+            "tag": "dyn_childhood_10_251",
             "title": "Kỷ Niệm Thuở Bé & Vòng Tay Gia Đình",
             "narrative": "Tuổi ấu thơ trôi qua với những buổi chiều chạy nhảy trước sân nhà. Cha mẹ ân cần dạy bạn từng con chữ và cách ứng xử tử tế với xóm giềng.",
             "spectrum_data": null,
@@ -511,11 +508,11 @@
             },
             "source": "Million-Vector Engine (<20ms)"
           },
-          "created_at": "2026-11-05T04:57:53.046Z"
+          "created_at": "2026-11-05T05:50:08.251Z"
         },
         {
-          "id": "0a533625-9521-45c8-b77a-5c3bc4358cfe",
-          "character_id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
+          "id": "d60eeb4a-363f-4d40-8c28-536469e1fe9b",
+          "character_id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
           "tick_number": 13,
           "event_data": {
             "id": "child_highschool_exam",
@@ -540,28 +537,48 @@
             },
             "source": "Million-Vector Engine (<20ms)"
           },
-          "created_at": "2026-11-05T04:57:53.049Z"
+          "created_at": "2026-11-05T05:50:08.253Z"
         },
         {
-          "id": "49d8e454-0d9b-4c94-afa7-d438f86c86e6",
-          "character_id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
+          "id": "127f1baa-4455-463e-bb1d-f6387399a815",
+          "character_id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
           "tick_number": 16,
           "event_data": {
-            "id": "dyn_1793854673052",
-            "interaction_type": "SPECTRUM",
-            "tag": "dyn_adolescence_16_52",
-            "title": "Mâu Thuẫn Quan Điểm Với Cha Mẹ",
-            "narrative": "Bạn bắt đầu có những suy nghĩ độc lập về phong cách sống và gu âm nhạc. Cha mẹ cảm thấy khó hiểu và lo lắng bạn đi chệch hướng.",
-            "spectrum_data": {
-              "min_label": "Lắng Nghe & Nhượng Bộ Cha Mẹ",
-              "max_label": "Khẳng Định Cá Tính Riêng",
-              "impact_metric": "burnout_vs_vitality",
-              "consequence_summary": "Lựa chọn mức độ đánh đổi thích ứng theo hoàn cảnh hiện tại."
-            },
+            "id": "dyn_1793857808255",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_adolescence_16_255",
+            "title": "Thử Thách Khảo Sát & Ước Mơ Tuổi Trẻ",
+            "narrative": "Thầy cô yêu cầu mỗi học sinh viết bài luận về ước mơ tương lai. Bạn đứng trước nhiều hoài bão: trở thành kỹ sư, doanh nhân, hay người hoạt động xã hội.",
+            "spectrum_data": null,
             "illusion_data": null,
             "trilemma_options": null,
             "time_skip_data": null,
-            "options": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Đăng Ký Đội Tuyển Học Sinh Giỏi",
+                "consequence_hint": "Rèn luyện tư duy logic xuất sắc, nhận cờ Nhạy Bén Tri Thức.",
+                "risk_percent": 15,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 10,
+                  "karma_delta": 10,
+                  "burnout_delta": -5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Tham Gia Đội Bóng Của Trường",
+                "consequence_hint": "Sức sống dồi dào, mở rộng mạng lưới bạn bè chí cốt.",
+                "risk_percent": 40,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 5,
+                  "karma_delta": -5,
+                  "burnout_delta": -10
+                }
+              }
+            ],
             "visual_vibe": {
               "background_scene": "cyber_dusk",
               "audio_ambient": "calm_hum",
@@ -569,11 +586,11 @@
             },
             "source": "Million-Vector Engine (<20ms)"
           },
-          "created_at": "2026-11-05T04:57:53.052Z"
+          "created_at": "2026-11-05T05:50:08.255Z"
         },
         {
-          "id": "cf1ebab5-a2af-4a4d-b93f-5edb8407b4ae",
-          "character_id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
+          "id": "dc67531e-38f5-4067-bc03-058d75644b02",
+          "character_id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
           "tick_number": 19,
           "event_data": {
             "id": "tri_scholar_crossroads",
@@ -676,25 +693,25 @@
             },
             "source": "Million-Vector Engine (<20ms)"
           },
-          "created_at": "2026-11-05T04:57:53.056Z"
+          "created_at": "2026-11-05T05:50:08.258Z"
         },
         {
-          "id": "5265fc55-9983-4a1d-b879-d171f961148d",
-          "character_id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
+          "id": "45a8936d-2d41-4cbb-b875-213e0e84c337",
+          "character_id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
           "tick_number": 22,
           "event_data": {
-            "id": "spec_passion_salary",
-            "interaction_type": "SPECTRUM",
-            "tag": "passion_vs_salary",
-            "title": "Mức Lương Cơm Áo Hay Đam Mê Nghệ Thuật",
-            "narrative": "Một tập đoàn tài chính chào mời mức lương khởi điểm hậu hĩnh nhưng môi trường cực kỳ áp lực và vô hồn. Ngược lại, xưởng vẽ/studio âm nhạc bạn ao ước chỉ trả đủ tiền ăn bánh mì qua ngày.",
-            "spectrum_data": {
-              "min_label": "Chạy Theo Đam Mê (Chấp Nhận Nghèo)",
-              "max_label": "Bán Mình Cho Tư Bản (Lương Khủng)",
-              "impact_metric": "vitality_vs_wealth",
-              "consequence_summary": "Đánh đổi giữa sự tự do tâm hồn và khối tài sản tích lũy đầu đời."
+            "id": "ill_startup_patent_theft",
+            "interaction_type": "ILLUSION",
+            "tag": "intellectual_theft_loss",
+            "title": "Ý Tưởng Khởi Nghiệp Bị Đánh Cắp",
+            "narrative": "Dự án phần mềm bạn cùng nhóm bạn thân ấp ủ suốt 18 tháng đã bị một công ty lớn 'sao chép nguyên bản' và tung ra thị trường trước nhờ nguồn vốn khổng lồ. Luật sư nói rằng việc theo đuổi vụ kiện sẽ ngốn sạch gia sản của bạn mà không chắc thắng.",
+            "spectrum_data": null,
+            "illusion_data": {
+              "button_text": "Nuốt Hận Bắt Đầu Lại Từ Đầu",
+              "impact_hint": "Dự án tan vỡ, nhưng tôi luyện bản lĩnh thương trường không bao giờ ngây thơ nữa (+20 Karma).",
+              "drain_ratio": 0.2,
+              "karma_gain": 20
             },
-            "illusion_data": null,
             "trilemma_options": null,
             "time_skip_data": null,
             "options": null,
@@ -705,35 +722,28 @@
             },
             "source": "Million-Vector Engine (<20ms)"
           },
-          "created_at": "2026-11-05T04:57:53.061Z"
+          "created_at": "2026-11-05T05:50:08.263Z"
         },
         {
-          "id": "fd84d140-7f1f-4134-9721-b7243239d333",
-          "character_id": "6151a46b-56f7-474f-b0ad-e57ae6a72f49",
+          "id": "39849320-b6b3-4582-a67f-dae88a0b9325",
+          "character_id": "3989e4f7-2e55-4499-89e3-3e327d74aaf7",
           "tick_number": 25,
           "event_data": {
-            "id": "spec_academic_vs_market",
-            "interaction_type": "SPECTRUM",
-            "tag": "scholar_spectrum",
-            "title": "Cán Cân: Nghiên Cứu Viện Hàn Lâm vs Lập Trình Thương Mại Hái Ra Tiền",
-            "narrative": "Bạn phân bổ quỹ thời gian giữa việc viết bài báo khoa học nâng tầm học thuật và nhận hợp đồng viết phần mềm thương mại kiếm tiền tươi.",
-            "spectrum_data": {
-              "left_label": "Thuần Hàn Lâm (Karma & Uy Tín)",
-              "right_label": "Thuần Kiếm Tiền (Tài Chính & Hối Hả)",
-              "effects_ratio": {
-                "left": {
-                  "karma_delta": 20,
-                  "burnout_delta": -10
-                },
-                "right": {
-                  "cash_delta": 45000,
-                  "burnout_delta": 25
-                }
-              }
-            },
+            "id": "skip_youth_grind",
+            "interaction_type": "TIME_SKIP",
+            "tag": "youth_peaceful_leap",
+            "title": "Ba Năm Thanh Xuân Trầm Lặng Tích Lũy",
+            "narrative": "Không có biến động long trời lở đất. Bạn kiên trì đi làm công sở, học thêm ngoại ngữ vào buổi tối, ăn cơm quán quen. Ba năm trôi qua nhanh như một cái chớp mắt, tích lũy được tay nghề vững chãi.",
+            "spectrum_data": null,
             "illusion_data": null,
             "trilemma_options": null,
-            "time_skip_data": null,
+            "time_skip_data": {
+              "years_jump": 3,
+              "yearly_income_save": 5000,
+              "burnout_decay": 30,
+              "vitality_drift": 0,
+              "event_summary": "Trải qua 3 năm tuổi trẻ chuyên tâm tích lũy tay nghề và tạo nền tảng."
+            },
             "options": null,
             "visual_vibe": {
               "background_scene": "cyber_dusk",
@@ -742,7 +752,7 @@
             },
             "source": "Million-Vector Engine (<20ms)"
           },
-          "created_at": "2026-11-05T04:57:53.064Z"
+          "created_at": "2026-11-05T05:50:08.265Z"
         }
       ],
       "currentDilemma": null,
@@ -750,7 +760,7 @@
         "id": "default",
         "total_karma": 585,
         "unlocked_perks": [],
-        "reincarnation_count": 9,
+        "reincarnation_count": 11,
         "lifetime_stats": {
           "total_years_lived": 0,
           "max_net_worth": 0,
@@ -24174,6 +24184,3202 @@
             "epitaph_quote": "Thân tựa phù vân nơi trần thế, tâm an tĩnh tại giữa hư không. Dòng họ hưng vượng nhờ đức sáng muôn đời.",
             "blessing": "+150 Nghiệp Lực Khởi Tổ & Hộ Mệnh Muôn Đời",
             "recorded_at": "2026-10-29T04:57:57.959Z"
+          }
+        ]
+      }
+    }
+  ],
+  [
+    "user_1793857814496",
+    {
+      "character": {
+        "id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+        "name": "Frantz Joseph",
+        "gender": "male",
+        "age": 65,
+        "generation": 1,
+        "parent_name": null,
+        "nationality": "Haiti",
+        "nationality_code": "T3_Haiti",
+        "country_flag": "🇭🇹",
+        "country_tier": "T3",
+        "current_city": "Port-au-Prince (Pétion-Ville)",
+        "housing": {
+          "tier": 1,
+          "id": "slum_shared",
+          "name": "Phòng trọ / Mái ấm bình dân",
+          "address": "Hẻm lao động, Port-au-Prince (Pétion-Ville)",
+          "status": "rented"
+        },
+        "background": "Gia đình nông dân nghèo / Lao động chân tay",
+        "background_type": "poor",
+        "household": {
+          "father_name": "Wilner Joseph",
+          "father_job": "Thợ cơ khí đường phố / Buôn bán vỉa hè",
+          "father_status": "deceased",
+          "father_age": 87,
+          "mother_name": "Chantal Chery",
+          "mother_job": "Bán than củi / Đan lát thủ công chợ trời",
+          "mother_status": "deceased",
+          "mother_age": 85,
+          "annual_allowance": 0,
+          "family_vibe": "Gia đình nghèo nàn kiên cường, đùm bọc nhau giữa bất ổn xã hội.",
+          "family_buff": {
+            "id": "labor_resilience",
+            "name": "Gia Phong Cần Lao",
+            "description": "Tôi luyện tính tự lập (+15% Chống chịu kiệt sức)",
+            "stat": "resilience",
+            "bonus": 0.15
+          },
+          "family_meals_available": 1,
+          "parents_status": "deceased",
+          "marital_status": "happy",
+          "father_death_age": 82,
+          "mother_death_age": 81
+        },
+        "innate_traits": [
+          "thiên_tài_toán_học",
+          "tâm_lý_thép",
+          "hệ_miễn_dịch_yếu"
+        ],
+        "traits_detailed": [
+          {
+            "id": "thiên_tài_toán_học",
+            "name": "Thiên tài toán học & logic",
+            "desc": "Tư duy trừu tượng nhạy bén, tiếp thu khoa học, tài chính và phân tích dữ liệu siêu tốc",
+            "category": "intellect",
+            "rarity": "rare",
+            "effects": {
+              "math_prodigy": true,
+              "study_bonus": 0.25,
+              "karma_delta": 5
+            }
+          },
+          {
+            "id": "tâm_lý_thép",
+            "name": "Tâm lý thép & khắc kỷ",
+            "desc": "Tích tụ Burnout chậm hơn 40% trước các biến cố phá sản, tang tóc và khủng hoảng",
+            "category": "mental",
+            "rarity": "rare",
+            "effects": {
+              "burnout_resistance": 0.4
+            }
+          },
+          {
+            "id": "hệ_miễn_dịch_yếu",
+            "name": "Hệ miễn dịch nhạy cảm",
+            "desc": "Thể trạng mong manh từ thuở bé, -10 Max Sinh Lực, dễ cảm mạo theo mùa",
+            "category": "curse",
+            "rarity": "common",
+            "effects": {
+              "max_vitality_delta": -10
+            }
+          }
+        ],
+        "personality_flags": [],
+        "vitality": 66,
+        "max_vitality": 66,
+        "transhuman_frozen_until_age": null,
+        "is_transhuman": false,
+        "cash": 7394,
+        "family_endowment": 0,
+        "burnout": 0,
+        "karma": 100,
+        "action_points": 2,
+        "skills": {
+          "tech_logic": {
+            "level": 0,
+            "name": "Trí Tuệ & Công Nghệ"
+          },
+          "finance_market": {
+            "level": 0,
+            "name": "Tài Chính & Thương Trường"
+          },
+          "resilience_health": {
+            "level": 0,
+            "name": "Sinh Lực & Khắc Kỷ"
+          },
+          "leadership_social": {
+            "level": 0,
+            "name": "Lãnh Đạo & Ngoại Giao"
+          }
+        },
+        "hidden_flags": [
+          "poverty_grit",
+          "cherished_childhood",
+          "childhood_year_6",
+          "choice:CHOICE_ACADEMIC_EXCELLENCE",
+          "career_crossroads_resolved",
+          "fragile_childhood_resilience",
+          "childhood_year_8",
+          "childhood_year_9",
+          "childhood_year_10",
+          "prodigy_iron_mind",
+          "childhood_year_13",
+          "childhood_year_14",
+          "parents_deceased",
+          "parent_passed_away",
+          "father_passed_away",
+          "mother_passed_away"
+        ],
+        "delayed_flags": [],
+        "recent_event_tags": [
+          "dyn_midlife_51_607",
+          "dyn_midlife_52_608",
+          "dyn_midlife_53_610",
+          "dyn_midlife_54_611",
+          "dyn_midlife_55_612",
+          "dyn_midlife_56_613",
+          "dyn_midlife_57_614",
+          "dyn_midlife_58_616",
+          "dyn_midlife_59_617",
+          "peer_bereavement",
+          "inheritance_planning",
+          "elderly_health_struggle",
+          "charity_endowment",
+          "elderly_peaceful_leisure",
+          "dyn_elderly_65_625"
+        ],
+        "experienced_scenarios": [
+          "child_early_years",
+          "child_primary_school",
+          "skip_childhood_peace",
+          "dyn_1793857814525",
+          "dyn_1793857814526",
+          "dyn_1793857814527",
+          "dyn_1793857814529",
+          "dyn_1793857814530",
+          "child_highschool_exam",
+          "dyn_1793857814532",
+          "dyn_1793857814533",
+          "dyn_1793857814535",
+          "dyn_1793857814536",
+          "tri_scholar_crossroads",
+          "spec_passion_salary",
+          "spec_academic_vs_market",
+          "tri_artisan_heritage",
+          "ill_thesis_dispute",
+          "ill_startup_patent_theft",
+          "tri_medical_resident_crossroads",
+          "ill_family_medical_emergency",
+          "ill_health_exhaustion",
+          "spec_startup_burnout",
+          "tri_local_retail_crossroads",
+          "skip_youth_grind",
+          "tri_spouse_startup_dream",
+          "spec_work_family",
+          "spec_health_wealth",
+          "tri_zen_renunciation",
+          "ill_macro_recession",
+          "skip_peaceful_groove",
+          "ill_market_correction_crash",
+          "tri_ma_corporate_war",
+          "tri_existential_crossroad",
+          "dyn_1793857814591",
+          "dyn_1793857814593",
+          "dyn_1793857814594",
+          "ill_parent_passing",
+          "tri_child_scholarship_abroad",
+          "dyn_1793857814599",
+          "tri_cybernetic_ascension",
+          "skip_midlife_zen",
+          "spec_corporate_politics",
+          "tri_midlife_crisis",
+          "tri_sibling_ancestral_land",
+          "dyn_1793857814606",
+          "dyn_1793857814607",
+          "dyn_1793857814608",
+          "dyn_1793857814610",
+          "dyn_1793857814611",
+          "dyn_1793857814612",
+          "dyn_1793857814613",
+          "dyn_1793857814614",
+          "dyn_1793857814616",
+          "dyn_1793857814617",
+          "ill_friend_passing",
+          "spec_estate_distribution",
+          "tri_retirement_dilemma",
+          "spec_charity_legacy",
+          "skip_elderly_garden",
+          "dyn_1793857814625"
+        ],
+        "timeline_snapshots": [
+          {
+            "age": 0,
+            "net_worth": 0,
+            "vitality": 90,
+            "burnout": 0,
+            "event": "Chào đời tại Haiti (🇭🇹)"
+          },
+          {
+            "age": 10,
+            "net_worth": 320,
+            "vitality": 100,
+            "burnout": 0,
+            "event": "Năm 10 tuổi"
+          },
+          {
+            "age": 15,
+            "net_worth": 540,
+            "vitality": 100,
+            "burnout": 0,
+            "event": "Năm 15 tuổi"
+          },
+          {
+            "age": 20,
+            "net_worth": 7394,
+            "vitality": 100,
+            "burnout": 0,
+            "event": "Năm 20 tuổi"
+          },
+          {
+            "age": 25,
+            "net_worth": 7394,
+            "vitality": 100,
+            "burnout": 0,
+            "event": "Năm 25 tuổi"
+          },
+          {
+            "age": 30,
+            "net_worth": 7394,
+            "vitality": 100,
+            "burnout": 0,
+            "event": "Năm 30 tuổi"
+          },
+          {
+            "age": 35,
+            "net_worth": 7394,
+            "vitality": 100,
+            "burnout": 0,
+            "event": "Năm 35 tuổi"
+          },
+          {
+            "age": 40,
+            "net_worth": 7394,
+            "vitality": 100,
+            "burnout": 0,
+            "event": "Năm 40 tuổi"
+          },
+          {
+            "age": 45,
+            "net_worth": 7394,
+            "vitality": 94,
+            "burnout": 0,
+            "event": "Năm 45 tuổi"
+          },
+          {
+            "age": 50,
+            "net_worth": 7394,
+            "vitality": 88,
+            "burnout": 0,
+            "event": "Năm 50 tuổi"
+          },
+          {
+            "age": 55,
+            "net_worth": 7394,
+            "vitality": 81,
+            "burnout": 0,
+            "event": "Năm 55 tuổi"
+          },
+          {
+            "age": 60,
+            "net_worth": 7394,
+            "vitality": 74,
+            "burnout": 0,
+            "event": "Năm 60 tuổi"
+          },
+          {
+            "age": 65,
+            "net_worth": 7394,
+            "vitality": 66,
+            "burnout": 0,
+            "event": "Năm 65 tuổi"
+          }
+        ],
+        "global_indices": {
+          "economy": 65,
+          "social": 65,
+          "environment": 65
+        },
+        "history_log": [
+          {
+            "age": 0,
+            "event": "Chào đời tại Haiti 🇭🇹 trong một gia đình nông dân nghèo / lao động chân tay.",
+            "choice": "Cất tiếng khóc chào đời"
+          },
+          {
+            "age": 0,
+            "event": "Hành động tuổi thơ",
+            "choice": "Một ngày ấu thơ trôi qua êm đềm dưới mái ấm gia đình."
+          },
+          {
+            "age": 1,
+            "event": "Lễ Thôi Nôi & Bước Đi Chập Chững",
+            "choice": "Cất tiếng gọi cha mẹ đầu đời và chập chững những bước đi vững chãi đầu tiên trong tình yêu thương gia đình."
+          },
+          {
+            "age": 3,
+            "event": "Những Năm Tháng Nhà Trẻ Rộn Rã",
+            "choice": "Làm quen với bạn bè trang lứa, học hát đồng dao và khám phá thế giới xung quanh qua từng trang sách ảnh."
+          },
+          {
+            "age": 5,
+            "event": "Tốt Nghiệp Mầm Non & Cắp Sách Vào Lớp 1",
+            "choice": "Được cha mẹ mua cho bộ đồng phục và chiếc cặp sách mới tinh, háo hức sẵn sàng bước vào ngưỡng cửa trường tiểu học."
+          },
+          {
+            "age": 7,
+            "event": "👨‍👩‍👧 Ấm Áp Bữa Cơm Gia Đình (6 Tuổi)",
+            "choice": "Dưới sự chăm sóc của Wilner Joseph và Chantal Chery, bạn lớn lên trong tình thương ấm áp. Tiền trợ cấp gia đình nuôi nấng bạn khôn lớn từng ngày."
+          },
+          {
+            "age": 7,
+            "event": "Ngã Rẽ Học Trò: Lớp Học & Bước Đầu Khôn Lớn",
+            "choice": "Tập Trung Học Tập Xuất Sắc & Thi Học Sinh Giỏi",
+            "stance": "LÝ TRÍ",
+            "outcome_tier": "critical_success",
+            "narration": "Bạn xuất sắc đạt giải cao trong kỳ thi học sinh giỏi! Thầy cô khen ngợi, cha mẹ hãnh diện.",
+            "roll": {
+              "d20_base": 18,
+              "trait_bonus": 0,
+              "stat_bonus": 1,
+              "ap_bonus": 2,
+              "total_score": 21,
+              "target_dc": 12,
+              "result_tier": "critical_success"
+            }
+          },
+          {
+            "age": 8,
+            "event": "🤧 Thể Tạng Mong Manh & Những Đợt Kháng Sinh (7 Tuổi)",
+            "choice": "Do sở hữu [Hệ miễn dịch nhạy cảm], bạn ốm sốt triền miên mỗi đợt giao mùa. Mẹ thức trắng đêm chườm trán, cho bạn uống từng thìa thuốc đắng. Những ngày nằm viện giúp bạn trân trọng sâu sắc từng giọt sinh lực."
+          },
+          {
+            "age": 9,
+            "event": "👨‍👩‍👧 Ấm Áp Bữa Cơm Gia Đình (8 Tuổi)",
+            "choice": "Dưới sự chăm sóc của Wilner Joseph và Chantal Chery, bạn lớn lên trong tình thương ấm áp. Tiền trợ cấp gia đình nuôi nấng bạn khôn lớn từng ngày."
+          },
+          {
+            "age": 10,
+            "event": "📈 Gia Đình Cải Thiện Thu Nhập (9 Tuổi)",
+            "choice": "Công việc làm ăn của Wilner Joseph (Thợ cơ khí đường phố / Buôn bán vỉa hè) thuận lợi hơn, bữa cơm gia đình có thêm món ngon và bạn được mua thêm quần áo mới."
+          },
+          {
+            "age": 11,
+            "event": "🌧️ Thắt Lưng Buộc Bụng (10 Tuổi)",
+            "choice": "Năm nay kinh tế gia đình gặp chững lại. Nhìn cha mẹ làm việc vất vả, bạn ngoan ngoãn phụ giúp việc nhà và không đòi hỏi mua sắm xa xỉ. Bạn học được bài học đầu đời về sự sẻ chia."
+          },
+          {
+            "age": 12,
+            "event": "🤧 Thể Tạng Mong Manh & Những Đợt Kháng Sinh (11 Tuổi)",
+            "choice": "Do sở hữu [Hệ miễn dịch nhạy cảm], bạn ốm sốt triền miên mỗi đợt giao mùa. Mẹ thức trắng đêm chườm trán, cho bạn uống từng thìa thuốc đắng. Những ngày nằm viện giúp bạn trân trọng sâu sắc từng giọt sinh lực."
+          },
+          {
+            "age": 13,
+            "event": "🛡️ Tâm Lý Thép & Điềm Tĩnh Trước Biến Cố (12 Tuổi)",
+            "choice": "Đối mặt với sự cố giao thông hay kỳ thi tuyển sinh căng thẳng, [Tâm lý thép] giúp bạn duy trì nhịp tim ổn định và cái đầu lạnh, xử lý tình huống chính xác tuyệt đối khiến người lớn ngỡ ngàng."
+          },
+          {
+            "age": 14,
+            "event": "🌧️ Thắt Lưng Buộc Bụng (13 Tuổi)",
+            "choice": "Năm nay kinh tế gia đình gặp chững lại. Nhìn cha mẹ làm việc vất vả, bạn ngoan ngoãn phụ giúp việc nhà và không đòi hỏi mua sắm xa xỉ. Bạn học được bài học đầu đời về sự sẻ chia."
+          },
+          {
+            "age": 15,
+            "event": "👨‍👩‍👧 Ấm Áp Bữa Cơm Gia Đình (14 Tuổi)",
+            "choice": "Dưới sự chăm sóc của Wilner Joseph và Chantal Chery, bạn lớn lên trong tình thương ấm áp. Tiền trợ cấp gia đình nuôi nấng bạn khôn lớn từng ngày."
+          },
+          {
+            "age": 16,
+            "event": "🤧 Thể Tạng Mong Manh & Những Đợt Kháng Sinh (15 Tuổi)",
+            "choice": "Do sở hữu [Hệ miễn dịch nhạy cảm], bạn ốm sốt triền miên mỗi đợt giao mùa. Mẹ thức trắng đêm chườm trán, cho bạn uống từng thìa thuốc đắng. Những ngày nằm viện giúp bạn trân trọng sâu sắc từng giọt sinh lực."
+          },
+          {
+            "age": 17,
+            "event": "🛡️ Tâm Lý Thép & Điềm Tĩnh Trước Biến Cố (16 Tuổi)",
+            "choice": "Đối mặt với sự cố giao thông hay kỳ thi tuyển sinh căng thẳng, [Tâm lý thép] giúp bạn duy trì nhịp tim ổn định và cái đầu lạnh, xử lý tình huống chính xác tuyệt đối khiến người lớn ngỡ ngàng."
+          },
+          {
+            "age": 18,
+            "event": "Cột Mốc Tuổi 18: Chính Thức Trưởng Thành & Độc Lập Tài Chính",
+            "choice": "Tiếp nhận toàn bộ khoản tiền bảo trợ gia đình tích lũy ($800) để tự do quyết định tương lai."
+          },
+          {
+            "age": 18,
+            "event": "Làm thêm giờ & Nhận dự án ngoài luồng (Overtime Grind)",
+            "choice": "Tiêu 1 AP: Kiếm thêm +$3,875, Burnout +12"
+          },
+          {
+            "age": 18,
+            "event": "Khóa tu tĩnh tâm / Du lịch hòa mình vào thiên nhiên",
+            "choice": "Chi $800 & 1 AP (+15 Sinh lực, -35 Burnout)"
+          },
+          {
+            "age": 18,
+            "event": "Làm thêm giờ & Nhận dự án ngoài luồng (Overtime Grind)",
+            "choice": "Tiêu 1 AP: Kiếm thêm +$3,709, Burnout +12"
+          },
+          {
+            "age": 18,
+            "event": "Khóa tu tĩnh tâm / Du lịch hòa mình vào thiên nhiên",
+            "choice": "Chi $800 & 1 AP (+15 Sinh lực, -35 Burnout)"
+          }
+        ],
+        "is_deceased": true,
+        "death_cause": "Đắc Đạo Niết Bàn (Ascended to Nirvana)",
+        "death_age": 65,
+        "created_at": "2026-11-05T05:50:14.504Z",
+        "pacing_state": {
+          "cycle_turn": 1,
+          "turns_since_major": 3
+        },
+        "knowledge_base": [
+          "infant_curiosity",
+          "peer_trust_friendship"
+        ],
+        "current_scene_id": "scene_school_classroom",
+        "occupation": "Học sinh tiểu học",
+        "total_ap": 2,
+        "locked_ap": 0,
+        "locked_reasons": [],
+        "commitments": [],
+        "life_aspiration": "young_scholar",
+        "nirvana_ascended": true
+      },
+      "assets": [],
+      "relationships": [
+        {
+          "id": "9a892982-da22-4644-b142-842975f56445",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "type": "father",
+          "name": "Wilner Joseph",
+          "age": 82,
+          "status": "deceased",
+          "affection_level": 85,
+          "monthly_cost": 0,
+          "death_age": 82
+        },
+        {
+          "id": "c47e04ab-43a1-4507-bbbc-b87ffdfa5276",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "type": "mother",
+          "name": "Chantal Chery",
+          "age": 81,
+          "status": "deceased",
+          "affection_level": 90,
+          "monthly_cost": 0,
+          "death_age": 81
+        }
+      ],
+      "npcs": [
+        {
+          "id": "89eda512-ffd2-44e6-923e-e5a855f7ef2d",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "name": "Lê Hoàng",
+          "role": "Bạn nối khố / Đồng nghiệp đầu đời",
+          "status": "alive",
+          "affinity": 75,
+          "memory_notes": "Cùng nhau lớn lên và chia sẻ từng chiếc bánh mì thời thiếu thốn.",
+          "last_encountered_age": 0,
+          "avatar_color": "#38bdf8"
+        },
+        {
+          "id": "2b0f9ea9-3e76-4dfd-995f-4639c716a383",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "name": "Bác Ba 'Cơm Tấm'",
+          "role": "Ân nhân xóm nghèo",
+          "status": "alive",
+          "affinity": 85,
+          "memory_notes": "Từng cho bạn ăn nợ nhiều tháng liền khi gia đình khánh kiệt.",
+          "last_encountered_age": 0,
+          "avatar_color": "#34d399"
+        }
+      ],
+      "tickEvents": [
+        {
+          "id": "64c4a5e0-fcb3-4ad2-8e5d-4db7ee2365c4",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 0,
+          "event_data": {
+            "id": "child_early_years",
+            "interaction_type": "STANDARD",
+            "tag": "infancy_milestone",
+            "title": "Tiếng Khóc Đầu Đời & Vòng Tay Gia Đình",
+            "narrative": "Bạn đang trong những năm tháng chập chững đầu đời. Một trận sốt mọc răng giữa đêm khiến cha mẹ lo sốt vó, thức trắng đêm chườm trán cho bạn. Hơi ấm tình thân là cội nguồn nuôi dưỡng sinh mệnh non nớt.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "INF_A",
+                "label": "Ngoan ngoãn ngủ say trong lòng mẹ",
+                "action_title": "Ngoan ngoãn ngủ say trong vòng tay mẹ",
+                "consequence_hint": "+12 Sinh lực, +15 Nghiệp • Định hình khí chất Điềm Tĩnh, Ngoan Ngoãn",
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 12,
+                  "karma_delta": 15,
+                  "burnout_delta": -10,
+                  "add_flags": [
+                    "calm_nature"
+                  ]
+                }
+              },
+              {
+                "id": "INF_B",
+                "label": "Khóc quấy ngằn ngặt đòi dỗ dành",
+                "action_title": "Khóc ré đòi bế & Khát khao sinh tồn",
+                "consequence_hint": "+6 Sinh lực, +8 Trí tuệ • Định hình khí chất Bướng Bỉnh, Đòi Hỏi",
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 6,
+                  "burnout_delta": 5,
+                  "add_flags": [
+                    "strong_willed"
+                  ]
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.504Z"
+        },
+        {
+          "id": "58a63df7-7f2a-41ef-9c0a-95c9ee9e5b05",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 6,
+          "event_data": {
+            "id": "child_primary_school",
+            "interaction_type": "STANDARD",
+            "tag": "childhood_growth",
+            "title": "Trường Lớp Đầu Tiên & Bạn Bè Trang Lứa",
+            "narrative": "Tiếng trống trường rộn rã khai giảng năm học mới. Thầy cô phân công bạn chăm sóc góc vườn sinh học của lớp và chia sẻ bàn học với một người bạn mới chuyển đến.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "PRI_A",
+                "label": "Chăm chỉ tưới cây & Giúp bạn học tập",
+                "action_title": "Trở thành học sinh gương mẫu",
+                "consequence_hint": "Rèn luyện tính kiên nhẫn, được thầy cô quý mến (+12 Thể lực, +15 Karma).",
+                "cost_ap": 1,
+                "effects": {
+                  "vitality_delta": 12,
+                  "karma_delta": 15,
+                  "add_flags": [
+                    "diligent_child"
+                  ]
+                }
+              },
+              {
+                "id": "PRI_B",
+                "label": "Rủ bạn trốn ra sân bóng chơi đùa",
+                "action_title": "Thỏa sức nô đùa dưới nắng hè",
+                "consequence_hint": "Thể lực dẻo dai, tâm hồn vô tư hồn nhiên (+8 Thể lực, -15 Burnout).",
+                "cost_ap": 1,
+                "effects": {
+                  "vitality_delta": 8,
+                  "burnout_delta": -15,
+                  "add_flags": [
+                    "playful_child"
+                  ]
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.516Z"
+        },
+        {
+          "id": "63f93822-7a55-4460-9432-581d948e0b90",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 7,
+          "event_data": {
+            "id": "skip_childhood_peace",
+            "interaction_type": "TIME_SKIP",
+            "tag": "childhood_peaceful_leap",
+            "title": "Những Năm Tháng Tuổi Thơ Vô Lo Vô Nghĩ",
+            "narrative": "Trôi qua 3 năm tuổi thơ êm đềm dưới mái nhà cha mẹ. Bạn lớn nhanh như thổi, được chăm sóc chu đáo, ngày ngày cắp sách tới trường và tận hưởng những bữa cơm gia đình đầm ấm.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": {
+              "years_jump": 3,
+              "yearly_income_save": 0,
+              "burnout_decay": 40,
+              "vitality_drift": 15,
+              "event_summary": "Trải qua 3 năm tuổi thơ lớn lên trong bình yên và tình yêu thương của gia đình."
+            },
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.517Z"
+        },
+        {
+          "id": "5a3804b3-5b3b-4466-9dd4-7a363e6ebc23",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 8,
+          "event_data": {
+            "id": "dyn_1793857814525",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_childhood_8_525",
+            "title": "Bệnh Cảm Sốt Đầu Đời",
+            "narrative": "Thời tiết giao mùa khiến bạn bị sốt cao. Bát cháo hành nóng hổi của mẹ và bàn tay chăm sóc của gia đình giúp bạn vượt qua cơn mệt mỏi.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Chịu Khó Uống Thuốc Đắng",
+                "consequence_hint": "Hồi phục nhanh chóng, thấu hiểu tình thương của mẹ (+12 Thể lực).",
+                "risk_percent": 15,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 10,
+                  "karma_delta": 10,
+                  "burnout_delta": -5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Đòi Mẹ Ôm Cả Đêm",
+                "consequence_hint": "Cảm nhận sự che chở ấm áp tuyệt đối (+6 Thể lực, +10 Karma).",
+                "risk_percent": 40,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 5,
+                  "karma_delta": -5,
+                  "burnout_delta": -10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.525Z"
+        },
+        {
+          "id": "9f5ac0da-51be-4434-a812-32d9904cc54a",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 9,
+          "event_data": {
+            "id": "dyn_1793857814526",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_childhood_9_526",
+            "title": "Kỷ Niệm Thuở Bé & Vòng Tay Gia Đình",
+            "narrative": "Tuổi ấu thơ trôi qua với những buổi chiều chạy nhảy trước sân nhà. Cha mẹ ân cần dạy bạn từng con chữ và cách ứng xử tử tế với xóm giềng.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Ngoan Ngoãn Học Bài",
+                "consequence_hint": "Được cha mẹ khen ngợi, bồi đắp tri thức đầu đời (+10 Thể lực, +15 Karma).",
+                "risk_percent": 15,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 10,
+                  "karma_delta": 10,
+                  "burnout_delta": -5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Thỏa Sức Khám Phá Xung Quanh",
+                "consequence_hint": "Rèn luyện thể chất năng động và sự tò mò vô tận (+8 Thể lực, -15 Burnout).",
+                "risk_percent": 40,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 5,
+                  "karma_delta": -5,
+                  "burnout_delta": -10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.526Z"
+        },
+        {
+          "id": "6f17aa98-cba3-4c63-83e6-ec65b37ab432",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 10,
+          "event_data": {
+            "id": "dyn_1793857814527",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_childhood_10_527",
+            "title": "Kỷ Niệm Thuở Bé & Vòng Tay Gia Đình",
+            "narrative": "Tuổi ấu thơ trôi qua với những buổi chiều chạy nhảy trước sân nhà. Cha mẹ ân cần dạy bạn từng con chữ và cách ứng xử tử tế với xóm giềng.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Ngoan Ngoãn Học Bài",
+                "consequence_hint": "Được cha mẹ khen ngợi, bồi đắp tri thức đầu đời (+10 Thể lực, +15 Karma).",
+                "risk_percent": 15,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 10,
+                  "karma_delta": 10,
+                  "burnout_delta": -5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Thỏa Sức Khám Phá Xung Quanh",
+                "consequence_hint": "Rèn luyện thể chất năng động và sự tò mò vô tận (+8 Thể lực, -15 Burnout).",
+                "risk_percent": 40,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 5,
+                  "karma_delta": -5,
+                  "burnout_delta": -10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.527Z"
+        },
+        {
+          "id": "bb4442b2-15a2-44d7-8b4b-f93e04a6e32b",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 11,
+          "event_data": {
+            "id": "dyn_1793857814529",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_childhood_11_529",
+            "title": "Kỷ Niệm Thuở Bé & Vòng Tay Gia Đình",
+            "narrative": "Tuổi ấu thơ trôi qua với những buổi chiều chạy nhảy trước sân nhà. Cha mẹ ân cần dạy bạn từng con chữ và cách ứng xử tử tế với xóm giềng.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Ngoan Ngoãn Học Bài",
+                "consequence_hint": "Được cha mẹ khen ngợi, bồi đắp tri thức đầu đời (+10 Thể lực, +15 Karma).",
+                "risk_percent": 15,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 10,
+                  "karma_delta": 10,
+                  "burnout_delta": -5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Thỏa Sức Khám Phá Xung Quanh",
+                "consequence_hint": "Rèn luyện thể chất năng động và sự tò mò vô tận (+8 Thể lực, -15 Burnout).",
+                "risk_percent": 40,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 5,
+                  "karma_delta": -5,
+                  "burnout_delta": -10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.529Z"
+        },
+        {
+          "id": "b847da85-1992-4d04-bd62-e893410b737c",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 12,
+          "event_data": {
+            "id": "dyn_1793857814530",
+            "interaction_type": "SPECTRUM",
+            "tag": "dyn_adolescence_12_530",
+            "title": "Mâu Thuẫn Quan Điểm Với Cha Mẹ",
+            "narrative": "Bạn bắt đầu có những suy nghĩ độc lập về phong cách sống và gu âm nhạc. Cha mẹ cảm thấy khó hiểu và lo lắng bạn đi chệch hướng.",
+            "spectrum_data": {
+              "min_label": "Lắng Nghe & Nhượng Bộ Cha Mẹ",
+              "max_label": "Khẳng Định Cá Tính Riêng",
+              "impact_metric": "burnout_vs_vitality",
+              "consequence_summary": "Lựa chọn mức độ đánh đổi thích ứng theo hoàn cảnh hiện tại."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.530Z"
+        },
+        {
+          "id": "22226152-4edb-4abe-b4b9-13d46c0b0386",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 13,
+          "event_data": {
+            "id": "child_highschool_exam",
+            "interaction_type": "SPECTRUM",
+            "tag": "teen_study_vs_passion",
+            "title": "Ngã Rẽ Thi Cử & Những Rung Động Tuổi Học Trò",
+            "narrative": "Kỳ thi chuyển cấp cận kề, gia đình kỳ vọng bạn thi đỗ trường chuyên lớp chọn. Trong khi đó, bạn ấp ủ đam mê công nghệ và những buổi sinh hoạt câu lạc bộ cùng mối tình đầu ngây thơ.",
+            "spectrum_data": {
+              "min_label": "Tập Trung Học Thêm (Trường Chuyên)",
+              "max_label": "Theo Đuổi Đam Mê & Tình Bạn",
+              "impact_metric": "burnout_vs_vitality",
+              "consequence_summary": "Kéo sang Trái: Điểm số cao, cha mẹ hài lòng nhưng chịu áp lực thi cử. Kéo sang Phải: Tự do khám phá nhưng phải tự lực cánh sinh."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.531Z"
+        },
+        {
+          "id": "20c9a36c-8d6b-48b8-9d74-1ac25d69624a",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 14,
+          "event_data": {
+            "id": "dyn_1793857814532",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_adolescence_14_532",
+            "title": "Thử Thách Khảo Sát & Ước Mơ Tuổi Trẻ",
+            "narrative": "Thầy cô yêu cầu mỗi học sinh viết bài luận về ước mơ tương lai. Bạn đứng trước nhiều hoài bão: trở thành kỹ sư, doanh nhân, hay người hoạt động xã hội.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Đăng Ký Đội Tuyển Học Sinh Giỏi",
+                "consequence_hint": "Rèn luyện tư duy logic xuất sắc, nhận cờ Nhạy Bén Tri Thức.",
+                "risk_percent": 15,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 10,
+                  "karma_delta": 10,
+                  "burnout_delta": -5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Tham Gia Đội Bóng Của Trường",
+                "consequence_hint": "Sức sống dồi dào, mở rộng mạng lưới bạn bè chí cốt.",
+                "risk_percent": 40,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 5,
+                  "karma_delta": -5,
+                  "burnout_delta": -10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.532Z"
+        },
+        {
+          "id": "2102ec1f-cfff-419f-8921-292083861244",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 15,
+          "event_data": {
+            "id": "dyn_1793857814533",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_adolescence_15_533",
+            "title": "Thử Thách Khảo Sát & Ước Mơ Tuổi Trẻ",
+            "narrative": "Thầy cô yêu cầu mỗi học sinh viết bài luận về ước mơ tương lai. Bạn đứng trước nhiều hoài bão: trở thành kỹ sư, doanh nhân, hay người hoạt động xã hội.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Đăng Ký Đội Tuyển Học Sinh Giỏi",
+                "consequence_hint": "Rèn luyện tư duy logic xuất sắc, nhận cờ Nhạy Bén Tri Thức.",
+                "risk_percent": 15,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 10,
+                  "karma_delta": 10,
+                  "burnout_delta": -5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Tham Gia Đội Bóng Của Trường",
+                "consequence_hint": "Sức sống dồi dào, mở rộng mạng lưới bạn bè chí cốt.",
+                "risk_percent": 40,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 5,
+                  "karma_delta": -5,
+                  "burnout_delta": -10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.533Z"
+        },
+        {
+          "id": "72d53787-816a-4193-925f-64cb89831064",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 16,
+          "event_data": {
+            "id": "dyn_1793857814535",
+            "interaction_type": "SPECTRUM",
+            "tag": "dyn_adolescence_16_535",
+            "title": "Mâu Thuẫn Quan Điểm Với Cha Mẹ",
+            "narrative": "Bạn bắt đầu có những suy nghĩ độc lập về phong cách sống và gu âm nhạc. Cha mẹ cảm thấy khó hiểu và lo lắng bạn đi chệch hướng.",
+            "spectrum_data": {
+              "min_label": "Lắng Nghe & Nhượng Bộ Cha Mẹ",
+              "max_label": "Khẳng Định Cá Tính Riêng",
+              "impact_metric": "burnout_vs_vitality",
+              "consequence_summary": "Lựa chọn mức độ đánh đổi thích ứng theo hoàn cảnh hiện tại."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.535Z"
+        },
+        {
+          "id": "08495c80-b7dd-441d-b34e-e60a64f09daf",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 17,
+          "event_data": {
+            "id": "dyn_1793857814536",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_adolescence_17_536",
+            "title": "Thử Thách Khảo Sát & Ước Mơ Tuổi Trẻ",
+            "narrative": "Thầy cô yêu cầu mỗi học sinh viết bài luận về ước mơ tương lai. Bạn đứng trước nhiều hoài bão: trở thành kỹ sư, doanh nhân, hay người hoạt động xã hội.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Đăng Ký Đội Tuyển Học Sinh Giỏi",
+                "consequence_hint": "Rèn luyện tư duy logic xuất sắc, nhận cờ Nhạy Bén Tri Thức.",
+                "risk_percent": 15,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 10,
+                  "karma_delta": 10,
+                  "burnout_delta": -5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Tham Gia Đội Bóng Của Trường",
+                "consequence_hint": "Sức sống dồi dào, mở rộng mạng lưới bạn bè chí cốt.",
+                "risk_percent": 40,
+                "cost_ap": 0,
+                "effects": {
+                  "vitality_delta": 5,
+                  "karma_delta": -5,
+                  "burnout_delta": -10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.537Z"
+        },
+        {
+          "id": "7f9e6023-2f21-4f43-82cc-bb116ca692c1",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 18,
+          "event_data": {
+            "id": "tri_scholar_crossroads",
+            "interaction_type": "TRILEMMA",
+            "tag": "youth_scholar_climax",
+            "title": "Tam Giác Định Mệnh: Nghiên Cứu Sinh, Thử Việc Big Tech hay Mái Ấm Giảng Viên?",
+            "narrative": "Bạn đứng trước ngã rẽ lớn của tuổi trẻ: Nhận học bổng toàn phần Tiến sĩ tại ĐH danh giá, lời mời làm Kỹ sư tập sự thử việc ở Thung Lũng Silicon, hay ở lại kết hôn và trở thành Giảng viên uy tín nơi quê nhà.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "SCH_A",
+                "action_title": "Nghiên Cứu Sinh Viện Hàn Lâm (Học Bổng Toàn Phần)",
+                "consequence_hint": "Miễn 100% học phí, nhận trợ cấp sinh hoạt $3.500/tháng ở Ký túc xá, dồn tâm sức viết luận án (+25 Karma, +15 Stress).",
+                "sacrifice_type": "relationship",
+                "effects": {
+                  "karma_delta": 25,
+                  "burnout_delta": 15,
+                  "cash_delta": 3500,
+                  "flags": [
+                    "stanford_phd_scholar"
+                  ],
+                  "new_city": "California (ĐH Stanford, Hoa Kỳ)",
+                  "new_housing": {
+                    "name": "Ký túc xá ĐH Stanford",
+                    "tier": 2,
+                    "status": "rented"
+                  },
+                  "occupation": "Nghiên cứu sinh Tiến sĩ",
+                  "delayed_domino": {
+                    "in_years": 3,
+                    "flag": "doctoral_defense_passed",
+                    "karma_delta": 35,
+                    "cash_delta": 25000,
+                    "occupation": "Tiến sĩ Viện Hàn Lâm",
+                    "title": "Bảo Vệ Thành Công Luận Án Tiến Sĩ",
+                    "milestone_summary": "Công trình nghiên cứu AI của bạn được công bố trên tạp chí khoa học quốc tế. Bạn chính thức nhận bằng Tiến sĩ và được mời làm Nghiên cứu viên cao cấp!"
+                  }
+                }
+              },
+              {
+                "id": "SCH_B",
+                "action_title": "Thử Việc Kỹ Sư Tập Sự Big Tech (Thung Lũng Silicon)",
+                "consequence_hint": "Chuyển tới San Francisco với chi phí đắt đỏ, nhận trợ cấp thực tập sinh $5.000, cày 70h/tuần vượt qua thử việc để ký hợp đồng chính thức (+5.000 USD, Burnout +30).",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "cash_delta": 5000,
+                  "burnout_delta": 30,
+                  "flags": [
+                    "bigtech_probation_period"
+                  ],
+                  "new_city": "San Francisco (Silicon Valley, Hoa Kỳ)",
+                  "new_housing": {
+                    "name": "Căn hộ ghép phòng San Francisco",
+                    "tier": 2,
+                    "status": "rented"
+                  },
+                  "occupation": "Kỹ sư Thực tập sinh Big Tech",
+                  "delayed_domino": {
+                    "in_years": 2,
+                    "flag": "bigtech_senior_confirmed",
+                    "cash_delta": 75000,
+                    "burnout_delta": 15,
+                    "occupation": "Kỹ sư AI Chính thức (Big Tech)",
+                    "title": "Kỳ Đánh Giá Thử Việc Big Tech Hoàn Tất",
+                    "milestone_summary": "Sau 2 năm cày cuốc ngày đêm, năng lực chuyên môn của bạn được hội đồng công nhận: Thăng cấp Kỹ sư chính thức kèm gói thưởng cổ phiếu $75.000!"
+                  }
+                }
+              },
+              {
+                "id": "SCH_C",
+                "action_title": "Ở Lại Kết Hôn & Làm Giảng Viên Địa Phương",
+                "consequence_hint": "Trân trọng hạnh phúc gia đình giản dị, truyền lửa tri thức cho thế hệ trẻ quê nhà (Hạnh phúc +30, Karma +25).",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "karma_delta": 25,
+                  "burnout_delta": -25,
+                  "cash_delta": -10000,
+                  "flags": [
+                    "local_mentor_spouse"
+                  ],
+                  "occupation": "Giảng viên Đại học địa phương",
+                  "delayed_domino": {
+                    "in_years": 2,
+                    "flag": "local_community_pillar",
+                    "karma_delta": 25,
+                    "cash_delta": 15000,
+                    "title": "Uy Tín Giảng Dạy & Tình Nghĩa Quê Hương",
+                    "milestone_summary": "Học trò bạn dìu dắt đạt giải thưởng nghiên cứu. Mái ấm gia đình hòa thuận, bạn được tín nhiệm làm Trưởng bộ môn!"
+                  }
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.539Z"
+        },
+        {
+          "id": "a0294b23-9f63-438b-aeb1-f9b0c3c18383",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 19,
+          "event_data": {
+            "id": "spec_passion_salary",
+            "interaction_type": "SPECTRUM",
+            "tag": "passion_vs_salary",
+            "title": "Mức Lương Cơm Áo Hay Đam Mê Nghệ Thuật",
+            "narrative": "Một tập đoàn tài chính chào mời mức lương khởi điểm hậu hĩnh nhưng môi trường cực kỳ áp lực và vô hồn. Ngược lại, xưởng vẽ/studio âm nhạc bạn ao ước chỉ trả đủ tiền ăn bánh mì qua ngày.",
+            "spectrum_data": {
+              "min_label": "Chạy Theo Đam Mê (Chấp Nhận Nghèo)",
+              "max_label": "Bán Mình Cho Tư Bản (Lương Khủng)",
+              "impact_metric": "vitality_vs_wealth",
+              "consequence_summary": "Đánh đổi giữa sự tự do tâm hồn và khối tài sản tích lũy đầu đời."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.566Z"
+        },
+        {
+          "id": "b4b61ee8-aa9c-43d4-bdf7-8a21245b7549",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 20,
+          "event_data": {
+            "id": "spec_academic_vs_market",
+            "interaction_type": "SPECTRUM",
+            "tag": "scholar_spectrum",
+            "title": "Cán Cân: Nghiên Cứu Viện Hàn Lâm vs Lập Trình Thương Mại Hái Ra Tiền",
+            "narrative": "Bạn phân bổ quỹ thời gian giữa việc viết bài báo khoa học nâng tầm học thuật và nhận hợp đồng viết phần mềm thương mại kiếm tiền tươi.",
+            "spectrum_data": {
+              "left_label": "Thuần Hàn Lâm (Karma & Uy Tín)",
+              "right_label": "Thuần Kiếm Tiền (Tài Chính & Hối Hả)",
+              "effects_ratio": {
+                "left": {
+                  "karma_delta": 20,
+                  "burnout_delta": -10
+                },
+                "right": {
+                  "cash_delta": 45000,
+                  "burnout_delta": 25
+                }
+              }
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.567Z"
+        },
+        {
+          "id": "6b58c6e1-606b-4e64-816c-954d040339c8",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 21,
+          "event_data": {
+            "id": "tri_artisan_heritage",
+            "interaction_type": "TRILEMMA",
+            "tag": "artisan_crossroads",
+            "title": "Ngã Rẽ Làng Nghề: Kế Nghiệp Cổ Truyền, Xuất Khẩu Mỹ Nghệ hay Chuyển Nghề Công Nghiệp?",
+            "narrative": "Xưởng thủ công truyền thống của gia tộc đang đứng trước cơn lốc công nghiệp hóa. Bạn có kỹ năng đôi bàn tay khéo léo và phải quyết định hướng đi cho đôi tay và tâm hồn mình.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "ART_A",
+                "action_title": "Kế Nghiệp Xưởng Cổ Truyền & Rèn Dũa Tay Nghề Nghệ Nhân",
+                "consequence_hint": "Chấp nhận thu nhập khởi điểm khiêm tốn, bảo tồn tinh hoa hoa văn của tổ tiên (+30 Karma, -15 Burnout).",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "karma_delta": 30,
+                  "burnout_delta": -15,
+                  "cash_delta": -10000,
+                  "flags": [
+                    "master_artisan_apprentice"
+                  ],
+                  "occupation": "Nghệ nhân Thủ công Truyền thống",
+                  "delayed_domino": {
+                    "in_years": 3,
+                    "flag": "cultural_heritage_master",
+                    "karma_delta": 40,
+                    "cash_delta": 22000,
+                    "title": "Đạt Danh Hiệu Nghệ Nhân Di Sản Quốc Gia",
+                    "milestone_summary": "Tác phẩm thủ công độc bản của bạn được trưng bày tại Bảo tàng Quốc gia và bán đấu giá thành công rực rỡ!"
+                  }
+                }
+              },
+              {
+                "id": "ART_B",
+                "action_title": "Xây Dựng Thương Hiệu Mỹ Nghệ Xuất Khẩu Toàn Cầu",
+                "consequence_hint": "Đưa sản phẩm lên sàn thương mại quốc tế, vay vốn đầu tư thiết kế bao bì mới (+15.000 USD, +25 Burnout).",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "cash_delta": 15000,
+                  "burnout_delta": 25,
+                  "vitality_delta": -8,
+                  "flags": [
+                    "artisan_export_founder"
+                  ],
+                  "occupation": "Nhà sáng lập Thương hiệu Thủ công Mỹ nghệ",
+                  "delayed_domino": {
+                    "in_years": 2,
+                    "flag": "global_artisan_brand_expansion",
+                    "cash_delta": 45000,
+                    "karma_delta": 20,
+                    "title": "Đơn Hàng Xuất Khẩu Châu Âu & Nhật Bản Ký Kết",
+                    "milestone_summary": "Thương hiệu mỹ nghệ của bạn ký được chuỗi phân phối 50 cửa hàng lưu niệm cao cấp tại Paris và Tokyo!"
+                  }
+                }
+              },
+              {
+                "id": "ART_C",
+                "action_title": "Chuyển Sang Thiết Kế Sản Phẩm Công Nghiệp Cho Tập Đoàn",
+                "consequence_hint": "Làm việc tại tập đoàn đa quốc gia, lương tháng ổn định nhưng gác lại nghề tổ (+20.000 USD, -10 Karma).",
+                "sacrifice_type": "relationship",
+                "effects": {
+                  "cash_delta": 20000,
+                  "burnout_delta": 10,
+                  "karma_delta": -10,
+                  "flags": [
+                    "industrial_cad_designer"
+                  ],
+                  "occupation": "Chuyên viên Thiết kế Công nghiệp"
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.568Z"
+        },
+        {
+          "id": "7e54d5ba-7ae8-4a3e-b8c9-654374be7d3a",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 22,
+          "event_data": {
+            "id": "ill_thesis_dispute",
+            "interaction_type": "ILLUSION",
+            "tag": "academic_crisis",
+            "title": "Cú Sốc Luận Án & Bị Tước Đoạt Quyền Đồng Tác Giả",
+            "narrative": "Một sự thật phũ phàng giáng xuống: Công trình nghiên cứu AI bạn cày suốt 2 năm trời đã bị giáo sư hướng dẫn đăng ký bằng sáng chế dưới tên riêng của ông mà không hề có tên bạn. Vị thế học trò bé nhỏ không cho phép bạn kiện tụng nếu không muốn bị đình chỉ học.",
+            "spectrum_data": null,
+            "illusion_data": {
+              "forced_outcome": "Cắn răng chấp nhận bất công, thề rằng sẽ tự đứng trên đôi chân của chính mình.",
+              "effects": {
+                "burnout_delta": 28,
+                "vitality_delta": -5,
+                "karma_delta": 10,
+                "flags": [
+                  "academic_injustice_grit"
+                ]
+              }
+            },
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.569Z"
+        },
+        {
+          "id": "968b9db3-8f25-4b08-b3bc-d6c60e32328b",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 23,
+          "event_data": {
+            "id": "ill_startup_patent_theft",
+            "interaction_type": "ILLUSION",
+            "tag": "intellectual_theft_loss",
+            "title": "Ý Tưởng Khởi Nghiệp Bị Đánh Cắp",
+            "narrative": "Dự án phần mềm bạn cùng nhóm bạn thân ấp ủ suốt 18 tháng đã bị một công ty lớn 'sao chép nguyên bản' và tung ra thị trường trước nhờ nguồn vốn khổng lồ. Luật sư nói rằng việc theo đuổi vụ kiện sẽ ngốn sạch gia sản của bạn mà không chắc thắng.",
+            "spectrum_data": null,
+            "illusion_data": {
+              "button_text": "Nuốt Hận Bắt Đầu Lại Từ Đầu",
+              "impact_hint": "Dự án tan vỡ, nhưng tôi luyện bản lĩnh thương trường không bao giờ ngây thơ nữa (+20 Karma).",
+              "drain_ratio": 0.2,
+              "karma_gain": 20
+            },
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.571Z"
+        },
+        {
+          "id": "50b91192-5806-47fe-ab11-9e9b335adbee",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 24,
+          "event_data": {
+            "id": "tri_medical_resident_crossroads",
+            "interaction_type": "TRILEMMA",
+            "tag": "medical_ethics_crossroads",
+            "title": "Sứ Mệnh Áo Trắng: Trực Đêm Tuyến Đầu, Bệnh Viện Quốc Tế hay Bác Sĩ Bản Làng?",
+            "narrative": "Tốt nghiệp trường Y, bạn đứng trước các lựa chọn cống hiến: Gắn bó với phòng cấp cứu tuyến đầu đầy nghẹt bệnh nhân, làm việc tại phòng khám tư nhân thu nhập cao, hay mang tủ thuốc lên vùng núi cao cứu đồng bào.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "MED_A",
+                "action_title": "Trực Đêm Cấp Cứu Tuyến Đầu (Bệnh Viện Công)",
+                "consequence_hint": "Ca trực 36 tiếng căng như dây đàn, lương phụ cấp khiêm tốn nhưng cứu được hàng ngàn mạng sống (+40 Karma, -15 Vitality, +35 Burnout).",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "karma_delta": 40,
+                  "vitality_delta": -15,
+                  "burnout_delta": 35,
+                  "cash_delta": 6000,
+                  "flags": [
+                    "er_medical_resident"
+                  ],
+                  "occupation": "Bác sĩ Cấp cứu Tuyến đầu",
+                  "delayed_domino": {
+                    "in_years": 2,
+                    "flag": "chief_surgeon_promotion",
+                    "karma_delta": 35,
+                    "cash_delta": 30000,
+                    "occupation": "Bác sĩ Phẫu thuật Trưởng Khoa",
+                    "title": "Bổ Nhiệm Bác Sĩ Trưởng Khoa Lâm Sàng",
+                    "milestone_summary": "Sau hàng trăm ca phẫu thuật giành giật sự sống từ tay tử thần, bạn được vinh danh Thầy thuốc Ưu tú và đề bạt Trưởng khoa!"
+                  }
+                }
+              },
+              {
+                "id": "MED_B",
+                "action_title": "Chuyển Sang Bệnh Viện Tư Nhân / Phòng Khám Quốc Tế",
+                "consequence_hint": "Môi trường máy lạnh tiện nghi, đãi ngộ tài chính cao ngất, ít ca hiểm nghèo (+35.000 USD, -15 Burnout).",
+                "sacrifice_type": "karma",
+                "effects": {
+                  "cash_delta": 35000,
+                  "burnout_delta": -15,
+                  "vitality_delta": 5,
+                  "karma_delta": 10,
+                  "flags": [
+                    "private_clinic_physician"
+                  ],
+                  "occupation": "Bác sĩ Đa khoa Phòng khám Quốc tế"
+                }
+              },
+              {
+                "id": "MED_C",
+                "action_title": "Tình Nguyện Làm Bác Sĩ Vùng Sâu Vùng Xa / Hải Đảo",
+                "consequence_hint": "Mang ánh sáng y học đến với bà con nghèo khó, điều kiện thiếu thốn nhưng bồi đắp Đại Thiện Nghiệp (+60 Karma, +20 Vitality dẻo dai).",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "karma_delta": 60,
+                  "vitality_delta": 15,
+                  "burnout_delta": -20,
+                  "cash_delta": -10000,
+                  "flags": [
+                    "volunteer_frontier_doctor"
+                  ],
+                  "occupation": "Bác sĩ Tình nguyện Vùng cao",
+                  "delayed_domino": {
+                    "in_years": 3,
+                    "flag": "frontier_medical_hero",
+                    "karma_delta": 50,
+                    "title": "Huân Chương Cống Hiến & Tình Dân Sâu Nặng",
+                    "milestone_summary": "Trạm y tế bạn xây dựng đã giúp đẩy lùi dịch bệnh cho hàng chục bản làng. Bạn trở thành biểu tượng y đức được nhân dân kính trọng!"
+                  }
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.572Z"
+        },
+        {
+          "id": "daff41b8-0c9b-4ed9-a6e6-ddbe91d51292",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 25,
+          "event_data": {
+            "id": "ill_family_medical_emergency",
+            "interaction_type": "ILLUSION",
+            "tag": "family_health_burden",
+            "title": "Hóa Đơn Viện Phí Của Người Thân",
+            "narrative": "Biến cố sức khỏe ập đến với người thân trong gia đình. Cầm tờ hóa đơn phẫu thuật trên tay, bạn nhận ra mọi số dư tài khoản vừa tích lũy được đều phải dồn hết để giành lại sự sống cho người ruột thịt.",
+            "spectrum_data": null,
+            "illusion_data": {
+              "button_text": "Gánh Vác Trách Nhiệm Gia Đình",
+              "impact_hint": "Dốc sạch 35% tiền mặt chi trả viện phí, chữ hiếu vẹn toàn (+25 Karma vĩnh cửu).",
+              "drain_ratio": 0.35,
+              "karma_gain": 25
+            },
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.573Z"
+        },
+        {
+          "id": "a3b99390-dc88-4e36-a696-4676d517c380",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 26,
+          "event_data": {
+            "id": "ill_health_exhaustion",
+            "interaction_type": "ILLUSION",
+            "tag": "health_breakdown_warning",
+            "title": "Cơn Ngất Xỉu Tại Bàn Làm Việc",
+            "narrative": "Chuỗi ngày thức trắng cày thêm việc và ăn mì gói đã đòi nợ. Bạn ngã gục ngay tại bàn làm việc và tỉnh dậy trong phòng cấp cứu với ống truyền nước biển. Bác sĩ nghiêm giọng cảnh cáo nếu không dừng việc tàn phá thân xác, bạn sẽ phải trả giá bằng cả mạng sống.",
+            "spectrum_data": null,
+            "illusion_data": {
+              "button_text": "Chấp Nhận Nghỉ Ngơi Dưỡng Sức",
+              "impact_hint": "Mất tiền viện phí, nhưng hiểu được giới hạn thể xác và nhận về sự thức tỉnh (+15 Karma).",
+              "drain_ratio": 0.15,
+              "karma_gain": 15
+            },
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.575Z"
+        },
+        {
+          "id": "5e95ede5-7e57-411d-bed0-6a344e229fd9",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 27,
+          "event_data": {
+            "id": "spec_startup_burnout",
+            "interaction_type": "SPECTRUM",
+            "tag": "youth_startup_hustle",
+            "title": "Khởi Nghiệp Bán Mạng Tuổi Hai Mươi",
+            "narrative": "Nhóm bạn đại học cùng lập dự án công nghệ. Nhà đầu tư thiên thần ép tiến độ hoàn thành MVP trong 30 ngày. Bạn đứng giữa hai lựa chọn: thức trắng đêm cày code đến rộc người hay duy trì nhịp sống cân bằng nhưng chấp nhận dự án chết yểu.",
+            "spectrum_data": {
+              "min_label": "Giữ Sức Khỏe (Chậm Lại)",
+              "max_label": "Thức Trắng Đêm (Tất Tay)",
+              "impact_metric": "burnout_vs_cash",
+              "consequence_summary": "Kéo về Phải: Thu nhập và cơ hội tăng vọt nhưng thanh xuân bị bào mòn bởi kiệt sức và stress."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.576Z"
+        },
+        {
+          "id": "3144d7ae-b91e-4ab3-bddd-de2b2a6a6860",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 28,
+          "event_data": {
+            "id": "tri_local_retail_crossroads",
+            "interaction_type": "TRILEMMA",
+            "tag": "retail_commerce_crossroads",
+            "title": "Thương Trường Phố Thị: Mở Tiệm Kinh Doanh Bản Địa, Nhượng Quyền hay Buôn Chuyến?",
+            "narrative": "Tích lũy được số vốn nhỏ, bạn quyết định bước chân vào thương trường buôn bán phố xá để tự làm chủ vận mệnh tài chính của mình.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "RET_A",
+                "action_title": "Mở Tiệm Cà Phê / Cửa Hàng Bản Địa Với Vốn Tự Có",
+                "consequence_hint": "Tự tay làm chủ, chăm chút từng khách hàng quen, doanh thu xoay vòng đều đặn (+12.000 USD, +15 Karma, +10 Burnout).",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "cash_delta": 12000,
+                  "burnout_delta": 10,
+                  "karma_delta": 15,
+                  "flags": [
+                    "local_shopkeeper_owner"
+                  ],
+                  "occupation": "Chủ Cửa hàng Kinh doanh Phố thị",
+                  "delayed_domino": {
+                    "in_years": 2,
+                    "flag": "local_shop_chain_success",
+                    "cash_delta": 35000,
+                    "karma_delta": 15,
+                    "title": "Khai Trương Cơ Sở Thứ 2 & Dòng Tiền Ổn Định",
+                    "milestone_summary": "Cửa hàng của bạn trở thành điểm đến quen thuộc của cả khu phố. Lợi nhuận ròng tăng trưởng vững chắc!"
+                  }
+                }
+              },
+              {
+                "id": "RET_B",
+                "action_title": "Vay Vốn Ngân Hàng Mua Nhượng Quyền Thương Hiệu Lớn",
+                "consequence_hint": "Tận dụng thương hiệu có sẵn nhưng gánh áp lực trả lãi hàng tháng (+30.000 USD doanh thu, +30 Burnout).",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "cash_delta": -10000,
+                  "burnout_delta": 30,
+                  "flags": [
+                    "franchise_operator_debt"
+                  ],
+                  "occupation": "Chủ Đại lý Nhượng quyền Thương hiệu"
+                }
+              },
+              {
+                "id": "RET_C",
+                "action_title": "Duy Trì Quy Mô Nhỏ & Tích Lũy Tiền Mua Đất Nền Vùng Ven",
+                "consequence_hint": "Chắt chiu từng đồng lời, không đua đòi mở rộng, tích trữ tiền mặt chờ cơ hội mua tài sản (-15 Burnout, +10 Karma).",
+                "sacrifice_type": "relationship",
+                "effects": {
+                  "cash_delta": 18000,
+                  "burnout_delta": -15,
+                  "karma_delta": 10,
+                  "flags": [
+                    "frugal_land_accumulator"
+                  ],
+                  "occupation": "Tiểu thương Tích lũy Bất động sản"
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.577Z"
+        },
+        {
+          "id": "c1150202-acb3-4748-83a2-0a5529b0928a",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 29,
+          "event_data": {
+            "id": "skip_youth_grind",
+            "interaction_type": "TIME_SKIP",
+            "tag": "youth_peaceful_leap",
+            "title": "Ba Năm Thanh Xuân Trầm Lặng Tích Lũy",
+            "narrative": "Không có biến động long trời lở đất. Bạn kiên trì đi làm công sở, học thêm ngoại ngữ vào buổi tối, ăn cơm quán quen. Ba năm trôi qua nhanh như một cái chớp mắt, tích lũy được tay nghề vững chãi.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": {
+              "years_jump": 3,
+              "yearly_income_save": 5000,
+              "burnout_decay": 30,
+              "vitality_drift": 0,
+              "event_summary": "Trải qua 3 năm tuổi trẻ chuyên tâm tích lũy tay nghề và tạo nền tảng."
+            },
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.579Z"
+        },
+        {
+          "id": "9d893785-23e6-43ed-a60f-46c9c9e7d4a6",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 30,
+          "event_data": {
+            "id": "tri_spouse_startup_dream",
+            "interaction_type": "TRILEMMA",
+            "tag": "spouse_venture_crossroad",
+            "title": "Tiếng Gọi Khởi Nghiệp Của Người Bạn Đời",
+            "narrative": "Người bạn đời sau cả thập kỷ hy sinh làm hậu phương nay ấp ủ ước mơ dồn toàn bộ tiền tiết kiệm gia đình để thành lập xưởng thiết kế / chuỗi kinh doanh riêng. Bạn đứng trước ba ngã rẽ định đoạt hạnh phúc lứa đôi.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "TRI_SPOUSE_A",
+                "action_title": "Toàn Lực Đặt Cược (Cầm cố tài sản)",
+                "consequence_hint": "Ủng hộ trọn vẹn tình nghĩa vợ chồng, chấp nhận rủi ro tài chính lớn (-$25.000, Hạnh phúc +35, Karma +20).",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "cash_delta": -10000,
+                  "burnout_delta": 10,
+                  "karma_delta": 20
+                }
+              },
+              {
+                "id": "TRI_SPOUSE_B",
+                "action_title": "Từ Chối Dứt Khoát (Bảo toàn tích lũy)",
+                "consequence_hint": "Giữ an toàn dòng tiền gia đình, nhưng dập tắt ước mơ của bạn đời khiến hôn nhân rạn nứt sâu sắc.",
+                "sacrifice_type": "relationship",
+                "effects": {
+                  "cash_delta": 0,
+                  "burnout_delta": 15,
+                  "karma_delta": -15
+                }
+              },
+              {
+                "id": "TRI_SPOUSE_C",
+                "action_title": "Đồng Hành Điều Hành (Cùng chịu trách nhiệm)",
+                "consequence_hint": "Tận dụng kỹ năng chuyên môn của bạn để cùng khởi nghiệp, vừa giữ vốn vừa cày kiệt sức.",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "cash_delta": -10000,
+                  "vitality_delta": -15,
+                  "burnout_delta": 25,
+                  "karma_delta": 15
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.581Z"
+        },
+        {
+          "id": "da951493-b1ad-4874-ba15-161ff26a3692",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 31,
+          "event_data": {
+            "id": "spec_work_family",
+            "interaction_type": "SPECTRUM",
+            "tag": "career_vs_family",
+            "title": "Bão Giá & Rạn Nứt Gia Đình",
+            "narrative": "Lãi suất thả nổi tăng vọt, tiền trả góp đè nặng mỗi tháng. Để bảo toàn vị thế, công ty yêu cầu bạn làm việc 14 tiếng/ngày. Vợ/chồng bạn rơi nước mắt vì những bữa cơm vắng mặt. Bạn buộc phải chọn mức độ đánh đổi.",
+            "spectrum_data": {
+              "min_label": "Bảo Vệ Gia Đình (Trượt Lại Sự Nghiệp)",
+              "max_label": "Tất Tay Cày Tiền (Đánh Đổi Người Thân)",
+              "impact_metric": "burnout_vs_affection",
+              "consequence_summary": "Kéo sang Trái: Giữ gia đình, giảm thu nhập. Kéo sang Phải: Đột phá tiền mặt nhưng đẩy gia đình vào đổ vỡ."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.582Z"
+        },
+        {
+          "id": "347480b2-ddd8-4479-bebc-a8887206ad36",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 32,
+          "event_data": {
+            "id": "spec_health_wealth",
+            "interaction_type": "SPECTRUM",
+            "tag": "health_vs_expansion",
+            "title": "Bán Mạng Lấy Thị Phần",
+            "narrative": "Cơ hội mở rộng chuỗi chi nhánh đang ở thời điểm vàng. Nhưng huyết áp và chỉ số men gan của bạn đã ở mức báo động đỏ. Bác sĩ yêu cầu nghỉ ngơi ngay lập tức, còn đối tác hối thúc giải ngân hợp đồng triệu đô.",
+            "spectrum_data": {
+              "min_label": "Dưỡng Bệnh / Thu Hẹp Quy Mô",
+              "max_label": "Đốt Cháy Giai Đoạn / Cày Bất Chấp",
+              "impact_metric": "vitality_vs_wealth",
+              "consequence_summary": "Càng kéo về phía phải, tài sản tăng nhanh nhưng sinh lực và nhịp tim càng suy kiệt."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.583Z"
+        },
+        {
+          "id": "d6d747c8-bc5a-4ca9-a67a-10ef32b89f4e",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 33,
+          "event_data": {
+            "id": "tri_zen_renunciation",
+            "interaction_type": "TRILEMMA",
+            "tag": "zen_crossroads",
+            "title": "Tiếng Chuông Cửa Thiền: Xuất Gia Đoạn Duyên, Lập Quỹ Từ Thiện hay Tiếp Tục Bon Chen?",
+            "narrative": "Giữa đỉnh cao sự nghiệp danh vọng, một đêm thức trắng nhìn xuống dòng xe tấp nập, bạn nhận ra mọi hư vinh trần thế chỉ là mây khói. Tiếng chuông chùa xa xăm như thức tỉnh tâm thức.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "ZEN_A",
+                "action_title": "Tạm Rời Hồng Trần Đi Khóa Tu Kín 1 Năm",
+                "consequence_hint": "Bàn giao hết công việc, buông xả danh lợi để chữa lành triệt để tâm trí (Tâm trí bình thản tuyệt đối, Karma +45).",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "burnout_delta": -60,
+                  "karma_delta": 45,
+                  "vitality_delta": 10,
+                  "flags": [
+                    "zen_monk_retreat"
+                  ]
+                }
+              },
+              {
+                "id": "ZEN_B",
+                "action_title": "Mở Bếp Ăn Thiện Nguyện 0 Đồng",
+                "consequence_hint": "Trích 60% thu nhập nuôi dưỡng hàng trăm mảnh đời cơ nhỡ mỗi ngày, tích lũy công đức vô lượng (+50 Karma vĩnh cửu).",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "cash_delta": -10000,
+                  "karma_delta": 50,
+                  "burnout_delta": -20,
+                  "flags": [
+                    "charity_patron_angel"
+                  ]
+                }
+              },
+              {
+                "id": "ZEN_C",
+                "action_title": "Ở Lại Làm Trụ Cột Hóa Giải Xung Đột Gia Tộc",
+                "consequence_hint": "Không chạy trốn thế gian, đem tâm từ bi và sự bao dung vào việc hòa giải hiềm khích anh em dòng họ.",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "karma_delta": 30,
+                  "burnout_delta": 10,
+                  "flags": [
+                    "clan_peacemaker"
+                  ]
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.584Z"
+        },
+        {
+          "id": "3a5bda71-d0fd-4777-806e-0f3fdd344f0b",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 34,
+          "event_data": {
+            "id": "ill_macro_recession",
+            "interaction_type": "ILLUSION",
+            "tag": "macro_catastrophe",
+            "title": "Sóng Thần Khủng Hoảng Kinh Tế Toàn Cầu",
+            "narrative": "Chuỗi cung ứng đứt gãy, các ngân hàng lớn sụp đổ dây chuyền. Tài sản cổ phiếu và bất động sản của bạn bốc hơi một nửa trong đêm. Không có đàm phán, không có lối thoát. Bạn chỉ có thể bất lực nhìn dòng chảy lịch sử nghiền nát công sức nhiều năm.",
+            "spectrum_data": null,
+            "illusion_data": {
+              "button_text": "Tiếp Nhận Hiện Thực Tàn Khốc",
+              "impact_hint": "Mất 30% tiền mặt, áp lực tâm lý tăng vọt nhưng bản năng sinh tồn được kích hoạt.",
+              "drain_ratio": 0.3,
+              "karma_gain": 10
+            },
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.585Z"
+        },
+        {
+          "id": "f939033b-dc34-4bb8-bd04-40979402493b",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 35,
+          "event_data": {
+            "id": "skip_peaceful_groove",
+            "interaction_type": "TIME_SKIP",
+            "tag": "peaceful_hiatus",
+            "title": "Ba Năm Bình Lặng Trôi Qua...",
+            "narrative": "Không có biến cố dữ dội nào ập đến. Cuộc sống của bạn vận hành như một cỗ máy nhịp nhàng: sáng đi làm, tối trở về bên mâm cơm ấm cúng, ngày qua ngày. Thời gian lặng lẽ bòn rút thanh xuân nhưng đem lại cho bạn sự an yên hiếm có.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": {
+              "years_jump": 3,
+              "yearly_income_save": 6000,
+              "burnout_decay": 25,
+              "vitality_drift": -3,
+              "event_summary": "Trải qua 3 năm tích lũy bền bỉ và ổn định cuộc sống gia đình."
+            },
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.587Z"
+        },
+        {
+          "id": "618a781b-e8f1-4c41-89a9-d98cd119d021",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 36,
+          "event_data": {
+            "id": "ill_market_correction_crash",
+            "interaction_type": "ILLUSION",
+            "tag": "market_flash_crash",
+            "title": "Cú Sập Hầm Thị Trường Tài Chính",
+            "narrative": "Một đợt điều chỉnh giảm đột ngột quét qua các sàn giao dịch tài sản. Danh mục đầu tư bạn vừa rót vốn sụt giảm 25% giá trị chỉ trong vài phiên. Không có đường lùi, chỉ có sự kiên định chờ đợi chu kỳ hồi phục.",
+            "spectrum_data": null,
+            "illusion_data": {
+              "button_text": "Gồng Mình Chờ Sóng Hồi",
+              "impact_hint": "Mất 25% thanh khoản tiền mặt ngắn hạn, rèn luyện thần kinh thép trước thị trường (+15 Karma).",
+              "drain_ratio": 0.25,
+              "karma_gain": 15
+            },
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.588Z"
+        },
+        {
+          "id": "e49174e8-e0c5-49a3-91cb-f715993516dd",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 37,
+          "event_data": {
+            "id": "tri_ma_corporate_war",
+            "interaction_type": "TRILEMMA",
+            "tag": "corporate_ma_war",
+            "title": "Bàn Cờ Thâu Tóm M&A: Nuốt Chửng Đối Thủ, Bán Mình Cho Quỹ Ngoại hay Cố Thủ?",
+            "narrative": "Cơn bão sáp nhập doanh nghiệp quét qua ngành nghề của bạn. Quỹ đầu tư mạo hiểm đưa ra tối hậu thư: hoặc chấp nhận bán mình với định giá 3 triệu USD, hoặc vay nợ đòn bẩy thâu tóm ngược đối thủ, hoặc sa thải 40% nhân sự để bảo toàn tiền mặt phòng thủ.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "EMP_A",
+                "action_title": "Đòn Bẩy Cực Đại Thâu Tóm Ngược",
+                "consequence_hint": "Liều lĩnh vay nợ ngân hàng nuốt chửng đối thủ, vươn lên vị thế độc tôn nhưng đối mặt rủi ro vỡ nợ (Tiềm năng tài sản +2M USD).",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "burnout_delta": 35,
+                  "vitality_delta": -15,
+                  "flags": [
+                    "hostile_takeover_king"
+                  ]
+                }
+              },
+              {
+                "id": "EMP_B",
+                "action_title": "Bán Đứt Doanh Nghiệp Cho Quỹ Ngoại",
+                "consequence_hint": "Bỏ túi ngay 2.500.000 USD tiền mặt dưỡng già nhưng vĩnh viễn mất quyền kiểm soát đứa con tinh thần dày công gầy dựng.",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "cash_delta": -10000,
+                  "burnout_delta": -25,
+                  "flags": [
+                    "sold_out_founder"
+                  ]
+                }
+              },
+              {
+                "id": "EMP_C",
+                "action_title": "Sa Thải 40% Nhân Sự Kỳ Cựu Phòng Thủ",
+                "consequence_hint": "Bảo toàn dòng tiền công ty nhưng mang tiếng bạc bẽo với những cộng sự đã kề vai sát cánh từ ngày đầu.",
+                "sacrifice_type": "relationship",
+                "effects": {
+                  "karma_delta": -25,
+                  "burnout_delta": 15,
+                  "flags": [
+                    "cold_hearted_ceo"
+                  ]
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.589Z"
+        },
+        {
+          "id": "6f2087a5-1691-4cd3-bb4d-8573dc52692e",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 38,
+          "event_data": {
+            "id": "tri_existential_crossroad",
+            "interaction_type": "TRILEMMA",
+            "tag": "impossible_triangle",
+            "title": "Tam Giác Bất Khả Thi: Sự Nghiệp, Thể Lực Hay Tình Nghĩa",
+            "narrative": "Dự án tâm huyết đang đối mặt nguy cơ sụp đổ nếu thiếu bạn chèo lái 24/7. Cùng lúc, cơ thể bạn xuất hiện triệu chứng xuất huyết dạ dày, và người bạn đời đang đệ đơn ly thân vì bị bỏ rơi quá lâu. Bạn CHỈ CÓ THỂ cứu vãn 2 thứ, buộc phải buông bỏ 1 thứ.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "TRI_A",
+                "action_title": "Hy sinh Tài chính (Bỏ dự án)",
+                "consequence_hint": "Cứu vãn hôn nhân và sức khỏe, chấp nhận mất tiền và thụt lùi sự nghiệp.",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "cash_delta": -10000,
+                  "vitality_delta": 20,
+                  "burnout_delta": -30
+                }
+              },
+              {
+                "id": "TRI_B",
+                "action_title": "Hy sinh Thể xác (Bán máu cứu vãn)",
+                "consequence_hint": "Giữ được tiền và người thân, nhưng cơ thể bị tàn phá suy kiệt cận kề đột quỵ.",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "cash_delta": 25000,
+                  "vitality_delta": -35,
+                  "burnout_delta": 40
+                }
+              },
+              {
+                "id": "TRI_C",
+                "action_title": "Hy sinh Tình nghĩa (Cắt đứt gia đình)",
+                "consequence_hint": "Tập trung tối đa cho bản thân và tiền bạc, ký đơn ly hôn, trở thành kẻ cô độc.",
+                "sacrifice_type": "relationship",
+                "effects": {
+                  "cash_delta": 40000,
+                  "vitality_delta": -10,
+                  "burnout_delta": 10,
+                  "karma_delta": -20
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.590Z"
+        },
+        {
+          "id": "1af1f07c-1dc1-49d8-afea-7247f87fb486",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 39,
+          "event_data": {
+            "id": "dyn_1793857814591",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_adulthood_39_591",
+            "title": "Đề Bạt Thăng Chức Kèm Trách Nhiệm Nặng Nề",
+            "narrative": "Ban giám đốc trao cho bạn chiếc ghế quản trị vùng. Mức lương tăng thêm 35% nhưng đồng nghĩa với những chuyến công tác biền biệt xa gia đình.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Nhận Ghế Quản Trị",
+                "consequence_hint": "Tiền tài thăng tiến vượt bậc, nhưng bỏ rơi mái ấm.",
+                "risk_percent": 15,
+                "cost_ap": 1,
+                "effects": {
+                  "cash_delta": 739,
+                  "vitality_delta": -5,
+                  "burnout_delta": 10,
+                  "karma_delta": 5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Từ Chối An Phận",
+                "consequence_hint": "Duy trì vị trí hiện tại, giữ trọn hạnh phúc gia đình.",
+                "risk_percent": 40,
+                "cost_ap": 1,
+                "effects": {
+                  "cash_delta": -370,
+                  "vitality_delta": 10,
+                  "burnout_delta": -15,
+                  "karma_delta": 10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.591Z"
+        },
+        {
+          "id": "9404a9d2-cf60-46fe-9f30-21ed763795e7",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 40,
+          "event_data": {
+            "id": "dyn_1793857814593",
+            "interaction_type": "SPECTRUM",
+            "tag": "dyn_adulthood_40_593",
+            "title": "Tái Cấu Trúc Tài Chính & Cắt Giảm Chi Phí",
+            "narrative": "Lạm phát và chi phí sinh hoạt tăng cao khiến ngân sách gia đình bị thâm hụt. Bạn cần đưa ra quyết định cân đối giữa chất lượng cuộc sống và sự an toàn dự phòng.",
+            "spectrum_data": {
+              "min_label": "Thắt Lưng Buộc Bụng",
+              "max_label": "Vay Mượn Duy Trì",
+              "impact_metric": "burnout_vs_cash",
+              "consequence_summary": "Lựa chọn mức độ đánh đổi thích ứng theo hoàn cảnh hiện tại."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.593Z"
+        },
+        {
+          "id": "bcd8e4b9-6224-4edb-8cd2-ff6f89266f53",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 41,
+          "event_data": {
+            "id": "dyn_1793857814594",
+            "interaction_type": "SPECTRUM",
+            "tag": "dyn_adulthood_41_594",
+            "title": "Tái Cấu Trúc Tài Chính & Cắt Giảm Chi Phí",
+            "narrative": "Lạm phát và chi phí sinh hoạt tăng cao khiến ngân sách gia đình bị thâm hụt. Bạn cần đưa ra quyết định cân đối giữa chất lượng cuộc sống và sự an toàn dự phòng.",
+            "spectrum_data": {
+              "min_label": "Thắt Lưng Buộc Bụng",
+              "max_label": "Vay Mượn Duy Trì",
+              "impact_metric": "burnout_vs_cash",
+              "consequence_summary": "Lựa chọn mức độ đánh đổi thích ứng theo hoàn cảnh hiện tại."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.594Z"
+        },
+        {
+          "id": "62529bb8-a011-4570-a072-4eca509dc6ec",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 42,
+          "event_data": {
+            "id": "ill_parent_passing",
+            "interaction_type": "ILLUSION",
+            "tag": "family_bereavement",
+            "title": "Hơi Thở Cuối Cùng Của Đấng Sinh Thành",
+            "narrative": "Chuông điện thoại reo vang lúc rạng sáng từ bệnh viện. Mẹ của bạn đã thanh thản trút hơi thở cuối cùng trong giấc ngủ. Giữa căn phòng tang lễ vắng lặng, mọi hào quang thành công hay bạc vàng bỗng trở nên vô nghĩa.",
+            "spectrum_data": null,
+            "illusion_data": {
+              "button_text": "Tiễn Đưa Người Về Cõi Vĩnh Hằng",
+              "impact_hint": "Mất đi điểm tựa gia đình, tích lũy sự trưởng thành đau đớn, Karma +25.",
+              "drain_ratio": 0.1,
+              "karma_gain": 25
+            },
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.595Z"
+        },
+        {
+          "id": "6e0a09ae-1026-4009-ba90-cb6b127e77ef",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 43,
+          "event_data": {
+            "id": "tri_child_scholarship_abroad",
+            "interaction_type": "TRILEMMA",
+            "tag": "child_destiny_crossroad",
+            "title": "Cánh Cổng Du Học Của Con Hay Quỹ Dưỡng Già",
+            "narrative": "Đứa con mà bạn dốc lòng nuôi nấng bất ngờ đỗ học bổng tinh hoa tại viện đại học hàng đầu thế giới. Tuy nhiên, phí sinh hoạt và bảo lãnh tài chính quốc tế đòi hỏi ngay một khoản tiền khổng lồ vượt quá dự trù.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "TRI_CHILD_A",
+                "action_title": "Thanh Lý Tài Sản Mở Lối Tương Lai Cho Con",
+                "consequence_hint": "Chấp nhận bán bớt cổ phiếu/bất động sản, dồn toàn lực chắp cánh cho con bay xa (-$35.000, Karma +35).",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "cash_delta": -10000,
+                  "burnout_delta": -15,
+                  "karma_delta": 35
+                }
+              },
+              {
+                "id": "TRI_CHILD_B",
+                "action_title": "Ép Con Học Đại Học Trong Nước",
+                "consequence_hint": "Giữ trọn quỹ hưu trí và căn nhà, nhưng ánh mắt đứa con nhìn bạn vĩnh viễn mang sự oán trách cay đắng.",
+                "sacrifice_type": "relationship",
+                "effects": {
+                  "cash_delta": 5000,
+                  "burnout_delta": 15,
+                  "karma_delta": -25
+                }
+              },
+              {
+                "id": "TRI_CHILD_C",
+                "action_title": "Vay Nợ Gia Tộc & Cày Bạt Mạng Nuôi Con",
+                "consequence_hint": "Đứng ra bảo lãnh vay nợ đòn bẩy, làm thêm ngày đêm để vừa giữ nhà vừa lo cho con ăn học.",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "cash_delta": -15000,
+                  "vitality_delta": -25,
+                  "burnout_delta": 35,
+                  "karma_delta": 20
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.598Z"
+        },
+        {
+          "id": "78c354fb-911f-4126-829d-ee7fa1703682",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 44,
+          "event_data": {
+            "id": "dyn_1793857814599",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_adulthood_44_599",
+            "title": "Đề Bạt Thăng Chức Kèm Trách Nhiệm Nặng Nề",
+            "narrative": "Ban giám đốc trao cho bạn chiếc ghế quản trị vùng. Mức lương tăng thêm 35% nhưng đồng nghĩa với những chuyến công tác biền biệt xa gia đình.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Nhận Ghế Quản Trị",
+                "consequence_hint": "Tiền tài thăng tiến vượt bậc, nhưng bỏ rơi mái ấm.",
+                "risk_percent": 15,
+                "cost_ap": 1,
+                "effects": {
+                  "cash_delta": 739,
+                  "vitality_delta": -5,
+                  "burnout_delta": 10,
+                  "karma_delta": 5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Từ Chối An Phận",
+                "consequence_hint": "Duy trì vị trí hiện tại, giữ trọn hạnh phúc gia đình.",
+                "risk_percent": 40,
+                "cost_ap": 1,
+                "effects": {
+                  "cash_delta": -370,
+                  "vitality_delta": 10,
+                  "burnout_delta": -15,
+                  "karma_delta": 10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.599Z"
+        },
+        {
+          "id": "5d46cfaa-feed-40c9-b5e6-d82b714109fc",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 45,
+          "event_data": {
+            "id": "tri_cybernetic_ascension",
+            "interaction_type": "TRILEMMA",
+            "tag": "cyber_ascension_climax",
+            "title": "Ngưỡng Cửa Bán Thần: Cấy Ghép Chip Thần Kinh, Tiêm Tế Bào Gốc hay Giữ Lại Thân Xác Phàm?",
+            "narrative": "Tập đoàn công nghệ sinh học NeuralMatrix đưa ra 3 phương án can thiệp sinh học cấp cao để kéo dài năng lực của bạn qua ngưỡng tuổi già.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "CYB_A",
+                "action_title": "Cấy Chip Neural Link Giao Diện Não Bộ",
+                "consequence_hint": "Tư duy kết nối trực tiếp với siêu máy tính, nhận thức tăng vọt nhưng mất đi một phần cảm xúc con người (Bán Thần).",
+                "sacrifice_type": "relationship",
+                "effects": {
+                  "burnout_delta": -30,
+                  "karma_delta": 10,
+                  "flags": [
+                    "cyber_brain_implant"
+                  ]
+                }
+              },
+              {
+                "id": "CYB_B",
+                "action_title": "Trị Liệu Phôi Tế Bào Gốc Trẻ Hóa Tế Bào",
+                "consequence_hint": "Bỏ ra $400.000 để tái tạo toàn diện hệ tim mạch và khung xương, kéo dài thêm 15 năm sung mãn (+25 Max Vitality).",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "cash_delta": -10000,
+                  "vitality_delta": 25,
+                  "flags": [
+                    "stem_cell_rejuvenated"
+                  ]
+                }
+              },
+              {
+                "id": "CYB_C",
+                "action_title": "Chấp Nhận Quy Luật Tự Nhiên Thuần Khiết",
+                "consequence_hint": "Từ chối mọi can thiệp nhân tạo, thuận theo lẽ tự nhiên của đất trời, thanh thản đón nhận tuổi già (Karma +35).",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "karma_delta": 35,
+                  "burnout_delta": -40,
+                  "flags": [
+                    "pure_organic_harmony"
+                  ]
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.600Z"
+        },
+        {
+          "id": "01fbf5bb-fc2b-4b53-8b36-02f2d3fcc3d3",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 46,
+          "event_data": {
+            "id": "skip_midlife_zen",
+            "interaction_type": "TIME_SKIP",
+            "tag": "midlife_peace",
+            "title": "Ba Năm Nhịp Sống Chậm Lại Của Tuổi Ngũ Tuần",
+            "narrative": "Sau bao năm giông bão nơi thương trường, bạn tìm thấy niềm vui trong những tách trà sớm và sách cũ. Con cái dần tự lập, dòng tiền thụ động đều đặn chảy về tài khoản.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": {
+              "years_jump": 3,
+              "yearly_income_save": 8000,
+              "burnout_decay": 35,
+              "vitality_drift": -4,
+              "event_summary": "Trôi qua 3 năm trung niên tĩnh lặng và phục hồi tâm trí."
+            },
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.601Z"
+        },
+        {
+          "id": "9c04d914-42a5-4c54-b353-3ac5b7e5382d",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 47,
+          "event_data": {
+            "id": "spec_corporate_politics",
+            "interaction_type": "SPECTRUM",
+            "tag": "boardroom_power_struggle",
+            "title": "Đấu Đá Quyền Lực Ở Tầng Lớp Thượng Tầng",
+            "narrative": "Thế hệ lãnh đạo trẻ đang rắp tâm đẩy bạn ra khỏi Hội đồng quản trị. Bạn có thể sử dụng các đòn bẩy pháp lý và quan hệ ngầm để triệt hạ đối thủ, hoặc buông tay rút về làm cố vấn danh dự trong yên bình.",
+            "spectrum_data": {
+              "min_label": "Rút Lui An Toàn (Làm Cố Vấn)",
+              "max_label": "Thanh Trừng Quyết Liệt (Giữ Quyền Lực)",
+              "impact_metric": "burnout_vs_cash",
+              "consequence_summary": "Kéo sang Trái: Giữ thanh thản tâm trí nhưng mất ghế chỉ đạo. Kéo sang Phải: Giành trọn quyền lực nhưng chuốc lấy thù hận và mất ngủ triền miên."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.603Z"
+        },
+        {
+          "id": "89cd9fce-2240-43d9-af00-8f71c48ddb35",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 48,
+          "event_data": {
+            "id": "tri_midlife_crisis",
+            "interaction_type": "TRILEMMA",
+            "tag": "midlife_turmoil",
+            "title": "Cơn Khủng Hoảng Tuổi Ngũ Tuần",
+            "narrative": "Cơ thể bắt đầu xuất hiện những cơn đau ngực ngắt quãng. Con cái bước vào tuổi dậy thì ngỗ nghịch, còn công ty đang đứng trước đợt cắt giảm 40% nhân sự cấp cao.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "TRI_MID_A",
+                "action_title": "Cứu Vãn Con Cái (Nghỉ việc đồng hành)",
+                "consequence_hint": "Cứu vãn tương lai của con, nhưng mất vị trí giám đốc và mất $40k thu nhập năm.",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "cash_delta": -10000,
+                  "vitality_delta": 15,
+                  "burnout_delta": -20,
+                  "karma_delta": 25
+                }
+              },
+              {
+                "id": "TRI_MID_B",
+                "action_title": "Bám Trụ Ghế Nóng (Giao con cho gia sư)",
+                "consequence_hint": "Bảo toàn vị thế tài phiệt nhưng khoảng cách với con cái vĩnh viễn không thể hàn gắn.",
+                "sacrifice_type": "relationship",
+                "effects": {
+                  "cash_delta": 50000,
+                  "vitality_delta": -15,
+                  "burnout_delta": 30,
+                  "karma_delta": -20
+                }
+              },
+              {
+                "id": "TRI_MID_C",
+                "action_title": "Nhập Viện Dưỡng Bệnh Khẩn Cấp",
+                "consequence_hint": "Tạm dừng mọi thứ cứu lấy mạng sống trước nguy cơ đột quỵ cận kề.",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "cash_delta": -20000,
+                  "vitality_delta": 30,
+                  "burnout_delta": -40,
+                  "karma_delta": 10
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.604Z"
+        },
+        {
+          "id": "8dcd01c2-dc31-4bd9-8bfb-a5d00b494e5a",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 49,
+          "event_data": {
+            "id": "tri_sibling_ancestral_land",
+            "interaction_type": "TRILEMMA",
+            "tag": "ancestral_heritage_crossroad",
+            "title": "Tranh Chấp Mảnh Đất Tổ Tiên & Tình Máu Mủ",
+            "narrative": "Khu đất hương hỏa từ đường nhiều đời của gia tộc bất ngờ lọt vào quy hoạch khu đô thị mới, giá trị tăng gấp 10 lần. Anh em trong họ bắt đầu lục đục chia phe: nhóm muốn bán sạch chia tiền mặt, nhóm muốn giữ đất thờ tự.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "TRI_LAND_A",
+                "action_title": "Dốc Tiền Túi Mua Lại Phần Anh Em Để Giữ Đất",
+                "consequence_hint": "Gánh vác toàn bộ để giữ trọn mộ phần tiền nhân. Tổn thất tiền bạc lớn nhưng trở thành trụ cột gia tộc (+45 Karma).",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "cash_delta": -10000,
+                  "burnout_delta": 15,
+                  "karma_delta": 45
+                }
+              },
+              {
+                "id": "TRI_LAND_B",
+                "action_title": "Đồng Ý Bán Sạch Chia Đều Tiền Mặt",
+                "consequence_hint": "Nhận về món tiền kếch xù giải quyết mọi nợ nần, nhưng mang tiếng bất hiếu với tổ tông dòng họ.",
+                "sacrifice_type": "karma",
+                "effects": {
+                  "cash_delta": 65000,
+                  "burnout_delta": -20,
+                  "karma_delta": -35
+                }
+              },
+              {
+                "id": "TRI_LAND_C",
+                "action_title": "Khởi Kiện Tranh Chấp Quyền Thừa Kế Tại Tòa",
+                "consequence_hint": "Nhờ pháp luật can thiệp phân xử. Vụ kiện kéo dài nhiều năm, anh em từ mặt nhau, sức khỏe hao mòn.",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "cash_delta": -12000,
+                  "vitality_delta": -20,
+                  "burnout_delta": 40,
+                  "karma_delta": -15
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.605Z"
+        },
+        {
+          "id": "05b8c6a2-5e58-45d4-b2bf-f95ee9d1357f",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 50,
+          "event_data": {
+            "id": "dyn_1793857814606",
+            "interaction_type": "SPECTRUM",
+            "tag": "dyn_midlife_50_606",
+            "title": "Thoái Hóa Cột Sống & Cảnh Báo Của Thể Xác",
+            "narrative": "Cơn đau lưng dữ dội tái phát sau những giờ làm việc kéo dài. Kết quả chụp cộng hưởng từ cho thấy nguy cơ thoát vị đĩa đệm độ 3 nếu không phẫu thuật hoặc nghỉ ngơi dài hạn.",
+            "spectrum_data": {
+              "min_label": "Nghỉ Việc Trị Liệu",
+              "max_label": "Uống Thuốc Giảm Đau Cày Tiếp",
+              "impact_metric": "vitality_vs_wealth",
+              "consequence_summary": "Lựa chọn mức độ đánh đổi thích ứng theo hoàn cảnh hiện tại."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.606Z"
+        },
+        {
+          "id": "382ea3f6-a7ed-41dc-94d6-97e6cd03c5cb",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 51,
+          "event_data": {
+            "id": "dyn_1793857814607",
+            "interaction_type": "SPECTRUM",
+            "tag": "dyn_midlife_51_607",
+            "title": "Thoái Hóa Cột Sống & Cảnh Báo Của Thể Xác",
+            "narrative": "Cơn đau lưng dữ dội tái phát sau những giờ làm việc kéo dài. Kết quả chụp cộng hưởng từ cho thấy nguy cơ thoát vị đĩa đệm độ 3 nếu không phẫu thuật hoặc nghỉ ngơi dài hạn.",
+            "spectrum_data": {
+              "min_label": "Nghỉ Việc Trị Liệu",
+              "max_label": "Uống Thuốc Giảm Đau Cày Tiếp",
+              "impact_metric": "vitality_vs_wealth",
+              "consequence_summary": "Lựa chọn mức độ đánh đổi thích ứng theo hoàn cảnh hiện tại."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.607Z"
+        },
+        {
+          "id": "62a94101-94c7-4764-ae89-778b370a2624",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 52,
+          "event_data": {
+            "id": "dyn_1793857814608",
+            "interaction_type": "SPECTRUM",
+            "tag": "dyn_midlife_52_608",
+            "title": "Thoái Hóa Cột Sống & Cảnh Báo Của Thể Xác",
+            "narrative": "Cơn đau lưng dữ dội tái phát sau những giờ làm việc kéo dài. Kết quả chụp cộng hưởng từ cho thấy nguy cơ thoát vị đĩa đệm độ 3 nếu không phẫu thuật hoặc nghỉ ngơi dài hạn.",
+            "spectrum_data": {
+              "min_label": "Nghỉ Việc Trị Liệu",
+              "max_label": "Uống Thuốc Giảm Đau Cày Tiếp",
+              "impact_metric": "vitality_vs_wealth",
+              "consequence_summary": "Lựa chọn mức độ đánh đổi thích ứng theo hoàn cảnh hiện tại."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.608Z"
+        },
+        {
+          "id": "4fdd5b99-8845-44cb-98ec-0178215322cc",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 53,
+          "event_data": {
+            "id": "dyn_1793857814610",
+            "interaction_type": "SPECTRUM",
+            "tag": "dyn_midlife_53_610",
+            "title": "Thoái Hóa Cột Sống & Cảnh Báo Của Thể Xác",
+            "narrative": "Cơn đau lưng dữ dội tái phát sau những giờ làm việc kéo dài. Kết quả chụp cộng hưởng từ cho thấy nguy cơ thoát vị đĩa đệm độ 3 nếu không phẫu thuật hoặc nghỉ ngơi dài hạn.",
+            "spectrum_data": {
+              "min_label": "Nghỉ Việc Trị Liệu",
+              "max_label": "Uống Thuốc Giảm Đau Cày Tiếp",
+              "impact_metric": "vitality_vs_wealth",
+              "consequence_summary": "Lựa chọn mức độ đánh đổi thích ứng theo hoàn cảnh hiện tại."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.610Z"
+        },
+        {
+          "id": "f419a8f1-1aaa-46f3-a320-8eae4e4c93ae",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 54,
+          "event_data": {
+            "id": "dyn_1793857814611",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_midlife_54_611",
+            "title": "Ngã Rẽ Đầu Tư Bất Động Sản Nghỉ Dưỡng",
+            "narrative": "Một lô đất ven biển đang được bán thanh lý giá hời. Liệu bạn có nên rút toàn bộ quỹ tiết kiệm dưỡng già để đón đầu quy hoạch du lịch?",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Xuống Tiền Mua Đất",
+                "consequence_hint": "Cơ hội nhân đôi tài sản, rủi ro thanh khoản đóng băng.",
+                "risk_percent": 15,
+                "cost_ap": 1,
+                "effects": {
+                  "cash_delta": 739,
+                  "vitality_delta": -5,
+                  "burnout_delta": 10,
+                  "karma_delta": 5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Giữ Tiền Mặt Thủ Thân",
+                "consequence_hint": "Bảo toàn an toàn tài chính, chấp nhận lạm phát bào mòn.",
+                "risk_percent": 40,
+                "cost_ap": 1,
+                "effects": {
+                  "cash_delta": -370,
+                  "vitality_delta": 10,
+                  "burnout_delta": -15,
+                  "karma_delta": 10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.611Z"
+        },
+        {
+          "id": "f5701050-ae2c-417b-aedf-08e6a15c5ab6",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 55,
+          "event_data": {
+            "id": "dyn_1793857814612",
+            "interaction_type": "SPECTRUM",
+            "tag": "dyn_midlife_55_612",
+            "title": "Thoái Hóa Cột Sống & Cảnh Báo Của Thể Xác",
+            "narrative": "Cơn đau lưng dữ dội tái phát sau những giờ làm việc kéo dài. Kết quả chụp cộng hưởng từ cho thấy nguy cơ thoát vị đĩa đệm độ 3 nếu không phẫu thuật hoặc nghỉ ngơi dài hạn.",
+            "spectrum_data": {
+              "min_label": "Nghỉ Việc Trị Liệu",
+              "max_label": "Uống Thuốc Giảm Đau Cày Tiếp",
+              "impact_metric": "vitality_vs_wealth",
+              "consequence_summary": "Lựa chọn mức độ đánh đổi thích ứng theo hoàn cảnh hiện tại."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.612Z"
+        },
+        {
+          "id": "6e9702df-c48f-49c9-ab34-06d9978bafa2",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 56,
+          "event_data": {
+            "id": "dyn_1793857814613",
+            "interaction_type": "SPECTRUM",
+            "tag": "dyn_midlife_56_613",
+            "title": "Thoái Hóa Cột Sống & Cảnh Báo Của Thể Xác",
+            "narrative": "Cơn đau lưng dữ dội tái phát sau những giờ làm việc kéo dài. Kết quả chụp cộng hưởng từ cho thấy nguy cơ thoát vị đĩa đệm độ 3 nếu không phẫu thuật hoặc nghỉ ngơi dài hạn.",
+            "spectrum_data": {
+              "min_label": "Nghỉ Việc Trị Liệu",
+              "max_label": "Uống Thuốc Giảm Đau Cày Tiếp",
+              "impact_metric": "vitality_vs_wealth",
+              "consequence_summary": "Lựa chọn mức độ đánh đổi thích ứng theo hoàn cảnh hiện tại."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.613Z"
+        },
+        {
+          "id": "3cede84c-9c6e-411a-af01-67e1bd7299b1",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 57,
+          "event_data": {
+            "id": "dyn_1793857814614",
+            "interaction_type": "SPECTRUM",
+            "tag": "dyn_midlife_57_614",
+            "title": "Thoái Hóa Cột Sống & Cảnh Báo Của Thể Xác",
+            "narrative": "Cơn đau lưng dữ dội tái phát sau những giờ làm việc kéo dài. Kết quả chụp cộng hưởng từ cho thấy nguy cơ thoát vị đĩa đệm độ 3 nếu không phẫu thuật hoặc nghỉ ngơi dài hạn.",
+            "spectrum_data": {
+              "min_label": "Nghỉ Việc Trị Liệu",
+              "max_label": "Uống Thuốc Giảm Đau Cày Tiếp",
+              "impact_metric": "vitality_vs_wealth",
+              "consequence_summary": "Lựa chọn mức độ đánh đổi thích ứng theo hoàn cảnh hiện tại."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.615Z"
+        },
+        {
+          "id": "224ff299-7e70-4d63-a6a5-cf7c0c8e8329",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 58,
+          "event_data": {
+            "id": "dyn_1793857814616",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_midlife_58_616",
+            "title": "Ngã Rẽ Đầu Tư Bất Động Sản Nghỉ Dưỡng",
+            "narrative": "Một lô đất ven biển đang được bán thanh lý giá hời. Liệu bạn có nên rút toàn bộ quỹ tiết kiệm dưỡng già để đón đầu quy hoạch du lịch?",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Xuống Tiền Mua Đất",
+                "consequence_hint": "Cơ hội nhân đôi tài sản, rủi ro thanh khoản đóng băng.",
+                "risk_percent": 15,
+                "cost_ap": 1,
+                "effects": {
+                  "cash_delta": 739,
+                  "vitality_delta": -5,
+                  "burnout_delta": 10,
+                  "karma_delta": 5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Giữ Tiền Mặt Thủ Thân",
+                "consequence_hint": "Bảo toàn an toàn tài chính, chấp nhận lạm phát bào mòn.",
+                "risk_percent": 40,
+                "cost_ap": 1,
+                "effects": {
+                  "cash_delta": -370,
+                  "vitality_delta": 10,
+                  "burnout_delta": -15,
+                  "karma_delta": 10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.616Z"
+        },
+        {
+          "id": "d0b9f924-6136-4a8d-abf7-b9185fd4bdd3",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 59,
+          "event_data": {
+            "id": "dyn_1793857814617",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_midlife_59_617",
+            "title": "Ngã Rẽ Đầu Tư Bất Động Sản Nghỉ Dưỡng",
+            "narrative": "Một lô đất ven biển đang được bán thanh lý giá hời. Liệu bạn có nên rút toàn bộ quỹ tiết kiệm dưỡng già để đón đầu quy hoạch du lịch?",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Xuống Tiền Mua Đất",
+                "consequence_hint": "Cơ hội nhân đôi tài sản, rủi ro thanh khoản đóng băng.",
+                "risk_percent": 15,
+                "cost_ap": 1,
+                "effects": {
+                  "cash_delta": 739,
+                  "vitality_delta": -5,
+                  "burnout_delta": 10,
+                  "karma_delta": 5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Giữ Tiền Mặt Thủ Thân",
+                "consequence_hint": "Bảo toàn an toàn tài chính, chấp nhận lạm phát bào mòn.",
+                "risk_percent": 40,
+                "cost_ap": 1,
+                "effects": {
+                  "cash_delta": -370,
+                  "vitality_delta": 10,
+                  "burnout_delta": -15,
+                  "karma_delta": 10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.617Z"
+        },
+        {
+          "id": "7a158550-e819-4b16-bca6-4f50fe58db69",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 60,
+          "event_data": {
+            "id": "ill_friend_passing",
+            "interaction_type": "ILLUSION",
+            "tag": "peer_bereavement",
+            "title": "Tiếng Chuông Tang Của Bạn Tri Kỷ Cùng Thời",
+            "narrative": "Người bạn thân nhất từng cùng bạn chia nhau gói mì tôm thời trẻ đã đột ngột qua đời vì bệnh tim. Đứng trước linh cữu người bạn cùng trang lứa, bạn giật mình nhận ra hàng ghế thời thanh xuân đang vơi dần từng người một.",
+            "spectrum_data": null,
+            "illusion_data": {
+              "button_text": "Thắp Nén Nhang Tiễn Bạn",
+              "impact_hint": "Cảm nhận sâu sắc sự vô thường của kiếp người, giảm ham muốn tiền tài, Karma +20.",
+              "karma_gain": 20
+            },
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.618Z"
+        },
+        {
+          "id": "62c60b54-c0f6-48d8-a29e-a2c09fffe4d9",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 61,
+          "event_data": {
+            "id": "spec_estate_distribution",
+            "interaction_type": "SPECTRUM",
+            "tag": "inheritance_planning",
+            "title": "Lập Di Chúc & Phân Chia Gia Sản Cho Con Cháu",
+            "narrative": "Ở tuổi gần thất thập, các con bắt đầu thăm dò về khối tài sản bạn đang nắm giữ. Nếu chia sớm, bạn sợ chúng ỷ lại lười biếng hoặc hắt hủi cha mẹ già. Nếu giữ chặt, anh em trong nhà ngấm ngầm kèn cựa mặt bằng tranh chấp.",
+            "spectrum_data": {
+              "min_label": "Giữ Trọn Đến Hơi Thở Cuối (Khóa Tài Sản)",
+              "max_label": "Chuyển Giao Hết Cho Con Cháu (Sống Tùy Nghi)",
+              "impact_metric": "affection_vs_security",
+              "consequence_summary": "Kéo sang Trái: Bảo đảm quyền lực tài chính tự thân. Kéo sang Phải: Trao quyền cho thế hệ sau nhưng đối mặt sự phụ thuộc hoàn toàn."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.619Z"
+        },
+        {
+          "id": "ad532853-51df-4493-bd3f-1b9d4c4fb3e7",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 62,
+          "event_data": {
+            "id": "tri_retirement_dilemma",
+            "interaction_type": "TRILEMMA",
+            "tag": "elderly_health_struggle",
+            "title": "Ngã Rẽ Bệnh Viện Tuổi Thất Thập",
+            "narrative": "Khớp gối thoái hóa nặng và bệnh lý tim mạch khiến việc tự sinh hoạt trở nên bất khả thi. Bạn cần một giải pháp lâu dài cho những năm tháng còn lại của cuộc đời.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": [
+              {
+                "id": "TRI_ELD_A",
+                "action_title": "Vào Viện Dưỡng Lão Cao Cấp",
+                "consequence_hint": "Tốn $60k tiền túi, không làm phiền con cháu, nhưng mang nỗi cô đơn tuổi già.",
+                "sacrifice_type": "cash",
+                "effects": {
+                  "cash_delta": -10000,
+                  "vitality_delta": 15,
+                  "burnout_delta": -15,
+                  "karma_delta": 10
+                }
+              },
+              {
+                "id": "TRI_ELD_B",
+                "action_title": "Chuyển Về Sống Chung Cùng Con Gái",
+                "consequence_hint": "Được gần gũi cháu thơ, nhưng chịu đựng sự khó chịu từ con rể và xung đột sinh hoạt.",
+                "sacrifice_type": "relationship",
+                "effects": {
+                  "cash_delta": -10000,
+                  "vitality_delta": -10,
+                  "burnout_delta": 25,
+                  "karma_delta": 15
+                }
+              },
+              {
+                "id": "TRI_ELD_C",
+                "action_title": "Thuê Điều Dưỡng Riêng Tại Nhà",
+                "consequence_hint": "Giữ được căn nhà kỷ niệm, nhưng chi phí bào mòn liên tục mỗi tháng.",
+                "sacrifice_type": "vitality",
+                "effects": {
+                  "cash_delta": -35000,
+                  "vitality_delta": 10,
+                  "burnout_delta": -10
+                }
+              }
+            ],
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.621Z"
+        },
+        {
+          "id": "59060d99-fc3e-426b-bb0d-722c2df2216e",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 63,
+          "event_data": {
+            "id": "spec_charity_legacy",
+            "interaction_type": "SPECTRUM",
+            "tag": "charity_endowment",
+            "title": "Quỹ Khuyến Học Hay Di Sản Gia Đình",
+            "narrative": "Trường cũ ngỏ lời mời bạn thành lập quỹ học bổng mang tên mình để nâng đỡ các sinh viên nghèo vượt khó. Quyết định này sẽ cắt bớt phần thừa kế mà các con bạn đang ngày đêm trông đợi.",
+            "spectrum_data": {
+              "min_label": "Giữ Trọn Cho Con (Ưu Tiên Gia Tộc)",
+              "max_label": "Hiến Tặng Xã Hội (Lưu Danh Sử Sách)",
+              "impact_metric": "karma_vs_cash",
+              "consequence_summary": "Kéo sang Trái: Giữ tiền cho con cháu. Kéo sang Phải: Tích lũy đại nghiệp lực (Karma vọt tăng) nhưng con cái bất mãn ra mặt."
+            },
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.622Z"
+        },
+        {
+          "id": "02b48fb0-473d-40d0-9d04-ba7877f3cde8",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 64,
+          "event_data": {
+            "id": "skip_elderly_garden",
+            "interaction_type": "TIME_SKIP",
+            "tag": "elderly_peaceful_leisure",
+            "title": "Ba Năm Thảnh Thơi Bên Vườn Hoa Tuổi Già",
+            "narrative": "Mỗi sáng ngắm hoa lan nở, chiều dạo bộ quanh công viên cùng các cụ ông cụ bà lối xóm. Tiếng cười của đứa cháu nội làm căn nhà rộn rã. Cơ thể tuy có chậm chạp đi nhưng tâm hồn hoàn toàn tĩnh tại.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": {
+              "years_jump": 3,
+              "yearly_income_save": 4000,
+              "burnout_decay": 40,
+              "vitality_drift": -5,
+              "event_summary": "Trải qua 3 năm tuổi già an nhàn, sum vầy cùng cháu chắt."
+            },
+            "options": null,
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.623Z"
+        },
+        {
+          "id": "126aa378-89ca-468b-ad3c-66fdec64442f",
+          "character_id": "537b47d2-8c11-4ead-89be-11f953a7912d",
+          "tick_number": 65,
+          "event_data": {
+            "id": "dyn_1793857814625",
+            "interaction_type": "STANDARD",
+            "tag": "dyn_elderly_65_625",
+            "title": "Cân Nhắc Sửa Lại Ngôi Nhà Cổ Của Tổ Tiên",
+            "narrative": "Mái ngói căn nhà cũ đã dột nát sau nhiều mùa mưa bão. Việc đại tu sẽ tốn khoảng $5,000, khoản tiền dự phòng viện phí của bạn.",
+            "spectrum_data": null,
+            "illusion_data": null,
+            "trilemma_options": null,
+            "time_skip_data": null,
+            "options": [
+              {
+                "id": "A",
+                "action_title": "Sửa Lại Nhà Tổ",
+                "consequence_hint": "Lưu giữ ký ức gia đình, giảm bớt tài sản tiền mặt dự phòng.",
+                "risk_percent": 15,
+                "cost_ap": 1,
+                "effects": {
+                  "cash_delta": 739,
+                  "vitality_delta": -5,
+                  "burnout_delta": 10,
+                  "karma_delta": 5
+                }
+              },
+              {
+                "id": "B",
+                "action_title": "Chấp Nhận Chắp Vá",
+                "consequence_hint": "Tiết kiệm tiền thuốc men tuổi già, chấp nhận nhà dột.",
+                "risk_percent": 40,
+                "cost_ap": 1,
+                "effects": {
+                  "cash_delta": -370,
+                  "vitality_delta": 10,
+                  "burnout_delta": -15,
+                  "karma_delta": 10
+                }
+              }
+            ],
+            "visual_vibe": {
+              "background_scene": "cyber_dusk",
+              "audio_ambient": "calm_hum",
+              "camera_drift": "steady_float"
+            },
+            "source": "Million-Vector Engine (<20ms)"
+          },
+          "created_at": "2026-11-05T05:50:14.625Z"
+        }
+      ],
+      "currentDilemma": null,
+      "playerAccount": {
+        "id": "user_1793857814496",
+        "total_karma": 585,
+        "unlocked_perks": [],
+        "reincarnation_count": 3,
+        "lifetime_stats": {
+          "total_years_lived": 0,
+          "max_net_worth": 0,
+          "total_deaths": 0
+        },
+        "ancestral_lineage": [
+          {
+            "id": "e6c8bdfb-66ab-45cc-9d9b-998aaf9d8111",
+            "recorded_at": "2026-11-05T05:50:14.630Z",
+            "generation": 1,
+            "name": "Frantz Joseph",
+            "nationality": "Haiti",
+            "age": 65,
+            "status": "ascended_nirvana",
+            "cause_of_passing": "Đắc Đạo Niết Bàn (Ascended to Nirvana)",
+            "max_net_worth": 7394,
+            "cash": 7394,
+            "karma": 100,
+            "aspiration_title": "young_scholar",
+            "epitaph_quote": "Thân tựa phù vân nơi trần thế, tâm an tĩnh tại giữa hư không. Vạn duyên dứt sạch, an trụ cõi tịch tịnh muôn thu.",
+            "blessing": "+150 Nghiệp Lực Vĩnh Cửu & Gia Trì Hộ Mệnh Muôn Đời"
+          },
+          {
+            "id": "founder_gen_1",
+            "generation": 1,
+            "name": "Vũ Chấn Hưng",
+            "nationality": "Việt Nam",
+            "age": 76,
+            "status": "ascended_nirvana",
+            "cause_of_passing": "Đắc Đạo Niết Bàn (Ascended to Nirvana)",
+            "max_net_worth": 1850000,
+            "cash": 240000,
+            "karma": 95,
+            "aspiration_title": "Khai Sáng & Đức Hạnh",
+            "epitaph_quote": "Thân tựa phù vân nơi trần thế, tâm an tĩnh tại giữa hư không. Dòng họ hưng vượng nhờ đức sáng muôn đời.",
+            "blessing": "+150 Nghiệp Lực Khởi Tổ & Hộ Mệnh Muôn Đời",
+            "recorded_at": "2026-10-29T05:50:14.498Z"
           }
         ]
       }

@@ -57,11 +57,11 @@ export default function AnnualDigestBanner({
       {/* Top Header: Tag, Cash Flow & Close button */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-[9.5px] font-mono uppercase px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold flex items-center gap-1 shrink-0">
+          <span className="text-[12px] font-sans tabular-nums normal-case px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold flex items-center gap-1 shrink-0">
             <Newspaper className="w-3 h-3 text-indigo-400" /> Điểm Tin {digest.age_reached}t
           </span>
 
-          <div className="flex items-center gap-1 text-[10px] font-mono px-1.5 py-0.5 rounded-lg bg-slate-950/80 border border-slate-800">
+          <div className="flex items-center gap-1 text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded-lg bg-slate-950/80 border border-slate-800">
             <span className="text-slate-400">Dòng tiền:</span>
             <span className={`font-bold flex items-center gap-0.5 ${isPositiveFlow ? 'text-teal-300' : 'text-rose-400'}`}>
               {isPositiveFlow ? '+' : ''}{netFormatted.primary}
@@ -106,17 +106,17 @@ export default function AnnualDigestBanner({
             <div className="font-semibold text-amber-300 flex items-center gap-1.5 flex-wrap">
               <span>{digest.childhood_event.title}</span>
               {digest.childhood_event.effects?.cash_delta && (
-                <span className="text-[9.5px] font-mono px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">
+                <span className="text-[12px] font-sans tabular-nums px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">
                   +{digest.childhood_event.effects.cash_delta} USD
                 </span>
               )}
               {digest.childhood_event.effects?.karma_delta && (
-                <span className="text-[9.5px] font-mono px-1 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 font-bold">
+                <span className="text-[12px] font-sans tabular-nums px-1 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 font-bold">
                   +{digest.childhood_event.effects.karma_delta} Karma
                 </span>
               )}
             </div>
-            <p className="text-[10.5px] text-slate-300 leading-snug mt-0.5">
+            <p className="text-[12px] text-slate-300 leading-snug mt-0.5">
               {digest.childhood_event.narrative}
             </p>
           </div>
@@ -125,7 +125,7 @@ export default function AnnualDigestBanner({
 
       {/* Additional Family Events if any and no duplicate with childhood */}
       {!digest.childhood_event && digest.family_events && digest.family_events.length > 0 && (
-        <div className="pt-1.5 border-t border-slate-800/60 flex items-center gap-2 text-[10.5px] text-slate-300">
+        <div className="pt-1.5 border-t border-slate-800/60 flex items-center gap-2 text-[12px] text-slate-300">
           <HeartHandshake className="w-3.5 h-3.5 text-pink-400 shrink-0" />
           <span className="truncate">{digest.family_events[0]}</span>
         </div>
@@ -133,3 +133,4 @@ export default function AnnualDigestBanner({
     </div>
   );
 }
+

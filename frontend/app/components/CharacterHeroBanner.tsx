@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import Tooltip from './Tooltip';
 
-const Dynamic3DAvatar = dynamic(() => import('./Dynamic3DAvatar'), {
+const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full flex items-center justify-center bg-slate-950 rounded-2xl">
@@ -348,14 +348,14 @@ export default function CharacterHeroBanner({
             {/* DYNAMIC AVATAR STATE OVERLAYS */}
             {/* 1. Trẻ sơ sinh trong nôi (0-5 tuổi) */}
             {isInfant && (
-              <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-sky-950/85 border border-sky-400/50 text-[8.5px] font-mono text-sky-200 font-semibold flex items-center gap-1 shadow backdrop-blur-sm z-20">
+              <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-sky-950/85 border border-sky-400/50 text-[12px] font-sans tabular-nums text-sky-200 font-semibold flex items-center gap-1 shadow backdrop-blur-sm z-20">
                 <span>🍼 Trong Nôi</span>
               </div>
             )}
 
             {/* 2. Sinh lực nguy kịch (vitality < 30): Nhịp tim đập chậm cảnh báo */}
             {isCriticalVitality && (
-              <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-rose-950/90 border border-rose-500/60 text-[8.5px] font-mono text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow z-20">
+              <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-rose-950/90 border border-rose-500/60 text-[12px] font-sans tabular-nums text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow z-20">
                 <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
                 <span>💔 Yếu ớt</span>
               </div>
@@ -365,7 +365,7 @@ export default function CharacterHeroBanner({
             {isSevereBurnout && (
               <>
                 <div className="absolute inset-0 pointer-events-none z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-rose-950/20 to-rose-950/60" />
-                <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-rose-950/90 border border-rose-500/70 text-[8.5px] font-mono text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow z-20">
+                <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-rose-950/90 border border-rose-500/70 text-[12px] font-sans tabular-nums text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow z-20">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping" />
                   <span>⚡ Kiệt sức</span>
                 </div>
@@ -373,9 +373,9 @@ export default function CharacterHeroBanner({
             )}
 
             {/* Permanent 3D Live Badge (Bỏ nút chuyển 2D) */}
-            <div className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-md bg-black/85 text-[8.5px] font-mono font-bold text-indigo-300 border border-indigo-500/40 backdrop-blur-md flex items-center gap-1 shadow z-20 pointer-events-none select-none">
+            <div className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-md bg-black/85 text-[12px] font-sans tabular-nums font-bold text-indigo-300 border border-indigo-500/40 backdrop-blur-md flex items-center gap-1 shadow z-20 pointer-events-none select-none">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>3D LIVE</span>
+              <span>NHÂN VẬT</span>
             </div>
 
             {/* 360 Fullscreen Trigger */}
@@ -396,24 +396,24 @@ export default function CharacterHeroBanner({
               </h1>
 
               {character.generation && character.generation > 1 && (
-                <span className="text-[9.5px] font-mono px-2 py-0.2 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
+                <span className="text-[12px] font-sans tabular-nums px-2 py-0.2 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
                   Đời {character.generation}
                 </span>
               )}
 
-              <span className={`text-[10px] px-2.5 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-sm ${socialStatus.color}`}>
+              <span className={`text-[12px] px-2.5 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-sm ${socialStatus.color}`}>
                 <span>{socialStatus.icon}</span>
                 <span>{socialStatus.title}</span>
               </span>
 
               {/* Nghề Nghiệp / Học Vị Hiện Tại */}
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full border border-sky-500/40 bg-sky-950/60 text-sky-200 font-bold flex items-center gap-1 shadow-sm">
+              <span className="text-[12px] px-2.5 py-0.5 rounded-full border border-sky-500/40 bg-sky-950/60 text-sky-200 font-bold flex items-center gap-1 shadow-sm">
                 <Briefcase className="w-3 h-3 text-sky-400" />
                 <span>{character.occupation || (age < 6 ? "Ấu nhi" : age < 18 ? "Học sinh" : "Lao động tự do")}</span>
               </span>
 
               {character.is_transhuman && (
-                <span className="text-[9px] font-sans px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold animate-pulse">
+                <span className="text-[12px] font-sans px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold animate-pulse">
                   <Cpu className="w-3 h-3 inline mr-0.5" /> Bán Thần
                 </span>
               )}
@@ -441,7 +441,7 @@ export default function CharacterHeroBanner({
               <span className="flex items-center gap-1 text-slate-200">
                 <Home className="w-3 h-3 text-amber-400 shrink-0" />
                 <span>{character.housing?.name || 'Phòng trọ'}</span>
-                <span className="text-amber-400 font-mono text-[9.5px]">
+                <span className="text-amber-400 font-sans tabular-nums text-[12px]">
                   ({character.housing?.status === 'owned' ? 'Sở hữu' : 'Thuê'})
                 </span>
               </span>
@@ -450,13 +450,13 @@ export default function CharacterHeroBanner({
             {/* Mã Gen Dạng Huy Hiệu Nhỏ Gọn (Tooltip giải thích) */}
             {character.innate_traits && character.innate_traits.length > 0 && (
               <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-                <span className="text-[9.5px] font-semibold text-purple-300 flex items-center gap-0.5">
+                <span className="text-[12px] font-semibold text-purple-300 flex items-center gap-0.5">
                   🧬 Gen:
                 </span>
                 {character.innate_traits.map((t: string) => (
                   <span
                     key={t}
-                    className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-purple-950/60 text-purple-200 border border-purple-500/30 flex items-center gap-0.5"
+                    className="text-[12px] font-medium px-2 py-0.5 rounded-full bg-purple-950/60 text-purple-200 border border-purple-500/30 flex items-center gap-0.5"
                   >
                     ✨ {t.replace(/_/g, ' ')}
                   </span>
@@ -479,24 +479,24 @@ export default function CharacterHeroBanner({
                     {activeFeedback.title}
                   </span>
                   {activeFeedback.delta && (
-                    <span className={`text-[9.5px] font-mono font-bold px-1.5 py-0.2 rounded-md border ${feedbackAtmo?.badgeDelta}`}>
+                    <span className={`text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded-md border ${feedbackAtmo?.badgeDelta}`}>
                       {activeFeedback.delta}
                     </span>
                   )}
                 </div>
                 {activeFeedback.subtitle && (
-                  <span className="text-[9.5px] text-slate-300 max-w-[220px] truncate">
+                  <span className="text-[12px] text-slate-300 max-w-[220px] truncate">
                     {activeFeedback.subtitle}
                   </span>
                 )}
               </div>
             </div>
           ) : (
-            <Tooltip content={<div className="text-[10px] max-w-xs">{lifeStage.desc}</div>}>
+            <Tooltip content={<div className="text-[12px] max-w-xs">{lifeStage.desc}</div>}>
               <div className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 rounded-2xl bg-slate-900/70 hover:bg-slate-900/90 border border-indigo-500/30 backdrop-blur-md cursor-help transition shrink-0">
                 <span className="text-base">{lifeStage.icon}</span>
                 <div className="flex flex-col text-right">
-                  <span className="text-[9px] uppercase tracking-wider text-indigo-400 font-mono font-semibold">Giai Đoạn</span>
+                  <span className="text-[12px] normal-case tracking-normal text-indigo-400 font-sans tabular-nums font-semibold">Giai Đoạn</span>
                   <span className="text-xs font-bold text-white">{lifeStage.stage}</span>
                 </div>
               </div>
@@ -508,3 +508,4 @@ export default function CharacterHeroBanner({
     </div>
   );
 }
+

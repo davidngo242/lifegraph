@@ -113,14 +113,14 @@ export default function StickyProfileSidebar({
   const HealthCard = (
     <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col gap-2 shadow-sm">
       <div className="flex items-center justify-between text-xs">
-        <span className="font-bold text-[11px] text-slate-300 flex items-center gap-1.5">
+        <span className="font-bold text-[12px] text-slate-300 flex items-center gap-1.5">
           <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-500/20" /> Sinh Lực
         </span>
         <div className="flex items-center gap-1.5">
-          <span className={`text-[9px] px-1.5 py-0.2 rounded border font-semibold ${healthStatus.color}`}>
+          <span className={`text-[12px] px-1.5 py-0.2 rounded border font-semibold ${healthStatus.color}`}>
             {healthStatus.label}
           </span>
-          <span className="font-mono font-bold text-white text-xs">
+          <span className="font-sans tabular-nums font-bold text-white text-xs">
             {vitality}<span className="text-slate-500 font-normal">/{maxVitality}</span>
           </span>
         </div>
@@ -135,22 +135,22 @@ export default function StickyProfileSidebar({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-1.5 pt-1 border-t border-slate-800/60 text-[10.5px]">
-        <Tooltip content={<div className="text-[10px]">Điểm Hành Động (AP) nhân vật nhận được mỗi năm.</div>}>
+      <div className="grid grid-cols-2 gap-1.5 pt-1 border-t border-slate-800/60 text-[12px]">
+        <Tooltip content={<div className="text-[12px]">Điểm Hành Động (AP) nhân vật nhận được mỗi năm.</div>}>
           <div className="flex items-center justify-between text-slate-300 bg-slate-900/60 px-2 py-1 rounded-lg cursor-help">
             <span className="flex items-center gap-1 text-slate-400">
               <Zap className="w-3 h-3 text-amber-400" /> AP/Năm:
             </span>
-            <span className="font-mono font-bold text-emerald-400">+{apGainPerYear} AP</span>
+            <span className="font-sans tabular-nums font-bold text-emerald-400">+{apGainPerYear} AP</span>
           </div>
         </Tooltip>
 
-        <Tooltip content={<div className="text-[10px]">Tốc độ lão hóa tế bào theo mức kiệt sức.</div>}>
+        <Tooltip content={<div className="text-[12px]">Tốc độ lão hóa tế bào theo mức kiệt sức.</div>}>
           <div className="flex items-center justify-between text-slate-300 bg-slate-900/60 px-2 py-1 rounded-lg cursor-help">
             <span className="flex items-center gap-1 text-slate-400">
               <Activity className="w-3 h-3 text-rose-400" /> Lão hóa:
             </span>
-            <span className={`font-mono font-semibold ${burnout >= 75 ? 'text-rose-400 animate-pulse' : 'text-slate-300'}`}>
+            <span className={`font-sans tabular-nums font-semibold ${burnout >= 75 ? 'text-rose-400 animate-pulse' : 'text-slate-300'}`}>
               {agingDecayRate}
             </span>
           </div>
@@ -163,12 +163,12 @@ export default function StickyProfileSidebar({
   const FinancialCard = (
     <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col gap-2 shadow-sm">
       <div className="flex items-center justify-between text-xs">
-        <span className="font-bold text-[11px] text-slate-300 flex items-center gap-1.5">
+        <span className="font-bold text-[12px] text-slate-300 flex items-center gap-1.5">
           <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> Tài Chính
         </span>
         <button
           onClick={onOpenAssets}
-          className="text-[10px] text-indigo-400 hover:text-indigo-300 font-medium transition"
+          className="text-[12px] text-indigo-400 hover:text-indigo-300 font-medium transition"
         >
           Chi tiết &rarr;
         </button>
@@ -176,19 +176,19 @@ export default function StickyProfileSidebar({
 
       <div className="flex items-baseline justify-between bg-slate-900/60 p-2 rounded-xl border border-slate-800/60">
         <div>
-          <span className="text-[9.5px] uppercase tracking-wider text-slate-400 block font-medium">
+          <span className="text-[12px] normal-case tracking-normal text-slate-400 block font-medium">
             {age < 6 ? "Quỹ Sữa Bỉm (Mẹ Giữ)" : isAdult ? "Tiền Mặt" : "Tiền Tiêu Vặt"}
           </span>
-          <span className={`text-base font-mono font-extrabold ${displayCash < 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
+          <span className={`text-base font-sans tabular-nums font-extrabold ${displayCash < 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
             {formattedCash.primary}
           </span>
         </div>
 
         <div className="text-right">
-          <span className="text-[9.5px] uppercase tracking-wider text-slate-400 block font-medium">
+          <span className="text-[12px] normal-case tracking-normal text-slate-400 block font-medium">
             {isAdult ? "Tổng Tài Sản Ròng" : "Quỹ Tín Thác 18t"}
           </span>
-          <span className="text-sm font-mono font-bold text-teal-300">
+          <span className="text-sm font-sans tabular-nums font-bold text-teal-300">
             {isAdult ? formattedNetWorth.primary : formattedEndowment.primary}
           </span>
         </div>
@@ -200,13 +200,13 @@ export default function StickyProfileSidebar({
   const HouseholdCard = character.household && (
     <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col gap-2 shadow-sm">
       <div className="flex items-center justify-between text-xs">
-        <span className="font-bold text-[11px] text-slate-300 flex items-center gap-1.5">
+        <span className="font-bold text-[12px] text-slate-300 flex items-center gap-1.5">
           👨‍👩‍👧 {!isAdult ? "Mái Ấm Gia Đình" : "Gia Thế Tiền Thân"}
         </span>
         
         {character.household.family_buff && (
-          <Tooltip content={<div className="text-[10px]">{character.household.family_buff.description}</div>}>
-            <span className="text-[9.5px] font-semibold text-amber-300 px-1.5 py-0.2 rounded bg-amber-500/10 border border-amber-500/20 cursor-help flex items-center gap-1">
+          <Tooltip content={<div className="text-[12px]">{character.household.family_buff.description}</div>}>
+            <span className="text-[12px] font-semibold text-amber-300 px-1.5 py-0.2 rounded bg-amber-500/10 border border-amber-500/20 cursor-help flex items-center gap-1">
               ⭐ {character.household.family_buff.name}
             </span>
           </Tooltip>
@@ -214,12 +214,12 @@ export default function StickyProfileSidebar({
       </div>
 
       {/* Parents Line (Clean 1-liner) */}
-      <div className="flex items-center justify-between text-[10.5px] text-slate-300 bg-slate-900/60 px-2.5 py-1.5 rounded-xl border border-slate-800/60">
+      <div className="flex items-center justify-between text-[12px] text-slate-300 bg-slate-900/60 px-2.5 py-1.5 rounded-xl border border-slate-800/60">
         <span className="truncate pr-1">
           {character.household.father_name ? `Bố: ${character.household.father_name}` : "Mồ côi"}
           {character.household.mother_name ? ` • Mẹ: ${character.household.mother_name}` : ""}
         </span>
-        <span className={`shrink-0 text-[8.5px] font-mono px-1.5 py-0.2 rounded font-semibold ${
+        <span className={`shrink-0 text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded font-semibold ${
           isParentsDeceased
             ? 'bg-rose-950/50 text-rose-300 border border-rose-800/60'
             : 'bg-emerald-950/50 text-emerald-300 border border-emerald-800/60'
@@ -232,7 +232,7 @@ export default function StickyProfileSidebar({
       <button
         onClick={onFamilyMeal}
         disabled={!canEatFamilyMeal}
-        className={`w-full py-1.5 px-2.5 rounded-xl text-[10.5px] font-semibold flex items-center justify-between transition border ${
+        className={`w-full py-1.5 px-2.5 rounded-xl text-[12px] font-semibold flex items-center justify-between transition border ${
           isParentsDeceased
             ? 'bg-slate-950 text-slate-600 border-slate-900 cursor-not-allowed'
             : canEatFamilyMeal
@@ -250,7 +250,7 @@ export default function StickyProfileSidebar({
               : (age < 6 ? "Đã được vỗ về năm nay" : "Đã sum vầy năm nay")}
           </span>
         </span>
-        <span className="font-mono text-[9px] text-amber-300/80">
+        <span className="font-sans tabular-nums text-[12px] text-amber-300/80">
           {canEatFamilyMeal
             ? (age < 6 ? "+10 Máu, +5 Hạnh Phúc" : "-15 Burnout, +5 Karma")
             : "Đợi sang tuổi mới"}
@@ -300,7 +300,7 @@ export default function StickyProfileSidebar({
           <span className="font-bold text-xs text-slate-200 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-purple-400" /> Tâm Thức & Nghiệp Lực
           </span>
-          <span className="text-[10px] font-mono text-purple-300 bg-purple-500/15 px-2 py-0.5 rounded-full border border-purple-500/30 font-semibold">
+          <span className="text-[12px] font-sans tabular-nums text-purple-300 bg-purple-500/15 px-2 py-0.5 rounded-full border border-purple-500/30 font-semibold">
             {karma >= 100 ? 'Thiện Nghiệp' : 'Cần Tu Dưỡng'}
           </span>
         </div>
@@ -308,7 +308,7 @@ export default function StickyProfileSidebar({
         {/* Danh sách 3 chỉ số thiết kế hàng ngang to rõ, full 100% block */}
         <div className="space-y-1.5 pt-1 border-t border-slate-800/60 w-full flex flex-col">
           {/* Item 1: Tâm Trí */}
-          <Tooltip content={<div className="text-[10px]">Chỉ số kiệt sức (Burnout: {burnout}%). Căng thẳng &gt; 80% có nguy cơ đột quỵ.</div>} className="w-full">
+          <Tooltip content={<div className="text-[12px]">Chỉ số kiệt sức (Burnout: {burnout}%). Căng thẳng &gt; 80% có nguy cơ đột quỵ.</div>} className="w-full">
             <div className={`w-full p-2.5 rounded-xl border flex items-center justify-between cursor-help transition-all ${
               burnout >= 75
                 ? 'bg-rose-950/80 border-rose-500/80 shadow-[0_0_12px_rgba(244,63,94,0.35)] animate-pulse'
@@ -319,18 +319,18 @@ export default function StickyProfileSidebar({
                 <span className="text-xs font-semibold text-slate-300">Tâm Trí</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className={`text-[11px] font-bold px-2 py-0.5 rounded border ${
-                  burnout >= 75 ? 'bg-rose-500/30 text-rose-200 border-rose-500 font-mono' : stress.color
+                <span className={`text-[12px] font-bold px-2 py-0.5 rounded border ${
+                  burnout >= 75 ? 'bg-rose-500/30 text-rose-200 border-rose-500 font-sans tabular-nums' : stress.color
                 }`}>
                   {stress.label}
                 </span>
-                <span className="text-[11px] font-mono text-slate-400 font-semibold">({burnout}%)</span>
+                <span className="text-[12px] font-sans tabular-nums text-slate-400 font-semibold">({burnout}%)</span>
               </div>
             </div>
           </Tooltip>
 
           {/* Item 2: Hạnh Phúc */}
-          <Tooltip content={<div className="text-[10px]">Hạnh phúc nội tâm ({happiness}%). &ge; 75% kích hoạt Buff Tự Tin (+15% Điểm Game).</div>} className="w-full">
+          <Tooltip content={<div className="text-[12px]">Hạnh phúc nội tâm ({happiness}%). &ge; 75% kích hoạt Buff Tự Tin (+15% Điểm Game).</div>} className="w-full">
             <div className="w-full p-2.5 rounded-xl bg-slate-900/70 border border-slate-800/80 hover:border-amber-500/40 flex items-center justify-between cursor-help transition-all">
               <div className="flex items-center gap-2">
                 <Smile className="w-3.5 h-3.5 text-amber-400" />
@@ -338,11 +338,11 @@ export default function StickyProfileSidebar({
               </div>
               <div className="flex items-center gap-2">
                 {isHappyBuffActive && (
-                  <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  <span className="text-[12px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
                     +15% Buff
                   </span>
                 )}
-                <span className={`text-sm font-mono font-bold ${
+                <span className={`text-sm font-sans tabular-nums font-bold ${
                   happiness >= 70 ? 'text-amber-300' : happiness >= 40 ? 'text-sky-300' : 'text-rose-400'
                 }`}>
                   {happiness}%
@@ -352,17 +352,17 @@ export default function StickyProfileSidebar({
           </Tooltip>
 
           {/* Item 3: Nghiệp Lực */}
-          <Tooltip content={<div className="text-[10px]">Nghiệp lực hiện tại ({karma}) / Nghiệp lực vĩnh cửu tiền kiếp ({eternalKarma}).</div>} className="w-full">
+          <Tooltip content={<div className="text-[12px]">Nghiệp lực hiện tại ({karma}) / Nghiệp lực vĩnh cửu tiền kiếp ({eternalKarma}).</div>} className="w-full">
             <div className="w-full p-2.5 rounded-xl bg-slate-900/70 border border-slate-800/80 hover:border-purple-500/40 flex items-center justify-between cursor-help transition-all">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-3.5 h-3.5 text-purple-400" />
                 <span className="text-xs font-semibold text-slate-300">Nghiệp Lực</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="text-sm font-mono font-bold text-purple-300">
+                <span className="text-sm font-sans tabular-nums font-bold text-purple-300">
                   {karma}
                 </span>
-                <span className="text-[10px] text-slate-500 font-mono">KP</span>
+                <span className="text-[12px] text-slate-500 font-sans tabular-nums">KP</span>
               </div>
             </div>
           </Tooltip>
@@ -370,13 +370,13 @@ export default function StickyProfileSidebar({
       </div>
 
       {/* LA BÀN VẬN MỆNH (1 Dòng Trực Quan) */}
-      <Tooltip content={<div className="text-[10px]">{destiny.buff}</div>} className="w-full">
+      <Tooltip content={<div className="text-[12px]">{destiny.buff}</div>} className="w-full">
         <div className="w-full p-2 rounded-2xl bg-gradient-to-r from-indigo-950/40 via-slate-950 to-purple-950/30 border border-indigo-500/30 flex items-center justify-between text-xs cursor-help">
           <div className="flex items-center gap-1.5 truncate">
             <Compass className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-            <span className="font-bold text-white text-[11px] truncate">{destiny.title}</span>
+            <span className="font-bold text-white text-[12px] truncate">{destiny.title}</span>
           </div>
-          <span className="font-mono text-indigo-300 text-[10px] shrink-0 font-semibold">
+          <span className="font-sans tabular-nums text-indigo-300 text-[12px] shrink-0 font-semibold">
             Còn {Math.max(1, destiny.nextAge - age)} năm
           </span>
         </div>
@@ -384,3 +384,4 @@ export default function StickyProfileSidebar({
     </div>
   );
 }
+

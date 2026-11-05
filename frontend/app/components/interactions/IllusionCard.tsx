@@ -21,7 +21,7 @@ export default function IllusionCard({ dilemma, onAccept, isLoading }: IllusionC
       <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(244,63,94,0.25)] pointer-events-none animate-pulse" />
 
       <div className="flex items-center justify-between mb-4">
-        <span className="text-[11px] font-sans font-bold tracking-wider uppercase px-3.5 py-1 rounded-full bg-rose-500/30 text-rose-200 border border-rose-500/60 flex items-center gap-1.5 animate-pulse">
+        <span className="text-[12px] font-sans font-bold tracking-normal normal-case px-3.5 py-1 rounded-full bg-rose-500/30 text-rose-200 border border-rose-500/60 flex items-center gap-1.5 animate-pulse">
           <AlertOctagon className="w-4 h-4 text-rose-400" /> ⚡ BIẾN CỐ ĐỊNH MỆNH (THE ILLUSION)
         </span>
       </div>
@@ -30,7 +30,7 @@ export default function IllusionCard({ dilemma, onAccept, isLoading }: IllusionC
         {dilemma.title}
       </h2>
 
-      <div className="p-5 rounded-2xl bg-slate-950/90 border border-rose-500/20 mb-6 text-slate-100 text-sm md:text-base leading-relaxed font-serif italic shadow-inner">
+      <div className="p-5 rounded-2xl bg-slate-950/90 border border-rose-500/20 mb-6 text-slate-100 text-sm md:text-base leading-relaxed font-sans italic shadow-inner">
         "{dilemma.narrative}"
       </div>
 
@@ -45,7 +45,7 @@ export default function IllusionCard({ dilemma, onAccept, isLoading }: IllusionC
       <button
         disabled={isLoading}
         onClick={onAccept}
-        className="w-full py-4 rounded-xl bg-gradient-to-r from-rose-700 via-rose-600 to-red-800 hover:from-rose-600 hover:to-red-700 text-white font-extrabold text-sm tracking-wide uppercase transition shadow-lg shadow-rose-950/60 flex items-center justify-center gap-2 active:scale-[0.98] animate-shake hover:shadow-[0_0_25px_rgba(244,63,94,0.5)]"
+        className="w-full py-4 rounded-xl bg-gradient-to-r from-rose-700 via-rose-600 to-red-800 hover:from-rose-600 hover:to-red-700 text-white font-extrabold text-sm tracking-wide normal-case transition shadow-lg shadow-rose-950/60 flex items-center justify-center gap-2 active:scale-[0.98] animate-shake hover:shadow-[0_0_25px_rgba(244,63,94,0.5)]"
       >
         <span>{data.button_text}</span>
         <ArrowRight className="w-4 h-4" />
@@ -53,3 +53,4 @@ export default function IllusionCard({ dilemma, onAccept, isLoading }: IllusionC
     </div>
   );
 }
+

@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
 import { X } from 'lucide-react';
 
-const Dynamic3DAvatar = dynamic(() => import('./Dynamic3DAvatar'), {
+const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full flex items-center justify-center bg-slate-950 rounded-2xl">
@@ -52,7 +52,7 @@ export default function AvatarInspectorModal({
           <div>
             <h3 className="text-lg font-bold text-white flex items-center gap-2">
               <span>Mô Hình 3D Nhân Vật: {character.name}</span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-sans tabular-nums">
                 {age} Tuổi
               </span>
             </h3>
@@ -78,11 +78,11 @@ export default function AvatarInspectorModal({
 
           {/* Status Overlay */}
           <div className="absolute top-3 left-3 flex flex-col gap-1 pointer-events-none">
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-black/60 text-slate-300 border border-slate-700/60 backdrop-blur">
+            <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-black/60 text-slate-300 border border-slate-700/60 backdrop-blur">
               Sắc tộc: {character.nationality}
             </span>
             <span
-              className={`text-[10px] font-mono px-2 py-0.5 rounded-full border backdrop-blur ${
+              className={`text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full border backdrop-blur ${
                 burnout > 75
                   ? 'bg-rose-950/80 text-rose-300 border-rose-600 animate-pulse'
                   : 'bg-black/60 text-emerald-300 border-emerald-700/60'
@@ -125,3 +125,4 @@ export default function AvatarInspectorModal({
     </div>
   );
 }
+

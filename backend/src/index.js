@@ -12,7 +12,7 @@ import {
 
 dotenv.config();
 
-const app = express();
+export const app = express();
 const PORT = parseInt(process.env.PORT, 10) || 10000;
 
 // Enable reverse proxy support (Render, Vercel, Cloudflare)
@@ -129,4 +129,5 @@ async function bootstrap() {
   });
 }
 
-bootstrap();
+if (process.env.NODE_ENV !== 'test') bootstrap();
+

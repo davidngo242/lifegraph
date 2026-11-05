@@ -52,6 +52,7 @@ if (typeof window !== 'undefined') {
       localStorage.setItem('lifegraph_session_id', sid);
     }
     const headers = new Headers(init?.headers || {});
+    if ((init?.method ?? 'GET').toUpperCase() === 'POST' && !headers.has('x-action-id')) headers.set('x-action-id', crypto.randomUUID());
     if (!headers.has('x-session-id')) {
       headers.set('x-session-id', sid);
     }
@@ -86,6 +87,7 @@ export default function LifeGraphPage() {
   const [lineage, setLineage] = useState<any[]>([]);
   const [nirvanaBanner, setNirvanaBanner] = useState<any | null>(null);
   const [dismissedAlerts, setDismissedAlerts] = useState<string[]>([]);
+  const [activeChallengeId, setActiveChallengeId] = useState<string | null>(null);
   const [activeMiniGame, setActiveMiniGame] = useState<MiniGameType | null>(null);
   const [activeExamSkillId, setActiveExamSkillId] = useState<string | null>(null);
   const [activeExamTargetLevel, setActiveExamTargetLevel] = useState<number>(1);
@@ -168,7 +170,7 @@ export default function LifeGraphPage() {
         setActiveView('home');
       }
     } catch (err: any) {
-      console.warn("Using offline fallback:", err);
+      setErrorMsg(err instanceof Error ? err.message : "Không tải được tiến trình. Hãy thử lại.");
     } finally {
       setLoading(false);
     }
@@ -196,6 +198,7 @@ export default function LifeGraphPage() {
     choice_id?: string;
     interaction_type?: string;
     interaction_result?: any;
+    advance_only?: boolean;
   }) => {
     setLoading(true);
     setErrorMsg(null);
@@ -205,7 +208,7 @@ export default function LifeGraphPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...payload,
-          previous_dilemma: dilemma
+          previous_dilemma: payload.advance_only ? null : dilemma
         })
       });
 
@@ -317,26 +320,9 @@ export default function LifeGraphPage() {
       if (rebirthData.dilemma) setDilemma(rebirthData.dilemma);
     }
 
-    // 2. Server synchronization call
-    try {
-      const res = await fetch(`${API_BASE}/rebirth`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(rebirthData)
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.character) setCharacter(data.character);
-        if (data.player_account) setPlayerAccount(data.player_account);
-        if (data.visuals) setVisuals(data.visuals);
-        if (data.assets) setAssets(data.assets);
-        if (data.relationships) setRelationships(data.relationships);
-        if (data.npcs) setNpcs(data.npcs);
-        if (data.dilemma) setDilemma(data.dilemma);
-      }
-    } catch (err: any) {
-      console.warn("Rebirth sync notice:", err);
-    }
+    // /start already persisted this life. Read it back instead of posting a client snapshot
+    // or creating/charging for another life during synchronization.
+    await loadState();
   };
 
   // Transhumanism Black-market Surgery
@@ -748,6 +734,7 @@ export default function LifeGraphPage() {
       }
       const data = await res.json();
       setCharacter(data.character);
+      setActiveChallengeId(data.exam?.id ?? null);
       setActiveExamSkillId(skillId);
       setActiveExamTargetLevel(data.exam?.target_level || 1);
       setShowSkillSelector(false);
@@ -758,6 +745,16 @@ export default function LifeGraphPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const launchMiniGame = async (type: MiniGameType) => {
+    try {
+      const res = await fetch(`${API_BASE}/action/minigame-start`, { method: 'POST',
+        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ minigame_type: type }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setActiveChallengeId(data.challenge.id); setActiveExamSkillId(null); setActiveMiniGame(type);
+    } catch (err: any) { setErrorMsg(err.message ?? 'Không mở được thử thách.'); }
   };
 
   const handleMiniGameComplete = async (result: {
@@ -773,6 +770,7 @@ export default function LifeGraphPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           minigame_type: activeMiniGame,
+          challenge_id: activeChallengeId,
           status: result.status,
           score: result.score,
           summary: result.summary,
@@ -1029,7 +1027,7 @@ export default function LifeGraphPage() {
           onRegisterExam={handleRegisterSkillExam}
           onSelectSkill={(gameType) => {
             setShowSkillSelector(false);
-            setActiveMiniGame(gameType);
+            launchMiniGame(gameType);
           }}
           onClose={() => setShowSkillSelector(false)}
         />
@@ -1084,13 +1082,13 @@ export default function LifeGraphPage() {
             <div className="w-full space-y-2 mb-5 text-xs">
               <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
                 <span className="text-slate-400">Gia sản thừa kế thực nhận:</span>
-                <span className="font-mono font-bold text-emerald-400 text-sm">
+                <span className="font-sans tabular-nums font-bold text-emerald-400 text-sm">
                   +${heirNotice.inherited_amount?.toLocaleString()}
                 </span>
               </div>
               <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
                 <span className="text-slate-400">Đã khấu trừ 30% Thuế Thừa Kế:</span>
-                <span className="font-mono font-semibold text-rose-400">
+                <span className="font-sans tabular-nums font-semibold text-rose-400">
                   -${heirNotice.estate_tax?.toLocaleString()}
                 </span>
               </div>
@@ -1110,7 +1108,7 @@ export default function LifeGraphPage() {
 
             <button
               onClick={() => setHeirNotice(null)}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-amber-500/25 active:scale-95"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-amber-500/25 active:scale-95"
             >
               Tiếp Nhận Vận Mệnh Dòng Tộc
             </button>
@@ -1182,10 +1180,11 @@ export default function LifeGraphPage() {
         />
       )}
 
+      <a href="/workshop" className="block bg-amber-950/70 border-b border-amber-700 text-amber-200 text-center p-3 text-sm">🔧 Chơi thử chương mới: Tiệm của cha · 2 ngày</a>
       {/* Slim Top Navigation */}
-      <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-50 gap-3 max-w-full overflow-visible">
+      <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex flex-wrap items-center justify-between sticky top-0 z-50 gap-3 max-w-full overflow-visible">
         {/* 1. Left Zone: Brand Logo & View Switcher Tabs (Đẩy sát sang trái) */}
-        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-wrap">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-amber-500 flex items-center justify-center font-black text-white text-xs shadow-md shadow-indigo-600/30 shrink-0">
               LG
@@ -1252,101 +1251,8 @@ export default function LifeGraphPage() {
           </div>
         </div>
 
-        {/* 2. Center Zone: Beautiful Detailed Aspiration Hub (Bố cục giữa nổi bật & chi tiết) */}
-        <div className="flex-1 flex justify-center items-center min-w-0">
-          {aspiration && activeView === 'game' && (
-            <Tooltip
-              position="bottom"
-              content={
-                <div className="space-y-1.5 p-1 max-w-xs">
-                  <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1">
-                    <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
-                      <span>{aspiration.icon || '🎯'}</span>
-                      <span>{aspiration.title}</span>
-                    </span>
-                    <span className="font-mono font-bold text-purple-300 text-xs">
-                      {aspiration.progress}%
-                    </span>
-                  </div>
-                  <div className="text-[10px] text-slate-300 font-serif italic leading-relaxed">
-                    {aspiration.target_summary}
-                  </div>
-                  {aspiration.progress >= 100 ? (
-                    <div className="text-[10px] font-bold text-emerald-400 pt-1 border-t border-slate-800 flex items-center gap-1 animate-pulse">
-                      ✨ Tâm nguyện đã trọn vẹn! Bấm để nâng cấp khát vọng (+60 Karma vĩnh cửu).
-                    </div>
-                  ) : (
-                    <div className="text-[9.5px] text-slate-400 pt-1 border-t border-slate-800/80 flex items-center justify-between">
-                      <span>Tiến độ hoàn thành:</span>
-                      <span className="font-bold text-amber-400">{aspiration.progress}% / 100%</span>
-                    </div>
-                  )}
-                </div>
-              }
-            >
-              <button
-                onClick={() => {
-                  if (aspiration.progress >= 100 || aspiration.is_completed) {
-                    setShowAspirationUpgradeModal(true);
-                  }
-                }}
-                className={`flex items-center gap-2 sm:gap-2.5 px-3 py-1.5 rounded-2xl border transition-all duration-300 group cursor-pointer max-w-full ${
-                  aspiration.progress >= 100 || aspiration.is_completed
-                    ? 'bg-gradient-to-r from-amber-500/20 via-purple-500/20 to-emerald-500/20 border-amber-400/70 text-amber-300 shadow-lg shadow-amber-500/20 animate-pulse'
-                    : 'bg-slate-950/90 hover:bg-slate-900 border-purple-500/35 hover:border-purple-400/60 text-slate-200 shadow-md'
-                }`}
-              >
-                {/* Icon halo */}
-                <div className="w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center shrink-0">
-                  <span className="text-xs">{aspiration.icon || '🔥'}</span>
-                </div>
-
-                <div className="flex flex-col items-start min-w-0 pr-1">
-                  <div className="flex items-center gap-1.5 w-full">
-                    <span className="text-[8.5px] uppercase tracking-wider text-purple-300 font-extrabold hidden lg:inline">
-                      Khát Vọng:
-                    </span>
-                    <span className="font-bold text-white text-xs truncate max-w-[110px] sm:max-w-[150px] md:max-w-[200px]">
-                      {aspiration.title}
-                    </span>
-                  </div>
-
-                  {/* Subtext description on medium+ screens */}
-                  <div className="text-[9px] text-slate-400 font-serif italic truncate max-w-[110px] sm:max-w-[150px] md:max-w-[200px] hidden sm:block">
-                    {aspiration.target_summary}
-                  </div>
-                </div>
-
-                {/* Progress Mini Meter with Glow */}
-                <div className="flex items-center gap-2 shrink-0">
-                  <div className="w-14 sm:w-20 md:w-28 h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800 p-0.5">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ${
-                        aspiration.progress >= 100
-                          ? 'bg-gradient-to-r from-amber-400 to-emerald-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
-                          : 'bg-gradient-to-r from-purple-500 via-indigo-400 to-amber-300'
-                      }`}
-                      style={{ width: `${Math.min(100, aspiration.progress)}%` }}
-                    />
-                  </div>
-
-                  <span className="font-mono font-bold text-xs text-amber-300 shrink-0">
-                    {aspiration.progress}%
-                  </span>
-                </div>
-
-                {aspiration.progress >= 100 && (
-                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 uppercase tracking-wider animate-bounce shadow-md shrink-0">
-                    Thăng Hạng
-                  </span>
-                )}
-              </button>
-            </Tooltip>
-          )}
-        </div>
-
         {/* 3. Right Zone: Đền Thờ Nghiệp Quả + Notifications + Audio */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
           {/* Đền Thờ Nghiệp Quả (Karma Sanctum) Header Button */}
           <Tooltip
             position="bottom"
@@ -1355,7 +1261,7 @@ export default function LifeGraphPage() {
                 <div className="font-bold text-amber-300 text-xs flex items-center gap-1 mb-0.5">
                   <Sparkles className="w-3.5 h-3.5" /> Đền Thờ Nghiệp Quả
                 </div>
-                <div className="text-[10px] text-slate-300">
+                <div className="text-[12px] text-slate-300">
                   Nơi thỉnh phước lành bảo hộ sinh mệnh, tiêu thụ điểm Karma vĩnh cửu tích lũy qua các đời.
                 </div>
               </div>
@@ -1367,7 +1273,7 @@ export default function LifeGraphPage() {
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300/30" />
               <span className="hidden md:inline">Đền Thờ Nghiệp Quả</span>
-              <span className="text-[10px] font-mono px-1 rounded bg-purple-950 text-purple-300 border border-purple-500/30 font-bold">
+              <span className="text-[12px] font-sans tabular-nums px-1 rounded bg-purple-950 text-purple-300 border border-purple-500/30 font-bold">
                 {playerAccount?.total_karma || 0}
               </span>
             </button>
@@ -1382,7 +1288,7 @@ export default function LifeGraphPage() {
                   <div className="font-bold text-amber-300 text-xs flex items-center gap-1 mb-0.5">
                     🎴 Thẻ Bài Tarot Cuộc Đời
                   </div>
-                  <div className="text-[10px] text-slate-300">
+                  <div className="text-[12px] text-slate-300">
                     Xuất hình ảnh thẻ bài vận mệnh Cyber-Tarot để chia sẻ bảng thành tích lên mạng xã hội.
                   </div>
                 </div>
@@ -1411,12 +1317,109 @@ export default function LifeGraphPage() {
             audioRef={audioRef}
           />
         </div>
+        {/* 2. Center Zone: Beautiful Detailed Aspiration Hub (Bố cục giữa nổi bật & chi tiết) */}
+        <div className="w-full min-w-0 border-t border-slate-800 pt-2 flex justify-start">
+          {aspiration && activeView === 'game' && (
+            <Tooltip
+              position="bottom"
+              content={
+                <div className="space-y-1.5 p-1 max-w-xs">
+                  <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1">
+                    <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
+                      <span>{aspiration.icon || '🎯'}</span>
+                      <span>{aspiration.title}</span>
+                    </span>
+                    <span className="font-sans tabular-nums font-bold text-purple-300 text-xs">
+                      {aspiration.progress}%
+                    </span>
+                  </div>
+                  <div className="text-[12px] text-slate-300 font-sans italic leading-relaxed">
+                    {aspiration.target_summary}
+                  </div>
+                  {aspiration.progress >= 100 ? (
+                    <div className="text-[12px] font-bold text-emerald-400 pt-1 border-t border-slate-800 flex items-center gap-1 animate-pulse">
+                      ✨ Tâm nguyện đã trọn vẹn! Bấm để nâng cấp khát vọng (+60 Karma vĩnh cửu).
+                    </div>
+                  ) : (
+                    <div className="text-[12px] text-slate-400 pt-1 border-t border-slate-800/80 flex items-center justify-between">
+                      <span>Tiến độ hoàn thành:</span>
+                      <span className="font-bold text-amber-400">{aspiration.progress}% / 100%</span>
+                    </div>
+                  )}
+                </div>
+              }
+            >
+              <button
+                onClick={() => {
+                  if (aspiration.progress >= 100 || aspiration.is_completed) {
+                    setShowAspirationUpgradeModal(true);
+                  }
+                }}
+                className={`flex items-center gap-2 sm:gap-2.5 px-3 py-1.5 rounded-2xl border transition-all duration-300 group cursor-pointer max-w-full ${
+                  aspiration.progress >= 100 || aspiration.is_completed
+                    ? 'bg-gradient-to-r from-amber-500/20 via-purple-500/20 to-emerald-500/20 border-amber-400/70 text-amber-300 shadow-lg shadow-amber-500/20 animate-pulse'
+                    : 'bg-slate-950/90 hover:bg-slate-900 border-purple-500/35 hover:border-purple-400/60 text-slate-200 shadow-md'
+                }`}
+              >
+                {/* Icon halo */}
+                <div className="w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center shrink-0">
+                  <span className="text-xs">{aspiration.icon || '🔥'}</span>
+                </div>
+
+                <div className="flex flex-col items-start min-w-0 pr-1">
+                  <div className="flex items-center gap-1.5 w-full">
+                    <span className="text-[12px] normal-case tracking-normal text-purple-300 font-extrabold hidden lg:inline">
+                      Khát Vọng:
+                    </span>
+                    <span className="font-bold text-white text-xs truncate max-w-[110px] sm:max-w-[150px] md:max-w-[200px]">
+                      {aspiration.title}
+                    </span>
+                  </div>
+
+                  {/* Subtext description on medium+ screens */}
+                  <div className="text-[12px] text-slate-400 font-sans italic truncate max-w-[110px] sm:max-w-[150px] md:max-w-[200px] hidden sm:block">
+                    {aspiration.target_summary}
+                  </div>
+                </div>
+
+                {/* Progress Mini Meter with Glow */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <div className="w-14 sm:w-20 md:w-28 h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        aspiration.progress >= 100
+                          ? 'bg-gradient-to-r from-amber-400 to-emerald-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
+                          : 'bg-gradient-to-r from-purple-500 via-indigo-400 to-amber-300'
+                      }`}
+                      style={{ width: `${Math.min(100, aspiration.progress)}%` }}
+                    />
+                  </div>
+
+                  <span className="font-sans tabular-nums font-bold text-xs text-amber-300 shrink-0">
+                    {aspiration.progress}%
+                  </span>
+                </div>
+
+                {aspiration.progress >= 100 && (
+                  <span className="text-[12px] font-bold px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 normal-case tracking-normal animate-bounce shadow-md shrink-0">
+                    Thăng Hạng
+                  </span>
+                )}
+              </button>
+            </Tooltip>
+          )}
+        </div>
+
       </header>
 
       {/* Main Container: Dynamic View Router */}
       <main className="flex-1 max-w-[1720px] w-full mx-auto p-3 md:p-5 z-10 relative">
         {/* 1. Trang Chủ (Home Portal) View - Luôn tích hợp toàn bộ Gia Phả các kiếp */}
-        {activeView === 'home' && (
+        {errorMsg && <div role="alert" className="mb-4 rounded-xl border border-rose-700 bg-slate-900 p-4 text-rose-200">
+          <p>{errorMsg}</p><button onClick={() => loadState()} className="mt-2 rounded-lg bg-indigo-600 px-4 py-2 text-white">Thử tải lại tiến trình</button>
+        </div>}
+        {loading && !character && <div role="status" className="p-8 text-center text-slate-300">Đang tải tiến trình đã lưu…</div>}
+        {activeView === 'home' && !loading && !errorMsg && (
           <LifeGraphHomePortal
             character={character}
             playerAccount={playerAccount}
@@ -1458,9 +1461,9 @@ export default function LifeGraphPage() {
                   <div>
                     <div className="text-xs md:text-sm font-bold text-white flex items-center gap-2">
                       <span>Cấy Ghép Y Tế Ngầm (Transhumanism Surgery)</span>
-                      <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">VIP Black-market</span>
+                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">VIP Black-market</span>
                     </div>
-                    <div className="text-[11px] text-slate-300 mt-0.5">
+                    <div className="text-[12px] text-slate-300 mt-0.5">
                       Đánh đổi $8.000.000 lấy công nghệ đóng băng suy thoái sinh học 10 năm. Rủi ro 50% tử vong ngay tại bàn mổ.
                     </div>
                   </div>
@@ -1468,7 +1471,7 @@ export default function LifeGraphPage() {
                 <button
                   onClick={handleTranshumanismSurgery}
                   disabled={loading}
-                  className="py-2 px-4 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-cyan-600/25 active:scale-95 shrink-0"
+                  className="py-2 px-4 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-cyan-600/25 active:scale-95 shrink-0"
                 >
                   Tiến Hành ($8M)
                 </button>
@@ -1487,9 +1490,45 @@ export default function LifeGraphPage() {
               onOpen3DInspector={() => setShow3DInspectorModal(true)}
             />
 
-            
 
-            /* 3-Column Responsive Grid Cockpit (Luôn duy trì bố cục 3 cột vững chãi) */
+            {/* View Mode Switcher: 3D Interactive Scene vs Cockpit Dashboard */}
+            <div className="flex items-center justify-between p-2 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md mb-4 flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setGameMode('2d_scene')}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
+                    gameMode === '2d_scene'
+                      ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/30'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <span>🎭 Khám Phá & Nhập Vai 3D</span>
+                  <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-400/30 text-[9px] font-mono">
+                    3D LIVE
+                  </span>
+                </button>
+                <button
+                  onClick={() => setGameMode('cockpit')}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
+                    gameMode === 'cockpit'
+                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <span>📋 Quản Lý Cuộc Sống & AP</span>
+                </button>
+              </div>
+              <span className="text-[12px] text-slate-400 hidden sm:inline">
+                {gameMode === '2d_scene' ? "Khám phá bối cảnh 3D & thu thập manh mối, rồi chọn hành động." : "Theo dõi chỉ số và các hoạt động của nhân vật."}
+              </span>
+            </div>
+
+            {gameMode === '2d_scene' ? (
+              <div className="mb-6">
+                <InteractiveScene2D onScenarioResolved={() => loadState()} character={character} onAdvanceYear={() => submitInteraction({ advance_only: true })} />
+              </div>
+            ) : (
+              /* 3-Column Responsive Grid Cockpit */
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
               {/* Left Column: Sticky Profile Sidebar (3 cols) */}
               <div className="order-2 lg:order-1 lg:col-span-3 min-w-0 w-full">
@@ -1511,44 +1550,6 @@ export default function LifeGraphPage() {
 
               {/* Center Column: AP Hub & Life Dilemmas (6 cols) */}
               <div className="order-1 lg:order-2 lg:col-span-6 flex flex-col gap-4 min-w-0 w-full">
-                {/* View Mode Switcher inside Center Column */}
-                <div className="flex items-center justify-between p-2 rounded-2xl bg-slate-900/90 border border-slate-800 backdrop-blur-md flex-wrap gap-2 shadow-lg">
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setGameMode('2d_scene')}
-                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-                        gameMode === '2d_scene'
-                          ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/30'
-                          : 'text-slate-400 hover:text-white'
-                      }`}
-                    >
-                      <span>🎭 Khám Phá & Nhập Vai 3D</span>
-                      <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-400/30 text-[9px] font-mono">
-                        3D LIVE
-                      </span>
-                    </button>
-                    <button
-                      onClick={() => setGameMode('cockpit')}
-                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-                        gameMode === 'cockpit'
-                          ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
-                          : 'text-slate-400 hover:text-white'
-                      }`}
-                    >
-                      <span>📜 Quản Lý Cuộc Sống & AP</span>
-                    </button>
-                  </div>
-                  <span className="text-[10px] text-slate-400 hidden sm:inline">
-                    {gameMode === '2d_scene' ? "Khám phá bối cảnh 3D & thu thập manh mối" : "Quản lý hành động tổng hợp"}
-                  </span>
-                </div>
-
-                {gameMode === '2d_scene' ? (
-                  <div className="w-full">
-                    <InteractiveScene2D onScenarioResolved={() => loadState()} character={character} />
-                  </div>
-                ) : (
-                  <>
                 {/* Strategic Action Points (AP) Hub (Đẩy lên trên cùng, tối ưu không gian) */}
                 {character && (
                   <ActionPointHub
@@ -1573,7 +1574,7 @@ export default function LifeGraphPage() {
                     onNetwork={handleNetworkAction}
                     onTimeSkip={handleTimeSkipContinue}
                     onOpenSkillHub={() => setShowSkillSelector(true)}
-                    onLaunchMiniGame={(type) => setActiveMiniGame(type)}
+                    onLaunchMiniGame={(type) => launchMiniGame(type)}
                     hiddenFlags={character.hidden_flags || []}
                     isLoading={loading}
                   />
@@ -1585,24 +1586,24 @@ export default function LifeGraphPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-xs">📖</span>
-                        <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">
+                        <span className="text-xs font-bold text-amber-300 normal-case tracking-normal">
                           Kịch Bản Trọng Tâm: Chương 1 · Giữ Nghề Hay Đổi Đời?
                         </span>
                       </div>
                       <button
                         onClick={() => setGameMode('2d_scene')}
-                        className="px-2.5 py-1 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 text-[11px] font-bold flex items-center gap-1 transition"
+                        className="px-2.5 py-1 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 text-[12px] font-bold flex items-center gap-1 transition"
                       >
                         <span>Mở Cảnh 2D</span>
                         <Play className="w-3 h-3 fill-current" />
                       </button>
                     </div>
 
-                    <p className="text-xs text-slate-300 font-serif leading-relaxed">
+                    <p className="text-xs text-slate-300 font-sans leading-relaxed">
                       Minh rủ bạn lập công ty AI với 35% cổ phần. Trong khi đó, sếp Hùng đề xuất thăng chức Tech Lead (+30% lương), còn Mai mong muốn sự an toàn tài chính.
                     </p>
 
-                    <div className="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px] text-slate-400">
+                    <div className="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[12px] text-slate-400">
                       <span>Nhân vật liên quan: Mai, Minh, Anh Hùng</span>
                       <button
                         onClick={() => setGameMode('2d_scene')}
@@ -1620,8 +1621,6 @@ export default function LifeGraphPage() {
                 }`}>
                   {renderInteractionComponent()}
                 </div>
-                  </>
-                )}
               </div>
 
               {/* Right Column: Sticky Life Chronicle & Narrative Feed + Annual Digest (3 cols) */}
@@ -1633,16 +1632,18 @@ export default function LifeGraphPage() {
                   currentAge={character?.age || 0}
                   annualDigest={annualDigest}
                   nationality={character?.nationality}
-                  onLaunchMiniGame={(type) => setActiveMiniGame(type)}
+                  onLaunchMiniGame={(type) => launchMiniGame(type)}
                   onCloseDigest={() => setAnnualDigest(null)}
                   onOpenAssets={() => setShowAssetModal(true)}
                   onOpenFamily={() => setShowFamilyModal(true)}
                 />
               </div>
             </div>
+            )}
           </>
         )}
       </main>
     </div>
   );
 }
+

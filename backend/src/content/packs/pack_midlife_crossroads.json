@@ -101,36 +101,36 @@
             "stat": "IQ",
             "target_dc": 13,
             "bonus_traits": [
-              "Tư duy chiến lược",
-              "Bản lĩnh tài chính"
+              "bộ_não_kỹ_thuật",
+              "trực_giác_kinh_doanh"
             ]
           },
           "outcomes": {
             "critical_success": {
               "narration": "Thương vụ liên doanh thắng lớn! Bạn đưa doanh nghiệp bước vào danh sách tinh hoa, tài sản tăng vọt.",
-              "stat_deltas": {
-                "cash": 500000,
-                "karma": 15,
-                "burnout": 15
-              },
               "commitments": [
                 "Thủ lĩnh đế chế thương mại"
-              ]
+              ],
+              "effects": {
+                "cash_delta": 500000,
+                "karma_delta": 15,
+                "burnout_delta": 15
+              }
             },
             "success": {
               "narration": "Mở rộng thành công bước đầu, doanh thu tăng trưởng vững vàng dù áp lực công việc gia tăng.",
-              "stat_deltas": {
-                "cash": 200000,
-                "burnout": 10
-              },
               "commitments": [
                 "Gia sản tăng trưởng ổn định"
-              ]
+              ],
+              "effects": {
+                "cash_delta": 200000,
+                "burnout_delta": 10
+              }
             },
             "failure": {
               "narration": "Biến động thị trường khiến dự án chậm tiến độ, gánh nặng công việc khiến bạn kiệt sức.",
-              "stat_deltas": {
-                "burnout": 20
+              "effects": {
+                "burnout_delta": 20
               }
             }
           }
@@ -147,14 +147,14 @@
           "outcomes": {
             "success": {
               "narration": "Ngôi nhà luôn rộn rã tiếng cười. Con cái noi gương hiếu học và gia đạo hưng thịnh vững bền.",
-              "stat_deltas": {
-                "karma": 20,
-                "burnout": -20,
-                "vitality": 5
-              },
               "commitments": [
                 "Gia phong mẫu mực, gia đạo hưng long"
-              ]
+              ],
+              "effects": {
+                "karma_delta": 20,
+                "burnout_delta": -20,
+                "vitality_delta": 5
+              }
             }
           }
         },
@@ -168,18 +168,34 @@
           "outcomes": {
             "success": {
               "narration": "Sức khỏe phục hồi rõ rệt! Thần thái minh mẫn, huyết áp ổn định và sinh mệnh được bảo tồn nguyên vẹn.",
-              "stat_deltas": {
-                "vitality": 15,
-                "burnout": -30,
-                "karma": 5
-              },
               "commitments": [
                 "Dưỡng sinh tráng kiện"
-              ]
+              ],
+              "effects": {
+                "vitality_delta": 15,
+                "burnout_delta": -30,
+                "karma_delta": 5
+              }
             }
           }
         }
-      ]
+      ],
+      "priority": 100,
+      "completion_flag": "midlife_resolved",
+      "knowledge_labels": {
+        "joint_venture_expansion_data": {
+          "label": "Bàn đàm phán mở rộng thị trường",
+          "desc": "Dự án liên doanh này có thể nâng định giá tài sản lên gấp đôi, nhưng đòi hỏi bạn phải túc trực công tác nước ngoài ít nhất 2 năm."
+        },
+        "midlife_health_warning": {
+          "label": "Báo cáo kiểm toán & Sức khỏe",
+          "desc": "Chỉ số áp lực tim mạch và Burnout đang ở mức báo động. Bác sĩ khuyến cáo bạn cần giảm giờ làm để bảo vệ tính mạng."
+        },
+        "family_harmony_priority": {
+          "label": "Trò chuyện cùng người thân",
+          "desc": "Tiền bạc bao nhiêu cũng không bằng bữa cơm quây quần ấm êm. Con cái lớn rồi, chúng cần bạn làm gương và chia sẻ."
+        }
+      }
     }
   ]
 }

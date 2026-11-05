@@ -87,6 +87,7 @@ interface ScenarioData {
 
 interface InteractiveScene2DProps {
   onScenarioResolved?: (result: any) => void;
+  onAdvanceYear?: () => void;
   character?: any;
 }
 

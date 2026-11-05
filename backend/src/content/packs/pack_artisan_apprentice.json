@@ -16,10 +16,12 @@
         "merchant": "Bà Triệu (Nhà sưu tầm cổ vật)"
       },
       "prerequisites": {
-        "min_age": 20,
+        "min_age": 18,
         "max_age": 60,
         "required_flags": [],
-        "excluded_flags": ["artisan_trial_completed"]
+        "excluded_flags": [
+          "artisan_trial_completed"
+        ]
       },
       "scenes": [
         {
@@ -90,29 +92,55 @@
           "title": "Canh Lò Cổ Truyền 18 Canh Giờ",
           "stance": "LÝ TRÍ",
           "description": "Tuân thủ nghiêm ngặt bí quyết gia truyền, thức trắng đêm canh nhiệt độ lò để hoàn thiện mẻ gốm.",
-          "knowledge_requirements": ["kiln_temperature_secret", "clay_molding_mastery"],
+          "knowledge_requirements": [
+            "kiln_temperature_secret",
+            "clay_molding_mastery"
+          ],
           "cost_ap": 1,
           "check": {
             "type": "CRAFT",
             "stat": "VITALITY",
             "target_dc": 12,
-            "bonus_traits": ["Tâm lý thép", "Ý chí kiên định"]
+            "bonus_traits": [
+              "tâm_lý_thép",
+              "ý_chí_bất_khuất"
+            ]
           },
           "outcomes": {
             "critical_success": {
               "narration": "Mẻ gốm ra lò với sắc men óng ánh kỳ ảo! Nghệ nhân Bách xúc động trao lại ấn tín kế thừa xưởng gốm cho bạn.",
-              "effects": { "cash_delta": 40000000, "vitality_delta": -10, "karma_delta": 25 },
-              "npc_trust_delta": { "Nghệ nhân Bách": 30, "Bà Triệu": 20 }
+              "effects": {
+                "cash_delta": 1600,
+                "vitality_delta": -10,
+                "karma_delta": 25
+              },
+              "npc_trust_delta": {
+                "Nghệ nhân Bách": 30,
+                "Bà Triệu": 20
+              }
             },
             "success": {
               "narration": "Tác phẩm hoàn thành xuất sắc, được nhà sưu tầm mua lại với giá cao. Bạn được công nhận là thợ chính làng nghề.",
-              "effects": { "cash_delta": 20000000, "vitality_delta": -15, "karma_delta": 15 },
-              "npc_trust_delta": { "Nghệ nhân Bách": 15, "Bà Triệu": 15 }
+              "effects": {
+                "cash_delta": 800,
+                "vitality_delta": -15,
+                "karma_delta": 15
+              },
+              "npc_trust_delta": {
+                "Nghệ nhân Bách": 15,
+                "Bà Triệu": 15
+              }
             },
             "failure": {
               "narration": "Lửa lò non vào rạng sáng khiến một số bình rạn men. Dù chưa hoàn hảo, sư phụ vẫn khen ngợi tinh thần chịu khó của bạn.",
-              "effects": { "vitality_delta": -20, "burnout_delta": 15, "karma_delta": 10 },
-              "npc_trust_delta": { "Nghệ nhân Bách": 5 }
+              "effects": {
+                "vitality_delta": -20,
+                "burnout_delta": 15,
+                "karma_delta": 10
+              },
+              "npc_trust_delta": {
+                "Nghệ nhân Bách": 5
+              }
             }
           },
           "commitments": [
@@ -124,7 +152,23 @@
             }
           ]
         }
-      ]
+      ],
+      "priority": 10,
+      "completion_flag": "artisan_trial_completed",
+      "knowledge_labels": {
+        "kiln_temperature_secret": {
+          "label": "Thỉnh giáo Nghệ nhân Bách",
+          "desc": "Nghề gốm cốt ở tâm tịnh. Mẻ men hỏa biến này cần giữ lò chuẩn 1280 độ suốt 18 canh giờ, sơ suất là hỏng cả mẻ."
+        },
+        "clay_molding_mastery": {
+          "label": "Bàn xoay vuốt gốm",
+          "desc": "Độ ẩm của đất và lực miết ngón tay quyết định độ thanh thoát của chiếc bình cổ."
+        },
+        "exhibition_sponsorship_offer": {
+          "label": "Gặp nhà sưu tầm",
+          "desc": "Nếu vuốt được dáng bình hoa lam chuẩn phong cách thế kỷ 15, tôi sẽ tài trợ mở gian triển lãm tại Tuần lễ Văn hóa."
+        }
+      }
     }
   ]
 }

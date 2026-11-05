@@ -141,7 +141,7 @@ export default function LogicCircuitMiniGame({
             </div>
 
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40 font-bold">
+              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40 font-bold">
                 Kỳ Thi Sát Hạch Cấp {targetLevel}: {targetLevel === 1 ? 'Kỹ Sư Tập Sự' : targetLevel === 2 ? 'Chuyên Gia Thuật Toán' : 'Đại Sư Công Nghệ'}
               </span>
             </div>
@@ -157,14 +157,14 @@ export default function LogicCircuitMiniGame({
 
             {/* How to play card */}
             <div className="w-full bg-slate-900/90 border border-slate-800 rounded-2xl p-4 mb-4 text-left space-y-2 text-xs">
-              <div className="font-bold text-sky-400 flex items-center gap-1.5 uppercase text-[11px] tracking-wider">
+              <div className="font-bold text-sky-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
                 <Sparkles className="w-4 h-4" /> Yêu Cầu & Thử Thách Cấp {targetLevel}:
               </div>
-              <p className="text-slate-300 text-[11px]">
+              <p className="text-slate-300 text-[12px]">
                 Nhấp vào từng cổng ({gateNames.join(', ')}) để đảo trạng thái (Bật/Tắt). Khi toàn bộ khớp với sơ đồ chuẩn, bóng đèn trung tâm sẽ lập tức phát sáng!
               </p>
               {targetLevel >= 2 && (
-                <div className="p-2 rounded-xl bg-amber-950/40 border border-amber-500/30 text-[11px] text-amber-300 flex items-center gap-2">
+                <div className="p-2 rounded-xl bg-amber-950/40 border border-amber-500/30 text-[12px] text-amber-300 flex items-center gap-2">
                   <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
                   <span>Cảnh báo cơ chế nâng cao: Có cổng logic nghịch đảo liên kết, bật một cổng có thể ảnh hưởng đến cổng kế bên!</span>
                 </div>
@@ -179,7 +179,7 @@ export default function LogicCircuitMiniGame({
                 setIsPowered(false);
                 setStage('playing');
               }}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-sky-500/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-sky-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <Play className="w-4 h-4 fill-current" />
               <span>Bắt Đầu Đấu Mạch ({initialTime} Giây)</span>
@@ -195,7 +195,7 @@ export default function LogicCircuitMiniGame({
               <span className="px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-300 font-medium border border-sky-500/20 flex items-center gap-1.5">
                 <Cpu className="w-3.5 h-3.5" /> Bảng Mạch Cấp {targetLevel} ({totalSwitches} Cổng)
               </span>
-              <div className="flex items-center gap-2 font-mono">
+              <div className="flex items-center gap-2 font-sans tabular-nums">
                 <span className="text-slate-400">Thời gian:</span>
                 <span className={`px-2.5 py-0.5 rounded font-bold ${
                   timeLeft <= 4 ? 'bg-rose-500/20 text-rose-400 animate-pulse' : 'bg-amber-500/20 text-amber-300'
@@ -215,7 +215,7 @@ export default function LogicCircuitMiniGame({
                 }`}>
                   {isPowered ? '💡' : '🔌'}
                 </div>
-                <span className={`text-[11px] font-mono font-bold mt-2 ${isPowered ? 'text-amber-300 animate-bounce' : 'text-slate-500'}`}>
+                <span className={`text-[12px] font-sans tabular-nums font-bold mt-2 ${isPowered ? 'text-amber-300 animate-bounce' : 'text-slate-500'}`}>
                   {isPowered ? "MẠCH ĐÃ THÔNG NGUỒN!" : "ĐANG CHỜ TÍN HIỆU ĐÚNG..."}
                 </span>
               </div>
@@ -223,9 +223,9 @@ export default function LogicCircuitMiniGame({
             </div>
 
             {/* Guide hint */}
-            <div className="text-[11px] text-slate-400 mb-2.5 text-center">
+            <div className="text-[12px] text-slate-400 mb-2.5 text-center">
               Mục tiêu logic: {gateNames.map((name, idx) => (
-                <span key={name} className="font-mono text-sky-300 mr-1.5">
+                <span key={name} className="font-sans tabular-nums text-sky-300 mr-1.5">
                   [{name}: {targetConfig[idx] ? 'Bật' : 'Tắt'}]
                 </span>
               ))}
@@ -248,9 +248,9 @@ export default function LogicCircuitMiniGame({
                         : 'bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-700'
                     }`}
                   >
-                    <span className="text-[10px] font-mono font-bold">Cổng {name}</span>
+                    <span className="text-[12px] font-sans tabular-nums font-bold">Cổng {name}</span>
                     <Zap className={`w-4 h-4 ${isOn ? 'text-sky-400 animate-pulse' : 'text-slate-600'}`} />
-                    <span className={`text-[9.5px] font-mono font-bold ${isMatching ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    <span className={`text-[12px] font-sans tabular-nums font-bold ${isMatching ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {isOn ? 'ON' : 'OFF'}
                     </span>
                   </button>
@@ -293,7 +293,7 @@ export default function LogicCircuitMiniGame({
 
             <button
               onClick={handleReturnToLife}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-sky-500/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-sky-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <span>Xác Nhận & Tiếp Tục Cuộc Đời</span>
               <ArrowRight className="w-4 h-4" />
@@ -304,3 +304,4 @@ export default function LogicCircuitMiniGame({
     </div>
   );
 }
+

@@ -20,7 +20,9 @@
         "min_age": 25,
         "max_age": 35,
         "required_flags": [],
-        "excluded_flags": ["career_crossroads_resolved"]
+        "excluded_flags": [
+          "career_crossroads_resolved"
+        ]
       },
       "scenes": [
         {
@@ -151,29 +153,61 @@
           "title": "Làm Cố Vấn Kỹ Thuật Ngoài Giờ",
           "stance": "LÝ TRÍ",
           "description": "Giữ công việc tập đoàn nhận lương ổn định, dành 15 giờ/tuần hỗ trợ Minh đổi lấy 15% cổ phần cố vấn.",
-          "knowledge_requirements": ["corporate_promotion_offer", "minh_equity_offer"],
+          "knowledge_requirements": [
+            "corporate_promotion_offer",
+            "minh_equity_offer"
+          ],
           "cost_ap": 1,
           "check": {
             "type": "PERSUASION",
             "stat": "IQ",
             "target_dc": 12,
-            "bonus_traits": ["Tư duy logic", "Trực giác kinh doanh"]
+            "bonus_traits": [
+              "bộ_não_kỹ_thuật",
+              "trực_giác_kinh_doanh"
+            ]
           },
           "outcomes": {
             "critical_success": {
               "narration": "Minh và sếp Hùng đều ủng hộ! Bạn phân bổ thời gian hợp lý, Minh có kiến trúc chuẩn còn Mai yên tâm. Nhận 15% cổ phần và tăng 15% lương.",
-              "effects": { "cash_delta": 30000000, "vitality_delta": -5, "burnout_delta": 10, "karma_delta": 15 },
-              "npc_trust_delta": { "Minh": 15, "Mai": 20, "Anh Hùng": 10 }
+              "effects": {
+                "cash_delta": 30000000,
+                "vitality_delta": -5,
+                "burnout_delta": 10,
+                "karma_delta": 15
+              },
+              "npc_trust_delta": {
+                "Minh": 15,
+                "Mai": 20,
+                "Anh Hùng": 10
+              }
             },
             "success": {
               "narration": "Minh đồng ý phương án cố vấn. Bạn bắt đầu lịch làm việc kép bận rộn nhưng vững vàng về tài chính.",
-              "effects": { "cash_delta": 15000000, "vitality_delta": -10, "burnout_delta": 18, "karma_delta": 10 },
-              "npc_trust_delta": { "Minh": 5, "Mai": 15, "Anh Hùng": 5 }
+              "effects": {
+                "cash_delta": 15000000,
+                "vitality_delta": -10,
+                "burnout_delta": 18,
+                "karma_delta": 10
+              },
+              "npc_trust_delta": {
+                "Minh": 5,
+                "Mai": 15,
+                "Anh Hùng": 5
+              }
             },
             "failure": {
               "narration": "Khối lượng công việc hai nơi khiến bạn kiệt sức. Cần rèn luyện thêm kỹ năng quản lý thời gian.",
-              "effects": { "vitality_delta": -15, "burnout_delta": 30, "karma_delta": 5 },
-              "npc_trust_delta": { "Minh": -10, "Mai": 5, "Anh Hùng": -10 }
+              "effects": {
+                "vitality_delta": -15,
+                "burnout_delta": 30,
+                "karma_delta": 5
+              },
+              "npc_trust_delta": {
+                "Minh": -10,
+                "Mai": 5,
+                "Anh Hùng": -10
+              }
             }
           },
           "commitments": [
@@ -182,14 +216,19 @@
               "to_npc": "Minh",
               "title": "Hỗ trợ kỹ thuật 15 giờ/tuần cho startup",
               "due_ticks": 1,
-              "consequence_on_break": { "trust_penalty": 30, "flag": "broken_promise_minh" }
+              "consequence_on_break": {
+                "trust_penalty": 30,
+                "flag": "broken_promise_minh"
+              }
             },
             {
               "id": "com_mai_home_savings",
               "to_npc": "Mai",
               "title": "Duy trì tiết kiệm mua nhà 10 triệu/tháng",
               "due_ticks": 1,
-              "consequence_on_break": { "affinity_penalty": 20 }
+              "consequence_on_break": {
+                "affinity_penalty": 20
+              }
             }
           ]
         },
@@ -198,29 +237,58 @@
           "title": "Nghỉ Việc Có Điều Kiện Khi Có Hợp Đồng",
           "stance": "TRÁI TIM",
           "description": "Thương lượng với Minh: Hỗ trợ hoàn thiện bản demo chốt hợp đồng 150M với khách hàng, sau đó mới chính thức nghỉ việc.",
-          "knowledge_requirements": ["market_real_demand_confirmed", "mai_financial_caution"],
+          "knowledge_requirements": [
+            "market_real_demand_confirmed",
+            "mai_financial_caution"
+          ],
           "cost_ap": 1,
           "check": {
             "type": "NEGOTIATION",
             "stat": "CHARISMA",
             "target_dc": 13,
-            "bonus_traits": ["Khí chất lãnh đạo", "Tâm lý thép"]
+            "bonus_traits": [
+              "phong_thái_lãnh_đạo",
+              "tâm_lý_thép"
+            ]
           },
           "outcomes": {
             "critical_success": {
               "narration": "Kế hoạch thuyết phục tuyệt đối! Khách hàng ký hợp đồng 150M sớm. Mai nhìn thấy dòng tiền thật nên hoàn toàn ủng hộ bạn làm Co-founder.",
-              "effects": { "cash_delta": 65000000, "vitality_delta": 0, "burnout_delta": 5, "karma_delta": 20 },
-              "npc_trust_delta": { "Minh": 25, "Mai": 25 }
+              "effects": {
+                "cash_delta": 65000000,
+                "vitality_delta": 0,
+                "burnout_delta": 5,
+                "karma_delta": 20
+              },
+              "npc_trust_delta": {
+                "Minh": 25,
+                "Mai": 25
+              }
             },
             "success": {
               "narration": "Minh chấp nhận mốc thỏa thuận. Sau 2 tháng, hợp đồng được ký kết và bạn bàn giao công việc tại tập đoàn một cách đàng hoàng.",
-              "effects": { "cash_delta": 40000000, "vitality_delta": -8, "burnout_delta": 15, "karma_delta": 15 },
-              "npc_trust_delta": { "Minh": 15, "Mai": 15 }
+              "effects": {
+                "cash_delta": 40000000,
+                "vitality_delta": -8,
+                "burnout_delta": 15,
+                "karma_delta": 15
+              },
+              "npc_trust_delta": {
+                "Minh": 15,
+                "Mai": 15
+              }
             },
             "failure": {
               "narration": "Khách hàng dời lịch ký hợp đồng do cắt giảm ngân sách. Bạn tiếp tục duy trì công việc hiện tại trong khi chuẩn bị thêm.",
-              "effects": { "vitality_delta": -5, "burnout_delta": 12, "karma_delta": 8 },
-              "npc_trust_delta": { "Minh": 5, "Mai": 10 }
+              "effects": {
+                "vitality_delta": -5,
+                "burnout_delta": 12,
+                "karma_delta": 8
+              },
+              "npc_trust_delta": {
+                "Minh": 5,
+                "Mai": 10
+              }
             }
           },
           "commitments": [
@@ -229,7 +297,9 @@
               "to_npc": "Minh",
               "title": "Hoàn thành module bảo mật để chốt hợp đồng",
               "due_ticks": 1,
-              "consequence_on_break": { "trust_penalty": 25 }
+              "consequence_on_break": {
+                "trust_penalty": 25
+              }
             }
           ]
         },
@@ -238,13 +308,17 @@
           "title": "Tiếp Nhận Tech Lead & Kết Nối Đối Tác",
           "stance": "LÝ TRÍ",
           "description": "Thăng tiến tại tập đoàn với mức lương +30%, đồng thời dùng mạng lưới kết nối nhân sự giỏi cho Minh.",
-          "knowledge_requirements": ["corporate_promotion_offer"],
+          "knowledge_requirements": [
+            "corporate_promotion_offer"
+          ],
           "cost_ap": 0,
           "check": {
             "type": "DIPLOMACY",
             "stat": "EQ",
             "target_dc": 10,
-            "bonus_traits": ["Tâm lý thép"]
+            "bonus_traits": [
+              "tâm_lý_thép"
+            ]
           },
           "outcomes": {
             "critical_success": {
@@ -253,16 +327,20 @@
                 "cash_delta": 25000000,
                 "vitality_delta": 5,
                 "burnout_delta": -10,
-                "karma_delta": 15,
-                "delayed_domino": {
-                  "in_years": 1,
-                  "flag": "techlead_bonus_esop",
-                  "cash_delta": 55000000,
-                  "title": "Thưởng Cuối Năm & Kích Hoạt Cổ Phần ESOP",
-                  "milestone_summary": "Sau 1 năm dẫn dắt đội ngũ kỹ thuật ổn định, tập đoàn thưởng hiệu quả năm và kích hoạt gói ESOP 55 triệu đồng!"
-                }
+                "karma_delta": 15
               },
-              "npc_trust_delta": { "Anh Hùng": 30, "Mai": 25, "Minh": 10 }
+              "npc_trust_delta": {
+                "Anh Hùng": 30,
+                "Mai": 25,
+                "Minh": 10
+              },
+              "delayed_domino": {
+                "in_years": 1,
+                "flag": "techlead_bonus_esop",
+                "cash_delta": 55000000,
+                "title": "Thưởng Cuối Năm & Kích Hoạt Cổ Phần ESOP",
+                "milestone_summary": "Sau 1 năm dẫn dắt đội ngũ kỹ thuật ổn định, tập đoàn thưởng hiệu quả năm và kích hoạt gói ESOP 55 triệu đồng!"
+              }
             },
             "success": {
               "narration": "Bạn đảm nhận vị trí Tech Lead với trách nhiệm mới. Minh hiểu lựa chọn của bạn. Thu nhập gia đình tăng trưởng đều đặn.",
@@ -270,21 +348,34 @@
                 "cash_delta": 15000000,
                 "vitality_delta": 0,
                 "burnout_delta": 5,
-                "karma_delta": 10,
-                "delayed_domino": {
-                  "in_years": 1,
-                  "flag": "techlead_bonus_annual",
-                  "cash_delta": 35000000,
-                  "title": "Thưởng Hiệu Quả Tech Lead",
-                  "milestone_summary": "Hoàn thành 1 năm phụ trách kỹ thuật, bạn nhận thưởng hiệu suất năm 35 triệu đồng từ tập đoàn!"
-                }
+                "karma_delta": 10
               },
-              "npc_trust_delta": { "Anh Hùng": 20, "Mai": 20, "Minh": 0 }
+              "npc_trust_delta": {
+                "Anh Hùng": 20,
+                "Mai": 20,
+                "Minh": 0
+              },
+              "delayed_domino": {
+                "in_years": 1,
+                "flag": "techlead_bonus_annual",
+                "cash_delta": 35000000,
+                "title": "Thưởng Hiệu Quả Tech Lead",
+                "milestone_summary": "Hoàn thành 1 năm phụ trách kỹ thuật, bạn nhận thưởng hiệu suất năm 35 triệu đồng từ tập đoàn!"
+              }
             },
             "failure": {
               "narration": "Công việc mới nhiều áp lực quản lý hơn dự tính. Bạn phải dành thêm thời gian thích nghi.",
-              "effects": { "cash_delta": 10000000, "vitality_delta": -10, "burnout_delta": 22, "karma_delta": 5 },
-              "npc_trust_delta": { "Anh Hùng": 10, "Mai": 15, "Minh": -15 }
+              "effects": {
+                "cash_delta": 10000000,
+                "vitality_delta": -10,
+                "burnout_delta": 22,
+                "karma_delta": 5
+              },
+              "npc_trust_delta": {
+                "Anh Hùng": 10,
+                "Mai": 15,
+                "Minh": -15
+              }
             }
           }
         },
@@ -293,13 +384,19 @@
           "title": "Tất Tay Khởi Nghiệp Cùng Minh",
           "stance": "BẢN NĂNG",
           "description": "Nộp đơn thôi việc, trích 50 triệu tiền tiết kiệm góp vốn và toàn tâm cùng Minh dẫn dắt công ty.",
-          "knowledge_requirements": ["minh_equity_offer", "personal_runway_verified"],
+          "knowledge_requirements": [
+            "minh_equity_offer",
+            "personal_runway_verified"
+          ],
           "cost_ap": 2,
           "check": {
             "type": "EXECUTION",
             "stat": "IQ",
             "target_dc": 15,
-            "bonus_traits": ["Gen thiên tài", "Trực giác kinh doanh"]
+            "bonus_traits": [
+              "thiên_tài_toán_học",
+              "trực_giác_kinh_doanh"
+            ]
           },
           "outcomes": {
             "critical_success": {
@@ -308,26 +405,48 @@
                 "cash_delta": 30000000,
                 "vitality_delta": -10,
                 "burnout_delta": 25,
-                "karma_delta": 25,
-                "delayed_domino": {
-                  "in_years": 1,
-                  "flag": "startup_series_seed_funded",
-                  "cash_delta": 120000000,
-                  "title": "Vòng Hạt Giống Series Seed Rót Vốn Thành Công",
-                  "milestone_summary": "Sau 1 năm kiểm chứng thị trường, quỹ đầu tư rót 120 triệu đồng vào quỹ dự phòng Co-founder của bạn!"
-                }
+                "karma_delta": 25
               },
-              "npc_trust_delta": { "Minh": 40, "Mai": 20, "Anh Hùng": -10 }
+              "npc_trust_delta": {
+                "Minh": 40,
+                "Mai": 20,
+                "Anh Hùng": -10
+              },
+              "delayed_domino": {
+                "in_years": 1,
+                "flag": "startup_series_seed_funded",
+                "cash_delta": 120000000,
+                "title": "Vòng Hạt Giống Series Seed Rót Vốn Thành Công",
+                "milestone_summary": "Sau 1 năm kiểm chứng thị trường, quỹ đầu tư rót 120 triệu đồng vào quỹ dự phòng Co-founder của bạn!"
+              }
             },
             "success": {
               "narration": "Khởi đầu gian nan nhưng đầy cảm hứng. Sản phẩm vận hành ổn định, mang lại doanh thu nuôi sống team nhỏ.",
-              "effects": { "cash_delta": 20000000, "vitality_delta": -15, "burnout_delta": 30, "karma_delta": 15 },
-              "npc_trust_delta": { "Minh": 25, "Mai": 10, "Anh Hùng": -15 }
+              "effects": {
+                "cash_delta": 20000000,
+                "vitality_delta": -15,
+                "burnout_delta": 30,
+                "karma_delta": 15
+              },
+              "npc_trust_delta": {
+                "Minh": 25,
+                "Mai": 10,
+                "Anh Hùng": -15
+              }
             },
             "failure": {
               "narration": "Sản phẩm gặp lỗi bảo mật khiến hệ thống gián đoạn. Bạn và Minh phải làm việc ngày đêm để khắc phục và tối ưu lại.",
-              "effects": { "cash_delta": -50000000, "vitality_delta": -25, "burnout_delta": 45, "karma_delta": 10 },
-              "npc_trust_delta": { "Minh": 10, "Mai": -15, "Anh Hùng": -20 }
+              "effects": {
+                "cash_delta": -50000000,
+                "vitality_delta": -25,
+                "burnout_delta": 45,
+                "karma_delta": 10
+              },
+              "npc_trust_delta": {
+                "Minh": 10,
+                "Mai": -15,
+                "Anh Hùng": -20
+              }
             }
           },
           "commitments": [
@@ -336,11 +455,15 @@
               "to_npc": "Minh",
               "title": "Chịu trách nhiệm về kiến trúc hệ thống và an toàn dữ liệu",
               "due_ticks": 2,
-              "consequence_on_break": { "trust_penalty": 40 }
+              "consequence_on_break": {
+                "trust_penalty": 40
+              }
             }
           ]
         }
-      ]
+      ],
+      "priority": 100,
+      "completion_flag": "career_crossroads_resolved"
     }
   ]
 }
