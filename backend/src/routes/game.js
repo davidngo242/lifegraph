@@ -1771,6 +1771,38 @@ router.post('/action/family', async (req, res) => {
       });
     }
 
+    if (action_type === 'family_mentorship') {
+      if (!character.household || character.household.parents_status === 'deceased_or_abandoned' || character.household.parents_status === 'deceased') {
+        return res.status(400).json({ error: "Cha mẹ đã khuất núi, không thể tâm sự định hướng." });
+      }
+      if (character.household.family_mentorship_used === character.age) {
+        return res.status(400).json({ error: "Năm nay bạn đã tâm sự cùng cha mẹ rồi. Hãy trải nghiệm cuộc sống và chia sẻ lại sang năm nhé!" });
+      }
+
+      character.household.family_mentorship_used = character.age;
+      character.burnout = Math.max(0, (character.burnout || 0) - 10);
+      character.karma = Math.min(100, (character.karma || 50) + 8);
+      flags.add("family_guidance_received");
+      character.hidden_flags = Array.from(flags);
+
+      const advice = character.household.family_buff?.description || "Cha mẹ luôn dõi theo và khuyên bạn hãy vững vàng với sự lựa chọn của mình, giữ gìn nhân cách và sức khỏe.";
+      history.push({
+        age: character.age,
+        event: "Tâm Sự Định Hướng Cùng Cha Mẹ",
+        choice: "Lắng nghe lời khuyên: " + advice + " (-10 Burnout, +8 Nghiệp Lực, Vững vàng tâm lý)"
+      });
+      character.history_log = history;
+      await updateCharacter(character.id, character);
+      const updatedRels = await getRelationships(character.id);
+
+      return res.json({
+        success: true,
+        message: "Cha mẹ đã lắng nghe tâm tư và chia sẻ lời khuyên quý giá: " + advice + " (-10 Burnout, +8 Nghiệp Lực).",
+        character,
+        relationships: updatedRels
+      });
+    }
+
     if (action_type === 'family_meal') {
       if (!character.household || character.household.parents_status === 'deceased_or_abandoned' || character.household.parents_status === 'deceased') {
         return res.status(400).json({ error: "Cha mẹ đã khuất núi, không còn bữa cơm sum vầy gia đình." });

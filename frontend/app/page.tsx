@@ -558,6 +558,63 @@ export default function LifeGraphPage() {
     }
   };
 
+  const handleFamilyMentorship = async (): Promise<string> => {
+    try {
+      const res = await fetch(`${API_BASE}/action/family`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action_type: 'family_mentorship' })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || err.error || "Không thể tâm sự cùng cha mẹ.");
+      }
+      const data = await res.json();
+      setCharacter(data.character);
+      if (data.relationships) setRelationships(data.relationships);
+      triggerAvatarReaction('meditating');
+      triggerBannerFeedback({
+        type: 'wellness',
+        title: 'Lời Khuyên Phụ Mẫu',
+        subtitle: 'Vững vàng định hướng và bản lĩnh trước sóng gió',
+        delta: '-10 Burnout, +8 Karma',
+        icon: '💬'
+      });
+      return data.message;
+    } catch (err: any) {
+      setErrorMsg(err.message);
+      return err.message;
+    }
+  };
+
+  const handleHealthCheckup = async (): Promise<string> => {
+    try {
+      const res = await fetch(`${API_BASE}/action/wellness`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action_type: 'medical_checkup' })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || err.error || "Không thể khám tổng quát.");
+      }
+      const data = await res.json();
+      setCharacter(data.character);
+      triggerAvatarReaction('meditating');
+      triggerBannerFeedback({
+        type: 'wellness',
+        title: 'Khám Tổng Quát & Rèn Thể Lực',
+        subtitle: 'Tầm soát thể lực, đẩy lùi nguy cơ bệnh tật',
+        delta: '+20 HP, -25 Burnout',
+        icon: '🩺'
+      });
+      return data.message;
+    } catch (err: any) {
+      setErrorMsg(err.message);
+      return err.message;
+    }
+  };
+
   const handleChildhoodAction = async (actionId: string): Promise<string> => {
     const res = await fetch(`${API_BASE}/action/childhood`, {
       method: 'POST',
@@ -1536,6 +1593,8 @@ export default function LifeGraphPage() {
                   onOpenKarmaSanctum={() => setShowKarmaModal(true)}
                   onOpenAspirationUpgrade={() => setShowAspirationUpgradeModal(true)}
                   onFamilyMeal={handleFamilyMeal}
+                  onFamilyMentorship={handleFamilyMentorship}
+                  onHealthCheckup={handleHealthCheckup}
                 />
               </div>
 

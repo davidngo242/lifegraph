@@ -134,6 +134,40 @@ const KNOWLEDGE_LABELS: { [key: string]: { label: string; icon: string; desc: st
   }
 };
 
+
+const HOTSPOT_LIFE_IMPACTS: { [key: string]: { perk: string; icon: string; category: string } } = {
+  hotspot_baby_blocks: {
+    perk: "Ươm mầm Tư Duy Logic & Nghiên Cứu (+15% tỷ lệ đỗ trường chuyên)",
+    icon: "🧩",
+    category: "Trí Tuệ"
+  },
+  hotspot_parents_embrace: {
+    perk: "Nền tảng Bản Lĩnh Gia Đình & EQ (+15 Karma, kháng stress)",
+    icon: "❤️",
+    category: "Gia Đạo"
+  },
+  hotspot_school_blackboard: {
+    perk: "Kiến thức nền tảng & kỷ luật học đường (+20% điểm sát hạch)",
+    icon: "📚",
+    category: "Học Vấn"
+  },
+  hotspot_desk_study: {
+    perk: "Rèn luyện khả năng tập trung sâu (Deep Work)",
+    icon: "💡",
+    category: "Kỹ Năng"
+  },
+  hotspot_workstation_dualmonitors: {
+    perk: "Làm chủ công nghệ số & thu nhập khởi điểm cao (+30% lương)",
+    icon: "💻",
+    category: "Sự Nghiệp"
+  },
+  hotspot_cafe_counter: {
+    perk: "Mạng lưới đối tác thương trường & quý nhân phù trợ",
+    icon: "🤝",
+    category: "Vốn Xã Hội"
+  }
+};
+
 const cleanWhisper = (text: string) => {
   if (!text) return '';
   return text
@@ -597,6 +631,29 @@ function StageCharacter3D({
 // =========================================================================
 // 3D INTERACTIVE HOTSPOT BEACON PILLAR
 // =========================================================================
+
+function TargetDecal3D({ position }: { position: { x: number; z: number } }) {
+  const ringRef = useRef<THREE.Mesh>(null);
+  useFrame((state) => {
+    if (!ringRef.current) return;
+    const t = state.clock.getElapsedTime();
+    const s = 1 + Math.sin(t * 8) * 0.15;
+    ringRef.current.scale.set(s, s, s);
+  });
+  return (
+    <group position={[position.x, 0, position.z]}>
+      <mesh ref={ringRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
+        <ringGeometry args={[0.22, 0.3, 32]} />
+        <meshBasicMaterial color="#38bdf8" opacity={0.8} transparent />
+      </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.015, 0]}>
+        <circleGeometry args={[0.08, 16]} />
+        <meshBasicMaterial color="#38bdf8" opacity={0.5} transparent />
+      </mesh>
+    </group>
+  );
+}
+
 function HotspotBeacon3D({
   hotspot,
   isVisited,
@@ -963,6 +1020,9 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
             );
           })}
 
+          {/* Target Destination Beacon Marker */}
+          <TargetDecal3D position={target3DPos} />
+
           {/* 3D Rigged Animated Character */}
           <StageCharacter3D
             character={character}
@@ -1038,6 +1098,16 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
             <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-serif italic max-w-3xl">
               "{activeDialogue?.text || scenario.description}"
             </p>
+
+            
+            {/* Future Life Orientation Impact Pill */}
+            {activeDialogue?.hotspot_id && HOTSPOT_LIFE_IMPACTS[activeDialogue.hotspot_id] && (
+              <div className="mt-1 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-indigo-500/15 border border-indigo-500/40 text-indigo-300 text-xs font-medium animate-in fade-in slide-in-from-left-2 w-fit">
+                <Compass className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                <span>Định hướng tương lai: </span>
+                <span className="font-bold">{HOTSPOT_LIFE_IMPACTS[activeDialogue.hotspot_id].perk}</span>
+              </div>
+            )}
 
             {/* Clue Discovered Notification Banner */}
             {activeDialogue?.granted_knowledge && (
