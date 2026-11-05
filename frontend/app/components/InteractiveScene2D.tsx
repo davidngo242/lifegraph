@@ -9,6 +9,7 @@ import {
   Briefcase,
   Coffee,
   Heart,
+  Flame,
   Sparkles,
   BookOpen,
   CheckCircle,
@@ -89,6 +90,7 @@ interface InteractiveScene2DProps {
   onScenarioResolved?: (result: any) => void;
   onAdvanceYear?: () => void;
   character?: any;
+  onBackToCockpit?: () => void;
 }
 
 const KNOWLEDGE_LABELS: { [key: string]: { label: string; icon: string; desc: string } } = {
@@ -709,7 +711,7 @@ function HotspotBeacon3D({
 // =========================================================================
 // MAIN INTERACTIVE SCENE COMPONENT (Unified 3D Stage & Story HUD)
 // =========================================================================
-export default function InteractiveScene2D({ onScenarioResolved, character }: InteractiveScene2DProps) {
+export default function InteractiveScene2D({ onScenarioResolved, character, onBackToCockpit }: InteractiveScene2DProps) {
   const [mounted, setMounted] = useState(false);
   const [scenario, setScenario] = useState<ScenarioData | null>(null);
   const [currentSceneId, setCurrentSceneId] = useState<string>("scene_nursery");
@@ -910,9 +912,23 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
           ========================================================================= */}
       <div className="relative w-full h-[360px] md:h-[420px] bg-slate-950 overflow-hidden">
         {/* Floating Top Control HUD */}
-        <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between gap-2 pointer-events-none">
-          {/* Left: Scenario & Scene Identity */}
-          <div className="flex items-center gap-2 pointer-events-auto">
+        <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between gap-2 pointer-events-none flex-wrap">
+          {/* Left: Return to Cockpit & Scenario Identity */}
+          <div className="flex items-center gap-2 pointer-events-auto flex-wrap">
+            {onBackToCockpit && (
+              <button
+                onClick={onBackToCockpit}
+                className="px-2.5 py-1 rounded-xl bg-gradient-to-r from-indigo-950/90 to-purple-950/90 hover:from-indigo-900 hover:to-purple-900 text-indigo-200 hover:text-white border border-indigo-500/40 text-[11px] font-bold flex items-center gap-1.5 transition active:scale-95 shadow-md shrink-0"
+              >
+                <span>⬅️ Bàn Điều Hành Cuộc Sống</span>
+                {(character?.action_points || 0) > 0 && (
+                  <span className="px-1 py-0.2 rounded bg-emerald-500/30 text-emerald-300 text-[9px] font-mono">
+                    {character.action_points} AP
+                  </span>
+                )}
+              </button>
+            )}
+
             <span className="px-2.5 py-1 rounded-xl bg-purple-950/80 text-purple-300 border border-purple-500/40 text-[10.5px] font-mono font-bold backdrop-blur-md shadow-md flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-purple-400" />
               <span>{scenario.title}</span>
@@ -937,8 +953,23 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
             </div>
           </div>
 
-          {/* Right: Quick AP & Clues Indicators */}
-          <div className="flex items-center gap-2 pointer-events-auto">
+          {/* Center / Right: Live Character Life HUD & Quick AP/Clues Indicators */}
+          <div className="flex items-center gap-2 pointer-events-auto flex-wrap">
+            {/* Live Character Stats Cockpit Bar inside 3D */}
+            <div className="hidden lg:flex items-center gap-2.5 px-3 py-1 rounded-xl bg-slate-950/90 border border-slate-800/80 backdrop-blur-md text-[11px] font-medium font-sans shadow-md">
+              <span className="text-rose-400 flex items-center gap-1 font-bold" title="Sinh Lực Hiện Tại">
+                <Heart className="w-3.5 h-3.5 fill-rose-400/30 text-rose-400" /> {character?.vitality ?? 80}/{character?.max_vitality ?? 100}
+              </span>
+              <span className="text-slate-700">•</span>
+              <span className="text-amber-400 flex items-center gap-1 font-bold" title="Căng Thẳng">
+                <Flame className="w-3.5 h-3.5 text-amber-400" /> {character?.burnout ?? 0}%
+              </span>
+              <span className="text-slate-700">•</span>
+              <span className="text-emerald-400 font-mono font-bold" title="Tiền Mặt">
+                ${(Number(character?.cash) || 0).toLocaleString()}
+              </span>
+            </div>
+
             <button
               onClick={() => setShowJournal(true)}
               className="px-2.5 py-1 rounded-xl bg-amber-950/80 text-amber-300 border border-amber-500/40 text-[10.5px] font-mono font-bold backdrop-blur-md shadow-md flex items-center gap-1.5 hover:bg-amber-900/60 transition"
@@ -948,7 +979,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
             </button>
 
             <span className="px-2.5 py-1 rounded-xl bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 text-[10.5px] font-mono font-bold backdrop-blur-md shadow-md">
-              ⚡ {actionPoints} AP
+              ⚡ {character?.action_points ?? actionPoints} AP
             </span>
 
             <button

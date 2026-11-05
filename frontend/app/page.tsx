@@ -30,6 +30,7 @@ import LifeGraphHomePortal from './components/LifeGraphHomePortal';
 import AncestralMemorialModal from './components/AncestralMemorialModal';
 import MmoWeatherBar from './components/MmoWeatherBar';
 import LifeTarotCardModal from './components/LifeTarotCardModal';
+import GameGuideModal from './components/GameGuideModal';
 import Tooltip from './components/Tooltip';
 
 // Non-binary Interaction Components (V5 & V6)
@@ -38,7 +39,7 @@ import IllusionCard from './components/interactions/IllusionCard';
 import TrilemmaCard from './components/interactions/TrilemmaCard';
 import TimeSkipCard from './components/interactions/TimeSkipCard';
 
-import { Sparkles, Volume2, VolumeX, ShieldAlert, Cpu, Globe2, AlertTriangle, Activity, Home, Feather, Play } from 'lucide-react';
+import { Sparkles, Volume2, VolumeX, ShieldAlert, Cpu, Globe2, AlertTriangle, Activity, Home, Feather, Play, BookOpen } from 'lucide-react';
 
 const API_BASE = '/api/game';
 
@@ -82,8 +83,9 @@ export default function LifeGraphPage() {
   const [showKarmaModal, setShowKarmaModal] = useState<boolean>(false);
   const [showSkillSelector, setShowSkillSelector] = useState<boolean>(false);
   const [showTarotCardModal, setShowTarotCardModal] = useState<boolean>(false);
+  const [showGuideModal, setShowGuideModal] = useState<boolean>(false);
   const [activeView, setActiveView] = useState<'home' | 'game' | 'lineage'>('home');
-  const [gameMode, setGameMode] = useState<'2d_scene' | 'cockpit'>('2d_scene');
+  const [gameMode, setGameMode] = useState<'2d_scene' | 'cockpit'>('cockpit');
   const [lineage, setLineage] = useState<any[]>([]);
   const [nirvanaBanner, setNirvanaBanner] = useState<any | null>(null);
   const [dismissedAlerts, setDismissedAlerts] = useState<string[]>([]);
@@ -1187,6 +1189,12 @@ export default function LifeGraphPage() {
         />
       )}
 
+      {/* Game Guide & Survival Manual Modal */}
+      <GameGuideModal
+        isOpen={showGuideModal}
+        onClose={() => setShowGuideModal(false)}
+      />
+
       {/* 3D Avatar 360 Fullscreen Inspector Modal */}
       {show3DInspectorModal && character && (
         <AvatarInspectorModal
@@ -1469,6 +1477,32 @@ export default function LifeGraphPage() {
 
         {/* 3. Right Zone: Đền Thờ Nghiệp Quả + Notifications + Audio */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
+          {/* Cẩm Nang Cuộc Đời (Game Guide) Header Button */}
+          <Tooltip
+            position="bottom"
+            content={
+              <div className="p-0.5">
+                <div className="font-bold text-amber-300 text-xs flex items-center gap-1 mb-0.5">
+                  <BookOpen className="w-3.5 h-3.5" /> Cẩm Nang Cuộc Đời
+                </div>
+                <div className="text-[12px] text-slate-300">
+                  Xem toàn bộ luật chơi, cơ chế sinh tử, cây kỹ năng RPG và bí kíp sống còn.
+                </div>
+              </div>
+            }
+          >
+            <button
+              onClick={() => setShowGuideModal(true)}
+              className="py-1 px-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-purple-600/20 to-indigo-600/20 hover:from-amber-500/30 hover:to-purple-600/30 border border-amber-400/50 hover:border-amber-300 text-amber-200 hover:text-white text-xs font-bold flex items-center gap-1.5 transition active:scale-95 shadow-md shadow-amber-950/30"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-amber-300" />
+              <span>Cẩm Nang</span>
+              <span className="text-[8.5px] font-mono px-1 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-pulse">
+                GUIDE
+              </span>
+            </button>
+          </Tooltip>
+
           {/* Đền Thờ Nghiệp Quả (Karma Sanctum) Header Button */}
           <Tooltip
             position="bottom"
@@ -1619,22 +1653,9 @@ export default function LifeGraphPage() {
             />
 
 
-            {/* View Mode Switcher: 3D Interactive Scene vs Cockpit Dashboard */}
+            {/* View Mode Switcher: Cockpit Dashboard vs 3D Interactive Scene */}
             <div className="flex items-center justify-between p-2 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md mb-4 flex-wrap gap-2">
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setGameMode('2d_scene')}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-                    gameMode === '2d_scene'
-                      ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/30'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <span>🎭 Khám Phá & Nhập Vai 3D</span>
-                  <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-400/30 text-[9px] font-mono">
-                    3D LIVE
-                  </span>
-                </button>
                 <button
                   onClick={() => setGameMode('cockpit')}
                   className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
@@ -1644,16 +1665,39 @@ export default function LifeGraphPage() {
                   }`}
                 >
                   <span>📋 Quản Lý Cuộc Sống & AP</span>
+                  {(character?.action_points || 0) > 0 && (
+                    <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 text-[9px] font-mono font-bold">
+                      {character.action_points} AP
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={() => setGameMode('2d_scene')}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
+                    gameMode === '2d_scene'
+                      ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/30'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <span>🎭 Không Gian Sống & Bối Cảnh 3D</span>
+                  <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-400/30 text-[9px] font-mono">
+                    3D LIVE
+                  </span>
                 </button>
               </div>
               <span className="text-[12px] text-slate-400 hidden sm:inline">
-                {gameMode === '2d_scene' ? "Khám phá bối cảnh 3D & thu thập manh mối, rồi chọn hành động." : "Theo dõi chỉ số và các hoạt động của nhân vật."}
+                {gameMode === 'cockpit' ? "Trung tâm điều hành cuộc đời: theo dõi chỉ số, tiêu AP, cây kỹ năng và tài sản." : "Khám phá bối cảnh 3D & thu thập manh mối ngã rẽ."}
               </span>
             </div>
 
             {gameMode === '2d_scene' ? (
               <div className="mb-6">
-                <InteractiveScene2D onScenarioResolved={() => loadState()} character={character} onAdvanceYear={() => submitInteraction({ advance_only: true })} />
+                <InteractiveScene2D 
+                  onScenarioResolved={() => loadState()} 
+                  character={character} 
+                  onAdvanceYear={() => submitInteraction({ advance_only: true })} 
+                  onBackToCockpit={() => setGameMode('cockpit')}
+                />
               </div>
             ) : (
               /* 3-Column Responsive Grid Cockpit */
