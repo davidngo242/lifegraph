@@ -438,6 +438,30 @@ export default function CharacterHeroBanner({
                   <Cpu className="w-3 h-3 inline mr-0.5" /> Bán Thần
                 </span>
               )}
+
+              {/* RPG Life Level & Title Badge */}
+              <div className="flex items-center gap-1.5 bg-slate-900/90 px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-sm">
+                <span className="text-[11px] font-sans tabular-nums font-black text-amber-400">
+                  Lv.{character.life_level || 1}
+                </span>
+                <span className="text-[11px] font-bold text-amber-200 hidden sm:inline">
+                  {character.life_level >= 71 ? "Huyền Thoại Bất Tử" :
+                   character.life_level >= 46 ? "Tài Phiệt & Đầu Sỏ" :
+                   character.life_level >= 26 ? "Doanh Chủ & Trụ Cột" :
+                   character.life_level >= 11 ? "Chuyên Gia Thực Chiến" : "Kẻ Khởi Đầu"}
+                </span>
+                <div className="w-12 bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800 hidden md:block">
+                  <div
+                    className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full"
+                    style={{ width: `${Math.min(100, Math.round(((character.life_exp || 0) / (character.life_level >= 71 ? 4000 : character.life_level >= 46 ? 2000 : character.life_level >= 26 ? 1000 : character.life_level >= 11 ? 500 : 250)) * 100))}%` }}
+                  />
+                </div>
+                {(character.skill_points || 0) > 0 && (
+                  <span className="text-[9.5px] font-sans tabular-nums font-black px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 animate-bounce">
+                    +{character.skill_points} SP
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* 1 Dòng Địa Danh & Nhà Ở Tinh Gọn */}

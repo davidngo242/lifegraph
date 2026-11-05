@@ -27,6 +27,8 @@ import {
 } from 'lucide-react';
 import { MiniGameType } from './minigames/MiniGameHostModal';
 import Tooltip from './Tooltip';
+import SkillTreeTab from './rpg/SkillTreeTab';
+import SocialLinksTab from './rpg/SocialLinksTab';
 
 interface ActionPointHubProps {
   actionPoints: number;
@@ -53,6 +55,8 @@ interface ActionPointHubProps {
   onTimeSkip?: () => void;
   onLaunchMiniGame: (gameType: MiniGameType) => void;
   onOpenSkillHub?: () => void;
+  onUnlockSkill?: (skillId: string) => Promise<void>;
+  onNpcInteract?: (npcId: string, actionType: 'socialize' | 'gift' | 'request_favor') => Promise<void>;
   hiddenFlags?: string[];
   isLoading: boolean;
 }
@@ -82,12 +86,15 @@ export default function ActionPointHub({
   onTimeSkip,
   onLaunchMiniGame,
   onOpenSkillHub,
+  onUnlockSkill,
+  onNpcInteract,
   hiddenFlags = [],
   isLoading
 }: ActionPointHubProps) {
   const [actionNotice, setActionNotice] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [activeButton, setActiveButton] = useState<string | null>(null);
   const [actionMode, setActionMode] = useState<'individual' | 'focus'>('individual');
+  const [centerTab, setCenterTab] = useState<'actions' | 'skills' | 'social'>('actions');
 
   const traits = character?.innate_traits || [];
   const hasTradeTrait = traits.includes('trực_giác_kinh_doanh') || traits.includes('mắt_nhìn_xuyên_thị_trường');
@@ -227,6 +234,78 @@ export default function ActionPointHub({
         </div>
       )}
 
+      {/* Primary RPG Center Tabs */}
+      <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800/80 gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-inner">
+          <button
+            type="button"
+            onClick={() => setCenterTab('actions')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+              centerTab === 'actions'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5 text-amber-400" />
+            <span>Hoạt Động & AP</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setCenterTab('skills')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+              centerTab === 'skills'
+                ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <span>🌳 Cây Kỹ Năng</span>
+            {(character?.skill_points || 0) > 0 && (
+              <span className="text-[10px] font-sans tabular-nums px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-pulse">
+                +{character.skill_points} SP
+              </span>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setCenterTab('social')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+              centerTab === 'social'
+                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Users className="w-3.5 h-3.5 text-purple-400" />
+            <span>Nhân Mạch</span>
+            <span className="text-[10px] font-sans tabular-nums px-1.5 py-0.2 rounded-full bg-purple-950 text-purple-300 border border-purple-500/30 font-semibold">
+              {character?.social_links?.length || 4}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {centerTab === 'skills' ? (
+        <SkillTreeTab
+          skillPoints={character?.skill_points || 0}
+          unlockedSkills={character?.unlocked_skills || []}
+          onUnlockSkill={async (id) => {
+            if (onUnlockSkill) await onUnlockSkill(id);
+          }}
+          isLoading={isLoading}
+        />
+      ) : centerTab === 'social' ? (
+        <SocialLinksTab
+          socialLinks={character?.social_links || []}
+          actionPoints={actionPoints}
+          cash={cash}
+          onInteract={async (id, type) => {
+            if (onNpcInteract) await onNpcInteract(id, type);
+          }}
+          isLoading={isLoading}
+        />
+      ) : (
+        <>
       {/* Header: AP Counter & Stage Indicator */}
       <div className="flex items-center justify-between pb-2.5 border-b border-slate-800/80 gap-3">
         <div className="flex items-center gap-2">
@@ -964,6 +1043,9 @@ export default function ActionPointHub({
           </>
         )}
       </div>
+
+      </>
+      )}
 
       {/* TỐI ƯU HÓA: DOCK ĐIỀU KHIỂN NHANH (Sàn Tài Sản, Gia Tộc, Rèn Kỹ Năng & Bỏ Qua 3 Năm) */}
       <div className="pt-2.5 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2.5">

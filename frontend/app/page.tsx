@@ -866,7 +866,65 @@ export default function LifeGraphPage() {
     }
   };
 
-  const handleUpgradeAspiration = async (newAspirationId: string) => {
+  const handleUnlockSkill = async (skillId: string) => {
+    try {
+      setLoading(true);
+      const res = await fetch(`${API_BASE}/rpg/unlock-skill`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ skill_id: skillId })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Mở khóa kỹ năng thất bại.");
+      }
+      const data = await res.json();
+      if (data.character) setCharacter(data.character);
+      triggerAvatarReaction('celebrate');
+      triggerBannerFeedback({
+        type: 'milestone',
+        title: 'Mở Khóa Kỹ Năng Mới!',
+        subtitle: data.message,
+        delta: '-SP · Buff Vĩnh Viễn',
+        icon: '🌳'
+      });
+    } catch (err: any) {
+      setErrorMsg(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNpcInteract = async (npcId: string, actionType: 'socialize' | 'gift' | 'request_favor') => {
+    try {
+      setLoading(true);
+      const res = await fetch(`${API_BASE}/rpg/npc-interact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ npc_id: npcId, action_type: actionType })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Giao lưu nhân vật thất bại.");
+      }
+      const data = await res.json();
+      if (data.character) setCharacter(data.character);
+      triggerAvatarReaction('meditating');
+      triggerBannerFeedback({
+        type: 'network',
+        title: 'Giao Lưu Nhân Mạch',
+        subtitle: data.message,
+        delta: '+Link EXP',
+        icon: '🤝'
+      });
+    } catch (err: any) {
+      setErrorMsg(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+    const handleUpgradeAspiration = async (newAspirationId: string) => {
     try {
       setLoading(true);
       const res = await fetch(`${API_BASE}/aspiration/upgrade`, {
@@ -1649,6 +1707,8 @@ export default function LifeGraphPage() {
                     onTimeSkip={handleTimeSkipContinue}
                     onOpenSkillHub={() => setShowSkillSelector(true)}
                     onLaunchMiniGame={(type) => launchMiniGame(type)}
+                    onUnlockSkill={handleUnlockSkill}
+                    onNpcInteract={handleNpcInteract}
                     hiddenFlags={character.hidden_flags || []}
                     isLoading={loading}
                   />

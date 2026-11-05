@@ -23,6 +23,14 @@ import {
   getAncestralLineage,
   addAncestralMemorial
 } from '../db/db.js';
+import {
+  SKILL_TREE,
+  initRpgState,
+  getLevelInfo,
+  awardLifeExp,
+  unlockSkill,
+  interactNpc
+} from '../engine/rpgProgressionEngine.js';
 import { processPassivePhase, calculateMaxVitality } from '../engine/tickEngine.js';
 import { getCurrentScenarioForCharacter, interactWithHotspot, resolveMindStageChoice, fulfillCommitment, evaluateCommitments, getNextScenarioAge } from '../engine/scenarioEngine.js';
 import { compileSystemPrompt } from '../engine/promptCompiler.js';
@@ -176,6 +184,7 @@ router.get('/state', async (req, res) => {
     // Can access Transhumanism surgery?
     const canTranshuman = character.age > 60 && netWorth > 15000000 && !character.is_transhuman;
 
+    initRpgState(character);
     if (!character.life_aspiration) {
       character.life_aspiration = assignInitialAspiration(character);
       await updateCharacter(character.id, { life_aspiration: character.life_aspiration });
@@ -689,6 +698,74 @@ router.post('/lineage/incense', async (req, res) => {
   } catch (err) {
     console.error('Error offering incense:', err);
     res.status(500).json({ error: 'Failed to offer incense', message: err.message });
+  }
+});
+
+// GET /api/game/rpg/state - Get Skill Tree & RPG State
+router.get('/rpg/state', async (req, res) => {
+  try {
+    let character = await getLatestCharacter();
+    if (!character) return res.status(404).json({ error: "Chưa có nhân vật" });
+    initRpgState(character);
+    const levelInfo = getLevelInfo(character.life_level);
+    return res.json({
+      skill_tree: SKILL_TREE,
+      character_rpg: {
+        level: character.life_level,
+        level_info: levelInfo,
+        exp: character.life_exp,
+        skill_points: character.skill_points,
+        unlocked_skills: character.unlocked_skills,
+        social_links: character.social_links
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/game/rpg/unlock-skill - Spend SP to unlock a skill node
+router.post('/rpg/unlock-skill', async (req, res) => {
+  try {
+    const { skill_id } = req.body;
+    let character = await getLatestCharacter();
+    if (!character) return res.status(404).json({ error: "Chưa có nhân vật" });
+    const result = unlockSkill(character, skill_id);
+    if (!result.success) {
+      return res.status(400).json({ error: result.error });
+    }
+    await updateCharacter(character.id, character);
+    return res.json({
+      success: true,
+      message: result.message,
+      character,
+      unlocked_skills: character.unlocked_skills,
+      skill_points: character.skill_points
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/game/rpg/npc-interact - Interact with an NPC (socialize, gift, request_favor)
+router.post('/rpg/npc-interact', async (req, res) => {
+  try {
+    const { npc_id, action_type } = req.body;
+    let character = await getLatestCharacter();
+    if (!character) return res.status(404).json({ error: "Chưa có nhân vật" });
+    const result = interactNpc(character, npc_id, action_type);
+    if (!result.success) {
+      return res.status(400).json({ error: result.error });
+    }
+    await updateCharacter(character.id, character);
+    return res.json({
+      success: true,
+      message: result.message,
+      character,
+      npc: result.npc
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
