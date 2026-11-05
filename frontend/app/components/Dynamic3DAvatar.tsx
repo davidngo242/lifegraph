@@ -110,11 +110,21 @@ function ProceduralCharacterMesh({
     metalness: 0.8
   }), []);
 
-  const lipMaterial = useMemo(() => new THREE.MeshStandardMaterial({
-    color: isBaby ? '#fda4af' : isFemale ? (burnout > 75 ? '#be123c' : '#fb7185') : (burnout > 80 ? '#7f1d1d' : '#991b1b'),
-    roughness: isBaby ? 0.7 : (isFemale ? 0.35 : 0.5),
-    metalness: isBaby ? 0 : (isFemale ? 0.1 : 0.05)
-  }), [isBaby, isFemale, burnout]);
+  const lipMaterial = useMemo(() => {
+    let lipColor = '#e29578';
+    if (isBaby || isChild) {
+      lipColor = '#fca5a5'; // Soft natural kid lips, no adult lipstick
+    } else if (isFemale) {
+      lipColor = burnout > 75 ? '#be123c' : '#fb7185';
+    } else {
+      lipColor = burnout > 80 ? '#7f1d1d' : '#991b1b';
+    }
+    return new THREE.MeshStandardMaterial({
+      color: lipColor,
+      roughness: (isBaby || isChild) ? 0.85 : (isFemale ? 0.35 : 0.5),
+      metalness: (isBaby || isChild) ? 0 : (isFemale ? 0.1 : 0.05)
+    });
+  }, [isBaby, isChild, isFemale, burnout]);
 
   const earringMaterial = useMemo(() => new THREE.MeshStandardMaterial({
     color: '#fbbf24',
@@ -285,7 +295,7 @@ function ProceduralCharacterMesh({
         </mesh>
 
         {/* Female Eyelash Accents (Only for adults & teens, never on babies!) */}
-        {isFemale && !isBaby && (
+        {isFemale && !isBaby && !isChild && (
           <group>
             <mesh position={[-0.22, 0.14, 0.42]} rotation={[0, 0, -0.28]} material={eyeMaterial}>
               <boxGeometry args={[0.08, 0.016, 0.02]} />
@@ -298,7 +308,7 @@ function ProceduralCharacterMesh({
 
         {/* Left Brow */}
         <mesh position={[-0.17, 0.21, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? -0.15 : 0.05]} material={hairMaterial}>
-          <boxGeometry args={[isBaby ? 0.07 : (isFemale ? 0.13 : 0.14), isBaby ? 0.008 : (isFemale ? 0.018 : 0.025), 0.03]} />
+          <boxGeometry args={[isBaby ? 0.07 : isChild ? 0.09 : (isFemale ? 0.13 : 0.14), isBaby ? 0.008 : isChild ? 0.012 : (isFemale ? 0.018 : 0.025), 0.03]} />
         </mesh>
 
         {/* Right Brow */}
@@ -335,8 +345,8 @@ function ProceduralCharacterMesh({
         )}
 
         {/* Mouth */}
-        <mesh ref={mouthRef} position={[0, isBaby ? -0.13 : -0.18, 0.43]}>
-          <sphereGeometry args={[isBaby ? 0.04 : (isFemale ? 0.065 : 0.06), 16, 8]} />
+        <mesh ref={mouthRef} position={[0, isBaby ? -0.13 : isChild ? -0.15 : -0.18, 0.43]}>
+          <sphereGeometry args={[isBaby ? 0.038 : isChild ? 0.048 : (isFemale ? 0.065 : 0.06), 16, 8]} />
           <primitive object={lipMaterial} attach="material" />
         </mesh>
 

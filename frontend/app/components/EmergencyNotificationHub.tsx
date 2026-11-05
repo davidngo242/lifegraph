@@ -35,9 +35,10 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
   const criticalCount = alerts.filter(a => a.type === 'critical' || a.type === 'vendetta').length;
   const totalCount = alerts.length;
 
-  // Auto-popup modal when any new alert arrives (ensures alerts are prominent popup modals)
+  // Only auto-popup modal when a critical life-threatening emergency occurs (vitality/debt crisis)
   useEffect(() => {
-    if (alerts.length > lastAlertCount) {
+    const hasCritical = alerts.some(a => a.type === 'critical' || a.type === 'vendetta');
+    if (alerts.length > lastAlertCount && hasCritical && lastAlertCount === 0) {
       setIsOpen(true);
     }
     setLastAlertCount(alerts.length);

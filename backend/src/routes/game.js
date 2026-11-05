@@ -1782,6 +1782,7 @@ router.post('/action/family', async (req, res) => {
       character.household.family_mentorship_used = character.age;
       character.burnout = Math.max(0, (character.burnout || 0) - 10);
       character.karma = Math.min(100, (character.karma || 50) + 8);
+      const flags = new Set(character.hidden_flags || []);
       flags.add("family_guidance_received");
       character.hidden_flags = Array.from(flags);
 

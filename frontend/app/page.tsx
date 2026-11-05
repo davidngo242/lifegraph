@@ -193,6 +193,16 @@ export default function LifeGraphPage() {
     loadLineage();
   }, []);
 
+  // Auto-dismiss operational errorMsg after 4 seconds
+  useEffect(() => {
+    if (errorMsg && character) {
+      const timer = setTimeout(() => {
+        setErrorMsg(null);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorMsg, character]);
+
   // Generic Tick Submission (Handles SPECTRUM, ILLUSION, TRILEMMA, TIME_SKIP, STANDARD)
   const submitInteraction = async (payload: {
     choice_id?: string;
@@ -994,15 +1004,8 @@ export default function LifeGraphPage() {
         actionHint: 'Nghỉ ngơi dưỡng sinh để hạ nhiệt áp lực.'
       });
     }
-    if (errorMsg && !dismissedAlerts.includes('system_error')) {
-      emergencyAlerts.push({
-        id: 'system_error',
-        type: 'warning',
-        title: 'Cảnh Báo Thao Tác',
-        message: errorMsg,
-        actionHint: 'Đã ghi nhận.'
-      });
-    }
+    // Operational errorMsg handled via sleek non-intrusive floating toast
+
     if (transhumanNotice && !dismissedAlerts.includes('transhuman_notice')) {
       emergencyAlerts.push({
         id: 'transhuman_notice',
@@ -1033,6 +1036,20 @@ export default function LifeGraphPage() {
 
       {/* Hidden Audio Player for BGM */}
       <audio ref={audioRef} src="/audio/bgm.mp3" loop preload="auto" />
+
+      {/* Floating operational error toast */}
+      {errorMsg && character && (
+        <div className="fixed top-14 right-4 z-[999] flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-rose-950/95 border border-rose-500/70 text-rose-200 shadow-2xl backdrop-blur-xl animate-in slide-in-from-top-3 text-xs font-semibold">
+          <span className="text-base shrink-0">⚠️</span>
+          <span className="max-w-xs">{errorMsg}</span>
+          <button
+            onClick={() => setErrorMsg(null)}
+            className="ml-1 text-rose-400 hover:text-white p-1 rounded-md transition"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* Screen-edge Burnout Vignette */}
       <BurnoutOverlay
@@ -1463,9 +1480,14 @@ export default function LifeGraphPage() {
       {/* Main Container: Dynamic View Router */}
       <main className="flex-1 max-w-[1720px] w-full mx-auto p-3 md:p-5 z-10 relative">
         {/* 1. Trang Chủ (Home Portal) View - Luôn tích hợp toàn bộ Gia Phả các kiếp */}
-        {errorMsg && <div role="alert" className="mb-4 rounded-xl border border-rose-700 bg-slate-900 p-4 text-rose-200">
-          <p>{errorMsg}</p><button onClick={() => loadState()} className="mt-2 rounded-lg bg-indigo-600 px-4 py-2 text-white">Thử tải lại tiến trình</button>
-        </div>}
+        {errorMsg && !character && (
+          <div role="alert" className="mb-4 rounded-xl border border-rose-700 bg-slate-900 p-4 text-rose-200 shadow-xl">
+            <p className="font-semibold">{errorMsg}</p>
+            <button onClick={() => loadState()} className="mt-2 rounded-lg bg-indigo-600 px-4 py-2 text-white font-bold text-xs hover:bg-indigo-500 transition">
+              Thử tải lại tiến trình
+            </button>
+          </div>
+        )}
         {loading && !character && <div role="status" className="p-8 text-center text-slate-300">Đang tải tiến trình đã lưu…</div>}
         {activeView === 'home' && !loading && !errorMsg && (
           <LifeGraphHomePortal
