@@ -262,6 +262,23 @@ export default function StickyProfileSidebar({
   return (
     <div className="w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-3.5 md:p-4 shadow-2xl backdrop-blur-xl flex flex-col gap-3 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6.5rem)] overflow-y-auto custom-scrollbar">
       
+      {/* Character Identity & Gender Pill */}
+      <div className="flex items-center justify-between px-3 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs">
+        <div className="flex items-center gap-2 truncate">
+          <span className="font-bold text-white truncate">{character.name || "Nhân vật"}</span>
+          <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${
+            character.gender === 'female' 
+              ? 'bg-rose-950/60 border-rose-500/40 text-rose-300' 
+              : 'bg-indigo-950/60 border-indigo-500/40 text-indigo-300'
+          }`}>
+            {character.gender === 'female' ? '♀️ Nữ' : '♂️ Nam'}
+          </span>
+        </div>
+        <span className="text-[10px] font-mono text-slate-400 shrink-0 font-semibold">
+          {age}t • {nationality}
+        </span>
+      </div>
+
       {/* Dynamic Lifecycle: Adults prioritize Health & Financials first */}
       {!isAdult ? (
         <>

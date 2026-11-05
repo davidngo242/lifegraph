@@ -245,24 +245,66 @@ export const SCENARIO_MATRIX = [
     trilemma_options: [
       {
         id: "TRI_YOUTH_A",
-        action_title: "Xách Ba Lô Đi Du Học",
-        consequence_hint: "Bỏ lại người yêu và gia đình, mở rộng tầm nhìn nhưng mang nỗi ân hận chia tay.",
+        action_title: "Xách Ba Lô Đi Du Học Khởi Nghiệp Bản Thân",
+        consequence_hint: "Trang trải chi phí ban đầu, bươn chải vừa học vừa làm xứ người nhưng mở rộng chân trời tri thức (-4.000 USD, Burnout +20).",
         sacrifice_type: "relationship",
-        effects: { cash_delta: -5000, vitality_delta: 10, burnout_delta: 20, karma_delta: -10 }
+        effects: {
+          cash_delta: -4000,
+          vitality_delta: 5,
+          burnout_delta: 20,
+          karma_delta: 15,
+          flags: ["abroad_study_hustle"],
+          delayed_domino: {
+            in_years: 3,
+            flag: "abroad_graduation_honor",
+            cash_delta: 20000,
+            karma_delta: 25,
+            title: "Tốt Nghiệp Thủ Khoa Du Học & Định Cư Nghề Nghiệp",
+            milestone_summary: "Sau 3 năm vừa rửa bát vừa làm nghiên cứu sinh, bạn tốt nghiệp loại xuất sắc và được mời làm việc với thu nhập ổn định!"
+          }
+        }
       },
       {
         id: "TRI_YOUTH_B",
-        action_title: "Ở Lại Kết Hôn Với Mối Tình Đầu",
-        consequence_hint: "Giữ trọn nghĩa tình son sắt, nhưng chôn vùi ước mơ vươn ra biển lớn.",
+        action_title: "Ở Lại Kết Hôn Với Mối Tình Đầu & Lập Nghiệp Quê Hương",
+        consequence_hint: "Giữ trọn lời thề son sắt, tổ chức lễ cưới giản dị và đồng lòng tích lũy tài chính (-2.000 USD, -25 Burnout, +25 Karma).",
         sacrifice_type: "cash",
-        effects: { cash_delta: 10000, vitality_delta: 15, burnout_delta: -20, karma_delta: 20 }
+        effects: {
+          cash_delta: -2000,
+          vitality_delta: 15,
+          burnout_delta: -25,
+          karma_delta: 25,
+          flags: ["wedded_youth_sweetheart"],
+          delayed_domino: {
+            in_years: 2,
+            flag: "happy_family_nest",
+            karma_delta: 20,
+            cash_delta: 15000,
+            title: "Tổ Ấm Thuận Hòa, Kinh Tế Gia Đình Vững Bước",
+            milestone_summary: "Hai vợ chồng đồng cam cộng khổ cùng quản lý chi tiêu. Mái ấm hòa thuận tích lũy được $15.000 quỹ sinh hoạt an toàn!"
+          }
+        }
       },
       {
         id: "TRI_YOUTH_C",
-        action_title: "Cày Tiền Gửi Về Cho Bố Mẹ",
-        consequence_hint: "Làm tròn chữ hiếu, thể xác vắt kiệt làm 2 ca, chia tay người yêu vì quá bận.",
+        action_title: "Cày Tiền Phụ Giúp Bố Mẹ & Trả Nợ Gia Đình",
+        consequence_hint: "Làm tròn chữ hiếu, thể xác vắt kiệt làm 2 ca để gửi kiều hối/lương về nhà (+12.000 USD, -20 Vitality, +30 Burnout).",
         sacrifice_type: "vitality",
-        effects: { cash_delta: 25000, vitality_delta: -25, burnout_delta: 35, karma_delta: 15 }
+        effects: {
+          cash_delta: 12000,
+          vitality_delta: -20,
+          burnout_delta: 30,
+          karma_delta: 30,
+          flags: ["filial_family_breadwinner"],
+          delayed_domino: {
+            in_years: 2,
+            flag: "family_debt_cleared_relief",
+            karma_delta: 30,
+            burnout_delta: -20,
+            title: "Trả Hết Món Nợ Gia Đình, Cha Mẹ Khỏe Mạnh",
+            milestone_summary: "Gia đình thoát khỏi nợ nần nhờ mồ hôi nước mắt của bạn. Bố mẹ rơi nước mắt tự hào, gánh nặng tâm lý được trút bỏ!"
+          }
+        }
       }
     ]
   },
@@ -787,48 +829,277 @@ export const SCENARIO_MATRIX = [
     min_age: 18,
     max_age: 26,
     target_vector: [0.15, 0.85, 0.30, 0.20, 0.80, 0.2],
-    title: "Tam Giác Sinh Tử: Học Bổng Stanford, Lương Khủng Big Tech hay Tình Đầu Quê Nhà?",
-    narrative: "Bạn đứng trước ngã rẽ định mệnh của tuổi thanh xuân: Cùng lúc nhận được thư cấp học bổng toàn phần Tiến sĩ tại Đại học danh giá, lời mời làm kỹ sư AI với mức lương $180.000/năm ở Thung Lũng Silicon, và lời hẹn ước trăm năm từ mối tình đầu nơi quê nhà. Không con đường nào vẹn cả đôi đường.",
+    title: "Tam Giác Định Mệnh: Nghiên Cứu Sinh, Thử Việc Big Tech hay Mái Ấm Giảng Viên?",
+    narrative: "Bạn đứng trước ngã rẽ lớn của tuổi trẻ: Nhận học bổng toàn phần Tiến sĩ tại ĐH danh giá, lời mời làm Kỹ sư tập sự thử việc ở Thung Lũng Silicon, hay ở lại kết hôn và trở thành Giảng viên uy tín nơi quê nhà.",
     trilemma_options: [
       {
         id: "SCH_A",
-        action_title: "Bay Sang Viễn Xứ Du Học Tiến Sĩ (Học Bổng Toàn Phần)",
-        consequence_hint: "Nhận học bổng toàn phần miễn 100% học phí + trợ cấp sinh hoạt $3.500/tháng, chuyển đến Ký túc xá Stanford, Hoa Kỳ (+25 Karma, +15 Stress).",
+        action_title: "Nghiên Cứu Sinh Viện Hàn Lâm (Học Bổng Toàn Phần)",
+        consequence_hint: "Miễn 100% học phí, nhận trợ cấp sinh hoạt $3.500/tháng ở Ký túc xá, dồn tâm sức viết luận án (+25 Karma, +15 Stress).",
         sacrifice_type: "relationship",
         effects: {
           karma_delta: 25,
           burnout_delta: 15,
-          cash_delta: 5000,
+          cash_delta: 3500,
           flags: ["stanford_phd_scholar"],
           new_city: "California (ĐH Stanford, Hoa Kỳ)",
           new_housing: { name: "Ký túc xá ĐH Stanford", tier: 2, status: "rented" },
-          occupation: "NCS Tiến sĩ (ĐH Stanford)"
+          occupation: "Nghiên cứu sinh Tiến sĩ",
+          delayed_domino: {
+            in_years: 3,
+            flag: "doctoral_defense_passed",
+            karma_delta: 35,
+            cash_delta: 25000,
+            occupation: "Tiến sĩ Viện Hàn Lâm",
+            title: "Bảo Vệ Thành Công Luận Án Tiến Sĩ",
+            milestone_summary: "Công trình nghiên cứu AI của bạn được công bố trên tạp chí khoa học quốc tế. Bạn chính thức nhận bằng Tiến sĩ và được mời làm Nghiên cứu viên cao cấp!"
+          }
         }
       },
       {
         id: "SCH_B",
-        action_title: "Đầu Quân Big Tech Hái Ra Tiền",
-        consequence_hint: "Gia nhập tập đoàn công nghệ Thung Lũng Silicon với mức lương $180.000/năm, chuyển tới căn hộ San Francisco (+180.000 USD, Burnout +25).",
+        action_title: "Thử Việc Kỹ Sư Tập Sự Big Tech (Thung Lũng Silicon)",
+        consequence_hint: "Chuyển tới San Francisco với chi phí đắt đỏ, nhận trợ cấp thực tập sinh $5.000, cày 70h/tuần vượt qua thử việc để ký hợp đồng chính thức (+5.000 USD, Burnout +30).",
         sacrifice_type: "vitality",
         effects: {
-          cash_delta: 180000,
-          burnout_delta: 25,
-          flags: ["bigtech_lead_eng"],
+          cash_delta: 5000,
+          burnout_delta: 30,
+          flags: ["bigtech_probation_period"],
           new_city: "San Francisco (Silicon Valley, Hoa Kỳ)",
-          new_housing: { name: "Căn hộ cao cấp San Francisco", tier: 3, status: "rented" },
-          occupation: "Kỹ sư AI Big Tech"
+          new_housing: { name: "Căn hộ ghép phòng San Francisco", tier: 2, status: "rented" },
+          occupation: "Kỹ sư Thực tập sinh Big Tech",
+          delayed_domino: {
+            in_years: 2,
+            flag: "bigtech_senior_confirmed",
+            cash_delta: 75000,
+            burnout_delta: 15,
+            occupation: "Kỹ sư AI Chính thức (Big Tech)",
+            title: "Kỳ Đánh Giá Thử Việc Big Tech Hoàn Tất",
+            milestone_summary: "Sau 2 năm cày cuốc ngày đêm, năng lực chuyên môn của bạn được hội đồng công nhận: Thăng cấp Kỹ sư chính thức kèm gói thưởng cổ phiếu $75.000!"
+          }
         }
       },
       {
         id: "SCH_C",
         action_title: "Ở Lại Kết Hôn & Làm Giảng Viên Địa Phương",
-        consequence_hint: "Từ bỏ ánh hào quang viễn xứ, trân trọng hạnh phúc gia đình giản dị nhưng ấm êm (Hạnh phúc +40, Karma +20).",
+        consequence_hint: "Trân trọng hạnh phúc gia đình giản dị, truyền lửa tri thức cho thế hệ trẻ quê nhà (Hạnh phúc +30, Karma +25).",
         sacrifice_type: "cash",
         effects: {
-          karma_delta: 20,
+          karma_delta: 25,
           burnout_delta: -25,
+          cash_delta: 8000,
           flags: ["local_mentor_spouse"],
-          occupation: "Giảng viên Đại học địa phương"
+          occupation: "Giảng viên Đại học địa phương",
+          delayed_domino: {
+            in_years: 2,
+            flag: "local_community_pillar",
+            karma_delta: 25,
+            cash_delta: 15000,
+            title: "Uy Tín Giảng Dạy & Tình Nghĩa Quê Hương",
+            milestone_summary: "Học trò bạn dìu dắt đạt giải thưởng nghiên cứu. Mái ấm gia đình hòa thuận, bạn được tín nhiệm làm Trưởng bộ môn!"
+          }
+        }
+      }
+    ]
+  },
+
+  // =========================================================================
+  // DIVERSE REALISTIC LIFE PATHWAYS: ARTISAN, RETAIL, HEALTHCARE, INDUSTRY
+  // =========================================================================
+  {
+    id: "tri_artisan_heritage",
+    interaction_type: "TRILEMMA",
+    aspiration_tags: ["all", "scholar_sage", "first_pot_of_gold"],
+    tag: "artisan_crossroads",
+    min_age: 20,
+    max_age: 32,
+    target_vector: [0.10, 0.60, 0.20, 0.40, 0.70, 0.1],
+    title: "Ngã Rẽ Làng Nghề: Kế Nghiệp Cổ Truyền, Xuất Khẩu Mỹ Nghệ hay Chuyển Nghề Công Nghiệp?",
+    narrative: "Xưởng thủ công truyền thống của gia tộc đang đứng trước cơn lốc công nghiệp hóa. Bạn có kỹ năng đôi bàn tay khéo léo và phải quyết định hướng đi cho đôi tay và tâm hồn mình.",
+    trilemma_options: [
+      {
+        id: "ART_A",
+        action_title: "Kế Nghiệp Xưởng Cổ Truyền & Rèn Dũa Tay Nghề Nghệ Nhân",
+        consequence_hint: "Chấp nhận thu nhập khởi điểm khiêm tốn, bảo tồn tinh hoa hoa văn của tổ tiên (+30 Karma, -15 Burnout).",
+        sacrifice_type: "cash",
+        effects: {
+          karma_delta: 30,
+          burnout_delta: -15,
+          cash_delta: 4000,
+          flags: ["master_artisan_apprentice"],
+          occupation: "Nghệ nhân Thủ công Truyền thống",
+          delayed_domino: {
+            in_years: 3,
+            flag: "cultural_heritage_master",
+            karma_delta: 40,
+            cash_delta: 22000,
+            title: "Đạt Danh Hiệu Nghệ Nhân Di Sản Quốc Gia",
+            milestone_summary: "Tác phẩm thủ công độc bản của bạn được trưng bày tại Bảo tàng Quốc gia và bán đấu giá thành công rực rỡ!"
+          }
+        }
+      },
+      {
+        id: "ART_B",
+        action_title: "Xây Dựng Thương Hiệu Mỹ Nghệ Xuất Khẩu Toàn Cầu",
+        consequence_hint: "Đưa sản phẩm lên sàn thương mại quốc tế, vay vốn đầu tư thiết kế bao bì mới (+15.000 USD, +25 Burnout).",
+        sacrifice_type: "vitality",
+        effects: {
+          cash_delta: 15000,
+          burnout_delta: 25,
+          vitality_delta: -8,
+          flags: ["artisan_export_founder"],
+          occupation: "Nhà sáng lập Thương hiệu Thủ công Mỹ nghệ",
+          delayed_domino: {
+            in_years: 2,
+            flag: "global_artisan_brand_expansion",
+            cash_delta: 45000,
+            karma_delta: 20,
+            title: "Đơn Hàng Xuất Khẩu Châu Âu & Nhật Bản Ký Kết",
+            milestone_summary: "Thương hiệu mỹ nghệ của bạn ký được chuỗi phân phối 50 cửa hàng lưu niệm cao cấp tại Paris và Tokyo!"
+          }
+        }
+      },
+      {
+        id: "ART_C",
+        action_title: "Chuyển Sang Thiết Kế Sản Phẩm Công Nghiệp Cho Tập Đoàn",
+        consequence_hint: "Làm việc tại tập đoàn đa quốc gia, lương tháng ổn định nhưng gác lại nghề tổ (+20.000 USD, -10 Karma).",
+        sacrifice_type: "relationship",
+        effects: {
+          cash_delta: 20000,
+          burnout_delta: 10,
+          karma_delta: -10,
+          flags: ["industrial_cad_designer"],
+          occupation: "Chuyên viên Thiết kế Công nghiệp"
+        }
+      }
+    ]
+  },
+  {
+    id: "tri_medical_resident_crossroads",
+    interaction_type: "TRILEMMA",
+    aspiration_tags: ["all", "scholar_sage", "adversity_phoenix"],
+    tag: "medical_ethics_crossroads",
+    min_age: 24,
+    max_age: 36,
+    target_vector: [0.05, 0.70, 0.40, 0.30, 0.90, 0.1],
+    title: "Sứ Mệnh Áo Trắng: Trực Đêm Tuyến Đầu, Bệnh Viện Quốc Tế hay Bác Sĩ Bản Làng?",
+    narrative: "Tốt nghiệp trường Y, bạn đứng trước các lựa chọn cống hiến: Gắn bó với phòng cấp cứu tuyến đầu đầy nghẹt bệnh nhân, làm việc tại phòng khám tư nhân thu nhập cao, hay mang tủ thuốc lên vùng núi cao cứu đồng bào.",
+    trilemma_options: [
+      {
+        id: "MED_A",
+        action_title: "Trực Đêm Cấp Cứu Tuyến Đầu (Bệnh Viện Công)",
+        consequence_hint: "Ca trực 36 tiếng căng như dây đàn, lương phụ cấp khiêm tốn nhưng cứu được hàng ngàn mạng sống (+40 Karma, -15 Vitality, +35 Burnout).",
+        sacrifice_type: "vitality",
+        effects: {
+          karma_delta: 40,
+          vitality_delta: -15,
+          burnout_delta: 35,
+          cash_delta: 6000,
+          flags: ["er_medical_resident"],
+          occupation: "Bác sĩ Cấp cứu Tuyến đầu",
+          delayed_domino: {
+            in_years: 2,
+            flag: "chief_surgeon_promotion",
+            karma_delta: 35,
+            cash_delta: 30000,
+            occupation: "Bác sĩ Phẫu thuật Trưởng Khoa",
+            title: "Bổ Nhiệm Bác Sĩ Trưởng Khoa Lâm Sàng",
+            milestone_summary: "Sau hàng trăm ca phẫu thuật giành giật sự sống từ tay tử thần, bạn được vinh danh Thầy thuốc Ưu tú và đề bạt Trưởng khoa!"
+          }
+        }
+      },
+      {
+        id: "MED_B",
+        action_title: "Chuyển Sang Bệnh Viện Tư Nhân / Phòng Khám Quốc Tế",
+        consequence_hint: "Môi trường máy lạnh tiện nghi, đãi ngộ tài chính cao ngất, ít ca hiểm nghèo (+35.000 USD, -15 Burnout).",
+        sacrifice_type: "karma",
+        effects: {
+          cash_delta: 35000,
+          burnout_delta: -15,
+          vitality_delta: 5,
+          karma_delta: 10,
+          flags: ["private_clinic_physician"],
+          occupation: "Bác sĩ Đa khoa Phòng khám Quốc tế"
+        }
+      },
+      {
+        id: "MED_C",
+        action_title: "Tình Nguyện Làm Bác Sĩ Vùng Sâu Vùng Xa / Hải Đảo",
+        consequence_hint: "Mang ánh sáng y học đến với bà con nghèo khó, điều kiện thiếu thốn nhưng bồi đắp Đại Thiện Nghiệp (+60 Karma, +20 Vitality dẻo dai).",
+        sacrifice_type: "cash",
+        effects: {
+          karma_delta: 60,
+          vitality_delta: 15,
+          burnout_delta: -20,
+          cash_delta: 3000,
+          flags: ["volunteer_frontier_doctor"],
+          occupation: "Bác sĩ Tình nguyện Vùng cao",
+          delayed_domino: {
+            in_years: 3,
+            flag: "frontier_medical_hero",
+            karma_delta: 50,
+            title: "Huân Chương Cống Hiến & Tình Dân Sâu Nặng",
+            milestone_summary: "Trạm y tế bạn xây dựng đã giúp đẩy lùi dịch bệnh cho hàng chục bản làng. Bạn trở thành biểu tượng y đức được nhân dân kính trọng!"
+          }
+        }
+      }
+    ]
+  },
+  {
+    id: "tri_local_retail_crossroads",
+    interaction_type: "TRILEMMA",
+    aspiration_tags: ["all", "first_pot_of_gold", "commercial_tycoon"],
+    tag: "retail_commerce_crossroads",
+    min_age: 22,
+    max_age: 35,
+    target_vector: [0.35, 0.40, 0.10, 0.80, 0.50, 0.1],
+    title: "Thương Trường Phố Thị: Mở Tiệm Kinh Doanh Bản Địa, Nhượng Quyền hay Buôn Chuyến?",
+    narrative: "Tích lũy được số vốn nhỏ, bạn quyết định bước chân vào thương trường buôn bán phố xá để tự làm chủ vận mệnh tài chính của mình.",
+    trilemma_options: [
+      {
+        id: "RET_A",
+        action_title: "Mở Tiệm Cà Phê / Cửa Hàng Bản Địa Với Vốn Tự Có",
+        consequence_hint: "Tự tay làm chủ, chăm chút từng khách hàng quen, doanh thu xoay vòng đều đặn (+12.000 USD, +15 Karma, +10 Burnout).",
+        sacrifice_type: "vitality",
+        effects: {
+          cash_delta: 12000,
+          burnout_delta: 10,
+          karma_delta: 15,
+          flags: ["local_shopkeeper_owner"],
+          occupation: "Chủ Cửa hàng Kinh doanh Phố thị",
+          delayed_domino: {
+            in_years: 2,
+            flag: "local_shop_chain_success",
+            cash_delta: 35000,
+            karma_delta: 15,
+            title: "Khai Trương Cơ Sở Thứ 2 & Dòng Tiền Ổn Định",
+            milestone_summary: "Cửa hàng của bạn trở thành điểm đến quen thuộc của cả khu phố. Lợi nhuận ròng tăng trưởng vững chắc!"
+          }
+        }
+      },
+      {
+        id: "RET_B",
+        action_title: "Vay Vốn Ngân Hàng Mua Nhượng Quyền Thương Hiệu Lớn",
+        consequence_hint: "Tận dụng thương hiệu có sẵn nhưng gánh áp lực trả lãi hàng tháng (+30.000 USD doanh thu, +30 Burnout).",
+        sacrifice_type: "cash",
+        effects: {
+          cash_delta: 30000,
+          burnout_delta: 30,
+          flags: ["franchise_operator_debt"],
+          occupation: "Chủ Đại lý Nhượng quyền Thương hiệu"
+        }
+      },
+      {
+        id: "RET_C",
+        action_title: "Duy Trì Quy Mô Nhỏ & Tích Lũy Tiền Mua Đất Nền Vùng Ven",
+        consequence_hint: "Chắt chiu từng đồng lời, không đua đòi mở rộng, tích trữ tiền mặt chờ cơ hội mua tài sản (-15 Burnout, +10 Karma).",
+        sacrifice_type: "relationship",
+        effects: {
+          cash_delta: 18000,
+          burnout_delta: -15,
+          karma_delta: 10,
+          flags: ["frugal_land_accumulator"],
+          occupation: "Tiểu thương Tích lũy Bất động sản"
         }
       }
     ]

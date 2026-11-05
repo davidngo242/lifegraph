@@ -301,7 +301,7 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
     });
   }
 
-  // 6. Record Commitments
+  // 6. Record Commitments & Delayed Domino Fuses
   if (!Array.isArray(character.commitments)) character.commitments = [];
   if (Array.isArray(choice.commitments)) {
     choice.commitments.forEach(c => {
@@ -319,6 +319,15 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
         created_age: character.age,
         due_age: (character.age || 28) + (c.due_ticks || 1)
       });
+    });
+  }
+
+  // Handle Delayed Domino Fuses from outcome effects
+  if (effects.delayed_domino) {
+    if (!Array.isArray(character.delayed_flags)) character.delayed_flags = [];
+    character.delayed_flags.push({
+      ...effects.delayed_domino,
+      trigger_at_age: (character.age || 28) + (effects.delayed_domino.in_years || 2)
     });
   }
 

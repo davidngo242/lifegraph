@@ -249,17 +249,41 @@
           "outcomes": {
             "critical_success": {
               "narration": "Bổ nhiệm Tech Lead thành công, thu nhập tăng vọt. Nhân sự bạn giới thiệu cho Minh làm việc rất ăn ý. Mai hạnh phúc với tương lai vững chắc.",
-              "effects": { "cash_delta": 80000000, "vitality_delta": 5, "burnout_delta": -10, "karma_delta": 15 },
+              "effects": {
+                "cash_delta": 25000000,
+                "vitality_delta": 5,
+                "burnout_delta": -10,
+                "karma_delta": 15,
+                "delayed_domino": {
+                  "in_years": 1,
+                  "flag": "techlead_bonus_esop",
+                  "cash_delta": 55000000,
+                  "title": "Thưởng Cuối Năm & Kích Hoạt Cổ Phần ESOP",
+                  "milestone_summary": "Sau 1 năm dẫn dắt đội ngũ kỹ thuật ổn định, tập đoàn thưởng hiệu quả năm và kích hoạt gói ESOP 55 triệu đồng!"
+                }
+              },
               "npc_trust_delta": { "Anh Hùng": 30, "Mai": 25, "Minh": 10 }
             },
             "success": {
               "narration": "Bạn đảm nhận vị trí Tech Lead với trách nhiệm mới. Minh hiểu lựa chọn của bạn. Thu nhập gia đình tăng trưởng đều đặn.",
-              "effects": { "cash_delta": 50000000, "vitality_delta": 0, "burnout_delta": 5, "karma_delta": 10 },
+              "effects": {
+                "cash_delta": 15000000,
+                "vitality_delta": 0,
+                "burnout_delta": 5,
+                "karma_delta": 10,
+                "delayed_domino": {
+                  "in_years": 1,
+                  "flag": "techlead_bonus_annual",
+                  "cash_delta": 35000000,
+                  "title": "Thưởng Hiệu Quả Tech Lead",
+                  "milestone_summary": "Hoàn thành 1 năm phụ trách kỹ thuật, bạn nhận thưởng hiệu suất năm 35 triệu đồng từ tập đoàn!"
+                }
+              },
               "npc_trust_delta": { "Anh Hùng": 20, "Mai": 20, "Minh": 0 }
             },
             "failure": {
               "narration": "Công việc mới nhiều áp lực quản lý hơn dự tính. Bạn phải dành thêm thời gian thích nghi.",
-              "effects": { "cash_delta": 35000000, "vitality_delta": -10, "burnout_delta": 22, "karma_delta": 5 },
+              "effects": { "cash_delta": 10000000, "vitality_delta": -10, "burnout_delta": 22, "karma_delta": 5 },
               "npc_trust_delta": { "Anh Hùng": 10, "Mai": 15, "Minh": -15 }
             }
           }
@@ -280,7 +304,19 @@
           "outcomes": {
             "critical_success": {
               "narration": "Kỳ tích khởi nghiệp! Kiến trúc do bạn dựng chạy mượt mà trước 10.000 người dùng đầu tiên. Công ty gọi vốn thành công 1 tỷ đồng.",
-              "effects": { "cash_delta": 150000000, "vitality_delta": -10, "burnout_delta": 25, "karma_delta": 25 },
+              "effects": {
+                "cash_delta": 30000000,
+                "vitality_delta": -10,
+                "burnout_delta": 25,
+                "karma_delta": 25,
+                "delayed_domino": {
+                  "in_years": 1,
+                  "flag": "startup_series_seed_funded",
+                  "cash_delta": 120000000,
+                  "title": "Vòng Hạt Giống Series Seed Rót Vốn Thành Công",
+                  "milestone_summary": "Sau 1 năm kiểm chứng thị trường, quỹ đầu tư rót 120 triệu đồng vào quỹ dự phòng Co-founder của bạn!"
+                }
+              },
               "npc_trust_delta": { "Minh": 40, "Mai": 20, "Anh Hùng": -10 }
             },
             "success": {

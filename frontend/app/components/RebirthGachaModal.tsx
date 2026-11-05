@@ -65,6 +65,7 @@ export default function RebirthGachaModal({
   onClose
 }: RebirthGachaModalProps) {
   const [isSpinning, setIsSpinning] = useState(false);
+  const [selectedGender, setSelectedGender] = useState<'random' | 'male' | 'female'>('random');
   const [selectedPerks, setSelectedPerks] = useState<{ [key: string]: boolean }>({});
   const [selectedStarterPack, setSelectedStarterPack] = useState<'standard' | 'genz_startup' | 'crazy_rich' | 'street_hustler'>('standard');
   const [chosenTrait, setChosenTrait] = useState<string>("thiên_tài_toán_học");
@@ -138,6 +139,11 @@ export default function RebirthGachaModal({
 
     try {
       const payload: any = { karma_perks: { ...selectedPerks } };
+      if (selectedGender !== 'random') {
+        payload.karma_perks.preferred_gender = selectedGender;
+        payload.preferred_gender = selectedGender;
+        payload.gender = selectedGender;
+      }
       if (selectedPerks.choose_trait || unlockedPerks.includes('choose_trait')) {
         payload.karma_perks.choose_trait = true;
         payload.karma_perks.chosen_trait = chosenTrait;
@@ -208,6 +214,44 @@ export default function RebirthGachaModal({
           <div className="mb-4 p-3 rounded-xl bg-rose-950/40 border border-rose-500/40 text-rose-300 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{errorMessage}</span>
+          </div>
+        )}
+
+        {/* Gender Selection Toggle */}
+        {!rollResult && !isSpinning && (
+          <div className="mb-3.5 p-3 rounded-2xl bg-slate-900/90 border border-slate-800 text-xs">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-sans font-semibold text-slate-300 uppercase tracking-wide text-[11px] flex items-center gap-1.5">
+                <span>👤 Định Hình Giới Tính (Gender Identity)</span>
+              </span>
+              <span className="text-[10px] text-slate-400 font-mono">
+                {selectedGender === 'random' ? 'Tùy duyên bánh xe số phận' : selectedGender === 'male' ? 'Hóa thân Nhân vật Nam (♂️)' : 'Hóa thân Nhân vật Nữ (♀️)'}
+              </span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { id: 'random', label: 'Ngẫu Nhiên', icon: '🎲', color: 'border-slate-700 bg-slate-950 text-slate-300' },
+                { id: 'male', label: 'Nam Giới', icon: '♂️', color: 'border-indigo-500 bg-indigo-950/60 text-indigo-300' },
+                { id: 'female', label: 'Nữ Giới', icon: '♀️', color: 'border-rose-500 bg-rose-950/60 text-rose-300' }
+              ].map(item => {
+                const isSelected = selectedGender === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setSelectedGender(item.id as any)}
+                    className={`py-2 px-3 rounded-xl border font-bold text-xs flex items-center justify-center gap-2 transition active:scale-98 ${
+                      isSelected
+                        ? `${item.color} ring-2 ring-purple-500/60 shadow-md`
+                        : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-white'
+                    }`}
+                  >
+                    <span>{item.icon}</span>
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
 

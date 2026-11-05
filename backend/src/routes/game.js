@@ -276,7 +276,12 @@ router.get('/state', async (req, res) => {
 // POST /api/game/start - Procedural Rebirth from Age 0
 router.post('/start', async (req, res) => {
   try {
-    const { karma_perks = {}, lineage_parent_id = null, starter_pack = 'standard' } = req.body;
+    const { karma_perks = {}, lineage_parent_id = null, starter_pack = 'standard', preferred_gender = null, gender = null } = req.body;
+    const chosenGender = preferred_gender || gender || karma_perks.preferred_gender || karma_perks.gender;
+    if (chosenGender) {
+      karma_perks.preferred_gender = chosenGender;
+      karma_perks.gender = chosenGender;
+    }
 
     // Enforce Endgame Karma Costs for Adulthood Starter Packs
     const STARTER_PACK_KARMA_COSTS = {
@@ -487,7 +492,12 @@ router.post('/childhood-fastforward', async (req, res) => {
 // POST /api/game/rebirth - Direct Rebirth Execution & State Synchronization
 router.post('/rebirth', async (req, res) => {
   try {
-    const { karma_perks = {}, lineage_parent_id = null, character: directChar } = req.body;
+    const { karma_perks = {}, lineage_parent_id = null, character: directChar, preferred_gender = null, gender = null } = req.body;
+    const chosenGender = preferred_gender || gender || karma_perks.preferred_gender || karma_perks.gender;
+    if (chosenGender) {
+      karma_perks.preferred_gender = chosenGender;
+      karma_perks.gender = chosenGender;
+    }
     
     // If client already fast-forwarded and sent the complete new character, sync and return
     if (directChar && directChar.id) {
@@ -2465,7 +2475,7 @@ router.post('/action/minigame-result', async (req, res) => {
 // POST /api/game/tick - Advance simulation
 router.post('/tick', async (req, res) => {
   try {
-    const { choice_id, interaction_type, interaction_result, previous_dilemma } = req.body;
+    const { choice_id, interaction_type, type: rawType, interaction_result, previous_dilemma } = req.body;
     let character = await getLatestCharacter();
     if (!character) {
       return res.status(400).json({ error: "Không tìm thấy nhân vật đang hoạt động. Vui lòng bắt đầu kiếp sống mới!" });
@@ -2477,8 +2487,8 @@ router.post('/tick', async (req, res) => {
     let lastChoiceOutcome = null;
 
     // 0. Active Phase - Support Non-Binary Interactions & Quick Time Skip
-    if (previous_dilemma || interaction_type === "TIME_SKIP") {
-      const type = interaction_type || previous_dilemma?.interaction_type || "STANDARD";
+    if (previous_dilemma || interaction_type === "TIME_SKIP" || rawType === "TIME_SKIP") {
+      const type = interaction_type || rawType || previous_dilemma?.interaction_type || "STANDARD";
       const historyLog = character.history_log || [];
 
       // Update anti-loop tag memory and experienced once-in-a-lifetime events
@@ -2534,6 +2544,13 @@ router.post('/tick', async (req, res) => {
           const flagSet = new Set(character.hidden_flags || []);
           effects.flags.forEach(f => flagSet.add(f));
           character.hidden_flags = Array.from(flagSet);
+        }
+        if (effects.delayed_domino) {
+          if (!Array.isArray(character.delayed_flags)) character.delayed_flags = [];
+          character.delayed_flags.push({
+            ...effects.delayed_domino,
+            trigger_at_age: (character.age || 20) + (effects.delayed_domino.in_years || 2)
+          });
         }
 
         lastChoiceOutcome = selected.action_title;
@@ -2620,6 +2637,13 @@ router.post('/tick', async (req, res) => {
             if (effects.new_city) character.current_city = effects.new_city;
             if (effects.new_housing) character.housing = effects.new_housing;
             if (effects.occupation) character.occupation = effects.occupation;
+            if (effects.delayed_domino) {
+              if (!Array.isArray(character.delayed_flags)) character.delayed_flags = [];
+              character.delayed_flags.push({
+                ...effects.delayed_domino,
+                trigger_at_age: (character.age || 20) + (effects.delayed_domino.in_years || 2)
+              });
+            }
 
             historyLog.push({
               age: character.age,
@@ -2637,12 +2661,39 @@ router.post('/tick', async (req, res) => {
       }
     }
 
-    // Check Domino Fuses (Delayed time-bomb flags)
+    // Check Domino Fuses (Delayed time-bomb flags & story milestones)
     const { triggered: dominoTriggered, remaining: dominoRemaining } = checkDelayedDominoFuses(character);
+    let delayedMilestoneMessages = [];
     if (dominoTriggered.length > 0) {
       character.delayed_flags = dominoRemaining;
       dominoTriggered.forEach(d => {
-        if (!character.hidden_flags.includes(d.flag)) character.hidden_flags.push(d.flag);
+        if (d.flag && !character.hidden_flags.includes(d.flag)) character.hidden_flags.push(d.flag);
+        if (d.cash_delta) {
+          character.cash = Math.max(0, Number(character.cash || 0) + Number(d.cash_delta));
+        }
+        if (d.vitality_delta) {
+          const curMax = calculateMaxVitality(character.age, character.transhuman_frozen_until_age);
+          character.vitality = Math.max(10, Math.min(curMax, (character.vitality || 80) + Number(d.vitality_delta)));
+        }
+        if (d.burnout_delta) {
+          character.burnout = Math.max(0, Math.min(100, (character.burnout || 0) + Number(d.burnout_delta)));
+        }
+        if (d.karma_delta) {
+          character.karma = Math.max(0, Math.min(100, (character.karma || 80) + Number(d.karma_delta)));
+        }
+        if (d.occupation) {
+          character.occupation = d.occupation;
+        }
+
+        const msg = d.milestone_summary || d.title || `Cột mốc định mệnh: ${d.flag}`;
+        delayedMilestoneMessages.push(msg);
+
+        if (!Array.isArray(character.history_log)) character.history_log = [];
+        character.history_log.push({
+          age: character.age,
+          event: `[Cột Mốc Chín Muồi] ${d.title || 'Quả Báo/Trái Ngọt'}`,
+          choice: d.milestone_summary || 'Thời gian đã trả lời cho lựa chọn năm xưa.'
+        });
       });
     }
 
@@ -2753,7 +2804,8 @@ router.post('/tick', async (req, res) => {
       can_transhuman: character.age > 60 && netWorth > 15000000 && !character.is_transhuman,
       player_account: await getPlayerAccount(),
       passiveSummary,
-      aspiration
+      aspiration,
+      delayed_milestones: delayedMilestoneMessages
     });
   } catch (err) {
     console.error('Error during tick:', err);

@@ -476,11 +476,27 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
           </span>
 
           {/* 2D Avatar Body */}
-          <div className={`w-12 h-16 rounded-2xl bg-gradient-to-b from-indigo-500 to-indigo-800 border-2 border-indigo-300 flex items-center justify-center text-2xl shadow-xl shadow-indigo-600/40 transition-transform ${
-            facingDirection === 'left' ? 'scale-x-[-1]' : 'scale-x-100'
-          }`}>
-            🧑
-          </div>
+          {(() => {
+            const isFemale = character?.gender === 'female';
+            const age = character?.age ?? 25;
+            let avatarEmoji = '🧑';
+            if (isFemale) {
+              avatarEmoji = age <= 5 ? '👶' : age < 18 ? '👧' : age >= 65 ? '👵' : '👩';
+            } else {
+              avatarEmoji = age <= 5 ? '👶' : age < 18 ? '🧒' : age >= 65 ? '👴' : '🧑';
+            }
+            const gradClass = isFemale
+              ? 'from-rose-500 to-pink-700 border-rose-300 shadow-rose-600/40'
+              : 'from-indigo-500 to-indigo-800 border-indigo-300 shadow-indigo-600/40';
+
+            return (
+              <div className={`w-12 h-16 rounded-2xl bg-gradient-to-b ${gradClass} border-2 flex items-center justify-center text-2xl shadow-xl transition-transform ${
+                facingDirection === 'left' ? 'scale-x-[-1]' : 'scale-x-100'
+              }`}>
+                {avatarEmoji}
+              </div>
+            );
+          })()}
         </div>
 
         {/* Movement Help Banner */}

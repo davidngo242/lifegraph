@@ -42,18 +42,47 @@ export function generateCharacterVisuals(character, assets = []) {
 }
 
 function generateProceduralSvgAvatar(character, vfxFilter, netWorth) {
-  const { age, burnout, vitality } = character;
+  const { age, burnout, vitality, gender = 'male' } = character;
+  const isFemale = gender === 'female';
   
   // Colors based on age & state
-  const skinTone = vitality < 35 ? "#94a3b8" : age > 65 ? "#cbd5e1" : "#fcd34d";
+  const skinTone = vitality < 35 ? "#94a3b8" : age > 65 ? "#cbd5e1" : isFemale ? "#fed7aa" : "#fcd34d";
   const hairColor = age > 60 ? "#e2e8f0" : age > 45 ? "#64748b" : "#1e293b";
   const eyeColor = burnout > 75 ? "#ef4444" : "#38bdf8";
-  const borderColor = netWorth > 1000000 ? "#fbbf24" : burnout > 80 ? "#f43f5e" : "#6366f1";
+  const borderColor = netWorth > 1000000 ? "#fbbf24" : isFemale ? "#f43f5e" : "#6366f1";
 
   // Wrinkles for old age
   const wrinkles = age > 50 ? `<path d="M 35,45 Q 50,42 65,45 M 32,52 Q 50,49 68,52" stroke="#475569" stroke-width="1.2" fill="none" opacity="0.7"/>` : "";
   // Dark eye bags for burnout
   const eyeBags = burnout > 60 ? `<path d="M 36,65 Q 43,70 48,65 M 52,65 Q 57,70 64,65" stroke="#be123c" stroke-width="1.5" fill="none" opacity="0.8"/>` : "";
+
+  // Hair paths: Female long flowing hair vs Male classic crop
+  const hairSvg = isFemale
+    ? `<!-- Female Flowing Hair -->
+       <path d="M 23,46 C 18,65 19,86 26,96 L 33,96 C 26,82 26,62 31,48 Z" fill="${hairColor}"/>
+       <path d="M 77,46 C 82,65 81,86 74,96 L 67,96 C 74,82 74,62 69,48 Z" fill="${hairColor}"/>
+       <path d="M 26,45 Q 50,20 74,45 Q 76,28 50,22 Q 24,28 26,45 Z" fill="${hairColor}"/>
+       <!-- Female Side Bangs -->
+       <path d="M 32,38 Q 42,48 40,55 Q 35,48 31,42 Z" fill="${hairColor}"/>`
+    : `<!-- Male Classic Crop -->
+       <path d="M 28,45 Q 50,22 72,45 Q 74,32 50,26 Q 26,32 28,45 Z" fill="${hairColor}"/>
+       <path d="M 27,42 L 31,54 L 33,46 Z" fill="${hairColor}"/>`;
+
+  // Eyelashes & Lips
+  const femaleAccents = isFemale ? `
+    <!-- Eyelash flicks -->
+    <path d="M 38,51 L 35,48 M 46,51 L 49,49" stroke="#0f172a" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M 54,51 L 51,49 M 62,51 L 65,48" stroke="#0f172a" stroke-width="1.2" stroke-linecap="round"/>
+    <!-- Earrings -->
+    <circle cx="28" cy="56" r="2.2" fill="#fbbf24"/>
+    <circle cx="72" cy="56" r="2.2" fill="#fbbf24"/>
+    <!-- Soft blush cheeks -->
+    <circle cx="36" cy="62" r="5" fill="#f43f5e" opacity="0.25"/>
+    <circle cx="64" cy="62" r="5" fill="#f43f5e" opacity="0.25"/>
+  ` : '';
+
+  const mouthColor = isFemale ? (burnout > 75 ? '#be123c' : '#f43f5e') : (burnout > 75 ? '#7f1d1d' : '#334155');
+  const mouthStrokeWidth = isFemale ? "2.2" : "1.5";
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
     <defs>
@@ -68,7 +97,7 @@ function generateProceduralSvgAvatar(character, vfxFilter, netWorth) {
     <circle cx="50" cy="50" r="46" fill="none" stroke="${borderColor}" stroke-width="${netWorth > 1000000 ? '3' : '1.5'}" ${netWorth > 1000000 ? 'filter="url(#glow)"' : ''}/>
     
     <!-- Shoulders / Torso -->
-    <path d="M 18,96 Q 50,75 82,96 Z" fill="${netWorth > 1000000 ? '#1e293b' : '#0f172a'}" stroke="#334155" stroke-width="1"/>
+    <path d="M 18,96 Q 50,75 82,96 Z" fill="${netWorth > 1000000 ? '#1e293b' : isFemale ? '#312e81' : '#0f172a'}" stroke="#334155" stroke-width="1"/>
     ${netWorth > 1000000 ? `<path d="M 45,86 L 50,96 L 55,86 Z" fill="#fbbf24"/>` : ""}
 
     <!-- Head & Neck -->
@@ -76,7 +105,7 @@ function generateProceduralSvgAvatar(character, vfxFilter, netWorth) {
     <ellipse cx="50" cy="52" rx="20" ry="24" fill="${skinTone}"/>
 
     <!-- Hair -->
-    <path d="M 28,45 Q 50,22 72,45 Q 74,32 50,26 Q 26,32 28,45 Z" fill="${hairColor}"/>
+    ${hairSvg}
 
     <!-- Eyes -->
     <ellipse cx="42" cy="54" rx="3.5" ry="2.2" fill="#0f172a"/>
@@ -84,12 +113,13 @@ function generateProceduralSvgAvatar(character, vfxFilter, netWorth) {
     <ellipse cx="58" cy="54" rx="3.5" ry="2.2" fill="#0f172a"/>
     <circle cx="58" cy="54" r="1.5" fill="${eyeColor}"/>
 
+    ${femaleAccents}
     ${eyeBags}
     ${wrinkles}
 
     <!-- Nose & Mouth -->
     <path d="M 50,56 L 48,63 L 52,63" stroke="#475569" stroke-width="1" fill="none"/>
-    <path d="M 44,69 Q 50,${burnout > 70 ? '66' : '71'} 56,69" stroke="#334155" stroke-width="1.5" fill="none"/>
+    <path d="M 44,69 Q 50,${burnout > 70 ? '66' : '71'} 56,69" stroke="${mouthColor}" stroke-width="${mouthStrokeWidth}" fill="none"/>
 
     <!-- Subtle Glitch Lines when Burnout > 80 -->
     ${burnout > 80 ? `<line x1="10" y1="35" x2="90" y2="35" stroke="#f43f5e" stroke-width="0.8" opacity="0.6"/><line x1="20" y1="62" x2="80" y2="62" stroke="#38bdf8" stroke-width="0.8" opacity="0.5"/>` : ""}

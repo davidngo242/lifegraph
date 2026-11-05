@@ -424,6 +424,13 @@ export default function CharacterHeroBanner({
               <span className="font-bold text-white bg-slate-900/90 px-2 py-0.5 rounded-md border border-slate-700/60">
                 {age} Tuổi
               </span>
+              <span className={`font-bold px-2 py-0.5 rounded-md border text-[10px] flex items-center gap-1 ${
+                character.gender === 'female'
+                  ? 'bg-rose-950/70 border-rose-500/50 text-rose-300 shadow-sm'
+                  : 'bg-indigo-950/70 border-indigo-500/50 text-indigo-300 shadow-sm'
+              }`}>
+                <span>{character.gender === 'female' ? '♀️ Nữ' : '♂️ Nam'}</span>
+              </span>
               <span className="text-indigo-300 font-medium">{nationality}</span>
               <span className="text-slate-600">•</span>
               <span className="flex items-center gap-1 text-slate-200">

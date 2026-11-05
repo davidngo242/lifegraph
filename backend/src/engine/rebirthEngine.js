@@ -513,7 +513,12 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
   }
 
   // 4. Initial Character Assembly with Strict Patrilineal Lineage
-  const gender = karmaPerks.preferred_gender || (Math.random() < 0.5 ? 'male' : 'female');
+  const chosenGender = (karmaPerks.preferred_gender === 'male' || karmaPerks.preferred_gender === 'female')
+    ? karmaPerks.preferred_gender
+    : (karmaPerks.gender === 'male' || karmaPerks.gender === 'female')
+    ? karmaPerks.gender
+    : (Math.random() < 0.5 ? 'male' : 'female');
+  const gender = chosenGender;
   let householdContext = null;
   let characterName = "";
 
@@ -620,6 +625,7 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
   return {
     id: charId,
     name,
+    gender: gender,
     age: 0,
     generation: lineageParent ? (lineageParent.generation || 1) + 1 : 1,
     parent_name: lineageParent ? lineageParent.name : null,
