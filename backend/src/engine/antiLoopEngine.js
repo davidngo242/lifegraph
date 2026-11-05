@@ -35,6 +35,27 @@ export function filterViableScenarios(scenarioMatrix, character) {
   const flags = new Set(character.hidden_flags || []);
   const currentAge = typeof character.age === 'number' ? character.age : 20;
 
+  // 1. Determine Family & Relationship Reality for THIS character
+  const isOrphan = character.origin === 'orphan' ||
+                   character.origin_background?.id === 'orphan' ||
+                   flags.has("orphan") ||
+                   flags.has("parents_deceased") ||
+                   character.household?.parents_status === 'deceased_or_abandoned' ||
+                   character.household?.parents_status === 'deceased' ||
+                   (character.household?.father_status === 'deceased' && character.household?.mother_status === 'deceased');
+
+  const hasLivingSpouse = flags.has("married") ||
+                          (Array.isArray(character.relationships) && character.relationships.some(r => 
+                            (r.type === 'spouse' || r.type === 'partner') && r.status !== 'deceased'));
+
+  const hasChildren = Array.isArray(character.relationships) && 
+                      character.relationships.some(r => r.type === 'child' && r.status !== 'deceased');
+
+  const occ = (character.occupation || "").toLowerCase();
+  const isTechOrStartup = occ.includes('lập trình') || occ.includes('công nghệ') || occ.includes('ai') || 
+                          occ.includes('kỹ sư') || occ.includes('startup') || occ.includes('founder') ||
+                          flags.has("startup_founder") || flags.has("tech_career");
+
   const viable = scenarioMatrix.filter(s => {
     // 1. Age Range Check
     if (s.min_age !== undefined && currentAge < s.min_age) return false;
@@ -43,18 +64,31 @@ export function filterViableScenarios(scenarioMatrix, character) {
     // 2. Strict ID deduplication: Never repeat any scenario with an ID that has already been experienced in this lifetime
     if (s.id && experiencedIds.has(s.id)) return false;
 
-    // 3. Parent passing specific protection (Can never repeat and impossible at age 62+)
-    if (s.tag === "family_bereavement" || s.id === "ill_parent_passing") {
-      if (flags.has("parents_deceased") || flags.has("mother_deceased")) return false;
-      if (currentAge >= 62) return false;
+    // 3. Parent / Family Bereavement Check:
+    // If character is an orphan or parents already passed away, NEVER trigger parent passing or family burden events
+    if (s.tag === "family_bereavement" || s.id === "ill_parent_passing" || s.id === "ill_family_medical_emergency" || s.tag === "family_health_burden" || s.id === "tri_sibling_ancestral_land" || s.tag === "ancestral_heritage_crossroad") {
+      if (isOrphan || currentAge >= 62) return false;
     }
 
-    // 4. Spouse passing specific protection
-    if (s.tag === "spouse_bereavement" || s.id === "ill_spouse_passing") {
+    // 4. Spouse / Marriage Check:
+    // If character is single / unmarried, NEVER trigger spouse bereavement, spouse startup, or marital breakdown events
+    if (s.tag === "spouse_bereavement" || s.id === "ill_spouse_passing" || s.id === "tri_spouse_startup_dream" || s.tag === "spouse_venture_crossroad" || s.id === "spec_work_family" || s.tag === "career_vs_family") {
+      if (!hasLivingSpouse) return false;
       if (flags.has("spouse_deceased")) return false;
     }
 
-    // 5. Anti-Loop 15-tag contextual window check
+    // 5. Children Check:
+    // If character has no children, NEVER trigger child education or inheritance distribution events
+    if (s.tag === "child_destiny_crossroad" || s.id === "tri_child_scholarship_abroad" || s.id === "spec_estate_distribution" || s.tag === "inheritance_planning") {
+      if (!hasChildren) return false;
+    }
+
+    // 6. Tech / Software Startup Specific Check:
+    if (s.id === "ill_startup_patent_theft" || s.tag === "intellectual_theft_loss") {
+      if (!isTechOrStartup && !flags.has("intellectual_acumen")) return false;
+    }
+
+    // 7. Anti-Loop 15-tag contextual window check
     if (bannedTags.has(s.tag)) return false;
 
     return true;

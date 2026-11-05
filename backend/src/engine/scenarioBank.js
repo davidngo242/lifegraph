@@ -1381,6 +1381,21 @@ export function generateMillionProceduralScenario(character, netWorth, bannedTag
   const cash = Number(character.cash) || 10000;
   const burnout = Number(character.burnout) || 30;
   const vitality = Number(character.vitality) || 70;
+  const flags = new Set(character.hidden_flags || []);
+
+  const isOrphan = character.origin === 'orphan' ||
+                   character.origin_background?.id === 'orphan' ||
+                   flags.has("orphan") ||
+                   flags.has("parents_deceased") ||
+                   character.household?.parents_status === 'deceased_or_abandoned' ||
+                   character.household?.parents_status === 'deceased';
+
+  const hasLivingSpouse = flags.has("married") ||
+                          (Array.isArray(character.relationships) && character.relationships.some(r => 
+                            (r.type === 'spouse' || r.type === 'partner') && r.status !== 'deceased'));
+
+  const hasChildren = Array.isArray(character.relationships) && 
+                      character.relationships.some(r => r.type === 'child' && r.status !== 'deceased');
 
   // Determine age bracket strictly
   let stageKey = "youth";
@@ -1392,7 +1407,26 @@ export function generateMillionProceduralScenario(character, netWorth, bannedTag
   else if (age >= 30) stageKey = "adulthood";
 
   const stageTemplates = {
-    childhood: [
+    childhood: isOrphan ? [
+      {
+        title: "Tự Lập Thuở Nhỏ & Bài Học Sinh Tồn",
+        narrative: "Không có sự bao bọc của cha mẹ, bạn sớm học cách tự chăm sóc bản thân, biết nấu cơm và giúp đỡ những mảnh đời cơ nhỡ cùng cảnh ngộ.",
+        type: "STANDARD",
+        optA: "Chăm Chỉ Đèn Sách Tự Lập",
+        hintA: "Rèn luyện ý chí kiên định và tính tự giác cao (+10 Thể lực, +15 Karma).",
+        optB: "Thích Nghi Mưu Sinh Sớm",
+        hintB: "Nhạy bén với cuộc sống, tích lũy bản lĩnh (+8 Thể lực, +$50 tiền tiêu vặt)."
+      },
+      {
+        title: "Cơn Sốt Đơn Độc Vượt Qua",
+        narrative: "Thời tiết chuyển lạnh khiến bạn sốt cao giữa đêm. Bằng sự kiên cường và sự đùm bọc của thầy cô/bà con chòm xóm, bạn đã vượt qua cơn bạo bệnh.",
+        type: "STANDARD",
+        optA: "Uống Nước Ấm & Tự Chườm Khăn",
+        hintA: "Cơ thể vượt qua thử thách, sức đề kháng tôi luyện (+12 Thể lực).",
+        optB: "Nhờ Bà Con Chòm Xóm Giúp",
+        hintB: "Cảm nhận sự ấm áp của tình làng nghĩa xóm (+6 Thể lực, +12 Karma)."
+      }
+    ] : [
       {
         title: "Kỷ Niệm Thuở Bé & Vòng Tay Gia Đình",
         narrative: "Tuổi ấu thơ trôi qua với những buổi chiều chạy nhảy trước sân nhà. Cha mẹ ân cần dạy bạn từng con chữ và cách ứng xử tử tế với xóm giềng.",
@@ -1412,7 +1446,25 @@ export function generateMillionProceduralScenario(character, netWorth, bannedTag
         hintB: "Cảm nhận sự che chở ấm áp tuyệt đối (+6 Thể lực, +10 Karma)."
       }
     ],
-    adolescence: [
+    adolescence: isOrphan ? [
+      {
+        title: "Tự Chọn Con Đường Học Vấn Hay Mưu Sinh",
+        narrative: "Tuổi mới lớn đứng trước ngưỡng cửa tương lai. Không có phụ mẫu định hướng, mọi quyết định tiếp tục thi đại học hay học nghề đều nằm trong tay bạn.",
+        type: "STANDARD",
+        optA: "Quyết Tâm Đỗ Đại Học Công Lập",
+        hintA: "Nỗ lực đèn sách phi thường, mở khóa tương lai tri thức (+15 Karma).",
+        optB: "Học Nghề Kỹ Thuật Thực Tế",
+        hintB: "Sớm tự chủ tài chính mưu sinh (+10 Thể lực, +$300 tiền túi)."
+      },
+      {
+        title: "Khẳng Định Lập Trường Tuổi Trẻ",
+        narrative: "Bạn tự rèn luyện bản lĩnh sống tự lập. Những lời dị nghị của người ngoài không thể làm lung lay ý chí vươn lên thoát nghèo của bạn.",
+        type: "SPECTRUM",
+        min_label: "Khiêm Nhường Nhẫn Nại",
+        max_label: "Tự Tin Bứt Phá",
+        metric: "burnout_vs_vitality"
+      }
+    ] : [
       {
         title: "Thử Thách Khảo Sát & Ước Mơ Tuổi Trẻ",
         narrative: "Thầy cô yêu cầu mỗi học sinh viết bài luận về ước mơ tương lai. Bạn đứng trước nhiều hoài bão: trở thành kỹ sư, doanh nhân, hay người hoạt động xã hội.",
@@ -1440,7 +1492,7 @@ export function generateMillionProceduralScenario(character, netWorth, bannedTag
         max_label: "Tất Tay Mạo Hiểm",
         metric: "cash_vs_vitality"
       },
-      {
+      hasLivingSpouse ? {
         title: "Khúc Mắc Trong Mối Quan Hệ Lứa Đôi",
         narrative: "Sự bận rộn và khoảng cách quan điểm sống bắt đầu tạo ra hố sâu giữa hai người. Một cuộc trò chuyện thẳng thắn có thể cứu vãn hoặc đặt dấu chấm hết.",
         type: "STANDARD",
@@ -1448,18 +1500,26 @@ export function generateMillionProceduralScenario(character, netWorth, bannedTag
         hintA: "Giữ hòa khí tình cảm, nhưng phải gánh thêm áp lực tâm lý.",
         optB: "Bảo Vệ Cái Tôi",
         hintB: "Dứt khoát giải thoát, tập trung cày tiền nhưng chịu nỗi cô đơn."
+      } : {
+        title: "Độc Thân Tự Lập & Cám Dỗ Chi Tiêu",
+        narrative: "Sống một mình giữa phố thị mang lại sự tự do tuyệt đối, nhưng cũng kèm theo những cám dỗ về tiệc tùng và chi tiêu mua sắm quá tay vào cuối tuần.",
+        type: "STANDARD",
+        optA: "Kỷ Luật Tiết Kiệm & Ở Nhà Tự Nấu",
+        hintA: "Giữ vững dòng tiền tích lũy, bảo toàn ví tiền (+10 Karma).",
+        optB: "Tụ Tập Cùng Bạn Bè Đồng Nghiệp",
+        hintB: "Xả stress công việc nhưng tiêu hao một phần tiền túi (-15 Burnout, -$200)."
       }
     ],
     adulthood: [
       {
         title: "Tái Cấu Trúc Tài Chính & Cắt Giảm Chi Phí",
-        narrative: `Lạm phát và chi phí sinh hoạt tăng cao khiến ngân sách gia đình bị thâm hụt. Bạn cần đưa ra quyết định cân đối giữa chất lượng cuộc sống và sự an toàn dự phòng.`,
+        narrative: `Lạm phát và chi phí sinh hoạt tăng cao khiến ngân sách bị thâm hụt. Bạn cần đưa ra quyết định cân đối giữa chất lượng cuộc sống và sự an toàn dự phòng.`,
         type: "SPECTRUM",
         min_label: "Thắt Lưng Buộc Bụng",
         max_label: "Vay Mượn Duy Trì",
         metric: "burnout_vs_cash"
       },
-      {
+      hasLivingSpouse ? {
         title: "Đề Bạt Thăng Chức Kèm Trách Nhiệm Nặng Nề",
         narrative: "Ban giám đốc trao cho bạn chiếc ghế quản trị vùng. Mức lương tăng thêm 35% nhưng đồng nghĩa với những chuyến công tác biền biệt xa gia đình.",
         type: "STANDARD",
@@ -1467,6 +1527,13 @@ export function generateMillionProceduralScenario(character, netWorth, bannedTag
         hintA: "Tiền tài thăng tiến vượt bậc, nhưng bỏ rơi mái ấm.",
         optB: "Từ Chối An Phận",
         hintB: "Duy trì vị trí hiện tại, giữ trọn hạnh phúc gia đình."
+      } : {
+        title: "Bứt Phá Chuyên Môn Hay Cân Bằng Thể Lực",
+        narrative: "Không vướng bận việc gia đình, bạn có toàn quyền dốc sức cho hoài bão sự nghiệp. Tuy nhiên những đêm thức trắng liên tục bắt đầu để lại dấu hiệu suy kiệt.",
+        type: "SPECTRUM",
+        min_label: "Giữ Gìn Sức Khỏe",
+        max_label: "Bán Mạng Thâu Đêm",
+        metric: "vitality_vs_wealth"
       }
     ],
     midlife: [
@@ -1491,12 +1558,20 @@ export function generateMillionProceduralScenario(character, netWorth, bannedTag
     elderly: [
       {
         title: "Hội Ngộ Trường Xưa Tuổi Xế Chiều",
-        narrative: "Sau nửa thế kỷ, bạn có dịp gặp lại những người bạn cùng lớp thời niên thiếu. Những mái đầu bạc trắng, những câu chuyện về con cháu và sự thấu suốt về cuộc đời mang lại xúc cảm bồi hồi khó tả.",
+        narrative: "Sau nửa thế kỷ, bạn có dịp gặp lại những người bạn cùng lớp thời niên thiếu. Những mái đầu bạc trắng và sự thấu suốt về cuộc đời mang lại xúc cảm bồi hồi khó tả.",
         type: "TIME_SKIP",
         years_jump: 2,
         event_summary: "Trải qua 2 năm hoài niệm thanh thản, hàn gắn những kỷ niệm xưa."
       },
-      {
+      isOrphan ? {
+        title: "Trùng Tu Nơi Chôn Nhau Cắt Rốn",
+        narrative: `Ngôi chùa / xóm nghèo nơi cưu mang bạn thuở nhỏ nay đã xuống cấp. Việc ủng hộ tu sửa sẽ tốn khoảng $${Math.max(3000, Math.round(cash * 0.2)).toLocaleString()}.`,
+        type: "STANDARD",
+        optA: "Công Đức Trùng Tu",
+        hintA: "Tri ân cội nguồn, phước đức vô lượng (+25 Karma).",
+        optB: "Giữ Tiền Dự Phòng Y Tế",
+        hintB: "Tiết kiệm tiền dưỡng lão, giữ an toàn bản thân."
+      } : {
         title: "Cân Nhắc Sửa Lại Ngôi Nhà Cổ Của Tổ Tiên",
         narrative: `Mái ngói căn nhà cũ đã dột nát sau nhiều mùa mưa bão. Việc đại tu sẽ tốn khoảng $${Math.max(5000, Math.round(cash * 0.25)).toLocaleString()}, khoản tiền dự phòng viện phí của bạn.`,
         type: "STANDARD",
@@ -1514,14 +1589,22 @@ export function generateMillionProceduralScenario(character, netWorth, bannedTag
         years_jump: 2,
         event_summary: "Trải qua 2 năm hoàng hôn bình lặng, tâm thức nhẹ nhõm buông xả."
       },
-      {
-        title: "Phân Phát Kỷ Vật Cuối Cùng",
+      hasChildren ? {
+        title: "Phân Phát Kỷ Vật Cuối Cùng Cho Con Cháu",
         narrative: "Bạn tự tay mở chiếc hòm gỗ cũ, trao tặng lại những chiếc đồng hồ, cuốn sổ nhật ký và kỷ vật cả đời cho các con cháu làm kỷ niệm trước ngày đi xa.",
         type: "STANDARD",
         optA: "Trao Tặng Tất Cả",
         hintA: "Thanh thản không vướng bận, con cháu xúc động (Karma +25).",
         optB: "Giữ Lại Bên Mình",
         hintB: "Ôm ấp ký ức đến hơi thở cuối cùng trong bệnh viện."
+      } : {
+        title: "Thành Lập Quỹ Khuyến Học Thiện Nguyện",
+        narrative: "Không có con cháu nối dõi, bạn quyết định dành lại toàn bộ sản nghiệp và kỷ vật cả đời để thành lập quỹ học bổng cưu mang những em nhỏ cơ nhỡ.",
+        type: "STANDARD",
+        optA: "Hiến Tặng Toàn Bộ Di Sản",
+        hintA: "Để lại tiếng thơm muôn đời, đại phước đức chuyển kiếp (+35 Karma).",
+        optB: "Dành Cho Chi Phí Y Tế ICU",
+        hintB: "Bảo đảm điều kiện chăm sóc giảm nhẹ tốt nhất những ngày cuối (+15 Thể lực)."
       }
     ]
   };

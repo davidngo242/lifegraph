@@ -84,6 +84,7 @@ export default function LifeGraphPage() {
   const [showSkillSelector, setShowSkillSelector] = useState<boolean>(false);
   const [showTarotCardModal, setShowTarotCardModal] = useState<boolean>(false);
   const [showGuideModal, setShowGuideModal] = useState<boolean>(false);
+  const [activeScenario, setActiveScenario] = useState<any>(null);
   const [activeView, setActiveView] = useState<'home' | 'game' | 'lineage'>('home');
   const [gameMode, setGameMode] = useState<'2d_scene' | 'cockpit'>('cockpit');
   const [lineage, setLineage] = useState<any[]>([]);
@@ -164,6 +165,7 @@ export default function LifeGraphPage() {
       setNpcs(data.npcs || []);
       setDilemma(data.dilemma);
       setCanTranshuman(data.can_transhuman || false);
+      if (data.scenario !== undefined) setActiveScenario(data.scenario);
       if (data.aspiration) setAspiration(data.aspiration);
       if (data.passiveSummary?.annual_digest) setAnnualDigest(data.passiveSummary.annual_digest);
 
@@ -238,6 +240,7 @@ export default function LifeGraphPage() {
       setNpcs(data.npcs || []);
       setDilemma(data.dilemma);
       setCanTranshuman(data.can_transhuman || false);
+      if (data.scenario !== undefined) setActiveScenario(data.scenario);
       if (data.aspiration) setAspiration(data.aspiration);
       if (data.passiveSummary?.annual_digest) setAnnualDigest(data.passiveSummary.annual_digest);
     } catch (err: any) {
@@ -305,6 +308,7 @@ export default function LifeGraphPage() {
       setRelationships(data.relationships || []);
       setNpcs(data.npcs || []);
       setDilemma(data.dilemma);
+      if (data.scenario !== undefined) setActiveScenario(data.scenario);
       if (data.inheritance_summary) {
         setHeirNotice(data.inheritance_summary);
       }
@@ -667,6 +671,7 @@ export default function LifeGraphPage() {
       if (data.character) setCharacter(data.character);
       if (data.dilemma) setDilemma(data.dilemma);
       if (data.visuals) setVisuals(data.visuals);
+      if (data.scenario !== undefined) setActiveScenario(data.scenario);
       triggerAvatarReaction('celebrate');
       triggerBannerFeedback({
         type: 'milestone',
@@ -1758,31 +1763,33 @@ export default function LifeGraphPage() {
                   />
                 )}
 
-                {/* Active Scenario Cross-Cutting Quest Card (Xuyên suốt kịch bản trong Cockpit) */}
-                {character?.age >= 18 && (
+                {/* Active Scenario Cross-Cutting Quest Card (Chỉ hiển thị khi có Kịch bản phù hợp & chưa hoàn thành) */}
+                {activeScenario && !character?.is_deceased && (
                   <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/60 via-slate-900 to-indigo-950/60 border border-purple-500/40 shadow-xl space-y-2.5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-xs">📖</span>
                         <span className="text-xs font-bold text-amber-300 normal-case tracking-normal">
-                          Kịch Bản Trọng Tâm: Chương 1 · Giữ Nghề Hay Đổi Đời?
+                          {activeScenario.title || "Kịch Bản Trọng Tâm"}
                         </span>
                       </div>
                       <button
                         onClick={() => setGameMode('2d_scene')}
                         className="px-2.5 py-1 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 text-[12px] font-bold flex items-center gap-1 transition"
                       >
-                        <span>Mở Cảnh 2D</span>
+                        <span>Mở Cảnh 3D</span>
                         <Play className="w-3 h-3 fill-current" />
                       </button>
                     </div>
 
                     <p className="text-xs text-slate-300 font-sans leading-relaxed">
-                      Minh rủ bạn lập công ty AI với 35% cổ phần. Trong khi đó, sếp Hùng đề xuất thăng chức Tech Lead (+30% lương), còn Mai mong muốn sự an toàn tài chính.
+                      {activeScenario.description}
                     </p>
 
                     <div className="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[12px] text-slate-400">
-                      <span>Nhân vật liên quan: Mai, Minh, Anh Hùng</span>
+                      <span>
+                        {activeScenario.roles ? `Nhân vật liên quan: ${Object.values(activeScenario.roles).join(', ')}` : "Cột mốc ngã rẽ cuộc đời"}
+                      </span>
                       <button
                         onClick={() => setGameMode('2d_scene')}
                         className="text-purple-300 hover:text-white font-medium underline underline-offset-2"

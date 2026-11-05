@@ -495,7 +495,8 @@ router.post('/childhood-fastforward', async (req, res) => {
       assets,
       relationships,
       npcs,
-      dilemma: getSessionData().currentDilemma
+      dilemma: getSessionData().currentDilemma,
+      scenario: getCurrentScenarioForCharacter(character)
     });
   } catch (err) {
     console.error('Childhood fastforward error:', err);
@@ -536,7 +537,8 @@ router.post('/rebirth', async (req, res) => {
       assets,
       relationships,
       npcs,
-      dilemma: getSessionData().currentDilemma
+      dilemma: getSessionData().currentDilemma,
+      scenario: getCurrentScenarioForCharacter(character)
     });
   } catch (err) {
     console.error('Direct rebirth error:', err);
@@ -1029,6 +1031,7 @@ const handleHeirRebirth = async (req, res) => {
       npcs: inheritedNpcs,
       childhood_milestones: milestones,
       dilemma: getSessionData().currentDilemma,
+      scenario: getCurrentScenarioForCharacter(newCharacter),
       player_account: await getPlayerAccount(),
       inheritance_summary: {
         parent_name: parent.name,
@@ -2966,6 +2969,7 @@ router.post('/tick', async (req, res) => {
       player_account: await getPlayerAccount(),
       passiveSummary,
       aspiration,
+      scenario: getCurrentScenarioForCharacter(character),
       delayed_milestones: delayedMilestoneMessages
     });
   } catch (err) {
@@ -2992,7 +2996,8 @@ router.post('/reset', async (req, res) => {
       assets,
       relationships,
       npcs,
-      dilemma: getSessionData().currentDilemma
+      dilemma: getSessionData().currentDilemma,
+      scenario: getCurrentScenarioForCharacter(character)
     });
   } catch (err) {
     console.error('Reset failed:', err);

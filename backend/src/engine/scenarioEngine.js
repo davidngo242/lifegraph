@@ -87,13 +87,49 @@ export function getNextScenarioAge(character) {
 }
 
 function personalizeScenario(scenario, character) {
+  if (!scenario || !character) return scenario;
   const cloned = JSON.parse(JSON.stringify(scenario));
-  cloned.scenes.forEach(scene => {
-    scene.name = scene.name?.replace(/\bAn\b/g, character.name ?? 'Nhân vật');
-    scene.hotspots.forEach(h => {
-      if (h.dialogue?.speaker === 'An') h.dialogue.speaker = character.name;
+  const charName = character.name ?? 'Nhân vật';
+  const isFemale = (character.gender === 'female' || character.gender === 'Nữ');
+
+  // Find real spouse / partner if exists
+  const realSpouse = (character.relationships || []).find(r => (r.type === 'spouse' || r.type === 'partner') && r.status !== 'deceased');
+
+  // Safe partner name that NEVER collides with character's name
+  let defaultPartnerName = isFemale ? 'Minh Hải' : 'Thanh Mai';
+  if (charName.toLowerCase().includes('mai')) {
+    defaultPartnerName = isFemale ? 'Đình Trọng' : 'Hà Linh';
+  }
+  const partnerName = realSpouse?.name || defaultPartnerName;
+
+  // Personalize title & description
+  if (cloned.description) {
+    cloned.description = cloned.description
+      .replace(/\bMai\b/g, partnerName)
+      .replace(/\bAn\b/g, charName);
+  }
+
+  // Personalize roles
+  if (cloned.roles) {
+    if (cloned.roles.partner) {
+      cloned.roles.partner = cloned.roles.partner.replace(/\bMai\b/g, partnerName);
+    }
+  }
+
+  cloned.scenes?.forEach(scene => {
+    scene.name = scene.name?.replace(/\bAn\b/g, charName).replace(/\bMai\b/g, partnerName);
+    scene.hotspots?.forEach(h => {
+      if (h.dialogue?.speaker === 'An') h.dialogue.speaker = charName;
+      if (h.dialogue?.speaker === 'Mai') h.dialogue.speaker = partnerName;
+      if (h.label) h.label = h.label.replace(/\bMai\b/g, partnerName);
+      if (h.dialogue?.text) {
+        h.dialogue.text = h.dialogue.text
+          .replace(/\banh\b/gi, isFemale ? 'em' : 'anh')
+          .replace(/\bMai\b/g, partnerName);
+      }
     });
   });
+
   return cloned;
 }
 
