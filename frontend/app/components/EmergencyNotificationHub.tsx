@@ -35,13 +35,13 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
   const criticalCount = alerts.filter(a => a.type === 'critical' || a.type === 'vendetta').length;
   const totalCount = alerts.length;
 
-  // Auto-popup modal when a new critical alert arrives
+  // Auto-popup modal when any new alert arrives (ensures alerts are prominent popup modals)
   useEffect(() => {
-    if (criticalCount > 0 && alerts.length > lastAlertCount) {
+    if (alerts.length > lastAlertCount) {
       setIsOpen(true);
     }
     setLastAlertCount(alerts.length);
-  }, [alerts.length, criticalCount]);
+  }, [alerts.length]);
 
   const handleDismissAll = () => {
     alerts.forEach(a => onDismiss(a.id));
@@ -53,6 +53,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
       {/* Header Notification Pill Button */}
       <Tooltip
         position="bottom"
+        align="right"
         content={
           totalCount > 0
             ? `Có ${totalCount} thông báo & biến cố cần lưu ý`

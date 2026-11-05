@@ -1183,7 +1183,7 @@ export default function LifeGraphPage() {
       )}
 
       {/* Slim Top Navigation */}
-      <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-40 gap-3 max-w-full overflow-visible z-50">
+      <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-50 gap-3 max-w-full overflow-visible">
         {/* 1. Left Zone: Brand Logo & View Switcher Tabs (Đẩy sát sang trái) */}
         <div className="flex items-center gap-3 sm:gap-4 shrink-0">
           <div className="flex items-center gap-2.5">
@@ -1487,41 +1487,9 @@ export default function LifeGraphPage() {
               onOpen3DInspector={() => setShow3DInspectorModal(true)}
             />
 
-            {/* View Mode Switcher: 2D Interactive Scene vs Cockpit Dashboard */}
-            <div className="flex items-center justify-between p-2 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md mb-4 flex-wrap gap-2">
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setGameMode('2d_scene')}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-                    gameMode === '2d_scene'
-                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <span>🏙️ Không Gian 2D Nhập Vai (Chương 1)</span>
-                </button>
-                <button
-                  onClick={() => setGameMode('cockpit')}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-                    gameMode === 'cockpit'
-                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <span>📋 Bảng Điều Khiển Cuộc Đời (Cockpit)</span>
-                </button>
-              </div>
-              <span className="text-[11px] text-slate-400 hidden sm:inline">
-                {gameMode === '2d_scene' ? "Di chuyển trong không gian để khám phá manh mối trước khi quyết định" : "Chế độ quản lý chỉ số tổng hợp"}
-              </span>
-            </div>
+            
 
-            {gameMode === '2d_scene' ? (
-              <div className="mb-6">
-                <InteractiveScene2D onScenarioResolved={() => loadState()} character={character} />
-              </div>
-            ) : (
-              /* 3-Column Responsive Grid Cockpit */
+            /* 3-Column Responsive Grid Cockpit (Luôn duy trì bố cục 3 cột vững chãi) */
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
               {/* Left Column: Sticky Profile Sidebar (3 cols) */}
               <div className="order-2 lg:order-1 lg:col-span-3 min-w-0 w-full">
@@ -1543,6 +1511,41 @@ export default function LifeGraphPage() {
 
               {/* Center Column: AP Hub & Life Dilemmas (6 cols) */}
               <div className="order-1 lg:order-2 lg:col-span-6 flex flex-col gap-4 min-w-0 w-full">
+                {/* View Mode Switcher inside Center Column */}
+                <div className="flex items-center justify-between p-2 rounded-2xl bg-slate-900/90 border border-slate-800 backdrop-blur-md flex-wrap gap-2 shadow-lg">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setGameMode('2d_scene')}
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
+                        gameMode === '2d_scene'
+                          ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <span>🏙️ Không Gian Nhập Vai ({(character?.age || 0) < 6 ? "Ấu Thơ" : (character?.age || 0) < 18 ? "Học Trò" : (character?.age || 0) < 36 ? "Sự Nghiệp" : (character?.age || 0) < 56 ? "Trung Niên" : "Hoàng Hôn"})</span>
+                    </button>
+                    <button
+                      onClick={() => setGameMode('cockpit')}
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
+                        gameMode === 'cockpit'
+                          ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <span>📋 Bảng Quyết Định & AP</span>
+                    </button>
+                  </div>
+                  <span className="text-[10px] text-slate-400 hidden sm:inline">
+                    {gameMode === '2d_scene' ? "Di chuyển khám phá manh mối" : "Quản lý hành động tổng hợp"}
+                  </span>
+                </div>
+
+                {gameMode === '2d_scene' ? (
+                  <div className="w-full">
+                    <InteractiveScene2D onScenarioResolved={() => loadState()} character={character} />
+                  </div>
+                ) : (
+                  <>
                 {/* Strategic Action Points (AP) Hub (Đẩy lên trên cùng, tối ưu không gian) */}
                 {character && (
                   <ActionPointHub
@@ -1614,6 +1617,8 @@ export default function LifeGraphPage() {
                 }`}>
                   {renderInteractionComponent()}
                 </div>
+                  </>
+                )}
               </div>
 
               {/* Right Column: Sticky Life Chronicle & Narrative Feed + Annual Digest (3 cols) */}
@@ -1632,7 +1637,6 @@ export default function LifeGraphPage() {
                 />
               </div>
             </div>
-            )}
           </>
         )}
       </main>

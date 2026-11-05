@@ -113,6 +113,15 @@ const KNOWLEDGE_LABELS: { [key: string]: { label: string; icon: string; desc: st
   }
 };
 
+const cleanWhisper = (text: string) => {
+  if (!text) return '';
+  return text
+    .replace(/^[^:]{1,25}:\s*['"]?/, '')
+    .replace(/^(Lý Trí|Trái Tim|Bản Năng|Lý trí|Trái tim|Bản năng)[\s:'"]*/i, '')
+    .replace(/['"]$/, '')
+    .trim();
+};
+
 export default function InteractiveScene2D({ onScenarioResolved, character }: InteractiveScene2DProps) {
   const [scenario, setScenario] = useState<ScenarioData | null>(null);
   const [currentSceneId, setCurrentSceneId] = useState<string>("scene_home");
@@ -461,7 +470,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
         >
           {/* Player Tag */}
           <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold mb-1 shadow">
-            An (Bạn)
+            {character?.name ? `${character.name} (Bạn)` : "Bạn"}
           </span>
 
           {/* 2D Avatar Body */}
@@ -568,7 +577,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                   <span>Lý Trí</span>
                 </div>
                 <p className="text-slate-300 leading-relaxed font-serif text-[11.5px]">
-                  {(scenario.mind_stage?.whispers?.rational || '').replace(/^[^:]{1,25}:\s*['"]?/, '').replace(/['"]$/, '')}
+                  {cleanWhisper(scenario.mind_stage?.whispers?.rational || '')}
                 </p>
               </div>
 
@@ -578,7 +587,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                   <span>Trái Tim</span>
                 </div>
                 <p className="text-slate-300 leading-relaxed font-serif text-[11.5px]">
-                  {(scenario.mind_stage?.whispers?.empathy || '').replace(/^[^:]{1,25}:\s*['"]?/, '').replace(/['"]$/, '')}
+                  {cleanWhisper(scenario.mind_stage?.whispers?.empathy || '')}
                 </p>
               </div>
 
@@ -588,7 +597,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                   <span>Bản Năng</span>
                 </div>
                 <p className="text-slate-300 leading-relaxed font-serif text-[11.5px]">
-                  {(scenario.mind_stage?.whispers?.instinct || '').replace(/^[^:]{1,25}:\s*['"]?/, '').replace(/['"]$/, '')}
+                  {cleanWhisper(scenario.mind_stage?.whispers?.instinct || '')}
                 </p>
               </div>
             </div>

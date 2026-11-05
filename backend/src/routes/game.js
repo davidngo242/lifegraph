@@ -388,7 +388,7 @@ router.post('/start', async (req, res) => {
 // POST /api/game/childhood-fastforward - Complete childhood choices and advance
 router.post('/childhood-fastforward', async (req, res) => {
   try {
-    const { milestone_choices = [], target_age = 18 } = req.body;
+    const { milestone_choices = [], target_age = 6 } = req.body;
     let character = await getLatestCharacter();
     let assets = await getAssets(character.id);
     let relationships = await getRelationships(character.id);
@@ -414,7 +414,7 @@ router.post('/childhood-fastforward', async (req, res) => {
     }
 
     
-    if ((!milestone_choices || milestone_choices.length === 0) && (Number(target_age) || 18) <= 6) {
+    if ((!milestone_choices || milestone_choices.length === 0) && (Number(target_age) || 6) <= 6) {
       history.push({
         age: 1,
         event: "Lễ Thôi Nôi & Bước Đi Chập Chững",
@@ -434,7 +434,7 @@ router.post('/childhood-fastforward', async (req, res) => {
       character.karma = Math.min(100, (character.karma || 100) + 15);
       flagSet.add("cherished_childhood");
     }
-    const finalAge = Math.max(6, Math.min(18, Number(target_age) || 18));
+    const finalAge = Math.max(6, Math.min(18, Number(target_age) || 6));
     character.age = finalAge;
     character.max_vitality = calculateMaxVitality(finalAge);
     character.hidden_flags = Array.from(flagSet);
@@ -445,9 +445,19 @@ router.post('/childhood-fastforward', async (req, res) => {
       // UNLOCK PERSONAL CASH AT AGE 18!
       character.cash = Number(character.family_endowment || 0);
       character.family_endowment = 0;
+      if (!character.occupation || character.occupation === "Trẻ mầm non" || character.occupation === "Học sinh tiểu học") {
+        character.occupation = "Lao động tự do";
+      }
     } else {
       // Retain family endowment safely until age 18, provide living allowance
       character.cash = Math.max(150, character.household?.annual_allowance || 200);
+      if (finalAge >= 6 && finalAge < 12) {
+        character.occupation = "Học sinh tiểu học";
+      } else if (finalAge >= 12 && finalAge < 16) {
+        character.occupation = "Học sinh THCS";
+      } else if (finalAge >= 16) {
+        character.occupation = "Học sinh THPT";
+      }
     }
 
     await updateCharacter(character.id, character);

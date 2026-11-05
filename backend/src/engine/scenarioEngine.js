@@ -179,9 +179,6 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
   const scenario = getCurrentScenarioForCharacter(character);
   if (!scenario) throw new Error("Không tìm thấy kịch bản khả dụng.");
 
-  const choice = scenario.choices.find(c => c.id === choiceId);
-  if (!choice) throw new Error(`Lựa chọn '${choiceId}' không hợp lệ trong tình huống này.`);
-
   // 0. Handle Postpone / Continue Observing
   if (choiceId === 'CHOICE_POSTPONE_OBSERVE') {
     return {
@@ -198,6 +195,9 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
       }
     };
   }
+
+  const choice = scenario.choices.find(c => c.id === choiceId);
+  if (!choice) throw new Error(`Lựa chọn '${choiceId}' không hợp lệ trong tình huống này.`);
 
   // 1. Check Knowledge Requirements & Calculate Uncertainty Penalty
   let missingKnowledgeCount = 0;
