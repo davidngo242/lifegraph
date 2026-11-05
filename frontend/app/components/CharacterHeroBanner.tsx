@@ -410,104 +410,118 @@ export default function CharacterHeroBanner({
           </div>
 
           {/* Clean Core Identity Typography */}
-          <div className="flex flex-col gap-1 min-w-0 flex-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl md:text-2xl font-black text-white tracking-tight truncate">
+          <div className="flex flex-col gap-1 min-w-0">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <h1 className="text-lg md:text-xl font-black text-white tracking-tight truncate">
                 {character.name || "LifeGraph"}
               </h1>
 
               {character.generation && character.generation > 1 && (
-                <span className="text-[12px] font-sans tabular-nums px-2 py-0.2 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
+                <span className="text-[11px] font-sans tabular-nums px-2 py-0.2 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
                   Đời {character.generation}
                 </span>
               )}
-
-              <span className={`text-[12px] px-2.5 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-sm ${socialStatus.color}`}>
-                <span>{socialStatus.icon}</span>
-                <span>{socialStatus.title}</span>
-              </span>
-
-              {/* Nghề Nghiệp / Học Vị Hiện Tại */}
-              <span className="text-[12px] px-2.5 py-0.5 rounded-full border border-sky-500/40 bg-sky-950/60 text-sky-200 font-bold flex items-center gap-1 shadow-sm">
-                <Briefcase className="w-3 h-3 text-sky-400" />
-                <span>{character.occupation || (age < 6 ? "Ấu nhi" : age < 18 ? "Học sinh" : "Lao động tự do")}</span>
-              </span>
-
-              {character.is_transhuman && (
-                <span className="text-[12px] font-sans px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold animate-pulse">
-                  <Cpu className="w-3 h-3 inline mr-0.5" /> Bán Thần
-                </span>
-              )}
-
-              {/* RPG Life Level & Title Badge */}
-              <div className="flex items-center gap-1.5 bg-slate-900/90 px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-sm">
-                <span className="text-[11px] font-sans tabular-nums font-black text-amber-400">
-                  Lv.{character.life_level || 1}
-                </span>
-                <span className="text-[11px] font-bold text-amber-200 hidden sm:inline">
-                  {character.life_level >= 71 ? "Huyền Thoại Bất Tử" :
-                   character.life_level >= 46 ? "Tài Phiệt & Đầu Sỏ" :
-                   character.life_level >= 26 ? "Doanh Chủ & Trụ Cột" :
-                   character.life_level >= 11 ? "Chuyên Gia Thực Chiến" : "Kẻ Khởi Đầu"}
-                </span>
-                <div className="w-12 bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800 hidden md:block">
-                  <div
-                    className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full"
-                    style={{ width: `${Math.min(100, Math.round(((character.life_exp || 0) / (character.life_level >= 71 ? 4000 : character.life_level >= 46 ? 2000 : character.life_level >= 26 ? 1000 : character.life_level >= 11 ? 500 : 250)) * 100))}%` }}
-                  />
-                </div>
-                {(character.skill_points || 0) > 0 && (
-                  <span className="text-[9.5px] font-sans tabular-nums font-black px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 animate-bounce">
-                    +{character.skill_points} SP
-                  </span>
-                )}
-              </div>
             </div>
 
-            {/* 1 Dòng Địa Danh & Nhà Ở Tinh Gọn */}
-            <div className="flex items-center gap-2 text-xs text-slate-300 flex-wrap">
-              <span className="font-bold text-white bg-slate-900/90 px-2 py-0.5 rounded-md border border-slate-700/60">
+            {/* 1 Dòng Tuổi & Nơi Chốn Tinh Gọn */}
+            <div className="flex items-center gap-1.5 text-xs text-slate-300 flex-wrap">
+              <span className="font-bold text-white bg-slate-900/90 px-2 py-0.5 rounded-md border border-slate-700/60 text-[11px]">
                 {age} Tuổi
               </span>
-              <span className={`font-bold px-2 py-0.5 rounded-md border text-[10px] flex items-center gap-1 ${
+              <span className={`font-bold px-2 py-0.5 rounded-md border text-[10px] flex items-center gap-0.5 ${
                 character.gender === 'female'
                   ? 'bg-rose-950/70 border-rose-500/50 text-rose-300 shadow-sm'
                   : 'bg-indigo-950/70 border-indigo-500/50 text-indigo-300 shadow-sm'
               }`}>
                 <span>{character.gender === 'female' ? '♀️ Nữ' : '♂️ Nam'}</span>
               </span>
-              <span className="text-indigo-300 font-medium">{nationality}</span>
-              <span className="text-slate-600">•</span>
-              <span className="flex items-center gap-1 text-slate-200">
-                <MapPin className="w-3 h-3 text-rose-400 shrink-0" />
-                <span>{character.current_city || nationality}</span>
-              </span>
-              <span className="text-slate-600">•</span>
-              <span className="flex items-center gap-1 text-slate-200">
-                <Home className="w-3 h-3 text-amber-400 shrink-0" />
-                <span>{character.housing?.name || 'Phòng trọ'}</span>
-                <span className="text-amber-400 font-sans tabular-nums text-[12px]">
-                  ({character.housing?.status === 'owned' ? 'Sở hữu' : 'Thuê'})
-                </span>
-              </span>
+              <span className="text-indigo-300 font-medium text-[11px]">{nationality}</span>
             </div>
 
-            {/* Mã Gen Dạng Huy Hiệu Nhỏ Gọn (Tooltip giải thích) */}
-            {character.innate_traits && character.innate_traits.length > 0 && (
-              <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-                <span className="text-[12px] font-semibold text-purple-300 flex items-center gap-0.5">
-                  🧬 Gen:
+            <div className="flex items-center gap-1 text-[11px] text-slate-300 truncate pt-0.5">
+              <MapPin className="w-3 h-3 text-rose-400 shrink-0" />
+              <span className="truncate">{character.current_city || nationality}</span>
+              <span className="text-slate-600">•</span>
+              <Home className="w-3 h-3 text-amber-400 shrink-0" />
+              <span className="truncate text-slate-400">{character.housing?.name || 'Phòng trọ'}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Zone 2: Life Status Hub & Destiny Focus (Cột Giữa - Lấp đầy hoàn toàn khoảng trống giữa) */}
+        <div className="flex-1 flex flex-col gap-2 px-3.5 py-2.5 rounded-2xl bg-slate-900/50 border border-slate-800/70 backdrop-blur-md min-w-0">
+          {/* Row A: Status Badges & RPG Level */}
+          <div className="flex items-center gap-2 flex-wrap justify-between">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className={`text-[11px] px-2.5 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-sm ${socialStatus.color}`}>
+                <span>{socialStatus.icon}</span>
+                <span>{socialStatus.title}</span>
+              </span>
+
+              <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-sky-500/40 bg-sky-950/60 text-sky-200 font-bold flex items-center gap-1 shadow-sm">
+                <Briefcase className="w-3 h-3 text-sky-400" />
+                <span>{character.occupation || (age < 6 ? "Ấu nhi" : age < 18 ? "Học sinh" : "Lao động tự do")}</span>
+              </span>
+
+              {character.is_transhuman && (
+                <span className="text-[11px] font-sans px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold animate-pulse">
+                  <Cpu className="w-3 h-3 inline mr-0.5" /> Bán Thần
                 </span>
+              )}
+            </div>
+
+            {/* RPG Life Level & Title Badge */}
+            <div className="flex items-center gap-1.5 bg-slate-950/80 px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-sm shrink-0">
+              <span className="text-[11px] font-sans tabular-nums font-black text-amber-400">
+                Lv.{character.life_level || 1}
+              </span>
+              <span className="text-[10.5px] font-bold text-amber-200 hidden sm:inline">
+                {character.life_level >= 71 ? "Huyền Thoại Bất Tử" :
+                 character.life_level >= 46 ? "Tài Phiệt & Đầu Sỏ" :
+                 character.life_level >= 26 ? "Doanh Chủ & Trụ Cột" :
+                 character.life_level >= 11 ? "Chuyên Gia Thực Chiến" : "Kẻ Khởi Đầu"}
+              </span>
+              <div className="w-10 bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800 hidden md:block">
+                <div
+                  className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full"
+                  style={{ width: `${Math.min(100, Math.round(((character.life_exp || 0) / (character.life_level >= 71 ? 4000 : character.life_level >= 46 ? 2000 : character.life_level >= 26 ? 1000 : character.life_level >= 11 ? 500 : 250)) * 100))}%` }}
+                />
+              </div>
+              {(character.skill_points || 0) > 0 && (
+                <span className="text-[9px] font-sans tabular-nums font-black px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 animate-bounce">
+                  +{character.skill_points} SP
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Row B: Innate Traits & Stage Focus Narrative */}
+          <div className="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-slate-800/40 text-[11px]">
+            {character.innate_traits && character.innate_traits.length > 0 ? (
+              <div className="flex items-center gap-1 flex-wrap">
+                <span className="text-purple-300 font-semibold flex items-center gap-0.5">🧬 Gen:</span>
                 {character.innate_traits.map((t: string) => (
                   <span
                     key={t}
-                    className="text-[12px] font-medium px-2 py-0.5 rounded-full bg-purple-950/60 text-purple-200 border border-purple-500/30 flex items-center gap-0.5"
+                    className="font-medium px-2 py-0.2 rounded-full bg-purple-950/60 text-purple-200 border border-purple-500/30 text-[10.5px]"
                   >
                     ✨ {t.replace(/_/g, ' ')}
                   </span>
                 ))}
               </div>
+            ) : (
+              <span className="text-slate-400 text-[10.5px]">Hạt giống số phận đang nảy mầm...</span>
             )}
+
+            <div className="text-slate-400 flex items-center gap-1 text-[10.5px] truncate max-w-xs">
+              <span className="text-indigo-400 font-semibold">🎯 Trọng tâm:</span>
+              <span className="text-slate-300 truncate font-medium">
+                {age < 6 ? "Gắn kết phụ mẫu & bồi dưỡng thể chất" :
+                 age < 18 ? "Học vấn đèn sách & rèn chí lập thân" :
+                 age < 35 ? "Lập thân lập nghiệp & tích lũy tài sản" :
+                 age < 60 ? "Trụ cột gia tộc & củng cố cơ đồ" : "Di sản hoàng hôn & truyền thừa"}
+              </span>
+            </div>
           </div>
         </div>
         {/* Right Zone (~30%): Integrated Mini Vitals & Psyche HUD with Life Stage */}

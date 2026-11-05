@@ -20,7 +20,7 @@ import EmergencyNotificationHub, { EmergencyAlert } from './components/Emergency
 import AudioVolumeControl from './components/AudioVolumeControl';
 import KarmaSanctumModal from './components/KarmaSanctumModal';
 import SkillSelectorModal from './components/SkillSelectorModal';
-import StickyProfileSidebar from './components/StickyProfileSidebar';
+import MultiTabSidebar from './components/MultiTabSidebar';
 import CharacterHeroBanner, { BannerActionFeedback } from './components/CharacterHeroBanner';
 import AvatarInspectorModal from './components/AvatarInspectorModal';
 import InteractiveScene2D from './components/InteractiveScene2D';
@@ -1705,31 +1705,11 @@ export default function LifeGraphPage() {
                 />
               </div>
             ) : (
-              /* 3-Column Responsive Grid Cockpit */
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-              {/* Left Column: Sticky Profile Sidebar (3 cols) */}
-              <div className="order-2 lg:order-1 lg:col-span-3 min-w-0 w-full">
-                <StickyProfileSidebar
-                  character={character}
-                  visuals={visuals}
-                  playerAccount={playerAccount}
-                  netWorth={netWorth}
-                  aspiration={aspiration}
-                  reaction={avatarReaction}
-                  isFastForwarding={loading}
-                  onOpenAssets={() => setShowAssetModal(true)}
-                  onOpenFamily={() => setShowFamilyModal(true)}
-                  onOpenKarmaSanctum={() => setShowKarmaModal(true)}
-                  onOpenAspirationUpgrade={() => setShowAspirationUpgradeModal(true)}
-                  onFamilyMeal={handleFamilyMeal}
-                  onFamilyMentorship={handleFamilyMentorship}
-                  onHealthCheckup={handleHealthCheckup}
-                />
-              </div>
-
-              {/* Center Column: AP Hub & Life Dilemmas (6 cols) */}
-              <div className="order-1 lg:order-2 lg:col-span-6 flex flex-col gap-4 min-w-0 w-full">
-                {/* Strategic Action Points (AP) Hub (Đẩy lên trên cùng, tối ưu không gian) */}
+              /* 2-Column Responsive Cockpit Grid (65% Stage vs 35% Multi-Tab Sidebar) */
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+              {/* Left Column: Sân Khấu Cuộc Đời (lg:col-span-7 xl:col-span-8) */}
+              <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-4 min-w-0 w-full">
+                {/* Strategic Action Points (AP) Hub */}
                 {character && (
                   <ActionPointHub
                     actionPoints={character.action_points || 0}
@@ -1808,19 +1788,29 @@ export default function LifeGraphPage() {
                 </div>
               </div>
 
-              {/* Right Column: Sticky Life Chronicle & Narrative Feed + Annual Digest (3 cols) */}
-              <div className="order-3 lg:order-3 lg:col-span-3 min-w-0 w-full">
-                <NarrativeFeed
+              {/* Right Column: Multi-Tab Sidebar (lg:col-span-5 xl:col-span-4) */}
+              <div className="lg:col-span-5 xl:col-span-4 min-w-0 w-full">
+                <MultiTabSidebar
+                  character={character}
+                  visuals={visuals}
+                  playerAccount={playerAccount}
+                  netWorth={netWorth}
+                  aspiration={aspiration}
+                  annualDigest={annualDigest}
                   history={character?.history_log || []}
                   assets={assets}
                   relationships={relationships}
-                  currentAge={character?.age || 0}
-                  annualDigest={annualDigest}
-                  nationality={character?.nationality}
-                  onLaunchMiniGame={(type) => launchMiniGame(type)}
-                  onCloseDigest={() => setAnnualDigest(null)}
                   onOpenAssets={() => setShowAssetModal(true)}
                   onOpenFamily={() => setShowFamilyModal(true)}
+                  onOpenKarmaSanctum={() => setShowKarmaModal(true)}
+                  onOpenAspirationUpgrade={() => setShowAspirationUpgradeModal(true)}
+                  onFamilyMeal={handleFamilyMeal}
+                  onFamilyMentorship={handleFamilyMentorship}
+                  onHealthCheckup={handleHealthCheckup}
+                  onLaunchMiniGame={(type) => launchMiniGame(type)}
+                  onUnlockSkill={handleUnlockSkill}
+                  onNpcInteract={handleNpcInteract}
+                  isLoading={loading}
                 />
               </div>
             </div>

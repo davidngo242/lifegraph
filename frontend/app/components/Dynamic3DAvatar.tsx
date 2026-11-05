@@ -306,15 +306,17 @@ function ProceduralCharacterMesh({
           </group>
         )}
 
-        {/* Left Brow */}
-        <mesh position={[-0.17, 0.21, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? -0.15 : 0.05]} material={hairMaterial}>
-          <boxGeometry args={[isBaby ? 0.07 : isChild ? 0.09 : (isFemale ? 0.13 : 0.14), isBaby ? 0.008 : isChild ? 0.012 : (isFemale ? 0.018 : 0.025), 0.03]} />
-        </mesh>
-
-        {/* Right Brow */}
-        <mesh position={[0.17, 0.21, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? 0.15 : -0.05]} material={hairMaterial}>
-          <boxGeometry args={[isFemale ? 0.13 : 0.14, isFemale ? 0.018 : 0.025, 0.03]} />
-        </mesh>
+        {/* Eyebrows (Hidden on babies for pure gentle infant look) */}
+        {!isBaby && (
+          <group>
+            <mesh position={[-0.17, 0.21, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? -0.15 : 0.05]} material={hairMaterial}>
+              <boxGeometry args={[isChild ? 0.09 : (isFemale ? 0.13 : 0.14), isChild ? 0.012 : (isFemale ? 0.018 : 0.025), 0.03]} />
+            </mesh>
+            <mesh position={[0.17, 0.21, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? 0.15 : -0.05]} material={hairMaterial}>
+              <boxGeometry args={[isChild ? 0.09 : (isFemale ? 0.13 : 0.14), isChild ? 0.012 : (isFemale ? 0.018 : 0.025), 0.03]} />
+            </mesh>
+          </group>
+        )}
 
         {/* 3D Dynamic State: Quầng thâm mắt do kiệt sức (Burnout > 75 & Người lớn) */}
         {burnout > 75 && age >= 16 && (
@@ -344,11 +346,22 @@ function ProceduralCharacterMesh({
           </group>
         )}
 
-        {/* Mouth */}
-        <mesh ref={mouthRef} position={[0, isBaby ? -0.13 : isChild ? -0.15 : -0.18, 0.43]}>
-          <sphereGeometry args={[isBaby ? 0.038 : isChild ? 0.048 : (isFemale ? 0.065 : 0.06), 16, 8]} />
-          <primitive object={lipMaterial} attach="material" />
-        </mesh>
+        {/* Mouth / Baby Pacifier */}
+        {isBaby ? (
+          <group position={[0, -0.12, 0.44]}>
+            <mesh material={ribbonMaterial}>
+              <torusGeometry args={[0.045, 0.015, 12, 24]} />
+            </mesh>
+            <mesh position={[0, 0, 0.02]} material={clothMaterial}>
+              <sphereGeometry args={[0.035, 16, 16]} />
+            </mesh>
+          </group>
+        ) : (
+          <mesh ref={mouthRef} position={[0, isChild ? -0.15 : -0.18, 0.43]}>
+            <sphereGeometry args={[isChild ? 0.048 : (isFemale ? 0.065 : 0.06), 16, 8]} />
+            <primitive object={lipMaterial} attach="material" />
+          </mesh>
+        )}
 
         {/* Hair Styles & Accessories */}
         <group ref={hairGroupRef} position={[0, 0.15, 0]}>
