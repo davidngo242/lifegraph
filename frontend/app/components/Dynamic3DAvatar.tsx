@@ -75,11 +75,13 @@ function ProceduralCharacterMesh({
   const hairColor = useMemo(() => getHairColor(age, nationality.charCodeAt(0)), [age, nationality]);
 
   // Age scaling characteristics
-  const isChild = age < 12;
+  const numericAge = Number(age ?? 0);
+  const isBaby = numericAge <= 3;
+  const isChild = numericAge > 3 && numericAge < 12;
   const isTeen = age >= 12 && age < 18;
   const isElderly = age >= 65;
 
-  const headScale = isChild ? 1.12 : isTeen ? 1.05 : 1.0;
+  const headScale = isBaby ? 1.25 : isChild ? 1.12 : isTeen ? 1.05 : 1.0;
   const spineHunch = isElderly ? 0.18 : 0;
 
   // Materials with physical reactivity to stats (Vitality, Burnout, Age)
@@ -109,10 +111,10 @@ function ProceduralCharacterMesh({
   }), []);
 
   const lipMaterial = useMemo(() => new THREE.MeshStandardMaterial({
-    color: isFemale ? (burnout > 75 ? '#be123c' : '#fb7185') : (burnout > 80 ? '#7f1d1d' : '#991b1b'),
-    roughness: isFemale ? 0.35 : 0.5,
-    metalness: isFemale ? 0.1 : 0.05
-  }), [isFemale, burnout]);
+    color: isBaby ? '#fda4af' : isFemale ? (burnout > 75 ? '#be123c' : '#fb7185') : (burnout > 80 ? '#7f1d1d' : '#991b1b'),
+    roughness: isBaby ? 0.7 : (isFemale ? 0.35 : 0.5),
+    metalness: isBaby ? 0 : (isFemale ? 0.1 : 0.05)
+  }), [isBaby, isFemale, burnout]);
 
   const earringMaterial = useMemo(() => new THREE.MeshStandardMaterial({
     color: '#fbbf24',
@@ -121,22 +123,24 @@ function ProceduralCharacterMesh({
   }), []);
 
   const ribbonMaterial = useMemo(() => new THREE.MeshStandardMaterial({
-    color: '#f43f5e',
+    color: isBaby ? '#fef08a' : '#f43f5e',
     roughness: 0.4
-  }), []);
+  }), [isBaby]);
 
   const clothMaterial = useMemo(() => {
     let clothColor = isFemale ? '#be185d' : '#4f46e5';
-    if (age <= 5) {
-      clothColor = isFemale ? '#fce7f3' : '#e0f2fe'; // Quấn tã vải cotton sơ sinh hồng phấn hoặc lam phấn
+    if (isBaby) {
+      clothColor = isFemale ? '#fbcfe8' : '#bae6fd'; // Vải cotton pastel sơ sinh
+    } else if (age <= 5) {
+      clothColor = isFemale ? '#fce7f3' : '#e0f2fe';
     } else if (burnout > 75) {
-      clothColor = '#334155'; // Trang phục xám xịt của người lao lực kiệt quệ
+      clothColor = '#334155';
     }
     return new THREE.MeshStandardMaterial({
       color: clothColor,
       roughness: 0.8,
     });
-  }, [age, burnout, isFemale]);
+  }, [isBaby, age, burnout, isFemale]);
 
   // Real-time Procedural Animation Loop
   useFrame((state, delta) => {
@@ -220,48 +224,68 @@ function ProceduralCharacterMesh({
 
   return (
     <group ref={groupRef} position={[0, -0.82, 0]}>
-      {/* Upper Torso & Collar */}
-      <mesh position={[0, 0.1, 0]} material={clothMaterial}>
-        <cylinderGeometry args={[isFemale ? 0.38 : 0.42, isFemale ? 0.48 : 0.52, 0.65, 32]} />
-      </mesh>
+      {isBaby ? (
+        /* Cute Baby Swaddle Wrap */
+        <group position={[0, 0.18, 0]}>
+          <mesh material={clothMaterial}>
+            <cylinderGeometry args={[0.32, 0.42, 0.6, 24]} />
+          </mesh>
+          <mesh position={[0, 0.28, 0.04]} rotation={[0.2, 0, 0]} material={clothMaterial}>
+            <torusGeometry args={[0.24, 0.05, 12, 24]} />
+          </mesh>
+        </group>
+      ) : (
+        <>
+          {/* Upper Torso & Collar */}
+          <mesh position={[0, 0.1, 0]} material={clothMaterial}>
+            <cylinderGeometry args={[isFemale ? 0.38 : 0.42, isFemale ? 0.48 : 0.52, 0.65, 32]} />
+          </mesh>
 
-      {/* Shoulders */}
-      <mesh position={[isFemale ? -0.40 : -0.45, 0.32, 0]} material={clothMaterial}>
-        <sphereGeometry args={[isFemale ? 0.16 : 0.18, 16, 16]} />
-      </mesh>
-      <mesh position={[isFemale ? 0.40 : 0.45, 0.32, 0]} material={clothMaterial}>
-        <sphereGeometry args={[isFemale ? 0.16 : 0.18, 16, 16]} />
-      </mesh>
+          {/* Shoulders */}
+          <mesh position={[isFemale ? -0.40 : -0.45, 0.32, 0]} material={clothMaterial}>
+            <sphereGeometry args={[isFemale ? 0.16 : 0.18, 16, 16]} />
+          </mesh>
+          <mesh position={[isFemale ? 0.40 : 0.45, 0.32, 0]} material={clothMaterial}>
+            <sphereGeometry args={[isFemale ? 0.16 : 0.18, 16, 16]} />
+          </mesh>
 
-      {/* Neck */}
-      <mesh position={[0, 0.52, 0]} material={skinMaterial}>
-        <cylinderGeometry args={[isFemale ? 0.14 : 0.16, isFemale ? 0.17 : 0.19, 0.28, 24]} />
-      </mesh>
+          {/* Neck */}
+          <mesh position={[0, 0.52, 0]} material={skinMaterial}>
+            <cylinderGeometry args={[isFemale ? 0.14 : 0.16, isFemale ? 0.17 : 0.19, 0.28, 24]} />
+          </mesh>
+        </>
+      )}
 
       {/* Head Group (Rotatable) */}
-      <group ref={headRef} position={[0, 0.88, 0]} scale={[headScale, headScale, headScale]}>
+      <group ref={headRef} position={[0, isBaby ? 0.74 : 0.88, 0]} scale={[headScale, headScale, headScale]}>
         {/* Head Cranium */}
         <mesh material={skinMaterial}>
           <sphereGeometry args={[isFemale ? 0.45 : 0.46, 32, 32]} />
         </mesh>
 
         {/* Nose */}
-        <mesh position={[0, 0.02, 0.44]} rotation={[0.4, 0, 0]} material={skinMaterial}>
-          <coneGeometry args={[isFemale ? 0.055 : 0.07, isFemale ? 0.14 : 0.16, 16]} />
-        </mesh>
+        {isBaby ? (
+          <mesh position={[0, 0.01, 0.45]} material={skinMaterial}>
+            <sphereGeometry args={[0.038, 12, 12]} />
+          </mesh>
+        ) : (
+          <mesh position={[0, 0.02, 0.44]} rotation={[0.4, 0, 0]} material={skinMaterial}>
+            <coneGeometry args={[isFemale ? 0.055 : 0.07, isFemale ? 0.14 : 0.16, 16]} />
+          </mesh>
+        )}
 
         {/* Left Eye */}
-        <mesh ref={leftEyeRef} position={[-0.17, 0.1, 0.41]} material={eyeMaterial}>
-          <sphereGeometry args={[isFemale ? 0.065 : 0.06, 16, 16]} />
+        <mesh ref={leftEyeRef} position={[-0.17, isBaby ? 0.08 : 0.1, 0.42]} material={eyeMaterial}>
+          <sphereGeometry args={[isBaby ? 0.068 : (isFemale ? 0.065 : 0.06), 16, 16]} />
         </mesh>
 
         {/* Right Eye */}
-        <mesh ref={rightEyeRef} position={[0.17, 0.1, 0.41]} material={eyeMaterial}>
-          <sphereGeometry args={[isFemale ? 0.065 : 0.06, 16, 16]} />
+        <mesh ref={rightEyeRef} position={[0.17, isBaby ? 0.08 : 0.1, 0.42]} material={eyeMaterial}>
+          <sphereGeometry args={[isBaby ? 0.068 : (isFemale ? 0.065 : 0.06), 16, 16]} />
         </mesh>
 
-        {/* Female Eyelash Accents */}
-        {isFemale && (
+        {/* Female Eyelash Accents (Only for adults & teens, never on babies!) */}
+        {isFemale && !isBaby && (
           <group>
             <mesh position={[-0.22, 0.14, 0.42]} rotation={[0, 0, -0.28]} material={eyeMaterial}>
               <boxGeometry args={[0.08, 0.016, 0.02]} />
@@ -274,7 +298,7 @@ function ProceduralCharacterMesh({
 
         {/* Left Brow */}
         <mesh position={[-0.17, 0.21, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? -0.15 : 0.05]} material={hairMaterial}>
-          <boxGeometry args={[isFemale ? 0.13 : 0.14, isFemale ? 0.018 : 0.025, 0.03]} />
+          <boxGeometry args={[isBaby ? 0.07 : (isFemale ? 0.13 : 0.14), isBaby ? 0.008 : (isFemale ? 0.018 : 0.025), 0.03]} />
         </mesh>
 
         {/* Right Brow */}
@@ -300,7 +324,7 @@ function ProceduralCharacterMesh({
         {(age <= 5 || (isFemale && age < 25)) && (
           <group position={[0, -0.08, 0.4]}>
             <mesh position={[-0.22, 0, 0]}>
-              <sphereGeometry args={[age <= 5 ? 0.075 : 0.05, 16, 8]} />
+              <sphereGeometry args={[isBaby ? 0.09 : (age <= 5 ? 0.075 : 0.05), 16, 8]} />
               <meshBasicMaterial color="#fb7185" opacity={age <= 5 ? 0.5 : 0.3} transparent />
             </mesh>
             <mesh position={[0.22, 0, 0]}>
@@ -311,14 +335,34 @@ function ProceduralCharacterMesh({
         )}
 
         {/* Mouth */}
-        <mesh ref={mouthRef} position={[0, -0.18, 0.42]}>
-          <sphereGeometry args={[isFemale ? 0.065 : 0.06, 16, 8]} />
+        <mesh ref={mouthRef} position={[0, isBaby ? -0.13 : -0.18, 0.43]}>
+          <sphereGeometry args={[isBaby ? 0.04 : (isFemale ? 0.065 : 0.06), 16, 8]} />
           <primitive object={lipMaterial} attach="material" />
         </mesh>
 
         {/* Hair Styles & Accessories */}
         <group ref={hairGroupRef} position={[0, 0.15, 0]}>
-          {isFemale ? (
+          {isBaby ? (
+            /* CUTE ADORABLE BABY BEANIE BONNET */
+            <group position={[0, 0.06, 0]}>
+              {/* Bonnet Cap */}
+              <mesh material={clothMaterial}>
+                <sphereGeometry args={[0.47, 24, 24]} />
+              </mesh>
+              {/* Folded Brim */}
+              <mesh position={[0, 0.1, 0.28]} rotation={[0.3, 0, 0]} material={clothMaterial}>
+                <torusGeometry args={[0.38, 0.045, 12, 24]} />
+              </mesh>
+              {/* Fluffy Pom-Pom on Top */}
+              <mesh position={[0, 0.54, 0]} material={ribbonMaterial}>
+                <sphereGeometry args={[0.085, 16, 16]} />
+              </mesh>
+              {/* Soft Baby Hair Curl peeking out */}
+              <mesh position={[0, 0.18, 0.44]} rotation={[0.2, 0, 0]} material={hairMaterial}>
+                <torusGeometry args={[0.045, 0.015, 8, 16, Math.PI]} />
+              </mesh>
+            </group>
+          ) : isFemale ? (
             /* FEMALE PROCEDURAL HAIRSTYLE */
             <group>
               {/* Main Crown Volume */}

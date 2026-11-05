@@ -10,7 +10,12 @@ import {
   Home,
   Compass,
   Sparkles,
-  Briefcase
+  Briefcase,
+  Heart,
+  Smile,
+  ShieldCheck,
+  AlertTriangle,
+  Activity
 } from 'lucide-react';
 import Tooltip from './Tooltip';
 
@@ -59,6 +64,31 @@ export default function CharacterHeroBanner({
   const vitality = character.vitality ?? 80;
   const burnout = character.burnout ?? 0;
   const nationality = character.nationality || "Việt Nam";
+
+  const maxVitality = character.max_vitality ?? 100;
+  const karma = character.karma ?? 100;
+  const relCount = character.relationships?.length || 1;
+  const cash = Number(character.cash ?? 0);
+  const rawHappiness = 100 - (burnout * 0.55) + (karma >= 70 ? 10 : -5) + Math.min(20, relCount * 4) + (cash > 50000 ? 5 : -5);
+  const happiness = Math.max(10, Math.min(100, Math.round(rawHappiness)));
+  const isHappyBuffActive = happiness >= 75;
+  const apGainPerYear = vitality >= 70 ? 4 : vitality >= 40 ? 3 : 2;
+
+  const getHealthStatus = () => {
+    if (vitality >= 80) return { label: "Sung mãn", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" };
+    if (vitality >= 50) return { label: "Ổn định", color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/30" };
+    if (vitality >= 25) return { label: "Suy yếu", color: "text-amber-400 bg-amber-500/10 border-amber-500/30" };
+    return { label: "Nguy kịch", color: "text-rose-400 bg-rose-500/20 border-rose-500/40 animate-pulse" };
+  };
+  const healthStatus = getHealthStatus();
+
+  const getStress = () => {
+    if (burnout >= 80) return { label: "Nguy cấp", color: "text-rose-400" };
+    if (burnout >= 55) return { label: "Căng thẳng", color: "text-orange-400" };
+    if (burnout >= 30) return { label: "Mệt mỏi", color: "text-amber-400" };
+    return { label: "Ổn định", color: "text-emerald-400" };
+  };
+  const stress = getStress();
 
   // Dynamic Action Feedback Realtime Overlay
   const [activeFeedback, setActiveFeedback] = useState<BannerActionFeedback | null>(null);
@@ -324,7 +354,7 @@ export default function CharacterHeroBanner({
       <div className={`absolute top-0 right-1/3 w-80 h-80 ${env.accentGlow} rounded-full blur-3xl pointer-events-none`} />
 
       {/* 2. MAIN COVER CONTENT */}
-      <div className="relative z-10 p-3.5 md:p-5 flex items-center justify-between gap-4">
+      <div className="relative z-10 p-3.5 md:p-4 lg:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         
         {/* Left: 3D Avatar (ĐỘC BẢN 3D - BỎ HOÀN TOÀN 2D) + Core Identity */}
         <div className="flex items-center gap-4 md:gap-5 min-w-0 flex-1">
@@ -346,12 +376,7 @@ export default function CharacterHeroBanner({
             </div>
 
             {/* DYNAMIC AVATAR STATE OVERLAYS */}
-            {/* 1. Trẻ sơ sinh trong nôi (0-5 tuổi) */}
-            {isInfant && (
-              <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-sky-950/85 border border-sky-400/50 text-[12px] font-sans tabular-nums text-sky-200 font-semibold flex items-center gap-1 shadow backdrop-blur-sm z-20">
-                <span>🍼 Trong Nôi</span>
-              </div>
-            )}
+            
 
             {/* 2. Sinh lực nguy kịch (vitality < 30): Nhịp tim đập chậm cảnh báo */}
             {isCriticalVitality && (
@@ -461,44 +486,121 @@ export default function CharacterHeroBanner({
             )}
           </div>
         </div>
-
-        {/* Right: Dynamic Action Result Feedback / Giai Đoạn Vận Mệnh */}
-        <div className="flex items-center gap-3 shrink-0">
-          {activeFeedback ? (
-            <div className={`flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border backdrop-blur-xl shadow-xl transition-all duration-300 animate-in fade-in zoom-in-95 slide-in-from-right-3 ${feedbackAtmo?.badgeBg}`}>
-              <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-lg border shrink-0 ${feedbackAtmo?.badgeIconBg}`}>
-                {activeFeedback.icon || '✨'}
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-xs font-bold text-white tracking-tight">
-                    {activeFeedback.title}
-                  </span>
-                  {activeFeedback.delta && (
-                    <span className={`text-[12px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded-md border ${feedbackAtmo?.badgeDelta}`}>
-                      {activeFeedback.delta}
-                    </span>
-                  )}
-                </div>
-                {activeFeedback.subtitle && (
-                  <span className="text-[12px] text-slate-300 max-w-[220px] truncate">
-                    {activeFeedback.subtitle}
+        {/* Right Zone (~30%): Integrated Mini Vitals & Psyche HUD with Life Stage */}
+        <div className="w-full lg:w-[350px] xl:w-[380px] shrink-0 p-3 rounded-2xl bg-slate-950/75 border border-slate-800/80 backdrop-blur-xl shadow-xl flex flex-col gap-2">
+          
+          {/* Active Action Feedback Flash Notice */}
+          {activeFeedback && (
+            <div className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl border backdrop-blur-md animate-in fade-in slide-in-from-top-1 ${feedbackAtmo?.badgeBg}`}>
+              <span className="text-base shrink-0">{activeFeedback.icon || '✨'}</span>
+              <div className="flex items-center justify-between w-full min-w-0">
+                <span className="text-xs font-bold text-white truncate">{activeFeedback.title}</span>
+                {activeFeedback.delta && (
+                  <span className={`text-[11px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded border shrink-0 ${feedbackAtmo?.badgeDelta}`}>
+                    {activeFeedback.delta}
                   </span>
                 )}
               </div>
             </div>
-          ) : (
+          )}
+
+          {/* Row 1: Giai Đoạn, Động Lực Sống & Karma */}
+          <div className="flex items-center justify-between gap-1.5 pb-1.5 border-b border-slate-800/60">
+            {/* Life Stage Pill */}
             <Tooltip content={<div className="text-[12px] max-w-xs">{lifeStage.desc}</div>}>
-              <div className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 rounded-2xl bg-slate-900/70 hover:bg-slate-900/90 border border-indigo-500/30 backdrop-blur-md cursor-help transition shrink-0">
-                <span className="text-base">{lifeStage.icon}</span>
-                <div className="flex flex-col text-right">
-                  <span className="text-[12px] normal-case tracking-normal text-indigo-400 font-sans tabular-nums font-semibold">Giai Đoạn</span>
-                  <span className="text-xs font-bold text-white">{lifeStage.stage}</span>
-                </div>
+              <div className="flex items-center gap-1.5 px-2 py-1 rounded-xl bg-indigo-950/60 hover:bg-indigo-900/50 border border-indigo-500/30 cursor-help transition">
+                <span className="text-xs">{lifeStage.icon}</span>
+                <span className="text-[11px] font-bold text-indigo-200 truncate">{lifeStage.stage}</span>
               </div>
             </Tooltip>
-          )}
+
+            {/* Motivation / Happiness */}
+            <Tooltip content={<div className="text-[12px]">Động lực sống & Tinh thần lạc quan ({happiness}%). Trên 75% kích hoạt buff thăng hoa +15%.</div>}>
+              <div className="flex items-center gap-1 px-2 py-1 rounded-xl bg-slate-900/80 border border-slate-800 cursor-help">
+                <Smile className="w-3 h-3 text-amber-400" />
+                <span className={`text-[11px] font-sans tabular-nums font-bold ${happiness >= 70 ? 'text-amber-300' : 'text-slate-300'}`}>
+                  {happiness}%
+                </span>
+                {isHappyBuffActive && (
+                  <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold">
+                    Buff
+                  </span>
+                )}
+              </div>
+            </Tooltip>
+
+            {/* Social Karma */}
+            <Tooltip content={<div className="text-[12px]">Phước đức xã hội tích lũy ({karma} KP). Ảnh hưởng phúc khí và độ uy tín dòng họ.</div>}>
+              <div className="flex items-center gap-1 px-2 py-1 rounded-xl bg-slate-900/80 border border-slate-800 cursor-help">
+                <ShieldCheck className="w-3 h-3 text-purple-400" />
+                <span className="text-[11px] font-sans tabular-nums font-bold text-purple-300">
+                  {karma} <span className="text-[9px] text-slate-500">KP</span>
+                </span>
+              </div>
+            </Tooltip>
+          </div>
+
+          {/* Row 2: Card Thể Lực (Sinh Lực & Sức Bền) */}
+          <div className="flex flex-col gap-1 bg-slate-900/60 p-2 rounded-xl border border-slate-800/60">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[11.5px] font-bold text-slate-200 flex items-center gap-1">
+                <Heart className="w-3 h-3 text-rose-400" /> Sinh Lực
+              </span>
+              <div className="flex items-center gap-1.5">
+                <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${healthStatus.color}`}>
+                  {healthStatus.label}
+                </span>
+                <span className="text-[11px] font-sans tabular-nums font-extrabold text-white">
+                  {vitality}<span className="text-slate-500 font-normal">/{maxVitality}</span>
+                </span>
+              </div>
+            </div>
+
+            {/* Vitality Bar */}
+            <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800/80">
+              <div
+                className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500 rounded-full"
+                style={{ width: `${Math.min(100, (vitality / maxVitality) * 100)}%` }}
+              />
+            </div>
+
+            {/* Quick Metrics Inline */}
+            <div className="flex items-center justify-between text-[10px] text-slate-400 font-sans tabular-nums pt-0.5">
+              <span>Lão hóa: <strong className="text-slate-300">{character.aging_speed ? character.aging_speed.toFixed(1) + 'x' : '1.0x'}</strong></span>
+              <span>Đột quỵ: <strong className="text-emerald-400">&lt;2%</strong></span>
+              <span>Hồi phục: <strong className="text-amber-400">+{apGainPerYear} AP</strong></span>
+            </div>
+          </div>
+
+          {/* Row 3: Card Tâm Lý (Căng Thẳng & Áp Lực) */}
+          <div className="flex flex-col gap-1 bg-slate-900/60 p-2 rounded-xl border border-slate-800/60">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[11.5px] font-bold text-slate-200 flex items-center gap-1">
+                <AlertTriangle className={`w-3 h-3 ${burnout >= 75 ? 'text-rose-400' : 'text-indigo-400'}`} /> Căng Thẳng
+              </span>
+              <div className="flex items-center gap-1.5">
+                <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${stress.color}`}>
+                  {stress.label}
+                </span>
+                <span className="text-[11px] font-sans tabular-nums font-bold text-slate-300">
+                  {burnout}%
+                </span>
+              </div>
+            </div>
+
+            {/* Burnout Bar */}
+            <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800/80">
+              <div
+                className={`h-full transition-all duration-500 rounded-full ${
+                  burnout >= 75 ? 'bg-gradient-to-r from-orange-500 to-rose-500' : 'bg-gradient-to-r from-indigo-500 to-purple-500'
+                }`}
+                style={{ width: `${Math.min(100, burnout)}%` }}
+              />
+            </div>
+          </div>
+
         </div>
+
 
       </div>
     </div>

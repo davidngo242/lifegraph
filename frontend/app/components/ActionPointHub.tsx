@@ -87,6 +87,7 @@ export default function ActionPointHub({
 }: ActionPointHubProps) {
   const [actionNotice, setActionNotice] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [activeButton, setActiveButton] = useState<string | null>(null);
+  const [actionMode, setActionMode] = useState<'individual' | 'focus'>('individual');
 
   const traits = character?.innate_traits || [];
   const hasTradeTrait = traits.includes('trực_giác_kinh_doanh') || traits.includes('mắt_nhìn_xuyên_thị_trường');
@@ -254,6 +255,36 @@ export default function ActionPointHub({
             </Tooltip>
           </div>
         </div>
+
+        {/* Segmented Mode Switcher (1 AP vs 3 AP Focus) for Age >= 6 */}
+        {characterAge >= 6 && onAnnualFocus && (
+          <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-2xl border border-slate-800 shadow-inner">
+            <button
+              type="button"
+              onClick={() => setActionMode('individual')}
+              className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                actionMode === 'individual'
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>⚡ Từng Việc</span>
+              <span className="text-[10px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-950 text-amber-400 border border-amber-500/30 font-semibold">1 AP</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActionMode('focus')}
+              className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                actionMode === 'focus'
+                  ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>🎯 Trọng Tâm Năm</span>
+              <span className="text-[10px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-400 border border-indigo-500/30 font-semibold">3 AP</span>
+            </button>
+          </div>
+        )}
 
         {/* AP Pips Counter with Tooltip */}
         <Tooltip content={<div className="text-[12px]">Bạn có <strong>{actionPoints}/{totalAp} AP</strong> khả dụng trong năm. Các hoạt động tốn AP giúp phát triển tài chính, sức khỏe, học vấn và mở rộng mạng lưới quan hệ.</div>}>
@@ -452,7 +483,7 @@ export default function ActionPointHub({
         {/* ========================================================================= */}
         {/* CHẾ ĐỘ TRỌNG TÂM NĂM (1-CLICK STRATEGIC FOCUS) DÀNH CHO TUỔI ĐI HỌC & ĐỜI */}
         {/* ========================================================================= */}
-        {characterAge >= 6 && onAnnualFocus && (
+        {characterAge >= 6 && onAnnualFocus && actionMode === 'focus' && (
           <div className="col-span-full p-2.5 rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-indigo-500/30 shadow-md">
             <div className="flex items-center justify-between gap-2 mb-2">
               <div className="flex items-center gap-1.5">
@@ -520,7 +551,7 @@ export default function ActionPointHub({
         {/* ========================================================================= */}
         {/* 2. GIAI ĐOẠN 6 - 12 TUỔI: TUỔI NHI ĐỒNG & CẮP SÁCH ĐẾN TRƯỜNG */}
         {/* ========================================================================= */}
-        {characterAge >= 6 && characterAge <= 12 && (
+        {characterAge >= 6 && characterAge <= 12 && actionMode === 'individual' && (
           <>
             {/* Tile 1: Học tập ở trường */}
             <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Học Bài Ở Trường:</strong> Chăm chỉ nghe giảng, giành danh hiệu cháu ngoan trò giỏi (+12 Karma, cờ Chăm ngoan).</div>}>
@@ -654,7 +685,7 @@ export default function ActionPointHub({
         {/* ========================================================================= */}
         {/* 3. GIAI ĐOẠN 13 - 17 TUỔI: TUỔI THIẾU NIÊN & LUYỆN THI */}
         {/* ========================================================================= */}
-        {characterAge >= 13 && characterAge <= 17 && (
+        {characterAge >= 13 && characterAge <= 17 && actionMode === 'individual' && (
           <>
             {/* Tile 1: Luyện thi chuyển cấp / đại học */}
             <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Luyện Thi Đại Học:</strong> Đêm ngày ôn luyện đèn sách, chuẩn bị bước ngoặt học vấn vào đời (+10 Karma, cờ Tri thức).</div>}>
@@ -760,7 +791,7 @@ export default function ActionPointHub({
         {/* ========================================================================= */}
         {/* 4. GIAI ĐOẠN 18 - 59 TUỔI: NGƯỜI LỚN & THƯƠNG TRƯỜNG */}
         {/* ========================================================================= */}
-        {characterAge >= 18 && characterAge < 60 && (
+        {characterAge >= 18 && characterAge < 60 && actionMode === 'individual' && (
           <>
             {/* Tile 1: Overtime */}
             <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Cày Việc:</strong> Làm thêm giờ kiếm thu nhập cao (+ $1.5k–$7k, +12 Stress).</div>}>
@@ -849,7 +880,7 @@ export default function ActionPointHub({
         {/* ========================================================================= */}
         {/* 5. GIAI ĐOẠN 60+ TUỔI: AN HƯỞNG & DƯỠNG LÃO */}
         {/* ========================================================================= */}
-        {characterAge >= 60 && (
+        {characterAge >= 60 && actionMode === 'individual' && (
           <>
             {/* Tile 1: Thái cực quyền / Dưỡng lão */}
             <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Thái Cực Quyền:</strong> Tập luyện khí công dưỡng sinh, ổn định huyết áp tim mạch và bảo toàn tuổi thọ.</div>}>

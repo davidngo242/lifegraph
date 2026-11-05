@@ -241,75 +241,7 @@ export default function StickyProfileSidebar({
     </div>
   );
 
-  // =========================================================================
-  // CARD 2: THỂ LỰC & SỨC BỀN (COMPACT, NO TRUNCATION)
-  // =========================================================================
-  const HealthCard = (
-    <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col gap-2 shadow-sm">
-      <div className="flex items-center justify-between text-xs">
-        <span className="font-bold text-[12px] text-slate-200 flex items-center gap-1.5">
-          <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-500/20" /> Thể Lực & Sức Bền
-        </span>
-        <div className="flex items-center gap-1.5">
-          <span className={`text-[10.5px] px-1.5 py-0.2 rounded border font-semibold ${healthStatus.color}`}>
-            {healthStatus.label}
-          </span>
-          <span className="font-sans tabular-nums font-bold text-white text-xs">
-            {vitality}<span className="text-slate-500 font-normal">/{maxVitality}</span>
-          </span>
-        </div>
-      </div>
-
-      {/* Progress Bar */}
-      <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
-        <div
-          className={`h-full transition-all duration-500 rounded-full ${
-            vitality < 25 ? 'bg-rose-500 animate-pulse' : vitality < 55 ? 'bg-amber-400' : 'bg-emerald-400'
-          }`}
-          style={{ width: `${vitalityPercent}%` }}
-        />
-      </div>
-
-      {/* Key Health Metrics - 3 Clean Columns */}
-      <div className="grid grid-cols-3 gap-1 pt-1 border-t border-slate-800/60 text-[10.5px]">
-        <div className="bg-slate-900/60 px-1.5 py-1 rounded-lg border border-slate-800/60 text-center">
-          <span className="text-slate-400 block text-[9.5px]">Lão hóa</span>
-          <span className="font-semibold text-slate-200">{burnout >= 75 ? "x1.5" : burnout >= 45 ? "x1.2" : "1.0x"}</span>
-        </div>
-        <div className="bg-slate-900/60 px-1.5 py-1 rounded-lg border border-slate-800/60 text-center">
-          <span className="text-slate-400 block text-[9.5px]">Đột quỵ</span>
-          <span className={`font-semibold ${burnout >= 75 ? "text-rose-400" : "text-emerald-400"}`}>
-            {burnout >= 75 ? ">15%" : "<2%"}
-          </span>
-        </div>
-        <div className="bg-slate-900/60 px-1.5 py-1 rounded-lg border border-slate-800/60 text-center">
-          <span className="text-slate-400 block text-[9.5px]">Hồi phục</span>
-          <span className="font-semibold text-emerald-400">+{apGainPerYear} AP</span>
-        </div>
-      </div>
-
-      {/* Health checkup button for adults */}
-      {isAdult && onHealthCheckup && (
-        <button
-          onClick={onHealthCheckup}
-          disabled={cash < 3000 || (character.action_points || 0) < 1}
-          className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-semibold flex items-center justify-between transition border ${
-            cash >= 3000 && (character.action_points || 0) >= 1
-              ? 'bg-rose-950/40 hover:bg-rose-900/50 text-rose-200 border-rose-500/40 active:scale-98 shadow'
-              : 'bg-slate-900/50 text-slate-500 border-slate-800/80 cursor-not-allowed'
-          }`}
-        >
-          <span className="flex items-center gap-1 truncate">
-            <Stethoscope className="w-3 h-3 text-rose-400 shrink-0" />
-            <span>Khám Tổng Quát</span>
-          </span>
-          <span className="text-[10px] text-rose-300/80 font-mono shrink-0">
-            -1 AP · -3.000 R$
-          </span>
-        </button>
-      )}
-    </div>
-  );
+  
 
   // =========================================================================
   // CARD 3: TÀI CHÍNH GỘP (FINANCIAL OVERVIEW)
@@ -350,75 +282,7 @@ export default function StickyProfileSidebar({
     </div>
   );
 
-  // =========================================================================
-  // CARD 4: TRẠNG THÁI TÂM LÝ & UY TÍN (NO OVERLAPPING TOOLTIPS)
-  // =========================================================================
-  const MentalCard = (
-    <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col gap-2 shadow-sm">
-      <div className="flex items-center justify-between text-xs">
-        <span className="font-bold text-[12px] text-slate-200 flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-purple-400" /> Tâm Lý & Uy Tín
-        </span>
-        <span className="text-[10px] font-sans tabular-nums text-purple-300 bg-purple-500/15 px-2 py-0.5 rounded-full border border-purple-500/30 font-semibold">
-          {karma >= 100 ? 'Thiện Nghiệp' : 'Cần Tu Dưỡng'}
-        </span>
-      </div>
-
-      <div className="space-y-1.5 pt-0.5 border-t border-slate-800/60 w-full flex flex-col">
-        {/* Item 1: Stress & Burnout */}
-        <div className={`w-full px-2.5 py-1.5 rounded-xl border flex items-center justify-between transition-all ${
-          burnout >= 75
-            ? 'bg-rose-950/80 border-rose-500/80 shadow-[0_0_12px_rgba(244,63,94,0.35)] animate-pulse'
-            : 'bg-slate-900/70 border-slate-800/80'
-        }`}>
-          <div className="flex items-center gap-1.5">
-            <AlertTriangle className={`w-3.5 h-3.5 ${burnout >= 75 ? 'text-rose-400' : 'text-indigo-400'}`} />
-            <span className="text-[11.5px] font-semibold text-slate-300">Căng Thẳng</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className={`text-[10.5px] font-bold px-1.5 py-0.2 rounded border ${stress.color}`}>
-              {stress.label}
-            </span>
-            <span className="text-[11px] font-sans tabular-nums text-slate-400 font-semibold">({burnout}%)</span>
-          </div>
-        </div>
-
-        {/* Item 2: Happiness / Motivation */}
-        <div className="w-full px-2.5 py-1.5 rounded-xl bg-slate-900/70 border border-slate-800/80 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <Smile className="w-3.5 h-3.5 text-amber-400" />
-            <span className="text-[11.5px] font-semibold text-slate-300">Động Lực Sống</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            {isHappyBuffActive && (
-              <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                +15% Thăng Hoa
-              </span>
-            )}
-            <span className={`text-xs font-sans tabular-nums font-bold ${
-              happiness >= 70 ? 'text-amber-300' : happiness >= 40 ? 'text-sky-300' : 'text-rose-400'
-            }`}>
-              {happiness}%
-            </span>
-          </div>
-        </div>
-
-        {/* Item 3: Social Karma */}
-        <div className="w-full px-2.5 py-1.5 rounded-xl bg-slate-900/70 border border-slate-800/80 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-purple-400" />
-            <span className="text-[11.5px] font-semibold text-slate-300">Phước Đức Xã Hội</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="text-xs font-sans tabular-nums font-bold text-purple-300">
-              {karma}
-            </span>
-            <span className="text-[10px] text-slate-500 font-sans tabular-nums">KP</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  
 
   // =========================================================================
   // CARD 5: CỘT MỐC GIAI ĐOẠN ĐỜI NGƯỜI (COMPACT, NO FONT BUG)
@@ -465,24 +329,9 @@ export default function StickyProfileSidebar({
 
   return (
     <div className="w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-3 md:p-3.5 shadow-2xl backdrop-blur-xl flex flex-col gap-2.5 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6.5rem)] overflow-y-auto custom-scrollbar">
-      {/* Lifecycle order */}
-      {!isAdult ? (
-        <>
-          {HouseholdCard}
-          {HealthCard}
-          {FinancialCard}
-          {MentalCard}
-          {StageCard}
-        </>
-      ) : (
-        <>
-          {HealthCard}
-          {FinancialCard}
-          {HouseholdCard}
-          {MentalCard}
-          {StageCard}
-        </>
-      )}
+      {HouseholdCard}
+      {FinancialCard}
+      {StageCard}
     </div>
   );
 }
