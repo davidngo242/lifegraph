@@ -57,6 +57,9 @@ interface ActionPointHubProps {
   onOpenSkillHub?: () => void;
   onUnlockSkill?: (skillId: string) => Promise<void>;
   onNpcInteract?: (npcId: string, actionType: 'socialize' | 'gift' | 'request_favor') => Promise<void>;
+  breakthroughAction?: any;
+  onBreakthrough?: () => Promise<string | void>;
+  onRpgActivePerk?: (type: string) => Promise<string | void>;
   hiddenFlags?: string[];
   isLoading: boolean;
 }
@@ -88,6 +91,9 @@ export default function ActionPointHub({
   onOpenSkillHub,
   onUnlockSkill,
   onNpcInteract,
+  breakthroughAction,
+  onBreakthrough,
+  onRpgActivePerk,
   hiddenFlags = [],
   isLoading
 }: ActionPointHubProps) {
@@ -400,6 +406,73 @@ export default function ActionPointHub({
           </div>
         </Tooltip>
       </div>
+
+      {/* BREAKTHROUGH ACTION CARD (2 AP) */}
+      {breakthroughAction && onBreakthrough && (
+        <div className="my-2.5 p-3 rounded-2xl bg-gradient-to-r from-amber-950/60 via-slate-900 to-amber-950/60 border border-amber-500/50 shadow-lg">
+          <div className="flex items-center justify-between mb-1.5 flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xl shrink-0">{breakthroughAction.icon || '🚀'}</span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-amber-200">{breakthroughAction.title}</span>
+                  <span className="text-[10px] font-sans px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold shrink-0">
+                    ĐỘT PHÁ · 2 AP
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-300 leading-relaxed mt-0.5">
+                  {breakthroughAction.description}
+                </p>
+              </div>
+            </div>
+            <button
+              disabled={isLoading || actionPoints < 2 || activeButton !== null}
+              onClick={() => handleAction('breakthrough', onBreakthrough, 2, breakthroughAction.costCash || 0)}
+              className="py-1.5 px-3 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-slate-950 text-xs font-bold transition shadow-md active:scale-95 disabled:opacity-40 shrink-0"
+            >
+              Tiến Hành (2 AP)
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ACTIVE RPG SKILL PERKS BAR */}
+      {onRpgActivePerk && character?.unlocked_skills && character.unlocked_skills.length > 0 && (
+        <div className="mb-2 p-2 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between flex-wrap gap-2 text-xs">
+          <span className="text-purple-300 font-bold flex items-center gap-1 text-[11px]">
+            <span>✨</span> Đặc Quyền Kỹ Năng:
+          </span>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {character.unlocked_skills.includes('market_sense_1') && (
+              <button
+                disabled={isLoading || actionPoints < 1}
+                onClick={() => handleAction('perk_stock', () => onRpgActivePerk('stock_trading'), 1, 0)}
+                className="py-1 px-2.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold transition"
+              >
+                📈 Lướt Sóng Cổ Phiếu (1 AP)
+              </button>
+            )}
+            {character.unlocked_skills.includes('stoic_mind_1') && (
+              <button
+                disabled={isLoading || actionPoints < 1}
+                onClick={() => handleAction('perk_zen', () => onRpgActivePerk('zen_meditation'), 1, 0)}
+                className="py-1 px-2.5 rounded-lg bg-indigo-950/60 hover:bg-indigo-900/60 border border-indigo-500/40 text-indigo-300 text-[11px] font-bold transition"
+              >
+                🧘 Thiền Định Siêu Việt (1 AP)
+              </button>
+            )}
+            {character.unlocked_skills.includes('social_magnet_1') && (
+              <button
+                disabled={isLoading || actionPoints < 1}
+                onClick={() => handleAction('perk_vip', () => onRpgActivePerk('vip_networking'), 1, 1500)}
+                className="py-1 px-2.5 rounded-lg bg-amber-950/60 hover:bg-amber-900/60 border border-amber-500/40 text-amber-300 text-[11px] font-bold transition"
+              >
+                🥂 Tiệc VIP Thượng Lưu (1 AP)
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* DYNAMIC AGE-APPROPRIATE ACTION TILES */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 my-2.5 w-full">

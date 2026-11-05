@@ -52,9 +52,16 @@ export function filterViableScenarios(scenarioMatrix, character) {
                       character.relationships.some(r => r.type === 'child' && r.status !== 'deceased');
 
   const occ = (character.occupation || "").toLowerCase();
-  const isTechOrStartup = occ.includes('lập trình') || occ.includes('công nghệ') || occ.includes('ai') || 
-                          occ.includes('kỹ sư') || occ.includes('startup') || occ.includes('founder') ||
-                          flags.has("startup_founder") || flags.has("tech_career");
+  const isRealStartupFounder = flags.has("startup_founder") || flags.has("founded_startup") || 
+                              flags.has("ai_startup_venture") || flags.has("tech_startup_joined");
+
+  const isRenting = !flags.has("owns_house") && !flags.has("owns_villa") && 
+                    character.housing !== 'villa' && character.housing !== 'luxury_apartment';
+
+  const hasInvestments = (Array.isArray(character.assets) && character.assets.some(a => a.type === 'stock' || a.type === 'crypto' || a.type === 'business')) ||
+                         (character.cash >= 20000000);
+
+  const isStudent = currentAge <= 25 && (occ.includes('sinh viên') || occ.includes('học') || flags.has("higher_education"));
 
   const viable = scenarioMatrix.filter(s => {
     // 1. Age Range Check
@@ -85,10 +92,25 @@ export function filterViableScenarios(scenarioMatrix, character) {
 
     // 6. Tech / Software Startup Specific Check:
     if (s.id === "ill_startup_patent_theft" || s.tag === "intellectual_theft_loss") {
-      if (!isTechOrStartup && !flags.has("intellectual_acumen")) return false;
+      if (!isRealStartupFounder) return false;
     }
 
-    // 7. Anti-Loop 15-tag contextual window check
+    // 7. Student Academic Check:
+    if (s.id === "ill_thesis_dispute") {
+      if (!isStudent) return false;
+    }
+
+    // 8. Rental / Eviction Check:
+    if (s.id === "ill_rental_scam" || s.id === "ill_landlord_eviction") {
+      if (!isRenting) return false;
+    }
+
+    // 9. Market Crash Check:
+    if (s.id === "ill_market_correction_crash") {
+      if (!hasInvestments) return false;
+    }
+
+    // 10. Anti-Loop 15-tag contextual window check
     if (bannedTags.has(s.tag)) return false;
 
     return true;

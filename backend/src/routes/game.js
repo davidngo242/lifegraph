@@ -33,6 +33,9 @@ import {
 } from '../engine/rpgProgressionEngine.js';
 import { processPassivePhase, calculateMaxVitality } from '../engine/tickEngine.js';
 import { getCurrentScenarioForCharacter, interactWithHotspot, resolveMindStageChoice, fulfillCommitment, evaluateCommitments, getNextScenarioAge } from '../engine/scenarioEngine.js';
+import { recordAndCheckCombo, resetAnnualActions } from '../engine/comboActionEngine.js';
+import { executeBreakthroughAction, getBreakthroughForAge } from '../engine/breakthroughEngine.js';
+import { evaluateIncomingNpcEvent } from '../engine/incomingSocialEngine.js';
 import { compileSystemPrompt } from '../engine/promptCompiler.js';
 import { generateDilemma } from '../engine/aiGameMaster.js';
 import { getChildhoodMilestones, generateLocalizedName, NAMES_BY_COUNTRY } from '../engine/rebirthEngine.js';
@@ -279,7 +282,8 @@ router.get('/state', async (req, res) => {
       net_worth: netWorth,
       can_transhuman: canTranshuman,
       aspiration,
-      scenario: getCurrentScenarioForCharacter(character)
+      scenario: getCurrentScenarioForCharacter(character),
+      breakthrough_action: getBreakthroughForAge(character.age)
     });
   } catch (err) {
     console.error('Error fetching game state:', err);
@@ -1964,11 +1968,13 @@ router.post('/action/wellness', async (req, res) => {
         event: "Khám sức khỏe tổng quát & Trị liệu dưỡng sinh",
         choice: `Chi $${costCash.toLocaleString()} & ${costAP} AP (+${vitGained} Sinh lực, -${burnoutRelief} Burnout)${healthPerkMsg}`
       });
+      const combo = recordAndCheckCombo(character, 'wellness');
       character.history_log = history;
       await updateCharacter(character.id, character);
 
       return res.json({
         success: true,
+        combo_triggered: combo,
         message: `Trị liệu y tế phục hồi thể trạng thành công! (+${vitGained} Sinh lực, -${burnoutRelief} Burnout)${healthPerkMsg}`,
         character
       });
@@ -2625,6 +2631,109 @@ router.post('/action/minigame-result', async (req, res) => {
   }
 });
 
+// POST /api/game/action/breakthrough - Execute 2 AP Breakthrough Action
+router.post('/action/breakthrough', async (req, res) => {
+  try {
+    let character = await getLatestCharacter();
+    if (!character) return res.status(400).json({ error: 'Không tìm thấy nhân vật' });
+    const result = executeBreakthroughAction(character);
+    await updateCharacter(character.id, character);
+    res.json({ success: true, ...result, character });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// POST /api/game/action/social-respond - Respond to Incoming NPC Event
+router.post('/action/social-respond', async (req, res) => {
+  try {
+    const { option_id } = req.body;
+    let character = await getLatestCharacter();
+    if (!character) return res.status(400).json({ error: 'Không tìm thấy nhân vật' });
+    let relationships = await getRelationships(character.id);
+    const incomingEvent = evaluateIncomingNpcEvent(character, relationships);
+    const chosenOption = incomingEvent?.options?.find(o => o.id === option_id) || incomingEvent?.options?.[0];
+    
+    if (chosenOption) {
+      if ((chosenOption.costAp || 0) > 0) {
+        if ((character.action_points || 0) < chosenOption.costAp) {
+          return res.status(400).json({ error: 'Không đủ AP để thực hiện lựa chọn này!' });
+        }
+        character.action_points -= chosenOption.costAp;
+      }
+      if ((chosenOption.costCash || 0) > 0) {
+        if ((Number(character.cash) || 0) < chosenOption.costCash) {
+          return res.status(400).json({ error: 'Không đủ tiền mặt!' });
+        }
+      }
+      const msg = chosenOption.effect ? chosenOption.effect(character) : 'Đã phản hồi tương tác xã hội.';
+      const history = character.history_log || [];
+      history.push({
+        age: character.age,
+        event: `Tương tác với ${incomingEvent.npcName}: ${incomingEvent.title}`,
+        choice: msg
+      });
+      character.history_log = history;
+      await updateCharacter(character.id, character);
+      return res.json({ success: true, message: msg, character });
+    }
+    res.json({ success: true, message: 'Đã ghi nhận phản hồi.', character });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// POST /api/game/action/rpg-active-perk - Execute Active Perks unlocked by RPG tree
+router.post('/action/rpg-active-perk', async (req, res) => {
+  try {
+    const { perk_type } = req.body;
+    let character = await getLatestCharacter();
+    if (!character) return res.status(400).json({ error: 'Không tìm thấy nhân vật' });
+    if ((character.action_points || 0) < 1) {
+      return res.status(400).json({ error: 'Cần tối thiểu 1 AP để kích hoạt đặc quyền!' });
+    }
+
+    character.action_points -= 1;
+    const history = character.history_log || [];
+    let message = '';
+
+    if (perk_type === 'stock_trading') {
+      const isProfit = Math.random() < 0.70;
+      const amount = Math.round(Math.max(2000, (Number(character.cash) || 5000) * 0.25));
+      if (isProfit) {
+        character.cash = (Number(character.cash) || 0) + amount;
+        message = `Lướt sóng cổ phiếu thành công! Nhận thặng dư +${amount.toLocaleString()}.`;
+      } else {
+        character.cash = Math.max(0, (Number(character.cash) || 0) - Math.round(amount * 0.4));
+        message = `Thị trường điều chỉnh nhẹ, cắt lỗ an toàn -${Math.round(amount * 0.4).toLocaleString()}.`;
+      }
+      awardLifeExp(character, 45, 'Lướt sóng thị trường vốn');
+    } else if (perk_type === 'zen_meditation') {
+      character.burnout = Math.max(0, (character.burnout || 0) - 45);
+      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 15);
+      character.karma = Math.min(100, (character.karma || 100) + 15);
+      message = 'Thiền định siêu việt: Tâm thức thanh lọc tuyệt đối, xóa sạch 45% Stress, hồi phục 15 HP.';
+      awardLifeExp(character, 40, 'Thiền định giác ngộ');
+    } else if (perk_type === 'vip_networking') {
+      character.cash = Math.max(0, (Number(character.cash) || 0) - 1500);
+      character.karma = Math.min(100, (character.karma || 100) + 20);
+      message = 'Dự tiệc Networking thượng lưu: Gặp gỡ các nhà đầu tư lớn, mở rộng mạng lưới uy tín (+20 Karma).';
+      awardLifeExp(character, 50, 'Mạng lưới thượng lưu VIP');
+    }
+
+    history.push({
+      age: character.age,
+      event: `Đặc quyền RPG kích hoạt [${perk_type}]`,
+      choice: message
+    });
+    character.history_log = history;
+    await updateCharacter(character.id, character);
+    res.json({ success: true, message, character });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 // POST /api/game/tick - Advance simulation
 router.post('/tick', async (req, res) => {
   try {
@@ -2671,12 +2780,50 @@ router.post('/tick', async (req, res) => {
           choice: lastChoiceOutcome
         });
       } else if (type === "ILLUSION") {
-        const drain = previous_dilemma.illusion_data?.drain_ratio || 0.25;
-        const lossAmount = Math.round(Math.max(5000, character.cash) * drain);
-        character.cash = Math.max(0, character.cash - lossAmount);
-        character.karma = Math.min(100, character.karma + (previous_dilemma.illusion_data?.karma_gain || 10));
+        const strategyId = choice_id || interaction_result?.strategy_id || (interaction_result?.acknowledged ? "endure" : "pivot");
 
-        lastChoiceOutcome = previous_dilemma.illusion_data?.button_text || "Tiếp nhận hiện thực";
+        if (strategyId === "fight") {
+          // Aggressive / Assertive Counter Strategy
+          const statPower = (character.vitality || 50) + (character.karma || 0) + (character.rpg_skills?.length || 0) * 10;
+          const isSuccess = statPower >= 75 || Math.random() < 0.60;
+
+          if (isSuccess) {
+            const salvageCash = Math.round(Math.max(2000, character.cash) * 0.10);
+            character.cash += salvageCash;
+            character.karma = Math.min(100, character.karma + 15);
+            character.rpg_exp = (character.rpg_exp || 0) + 25;
+            if (!character.hidden_flags) character.hidden_flags = [];
+            character.hidden_flags.push("courageous_fighter");
+            lastChoiceOutcome = `Quyết liệt đấu tranh: Bạn dũng cảm đối diện nghịch cảnh, đòi lại công bằng danh dự (+${salvageCash.toLocaleString('vi-VN')}₫, +25 EXP RPG, +15 Karma).`;
+          } else {
+            const legalLoss = Math.round(Math.max(4000, character.cash) * 0.18);
+            character.cash = Math.max(0, character.cash - legalLoss);
+            character.vitality = Math.max(10, character.vitality - 5);
+            character.karma = Math.min(100, character.karma + 10);
+            lastChoiceOutcome = `Quyết liệt đấu tranh: Dù tốn phí tổn đối đầu (-${legalLoss.toLocaleString('vi-VN')}₫), bạn đã tôi luyện ý chí kiên định (+10 Karma).`;
+          }
+        } else if (strategyId === "pivot") {
+          // Adaptive Pivot Strategy: Turn crisis into catalyst
+          const pivotCost = Math.round(Math.max(2000, character.cash) * 0.08);
+          character.cash = Math.max(0, character.cash - pivotCost);
+          character.vitality = Math.max(10, character.vitality - 8);
+          character.burnout = Math.min(100, (character.burnout || 0) + 8);
+          character.rpg_exp = (character.rpg_exp || 0) + 35;
+          if (!character.hidden_flags) character.hidden_flags = [];
+          character.hidden_flags.push("crisis_pivot_survivor");
+          lastChoiceOutcome = `Thích ứng & Đổi mới: Bạn thần tốc đổi hướng, biến nghịch cảnh thành bàn đạp để nâng cấp kỹ năng (+35 EXP RPG, mở khóa Sinh Tồn Nghịch Cảnh).`;
+        } else {
+          // Endure / Preserve Strength Strategy
+          const drain = previous_dilemma.illusion_data?.drain_ratio || 0.15;
+          const lossAmount = Math.round(Math.max(3000, character.cash) * drain);
+          character.cash = Math.max(0, character.cash - lossAmount);
+          const karmaReward = previous_dilemma.illusion_data?.karma_gain || 25;
+          character.karma = Math.min(100, character.karma + karmaReward);
+          lastChoiceOutcome = previous_dilemma.illusion_data?.button_text ? 
+            `${previous_dilemma.illusion_data.button_text} (+${karmaReward} Karma)` : 
+            `Nhẫn nhịn bảo toàn lực lượng, tích lũy bài học kinh nghiệm sâu sắc (+${karmaReward} Karma).`;
+        }
+
         historyLog.push({
           age: character.age,
           event: previous_dilemma.title,
@@ -2928,6 +3075,8 @@ router.post('/tick', async (req, res) => {
 
     evaluateCommitments(character, npcs);
     for (const npc of npcs) await updateNpc(npc.id, npc);
+    resetAnnualActions(character);
+    const incomingNpcEvent = evaluateIncomingNpcEvent(character, relationships);
 
     // 2. Check Long-term NPC Memory Arcs
     const npcArc = evaluateNpcLongTermArc(character, npcs);
@@ -2970,6 +3119,8 @@ router.post('/tick', async (req, res) => {
       passiveSummary,
       aspiration,
       scenario: getCurrentScenarioForCharacter(character),
+      incoming_npc_event: incomingNpcEvent,
+      breakthrough_action: getBreakthroughForAge(character.age),
       delayed_milestones: delayedMilestoneMessages
     });
   } catch (err) {

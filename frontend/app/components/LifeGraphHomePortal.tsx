@@ -25,6 +25,7 @@ import {
   Globe2
 } from 'lucide-react';
 import { formatCurrency } from '../utils/currencyUtils';
+import AncestralFamilyTree from './AncestralFamilyTree';
 
 interface LifeGraphHomePortalProps {
   character?: any;
@@ -52,6 +53,7 @@ export default function LifeGraphHomePortal({
   onClearNirvanaBanner
 }: LifeGraphHomePortalProps) {
   const [filter, setFilter] = useState<'all' | 'nirvana' | 'deceased'>('all');
+  const [lineageViewMode, setLineageViewMode] = useState<'tree' | 'list'>('tree');
   const [incenseOffered, setIncenseOffered] = useState<boolean>(false);
   const [incenseLoading, setIncenseLoading] = useState<boolean>(false);
   const [incenseMessage, setIncenseMessage] = useState<string | null>(null);

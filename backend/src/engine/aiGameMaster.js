@@ -197,6 +197,30 @@ function determineVisualVibe(character, netWorth) {
 
 function normalizeInteractionData(data) {
   const type = data.interaction_type || "STANDARD";
+  let copingStrategies = data.coping_strategies || null;
+  if (type === "ILLUSION" && !copingStrategies) {
+    copingStrategies = [
+      {
+        id: "fight",
+        title: "⚔️ Quyết Liệt Đấu Tranh",
+        desc: "Dùng trí tuệ, quan hệ và pháp lý để đối đầu trực diện, đòi lại danh dự và lợi ích chính đáng.",
+        risk_hint: "Tiêu tốn chi phí đối đầu nhưng có cơ hội lội ngược dòng bảo vệ thành quả."
+      },
+      {
+        id: "pivot",
+        title: "💡 Thích Ứng & Đổi Mới (Pivot)",
+        desc: "Thần tốc đổi hướng chiến lược, biến nghịch cảnh thành bàn đạp nâng cấp kỹ năng và bứt phá.",
+        risk_hint: "Tiêu hao thể lực & năng lượng, nhận +35 EXP Kỹ Năng RPG vĩnh viễn."
+      },
+      {
+        id: "endure",
+        title: "🛡️ Nhẫn Nhịn Bảo Toàn",
+        desc: data.illusion_data?.button_text || "Nuốt hận bảo toàn lực lượng, tích lũy bài học kinh nghiệm sâu sắc.",
+        risk_hint: data.illusion_data?.impact_hint || "Chấp nhận mất mát ngắn hạn, nhận +25 Điểm Phúc Báo Karma vĩnh cửu."
+      }
+    ];
+  }
+
   return {
     id: data.id || crypto.randomUUID(),
     interaction_type: type,
@@ -205,6 +229,7 @@ function normalizeInteractionData(data) {
     narrative: data.narrative || "Thời gian lặng lẽ trôi qua mang theo những đổi thay không ngờ.",
     spectrum_data: data.spectrum_data || null,
     illusion_data: data.illusion_data || null,
+    coping_strategies: copingStrategies,
     trilemma_options: data.trilemma_options || null,
     time_skip_data: data.time_skip_data || null,
     options: data.options || null,

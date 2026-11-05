@@ -32,6 +32,7 @@ import MmoWeatherBar from './components/MmoWeatherBar';
 import LifeTarotCardModal from './components/LifeTarotCardModal';
 import GameGuideModal from './components/GameGuideModal';
 import Tooltip from './components/Tooltip';
+import IncomingNpcEventModal from './components/IncomingNpcEventModal';
 
 // Non-binary Interaction Components (V5 & V6)
 import SpectrumSlider from './components/interactions/SpectrumSlider';
@@ -101,6 +102,8 @@ export default function LifeGraphPage() {
   const [annualDigest, setAnnualDigest] = useState<AnnualDigestData | null>(null);
   const [avatarReaction, setAvatarReaction] = useState<AvatarReactionType>('idle');
   const [bannerFeedback, setBannerFeedback] = useState<BannerActionFeedback | null>(null);
+  const [breakthroughAction, setBreakthroughAction] = useState<any>(null);
+  const [incomingNpcEvent, setIncomingNpcEvent] = useState<any>(null);
 
   const triggerAvatarReaction = (reactionType: AvatarReactionType, durationMs: number = 3200) => {
     setAvatarReaction(reactionType);
@@ -165,6 +168,8 @@ export default function LifeGraphPage() {
       setNpcs(data.npcs || []);
       setDilemma(data.dilemma);
       setCanTranshuman(data.can_transhuman || false);
+      if (data.breakthrough_action !== undefined) setBreakthroughAction(data.breakthrough_action);
+      if (data.incoming_npc_event !== undefined) setIncomingNpcEvent(data.incoming_npc_event);
       if (data.scenario !== undefined) setActiveScenario(data.scenario);
       if (data.aspiration) setAspiration(data.aspiration);
       if (data.passiveSummary?.annual_digest) setAnnualDigest(data.passiveSummary.annual_digest);
@@ -240,6 +245,17 @@ export default function LifeGraphPage() {
       setNpcs(data.npcs || []);
       setDilemma(data.dilemma);
       setCanTranshuman(data.can_transhuman || false);
+      if (data.breakthrough_action !== undefined) setBreakthroughAction(data.breakthrough_action);
+      if (data.incoming_npc_event !== undefined) setIncomingNpcEvent(data.incoming_npc_event);
+      if (data.combo_triggered) {
+        triggerBannerFeedback({
+          type: 'milestone',
+          title: `COMBO: ${data.combo_triggered.name}`,
+          subtitle: data.combo_triggered.description,
+          delta: data.combo_triggered.reward_summary || '+Thưởng Đột Phá Combo',
+          icon: data.combo_triggered.icon || '🔥'
+        });
+      }
       if (data.scenario !== undefined) setActiveScenario(data.scenario);
       if (data.aspiration) setAspiration(data.aspiration);
       if (data.passiveSummary?.annual_digest) setAnnualDigest(data.passiveSummary.annual_digest);
@@ -263,10 +279,11 @@ export default function LifeGraphPage() {
     });
   };
 
-  const handleIllusionAccept = () => {
+  const handleIllusionAccept = (strategyId?: string) => {
     submitInteraction({
       interaction_type: "ILLUSION",
-      interaction_result: { acknowledged: true }
+      choice_id: strategyId || "endure",
+      interaction_result: { strategy_id: strategyId || "endure", acknowledged: true }
     });
   };
 
@@ -600,6 +617,102 @@ export default function LifeGraphPage() {
     } catch (err: any) {
       setErrorMsg(err.message);
       return err.message;
+    }
+  };
+
+  const handleBreakthroughAction = async (): Promise<string | void> => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/action/breakthrough`, {
+        credentials: 'omit',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || err.error || "Hành động đột phá thất bại.");
+      }
+      const data = await res.json();
+      if (data.character) setCharacter(data.character);
+      setBreakthroughAction(null);
+      triggerAvatarReaction(data.is_critical_success ? 'celebrate' : 'negotiating');
+      triggerBannerFeedback({
+        type: 'milestone',
+        title: data.is_critical_success ? 'Đại Thắng Đột Phá (Crit Success)!' : 'Đột Phá Thành Công',
+        subtitle: data.result_narrative || 'Dốc toàn lực tạo bước ngoặt lớn trong cuộc đời',
+        delta: data.is_critical_success ? '+Đại Thưởng Đột Phá' : '+Thành Quả 2 AP',
+        icon: '⚡'
+      });
+      return data.result_narrative;
+    } catch (err: any) {
+      setErrorMsg(err.message);
+      return err.message;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRpgActivePerk = async (perkType: string): Promise<string | void> => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/action/rpg-active-perk`, {
+        credentials: 'omit',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ perk_type: perkType })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || err.error || "Kích hoạt đặc quyền kỹ năng thất bại.");
+      }
+      const data = await res.json();
+      if (data.character) setCharacter(data.character);
+      triggerAvatarReaction('celebrate');
+      triggerBannerFeedback({
+        type: 'milestone',
+        title: 'Đặc Quyền Kỹ Năng RPG Kích Hoạt!',
+        subtitle: data.message || 'Phát huy năng lực chủ động từ cây kỹ năng',
+        delta: data.reward_detail || '+Thưởng Đặc Quyền',
+        icon: '⭐'
+      });
+      return data.message;
+    } catch (err: any) {
+      setErrorMsg(err.message);
+      return err.message;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSocialRespond = async (optionId: string): Promise<void> => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/action/social-respond`, {
+        credentials: 'omit',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ option_id: optionId })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || err.error || "Phản hồi sự kiện NPC thất bại.");
+      }
+      const data = await res.json();
+      if (data.character) setCharacter(data.character);
+      if (data.relationships) setRelationships(data.relationships);
+      setIncomingNpcEvent(null);
+      triggerAvatarReaction('negotiating');
+      triggerBannerFeedback({
+        type: 'infant',
+        title: 'Phản Hồi Mối Quan Hệ Xã Hội',
+        subtitle: data.result_narrative || 'Giao lưu gắn kết tình cảm với người thân',
+        delta: 'Đã Cập Nhật Quan Hệ',
+        icon: '💌'
+      });
+    } catch (err: any) {
+      setErrorMsg(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -1738,6 +1851,9 @@ export default function LifeGraphPage() {
                     onLaunchMiniGame={(type) => launchMiniGame(type)}
                     onUnlockSkill={handleUnlockSkill}
                     onNpcInteract={handleNpcInteract}
+                    breakthroughAction={breakthroughAction}
+                    onBreakthrough={handleBreakthroughAction}
+                    onRpgActivePerk={handleRpgActivePerk}
                     hiddenFlags={character.hidden_flags || []}
                     isLoading={loading}
                   />
@@ -1816,6 +1932,15 @@ export default function LifeGraphPage() {
             </div>
             )}
           </>
+        )}
+
+        {/* Incoming Annual NPC Social Event Modal */}
+        {incomingNpcEvent && (
+          <IncomingNpcEventModal
+            event={incomingNpcEvent}
+            onRespond={handleSocialRespond}
+            onClose={() => setIncomingNpcEvent(null)}
+          />
         )}
       </main>
     </div>
