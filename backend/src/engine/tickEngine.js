@@ -3,19 +3,25 @@ import { generatePassiveChildhoodEvent } from './rebirthEngine.js';
 
 // Calculate maximum vitality cap based on biological age
 // If Transhumanism surgery was successful, decay is frozen until transhuman_frozen_until_age
-export function calculateMaxVitality(age, transhumanFrozenUntilAge = null) {
+// If transcendence_sage skill is unlocked, adds permanent +15 vitality cap bonus
+export function calculateMaxVitality(age, transhumanFrozenUntilAge = null, hasTranscendence = false) {
+  const transcendenceBonus = hasTranscendence ? 15 : 0;
   if (transhumanFrozenUntilAge && age <= transhumanFrozenUntilAge) {
-    return 90; // Frozen from biological decay!
+    return 90 + transcendenceBonus; // Frozen from biological decay!
   }
-  if (age <= 40) return 100;
-  if (age <= 60) return Math.round(100 - (age - 40) * 1.25); // 40->100, 60->75
-  if (age <= 80) return Math.round(75 - (age - 60) * 1.75);  // 60->75, 80->40
-  return Math.max(15, Math.round(40 - (age - 80) * 1.2));    // 80->40, 100->16
+  let baseMax = 100;
+  if (age <= 40) baseMax = 100;
+  else if (age <= 60) baseMax = Math.round(100 - (age - 40) * 1.25); // 40->100, 60->75
+  else if (age <= 80) baseMax = Math.round(75 - (age - 60) * 1.75);  // 60->75, 80->40
+  else baseMax = Math.max(15, Math.round(40 - (age - 80) * 1.2));    // 80->40, 100->16
+  return baseMax + transcendenceBonus;
 }
 
 // Biological Reaper Death Roll (Exponential mortality from age 70+)
-export function evaluateReaperRoll(age, currentVitality) {
-  if (age < 70) return { died: false };
+// If transcendence_sage is unlocked, grace period extended to 75+ and mortality risk halved
+export function evaluateReaperRoll(age, currentVitality, hasTranscendence = false) {
+  const thresholdAge = hasTranscendence ? 75 : 70;
+  if (age < thresholdAge) return { died: false };
 
   let deathProbability = 0;
 
@@ -35,6 +41,11 @@ export function evaluateReaperRoll(age, currentVitality) {
   // Fragility penalty if vitality is low
   if (currentVitality < 25) {
     deathProbability += 0.20;
+  }
+
+  // Transcendence Sage perk: Halves sudden death probability
+  if (hasTranscendence) {
+    deathProbability *= 0.50;
   }
 
   const roll = Math.random();
@@ -59,13 +70,18 @@ export function evaluateReaperRoll(age, currentVitality) {
 export async function processPassivePhase(character, assets, relationships) {
   let { vitality, cash, burnout, karma, hidden_flags, age } = character;
   const flagsSet = new Set(Array.isArray(hidden_flags) ? hidden_flags : []);
+  const unlockedSkills = Array.isArray(character.unlocked_skills) ? character.unlocked_skills : [];
+  const hasTranscendence = unlockedSkills.includes("transcendence_sage");
+  const hasStoicMind = unlockedSkills.includes("stoic_mind");
+  const hasEncyclopedic = unlockedSkills.includes("encyclopedic_brain");
+  const hasCapitalEngine = unlockedSkills.includes("capital_engine");
 
   // 1. Natural aging
   age += 1;
-  const maxVitality = calculateMaxVitality(age, character.transhuman_frozen_until_age);
+  const maxVitality = calculateMaxVitality(age, character.transhuman_frozen_until_age, hasTranscendence);
 
   // 2. Check Reaper Death Roll from age 70+
-  const reaperResult = evaluateReaperRoll(age, vitality);
+  const reaperResult = evaluateReaperRoll(age, vitality, hasTranscendence);
   if (reaperResult.died) {
     return {
       updatedCharacter: {
@@ -255,8 +271,16 @@ export async function processPassivePhase(character, assets, relationships) {
     }
   }
 
-  // Net Passive Flow: Asset Yield - Asset Maintenance - Family Upkeep
-  const netPassiveFlow = totalAssetIncome - totalAssetMaintenance - totalRelationshipCost;
+  // Skill: Capital Engine passive yield (+$25,000/yr without AP/Vitality drain)
+  const capitalEngineBonus = hasCapitalEngine ? 25000 : 0;
+
+  // Skill: Encyclopedic Brain annual karma buff (+25 Karma/yr)
+  if (hasEncyclopedic) {
+    karma = Math.min(100, (Number(karma) || 50) + 25);
+  }
+
+  // Net Passive Flow: Asset Yield + Capital Engine - Asset Maintenance - Family Upkeep
+  const netPassiveFlow = totalAssetIncome + capitalEngineBonus - totalAssetMaintenance - totalRelationshipCost;
   cash += netPassiveFlow;
 
   // MINOR SHIELD: Minors (< 18) are protected from negative cash / personal debt
@@ -280,6 +304,11 @@ export async function processPassivePhase(character, assets, relationships) {
     if (flagsSet.has("high_debt") && cash > 3000) {
       flagsSet.delete("high_debt");
     }
+  }
+
+  // Skill: Stoic Mind - Reduces burnout gain by 40%
+  if (burnoutChange > 0 && hasStoicMind) {
+    burnoutChange = Math.round(burnoutChange * 0.6);
   }
 
   // 9. Chronic Burnout damage
@@ -441,12 +470,15 @@ export async function processPassivePhase(character, assets, relationships) {
           : `⚠️ Bước Sang Tuổi ${age}: Áp Lực Thâm Hụt Chi Phí Sinh Hoạt`,
         cash_flow: {
           asset_yield: totalAssetIncome,
+          capital_engine_bonus: capitalEngineBonus,
           maintenance: totalAssetMaintenance,
           family_cost: totalRelationshipCost,
           net_change: netPassiveFlow
         },
         childhood_event: childhoodPassiveEvent,
         family_events: [
+          ...(capitalEngineBonus > 0 ? [`👑 Cỗ Máy Dòng Tiền: Thu về +$${capitalEngineBonus.toLocaleString()} lợi tức thụ động không hao tổn sinh lực.`] : []),
+          ...(hasEncyclopedic ? [`📚 Bách Khoa Toàn Thư: Trí tuệ uyên thâm đem lại +25 Karma danh vọng học thuật.`] : []),
           ...(childhoodPassiveEvent ? [`${childhoodPassiveEvent.title}: ${childhoodPassiveEvent.narrative}`] : []),
           ...(newlyAdultChildrenCount > 0 ? [`🎉 Có ${newlyAdultChildrenCount} người con tròn 18 tuổi - Giải phóng 1 AP cầm tù!`] : []),
           ...(flagsSet.has("parent_passed_away") ? ["🕯️ Cha/mẹ già đã tạ thế bình yên theo quy luật tự nhiên."] : [])

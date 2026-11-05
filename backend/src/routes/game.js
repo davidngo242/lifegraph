@@ -1171,7 +1171,11 @@ router.post('/action/buy-asset', async (req, res) => {
     const actualCashFlow = Math.max(0, Number(annual_cash_flow || cash_flow || 0));
 
     const financeLevel = character.skills?.finance_market?.level || 0;
-    const discountRate = financeLevel === 1 ? 0.10 : financeLevel === 2 ? 0.20 : financeLevel >= 3 ? 0.25 : 0;
+    let discountRate = financeLevel === 1 ? 0.10 : financeLevel === 2 ? 0.20 : financeLevel >= 3 ? 0.25 : 0;
+    const hasMarketSense = (character.unlocked_skills || []).includes("market_sense_1");
+    if (hasMarketSense) {
+      discountRate = Math.min(0.40, discountRate + 0.10); // +10% discount from Mắt Thần Định Giá
+    }
     const finalCost = Math.round(rawCost * (1 - discountRate));
 
     if ((character.action_points || 0) < actualCostAp) {
@@ -1184,6 +1188,9 @@ router.post('/action/buy-asset', async (req, res) => {
     character.action_points -= actualCostAp;
     character.cash -= finalCost;
 
+    // Award Life EXP for strategic investment
+    awardLifeExp(character, 80, `Đầu tư tài sản: ${safeName}`);
+
     const newAsset = await addAsset({
       character_id: character.id,
       type: actualType,
@@ -1195,7 +1202,8 @@ router.post('/action/buy-asset', async (req, res) => {
       annual_cash_flow: actualCashFlow
     });
 
-    const discountNote = discountRate > 0 ? ` (Được chiết khấu ${(discountRate * 100).toFixed(0)}% nhờ Kỹ Năng Tài Chính Cấp ${financeLevel})` : '';
+    const skillNote = hasMarketSense ? ' + 10% [Mắt Thần Định Giá]' : '';
+    const discountNote = discountRate > 0 ? ` (Được chiết khấu ${(discountRate * 100).toFixed(0)}% nhờ Kỹ Năng Tài Chính${skillNote})` : '';
     const history = character.history_log || [];
     history.push({
       age: character.age,
@@ -1489,6 +1497,8 @@ router.post('/action/annual-focus', async (req, res) => {
       character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 10);
       message = "Một năm trôi qua bình dị và thuận hòa.";
     }
+
+    awardLifeExp(character, 80, `Trọng tâm năm: ${focus_type}`);
 
     history.push({
       age: character.age,
@@ -1943,6 +1953,7 @@ router.post('/action/wellness', async (req, res) => {
       const burnoutRelief = 25 + bonusBurnoutRelief;
       character.vitality = Math.min(maxV, character.vitality + vitGained);
       character.burnout = Math.max(0, character.burnout - burnoutRelief);
+      awardLifeExp(character, 30, "Trị liệu y tế phục hồi thể trạng");
 
       const healthPerkMsg = healthLevel > 0 ? ` (Kỹ Năng Sinh Lực Lv${healthLevel} tăng thêm +${bonusVit} HP, -${bonusBurnoutRelief} Burnout)` : '';
       history.push({
@@ -1974,6 +1985,7 @@ router.post('/action/wellness', async (req, res) => {
       character.burnout = Math.max(0, character.burnout - burnoutRelief);
       character.vitality = Math.min(character.max_vitality || 100, character.vitality + vitGained);
       character.karma = Math.min(100, character.karma + 10);
+      awardLifeExp(character, 35, "Khóa tu tĩnh tâm dưỡng sinh");
 
       const healthPerkMsg = healthLevel > 0 ? ` (Kỹ Năng Sinh Lực Lv${healthLevel} tăng thêm +${bonusVit} HP, -${bonusBurnoutRelief} Burnout)` : '';
       history.push({
@@ -2011,8 +2023,11 @@ router.post('/action/overtime', async (req, res) => {
 
     const techLevel = character.skills?.tech_logic?.level || 0;
     const techMultiplier = 1 + (techLevel * 0.15); // +15% per tech level
+    const hasNegotiation = (character.unlocked_skills || []).includes("negotiation_master");
+    const negotiationMultiplier = hasNegotiation ? 1.35 : 1.0; // +35% thặng dư từ Kỹ Năng Đàm Phán Khắc Nghiệt
+
     const baseEarned = Math.round(1500 + (age * 120) + (Math.random() * 800));
-    const earnedCash = Math.round(baseEarned * techMultiplier);
+    const earnedCash = Math.round(baseEarned * techMultiplier * negotiationMultiplier);
 
     const healthLevel = character.skills?.resilience_health?.level || 0;
     const burnoutReduction = healthLevel * 0.2; // 20% burnout reduction per level
@@ -2023,12 +2038,16 @@ router.post('/action/overtime', async (req, res) => {
     character.burnout = Math.min(100, character.burnout + burnoutGained);
     character.vitality = Math.max(10, character.vitality - (healthLevel >= 2 ? 1 : 3));
 
-    const techBonusNote = techLevel > 0 ? ` (+${techLevel * 15}% nhờ Kỹ Năng Công Nghệ Lv${techLevel})` : '';
+    // Award Life EXP for grinding hard
+    awardLifeExp(character, 40, "Cày việc ngoài giờ thực chiến");
+
+    const techBonusNote = techLevel > 0 ? ` (+${techLevel * 15}% Kỹ Năng Công Nghệ)` : '';
+    const negotiationNote = hasNegotiation ? ' (+35% [Đàm Phán Khắc Nghiệt])' : '';
     const history = character.history_log || [];
     history.push({
       age: character.age,
       event: "Làm thêm giờ & Nhận dự án ngoài luồng (Overtime Grind)",
-      choice: `Tiêu 1 AP: Kiếm thêm +$${earnedCash.toLocaleString()}${techBonusNote}, Burnout +${burnoutGained}`
+      choice: `Tiêu 1 AP: Kiếm thêm +$${earnedCash.toLocaleString()}${techBonusNote}${negotiationNote}, Burnout +${burnoutGained}`
     });
     character.history_log = history;
     await updateCharacter(character.id, character);
@@ -2058,6 +2077,9 @@ router.post('/action/study', async (req, res) => {
     character.cash -= costCash;
     character.burnout = Math.max(0, character.burnout - 10);
     character.karma = Math.min(100, character.karma + 8);
+
+    // Award Life EXP for studying
+    awardLifeExp(character, 50, "Nghiên cứu tri thức chuyên sâu");
 
     const flags = new Set(character.hidden_flags || []);
     flags.add("intellectual_acumen");
@@ -2396,13 +2418,15 @@ router.post('/action/minigame-result', async (req, res) => {
     if (!Number.isFinite(Number(score)) || Number(score) < 0) return res.status(400).json({ error: 'Điểm không hợp lệ.' });
 
     const targetSkillId = req.body.skill_id || pendingExam?.skill_id;
+    const hasEncyclopedic = (character.unlocked_skills || []).includes("encyclopedic_brain");
+    const effectiveOutcome = (pendingExam && hasEncyclopedic) ? 'success' : outcome;
 
     if (pendingExam && (pendingExam.skill_id === targetSkillId || !targetSkillId)) {
       const activeSkillId = pendingExam.skill_id;
       const targetLevel = pendingExam.target_level;
       const def = SKILL_DEFINITIONS[activeSkillId];
 
-      if (outcome === 'success' || outcome === 'fair') {
+      if (effectiveOutcome === 'success' || effectiveOutcome === 'fair') {
         if (!character.skills) character.skills = {};
         if (!character.skills[activeSkillId]) {
           character.skills[activeSkillId] = { level: 0, name: def.name };
@@ -2420,7 +2444,7 @@ router.post('/action/minigame-result', async (req, res) => {
           character.vitality = Math.min(character.max_vitality, character.vitality + 15);
         }
 
-        const karmaGain = outcome === 'success' ? 18 : 10;
+        const karmaGain = effectiveOutcome === 'success' ? 18 : 10;
         character.karma = Math.min(100, (character.karma || 100) + karmaGain);
 
         // Synergy with Aspiration
@@ -2435,7 +2459,8 @@ router.post('/action/minigame-result', async (req, res) => {
           }
         }
 
-        feedback = `🎉 THI ĐỖ SÁT HẠCH! Bạn đã chính thức đạt chứng chỉ [${def?.name || activeSkillId} - ${levelCfg?.title || 'Cấp ' + targetLevel}]! Mở khóa vĩnh viễn: ${levelCfg?.perk_title || ''} (+${karmaGain} Karma).`;
+        const encyclopedicNote = (hasEncyclopedic && outcome !== 'success') ? ' 🌟 [Bách Khoa Toàn Thư Auto-Pass]' : '';
+        feedback = `🎉 THI ĐỖ SÁT HẠCH! Bạn đã chính thức đạt chứng chỉ [${def?.name || activeSkillId} - ${levelCfg?.title || 'Cấp ' + targetLevel}]! Mở khóa vĩnh viễn: ${levelCfg?.perk_title || ''}${encyclopedicNote} (+${karmaGain} Karma).`;
       } else {
         character.burnout = Math.min(100, (character.burnout || 0) + 10);
         feedback = `Thi trượt sát hạch [${def?.name || activeSkillId} - Cấp ${targetLevel}]! Thiếu chút may mắn và sự tập trung (+10 Burnout). Hãy ôn luyện và thi lại sau.`;
@@ -2576,6 +2601,9 @@ router.post('/action/minigame-result', async (req, res) => {
       event: `Thử thách kỹ năng [${minigame_id}]`,
       choice: feedback
     });
+    const expGain = (effectiveOutcome === 'success') ? 120 : (effectiveOutcome === 'fair') ? 60 : 25;
+    awardLifeExp(character, expGain, `Hoàn thành thử thách [${minigame_id || 'Sát Hạch'}]`);
+
     character.pending_minigame = null;
     if (!pendingExam) character.completed_minigames = [...new Set([...played, minigame_id])];
     character.history_log = history;
@@ -2828,6 +2856,9 @@ router.post('/tick', async (req, res) => {
       character.household.family_meals_available = 1;
     }
 
+    // Award annual life EXP for living another year
+    awardLifeExp(character, 100, `Trải nghiệm sống tuổi ${character.age}`);
+
     // Tự động giải ngân quỹ bảo trợ gia đình khi tròn 18 tuổi
     if (character.age >= 18 && Number(character.family_endowment ?? 0) > 0) {
       const endowment = Number(character.family_endowment || 0);
@@ -2857,8 +2888,11 @@ router.post('/tick', async (req, res) => {
     // Check if character died during passive phase or Reaper roll
     if (character.is_deceased) {
       await updateCharacter(character.id, character);
-      // Transfer accumulated karma to eternal player_account
-      await addTotalKarma(character.karma || 50);
+      // Transfer accumulated karma to eternal player_account (Doubled if Giác Ngộ Niết Bàn)
+      const hasTranscendence = (character.unlocked_skills || []).includes("transcendence_sage");
+      const karmaMultiplier = hasTranscendence ? 2 : 1;
+      const karmaTransferred = Math.round((character.karma || 50) * karmaMultiplier);
+      await addTotalKarma(karmaTransferred);
       const account = await getPlayerAccount();
       await updatePlayerAccount({
         lifetime_stats: {
