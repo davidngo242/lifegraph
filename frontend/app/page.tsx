@@ -1518,11 +1518,14 @@ export default function LifeGraphPage() {
                       onClick={() => setGameMode('2d_scene')}
                       className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
                         gameMode === '2d_scene'
-                          ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
+                          ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/30'
                           : 'text-slate-400 hover:text-white'
                       }`}
                     >
-                      <span>🏙️ Không Gian Nhập Vai ({(character?.age || 0) < 6 ? "Ấu Thơ" : (character?.age || 0) < 18 ? "Học Trò" : (character?.age || 0) < 36 ? "Sự Nghiệp" : (character?.age || 0) < 56 ? "Trung Niên" : "Hoàng Hôn"})</span>
+                      <span>🎭 Khám Phá & Nhập Vai 3D</span>
+                      <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-400/30 text-[9px] font-mono">
+                        3D LIVE
+                      </span>
                     </button>
                     <button
                       onClick={() => setGameMode('cockpit')}
@@ -1532,11 +1535,11 @@ export default function LifeGraphPage() {
                           : 'text-slate-400 hover:text-white'
                       }`}
                     >
-                      <span>📋 Bảng Quyết Định & AP</span>
+                      <span>📜 Quản Lý Cuộc Sống & AP</span>
                     </button>
                   </div>
                   <span className="text-[10px] text-slate-400 hidden sm:inline">
-                    {gameMode === '2d_scene' ? "Di chuyển khám phá manh mối" : "Quản lý hành động tổng hợp"}
+                    {gameMode === '2d_scene' ? "Khám phá bối cảnh 3D & thu thập manh mối" : "Quản lý hành động tổng hợp"}
                   </span>
                 </div>
 
