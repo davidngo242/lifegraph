@@ -23,7 +23,8 @@ import SkillSelectorModal from './components/SkillSelectorModal';
 import MultiTabSidebar from './components/MultiTabSidebar';
 import CharacterHeroBanner, { BannerActionFeedback } from './components/CharacterHeroBanner';
 import AvatarInspectorModal from './components/AvatarInspectorModal';
-import InteractiveScene2D from './components/InteractiveScene2D';
+import LivingRoomBackdropViewport from './components/LivingRoomBackdropViewport';
+import CinemaDecisionRoomModal from './components/CinemaDecisionRoomModal';
 import type { AvatarReactionType } from './components/Dynamic3DAvatar';
 import AspirationUpgradeModal from './components/AspirationUpgradeModal';
 import LifeGraphHomePortal from './components/LifeGraphHomePortal';
@@ -87,7 +88,7 @@ export default function LifeGraphPage() {
   const [showGuideModal, setShowGuideModal] = useState<boolean>(false);
   const [activeScenario, setActiveScenario] = useState<any>(null);
   const [activeView, setActiveView] = useState<'home' | 'game' | 'lineage'>('home');
-  const [gameMode, setGameMode] = useState<'2d_scene' | 'cockpit'>('cockpit');
+  const [showCinemaDecisionModal, setShowCinemaDecisionModal] = useState<boolean>(false);
   const [lineage, setLineage] = useState<any[]>([]);
   const [nirvanaBanner, setNirvanaBanner] = useState<any | null>(null);
   const [dismissedAlerts, setDismissedAlerts] = useState<string[]>([]);
@@ -1203,7 +1204,7 @@ export default function LifeGraphPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col relative selection:bg-indigo-900 selection:text-white overflow-x-hidden font-sans">
       {/* Cinematic Looping Background with Ken Burns Drift */}
-      <CinematicBackground scene={visuals?.visual_vibe?.background_scene || "cyber_dusk"} />
+      <CinematicBackground scene={visuals?.visual_vibe?.background_scene || "cyber_dusk"} netWorth={netWorth} housing={character?.housing} />
 
       {/* 3-Channel Adaptive Web Audio Soundscape (Linked to Burnout & Vitality) */}
       <AdaptiveSoundscape
@@ -1771,57 +1772,21 @@ export default function LifeGraphPage() {
             />
 
 
-            {/* View Mode Switcher: Cockpit Dashboard vs 3D Interactive Scene */}
-            <div className="flex items-center justify-between p-2 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md mb-4 flex-wrap gap-2">
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setGameMode('cockpit')}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-                    gameMode === 'cockpit'
-                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <span>📋 Quản Lý Cuộc Sống & AP</span>
-                  {(character?.action_points || 0) > 0 && (
-                    <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 text-[9px] font-mono font-bold">
-                      {character.action_points} AP
-                    </span>
-                  )}
-                </button>
-                <button
-                  onClick={() => setGameMode('2d_scene')}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-                    gameMode === '2d_scene'
-                      ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/30'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <span>🎭 Không Gian Sống & Bối Cảnh 3D</span>
-                  <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-400/30 text-[9px] font-mono">
-                    3D LIVE
-                  </span>
-                </button>
-              </div>
-              <span className="text-[12px] text-slate-400 hidden sm:inline">
-                {gameMode === 'cockpit' ? "Trung tâm điều hành cuộc đời: theo dõi chỉ số, tiêu AP, cây kỹ năng và tài sản." : "Khám phá bối cảnh 3D & thu thập manh mối ngã rẽ."}
-              </span>
-            </div>
-
-            {gameMode === '2d_scene' ? (
-              <div className="mb-6">
-                <InteractiveScene2D 
-                  onScenarioResolved={() => loadState()} 
-                  character={character} 
-                  onAdvanceYear={() => submitInteraction({ advance_only: true })} 
-                  onBackToCockpit={() => setGameMode('cockpit')}
-                />
-              </div>
-            ) : (
-              /* 2-Column Responsive Cockpit Grid (65% Stage vs 35% Multi-Tab Sidebar) */
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+            {/* 2-Column Responsive Cockpit Grid (65% Stage vs 35% Multi-Tab Sidebar) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
               {/* Left Column: Sân Khấu Cuộc Đời (lg:col-span-7 xl:col-span-8) */}
               <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-4 min-w-0 w-full">
+                {/* Dynamic Living Room Viewport (Cửa sổ không gian sống tiến hóa theo Net Worth) */}
+                {character && (
+                  <LivingRoomBackdropViewport
+                    netWorth={netWorth}
+                    housing={character?.housing}
+                    age={character?.age}
+                    nationality={character?.nationality}
+                    onOpenCinemaMode={() => setShowCinemaDecisionModal(true)}
+                    activeScenarioTitle={activeScenario?.title}
+                  />
+                )}
                 {/* Strategic Action Points (AP) Hub */}
                 {character && (
                   <ActionPointHub
@@ -1870,10 +1835,10 @@ export default function LifeGraphPage() {
                         </span>
                       </div>
                       <button
-                        onClick={() => setGameMode('2d_scene')}
-                        className="px-2.5 py-1 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 text-[12px] font-bold flex items-center gap-1 transition"
+                        onClick={() => setShowCinemaDecisionModal(true)}
+                        className="px-2.5 py-1 rounded-xl bg-gradient-to-r from-purple-600/40 to-amber-600/40 hover:from-purple-600 hover:to-amber-600 border border-purple-400/50 text-white text-[12px] font-bold flex items-center gap-1.5 transition shadow-sm animate-pulse"
                       >
-                        <span>Mở Cảnh 3D</span>
+                        <span>🎬 Phòng Quyết Định</span>
                         <Play className="w-3 h-3 fill-current" />
                       </button>
                     </div>
@@ -1887,10 +1852,11 @@ export default function LifeGraphPage() {
                         {activeScenario.roles ? `Nhân vật liên quan: ${Object.values(activeScenario.roles).join(', ')}` : "Cột mốc ngã rẽ cuộc đời"}
                       </span>
                       <button
-                        onClick={() => setGameMode('2d_scene')}
-                        className="text-purple-300 hover:text-white font-medium underline underline-offset-2"
+                        onClick={() => setShowCinemaDecisionModal(true)}
+                        className="text-amber-300 hover:text-white font-bold flex items-center gap-1 transition group"
                       >
-                        Khám phá manh mối & đối diện ngã rẽ →
+                        <span>🎬 Bung toàn cảnh điện ảnh & đối diện ngã rẽ</span>
+                        <span className="group-hover:translate-x-1 transition-transform">→</span>
                       </button>
                     </div>
                   </div>
@@ -1930,7 +1896,6 @@ export default function LifeGraphPage() {
                 />
               </div>
             </div>
-            )}
           </>
         )}
 
@@ -1942,6 +1907,16 @@ export default function LifeGraphPage() {
             onClose={() => setIncomingNpcEvent(null)}
           />
         )}
+
+        {/* Fullscreen Cinema Decision Room Modal (21:9 Letterbox) */}
+        <CinemaDecisionRoomModal
+          isOpen={showCinemaDecisionModal}
+          onClose={() => setShowCinemaDecisionModal(false)}
+          character={character}
+          onScenarioResolved={() => loadState()}
+          onAdvanceYear={() => submitInteraction({ advance_only: true })}
+          activeScenario={activeScenario}
+        />
       </main>
     </div>
   );

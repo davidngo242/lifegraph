@@ -4,10 +4,21 @@ import React, { useEffect, useRef } from 'react';
 
 interface CinematicBackgroundProps {
   scene?: string; // 'rain_glass' | 'city_night' | 'golden_sunset' | 'cyber_dusk'
+  netWorth?: number;
+  housing?: string;
 }
 
-export default function CinematicBackground({ scene = "cyber_dusk" }: CinematicBackgroundProps) {
+export default function CinematicBackground({
+  scene = "cyber_dusk",
+  netWorth = 0,
+  housing
+}: CinematicBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  // Derive atmospheric tier from net worth & housing
+  const isLuxury = (netWorth >= 1000000000) || housing === 'villa' || housing === 'luxury_penthouse';
+  const isMiddle = (netWorth >= 50000000 && !isLuxury) || housing === 'apartment';
+  const isStarter = !isLuxury && !isMiddle;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -25,30 +36,33 @@ export default function CinematicBackground({ scene = "cyber_dusk" }: CinematicB
     };
     window.addEventListener('resize', handleResize);
 
-    // Particles for rain or floating city dust
+    // Particles for rain, city lights, or luxury golden dust
     const particles: any[] = [];
-    const count = scene === 'rain_glass' ? 90 : 45;
+    const count = isStarter ? 80 : isLuxury ? 60 : 45;
 
     for (let i = 0; i < count; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        length: scene === 'rain_glass' ? Math.random() * 20 + 10 : Math.random() * 3 + 1,
-        speed: scene === 'rain_glass' ? Math.random() * 8 + 6 : Math.random() * 0.8 + 0.2,
-        opacity: Math.random() * 0.4 + 0.1
+        length: isStarter ? Math.random() * 18 + 8 : Math.random() * 4 + 1.5,
+        speed: isStarter ? Math.random() * 7 + 5 : Math.random() * 0.9 + 0.2,
+        opacity: Math.random() * 0.45 + 0.1,
+        color: isLuxury
+          ? (Math.random() > 0.4 ? 'rgba(245, 158, 11, ' : 'rgba(192, 132, 252, ')
+          : isMiddle
+          ? (Math.random() > 0.4 ? 'rgba(6, 182, 212, ' : 'rgba(99, 102, 241, ')
+          : 'rgba(148, 163, 184, '
       });
     }
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Render ambient particles
-      ctx.strokeStyle = scene === 'rain_glass' ? 'rgba(148, 163, 184, 0.4)' : scene === 'golden_sunset' ? 'rgba(251, 191, 36, 0.3)' : 'rgba(99, 102, 241, 0.3)';
-      ctx.lineWidth = scene === 'rain_glass' ? 1.2 : 2;
-
       for (const p of particles) {
-        if (scene === 'rain_glass') {
-          // Falling rain line
+        if (isStarter) {
+          // Falling rain line on window glass for starter room
+          ctx.strokeStyle = `${p.color}${p.opacity})`;
+          ctx.lineWidth = 1.2;
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(p.x - 2, p.y + p.length);
@@ -61,14 +75,15 @@ export default function CinematicBackground({ scene = "cyber_dusk" }: CinematicB
             p.x = Math.random() * width;
           }
         } else {
-          // Floating bokeh dust
-          ctx.fillStyle = ctx.strokeStyle;
+          // Floating bokeh lights for modern apartment or luxury penthouse
+          ctx.fillStyle = `${p.color}${p.opacity})`;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.length, 0, Math.PI * 2);
           ctx.fill();
 
           p.y -= p.speed;
-          if (p.y < 0) {
+          p.x += Math.sin(p.y * 0.01) * 0.3;
+          if (p.y < -10) {
             p.y = height + 10;
             p.x = Math.random() * width;
           }
@@ -81,31 +96,21 @@ export default function CinematicBackground({ scene = "cyber_dusk" }: CinematicB
     render();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', handleResize);
     };
-  }, [scene]);
+  }, [isStarter, isMiddle, isLuxury, scene]);
 
-  // Scene gradients with Ken Burns slow camera zoom & drift
-  let gradientClass = "from-slate-950 via-indigo-950/40 to-slate-950";
-  if (scene === "rain_glass") {
-    gradientClass = "from-slate-950 via-cyan-950/30 to-slate-950";
-  } else if (scene === "city_night") {
-    gradientClass = "from-slate-950 via-purple-950/40 to-slate-950";
-  } else if (scene === "golden_sunset") {
-    gradientClass = "from-slate-950 via-amber-950/30 to-slate-950";
-  }
+  // Ambient gradient tone reflecting the room tier
+  const ambientGradient = isLuxury
+    ? 'from-purple-950/40 via-slate-950/90 to-amber-950/30'
+    : isMiddle
+    ? 'from-indigo-950/40 via-slate-950/90 to-cyan-950/20'
+    : 'from-stone-950/50 via-slate-950/95 to-slate-950';
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Dynamic atmospheric gradient with Ken Burns animation */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${gradientClass} transition-colors duration-1000 transform scale-105 animate-pulse`} />
-
-      {/* Procedural Canvas layer for ambient rain / city light dust */}
-      <canvas ref={canvasRef} className="absolute inset-0 opacity-60 mix-blend-screen" />
-
-      {/* Subtle vignette border */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(2,6,23,0.85)_100%)]" />
+    <div className={`fixed inset-0 pointer-events-none z-0 overflow-hidden bg-gradient-to-b ${ambientGradient} transition-colors duration-1000`}>
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-65" />
     </div>
   );
 }
