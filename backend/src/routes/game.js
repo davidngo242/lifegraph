@@ -2476,13 +2476,15 @@ router.post('/tick', async (req, res) => {
 
     let lastChoiceOutcome = null;
 
-    // 0. Active Phase - Support Non-Binary Interactions
-    if (previous_dilemma) {
-      const type = interaction_type || previous_dilemma.interaction_type || "STANDARD";
+    // 0. Active Phase - Support Non-Binary Interactions & Quick Time Skip
+    if (previous_dilemma || interaction_type === "TIME_SKIP") {
+      const type = interaction_type || previous_dilemma?.interaction_type || "STANDARD";
       const historyLog = character.history_log || [];
 
       // Update anti-loop tag memory and experienced once-in-a-lifetime events
-      recordExperiencedScenario(character, previous_dilemma);
+      if (previous_dilemma) {
+        recordExperiencedScenario(character, previous_dilemma);
+      }
 
       if (type === "SPECTRUM") {
         const val = typeof interaction_result?.slider_value === 'number' ? interaction_result.slider_value : 50;
@@ -2540,8 +2542,12 @@ router.post('/tick', async (req, res) => {
           event: previous_dilemma.title,
           choice: lastChoiceOutcome
         });
-      } else if (type === "TIME_SKIP" && previous_dilemma.time_skip_data) {
-        const skip = previous_dilemma.time_skip_data;
+      } else if (type === "TIME_SKIP") {
+        const skip = (previous_dilemma && previous_dilemma.time_skip_data) ? previous_dilemma.time_skip_data : {
+          years_jump: 3,
+          yearly_income_save: Math.max(2000, (character.occupation && character.occupation !== 'Lao động tự do' ? 5000 : 2500)),
+          burnout_decay: 25
+        };
         const strategy = interaction_result?.strategy || 'accumulate';
         const yearsJump = skip.years_jump || 3;
         character.age += yearsJump - 1; // 1 will be added in passive phase
@@ -2586,7 +2592,7 @@ router.post('/tick', async (req, res) => {
 
         historyLog.push({
           age: character.age,
-          event: previous_dilemma.title,
+          event: (previous_dilemma && previous_dilemma.title) ? previous_dilemma.title : `Tua nhanh thời gian (${yearsJump} năm êm đềm)`,
           choice: lastChoiceOutcome
         });
       } else if (choice_id && previous_dilemma.options) {
@@ -2626,7 +2632,9 @@ router.post('/tick', async (req, res) => {
 
       character.history_log = historyLog;
       // Record resolved dilemma in anti-loop engine and update recent tags
-      recordExperiencedScenario(character, previous_dilemma);
+      if (previous_dilemma) {
+        recordExperiencedScenario(character, previous_dilemma);
+      }
     }
 
     // Check Domino Fuses (Delayed time-bomb flags)
