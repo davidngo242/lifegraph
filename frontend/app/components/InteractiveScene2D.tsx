@@ -139,6 +139,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
   const [showMindStage, setShowMindStage] = useState<boolean>(false);
   const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
   const [apInvestment, setApInvestment] = useState<number>(0);
+  const [safeguardTerm, setSafeguardTerm] = useState<'standard' | 'time_cap' | 'deposit'>('standard');
   const [isResolving, setIsResolving] = useState<boolean>(false);
   const [rollResult, setRollResult] = useState<any | null>(null);
 
@@ -275,7 +276,8 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           choice_id: choiceId,
-          ap_investment: apInvestment
+          ap_investment: apInvestment,
+          safeguard_term: safeguardTerm
         })
       });
       const data = await res.json();
@@ -489,6 +491,31 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
         </div>
       </div>
 
+      {/* 2.5 Quick Hotspot Navigation Ribbon (Bấm để nhân vật tự động bước tới điểm tương tác) */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 shrink-0 font-bold">
+          Điểm Tương Tác:
+        </span>
+        {currentScene.hotspots.map(h => {
+          const isVisited = h.dialogue?.granted_knowledge && knowledgeBase.includes(h.dialogue.granted_knowledge);
+          return (
+            <button
+              key={h.id}
+              onClick={() => handleTriggerHotspot(h)}
+              className={`px-3 py-1.5 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition active:scale-95 whitespace-nowrap ${
+                isVisited
+                  ? 'bg-slate-900/90 border-emerald-500/40 text-emerald-300 hover:bg-slate-800'
+                  : 'bg-slate-900/90 border-slate-700/80 text-slate-300 hover:border-indigo-400 hover:text-white'
+              }`}
+            >
+              <span>{h.npc_role === 'teacher' ? '👩‍🏫' : h.npc_role === 'classmate' ? '🧒' : h.npc_role === 'parent' ? '👨‍👩‍👧' : h.npc_role === 'mentor' ? '🧙‍♂️' : h.npc_role === 'partner' ? '👩‍💼' : h.npc_role === 'manager' ? '👨‍💼' : h.npc_role === 'friend' ? '🧑‍💻' : '📦'}</span>
+              <span>{h.label}</span>
+              {isVisited && <CheckCircle className="w-3 h-3 text-emerald-400 shrink-0" />}
+            </button>
+          );
+        })}
+      </div>
+
       {/* 3. Dialogue Popout Window */}
       {activeDialogue && (
         <div className="p-5 rounded-2xl bg-slate-900 border-2 border-indigo-500/50 shadow-2xl relative animate-in fade-in slide-in-from-bottom-2">
@@ -650,7 +677,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                   {scenario.choices.map(choice => {
                     const missingKnowledge = (choice.knowledge_requirements || []).filter(k => !knowledgeBase.includes(k));
                     const isUnderUncertainty = missingKnowledge.length > 0;
-                    const cleanChoiceTitle = choice.title.replace(/^[[^]]+]s*/, '').trim();
+                    const cleanChoiceTitle = choice.title.replace(/^\[[^\]]+\]\s*/, '').trim();
 
                     return (
                       <div
@@ -698,39 +725,86 @@ export default function InteractiveScene2D({ onScenarioResolved, character }: In
                         )}
 
                         {selectedChoiceId === choice.id && (
-                          <div className="mt-4 pt-3 border-t border-purple-500/30 flex flex-wrap items-center justify-between gap-3 animate-in fade-in">
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-slate-400">Đầu tư thêm AP:</span>
-                              {[0, 1, 2].map(ap => (
+                          <div className="mt-4 pt-3 border-t border-purple-500/30 space-y-3 animate-in fade-in">
+                            {/* Strategic Negotiation Safeguard Clause */}
+                            <div className="space-y-1.5">
+                              <span className="text-[11px] font-bold text-purple-300 flex items-center gap-1">
+                                <Shield className="w-3.5 h-3.5" /> Điều Khoản Đảm Bảo (Thương lượng bổ sung):
+                              </span>
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                                 <button
-                                  key={ap}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (actionPoints >= (choice.cost_ap || 0) + ap) {
-                                      setApInvestment(ap);
-                                    }
-                                  }}
-                                  className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition ${
-                                    apInvestment === ap
-                                      ? 'bg-purple-600 text-white'
-                                      : 'bg-slate-800 text-slate-400 hover:text-white'
+                                  type="button"
+                                  onClick={(e) => { e.stopPropagation(); setSafeguardTerm('standard'); }}
+                                  className={`p-2 rounded-xl border text-[11px] text-left transition ${
+                                    safeguardTerm === 'standard'
+                                      ? 'bg-purple-900/60 border-purple-400 text-white font-bold shadow-sm'
+                                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
                                   }`}
                                 >
-                                  +{ap} AP (+{ap * 2} Roll)
+                                  <div className="font-semibold text-xs">🛡️ Tiêu chuẩn</div>
+                                  <div className="text-[9.5px] opacity-75 mt-0.5">Tiến hành theo thỏa thuận gốc</div>
                                 </button>
-                              ))}
+                                <button
+                                  type="button"
+                                  onClick={(e) => { e.stopPropagation(); setSafeguardTerm('time_cap'); }}
+                                  className={`p-2 rounded-xl border text-[11px] text-left transition ${
+                                    safeguardTerm === 'time_cap'
+                                      ? 'bg-purple-900/60 border-purple-400 text-white font-bold shadow-sm'
+                                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                                  }`}
+                                >
+                                  <div className="font-semibold text-xs text-amber-300">⏱️ Giới hạn 15h/tuần</div>
+                                  <div className="text-[9.5px] opacity-75 mt-0.5">Giảm 50% áp lực kiệt sức</div>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={(e) => { e.stopPropagation(); setSafeguardTerm('deposit'); }}
+                                  className={`p-2 rounded-xl border text-[11px] text-left transition ${
+                                    safeguardTerm === 'deposit'
+                                      ? 'bg-purple-900/60 border-purple-400 text-white font-bold shadow-sm'
+                                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                                  }`}
+                                >
+                                  <div className="font-semibold text-xs text-emerald-300">💵 Tạm ứng trước</div>
+                                  <div className="text-[9.5px] opacity-75 mt-0.5">Tăng +10% lợi nhuận thu về</div>
+                                </button>
+                              </div>
                             </div>
 
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleConfirmChoice(choice.id);
-                              }}
-                              disabled={isResolving}
-                              className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg active:scale-95"
-                            >
-                              {isResolving ? "Đang Gieo Xúc Xắc..." : "Xác Nhận & Tung Xúc Xắc D20"}
-                            </button>
+                            <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-slate-400">Đầu tư thêm AP:</span>
+                                {[0, 1, 2].map(ap => (
+                                  <button
+                                    key={ap}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      if (actionPoints >= (choice.cost_ap || 0) + ap) {
+                                        setApInvestment(ap);
+                                      }
+                                    }}
+                                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition ${
+                                      apInvestment === ap
+                                        ? 'bg-purple-600 text-white'
+                                        : 'bg-slate-800 text-slate-400 hover:text-white'
+                                    }`}
+                                  >
+                                    +{ap} AP (+{ap * 2} Roll)
+                                  </button>
+                                ))}
+                              </div>
+
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleConfirmChoice(choice.id);
+                                }}
+                                disabled={isResolving}
+                                className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg active:scale-95"
+                              >
+                                {isResolving ? "Đang Gieo Xúc Xắc..." : "Xác Nhận & Tung Xúc Xắc D20"}
+                              </button>
+                            </div>
                           </div>
                         )}
                       </div>

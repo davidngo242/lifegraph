@@ -113,12 +113,16 @@ async function runTests() {
   });
   record('14. Tương tác Cảnh 2D Trường Học (Bạn cùng bàn)', schoolInteract.ok, `Tri thức nhận được: ${schoolInteract.data?.granted_knowledge}`);
 
-  // 15. Action Under Uncertainty (Decide in Mind Stage with Missing Knowledge)
+  // 15. Action Under Uncertainty with Strategic Safeguard Term
   const resolveUncertainty = await api('/api/game/scenario/resolve-mindstage', {
     method: 'POST',
-    body: JSON.stringify({ choice_id: 'CHOICE_ACADEMIC_EXCELLENCE', ap_investment: 1 })
+    body: JSON.stringify({
+      choice_id: 'CHOICE_ACADEMIC_EXCELLENCE',
+      ap_investment: 1,
+      safeguard_term: 'time_cap'
+    })
   });
-  record('15. Quyết định dưới Bất định (Hành động sớm, tăng DC)', resolveUncertainty.ok, `Kết quả: ${resolveUncertainty.data?.outcome_key}, D20: ${resolveUncertainty.data?.roll?.total_score} vs DC ${resolveUncertainty.data?.roll?.target_dc}`);
+  record('15. Quyết định dưới Bất định kèm Điều khoản Đảm bảo (time_cap)', resolveUncertainty.ok, `Kết quả: ${resolveUncertainty.data?.outcome_key}, D20: ${resolveUncertainty.data?.roll?.total_score} vs DC ${resolveUncertainty.data?.roll?.target_dc}`);
 
   // 16. Test Postpone / Delay Option in Mind Stage
   const postpone = await api('/api/game/scenario/resolve-mindstage', {

@@ -175,7 +175,7 @@ export function interactWithHotspot(character, sceneId, hotspotId, npcs = []) {
   };
 }
 
-export function resolveMindStageChoice(character, choiceId, apInvestment = 0, npcs = []) {
+export function resolveMindStageChoice(character, choiceId, apInvestment = 0, npcs = [], safeguardTerm = 'standard') {
   const scenario = getCurrentScenarioForCharacter(character);
   if (!scenario) throw new Error("Không tìm thấy kịch bản khả dụng.");
 
@@ -269,14 +269,22 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
   const effects = outcomeData.effects || choice.effects || {};
 
   if (effects.cash_delta) {
-    character.cash = Math.max(0, Number(character.cash || 0) + Number(effects.cash_delta));
+    let cashChange = Number(effects.cash_delta);
+    if (safeguardTerm === 'deposit' && cashChange > 0) {
+      cashChange = Math.round(cashChange * 1.1); // +10% cash bonus when demanding advance deposit
+    }
+    character.cash = Math.max(0, Number(character.cash || 0) + cashChange);
   }
   if (effects.vitality_delta) {
     const maxVit = character.max_vitality || 100;
     character.vitality = Math.max(10, Math.min(maxVit, (character.vitality || 80) + Number(effects.vitality_delta)));
   }
   if (effects.burnout_delta) {
-    character.burnout = Math.max(0, Math.min(100, (character.burnout || 0) + Number(effects.burnout_delta)));
+    let burnoutChange = Number(effects.burnout_delta);
+    if (safeguardTerm === 'time_cap' && burnoutChange > 0) {
+      burnoutChange = Math.round(burnoutChange * 0.5); // 50% burnout reduction from 15h/week time cap
+    }
+    character.burnout = Math.max(0, Math.min(100, (character.burnout || 0) + burnoutChange));
   }
   if (effects.karma_delta) {
     character.karma = Math.max(0, Math.min(100, (character.karma || 80) + Number(effects.karma_delta)));
@@ -297,8 +305,16 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
   if (!Array.isArray(character.commitments)) character.commitments = [];
   if (Array.isArray(choice.commitments)) {
     choice.commitments.forEach(c => {
+      const formattedTitle = safeguardTerm === 'time_cap'
+        ? `${c.title} (Có giới hạn 15h/tuần)`
+        : safeguardTerm === 'deposit'
+        ? `${c.title} (Có tạm ứng bảo đảm)`
+        : c.title;
+
       character.commitments.push({
         ...c,
+        title: formattedTitle,
+        safeguard_term: safeguardTerm,
         status: "active",
         created_age: character.age,
         due_age: (character.age || 28) + (c.due_ticks || 1)

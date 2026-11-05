@@ -2829,12 +2829,12 @@ router.post('/scenario/interact', async (req, res) => {
 // POST /api/game/scenario/resolve-mindstage - Giải quyết lựa chọn Mind Stage server-side
 router.post('/scenario/resolve-mindstage', async (req, res) => {
   try {
-    const { choice_id, ap_investment } = req.body;
+    const { choice_id, ap_investment, safeguard_term = 'standard' } = req.body;
     const character = await getLatestCharacter();
     if (!character) return res.status(400).json({ error: "Không tìm thấy nhân vật." });
     const npcs = await getNpcs(character.id);
 
-    const result = resolveMindStageChoice(character, choice_id, ap_investment, npcs);
+    const result = resolveMindStageChoice(character, choice_id, ap_investment, npcs, safeguard_term);
     await updateCharacter(character.id, character);
 
     res.json(result);
