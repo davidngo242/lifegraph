@@ -152,6 +152,59 @@ export default function MultiTabSidebar({
   return (
     <div className="w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-3 md:p-4 shadow-2xl backdrop-blur-xl flex flex-col gap-3 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6.5rem)] overflow-hidden">
       
+      {/* Life Aspiration Quick Banner */}
+      {aspiration && (
+        <div
+          onClick={() => {
+            if (aspiration.progress >= 100 || aspiration.is_completed) {
+              onOpenAspirationUpgrade?.();
+            }
+          }}
+          className={`p-2.5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-slate-950/80 to-indigo-950/40 border border-purple-500/30 flex items-center justify-between gap-3 shadow-sm transition ${
+            aspiration.progress >= 100 || aspiration.is_completed
+              ? 'cursor-pointer hover:border-amber-400/60 bg-amber-500/10 border-amber-500/40 animate-pulse'
+              : ''
+          }`}
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="w-7 h-7 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-sm shrink-0">
+              {aspiration.icon || '🎯'}
+            </span>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-bold text-purple-300 uppercase tracking-wider">
+                  Khát Vọng
+                </span>
+                {aspiration.progress >= 100 && (
+                  <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-bounce">
+                    Đạt Mục Tiêu!
+                  </span>
+                )}
+              </div>
+              <div className="text-xs font-bold text-white truncate max-w-[150px] sm:max-w-[200px]">
+                {aspiration.title}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-end gap-1 shrink-0">
+            <span className="text-[11px] font-mono font-bold text-amber-300">
+              {aspiration.progress}%
+            </span>
+            <div className="w-16 h-1.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+              <div
+                className={`h-full rounded-full transition-all duration-500 ${
+                  aspiration.progress >= 100
+                    ? 'bg-gradient-to-r from-amber-400 to-emerald-400'
+                    : 'bg-gradient-to-r from-purple-500 to-indigo-400'
+                }`}
+                style={{ width: `${Math.min(100, aspiration.progress)}%` }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 4-Tab Navigation Header */}
       <div className="grid grid-cols-4 gap-1 p-1 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-inner shrink-0">
         <button

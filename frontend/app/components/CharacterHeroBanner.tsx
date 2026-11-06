@@ -42,6 +42,8 @@ interface CharacterHeroBannerProps {
   visuals?: any;
   playerAccount?: any;
   netWorth: number;
+  aspiration?: any;
+  onOpenAspirationUpgrade?: () => void;
   reaction?: AvatarReactionType;
   isFastForwarding?: boolean;
   onOpen3DInspector: () => void;
@@ -53,6 +55,8 @@ export default function CharacterHeroBanner({
   visuals,
   playerAccount,
   netWorth,
+  aspiration,
+  onOpenAspirationUpgrade,
   reaction = 'idle',
   isFastForwarding = false,
   onOpen3DInspector,
@@ -523,6 +527,57 @@ export default function CharacterHeroBanner({
               </span>
             </div>
           </div>
+
+          {/* Row C: Khát Vọng Cuộc Đời (Life Aspiration Hub) */}
+          {aspiration && (
+            <div
+              onClick={() => {
+                if (aspiration.progress >= 100 || aspiration.is_completed) {
+                  onOpenAspirationUpgrade?.();
+                }
+              }}
+              className={`flex items-center justify-between gap-2.5 pt-1.5 mt-0.5 border-t border-slate-800/60 text-[11px] transition ${
+                aspiration.progress >= 100 || aspiration.is_completed
+                  ? 'cursor-pointer hover:bg-amber-500/10 px-2 py-1 rounded-xl border-amber-500/40 bg-amber-500/5 animate-pulse'
+                  : ''
+              }`}
+            >
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span className="w-5 h-5 rounded-md bg-purple-500/20 border border-purple-500/35 flex items-center justify-center text-xs shrink-0 shadow-inner">
+                  {aspiration.icon || '🎯'}
+                </span>
+                <span className="text-purple-300 font-bold uppercase tracking-wider text-[10px] hidden sm:inline">
+                  Khát Vọng:
+                </span>
+                <Tooltip content={aspiration.target_summary || aspiration.title}>
+                  <span className="font-bold text-white text-xs truncate max-w-[130px] sm:max-w-[200px]">
+                    {aspiration.title}
+                  </span>
+                </Tooltip>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="w-20 sm:w-28 h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                  <div
+                    className={`h-full rounded-full transition-all duration-500 ${
+                      aspiration.progress >= 100
+                        ? 'bg-gradient-to-r from-amber-400 to-emerald-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
+                        : 'bg-gradient-to-r from-purple-500 via-indigo-400 to-amber-300'
+                    }`}
+                    style={{ width: `${Math.min(100, aspiration.progress)}%` }}
+                  />
+                </div>
+                <span className="font-sans tabular-nums font-bold text-xs text-amber-300">
+                  {aspiration.progress}%
+                </span>
+                {aspiration.progress >= 100 && (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black animate-bounce shadow-md">
+                    Thăng Hạng!
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
         </div>
         {/* Right Zone (~30%): Integrated Mini Vitals & Psyche HUD with Life Stage */}
         <div className="w-full lg:w-[350px] xl:w-[380px] shrink-0 p-3 rounded-2xl bg-slate-950/75 border border-slate-800/80 backdrop-blur-xl shadow-xl flex flex-col gap-2">

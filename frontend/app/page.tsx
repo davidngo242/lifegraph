@@ -1842,6 +1842,8 @@ export default function LifeGraphPage() {
               visuals={visuals}
               playerAccount={playerAccount}
               netWorth={netWorth}
+              aspiration={aspiration}
+              onOpenAspirationUpgrade={() => setShowAspirationUpgradeModal(true)}
               reaction={avatarReaction}
               actionFeedback={bannerFeedback}
               isFastForwarding={loading}
