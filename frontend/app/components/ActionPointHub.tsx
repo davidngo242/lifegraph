@@ -31,6 +31,7 @@ import SkillTreeTab from './rpg/SkillTreeTab';
 import SocialLinksTab from './rpg/SocialLinksTab';
 
 interface ActionPointHubProps {
+  isEmbedded?: boolean;
   actionPoints: number;
   totalAp?: number;
   lockedAp?: number;
@@ -65,6 +66,7 @@ interface ActionPointHubProps {
 }
 
 export default function ActionPointHub({
+  isEmbedded = false,
   actionPoints,
   totalAp = 3,
   lockedAp = 0,
@@ -205,7 +207,11 @@ export default function ActionPointHub({
   const miniGameInfo = getMiniGameForAge();
 
   return (
-    <div className={`w-full bg-slate-900/95 border border-amber-500/30 rounded-3xl p-3 md:p-4 shadow-xl backdrop-blur-xl relative overflow-hidden transition-all duration-300 ${
+    <div className={`w-full ${
+      isEmbedded
+        ? 'bg-transparent border-0 p-0 shadow-none'
+        : 'bg-slate-900/95 border border-amber-500/30 rounded-3xl p-3 md:p-4 shadow-xl backdrop-blur-xl'
+    } relative overflow-hidden transition-all duration-300 ${
       isTrilemmaActive ? 'opacity-40 blur-[0.6px] pointer-events-none select-none ring-1 ring-amber-500/20' : ''
     }`}>
       {/* Background ambient lighting */}

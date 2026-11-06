@@ -44,7 +44,7 @@ import IllusionCard from './components/interactions/IllusionCard';
 import TrilemmaCard from './components/interactions/TrilemmaCard';
 import TimeSkipCard from './components/interactions/TimeSkipCard';
 
-import { Sparkles, Volume2, VolumeX, ShieldAlert, Cpu, Globe2, AlertTriangle, Activity, Home, Feather, Play, BookOpen } from 'lucide-react';
+import { Sparkles, Volume2, VolumeX, ShieldAlert, Cpu, Globe2, AlertTriangle, Activity, Home, Feather, Play, BookOpen, Zap } from 'lucide-react';
 
 const API_BASE = '/api/game';
 
@@ -1855,14 +1855,7 @@ export default function LifeGraphPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
               {/* Left Column: Sân Khấu Cuộc Đời (lg:col-span-7 xl:col-span-8) */}
               <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-4 min-w-0 w-full">
-                {/* 1. Decision Dilemma Interaction Area (Tiêu điểm chính của game: Hiển thị ngay trên đầu) */}
-                <div className={`w-full transition-all duration-300 ${
-                  dilemma?.interaction_type === 'TRILEMMA' ? 'ring-2 ring-amber-500/50 rounded-3xl shadow-2xl shadow-amber-950/60' : ''
-                }`}>
-                  {renderInteractionComponent()}
-                </div>
-
-                {/* 2. Active Scenario Cross-Cutting Quest Card (Chỉ hiển thị khi có Kịch bản phù hợp & chưa hoàn thành) */}
+                {/* 1. Active Scenario Cross-Cutting Quest Card (Chỉ hiển thị khi có Kịch bản phù hợp & chưa hoàn thành) */}
                 {activeScenario && !character?.is_deceased && (
                   <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/60 via-slate-900 to-indigo-950/60 border border-purple-500/40 shadow-xl space-y-2.5">
                     <div className="flex items-center justify-between">
@@ -1900,44 +1893,90 @@ export default function LifeGraphPage() {
                   </div>
                 )}
 
-                {/* 3. Strategic Action Points (AP) Hub */}
-                {character && (
-                  <ActionPointHub
-                    actionPoints={character.action_points || 0}
-                    totalAp={character.total_ap || 3}
-                    lockedAp={character.locked_ap || 0}
-                    lockedReasons={character.locked_reasons || []}
-                    vitality={character.vitality || 80}
-                    characterAge={character.age || 0}
-                    cash={Number(character.cash || 0)}
-                    character={character}
-                    relationships={relationships}
-                    assets={assets}
-                    isTrilemmaActive={dilemma?.interaction_type === 'TRILEMMA'}
-                    onChildhoodAction={handleChildhoodAction}
-                    onFastForwardToSchool={handleFastForwardToSchool}
-                    onAnnualFocus={handleAnnualFocus}
-                    onOpenAssets={() => setShowAssetModal(true)}
-                    onOpenFamily={() => setShowFamilyModal(true)}
-                    onOvertime={handleOvertime}
-                    onStudy={handleStudy}
-                    onWellness={handleWellness}
-                    onGamble={handleGamble}
-                    onNetwork={handleNetworkAction}
-                    onTimeSkip={handleTimeSkipContinue}
-                    onOpenSkillHub={() => setShowSkillSelector(true)}
-                    onLaunchMiniGame={(type) => launchMiniGame(type)}
-                    onUnlockSkill={handleUnlockSkill}
-                    onNpcInteract={handleNpcInteract}
-                    breakthroughAction={breakthroughAction}
-                    onBreakthrough={handleBreakthroughAction}
-                    onRpgActivePerk={handleRpgActivePerk}
-                    hiddenFlags={character.hidden_flags || []}
-                    isLoading={loading}
-                  />
-                )}
+                {/* 2. Khoang Quyết Định & Hành Động Năm Hợp Nhất (Unified Annual Decision & Action Stage) */}
+                <div className="w-full rounded-3xl border border-slate-800/90 bg-slate-950/85 backdrop-blur-2xl shadow-2xl overflow-hidden flex flex-col">
+                  {/* Header chung: Hiển thị tiêu đề năm tuổi, số AP còn lại và gợi ý */}
+                  <div className="px-4 py-3 bg-gradient-to-r from-slate-900/95 via-indigo-950/40 to-slate-900/95 border-b border-slate-800/80 flex items-center justify-between gap-3 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <span className="text-base">🎯</span>
+                      <span className="text-xs md:text-sm font-bold text-white tracking-wide">
+                        Vòng Đời Năm Nay (Tuổi {character?.age ?? 0})
+                      </span>
+                      <span className="text-[11px] font-sans text-slate-400 italic hidden sm:inline">
+                        — Dùng AP trước khi đưa ra quyết định chốt năm
+                      </span>
+                    </div>
 
-                {/* 4. Dynamic Living Room Viewport (Cửa sổ không gian sống - Thu gọn thanh lịch) */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-sans text-slate-400 sm:hidden italic">
+                        Dùng AP trước khi chốt năm
+                      </span>
+                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold text-amber-300">
+                        <Zap className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                        <span className="font-mono font-bold">{character?.action_points ?? 0}</span>
+                        <span className="text-slate-400 text-[11px]">/ {character?.total_ap ?? 3} AP</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Khu vực trên: renderInteractionComponent() */}
+                  <div className={`p-3 md:p-4 w-full transition-all duration-300 ${
+                    dilemma?.interaction_type === 'TRILEMMA' ? 'ring-1 ring-amber-500/30 rounded-2xl bg-amber-950/10' : ''
+                  }`}>
+                    {renderInteractionComponent()}
+                  </div>
+
+                  {/* Cầu nối chiến lược ở giữa: Dải phân cách mỏng phát sáng nhẹ kết nối giữa việc chuẩn bị nguồn lực AP và việc đối diện biến cố */}
+                  <div className="relative flex items-center justify-center my-1 px-4">
+                    <div className="w-full h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
+                    <span className="absolute px-3 py-0.5 rounded-full bg-slate-950 border border-indigo-500/30 text-[10px] font-mono font-semibold text-indigo-300 shadow-sm flex items-center gap-1.5">
+                      <Zap className="w-3 h-3 text-amber-400" />
+                      <span>ĐIỀU HÀNH NGUỒN LỰC AP & HOẠT ĐỘNG NĂM</span>
+                    </span>
+                  </div>
+
+                  {/* Khu vực dưới: ActionPointHub isEmbedded={true} */}
+                  {character && (
+                    <div className="p-3 md:p-4 pt-2">
+                      <ActionPointHub
+                        isEmbedded={true}
+                        actionPoints={character.action_points || 0}
+                        totalAp={character.total_ap || 3}
+                        lockedAp={character.locked_ap || 0}
+                        lockedReasons={character.locked_reasons || []}
+                        vitality={character.vitality || 80}
+                        characterAge={character.age || 0}
+                        cash={Number(character.cash || 0)}
+                        character={character}
+                        relationships={relationships}
+                        assets={assets}
+                        isTrilemmaActive={dilemma?.interaction_type === 'TRILEMMA'}
+                        onChildhoodAction={handleChildhoodAction}
+                        onFastForwardToSchool={handleFastForwardToSchool}
+                        onAnnualFocus={handleAnnualFocus}
+                        onOpenAssets={() => setShowAssetModal(true)}
+                        onOpenFamily={() => setShowFamilyModal(true)}
+                        onOvertime={handleOvertime}
+                        onStudy={handleStudy}
+                        onWellness={handleWellness}
+                        onGamble={handleGamble}
+                        onNetwork={handleNetworkAction}
+                        onTimeSkip={handleTimeSkipContinue}
+                        onOpenSkillHub={() => setShowSkillSelector(true)}
+                        onLaunchMiniGame={(type) => launchMiniGame(type)}
+                        onUnlockSkill={handleUnlockSkill}
+                        onNpcInteract={handleNpcInteract}
+                        breakthroughAction={breakthroughAction}
+                        onBreakthrough={handleBreakthroughAction}
+                        onRpgActivePerk={handleRpgActivePerk}
+                        hiddenFlags={character.hidden_flags || []}
+                        isLoading={loading}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* 3. Dynamic Living Room Viewport (Cửa sổ không gian sống - Thu gọn thanh lịch) */}
                 {character && (
                   <LivingRoomBackdropViewport
                     netWorth={netWorth}

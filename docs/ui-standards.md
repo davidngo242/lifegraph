@@ -137,11 +137,122 @@ Khi thỏa mãn điều kiện nguy cấp:
 
 ---
 
-## 4. Chuẩn Mực Phím Tắt Toàn Cục & Tiếp Cận Bàn Phím (Global Hotkeys & Accessibility)
+## 4. Khoang Quyết Định & Hành Động Năm Hợp Nhất (Unified Annual Decision & Action Stage)
+
+Nhằm khắc phục tình trạng phân mảnh thị giác giữa biến cố cuộc đời và khay công cụ hành động, LifeGraph áp dụng kiến trúc **Khoang Quyết Định & Hành Động Năm Hợp Nhất (Unified Annual Decision & Action Stage)**. Thay vì để thẻ biến cố (Dilemma Card) và khay hành động (Action Dock) tách rời thành hai khối hộp riêng biệt gây cảm giác rời rạc và rối mắt, toàn bộ tiến trình của một năm đời được gom chung vào một cấu trúc khung bao bọc hợp nhất nguyên khối.
+
+### 4.1. Thiết Kế Khung Bao Bọc Hợp Nhất (Unified Container & Anti-Clutter Design)
+
+```text
+┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ 🎯 Vòng Đời Năm Nay (Tuổi 28) — Dùng AP trước khi đưa ra quyết định chốt năm        ⚡ 2 / 3 AP  │
+├───────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                   │
+│  [KHU VỰC TRÊN: BIẾN CỐ NĂM — renderInteractionComponent()]                                       │
+│  • Thẻ ngã rẽ cuộc đời (Dilemma / Trilemma / TimeSkip / NPC Dialogue Duel / Crisis Survival)      │
+│  • Trực quan hóa 3 Bản Ngã & Lựa chọn định mệnh [1], [2], [3]                                     │
+│                                                                                                   │
+├─────────────────────── ⚡ ĐIỀU HÀNH NGUỒN LỰC AP & HOẠT ĐỘNG NĂM ──────────────────────────────────┤
+│                                                                                                   │
+│  [KHU VỰC DƯỚI: KHAY HÀNH ĐỘNG — ActionPointHub (isEmbedded={true})]                              │
+│  • Danh mục tab hoạt động: Dưỡng sinh, Làm thêm, Học tập, Gia đình, Nhân mạch, Tài sản           │
+│  • Tự do sử dụng AP để chuẩn bị thể lực, dòng tiền trước khi chốt năm                             │
+│                                                                                                   │
+└───────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+* **Khung bao bọc ngoài cùng (Outer Unified Card):**
+  * Sử dụng container bo góc lớn `w-full rounded-3xl border border-slate-800/90 bg-slate-950/85 backdrop-blur-2xl shadow-2xl overflow-hidden flex flex-col`.
+  * Đảm bảo tính liền mạch, sang trọng, mang phong cách buồng lái tương lai (Sci-fi Cockpit).
+* **Header hợp nhất định hướng lượt chơi:**
+  * Lớp nền `bg-gradient-to-r from-slate-900/95 via-indigo-950/40 to-slate-900/95 border-b border-slate-800/80`.
+  * Hiển thị độ tuổi hiện tại (`🎯 Vòng Đời Năm Nay (Tuổi {age})`), thông điệp hướng dẫn ngắn gọn cho người chơi (`— Dùng AP trước khi đưa ra quyết định chốt năm`), và badge đếm số AP khả dụng (`⚡ {action_points} / {total_ap} AP`).
+* **Cầu nối chiến lược (Strategic Visual Divider):**
+  * Dải phân cách phát sáng tinh tế `bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent` với huy hiệu trung tâm `bg-slate-950 border border-indigo-500/30 text-[10px] font-mono text-indigo-300`.
+  * Nhấn mạnh ranh giới giữa việc "chuẩn bị nội lực" và việc "đối mặt với thử thách số phận".
+
+---
+
+### 4.2. Quy Chuẩn Thuộc Tính `isEmbedded` trong `ActionPointHub.tsx`
+
+Một trong những vấn đề nghiêm trọng của thiết kế lồng ghép UI là hiện tượng **"viền lồng viền (nested border clutter)"** và khoảng đệm kép (double padding/margin), khiến giao diện trông chật chội và kém thẩm mỹ.
+
+Thuộc tính `isEmbedded: boolean` được chuẩn hóa trong `ActionPointHubProps` nhằm giải quyết triệt để vấn đề này:
+
+```typescript
+// Định nghĩa props trong ActionPointHub.tsx
+interface ActionPointHubProps {
+  isEmbedded?: boolean; // Cờ kích hoạt chế độ nhúng vào khoang hợp nhất
+  actionPoints: number;
+  totalAp?: number;
+  // ... các props khác
+}
+```
+
+* **Hành vi khi `isEmbedded === true` (Chế độ nhúng hợp nhất):**
+  ```tsx
+  className={`w-full ${
+    isEmbedded
+      ? 'bg-transparent border-0 p-0 shadow-none'
+      : 'bg-slate-900/95 border border-amber-500/30 rounded-3xl p-3 md:p-4 shadow-xl backdrop-blur-xl'
+  }`}
+  ```
+  * Loại bỏ hoàn toàn viền (`border-0`), nền đệm trong suốt (`bg-transparent`), xóa bỏ padding thừa (`p-0`) và triệt tiêu bóng đổ lồng (`shadow-none`).
+  * Khay hành động hòa quyện 100% vào cấu trúc của khoang hợp nhất, tạo cảm giác như một phân vùng tự nhiên của màn chơi.
+* **Hành vi khi `isEmbedded === false` (Chế độ độc lập):**
+  * Áp dụng đầy đủ viền vàng hổ phách `border-amber-500/30`, bo góc `rounded-3xl`, đệm `p-3 md:p-4` và bóng mờ `shadow-xl backdrop-blur-xl` khi được sử dụng tại các màn hình độc lập khác.
+
+---
+
+### 4.3. Luồng Chơi 2 Giai Đoạn Chuẩn Mực (2-Phase Annual Turn Loop)
+
+Kiến trúc hợp nhất này củng cố một nguyên lý gameplay chiến lược: **Luồng chơi 2 giai đoạn mỗi năm (2-Phase Turn)** giúp người chơi luôn ở thế chủ động kiểm soát vận mệnh thay vì bị biến cố dồn ép bất ngờ:
+
+```mermaid
+flowchart TD
+    StartYear["🌅 BẮT ĐẦU NĂM MỚI (Tuổi N)<br/>Hồi phục đầy đủ 3 AP • Phát sinh Biến cố / Ngã rẽ"] --> Phase1
+    
+    subgraph Phase1 ["GIAI ĐOẠN 1: ĐIỀU HÀNH NGUỒN LỰC AP (Khay dưới)"]
+        direction TB
+        AP1["🌿 Dưỡng sinh phục hồi (Hồi HP, xoa dịu Burnout)"]
+        AP2["💼 Làm thêm / Tăng ca (Kiếm thêm Cash)"]
+        AP3["📚 Học tập / Rèn luyện (Tích lũy EXP kỹ năng)"]
+        AP4["🤝 Gặp gỡ quý nhân / Chăm lo gia đình (Tăng Affinity)"]
+        AP5["📈 Mua sắm tài sản / Đầu tư sinh lời"]
+    end
+    
+    Phase1 --> ReadyCheck{"Đã tối ưu hóa chỉ số & sẵn sàng đối mặt biến cố?<br/>(Hoặc đã dùng hết AP)"}
+    
+    ReadyCheck -- "Chưa" --> Phase1
+    ReadyCheck -- "Sẵn sàng" --> Phase2
+    
+    subgraph Phase2 ["GIAI ĐOẠN 2: ĐỐI DIỆN ĐỊNH MỆNH & CHỐT NĂM (Khay trên)"]
+        direction TB
+        Choice1["[1] Phương án A / Trilemma A / TimeSkip"]
+        Choice2["[2] Phương án B / Trilemma B / Nghỉ ngơi"]
+        Choice3["[3] Phương án C / Canh bạc đột phá"]
+        ChoiceSpace["[Space] Xác nhận tiếp tục sang năm mới"]
+    end
+    
+    Phase2 --> EndYear["🎉 KẾT THÚC LƯỢT NĂM<br/>Cộng dồn AP thừa thành Máu (HP) • Chuyển giao tuổi N+1"]
+```
+
+1. **Giai đoạn 1 — Chuẩn Bị & Điều Hành Nguồn Lực AP (Resource Preparation Phase):**
+   * Người chơi tập trung vào **Khay hành động ở nửa dưới**.
+   * Nếu nhân vật đang có chỉ số Máu thấp hoặc Burnout cao, người chơi có thể bấm **Dưỡng sinh (1 AP)** ngay lập tức để hồi phục thể lực *trước khi* bước vào tình huống hiểm nghèo của biến cố năm đó.
+   * Nếu biến cố đòi hỏi tiền bạc hoặc chỉ số, người chơi có thể bấm làm thêm hoặc rèn luyện kỹ năng trước.
+2. **Giai đoạn 2 — Ra Quyết Định Định Mệnh & Chốt Năm (Destiny Decision & Year Settlement Phase):**
+   * Sau khi đã trang bị đầy đủ tài nguyên và tâm thế, người chơi hướng mắt lên **Khu vực biến cố ở nửa trên**.
+   * Nhấn các phím <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd> hoặc <kbd>Space</kbd> để đưa ra lựa chọn chốt hạ.
+   * Quyết định này sẽ khóa sổ năm tuổi hiện tại, ghi nhận kết quả và đưa nhân vật bước sang năm tiếp theo.
+
+---
+
+## 5. Chuẩn Mực Phím Tắt Toàn Cục & Tiếp Cận Bàn Phím (Global Hotkeys & Accessibility)
 
 Nhằm mang lại trải nghiệm điều khiển liên tục (Flow State) như các tựa game RPG kinh điển, LifeGraph thiết lập chuẩn phím tắt toàn cục 1 chạm:
 
-### 4.1. Bảng Quy Chuẩn Phím Tắt Cốt Lõi
+### 5.1. Bảng Quy Chuẩn Phím Tắt Cốt Lõi
 
 | Phím Tắt | Phân Loại | Màu Sắc Badge `<kbd>` | Hành Động Kích Hoạt |
 | :---: | :--- | :--- | :--- |
@@ -155,7 +266,7 @@ Nhằm mang lại trải nghiệm điều khiển liên tục (Flow State) như 
 
 ---
 
-### 4.2. Cơ Chế Cách Ly Nhập Liệu An Toàn (Safe Context-Guarding)
+### 5.2. Cơ Chế Cách Ly Nhập Liệu An Toàn (Safe Context-Guarding)
 
 Để tránh hiện tượng kích hoạt phím ngoài ý muốn, hệ thống tuân thủ nghiêm ngặt 3 lớp bảo vệ (Guarding Layers):
 
@@ -165,7 +276,7 @@ Nhằm mang lại trải nghiệm điều khiển liên tục (Flow State) như 
 
 ---
 
-### 4.3. Hiển Thị Nhãn Gợi Ý Phím Tắt Trực Quan (Interactive Key Hints)
+### 5.3. Hiển Thị Nhãn Gợi Ý Phím Tắt Trực Quan (Interactive Key Hints)
 
 * Trên các nút bấm có hỗ trợ phím tắt (nút Năm Mới, các nút lựa chọn phương án A/B/C, nút Phòng Điện Ảnh), bắt buộc đính kèm thẻ `<kbd>` nhỏ ở góc phải nút:
   * Ví dụ: `[1]`, `[2]`, `[3]`, `[Space]`, `[D]`.
@@ -174,7 +285,7 @@ Nhằm mang lại trải nghiệm điều khiển liên tục (Flow State) như 
 
 ---
 
-## 5. Quy Chuẩn Typography & Kiểu Chữ
+## 6. Quy Chuẩn Typography & Kiểu Chữ
 
 * **Phông chữ chủ đạo:** Sử dụng họ phông **Inter** hỗ trợ đầy đủ bộ ký tự tiếng Việt Unicode dựng sẵn; phông `system-ui, sans-serif` làm dự phòng. Chỉ nạp 1 họ phông với trọng số (font-weight) 400, 600, 700, 800 và thuộc tính `font-display: swap`.
 * **Thang cỡ chữ (Type Scale):**
@@ -187,7 +298,7 @@ Nhằm mang lại trải nghiệm điều khiển liên tục (Flow State) như 
 
 ---
 
-## 6. Bố Cục, Khoảng Cách & Thang Màu (Layout & Color System)
+## 7. Bố Cục, Khoảng Cách & Thang Màu (Layout & Color System)
 
 * **Hệ thống khoảng cách (Spacing System):** Tuân thủ bội số 4px của Tailwind CSS: `4px`, `8px`, `12px`, `16px`, `24px`, `32px`, `48px`.
 * **Bo góc (Border Radius):**
@@ -204,7 +315,7 @@ Nhằm mang lại trải nghiệm điều khiển liên tục (Flow State) như 
 
 ---
 
-## 7. Văn Phong & Ngôn Ngữ Trải Nghiệm (Tone of Voice & Copywriting)
+## 8. Văn Phong & Ngôn Ngữ Trải Nghiệm (Tone of Voice & Copywriting)
 
 * **Văn phong gần gũi, giàu cảm xúc và hành động:** Sử dụng tiếng Việt chuẩn mực, súc tích. Mỗi lựa chọn đều nêu rõ cái giá phải trả và cơ hội mở ra (Ví dụ: *"Dưỡng sinh phục hồi (-1 AP, +25 Máu)"* thay vì chỉ ghi *"Nghỉ ngơi"*).
 * **Tuyệt đối tránh thuật ngữ nội bộ:** Không đưa các từ ngữ dev/engineering vào giao diện người chơi (ví dụ: không dùng *"Cockpit View"*, *"State Machine"*, *"Backend API"*; thay bằng *"Buồng Lái Kiếp Sống"*, *"Quy Luật Sinh Mệnh"*, *"Máy Chủ Trò Chơi"*).
@@ -212,13 +323,14 @@ Nhằm mang lại trải nghiệm điều khiển liên tục (Flow State) như 
 
 ---
 
-## 8. Danh Mục Kiểm Tra Trước Phát Hành (Pre-Release UI/UX Checklist)
+## 9. Danh Mục Kiểm Tra Trước Phát Hành (Pre-Release UI/UX Checklist)
 
 Mọi cập nhật giao diện trước khi xuất bản lên môi trường Production bắt buộc phải vượt qua danh mục kiểm tra:
 
 - [ ] **Type check & Build:** Lệnh `npm run build` trên thư mục `frontend/` hoàn thành 100% không cảnh báo lỗi type.
 - [ ] **Kiểm tra cỡ chữ tối thiểu:** Không có đoạn văn bản đọc hiểu nào dưới 12px.
 - [ ] **Kiểm tra Responsive:** Kiểm tra hiển thị chuẩn trên 3 kích thước: Mobile (375px), Tablet (768px), Desktop (1440px+).
+- [ ] **Kiểm tra Khoang Hợp Nhất (isEmbedded):** Thẻ Dilemma và ActionPointHub hiển thị liền khối trong container chung `rounded-3xl`, không có hiện tượng viền lồng viền (nested borders).
 - [ ] **Kiểm tra Dual-Mode UX:** Chuyển đổi qua lại giữa *Bản Đồ Vui Nhộn* và *Cẩm Nang RPG* mượt mà, không bị tràn khung hay mất dữ liệu.
 - [ ] **Kiểm tra Ngưỡng Cấp Cứu SOS:** Đổi chỉ số Máu xuống < 30% hoặc Kiệt Sức lên > 75%, nút SOS nhấp nháy xuất hiện chính xác trên thanh HUD.
 - [ ] **Kiểm tra Cách Ly Phím Tắt (Context Guarding):** Nhấp chuột vào ô chat NPC hoặc ô nhập văn bản và gõ các phím `1`, `2`, `3`, `Space`, `D` — đảm bảo chỉ gõ chữ vào ô nhập mà không làm nhảy năm hay kích hoạt ngã rẽ.
