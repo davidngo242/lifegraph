@@ -1,6 +1,6 @@
 # LifeGraph — quy chuẩn giao diện v1
 
-Áp dụng cho game cuộc đời và chương Tiệm của cha. Đây là quy chuẩn sản phẩm của dự án, không phải chứng nhận hay một tiêu chuẩn bắt buộc chung cho mọi game.
+Áp dụng cho game cuộc đời LifeGraph RPG. Đây là quy chuẩn sản phẩm của dự án, không phải chứng nhận hay một tiêu chuẩn bắt buộc chung cho mọi game.
 
 ## Typography
 - Inter là font giao diện chính, có bộ ký tự tiếng Việt; system sans là dự phòng khi CDN không tải được. Chỉ nạp một họ font, weights 400–800, display=swap; không import cùng stylesheet hai lần.

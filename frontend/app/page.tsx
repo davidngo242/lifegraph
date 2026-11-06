@@ -1439,7 +1439,6 @@ export default function LifeGraphPage() {
         />
       )}
 
-      <a href="/workshop" className="block bg-amber-950/70 border-b border-amber-700 text-amber-200 text-center p-3 text-sm">🔧 Chơi thử chương mới: Tiệm của cha · 2 ngày</a>
       {/* Slim Top Navigation */}
       <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-50 gap-3 max-w-full overflow-visible">
         {/* 1. Left Zone: Brand Logo & View Switcher Tabs (Đẩy sát sang trái) */}
