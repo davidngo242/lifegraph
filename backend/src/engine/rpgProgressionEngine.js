@@ -213,12 +213,18 @@ export function initRpgState(character) {
   if (typeof character.life_level === 'undefined') {
     character.life_level = 1;
   }
+  character.level = character.life_level;
+
   if (typeof character.life_exp === 'undefined') {
     character.life_exp = 0;
   }
+  character.exp = character.life_exp;
+
   if (typeof character.skill_points === 'undefined') {
     character.skill_points = 1; // Start with 1 SP bonus
   }
+  character.sp = character.skill_points;
+
   if (!Array.isArray(character.unlocked_skills)) {
     character.unlocked_skills = [];
   }
@@ -264,6 +270,10 @@ export function awardLifeExp(character, amount = 0, reason = "") {
     // Recalculate tier
     currentTier = LEVEL_TIERS.find(t => character.life_level >= t.minLevel && character.life_level <= t.maxLevel) || LEVEL_TIERS[LEVEL_TIERS.length - 1];
   }
+
+  character.level = character.life_level;
+  character.exp = character.life_exp;
+  character.sp = character.skill_points;
 
   return {
     leveledUp,

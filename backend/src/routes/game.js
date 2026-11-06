@@ -67,6 +67,20 @@ import { sessionMutations } from '../middleware/sessionMutations.js';
 const router = express.Router();
 router.use(sessionMutations);
 
+// Helper bảo đảm chỉ nhân vật đang còn sống mới được thực hiện hành động
+async function getLivingCharacter(res) {
+  const character = await getLatestCharacter();
+  if (!character) {
+    res.status(400).json({ error: "Không tìm thấy nhân vật đang hoạt động. Vui lòng bắt đầu kiếp sống mới!" });
+    return null;
+  }
+  if (character.is_deceased) {
+    res.status(409).json({ error: "Kiếp sống này đã kết thúc." });
+    return null;
+  }
+  return character;
+}
+
 // GET /api/game/diagnostic
 router.get('/diagnostic', async (req, res) => {
   try {
@@ -734,8 +748,8 @@ router.get('/rpg/state', async (req, res) => {
 router.post('/rpg/unlock-skill', async (req, res) => {
   try {
     const { skill_id } = req.body;
-    let character = await getLatestCharacter();
-    if (!character) return res.status(404).json({ error: "Chưa có nhân vật" });
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     const result = unlockSkill(character, skill_id);
     if (!result.success) {
       return res.status(400).json({ error: result.error });
@@ -757,8 +771,8 @@ router.post('/rpg/unlock-skill', async (req, res) => {
 router.post('/rpg/npc-interact', async (req, res) => {
   try {
     const { npc_id, action_type } = req.body;
-    let character = await getLatestCharacter();
-    if (!character) return res.status(404).json({ error: "Chưa có nhân vật" });
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     const result = interactNpc(character, npc_id, action_type);
     if (!result.success) {
       return res.status(400).json({ error: result.error });
@@ -1162,7 +1176,8 @@ router.post('/action/buy-asset', async (req, res) => {
       annual_cash_flow,
       cash_flow
     } = req.body;
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
 
     if ((Number(character.age) || 0) < 18) {
       return res.status(400).json({
@@ -1257,7 +1272,8 @@ router.get('/market/assets', async (req, res) => {
 router.post('/action/upgrade-housing', async (req, res) => {
   try {
     const { housing_id, target_tier } = req.body;
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
 
     if ((Number(character.age) || 0) < 18) {
       return res.status(400).json({
@@ -1310,7 +1326,8 @@ router.post('/action/upgrade-housing', async (req, res) => {
 router.post('/action/childhood', async (req, res) => {
   try {
     const { action_id } = req.body;
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     const history = character.history_log || [];
     const flags = new Set(character.hidden_flags || []);
 
@@ -1453,7 +1470,8 @@ router.post('/action/childhood', async (req, res) => {
 router.post('/action/annual-focus', async (req, res) => {
   try {
     const { focus_type } = req.body;
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     if (!character) return res.status(404).json({ error: "Không tìm thấy nhân vật!" });
 
     const apAvailable = character.action_points || 0;
@@ -1530,7 +1548,8 @@ router.post('/action/annual-focus', async (req, res) => {
 router.post('/action/custom-resolve', async (req, res) => {
   try {
     const { user_action_text, cost_ap = 1 } = req.body;
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     if (!character) return res.status(404).json({ error: "Không tìm thấy nhân vật!" });
 
     if ((character.action_points || 0) < cost_ap) {
@@ -1626,7 +1645,8 @@ router.post('/action/sell-asset', async (req, res) => {
     const safeAssetId = sanitizeString(asset_id, 64);
     const validCostAp = Math.max(1, Math.min(4, Math.floor(Number(cost_ap || 1))));
 
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     let assets = await getAssets(character.id);
 
     if ((character.action_points || 0) < validCostAp) {
@@ -1670,7 +1690,8 @@ router.post('/action/sell-asset', async (req, res) => {
 router.post('/action/family', async (req, res) => {
   try {
     const { action_type } = req.body;
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     let relationships = await getRelationships(character.id);
     const history = character.history_log || [];
 
@@ -1940,7 +1961,8 @@ router.post('/action/family', async (req, res) => {
 router.post('/action/wellness', async (req, res) => {
   try {
     const action_type = req.body.action_type || req.body.therapy_type || 'meditation_retreat';
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     const history = character.history_log || [];
     const healthLevel = character.skills?.resilience_health?.level || 0;
     const bonusVit = healthLevel >= 2 ? (healthLevel === 2 ? 10 : 15) : 0;
@@ -2021,7 +2043,8 @@ router.post('/action/wellness', async (req, res) => {
 // POST /api/game/action/overtime - High-value direct AP cash earner
 router.post('/action/overtime', async (req, res) => {
   try {
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     const age = typeof character.age === 'number' ? character.age : 25;
     if (age < 18) {
       return res.status(400).json({ error: "Chưa đủ 18 tuổi để tham gia lao động cày việc ngoài luồng!" });
@@ -2076,7 +2099,8 @@ router.post('/action/overtime', async (req, res) => {
 // POST /api/game/action/study - Invest in intellectual capital
 router.post('/action/study', async (req, res) => {
   try {
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     const costCash = 500;
     if (character.action_points < 1 || character.cash < costCash) {
       return res.status(400).json({ error: "Cần 1 AP và $500 để mua sách và tham gia khóa đào tạo chuyên sâu!" });
@@ -2116,7 +2140,8 @@ router.post('/action/study', async (req, res) => {
 // POST /api/game/action/network - Expand social and business network
 router.post('/action/network', async (req, res) => {
   try {
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     const socialLevel = character.skills?.leadership_social?.level || 0;
     const socialDiscount = socialLevel === 1 ? 0.25 : socialLevel === 2 ? 0.50 : socialLevel >= 3 ? 0.70 : 0;
     const costCash = Math.round(400 * (1 - socialDiscount));
@@ -2178,7 +2203,8 @@ router.post('/action/network', async (req, res) => {
 // POST /api/game/action/gamble - High-stakes speculative roll
 router.post('/action/gamble', async (req, res) => {
   try {
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     const costCash = 300;
     if (character.action_points < 1 || character.cash < costCash) {
       return res.status(400).json({ error: "Cần 1 AP và $300 để thử vận may mua vé số / đầu cơ lướt sóng!" });
@@ -2313,7 +2339,8 @@ router.post('/blessing', async (req, res) => {
 router.post('/action/skill-train', async (req, res) => {
   try {
     const { skill_id } = req.body;
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     if (!character) return res.status(404).json({ error: "Không tìm thấy dữ liệu nhân vật!" });
 
     if ((Number(character.age) || 0) < 6) {
@@ -2411,7 +2438,8 @@ router.post('/action/minigame-result', async (req, res) => {
     const reportedOutcome = req.body.outcome ?? req.body.status ?? 'fair';
     const outcome = reportedOutcome === 'fail' ? 'failure' : reportedOutcome;
     const score = req.body.score || 0;
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     if (!character || character.is_deceased) return res.status(409).json({ error: 'Không có kiếp sống đang hoạt động.' });
     if (!['success', 'fair', 'failure'].includes(outcome)) return res.status(400).json({ error: 'Kết quả thử thách không hợp lệ.' });
     const played = character.completed_minigames ?? [];
@@ -2634,7 +2662,8 @@ router.post('/action/minigame-result', async (req, res) => {
 // POST /api/game/action/breakthrough - Execute 2 AP Breakthrough Action
 router.post('/action/breakthrough', async (req, res) => {
   try {
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     if (!character) return res.status(400).json({ error: 'Không tìm thấy nhân vật' });
     const result = executeBreakthroughAction(character);
     await updateCharacter(character.id, character);
@@ -2648,7 +2677,8 @@ router.post('/action/breakthrough', async (req, res) => {
 router.post('/action/social-respond', async (req, res) => {
   try {
     const { option_id } = req.body;
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     if (!character) return res.status(400).json({ error: 'Không tìm thấy nhân vật' });
     let relationships = await getRelationships(character.id);
     const incomingEvent = evaluateIncomingNpcEvent(character, relationships);
@@ -2687,7 +2717,8 @@ router.post('/action/social-respond', async (req, res) => {
 router.post('/action/rpg-active-perk', async (req, res) => {
   try {
     const { perk_type } = req.body;
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     if (!character) return res.status(400).json({ error: 'Không tìm thấy nhân vật' });
     if ((character.action_points || 0) < 1) {
       return res.status(400).json({ error: 'Cần tối thiểu 1 AP để kích hoạt đặc quyền!' });
@@ -2739,7 +2770,8 @@ router.post('/tick', async (req, res) => {
   try {
     const { choice_id, interaction_type, type: rawType, interaction_result, advance_only } = req.body;
     const previous_dilemma = advance_only ? null : (req.body.previous_dilemma || getSessionData().currentDilemma);
-    let character = await getLatestCharacter();
+    let character = await getLivingCharacter(res);
+    if (!character) return;
     if (!character) {
       return res.status(400).json({ error: "Không tìm thấy nhân vật đang hoạt động. Vui lòng bắt đầu kiếp sống mới!" });
     }

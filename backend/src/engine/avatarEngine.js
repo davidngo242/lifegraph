@@ -33,11 +33,24 @@ export function generateCharacterVisuals(character, assets = []) {
   // 4. Procedural SVG Portrait Data (Zero external latency, renders immediately)
   const avatarSvg = generateProceduralSvgAvatar(character, vfxFilter, netWorth);
 
+  const { gender = 'male' } = character;
+  const isFemale = gender === 'female';
+  const skinTone = vitality < 35 ? "#94a3b8" : age > 65 ? "#cbd5e1" : isFemale ? "#fed7aa" : "#fcd34d";
+
   return {
     portrait_url: `data:image/svg+xml;utf8,${encodeURIComponent(avatarSvg)}`,
     vfx_filter: vfxFilter,
     mood_description: moodDescription,
-    ai_image_prompt: aiImagePrompt
+    ai_image_prompt: aiImagePrompt,
+    skin_color: skinTone,
+    hair_style: age < 6 ? 'baby_fuzz' : isFemale ? 'long_waves' : 'crop_short',
+    outfit_type: netWorth > 1000000 ? 'luxury_bespoke' : cash < 0 ? 'worn_casual' : 'modern_smart',
+    age_morph: age < 6 ? 'infant' : age < 18 ? 'teen' : age < 60 ? 'adult' : 'elder',
+    expression: expression,
+    visual_vibe: {
+      background_scene: netWorth > 1000000 ? 'cyber_gold' : burnout > 70 ? 'neon_noir' : 'cyber_dusk'
+    },
+    personality_badges: Array.from(flags).slice(0, 4)
   };
 }
 

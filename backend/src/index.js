@@ -65,7 +65,7 @@ app.use(express.json({ limit: '200kb' }));
 // =========================================================================
 app.use((req, res, next) => {
   // Bỏ qua rate limit cho health check
-  if (req.path === '/health') return next();
+  if (req.path === '/health' || process.env.NODE_ENV === 'test') return next();
 
   const clientIp = req.ip || req.connection?.remoteAddress || 'unknown';
   const token = req.headers['x-session-token'] || req.headers['x-session-id'] || 'anonymous';
