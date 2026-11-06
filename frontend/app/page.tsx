@@ -34,6 +34,9 @@ import LifeTarotCardModal from './components/LifeTarotCardModal';
 import GameGuideModal from './components/GameGuideModal';
 import Tooltip from './components/Tooltip';
 import IncomingNpcEventModal from './components/IncomingNpcEventModal';
+import CommandBarHUD from './components/CommandBarHUD';
+import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
+import EmergencyRescueModal from './components/EmergencyRescueModal';
 
 // Non-binary Interaction Components (V5 & V6)
 import SpectrumSlider from './components/interactions/SpectrumSlider';
@@ -86,6 +89,8 @@ export default function LifeGraphPage() {
   const [showSkillSelector, setShowSkillSelector] = useState<boolean>(false);
   const [showTarotCardModal, setShowTarotCardModal] = useState<boolean>(false);
   const [showGuideModal, setShowGuideModal] = useState<boolean>(false);
+  const [showShortcutsModal, setShowShortcutsModal] = useState<boolean>(false);
+  const [showEmergencyModal, setShowEmergencyModal] = useState<boolean>(false);
   const [activeScenario, setActiveScenario] = useState<any>(null);
   const [activeView, setActiveView] = useState<'home' | 'game' | 'lineage'>('home');
   const [showCinemaDecisionModal, setShowCinemaDecisionModal] = useState<boolean>(false);
@@ -144,7 +149,9 @@ export default function LifeGraphPage() {
       audioRef.current.pause();
       setIsPlayingAudio(false);
     } else {
-      audioRef.current.volume = 0.35;
+      if (!audioRef.current.volume) {
+        audioRef.current.volume = 0.35;
+      }
       audioRef.current.play().then(() => {
         setIsPlayingAudio(true);
       }).catch((e) => {
@@ -302,6 +309,156 @@ export default function LifeGraphPage() {
       interaction_result: { strategy: choice || 'accumulate' }
     });
   };
+
+  // Global Keyboard Shortcuts (Hotkeys)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // 1. Ignore if typing in an input, textarea, select, or contenteditable element
+      const target = e.target as HTMLElement | null;
+      if (target) {
+        const tagName = target.tagName ? target.tagName.toLowerCase() : '';
+        const isEditable = target.isContentEditable;
+        if (tagName === 'input' || tagName === 'textarea' || tagName === 'select' || isEditable) {
+          return;
+        }
+      }
+
+      // 2. Ignore modifier key combinations (Ctrl, Alt, Meta) to preserve browser shortcuts
+      if (e.ctrlKey || e.metaKey || e.altKey) {
+        return;
+      }
+
+      const key = e.key;
+
+      // 3. Audio toggle (M / m) - available globally
+      if (key === 'm' || key === 'M') {
+        e.preventDefault();
+        toggleAudio();
+        return;
+      }
+
+      // 4. Survival Game Guide modal (? or /)
+      if (key === '?' || key === '/') {
+        e.preventDefault();
+        setShowGuideModal(prev => !prev);
+        return;
+      }
+
+      // 5. Cinema Decision Room 21:9 (D / d)
+      if (key === 'd' || key === 'D') {
+        const otherModalOpen =
+          showRebirthModal ||
+          showAssetModal ||
+          showFamilyModal ||
+          showKarmaModal ||
+          showSkillSelector ||
+          showTarotCardModal ||
+          showGuideModal ||
+          showAspirationUpgradeModal ||
+          show3DInspectorModal ||
+          showShortcutsModal ||
+          showEmergencyModal ||
+          Boolean(activeMiniGame) ||
+          Boolean(heirNotice) ||
+          Boolean(incomingNpcEvent);
+
+        if (character && !character.is_deceased && !otherModalOpen) {
+          e.preventDefault();
+          setShowCinemaDecisionModal(prev => !prev);
+          return;
+        }
+      }
+
+      // 6. Check if any blocking dialog/modal is open or game is loading or dead
+      const hasBlockingModal =
+        showRebirthModal ||
+        showAssetModal ||
+        showFamilyModal ||
+        showKarmaModal ||
+        showSkillSelector ||
+        showTarotCardModal ||
+        showGuideModal ||
+        showCinemaDecisionModal ||
+        showAspirationUpgradeModal ||
+        show3DInspectorModal ||
+        showShortcutsModal ||
+        showEmergencyModal ||
+        Boolean(activeMiniGame) ||
+        Boolean(heirNotice) ||
+        Boolean(incomingNpcEvent) ||
+        Boolean(character?.is_deceased && showEpitaphModal);
+
+      if (hasBlockingModal || loading || !character || character.is_deceased || activeView !== 'game') {
+        return;
+      }
+
+      // 7. Space: Bước sang năm tiếp theo / tiếp tục nhanh (khi không trong modal hay đang gõ text)
+      if (e.code === 'Space' || key === ' ') {
+        e.preventDefault();
+        if (dilemma?.interaction_type === 'TIME_SKIP') {
+          handleTimeSkipContinue('accumulate');
+        } else {
+          submitInteraction({ advance_only: true });
+        }
+        return;
+      }
+
+      // 8. 1, 2, 3: Chọn nhanh phương án trong các ngã rẽ lựa chọn (Dilemma/Trilemma options)
+      if (key === '1' || key === '2' || key === '3') {
+        if (!dilemma) return;
+        const index = parseInt(key, 10) - 1;
+
+        if (dilemma.interaction_type === 'TRILEMMA') {
+          const opts = dilemma.trilemma_options || [
+            { id: 'TRI_A' },
+            { id: 'TRI_B' },
+            { id: 'TRI_C' }
+          ];
+          if (opts[index]) {
+            e.preventDefault();
+            handleTrilemmaSelect(opts[index].id);
+          }
+        } else if (dilemma.interaction_type === 'TIME_SKIP') {
+          if (index === 0) {
+            e.preventDefault();
+            handleTimeSkipContinue('accumulate');
+          } else if (index === 1) {
+            e.preventDefault();
+            handleTimeSkipContinue('relax');
+          }
+        } else if (dilemma.options && dilemma.options[index]) {
+          e.preventDefault();
+          handleSelectChoice(dilemma.options[index].id);
+        }
+        return;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [
+    character,
+    activeView,
+    dilemma,
+    loading,
+    isPlayingAudio,
+    showRebirthModal,
+    showAssetModal,
+    showFamilyModal,
+    showKarmaModal,
+    showSkillSelector,
+    showTarotCardModal,
+    showGuideModal,
+    showCinemaDecisionModal,
+    showAspirationUpgradeModal,
+    show3DInspectorModal,
+    showShortcutsModal,
+    showEmergencyModal,
+    activeMiniGame,
+    heirNotice,
+    incomingNpcEvent,
+    showEpitaphModal
+  ]);
 
   // Reincarnation / Generation Continuity
   const handleContinueAsChild = async (child: any) => {
@@ -1314,6 +1471,24 @@ export default function LifeGraphPage() {
         onClose={() => setShowGuideModal(false)}
       />
 
+      {/* Global Keyboard Shortcuts Cheatsheet Modal */}
+      <KeyboardShortcutsModal
+        isOpen={showShortcutsModal}
+        onClose={() => setShowShortcutsModal(false)}
+      />
+
+      {/* Emergency SOS Rescue Modal */}
+      <EmergencyRescueModal
+        isOpen={showEmergencyModal}
+        onClose={() => setShowEmergencyModal(false)}
+        vitality={character?.vitality ?? 100}
+        burnout={character?.burnout ?? 0}
+        actionPoints={character?.action_points ?? 0}
+        onPerformWellness={handleWellness}
+        onOpenKarmaSanctum={() => setShowKarmaModal(true)}
+        isLoading={loading}
+      />
+
       {/* 3D Avatar 360 Fullscreen Inspector Modal */}
       {show3DInspectorModal && character && (
         <AvatarInspectorModal
@@ -1604,7 +1779,7 @@ export default function LifeGraphPage() {
                   <BookOpen className="w-3.5 h-3.5" /> Cẩm Nang Cuộc Đời
                 </div>
                 <div className="text-[12px] text-slate-300">
-                  Xem toàn bộ luật chơi, cơ chế sinh tử, cây kỹ năng RPG và bí kíp sống còn.
+                  Xem toàn bộ luật chơi, cơ chế sinh tử, cây kỹ năng RPG và bí kíp sống còn (Phím tắt: [?]).
                 </div>
               </div>
             }
@@ -1615,9 +1790,12 @@ export default function LifeGraphPage() {
             >
               <BookOpen className="w-3.5 h-3.5 text-amber-300" />
               <span>Cẩm Nang</span>
-              <span className="text-[8.5px] font-mono px-1 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-pulse">
+              <span className="text-[8.5px] font-mono px-1 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black">
                 GUIDE
               </span>
+              <kbd className="hidden sm:inline text-[9px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-amber-500/40 text-amber-300 font-bold">
+                ?
+              </kbd>
             </button>
           </Tooltip>
 
@@ -1685,7 +1863,25 @@ export default function LifeGraphPage() {
             audioRef={audioRef}
           />
         </div>
-        </header>
+      </header>
+
+      {/* Command Bar / Header HUD trực quan */}
+      {character && !character.is_deceased && (
+        <CommandBarHUD
+          activeView={activeView}
+          onToggleQuickView={() => {
+            setActiveView(prev => (prev === 'game' ? 'home' : 'game'));
+          }}
+          vitality={character?.vitality ?? 100}
+          burnout={character?.burnout ?? 0}
+          actionPoints={character?.action_points ?? 0}
+          onEmergencyRescue={() => setShowEmergencyModal(true)}
+          onOpenCinema={() => setShowCinemaDecisionModal(true)}
+          onOpenGuide={() => setShowGuideModal(true)}
+          onOpenShortcutsHelp={() => setShowShortcutsModal(true)}
+          isLoading={loading}
+        />
+      )}
 
       {/* Main Container: Dynamic View Router */}
       <main className="flex-1 max-w-[1720px] w-full mx-auto p-3 md:p-5 z-10 relative">

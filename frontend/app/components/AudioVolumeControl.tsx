@@ -30,11 +30,16 @@ export default function AudioVolumeControl({ isPlaying, onTogglePlay, audioRef }
         align="right"
         content={
           <div className="p-0.5">
-            <div className="font-bold text-indigo-300 text-xs flex items-center gap-1 mb-0.5">
-              <Music className="w-3.5 h-3.5" /> {isPlaying ? `Nhạc Nền Đang Phát (${volume}%)` : "Nhạc Nền Tắt"}
+            <div className="font-bold text-indigo-300 text-xs flex items-center justify-between gap-2 mb-0.5">
+              <span className="flex items-center gap-1">
+                <Music className="w-3.5 h-3.5" /> {isPlaying ? `Nhạc Nền Đang Phát (${volume}%)` : "Nhạc Nền Tắt"}
+              </span>
+              <kbd className="px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-300 border border-indigo-500/40 text-[10px] font-mono font-bold">
+                M
+              </kbd>
             </div>
             <div className="text-[10px] text-slate-300">
-              {isPlaying ? "Bấm để tạm dừng âm thanh không gian sống hoặc chỉnh âm lượng." : "Bấm để bật âm nhạc thiền định và nhịp điệu cuộc sống."}
+              {isPlaying ? "Bấm để tạm dừng âm thanh (hoặc nhấn phím M)." : "Bấm để bật âm nhạc thiền định (hoặc nhấn phím M)."}
             </div>
           </div>
         }
@@ -61,6 +66,9 @@ export default function AudioVolumeControl({ isPlaying, onTogglePlay, audioRef }
             <span className="hidden sm:inline font-medium text-[12px]">
               {isPlaying ? `${volume}%` : 'Nhạc Tắt'}
             </span>
+            <kbd className="hidden lg:inline text-[9px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-slate-700 text-slate-400 font-bold ml-0.5">
+              M
+            </kbd>
           </button>
 
           {/* Volume Slider Popover Toggle */}

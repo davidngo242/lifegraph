@@ -60,23 +60,28 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
           className="p-4 rounded-2xl bg-slate-950 hover:bg-sky-950/40 border border-slate-800 hover:border-sky-500/50 text-left transition active:scale-[0.98] group flex flex-col justify-between"
         >
           <div>
-            <div className="flex items-center gap-2 mb-1.5 text-sky-400 font-bold text-sm group-hover:text-sky-300">
-              {isInfant ? (
-                <>
-                  <Baby className="w-4 h-4" />
-                  <span>Ăn Ngoan & Lớn Nhanh</span>
-                </>
-              ) : isMinor ? (
-                <>
-                  <BookOpen className="w-4 h-4" />
-                  <span>Chuyên Tâm Đèn Sách</span>
-                </>
-              ) : (
-                <>
-                  <Briefcase className="w-4 h-4" />
-                  <span>Cày Tiền & Tích Lũy Kỹ Năng</span>
-                </>
-              )}
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-2 text-sky-400 font-bold text-sm group-hover:text-sky-300">
+                {isInfant ? (
+                  <>
+                    <Baby className="w-4 h-4" />
+                    <span>Ăn Ngoan & Lớn Nhanh</span>
+                  </>
+                ) : isMinor ? (
+                  <>
+                    <BookOpen className="w-4 h-4" />
+                    <span>Chuyên Tâm Đèn Sách</span>
+                  </>
+                ) : (
+                  <>
+                    <Briefcase className="w-4 h-4" />
+                    <span>Cày Tiền & Tích Lũy Kỹ Năng</span>
+                  </>
+                )}
+              </div>
+              <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-sky-300 font-mono text-[10px] font-bold group-hover:border-sky-400 shadow-sm">
+                1
+              </kbd>
             </div>
             <p className="text-xs text-slate-400 leading-snug">
               {isInfant
@@ -102,23 +107,28 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
           className="p-4 rounded-2xl bg-slate-950 hover:bg-emerald-950/40 border border-slate-800 hover:border-emerald-500/50 text-left transition active:scale-[0.98] group flex flex-col justify-between"
         >
           <div>
-            <div className="flex items-center gap-2 mb-1.5 text-emerald-400 font-bold text-sm group-hover:text-emerald-300">
-              {isInfant ? (
-                <>
-                  <Sparkles className="w-4 h-4" />
-                  <span>Khám Phá Tuổi Thơ & Mái Ấm</span>
-                </>
-              ) : isMinor ? (
-                <>
-                  <Smile className="w-4 h-4" />
-                  <span>Tuổi Thơ Năng Động & Bạn Bè</span>
-                </>
-              ) : (
-                <>
-                  <Heart className="w-4 h-4" />
-                  <span>Dưỡng Sức & Gắn Kết Mái Ấm</span>
-                </>
-              )}
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm group-hover:text-emerald-300">
+                {isInfant ? (
+                  <>
+                    <Sparkles className="w-4 h-4" />
+                    <span>Khám Phá Tuổi Thơ & Mái Ấm</span>
+                  </>
+                ) : isMinor ? (
+                  <>
+                    <Smile className="w-4 h-4" />
+                    <span>Tuổi Thơ Năng Động & Bạn Bè</span>
+                  </>
+                ) : (
+                  <>
+                    <Heart className="w-4 h-4" />
+                    <span>Dưỡng Sức & Gắn Kết Mái Ấm</span>
+                  </>
+                )}
+              </div>
+              <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-emerald-300 font-mono text-[10px] font-bold group-hover:border-emerald-400 shadow-sm">
+                2
+              </kbd>
             </div>
             <p className="text-xs text-slate-400 leading-snug">
               {isInfant
@@ -136,6 +146,10 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
               : `-40 Burnout, +15 Sinh lực, +15 Karma`}
           </div>
         </button>
+      </div>
+
+      <div className="text-center text-[11px] text-slate-500 font-sans mt-2">
+        Nhấn phím <kbd className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-mono">1</kbd> hoặc <kbd className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-mono">2</kbd> để chọn đường hướng, hoặc <kbd className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-mono">Space</kbd> để tiếp tục nhanh.
       </div>
     </div>
   );

@@ -331,6 +331,13 @@ export default function EventCard({
                   className="flex-1 text-left min-w-0 pr-2"
                 >
                   <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
+                    {/* Hotkey badge */}
+                    {idx < 3 && (
+                      <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-amber-300 font-mono text-[10px] font-bold group-hover:border-indigo-400 group-hover:text-indigo-200 shadow-sm transition">
+                        {idx + 1}
+                      </kbd>
+                    )}
+
                     {/* Roleplay Stance Badge */}
                     <span className={`text-[12px] font-bold normal-case tracking-normal px-2 py-0.5 rounded-md border ${stance.color}`}>
                       {stance.tag}

@@ -84,7 +84,7 @@ NEXT_PUBLIC_API_URL=/api/game
 
 ---
 
-## 🏛️ Tính Năng & Kiến Trúc Nổi Bật (Version 7.0)
+## 🏛️ Tính Năng & Kiến Trúc Nổi Bật (Version 7.5)
 
 ### 1. Sân Khấu Nhập Vai & Bản Ngã Tâm Thức (Mind Stage & Ego Voices)
 * **Bộ Ba Bản Ngã Tranh Luận:** Trong mỗi biến cố cuộc đời, ba giọng nói nội tâm sẽ thì thầm lời khuyên:
@@ -104,10 +104,11 @@ NEXT_PUBLIC_API_URL=/api/game
 ### 4. Sảnh Sống Động 3D & Phòng Quyết Định 21:9 Cinema (Living Room Viewport)
 * Khung cảnh mô phỏng phòng khách sống động (Dynamic 3D Canvas) thay đổi theo độ tuổi (từ sơ sinh, thiếu nhi tới trưởng thành và về già).
 * Tích hợp thanh HUD chỉ số sinh tồn và nhịp tim ECG theo thời gian thực.
+* **Chế độ Điện Ảnh 21:9 (Phím tắt `[D]`):** Mở không gian màn ảnh rộng tập trung tối đa tâm trí vào các bước ngoặt cuộc đời.
 
 ### 5. Cây Kỹ Năng Tam Phân & Hệ Thống Liên Kết Xã Hội (RPG Progression)
 * Thăng cấp bậc đời (*Life Level Progression*).
-* Cây 3 nhánh kỹ năng: *Trí Tuệ & Chuyên Môn*, *Giao Tiếp & Uy Thế*, *Sức Khỏe & Thể Lực*.
+* Cây 3 nhánh kỹ năng: *Trí Tuệ & Chuyên Môn (Sage)*, *Giao Tiếp & Uy Thế (Social)*, *Thương Trường & Tài Phiệt (Wealth)*.
 * Hệ thống Social Links gắn kết với bạn bè, đồng nghiệp, người yêu và gia tộc.
 
 ### 6. Hệ Thống Mini-Game Đa Trục (Skill - Age - Geo)
@@ -115,6 +116,52 @@ NEXT_PUBLIC_API_URL=/api/game
 * 🤝 **Bàn Tròn Thương Lượng (Negotiation Duel):** Cân bằng Uy Thế và Kiên Nhẫn đối tác để giảm giá tài sản.
 * 🚨 **Sinh Tồn Khủng Hoảng (Crisis Survival):** Đếm ngược 15s qua 4 trạm hiểm nguy cứu gia đình và nhu yếu phẩm.
 * 🧩 **Rèn Luyện Tuổi Thơ & Hoàng Hôn:** Ươm mầm kiên nhẫn, Mạch logic robot, Nhịp tim ECG, Mảnh ghép ký ức chống Alzheimer.
+
+### 7. Cẩm Nang Trực Quan Siêu Dễ Hiểu (Dual-Mode Survival Guide UX)
+* **Cơ chế Kép (Dual-Mode UX):** Chuyển đổi linh hoạt giữa giao diện trực quan và cẩm nang chuyên sâu chỉ bằng 1 nút bấm:
+  * 🧸 **Bản Đồ Vui Nhộn (Bé 6 tuổi cũng hiểu - Mặc định):** Trực quan hóa toàn diện, không gánh nặng đọc hiểu:
+    * ⚡ **Tia Sét Năng Lượng (AP - Amber):** Mỗi năm nhận 3-4 tia sét để làm việc, giải trí, khám bệnh. Điểm dư thừa cuối năm tự chuyển hóa thành sinh lực.
+    * ❤️ **Trái Tim Khỏe Mạnh (HP - Rose):** Chỉ số sinh tồn cốt tử. Hết máu là Game Over, cần ăn ngon ngủ kỹ và dưỡng bệnh kịp thời.
+    * 💥 **Ngọn Lửa Áp Lực (Burnout - Orange):** Mức độ căng thẳng tinh thần. Vượt ngưỡng 80% sẽ bùng cháy thiêu rụi máu trần.
+    * 💰 **Túi Tiền Tiết Kiệm (Cash - Emerald):** Tích lũy mua nhà xịn, đồ chơi, chăm sóc bản thân và phụng dưỡng cha mẹ.
+    * 🚀 **Vòng lặp "3 Bước Chơi Ngay Trong 10 Giây":** *Bước 1: Chọn 1 việc làm* ➔ *Bước 2: Bấm nút tím to bự "Bước Sang Tuổi Mới"* ➔ *Bước 3: Nhận quà sinh nhật, EXP và điểm may mắn*.
+    * 💡 **4 Mẹo Vàng Dễ Nhớ:** Nâng cấp chỗ ở (giảm bệnh tật), Thư giãn đúng lúc (dập tắt lửa áp lực), Kết thân bạn bè (cứu nguy hoạn nạn), Sinh con nối dõi (truyền thừa cơ nghiệp).
+  * 📖 **Cẩm Nang Tra Cứu RPG Nâng Cao:** Dành cho game thủ muốn làm chủ số phận:
+    * **Cây Kỹ Năng 3 Nhánh:** *Wealth* (Thương Trường: Mắt Thần Định Giá ➔ Đàm Phán Khắc Nghiệt ➔ Cỗ Máy Dòng Tiền), *Social* (Nhân Mạch: Hào Quang Cuốn Hút ➔ Mượn Gió Bẻ Măng ➔ Đế Chế Nhân Mạch), *Sage* (Tâm Thức: Tâm Lý Thép ➔ Bách Khoa Toàn Thư ➔ Giác Ngộ Niết Bàn).
+    * **4 Quý Nhân NPC Đồng Hành:** *Mentor* GS. Vũ Trọng Khang, *Ally* Trần Đình Khang, *Rival* Lâm Thế Cường, *Protégé* Nguyễn Thảo My cùng đặc quyền can thiệp sinh tử ở Hảo cảm Cấp 3.
+    * **Chiến Lược Tích Sản & Quản Trị Dòng Tiền:** Cơ chế phạt âm tiền (lãi vay nợ 4.5%/năm & +25% Burnout), tối ưu hóa cổ tức BĐS/Cổ phiếu thụ động và cân đối chi phí sinh hoạt gia đình.
+    * **5 Giai Đoạn Đời:** Ấu thơ (0-5t), Học đường (6-17t), Lập nghiệp (18-35t), Trụ cột gia tộc (36-55t), Hoàng hôn & Luân hồi (56+t).
+
+### 8. Thanh Điều Khiển HUD & Hệ Thống Cứu Hộ Khẩn Cấp (CommandBarHUD & Emergency SOS)
+* 🎛️ **Thanh Lệnh HUD Cố Định (Sticky Cockpit Command Bar):** Tọa lạc ngay dưới thanh điều hướng chính, tích hợp công cụ chuyển đổi nhanh 1-chạm giữa Buồng Lái Kiếp Sống (*RPG Simulation View*) và Cây Gia Phả Tiền Nhân (*Family Lineage Portal*).
+* 🎬 **Lối Tắt Phòng Quyết Định 21:9 Cinema (`[D]`):** Mở không gian toàn cảnh Ultra-wide điện ảnh đối mặt ngã rẽ cuộc đời mà không bị che khuất bởi các thanh công cụ phụ.
+* 🚨 **Trung Tâm Cấp Cứu Khẩn Cấp Sinh Mệnh (Emergency Rescue Engine):** Tự động giám sát hai ngưỡng sinh tồn cốt tử: **Sinh Lực (Vitality < 30%)** hoặc **Kiệt Sức (Burnout > 75%)**.
+  * Khi chạm ngưỡng nguy kịch, nút cứu sinh phát xung nhịp tim đập (*pulsing alert*) màu đỏ-hổ phách kích hoạt modal can thiệp sinh mạng cấp tốc.
+  * Hỗ trợ 2 phương án cứu sinh tức thời: **Dưỡng Sinh Phục Hồi Toàn Diện (1 AP)** giải tỏa kiệt sức hoặc **Thỉnh Phước Bảo Mạng (0 AP)** tại Đền Thờ Nghiệp Quả Karma khi đã cạn sạch điểm hành động.
+* ⌨️ **Gợi Ý Phím Tắt Trực Quan (Interactive Key Badges):** Hiển thị trực tiếp các phím tắt cốt lõi (`[1] [2] [3]`, `[Space]`, `[?]`) kèm nút tra cứu nhanh cheat-sheet.
+
+---
+
+## ⌨️ Bảng Phím Tắt Toàn Cục (Global Hotkeys Cheat-Sheet)
+
+Nhằm tối ưu hóa trải nghiệm điều khiển liên tục và nhập vai mượt mà không cần rê chuột liên tục, LifeGraph trang bị hệ thống phím tắt toàn cục thông minh trên toàn bộ buồng lái:
+
+| Phím Tắt | Chức Năng Chính | Phân Loại | Ngữ Cảnh & Mô Tả Chi Tiết |
+| :---: | :--- | :--- | :--- |
+| <kbd>Space</kbd> | **Tiếp Tục / Bước Sang Năm Mới** | Điều Khiển Lượt | Tự động kích hoạt lượt thời gian tiếp theo; trong sự kiện Bỏ Qua Thời Gian (*Time Skip*), tự động chọn nhánh tích lũy mặc định. |
+| <kbd>1</kbd> | **Chọn Phương Án 1** | Quyết Định | Kích hoạt lựa chọn 1 trong Biến cố Ngã rẽ, Đối thoại NPC, Tam giác nghịch lý (*Trilemma*), hoặc Khoảng lặng tích lũy. |
+| <kbd>2</kbd> | **Chọn Phương Án 2** | Quyết Định | Kích hoạt lựa chọn 2 trong Biến cố Ngã rẽ, Đối thoại NPC, Tam giác nghịch lý, hoặc Khoảng lặng thư giãn. |
+| <kbd>3</kbd> | **Chọn Phương Án 3** | Quyết Định | Kích hoạt lựa chọn 3 trong Tam giác nghịch lý đánh đổi sinh tồn hoặc ngã rẽ 3 phương án. |
+| <kbd>D</kbd> | **Mở / Đóng Phòng Quyết Định 21:9** | Trải Nghiệm | Mở không gian điện ảnh toàn cảnh chuẩn Cinema 21:9 tập trung tuyệt đối vào bước ngoặt định mệnh. |
+| <kbd>M</kbd> | **Bật / Tắt Nhạc Nền (Mute Toggle)** | Âm Thanh | Bật hoặc tắt nhanh âm thanh không gian sống và nhạc thiền định nền. |
+| <kbd>?</kbd> hoặc <kbd>/</kbd> | **Mở Cẩm Nang Hướng Dẫn Sinh Tồn** | Trợ Giúp | Truy cập nhanh Bản Đồ Vui Nhộn & Cẩm Nang Tra Cứu RPG (Game Guide Modal). |
+
+> [!TIP]
+> **Cơ chế An Toàn Chống Xung Đột Nhập Liệu (Safe Input & Modal Guarding):**
+> * **Bảo Vệ Ô Nhập Liệu:** Khi con trỏ đang nằm trong các ô nhập văn bản (`<input>`, `<textarea>`, `<select>` hoặc phần tử `contenteditable`), toàn bộ phím tắt sẽ tự động tạm ngưng để đảm bảo việc gõ chữ trơn tru (như khi chat với NPC).
+> * **Bảo Toàn Phím Tắt Hệ Thống:** Các tổ hợp phím hệ điều hành như `Ctrl + C`, `Alt + Tab`, `Cmd + R` được bảo lưu nguyên vẹn, không bao giờ bị can thiệp.
+> * **Khóa An Toàn Khi Modal Mở / Tử Vong:** Các phím điều khiển thời gian và chọn nhánh sẽ tự động khóa an toàn khi nhân vật đã qua đời hoặc khi các hộp thoại modal lớn (Tái sinh, Di chúc, Cây kỹ năng, Minigame) đang hiển thị.
+> * Bấm vào biểu tượng bàn phím trên `CommandBarHUD` hoặc gõ <kbd>?</kbd> để mở bảng tra cứu phím tắt bất kỳ lúc nào.
 
 ---
 

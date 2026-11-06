@@ -60,7 +60,7 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
 
       {/* 3-Column Horizontal Grid - Viewable on 1 screen without scrolling! */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-        {options.map((opt: any) => {
+        {options.map((opt: any, idx: number) => {
           const badge = getSacrificeBadge(opt.sacrifice_type);
           return (
             <button
@@ -74,6 +74,9 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
                   <span className={`text-[12px] font-sans font-medium px-2 py-0.5 rounded-full border flex items-center gap-1 shrink-0 ${badge.color}`}>
                     {badge.icon} {badge.label}
                   </span>
+                  <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-amber-300 font-mono text-[10px] font-bold group-hover:border-amber-400 shadow-sm">
+                    {idx + 1}
+                  </kbd>
                 </div>
                 <div className="text-xs md:text-sm font-bold text-white group-hover:text-amber-200 transition-colors line-clamp-2">
                   {opt.action_title}
