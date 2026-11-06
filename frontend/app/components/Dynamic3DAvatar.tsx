@@ -287,11 +287,21 @@ function ProceduralCharacterMesh({
         {/* Left Eye */}
         <mesh ref={leftEyeRef} position={[-0.17, isBaby ? 0.08 : 0.1, 0.42]} material={eyeMaterial}>
           <sphereGeometry args={[isBaby ? 0.068 : (isFemale ? 0.065 : 0.06), 16, 16]} />
+          {/* Eye shine reflection */}
+          <mesh position={[0.022, 0.022, 0.055]}>
+            <sphereGeometry args={[0.018, 8, 8]} />
+            <meshBasicMaterial color="#ffffff" />
+          </mesh>
         </mesh>
 
         {/* Right Eye */}
         <mesh ref={rightEyeRef} position={[0.17, isBaby ? 0.08 : 0.1, 0.42]} material={eyeMaterial}>
           <sphereGeometry args={[isBaby ? 0.068 : (isFemale ? 0.065 : 0.06), 16, 16]} />
+          {/* Eye shine reflection */}
+          <mesh position={[0.022, 0.022, 0.055]}>
+            <sphereGeometry args={[0.018, 8, 8]} />
+            <meshBasicMaterial color="#ffffff" />
+          </mesh>
         </mesh>
 
         {/* Female Eyelash Accents (Only for adults & teens, never on babies!) */}
@@ -379,10 +389,6 @@ function ProceduralCharacterMesh({
               {/* Fluffy Pom-Pom on Top */}
               <mesh position={[0, 0.54, 0]} material={ribbonMaterial}>
                 <sphereGeometry args={[0.085, 16, 16]} />
-              </mesh>
-              {/* Soft Baby Hair Curl peeking out */}
-              <mesh position={[0, 0.18, 0.44]} rotation={[0.2, 0, 0]} material={hairMaterial}>
-                <torusGeometry args={[0.045, 0.015, 8, 16, Math.PI]} />
               </mesh>
             </group>
           ) : isFemale ? (

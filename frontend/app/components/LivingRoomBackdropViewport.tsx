@@ -49,7 +49,7 @@ export default function LivingRoomBackdropViewport({
   onOpenCinemaMode,
   activeScenarioTitle
 }: LivingRoomBackdropViewportProps) {
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [activeMonologue, setActiveMonologue] = useState<string | null>(null);
 
   const tier = getRoomTier(netWorth, housing);

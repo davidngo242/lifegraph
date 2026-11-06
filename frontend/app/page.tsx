@@ -1684,142 +1684,51 @@ export default function LifeGraphPage() {
           </div>
         </div>
 
-        {/* 2. Center Zone: Beautiful Detailed Aspiration Hub (Bố cục giữa gọn gàng trên 1 dòng) */}
-        {aspiration && activeView === 'game' && (
-          <div className="hidden lg:flex items-center justify-center min-w-0 flex-1 px-2">
-            <Tooltip
-              position="bottom"
-              content={
-                <div className="space-y-1.5 p-1 max-w-xs">
-                  <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1">
-                    <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
-                      <span>{aspiration.icon || '🎯'}</span>
-                      <span>{aspiration.title}</span>
-                    </span>
-                    <span className="font-sans tabular-nums font-bold text-purple-300 text-xs">
-                      {aspiration.progress}%
-                    </span>
-                  </div>
-                  <div className="text-[12px] text-slate-300 font-sans italic leading-relaxed">
-                    {aspiration.target_summary}
-                  </div>
-                  {aspiration.progress >= 100 ? (
-                    <div className="text-[12px] font-bold text-emerald-400 pt-1 border-t border-slate-800 flex items-center gap-1 animate-pulse">
-                      ✨ Tâm nguyện đã trọn vẹn! Bấm để nâng cấp khát vọng (+60 Karma vĩnh cửu).
-                    </div>
-                  ) : (
-                    <div className="text-[12px] text-slate-400 pt-1 border-t border-slate-800/80 flex items-center justify-between">
-                      <span>Tiến độ hoàn thành:</span>
-                      <span className="font-bold text-amber-400">{aspiration.progress}% / 100%</span>
-                    </div>
-                  )}
-                </div>
-              }
+        {/* 2. Center: Empty spacer for clean breathing room */}
+        <div className="flex-1" />
+
+        {/* 3. Right Zone: Clean Quick Actions, Karma & Audio */}
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+          {/* Emergency SOS Rescue Button (Only when in critical condition) */}
+          {character && !character.is_deceased && (character.vitality < 30 || character.burnout > 75) && (
+            <button
+              onClick={() => setShowEmergencyModal(true)}
+              className="py-1 px-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs flex items-center gap-1.5 animate-pulse shadow-lg shadow-rose-950 active:scale-95 transition"
             >
-              <button
-                onClick={() => {
-                  if (aspiration.progress >= 100 || aspiration.is_completed) {
-                    setShowAspirationUpgradeModal(true);
-                  }
-                }}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-2xl border transition-all duration-300 group cursor-pointer max-w-full ${
-                  aspiration.progress >= 100 || aspiration.is_completed
-                    ? 'bg-gradient-to-r from-amber-500/20 via-purple-500/20 to-emerald-500/20 border-amber-400/70 text-amber-300 shadow-lg shadow-amber-500/20 animate-pulse'
-                    : 'bg-slate-950/90 hover:bg-slate-900 border-purple-500/35 hover:border-purple-400/60 text-slate-200 shadow-md'
-                }`}
-              >
-                <div className="w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center shrink-0">
-                  <span className="text-xs">{aspiration.icon || '🎯'}</span>
-                </div>
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-200" />
+              <span>CẤP CỨU SOS</span>
+            </button>
+          )}
 
-                <div className="flex items-center gap-1.5 min-w-0 pr-1">
-                  <span className="text-[11px] font-mono text-purple-300 font-bold uppercase tracking-wider hidden xl:inline">
-                    Khát Vọng:
-                  </span>
-                  <span className="font-bold text-white text-xs truncate max-w-[130px] xl:max-w-[170px]">
-                    {aspiration.title}
-                  </span>
-                </div>
-
-                {/* Progress Bar */}
-                <div className="flex items-center gap-2 shrink-0">
-                  <div className="w-16 xl:w-24 h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800 p-0.5">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ${
-                        aspiration.progress >= 100
-                          ? 'bg-gradient-to-r from-amber-400 to-emerald-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
-                          : 'bg-gradient-to-r from-purple-500 via-indigo-400 to-amber-300'
-                      }`}
-                      style={{ width: `${Math.min(100, aspiration.progress)}%` }}
-                    />
-                  </div>
-                  <span className="font-sans tabular-nums font-bold text-xs text-amber-300 shrink-0">
-                    {aspiration.progress}%
-                  </span>
-                </div>
-
-                {aspiration.progress >= 100 && (
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 normal-case tracking-normal animate-bounce shadow-md shrink-0">
-                    Thăng Hạng
-                  </span>
-                )}
-              </button>
-            </Tooltip>
-          </div>
-        )}
-
-        {/* 3. Right Zone: Đền Thờ Nghiệp Quả + Notifications + Audio */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
-          {/* Cẩm Nang Cuộc Đời (Game Guide) Header Button */}
+          {/* Cẩm Nang & Phím Tắt [?] */}
           <Tooltip
             position="bottom"
-            content={
-              <div className="p-0.5">
-                <div className="font-bold text-amber-300 text-xs flex items-center gap-1 mb-0.5">
-                  <BookOpen className="w-3.5 h-3.5" /> Cẩm Nang Cuộc Đời
-                </div>
-                <div className="text-[12px] text-slate-300">
-                  Xem toàn bộ luật chơi, cơ chế sinh tử, cây kỹ năng RPG và bí kíp sống còn (Phím tắt: [?]).
-                </div>
-              </div>
-            }
+            content="Xem luật chơi, cẩm nang sinh tồn và danh sách phím tắt [?]"
           >
             <button
               onClick={() => setShowGuideModal(true)}
-              className="py-1 px-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-purple-600/20 to-indigo-600/20 hover:from-amber-500/30 hover:to-purple-600/30 border border-amber-400/50 hover:border-amber-300 text-amber-200 hover:text-white text-xs font-bold flex items-center gap-1.5 transition active:scale-95 shadow-md shadow-amber-950/30"
+              className="py-1 px-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 hover:border-amber-400/60 text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95"
             >
               <BookOpen className="w-3.5 h-3.5 text-amber-300" />
-              <span>Cẩm Nang</span>
-              <span className="text-[8.5px] font-mono px-1 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black">
-                GUIDE
-              </span>
-              <kbd className="hidden sm:inline text-[9px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-amber-500/40 text-amber-300 font-bold">
+              <span className="hidden sm:inline">Cẩm Nang</span>
+              <kbd className="text-[10px] font-mono px-1 py-0.2 rounded bg-slate-950 border border-amber-500/40 text-amber-300 font-bold">
                 ?
               </kbd>
             </button>
           </Tooltip>
 
-          {/* Đền Thờ Nghiệp Quả (Karma Sanctum) Header Button */}
+          {/* Đền Thờ Nghiệp Quả (Karma Sanctum) */}
           <Tooltip
             position="bottom"
-            content={
-              <div className="p-0.5">
-                <div className="font-bold text-amber-300 text-xs flex items-center gap-1 mb-0.5">
-                  <Sparkles className="w-3.5 h-3.5" /> Đền Thờ Nghiệp Quả
-                </div>
-                <div className="text-[12px] text-slate-300">
-                  Nơi thỉnh phước lành bảo hộ sinh mệnh, tiêu thụ điểm Karma vĩnh cửu tích lũy qua các đời.
-                </div>
-              </div>
-            }
+            content="Đền Thờ Nghiệp Quả - Thỉnh phước bảo mạng"
           >
             <button
               onClick={() => setShowKarmaModal(true)}
-              className="py-1 px-2.5 rounded-xl bg-gradient-to-r from-purple-600/30 via-indigo-600/30 to-amber-600/30 hover:from-purple-600/50 hover:to-amber-600/50 border border-purple-500/40 hover:border-amber-400/60 text-white text-xs font-bold flex items-center gap-1.5 transition active:scale-95 shadow-md shadow-purple-950/40"
+              className="py-1 px-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-purple-500/40 hover:border-purple-400 text-white text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300/30" />
-              <span className="hidden md:inline">Đền Thờ Nghiệp Quả</span>
-              <span className="text-[12px] font-sans tabular-nums px-1 rounded bg-purple-950 text-purple-300 border border-purple-500/30 font-bold">
+              <span className="hidden md:inline">Đền Thờ</span>
+              <span className="text-[11px] font-mono font-bold text-purple-300 px-1.5 py-0.2 rounded bg-purple-950/80 border border-purple-500/30">
                 {playerAccount?.total_karma || 0}
               </span>
             </button>
@@ -1829,20 +1738,11 @@ export default function LifeGraphPage() {
           {character && (
             <Tooltip
               position="bottom"
-              content={
-                <div className="p-0.5">
-                  <div className="font-bold text-amber-300 text-xs flex items-center gap-1 mb-0.5">
-                    🎴 Thẻ Bài Tarot Cuộc Đời
-                  </div>
-                  <div className="text-[12px] text-slate-300">
-                    Xuất hình ảnh thẻ bài vận mệnh Cyber-Tarot để chia sẻ bảng thành tích lên mạng xã hội.
-                  </div>
-                </div>
-              }
+              content="Xuất thẻ bài vận mệnh Cyber-Tarot"
             >
               <button
                 onClick={() => setShowTarotCardModal(true)}
-                className="py-1 px-2.5 rounded-xl bg-slate-950/80 hover:bg-amber-950/50 border border-slate-800 hover:border-amber-500/50 text-slate-300 hover:text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
+                className="py-1 px-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 text-slate-300 hover:text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95"
               >
                 <span>🎴</span>
                 <span className="hidden xl:inline">Thẻ Bài</span>
@@ -1850,7 +1750,7 @@ export default function LifeGraphPage() {
             </Tooltip>
           )}
 
-          {/* Dynamic Loudspeaker Notification Hub */}
+          {/* Dynamic Notification Hub */}
           <EmergencyNotificationHub
             alerts={emergencyAlerts}
             onDismiss={handleDismissAlert}
@@ -1864,24 +1764,6 @@ export default function LifeGraphPage() {
           />
         </div>
       </header>
-
-      {/* Command Bar / Header HUD trực quan */}
-      {character && !character.is_deceased && (
-        <CommandBarHUD
-          activeView={activeView}
-          onToggleQuickView={() => {
-            setActiveView(prev => (prev === 'game' ? 'home' : 'game'));
-          }}
-          vitality={character?.vitality ?? 100}
-          burnout={character?.burnout ?? 0}
-          actionPoints={character?.action_points ?? 0}
-          onEmergencyRescue={() => setShowEmergencyModal(true)}
-          onOpenCinema={() => setShowCinemaDecisionModal(true)}
-          onOpenGuide={() => setShowGuideModal(true)}
-          onOpenShortcutsHelp={() => setShowShortcutsModal(true)}
-          isLoading={loading}
-        />
-      )}
 
       {/* Main Container: Dynamic View Router */}
       <main className="flex-1 max-w-[1720px] w-full mx-auto p-3 md:p-5 z-10 relative">
@@ -1971,55 +1853,14 @@ export default function LifeGraphPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
               {/* Left Column: Sân Khấu Cuộc Đời (lg:col-span-7 xl:col-span-8) */}
               <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-4 min-w-0 w-full">
-                {/* Dynamic Living Room Viewport (Cửa sổ không gian sống tiến hóa theo Net Worth) */}
-                {character && (
-                  <LivingRoomBackdropViewport
-                    netWorth={netWorth}
-                    housing={character?.housing}
-                    age={character?.age}
-                    nationality={character?.nationality}
-                    onOpenCinemaMode={() => setShowCinemaDecisionModal(true)}
-                    activeScenarioTitle={activeScenario?.title}
-                  />
-                )}
-                {/* Strategic Action Points (AP) Hub */}
-                {character && (
-                  <ActionPointHub
-                    actionPoints={character.action_points || 0}
-                    totalAp={character.total_ap || 3}
-                    lockedAp={character.locked_ap || 0}
-                    lockedReasons={character.locked_reasons || []}
-                    vitality={character.vitality || 80}
-                    characterAge={character.age || 0}
-                    cash={Number(character.cash || 0)}
-                    character={character}
-                    relationships={relationships}
-                    assets={assets}
-                    isTrilemmaActive={dilemma?.interaction_type === 'TRILEMMA'}
-                    onChildhoodAction={handleChildhoodAction}
-                    onFastForwardToSchool={handleFastForwardToSchool}
-                    onAnnualFocus={handleAnnualFocus}
-                    onOpenAssets={() => setShowAssetModal(true)}
-                    onOpenFamily={() => setShowFamilyModal(true)}
-                    onOvertime={handleOvertime}
-                    onStudy={handleStudy}
-                    onWellness={handleWellness}
-                    onGamble={handleGamble}
-                    onNetwork={handleNetworkAction}
-                    onTimeSkip={handleTimeSkipContinue}
-                    onOpenSkillHub={() => setShowSkillSelector(true)}
-                    onLaunchMiniGame={(type) => launchMiniGame(type)}
-                    onUnlockSkill={handleUnlockSkill}
-                    onNpcInteract={handleNpcInteract}
-                    breakthroughAction={breakthroughAction}
-                    onBreakthrough={handleBreakthroughAction}
-                    onRpgActivePerk={handleRpgActivePerk}
-                    hiddenFlags={character.hidden_flags || []}
-                    isLoading={loading}
-                  />
-                )}
+                {/* 1. Decision Dilemma Interaction Area (Tiêu điểm chính của game: Hiển thị ngay trên đầu) */}
+                <div className={`w-full transition-all duration-300 ${
+                  dilemma?.interaction_type === 'TRILEMMA' ? 'ring-2 ring-amber-500/50 rounded-3xl shadow-2xl shadow-amber-950/60' : ''
+                }`}>
+                  {renderInteractionComponent()}
+                </div>
 
-                {/* Active Scenario Cross-Cutting Quest Card (Chỉ hiển thị khi có Kịch bản phù hợp & chưa hoàn thành) */}
+                {/* 2. Active Scenario Cross-Cutting Quest Card (Chỉ hiển thị khi có Kịch bản phù hợp & chưa hoàn thành) */}
                 {activeScenario && !character?.is_deceased && (
                   <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/60 via-slate-900 to-indigo-950/60 border border-purple-500/40 shadow-xl space-y-2.5">
                     <div className="flex items-center justify-between">
@@ -2057,12 +1898,54 @@ export default function LifeGraphPage() {
                   </div>
                 )}
 
-                {/* Decision Dilemma Interaction Area (Tiêu điểm duy nhất khi có Trilemma) */}
-                <div className={`w-full transition-all duration-300 ${
-                  dilemma?.interaction_type === 'TRILEMMA' ? 'ring-2 ring-amber-500/50 rounded-3xl shadow-2xl shadow-amber-950/60' : ''
-                }`}>
-                  {renderInteractionComponent()}
-                </div>
+                {/* 3. Strategic Action Points (AP) Hub */}
+                {character && (
+                  <ActionPointHub
+                    actionPoints={character.action_points || 0}
+                    totalAp={character.total_ap || 3}
+                    lockedAp={character.locked_ap || 0}
+                    lockedReasons={character.locked_reasons || []}
+                    vitality={character.vitality || 80}
+                    characterAge={character.age || 0}
+                    cash={Number(character.cash || 0)}
+                    character={character}
+                    relationships={relationships}
+                    assets={assets}
+                    isTrilemmaActive={dilemma?.interaction_type === 'TRILEMMA'}
+                    onChildhoodAction={handleChildhoodAction}
+                    onFastForwardToSchool={handleFastForwardToSchool}
+                    onAnnualFocus={handleAnnualFocus}
+                    onOpenAssets={() => setShowAssetModal(true)}
+                    onOpenFamily={() => setShowFamilyModal(true)}
+                    onOvertime={handleOvertime}
+                    onStudy={handleStudy}
+                    onWellness={handleWellness}
+                    onGamble={handleGamble}
+                    onNetwork={handleNetworkAction}
+                    onTimeSkip={handleTimeSkipContinue}
+                    onOpenSkillHub={() => setShowSkillSelector(true)}
+                    onLaunchMiniGame={(type) => launchMiniGame(type)}
+                    onUnlockSkill={handleUnlockSkill}
+                    onNpcInteract={handleNpcInteract}
+                    breakthroughAction={breakthroughAction}
+                    onBreakthrough={handleBreakthroughAction}
+                    onRpgActivePerk={handleRpgActivePerk}
+                    hiddenFlags={character.hidden_flags || []}
+                    isLoading={loading}
+                  />
+                )}
+
+                {/* 4. Dynamic Living Room Viewport (Cửa sổ không gian sống - Thu gọn thanh lịch) */}
+                {character && (
+                  <LivingRoomBackdropViewport
+                    netWorth={netWorth}
+                    housing={character?.housing}
+                    age={character?.age}
+                    nationality={character?.nationality}
+                    onOpenCinemaMode={() => setShowCinemaDecisionModal(true)}
+                    activeScenarioTitle={activeScenario?.title}
+                  />
+                )}
               </div>
 
               {/* Right Column: Multi-Tab Sidebar (lg:col-span-5 xl:col-span-4) */}
