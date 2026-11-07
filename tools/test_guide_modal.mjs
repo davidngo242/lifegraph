@@ -283,10 +283,10 @@ runTest('Integration with frontend/app/page.tsx', () => {
     'page.tsx must register ? or / shortcut for guide'
   );
 
-  // Verify HUD CommandBar connection
+  // Verify Guide opening connection in Header or HUD
   assert.ok(
-    pageCode.includes('onOpenGuide={() => setShowGuideModal(true)}'),
-    'page.tsx must connect onOpenGuide in CommandBarHUD'
+    pageCode.includes('setShowGuideModal(true)'),
+    'page.tsx must connect setShowGuideModal(true) to open guide'
   );
 
   // Verify modal rendering

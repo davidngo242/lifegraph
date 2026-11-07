@@ -546,3 +546,17 @@ Khi người chơi đối mặt với các kịch bản mang tính sinh tử s�
   * Tích hợp chấm radar phát xung `animate-ping` màu hồng ngọc (`bg-rose-300` / `bg-rose-400` với `shadow-[0_0_8px_#f43f5e]`), tạo cảm giác hồi hộp và cấp bách tột độ.
 * **Quy Tắc Nhập Tâm & Hành Động:**
   * Giữ nguyên tỷ lệ 21:9, các Hotspot cấp cứu (túi chườm, bác sĩ trực, cành tre cứu hộ) phát quang rõ nét để người chơi kịp thời thu thập manh mối trước khi ra quyết định sống còn tại Sân Khấu Tâm Thức.
+
+### 14.5. Kiến Trúc Điều Hướng Hợp Nhất & Phòng Trầm Tư (Integrated Decision View & Mind Sanctuary)
+Nhằm xóa bỏ hoàn toàn cảm giác rời rạc khiến người dùng bỏ quên tính năng này, Phòng Quyết Định được nâng cấp thành một Tab độc lập cấp một (First-Class View):
+1. **Thanh Chuyển Hướng Header Cấp Một (First-Class View Switcher Pill):**
+   * Bổ sung tab **🎬 Phòng Quyết Định** trên thanh điều hướng chính song song với *Trang Chủ Gia Phả* và *Cockpit Sinh Tồn*.
+   * Tự động hiển thị chấm radar hổ phách phát xung (`animate-ping bg-amber-400`) mỗi khi có kịch bản định mệnh đang chờ người chơi đối mặt.
+2. **Hero Callout Banner Trong Cockpit (Chiến Thuật Mở Khóa):**
+   * Ngay trên bảng điều khiển Cockpit, biến cố trọng điểm hiển thị dưới dạng Hero Banner nổi bật với khung viền ánh kim và lời giải thích giá trị chiến thuật rõ ràng: *"Vào 3D để đối thoại, nhặt manh mối và tăng xác suất thành công từ 50% lên 90%+"*.
+   * Nút bấm hành động nhanh `[🎬 Bước Vào Phòng Quyết Định 3D [D] →]` giúp chuyển cảnh tức thì chỉ với 1 cú nhấp chuột hoặc phím tắt <kbd>D</kbd>.
+3. **Phòng Trầm Tư Cuộc Đời (Mind Sanctuary Ambient Fallback):**
+   * Khắc phục triệt để lỗi màn hình đen khi không có kịch bản kích hoạt: Hệ thống tự động chuyển sang chế độ **"Phòng Trầm Tư · Không Gian Chiêm Nghiệm Cuộc Đời"**.
+   * Không gian 3D ấm cúng với 3 điểm tương tác: *Ghế Tĩnh Tâm (hồi phục Burnout)*, *Tủ Kỷ Niệm (xem lại di sản & tài sản)*, và *Cửa Sổ Vận Mệnh (thông báo trước cột mốc ngã rẽ ở tuổi tiếp theo)*.
+4. **Thanh Chỉ Số Sinh Tồn Trực Quan (Mini-Vitals Strip):**
+   * Đỉnh phòng quyết định luôn ghim dải chỉ số thực tế: Máu (HP), Căng thẳng (Burnout), Điểm hành động (AP), và Tiền mặt (Cash), giúp người chơi luôn nắm chắc tình trạng sinh tồn khi cân nhắc các lựa chọn.

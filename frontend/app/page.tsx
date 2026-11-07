@@ -1793,6 +1793,32 @@ export default function LifeGraphPage() {
                 </button>
               </Tooltip>
             )}
+
+            {/* 3. Decision Room View Switcher Pill */}
+            {character && !character.is_deceased && (
+              <Tooltip
+                position="bottom"
+                content="Phòng quyết định 3D & không gian đối thoại vận mệnh 21:9 (Phím tắt: D)"
+              >
+                <button
+                  onClick={() => setActiveView('decision')}
+                  className={`relative px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
+                    activeView === 'decision'
+                      ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                  }`}
+                >
+                  <Clapperboard className="w-3.5 h-3.5" />
+                  <span className="hidden md:inline">Phòng Quyết Định</span>
+                  {activeScenario && (
+                    <span className="flex h-2 w-2 relative">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                    </span>
+                  )}
+                </button>
+              </Tooltip>
+            )}
           </div>
         </div>
 
@@ -1970,39 +1996,53 @@ export default function LifeGraphPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
               {/* Left Column: Sân Khấu Cuộc Đời (lg:col-span-7 xl:col-span-8) */}
               <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-4 min-w-0 w-full">
-                {/* 1. Active Scenario Cross-Cutting Quest Card (Chỉ hiển thị khi có Kịch bản phù hợp & chưa hoàn thành) */}
+                {/* 1. Active Scenario Hero Callout Banner (Ngã Rẽ Trọng Đại) */}
                 {activeScenario && !character?.is_deceased && (
-                  <div className="p-4 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-xl space-y-2.5">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs">📖</span>
-                        <span className="text-xs font-bold text-amber-300 normal-case tracking-normal">
-                          {activeScenario.title || "Kịch Bản Trọng Tâm"}
+                  <div className="relative overflow-hidden p-5 rounded-3xl bg-gradient-to-r from-amber-950/50 via-purple-950/40 to-slate-900/80 border-2 border-amber-500/50 shadow-2xl space-y-3 animate-in fade-in duration-300">
+                    <div className="absolute top-0 right-0 w-64 h-32 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <div className="flex items-center gap-2.5">
+                        <span className="relative flex h-3 w-3">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                        </span>
+                        <span className="text-xs font-black uppercase tracking-wider text-amber-300 px-2.5 py-0.5 rounded-full bg-amber-950/70 border border-amber-500/40">
+                          ⚡ Ngã Rẽ Định Mệnh · Tuổi {character?.age}
                         </span>
                       </div>
                       <button
-                        onClick={() => setShowCinemaDecisionModal(true)}
-                        className="px-2.5 py-1 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] hover:border-amber-400/50 text-[var(--text-primary)] text-[12px] font-bold flex items-center gap-1.5 transition shadow-sm animate-pulse"
+                        onClick={() => setActiveView('decision')}
+                        className="px-4 py-2 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs md:text-sm flex items-center gap-2 shadow-lg shadow-amber-500/30 transition active:scale-95 group"
                       >
-                        <span>🎬 Phòng Quyết Định</span>
-                        <Play className="w-3 h-3 fill-current" />
+                        <Clapperboard className="w-4 h-4 text-slate-950" />
+                        <span>Bước Vào Phòng Quyết Định 3D</span>
+                        <kbd className="font-mono text-[10px] bg-amber-950/30 text-amber-950 px-1.5 py-0.5 rounded font-bold">D</kbd>
+                        <span className="group-hover:translate-x-1 transition-transform">→</span>
                       </button>
                     </div>
 
-                    <p className="text-xs text-[var(--text-secondary)] font-sans leading-relaxed">
-                      {activeScenario.description}
-                    </p>
+                    <div>
+                      <h3 className="text-base sm:text-lg font-bold text-white font-serif">
+                        {activeScenario.title || "Kịch Bản Trọng Tâm"}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
+                        {activeScenario.description}
+                      </p>
+                    </div>
 
-                    <div className="flex items-center justify-between pt-1 border-t border-[var(--border-subtle)] text-[12px] text-[var(--text-secondary)]">
-                      <span>
-                        {activeScenario.roles ? `Nhân vật liên quan: ${Object.values(activeScenario.roles).join(', ')}` : "Cột mốc ngã rẽ cuộc đời"}
-                      </span>
+                    <div className="pt-2 border-t border-amber-500/20 flex flex-wrap items-center justify-between gap-3 text-xs">
+                      <div className="flex items-center gap-2 text-amber-200/90 font-medium">
+                        <span>💡</span>
+                        <span>
+                          <strong>Lợi thế chiến thuật:</strong> Đối thoại với các nhân vật và thu thập manh mối 3D giúp tăng tỷ lệ thành công từ 50% lên 90%+.
+                        </span>
+                      </div>
                       <button
-                        onClick={() => setShowCinemaDecisionModal(true)}
-                        className="text-amber-300 hover:text-white font-bold flex items-center gap-1 transition group"
+                        onClick={() => setActiveView('decision')}
+                        className="text-amber-300 hover:text-white font-bold flex items-center gap-1 transition underline decoration-amber-400/40 hover:decoration-white"
                       >
-                        <span>🎬 Bung toàn cảnh điện ảnh & đối diện ngã rẽ</span>
-                        <span className="group-hover:translate-x-1 transition-transform">→</span>
+                        <span>Vào phòng ngay</span>
+                        <span>→</span>
                       </button>
                     </div>
                   </div>
@@ -2031,6 +2071,15 @@ export default function LifeGraphPage() {
                         <span className="font-mono font-bold">{character?.action_points ?? 0}</span>
                         <span className="text-[var(--text-secondary)] text-[11px]">/ {character?.total_ap ?? 3} AP</span>
                       </div>
+                      <button
+                        onClick={() => setActiveView('decision')}
+                        className="px-2.5 py-1 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 hover:text-white border border-amber-500/30 text-[11px] font-bold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
+                        title="Vào không gian 3D chiêm nghiệm cuộc đời (Phím tắt: D)"
+                      >
+                        <Clapperboard className="w-3 h-3" />
+                        <span className="hidden sm:inline">Phòng Quyết Định 3D</span>
+                        <kbd className="px-1 py-0.2 rounded bg-amber-950/80 border border-amber-500/40 text-[9px] font-mono">D</kbd>
+                      </button>
                     </div>
                   </div>
 
@@ -2133,6 +2182,64 @@ export default function LifeGraphPage() {
               </div>
             </div>
           </>
+        )}
+
+        {/* 4. Decision Room View (First-Class Cinema Decision View) */}
+        {activeView === 'decision' && (
+          <div className="w-full max-w-7xl mx-auto space-y-4 animate-in fade-in duration-300">
+            {/* Top Navigation & Life Vitals Strip for Decision Mode */}
+            <div className="p-3.5 sm:p-4 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-xl flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setActiveView('game')}
+                  className="px-3.5 py-1.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-indigo-600/30 transition active:scale-95 group"
+                >
+                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                  <span>Trở Về Cockpit Sinh Tồn</span>
+                  <kbd className="hidden sm:inline px-1.5 py-0.5 rounded bg-indigo-900/60 border border-indigo-400/30 text-[10px] font-mono">D</kbd>
+                </button>
+                <div className="h-5 w-px bg-[var(--border-subtle)] hidden sm:block" />
+                <div className="flex items-center gap-2">
+                  <span className="text-base">🎬</span>
+                  <div>
+                    <h2 className="text-xs sm:text-sm font-bold text-[var(--text-primary)]">
+                      {activeScenario ? (activeScenario.title || "Phòng Quyết Định 21:9") : "Phòng Trầm Tư & Chiêm Nghiệm"}
+                    </h2>
+                    <p className="text-[11px] text-[var(--text-secondary)]">
+                      {activeScenario ? "Đối thoại nhân vật & thu thập manh mối để tăng tỷ lệ thành công" : "Tĩnh tâm, rà soát mục tiêu và chuẩn bị cho cột mốc tiếp theo"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Vitals Quick Glance */}
+              <div className="flex items-center gap-2 sm:gap-3 text-xs font-bold">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300">
+                  <Heart className="w-3.5 h-3.5 fill-rose-500/30 text-rose-400" />
+                  <span>{character?.vitality ?? 80}/{character?.max_vitality ?? 100}</span>
+                </div>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-950/40 border border-amber-500/30 text-amber-300">
+                  <Flame className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{character?.burnout ?? 0}%</span>
+                </div>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-300">
+                  <span>⚡</span>
+                  <span>{character?.action_points ?? 0} AP</span>
+                </div>
+                <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-sky-950/40 border border-sky-500/30 text-sky-300 font-mono">
+                  <span>${(Number(character?.cash) || 0).toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Embedded 3D Interactive Cinema Decision Scene */}
+            <InteractiveScene2D
+              character={character}
+              onScenarioResolved={() => loadState()}
+              onAdvanceYear={() => submitInteraction({ advance_only: true })}
+              onBackToCockpit={() => setActiveView('game')}
+            />
+          </div>
         )}
 
         {/* Incoming Annual NPC Social Event Modal */}
