@@ -180,30 +180,167 @@ const cleanWhisper = (text: string) => {
 };
 
 // =========================================================================
+// CINEMATIC VOLUMETRIC SUNBEAM (God Rays through Window)
+// =========================================================================
+function VolumetricSunbeam3D({ color = '#fef08a' }: { color?: string }) {
+  const materialRef = useRef<THREE.MeshBasicMaterial>(null);
+
+  useFrame((state) => {
+    if (materialRef.current) {
+      const t = state.clock.getElapsedTime();
+      // Atmospheric breathing / pulsing of light intensity
+      materialRef.current.opacity = 0.16 + Math.sin(t * 1.2) * 0.035;
+    }
+  });
+
+  return (
+    <group position={[0, 1.6, -1.98]} rotation={[0.89, 0, 0]}>
+      {/* Primary Volumetric Cone Beam */}
+      <mesh>
+        <cylinderGeometry args={[1.9, 3.8, 5.2, 32, 1, true]} />
+        <meshBasicMaterial
+          ref={materialRef}
+          color={color}
+          transparent={true}
+          opacity={0.16}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+      {/* Secondary Inner Core Beam for Concentrated Sunlight Glow */}
+      <mesh>
+        <cylinderGeometry args={[1.1, 2.3, 5.0, 24, 1, true]} />
+        <meshBasicMaterial
+          color={color}
+          transparent={true}
+          opacity={0.10}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+// =========================================================================
+// FLOATING DUST MOTES (Airborne Cinematic Light Particles)
+// =========================================================================
+function DustMotes3D({ count = 35, color = '#fef9c3' }: { count?: number; color?: string }) {
+  const pointsRef = useRef<THREE.Group>(null);
+
+  // Generate deterministic particles within the sunbeam cone
+  const particles = useMemo(() => {
+    return Array.from({ length: count }, (_, i) => {
+      const seed = i * 137.5;
+      return {
+        initialX: (Math.sin(seed) * 1.6),
+        initialY: 0.3 + (Math.abs(Math.cos(seed * 0.7)) * 2.8),
+        initialZ: -3.6 + (Math.abs(Math.sin(seed * 0.5)) * 4.0),
+        speed: 0.15 + (i % 5) * 0.05,
+        swaySpeed: 0.8 + (i % 7) * 0.2,
+        scale: 0.015 + ((i % 4) * 0.008),
+        offset: i * 0.6
+      };
+    });
+  }, [count]);
+
+  const itemsRef = useRef<Array<THREE.Mesh | null>>([]);
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    particles.forEach((p, idx) => {
+      const mesh = itemsRef.current[idx];
+      if (!mesh) return;
+
+      const y = ((p.initialY + t * p.speed) % 3.2);
+      const x = p.initialX + Math.sin(t * p.swaySpeed + p.offset) * 0.12;
+      const z = p.initialZ + Math.cos(t * p.swaySpeed * 0.8 + p.offset) * 0.1;
+
+      mesh.position.set(x, y, z);
+      if (mesh.material && 'opacity' in mesh.material) {
+        (mesh.material as THREE.MeshStandardMaterial).opacity = 0.3 + Math.sin(t * 2 + p.offset) * 0.35;
+      }
+    });
+  });
+
+  return (
+    <group ref={pointsRef}>
+      {particles.map((p, idx) => (
+        <mesh
+          key={idx}
+          ref={(el) => { itemsRef.current[idx] = el; }}
+          position={[p.initialX, p.initialY, p.initialZ]}
+        >
+          <sphereGeometry args={[p.scale, 8, 8]} />
+          <meshStandardMaterial
+            color={color}
+            emissive={color}
+            emissiveIntensity={1.2}
+            transparent={true}
+            opacity={0.65}
+            roughness={0.1}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+// =========================================================================
 // PROCEDURAL 3D ENVIRONMENT SETS (Free Procedural Room Geometries & Shaders)
 // =========================================================================
-function ProceduralRoom3D({ theme = 'nursery', sceneId = '' }: { theme?: string; sceneId?: string }) {
+function ProceduralRoom3D({
+  theme = 'nursery',
+  sceneId = '',
+  activeTheme = 'obsidian',
+  sunbeamColor = '#fef08a'
+}: {
+  theme?: string;
+  sceneId?: string;
+  activeTheme?: 'obsidian' | 'sepia' | 'cyberpunk';
+  sunbeamColor?: string;
+}) {
   const isNursery = theme.includes('nursery') || sceneId.includes('nursery');
   const isSchool = theme.includes('school') || sceneId.includes('school') || sceneId.includes('class');
   const isOffice = theme.includes('office') || sceneId.includes('office');
   const isCafe = theme.includes('cafe') || sceneId.includes('cafe');
   const isArtisan = theme.includes('artisan') || sceneId.includes('workshop');
 
-  // Theme-specific colors
-  const wallColor = isNursery ? '#2a1a1f' : isSchool ? '#13212e' : isOffice ? '#0f172a' : isCafe ? '#27160c' : '#1e1b4b';
-  const floorColor = isNursery ? '#3b2229' : isSchool ? '#1e293b' : isOffice ? '#1e293b' : isCafe ? '#451a03' : '#18181b';
-  const windowGlowColor = isNursery ? '#fbcfe8' : isSchool ? '#93c5fd' : isOffice ? '#60a5fa' : isCafe ? '#fed7aa' : '#c084fc';
+  // Multi-Theme & Setting adaptive colors
+  let wallColor = isNursery ? '#2a1a1f' : isSchool ? '#13212e' : isOffice ? '#0f172a' : isCafe ? '#27160c' : '#1e1b4b';
+  let floorColor = isNursery ? '#3b2229' : isSchool ? '#1e293b' : isOffice ? '#1e293b' : isCafe ? '#451a03' : '#18181b';
+  let windowGlowColor = isNursery ? '#fbcfe8' : isSchool ? '#93c5fd' : isOffice ? '#60a5fa' : isCafe ? '#fed7aa' : '#c084fc';
+
+  if (activeTheme === 'sepia') {
+    floorColor = isNursery ? '#451a03' : isCafe ? '#3e1a06' : '#29180f';
+    wallColor = isNursery ? '#2d1810' : '#1c1815';
+    windowGlowColor = '#fed7aa';
+  } else if (activeTheme === 'cyberpunk') {
+    floorColor = '#090d16';
+    wallColor = '#0b1120';
+    windowGlowColor = '#38bdf8';
+  }
 
   return (
     <group>
-      {/* 1. Main Parquet / Tiled Floor Plane */}
+      {/* 1. Main Parquet / Tiled Floor Plane with Specular Sheen */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
         <planeGeometry args={[16, 9]} />
-        <meshStandardMaterial color={floorColor} roughness={0.7} metalness={0.1} />
+        <meshStandardMaterial
+          color={floorColor}
+          roughness={0.38}
+          metalness={0.16}
+          envMapIntensity={1.2}
+        />
       </mesh>
 
       {/* Grid Floor Lines for 3D Depth */}
-      <gridHelper args={[16, 16, '#475569', '#334155']} position={[0, 0.005, 0]} />
+      <gridHelper
+        args={[16, 16, activeTheme === 'cyberpunk' ? '#0ea5e9' : '#475569', activeTheme === 'cyberpunk' ? '#0369a1' : '#334155']}
+        position={[0, 0.005, 0]}
+      />
 
       {/* 2. Room Back Wall with Baseboard */}
       <mesh position={[0, 2.8, -4.2]} receiveShadow>
@@ -238,6 +375,12 @@ function ProceduralRoom3D({ theme = 'nursery', sceneId = '' }: { theme?: string;
           <meshStandardMaterial color="#1e293b" />
         </mesh>
       </group>
+
+      {/* Volumetric Sunbeam / God Rays Streaming From Window */}
+      <VolumetricSunbeam3D color={sunbeamColor} />
+
+      {/* Floating Dust Motes Dancing in the Sunbeam */}
+      <DustMotes3D count={35} color={sunbeamColor} />
 
       {/* 4. THEMATIC PROCEDURAL FURNITURE & PROPS */}
       {isNursery && (
@@ -743,6 +886,29 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
     setMounted(true);
   }, []);
 
+  // Multi-Theme Lighting & Environment Synchronization
+  const [activeTheme, setActiveTheme] = useState<'obsidian' | 'sepia' | 'cyberpunk'>('obsidian');
+
+  useEffect(() => {
+    const detectTheme = () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'obsidian';
+      if (current === 'sepia' || current === 'cyberpunk' || current === 'obsidian') {
+        setActiveTheme(current as any);
+      }
+    };
+    detectTheme();
+    const observer = new MutationObserver(detectTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
+
+  // Theme-specific light colors
+  const keyLightColor = activeTheme === 'sepia' ? '#fed7aa' : activeTheme === 'cyberpunk' ? '#67e8f9' : '#fef3c7';
+  const fillLightColor = activeTheme === 'sepia' ? '#fed7aa' : activeTheme === 'cyberpunk' ? '#38bdf8' : '#cbd5e1';
+  const rimLightColor = activeTheme === 'sepia' ? '#fbbf24' : activeTheme === 'cyberpunk' ? '#c084fc' : '#fde68a';
+  const sunbeamColor = activeTheme === 'sepia' ? '#f59e0b' : activeTheme === 'cyberpunk' ? '#38bdf8' : '#fef08a';
+  const ambientLightColor = activeTheme === 'sepia' ? '#fef3c7' : activeTheme === 'cyberpunk' ? '#1e293b' : '#f8fafc';
+
   // Fetch Current Scenario on Mount
   useEffect(() => {
     async function fetchScenario() {
@@ -1008,21 +1174,38 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
           className="w-full h-full cursor-crosshair"
           gl={{ antialias: true, alpha: false }}
         >
-          {/* Lighting Rig */}
-          <ambientLight intensity={0.7} color="#fffbeb" />
+          {/* Lighting Rig: 3-Point Studio Architecture */}
+          <ambientLight intensity={0.55} color={ambientLightColor} />
+          {/* 1. Key Light: Sunbeam streaming from window [0, 3.2, -3.95] */}
           <directionalLight
-            position={[5, 8, 4]}
-            intensity={1.3}
+            position={[2.5, 6.5, -4.5]}
+            intensity={2.2}
             castShadow
             shadow-mapSize={[1024, 1024]}
-            color="#ffffff"
+            shadow-bias={-0.0005}
+            color={keyLightColor}
           />
-          <pointLight position={[0, 3.5, 0]} intensity={0.9} color="#e0e7ff" distance={10} />
+          {/* 2. Fill Light: Soft bounce light from opposite room angle */}
+          <directionalLight
+            position={[-4.5, 3.5, 4.5]}
+            intensity={0.6}
+            color={fillLightColor}
+          />
+          {/* 3. Rim Light: Highlights character silhouette separation from background */}
+          <pointLight
+            position={[0, 2.2, -1.8]}
+            intensity={1.2}
+            color={rimLightColor}
+            distance={6}
+            decay={2}
+          />
 
-          {/* Procedural 3D Environment Room */}
+          {/* Procedural 3D Environment Room with Specular Floor & God Rays */}
           <ProceduralRoom3D
             theme={currentScene.background_theme}
             sceneId={currentSceneId}
+            activeTheme={activeTheme}
+            sunbeamColor={sunbeamColor}
           />
 
           {/* Clickable 3D Invisible Raycast Floor */}
