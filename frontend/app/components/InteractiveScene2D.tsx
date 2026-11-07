@@ -1142,7 +1142,7 @@ function HotspotBeacon3D({
 // =========================================================================
 // MAIN INTERACTIVE SCENE COMPONENT (Unified 3D Stage & Story HUD)
 // =========================================================================
-export default function InteractiveScene2D({ onScenarioResolved, character, onBackToCockpit }: InteractiveScene2DProps) {
+export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, character, onBackToCockpit }: InteractiveScene2DProps) {
   const [mounted, setMounted] = useState(false);
   const [scenario, setScenario] = useState<ScenarioData | null>(null);
   const [currentSceneId, setCurrentSceneId] = useState<string>("scene_nursery");
@@ -1472,16 +1472,30 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
         <Sparkles className="w-8 h-8 text-amber-400 animate-pulse" />
         <h3 className="text-base font-bold text-white">Không Gian Trầm Tư Đang Sẵn Sàng</h3>
         <p className="text-xs text-slate-400 max-w-md">
-          Chưa có ngã rẽ nào đang diễn ra ở thời điểm hiện tại. Hãy quay lại Bàn Điều Hành Cockpit để tiếp tục trải nghiệm!
+          Chưa có biến cố lớn nào đòi hỏi đấu trí ở tuổi này. Bạn có thể chốt năm để bước sang tuổi mới hoặc quay lại Cockpit để trải nghiệm các hoạt động thường niên!
         </p>
-        {onBackToCockpit && (
-          <button
-            onClick={onBackToCockpit}
-            className="px-4 py-2 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow-lg"
-          >
-            ⬅ Trở Về Cockpit Sinh Tồn
-          </button>
-        )}
+        <div className="flex items-center gap-3 justify-center flex-wrap pt-2">
+          {onAdvanceYear && (
+            <button
+              onClick={() => {
+                if (onAdvanceYear) onAdvanceYear();
+                if (onBackToCockpit) onBackToCockpit();
+              }}
+              className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 text-xs font-black uppercase tracking-wider transition shadow-lg active:scale-95 flex items-center gap-1.5"
+            >
+              <span>✨ Chốt Năm & Bước Sang Tuổi Mới (+1 Tuổi)</span>
+              <span>→</span>
+            </button>
+          )}
+          {onBackToCockpit && (
+            <button
+              onClick={onBackToCockpit}
+              className="px-4 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition shadow-md"
+            >
+              ⬅ Trở Về Cockpit Sinh Tồn
+            </button>
+          )}
+        </div>
       </div>
     );
   }
@@ -1871,11 +1885,13 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
                   onClick={() => {
                     setRollResult(null);
                     setSelectedChoiceId(null);
+                    if (onAdvanceYear) onAdvanceYear();
                     if (onBackToCockpit) onBackToCockpit();
                   }}
-                  className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg"
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-1.5 active:scale-95"
                 >
-                  Tiếp Tục Hành Trình
+                  <span>✨ Chốt Năm & Bước Sang Tuổi Mới (+1 Tuổi)</span>
+                  <span>→</span>
                 </button>
               </div>
             </div>

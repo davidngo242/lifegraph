@@ -2099,19 +2099,30 @@ export default function LifeGraphPage() {
                       </p>
                     </div>
 
-                    <div className="flex sm:flex-col items-center sm:items-end gap-1.5 shrink-0">
-                      <button
-                        onClick={() => setActiveView('decision')}
-                        className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 transition active:scale-95 group"
-                        title="Bước vào Phòng Quyết Định 3D (Phím tắt: D)"
-                      >
-                        <Clapperboard className="w-4 h-4 text-slate-950" />
-                        <span>Bước Vào Phòng Quyết Định 3D</span>
-                        <kbd className="font-mono text-[10px] bg-black/20 text-slate-950 px-1.5 py-0.5 rounded font-bold">D</kbd>
-                        <span className="group-hover:translate-x-1 transition-transform">→</span>
-                      </button>
+                    <div className="flex sm:flex-col items-center sm:items-end gap-2 shrink-0">
+                      <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap w-full sm:w-auto">
+                        <button
+                          onClick={() => submitInteraction({ advance_only: true })}
+                          className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 font-bold text-xs uppercase tracking-wider border border-amber-500/50 flex items-center justify-center gap-1.5 transition active:scale-95 shadow"
+                          title="Chốt năm trực tiếp, AP dư tự chuyển hóa thành Dưỡng Sinh HP & giảm Burnout (Phím tắt: Space)"
+                        >
+                          <span>⏩ Chốt Năm (+1 Tuổi)</span>
+                          <kbd className="font-mono text-[10px] bg-black/40 text-amber-300 px-1 py-0.5 rounded font-bold">Space</kbd>
+                        </button>
+
+                        <button
+                          onClick={() => setActiveView('decision')}
+                          className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 transition active:scale-95 group"
+                          title="Bước vào Phòng Quyết Định 3D (Phím tắt: D)"
+                        >
+                          <Clapperboard className="w-4 h-4 text-slate-950" />
+                          <span>Phòng Quyết Định 3D</span>
+                          <kbd className="font-mono text-[10px] bg-black/20 text-slate-950 px-1.5 py-0.5 rounded font-bold">D</kbd>
+                          <span className="group-hover:translate-x-1 transition-transform">→</span>
+                        </button>
+                      </div>
                       <span className="text-[10px] font-mono text-slate-400 hidden sm:inline">
-                        {(character?.action_points || 0) > 0 ? "Khuyên dùng hết AP trước khi vào" : "Sẵn sàng mở khóa tuổi mới"}
+                        {(character?.action_points || 0) > 0 ? "AP chưa dùng sẽ tự chuyển thành Dưỡng Sinh (+2 HP / -5% Stress)" : "Đã sẵn sàng mở khóa tuổi mới"}
                       </span>
                     </div>
                   </div>

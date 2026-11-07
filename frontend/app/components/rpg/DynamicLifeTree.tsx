@@ -568,13 +568,13 @@ export default function DynamicLifeTree({
           )}
 
           {onTimeSkip && (
-            <Tooltip content="Bỏ qua các hành động còn lại, tích trữ AP sang hồi phục sinh lực và bước sang tuổi kế tiếp (+1 tuổi).">
+            <Tooltip content="Chốt năm trực tiếp, tích trữ AP dư chuyển sang Dưỡng Sinh (+2 HP / -5% Stress) và bước sang tuổi kế tiếp (+1 tuổi).">
               <button
                 onClick={onTimeSkip}
                 disabled={isLoading}
-                className="px-2.5 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-[11px] border border-slate-700 transition active:scale-95"
+                className="px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 font-bold text-xs border border-amber-500/40 transition active:scale-95 shadow-sm flex items-center gap-1"
               >
-                <span>+1 Tuổi</span>
+                <span>⏩ Qua Năm (+1t)</span>
               </button>
             </Tooltip>
           )}
