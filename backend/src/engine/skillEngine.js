@@ -8,7 +8,7 @@ export const SKILL_DEFINITIONS = {
     description: "Kỹ năng tư duy giải thuật, lập trình hệ thống, tự động hóa và công nghệ cao.",
     icon: "💻",
     default_minigame: "logic_circuit_6yo",
-    compatible_traits: ["thiên_tài_toán_học", "bộ_não_kỹ_thuật", "trí_nhớ_siêu_phàm", "tư_duy_chiến_lược"],
+    compatible_traits: ["thiên_tài_toán_học", "bộ_não_kỹ_thuật", "trí_nhớ_siêu_phàm", "tư_duy_chiến_lược", "code_whisperer", "math_prodigy", "photographic_memory"],
     levels: [
       {
         level: 1,
@@ -42,7 +42,7 @@ export const SKILL_DEFINITIONS = {
     description: "Kỹ năng đọc biểu đồ thị trường, định giá tài sản, lướt sóng và quản trị danh mục vốn.",
     icon: "📈",
     default_minigame: "stock_trader_20yo",
-    compatible_traits: ["trực_giác_kinh_doanh", "mắt_nhìn_xuyên_thị_trường", "tư_duy_chiến_lược"],
+    compatible_traits: ["trực_giác_kinh_doanh", "mắt_nhìn_xuyên_thị_trường", "tư_duy_chiến_lược", "market_intuition", "negotiation_shark", "culinary_artist"],
     levels: [
       {
         level: 1,
@@ -76,7 +76,7 @@ export const SKILL_DEFINITIONS = {
     description: "Năng lực kiểm soát thân tâm, dưỡng sinh trường thọ, điều hòa nhịp tim và hóa giải stress.",
     icon: "🧘",
     default_minigame: "cardio_beat_55yo",
-    compatible_traits: ["cốt_cách_trường_thọ", "gen_trường_thọ_bách_niên", "khỏe_mạnh_vô_song", "phục_hồi_thần_tốc", "thể_chất_vận_động_viên", "tâm_lý_thép"],
+    compatible_traits: ["cốt_cách_trường_thọ", "gen_trường_thọ_bách_niên", "khỏe_mạnh_vô_song", "phục_hồi_thần_tốc", "thể_chất_vận_động_viên", "tâm_lý_thép", "iron_constitution", "resilient_spirit", "stoic_zen", "longevity_ancestry"],
     levels: [
       {
         level: 1,
@@ -110,7 +110,7 @@ export const SKILL_DEFINITIONS = {
     description: "Nghệ thuật đàm phán thương trường, xây dựng mạng lưới quan hệ đỉnh cao và hòa giải gia tộc.",
     icon: "🤝",
     default_minigame: "negotiation_duel",
-    compatible_traits: ["phong_thái_lãnh_đạo", "thấu_cảm_xã_hội", "ngoại_hình_xuất_chúng", "giọng_nói_truyền_cảm"],
+    compatible_traits: ["phong_thái_lãnh_đạo", "thấu_cảm_xã_hội", "ngoại_hình_xuất_chúng", "giọng_nói_truyền_cảm", "charismatic_orator", "polyglot_tongue", "empathic_healer", "negotiation_shark"],
     levels: [
       {
         level: 1,

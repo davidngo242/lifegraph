@@ -90,8 +90,10 @@ export const COUNTRY_BIGDATA = {
       "Hà Nội (Quận Ba Đình)",
       "TP. Hồ Chí Minh (Quận 1)",
       "Đà Nẵng (Quận Hải Châu)",
+      "Hải Phòng (Quận Hồng Bàng)",
       "Cần Thơ (Quận Ninh Kiều)",
-      "Hải Phòng (Quận Hồng Bàng)"
+      "Nha Trang (Đường Trần Phú Ven Biển)",
+      "Huế (Khu Cố Đô Vỹ Dạ)"
     ],
     name_order: "eastern", // Surname + Given
     surnames: [
@@ -110,34 +112,34 @@ export const COUNTRY_BIGDATA = {
     ],
     family_jobs: {
       poor: {
-        father: "Công nhân xưởng máy / Buôn bán nhỏ",
-        mother: "Lao động tự do / Nội trợ gia đình",
-        vibe: "Gia đình đầm ấm nhưng chật vật mưu sinh."
+        father: "Ngư dân bám biển miền Trung / Thợ cơ khí xưởng máy / Tài xế xe ôm công nghệ",
+        mother: "Buôn gánh bán bưng chợ nổi miền Tây / Công nhân may xuất khẩu / Nội trợ đảm đang",
+        vibe: "Gia đình cần lao chất phác, đùm bọc qua muôn vàn gian khó mưu sinh."
       },
       middle: {
-        father: "Kỹ sư / Giáo chức / Công chức nhà nước",
-        mother: "Kế toán trưởng / Bác sĩ đa khoa",
-        vibe: "Gia đình trí thức nề nếp, coi trọng giáo dục và đạo đức."
+        father: "Kỹ sư cầu đường / Giáo viên THPT chuyên / Chuyên viên công nghệ Đà Nẵng",
+        mother: "Dược sĩ nhà thuốc tư nhân / Bác sĩ đa khoa bệnh viện tỉnh / Kế toán trưởng",
+        vibe: "Gia đình trí thức nề nếp gia phong, coi trọng hiếu đạo và học vấn đèn sách."
       },
       rich: {
-        father: "Chủ tịch tập đoàn tài chính tư nhân",
-        mother: "Nhà đầu tư bất động sản / Phu nhân",
-        vibe: "Hào môn danh gia vọng tộc, kỳ vọng khắt khe vào thế hệ kế nghiệp."
+        father: "Chủ tịch tập đoàn địa ốc & chuỗi khu nghỉ dưỡng / Doanh nhân xuất khẩu nông sản Tây Nguyên",
+        mother: "Nhà đầu tư bất động sản / Chủ chuỗi thẩm mỹ viện cao cấp / Phu nhân hào môn",
+        vibe: "Hào môn danh gia vọng tộc trải khắp ba miền, sở hữu cơ nghiệp đồn điền và bất động sản nghìn tỷ."
       }
     },
     housing: {
-      slum: { name: "Phòng trọ / Mái ấm bình dân", tier: 1 },
-      middle: { name: "Nhà phố gia đình trung tâm", tier: 3 },
-      rich: { name: "Dinh thự hào môn tư gia", tier: 5 }
+      slum: { name: "Phòng trọ / Mái ấm bình dân ven kênh", tier: 1 },
+      middle: { name: "Nhà phố gia đình trung tâm thành thị", tier: 3 },
+      rich: { name: "Biệt thự dinh thự hào môn ven sông", tier: 5 }
     },
     assets: {
       m1_savings: "Tiền Gửi Tiết Kiệm Vietcombank / BIDV Kỳ Hạn 1 Năm",
       m2_gold: "Vàng Miếng SJC 9999 Bảo An Quốc Gia",
       m3_index_etf: "Chứng Chỉ Quỹ Chỉ Số VN30 Index ETF",
       g1_tech_stocks: "Cổ Phiếu Công Nghệ Viễn Thông FPT / Viettel Post",
-      g2_franchise_cafe: "Nhượng Quyền Chuỗi Highlands Coffee / The Coffee House",
-      g3_suburban_land: "Đất Nền Ven Đô Đón Sóng Quy Hoạch Vành Đai 4",
-      p1_rental_condo: "Căn Hộ Chung Cư Cao Cấp Vinhomes Metropolis",
+      g2_franchise_cafe: "Nhượng Quyền Chuỗi Cà Phê Muối & Trà Sữa Đô Thị",
+      g3_suburban_land: "Đất Vườn Sầu Riêng Xuất Khẩu Đắk Lắk Tây Nguyên",
+      p1_rental_condo: "Căn Hộ Nghỉ Dưỡng Biển Mỹ Khê Đà Nẵng / Nha Trang",
       p2_shophouse: "Nhà Phố Mặt Tiền Shophouse Khu Đô Thị Mới Thủ Thiêm",
       p3_pharmacy_chain: "Chuỗi Nhà Thuốc Bán Lẻ Dược Phẩm Long Châu",
       l1_office_tower: "Tòa Cao Ốc Văn Phòng Hạng A Landmark 81",
@@ -656,6 +658,76 @@ export const COUNTRY_BIGDATA = {
       d1_hotel_5star: "Khách Sạn Cung Điện Huyền Thoại Copacabana Palace Rio",
       d2_sovereign_debt: "Trái Phiếu Kho Bạc Quốc Gia Brazil (Tesouro Direto)",
       d3_family_trust: "Quỹ Tín Thác Gia Tộc Đồn Điền Nông Nghiệp Xuyên Đại Dương"
+    }
+  },
+
+  "syria": {
+    id: "T3_Syria",
+    name: "Syria",
+    aliases: ["syria", "syr", "syrian", "cộng hòa ả rập syria"],
+    flag: "🇸🇾",
+    tier: "T3",
+    safety: 20,
+    economic_score: 15,
+    currency: { code: "SYP", symbol: "£S", rate_to_usd: 13000, name: "Bảng Syria (SYP)" },
+    cities: [
+      "Damascus (Khu phố cổ Bab Touma)",
+      "Damascus (Quận Al-Mezzeh)",
+      "Aleppo (Khu thành cổ Al-Madina)",
+      "Aleppo (Quận Al-Jamiliyah)",
+      "Homs (Quận Al-Zahra)"
+    ],
+    name_order: "western", // Given + Surname
+    surnames: [
+      "Al-Assad", "Kabbani", "Al-Shami", "Haddad", "Al-Khatib", "Barakat",
+      "Al-Halabi", "Makhlouf", "Al-Attar", "Tlass", "Al-Masri", "Najjar"
+    ],
+    male_given_names: [
+      "Youssef", "Omar", "Ahmad", "Tarek", "Kareem", "Zaid",
+      "Sami", "Khaled", "Bashir", "Fadi", "Nizar", "Rami"
+    ],
+    female_given_names: [
+      "Nour", "Layla", "Fatima", "Maryam", "Yasmin", "Rania",
+      "Aya", "Salma", "Hala", "Reem", "Dina", "Hiba"
+    ],
+    family_jobs: {
+      poor: {
+        father: "Thợ thủ công gốm sứ & xà phòng dầu ô liu Aleppo",
+        mother: "Dệt may thảm truyền thống Damascus / Nội trợ mưu sinh",
+        vibe: "Gia đình kiên cường trong vùng tàn tích chiến sự, gìn giữ nghề cổ truyền muôn đời."
+      },
+      middle: {
+        father: "Bác sĩ ngoại khoa bệnh viện Damascus / Kỹ sư xây dựng tái thiết",
+        mother: "Giảng viên Ngôn ngữ Ả Rập Đại học Damascus",
+        vibe: "Gia đình trí thức tôn kính cội nguồn văn hóa Levant, kiên trì bám trụ quê hương."
+      },
+      rich: {
+        father: "Thương gia dầu mỏ & xuất khẩu nông sản Levantine / Chủ tịch tập đoàn tái thiết",
+        mother: "Nhà sưu tầm cổ vật Damascus / Nhà hảo tâm tái thiết trường học",
+        vibe: "Hào môn danh gia sở hữu các dinh thự cổ và mạng lưới giao thương Trung Đông."
+      }
+    },
+    housing: {
+      slum: { name: "Nhà gạch tạm cư quận Đông Aleppo", tier: 1 },
+      middle: { name: "Căn hộ đá vôi cổ kính quận Bab Touma, Damascus", tier: 3 },
+      rich: { name: "Dinh thự cổ Levantine sân vườn đài phun nước Damascus", tier: 5 }
+    },
+    assets: {
+      m1_savings: "Tiền Gửi Tiết Kiệm Ngân Hàng Trung Ương Syria (CBS)",
+      m2_gold: "Vàng Thỏi Trú Ẩn Chợ Vàng Al-Buzuriyah Damascus",
+      m3_index_etf: "Chứng Chỉ Quỹ Thị Trường Chứng Khoán Damascus (DSE)",
+      g1_tech_stocks: "Cổ Phần Công Ty Viễn Thông Syriatel / MTN Syria",
+      g2_franchise_cafe: "Chuỗi Quán Trà & Cà Phê Bạch Đậu Khấu Phố Cổ Damascus",
+      g3_suburban_land: "Đồn Điền Ô Liu & Cây Ăn Quả Thung Lũng Al-Ghab",
+      p1_rental_condo: "Căn Hộ Cho Thuê Trung Tâm Damascus Al-Mezzeh",
+      p2_shophouse: "Nhà Phố Thương Mại Chợ Souq Al-Hamidiyah",
+      p3_pharmacy_chain: "Chuỗi Dược Phẩm & Xà Phòng Thảo Dược Hào Môn Aleppo",
+      l1_office_tower: "Tòa Nhà Văn Phòng Thương Mại & Tái Thiết Homs",
+      l2_beach_resort: "Khu Nghỉ Dưỡng Ven Biển Địa Trung Hải Latakia",
+      l3_pre_ipo_startup: "Cổ Phần Công Ty Vận Tải & Hậu Cần Xuyên Levant",
+      d1_hotel_5star: "Khách Sạn Cổ Kính Hoàng Gia 5 Sao Damascus",
+      d2_sovereign_debt: "Trái Phiếu Tái Thiết Cơ Sở Hạ Tầng Quốc Gia Syria",
+      d3_family_trust: "Quỹ Tín Thác Gia Tộc & Đồn Điền Ô Liu Ngàn Năm Tuổi"
     }
   }
 };

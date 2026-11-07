@@ -1204,6 +1204,10 @@ router.post('/action/buy-asset', async (req, res) => {
     if (hasMarketSense) {
       discountRate = Math.min(0.40, discountRate + 0.10); // +10% discount from Mắt Thần Định Giá
     }
+    const hasNegotiationShark = (character.innate_traits || []).includes("negotiation_shark");
+    if (hasNegotiationShark) {
+      discountRate = Math.min(0.50, discountRate + 0.15); // +15% discount from Cá Mập Đàm Phán
+    }
     const finalCost = Math.round(rawCost * (1 - discountRate));
 
     if ((character.action_points || 0) < actualCostAp) {
@@ -2264,11 +2268,17 @@ router.post('/action/overtime', async (req, res) => {
     const negotiationMultiplier = hasNegotiation ? 1.35 : 1.0; // +35% thặng dư từ Kỹ Năng Đàm Phán Khắc Nghiệt
 
     const baseEarned = Math.round(1500 + (age * 120) + (Math.random() * 800));
-    const earnedCash = Math.round(baseEarned * techMultiplier * negotiationMultiplier);
+    const hasCodeWhisperer = (character.innate_traits || []).includes("code_whisperer");
+    const codeMultiplier = hasCodeWhisperer ? 1.35 : 1.0;
+    const earnedCash = Math.round(baseEarned * techMultiplier * negotiationMultiplier * codeMultiplier);
 
     const healthLevel = character.skills?.resilience_health?.level || 0;
     const burnoutReduction = healthLevel * 0.2; // 20% burnout reduction per level
-    const burnoutGained = Math.max(4, Math.round(12 * (1 - burnoutReduction)));
+    let burnoutGained = Math.max(4, Math.round(12 * (1 - burnoutReduction)));
+    const hasStoicZen = (character.innate_traits || []).includes("stoic_zen");
+    if (hasStoicZen) {
+      burnoutGained = Math.max(2, Math.round(burnoutGained * 0.5)); // Giảm 50% kiệt sức khi cày việc (Stoic Zen)
+    }
 
     character.action_points -= 1;
     character.cash = Number(character.cash) + earnedCash;

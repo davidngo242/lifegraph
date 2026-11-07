@@ -1,0 +1,574 @@
+{
+  "timestamp": "2026-11-07T05:40:54.110Z",
+  "runs": [
+    {
+      "id": 1,
+      "name": "Grace Taylor",
+      "gender": "female",
+      "country": "Hoa Kỳ",
+      "country_tier": "T1",
+      "starting_city": "New York (Manhattan)",
+      "innate_traits": [
+        "ngoại_hình_xuất_chúng",
+        "trí_nhớ_siêu_phàm"
+      ],
+      "years_lived": 76,
+      "max_vitality_recorded": 95,
+      "peak_burnout": 16,
+      "peak_cash": 384410,
+      "final_cash": 296075,
+      "final_net_worth": 296075,
+      "final_status": "deceased",
+      "death_cause": "Suy đa tạng sau một đợt cảm lạnh mùa đông",
+      "scenarios_triggered": [
+        "scenario_infancy_first_steps",
+        "scenario_school_first_decade",
+        "scenario_artisan_trial",
+        "scenario_career_crossroads_28",
+        "scenario_midlife_crossroads",
+        "scenario_legacy_golden_years"
+      ],
+      "ap_stats": {
+        "earned": 227,
+        "spent_actions": 66,
+        "invested_boosts": 2,
+        "converted_wellness": 158
+      },
+      "actions_taken": {
+        "overtime": 0,
+        "study": 50,
+        "wellness": 0,
+        "childhood": 16,
+        "gamble": 0,
+        "breakthrough": 0
+      },
+      "milestones": [
+        "[Tuổi 0] Kích hoạt Kịch bản: Vòng Tay Gia Đình: Những Bước Đi Đầu Đời (0 - 5 Tuổi)",
+        "[Tuổi 6] Kích hoạt Kịch bản: Ngã Rẽ Học Trò: Lớp Học & Bước Đầu Khôn Lớn",
+        "[Tuổi 18] Kích hoạt Kịch bản: Bí Quyết Men Gốm Cổ: Khảo Nghiệm Sư Phụ",
+        "[Tuổi 25] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 28: Giữ Nghề Hay Đổi Đời?",
+        "[Tuổi 36] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 42: Củng Cố Vị Thế Hay Tái Thiết Cuộc Sống?",
+        "[Tuổi 56] Kích hoạt Kịch bản: Hoàng Hôn Cuộc Đời: Trao Quyền Kế Nghiệp & Trọn Vẹn Di Sản"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Adam Woźniak",
+      "gender": "male",
+      "country": "Ba Lan",
+      "country_tier": "T2",
+      "starting_city": "Kraków (Khu phố Stare Miasto)",
+      "innate_traits": [
+        "chuyển_hóa_trao_đổi_chất_vàng",
+        "thấu_cảm_xã_hội",
+        "mắt_nhìn_xuyên_thị_trường"
+      ],
+      "years_lived": 73,
+      "max_vitality_recorded": 95,
+      "peak_burnout": 11,
+      "peak_cash": 381512,
+      "final_cash": 335285,
+      "final_net_worth": 335285,
+      "final_status": "deceased",
+      "death_cause": "Đột quỵ trong giấc ngủ yên bình",
+      "scenarios_triggered": [
+        "scenario_infancy_first_steps",
+        "scenario_school_first_decade",
+        "scenario_artisan_trial",
+        "scenario_career_crossroads_28",
+        "scenario_midlife_crossroads",
+        "scenario_legacy_golden_years"
+      ],
+      "ap_stats": {
+        "earned": 221,
+        "spent_actions": 16,
+        "invested_boosts": 0,
+        "converted_wellness": 203
+      },
+      "actions_taken": {
+        "overtime": 0,
+        "study": 0,
+        "wellness": 0,
+        "childhood": 16,
+        "gamble": 0,
+        "breakthrough": 0
+      },
+      "milestones": [
+        "[Tuổi 0] Kích hoạt Kịch bản: Vòng Tay Gia Đình: Những Bước Đi Đầu Đời (0 - 5 Tuổi)",
+        "[Tuổi 6] Kích hoạt Kịch bản: Ngã Rẽ Học Trò: Lớp Học & Bước Đầu Khôn Lớn",
+        "[Tuổi 18] Kích hoạt Kịch bản: Bí Quyết Men Gốm Cổ: Khảo Nghiệm Sư Phụ",
+        "[Tuổi 27] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 28: Giữ Nghề Hay Đổi Đời?",
+        "[Tuổi 36] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 42: Củng Cố Vị Thế Hay Tái Thiết Cuộc Sống?",
+        "[Tuổi 56] Kích hoạt Kịch bản: Hoàng Hôn Cuộc Đời: Trao Quyền Kế Nghiệp & Trọn Vẹn Di Sản"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Apinya Sukhumvit",
+      "gender": "female",
+      "country": "Thái Lan",
+      "country_tier": "T2",
+      "starting_city": "Bangkok (Quận Sukhumvit)",
+      "innate_traits": [
+        "giác_ngộ_tâm_linh_tiên_thiên",
+        "tâm_lý_thép",
+        "huyết_thống_trâm_anh"
+      ],
+      "years_lived": 81,
+      "max_vitality_recorded": 95,
+      "peak_burnout": 32,
+      "peak_cash": 191087,
+      "final_cash": 45910,
+      "final_net_worth": 45910,
+      "final_status": "deceased",
+      "death_cause": "Đột quỵ trong giấc ngủ yên bình",
+      "scenarios_triggered": [
+        "scenario_infancy_first_steps",
+        "scenario_school_first_decade",
+        "scenario_artisan_trial",
+        "scenario_career_crossroads_28",
+        "scenario_midlife_crossroads",
+        "scenario_legacy_golden_years"
+      ],
+      "ap_stats": {
+        "earned": 236,
+        "spent_actions": 16,
+        "invested_boosts": 0,
+        "converted_wellness": 218
+      },
+      "actions_taken": {
+        "overtime": 0,
+        "study": 0,
+        "wellness": 0,
+        "childhood": 16,
+        "gamble": 0,
+        "breakthrough": 0
+      },
+      "milestones": [
+        "[Tuổi 0] Kích hoạt Kịch bản: Vòng Tay Gia Đình: Những Bước Đi Đầu Đời (0 - 5 Tuổi)",
+        "[Tuổi 6] Kích hoạt Kịch bản: Ngã Rẽ Học Trò: Lớp Học & Bước Đầu Khôn Lớn",
+        "[Tuổi 18] Kích hoạt Kịch bản: Bí Quyết Men Gốm Cổ: Khảo Nghiệm Sư Phụ",
+        "[Tuổi 25] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 28: Giữ Nghề Hay Đổi Đời?",
+        "[Tuổi 36] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 42: Củng Cố Vị Thế Hay Tái Thiết Cuộc Sống?",
+        "[Tuổi 56] Kích hoạt Kịch bản: Hoàng Hôn Cuộc Đời: Trao Quyền Kế Nghiệp & Trọn Vẹn Di Sản",
+        "[Tuổi 65] Rơi vào bẫy nợ: -$150016"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Natalia Kozłowski",
+      "gender": "female",
+      "country": "Ba Lan",
+      "country_tier": "T2",
+      "starting_city": "Warsaw (Quận Mokotów)",
+      "innate_traits": [
+        "thể_chất_vận_động_viên",
+        "phong_thái_lãnh_đạo"
+      ],
+      "years_lived": 78,
+      "max_vitality_recorded": 95,
+      "peak_burnout": 27,
+      "peak_cash": 177853,
+      "final_cash": 38075,
+      "final_net_worth": 38075,
+      "final_status": "deceased",
+      "death_cause": "Đột quỵ trong giấc ngủ yên bình",
+      "scenarios_triggered": [
+        "scenario_infancy_first_steps",
+        "scenario_school_first_decade",
+        "scenario_artisan_trial",
+        "scenario_career_crossroads_28",
+        "scenario_midlife_crossroads",
+        "scenario_legacy_golden_years"
+      ],
+      "ap_stats": {
+        "earned": 229,
+        "spent_actions": 16,
+        "invested_boosts": 0,
+        "converted_wellness": 211
+      },
+      "actions_taken": {
+        "overtime": 0,
+        "study": 0,
+        "wellness": 0,
+        "childhood": 16,
+        "gamble": 0,
+        "breakthrough": 0
+      },
+      "milestones": [
+        "[Tuổi 0] Kích hoạt Kịch bản: Vòng Tay Gia Đình: Những Bước Đi Đầu Đời (0 - 5 Tuổi)",
+        "[Tuổi 6] Kích hoạt Kịch bản: Ngã Rẽ Học Trò: Lớp Học & Bước Đầu Khôn Lớn",
+        "[Tuổi 18] Kích hoạt Kịch bản: Bí Quyết Men Gốm Cổ: Khảo Nghiệm Sư Phụ",
+        "[Tuổi 25] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 28: Giữ Nghề Hay Đổi Đời?",
+        "[Tuổi 37] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 42: Củng Cố Vị Thế Hay Tái Thiết Cuộc Sống?",
+        "[Tuổi 56] Kích hoạt Kịch bản: Hoàng Hôn Cuộc Đời: Trao Quyền Kế Nghiệp & Trọn Vẹn Di Sản",
+        "[Tuổi 66] Rơi vào bẫy nợ: -$61077"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Warunee Suwannarat",
+      "gender": "female",
+      "country": "Thái Lan",
+      "country_tier": "T2",
+      "starting_city": "Bangkok (Quận Sukhumvit)",
+      "innate_traits": [
+        "ý_chí_bất_khuất",
+        "giọng_nói_truyền_cảm"
+      ],
+      "years_lived": 70,
+      "max_vitality_recorded": 95,
+      "peak_burnout": 32,
+      "peak_cash": 148157,
+      "final_cash": 29800,
+      "final_net_worth": 29800,
+      "final_status": "deceased",
+      "death_cause": "Suy đa tạng sau một đợt cảm lạnh mùa đông",
+      "scenarios_triggered": [
+        "scenario_infancy_first_steps",
+        "scenario_school_first_decade",
+        "scenario_artisan_trial",
+        "scenario_career_crossroads_28",
+        "scenario_midlife_crossroads",
+        "scenario_legacy_golden_years"
+      ],
+      "ap_stats": {
+        "earned": 219,
+        "spent_actions": 16,
+        "invested_boosts": 0,
+        "converted_wellness": 201
+      },
+      "actions_taken": {
+        "overtime": 0,
+        "study": 0,
+        "wellness": 0,
+        "childhood": 16,
+        "gamble": 0,
+        "breakthrough": 0
+      },
+      "milestones": [
+        "[Tuổi 0] Kích hoạt Kịch bản: Vòng Tay Gia Đình: Những Bước Đi Đầu Đời (0 - 5 Tuổi)",
+        "[Tuổi 6] Kích hoạt Kịch bản: Ngã Rẽ Học Trò: Lớp Học & Bước Đầu Khôn Lớn",
+        "[Tuổi 18] Kích hoạt Kịch bản: Bí Quyết Men Gốm Cổ: Khảo Nghiệm Sư Phụ",
+        "[Tuổi 27] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 28: Giữ Nghề Hay Đổi Đời?",
+        "[Tuổi 37] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 42: Củng Cố Vị Thế Hay Tái Thiết Cuộc Sống?",
+        "[Tuổi 56] Kích hoạt Kịch bản: Hoàng Hôn Cuộc Đời: Trao Quyền Kế Nghiệp & Trọn Vẹn Di Sản",
+        "[Tuổi 65] Rơi vào bẫy nợ: -$214880"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Hồ Hoàng Nam",
+      "gender": "male",
+      "country": "Syria",
+      "country_tier": "T3",
+      "starting_city": "Aleppo (Quận Al-Jamiliyah)",
+      "innate_traits": [
+        "ngoại_hình_xuất_chúng",
+        "ý_chí_bất_khuất"
+      ],
+      "years_lived": 84,
+      "max_vitality_recorded": 95,
+      "peak_burnout": 11,
+      "peak_cash": 279518,
+      "final_cash": 246546,
+      "final_net_worth": 246546,
+      "final_status": "deceased",
+      "death_cause": "Đột quỵ trong giấc ngủ yên bình",
+      "scenarios_triggered": [
+        "scenario_infancy_first_steps",
+        "scenario_school_first_decade",
+        "scenario_artisan_trial",
+        "scenario_career_crossroads_28",
+        "scenario_midlife_crossroads",
+        "scenario_legacy_golden_years"
+      ],
+      "ap_stats": {
+        "earned": 236,
+        "spent_actions": 16,
+        "invested_boosts": 0,
+        "converted_wellness": 218
+      },
+      "actions_taken": {
+        "overtime": 0,
+        "study": 0,
+        "wellness": 0,
+        "childhood": 16,
+        "gamble": 0,
+        "breakthrough": 0
+      },
+      "milestones": [
+        "[Tuổi 0] Kích hoạt Kịch bản: Vòng Tay Gia Đình: Những Bước Đi Đầu Đời (0 - 5 Tuổi)",
+        "[Tuổi 6] Kích hoạt Kịch bản: Ngã Rẽ Học Trò: Lớp Học & Bước Đầu Khôn Lớn",
+        "[Tuổi 18] Kích hoạt Kịch bản: Bí Quyết Men Gốm Cổ: Khảo Nghiệm Sư Phụ",
+        "[Tuổi 25] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 28: Giữ Nghề Hay Đổi Đời?",
+        "[Tuổi 38] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 42: Củng Cố Vị Thế Hay Tái Thiết Cuộc Sống?",
+        "[Tuổi 56] Kích hoạt Kịch bản: Hoàng Hôn Cuộc Đời: Trao Quyền Kế Nghiệp & Trọn Vẹn Di Sản"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Samuel Morgan",
+      "gender": "male",
+      "country": "Hoa Kỳ",
+      "country_tier": "T1",
+      "starting_city": "San Francisco (Silicon Valley)",
+      "innate_traits": [
+        "bộ_não_kỹ_thuật",
+        "thể_chất_vận_động_viên"
+      ],
+      "years_lived": 83,
+      "max_vitality_recorded": 95,
+      "peak_burnout": 32,
+      "peak_cash": 194820,
+      "final_cash": 56670,
+      "final_net_worth": 56670,
+      "final_status": "deceased",
+      "death_cause": "Cơn đau thắt ngực cấp tính không kịp cấp cứu",
+      "scenarios_triggered": [
+        "scenario_infancy_first_steps",
+        "scenario_school_first_decade",
+        "scenario_artisan_trial",
+        "scenario_career_crossroads_28",
+        "scenario_midlife_crossroads",
+        "scenario_legacy_golden_years"
+      ],
+      "ap_stats": {
+        "earned": 242,
+        "spent_actions": 69,
+        "invested_boosts": 0,
+        "converted_wellness": 224
+      },
+      "actions_taken": {
+        "overtime": 0,
+        "study": 0,
+        "wellness": 53,
+        "childhood": 16,
+        "gamble": 0,
+        "breakthrough": 0
+      },
+      "milestones": [
+        "[Tuổi 0] Kích hoạt Kịch bản: Vòng Tay Gia Đình: Những Bước Đi Đầu Đời (0 - 5 Tuổi)",
+        "[Tuổi 6] Kích hoạt Kịch bản: Ngã Rẽ Học Trò: Lớp Học & Bước Đầu Khôn Lớn",
+        "[Tuổi 18] Kích hoạt Kịch bản: Bí Quyết Men Gốm Cổ: Khảo Nghiệm Sư Phụ",
+        "[Tuổi 25] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 28: Giữ Nghề Hay Đổi Đời?",
+        "[Tuổi 31] Rơi vào bẫy nợ: -$14208",
+        "[Tuổi 36] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 42: Củng Cố Vị Thế Hay Tái Thiết Cuộc Sống?",
+        "[Tuổi 51] Rơi vào bẫy nợ: -$25895",
+        "[Tuổi 56] Rơi vào bẫy nợ: -$523",
+        "[Tuổi 56] Kích hoạt Kịch bản: Hoàng Hôn Cuộc Đời: Trao Quyền Kế Nghiệp & Trọn Vẹn Di Sản",
+        "[Tuổi 65] Rơi vào bẫy nợ: -$182008"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Ngô Thanh Trúc",
+      "gender": "female",
+      "country": "Việt Nam",
+      "country_tier": "T2",
+      "starting_city": "TP. Hồ Chí Minh (Quận 1)",
+      "innate_traits": [
+        "thiên_tài_toán_học",
+        "gen_ngủ_ngắn_sleepless"
+      ],
+      "years_lived": 71,
+      "max_vitality_recorded": 95,
+      "peak_burnout": 37,
+      "peak_cash": 174132,
+      "final_cash": 6300,
+      "final_net_worth": 6300,
+      "final_status": "deceased",
+      "death_cause": "Ngừng tuần hoàn tự nhiên do cạn kiệt sinh lực",
+      "scenarios_triggered": [
+        "scenario_infancy_first_steps",
+        "scenario_school_first_decade",
+        "scenario_artisan_trial",
+        "scenario_career_crossroads_28",
+        "scenario_midlife_crossroads",
+        "scenario_legacy_golden_years"
+      ],
+      "ap_stats": {
+        "earned": 223,
+        "spent_actions": 16,
+        "invested_boosts": 61,
+        "converted_wellness": 195
+      },
+      "actions_taken": {
+        "overtime": 0,
+        "study": 0,
+        "wellness": 0,
+        "childhood": 16,
+        "gamble": 0,
+        "breakthrough": 0
+      },
+      "milestones": [
+        "[Tuổi 0] Kích hoạt Kịch bản: Vòng Tay Gia Đình: Những Bước Đi Đầu Đời (0 - 5 Tuổi)",
+        "[Tuổi 6] Kích hoạt Kịch bản: Ngã Rẽ Học Trò: Lớp Học & Bước Đầu Khôn Lớn",
+        "[Tuổi 18] Kích hoạt Kịch bản: Bí Quyết Men Gốm Cổ: Khảo Nghiệm Sư Phụ",
+        "[Tuổi 25] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 28: Giữ Nghề Hay Đổi Đời?",
+        "[Tuổi 37] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 42: Củng Cố Vị Thế Hay Tái Thiết Cuộc Sống?",
+        "[Tuổi 51] Rơi vào bẫy nợ: -$46283",
+        "[Tuổi 56] Kích hoạt Kịch bản: Hoàng Hôn Cuộc Đời: Trao Quyền Kế Nghiệp & Trọn Vẹn Di Sản",
+        "[Tuổi 66] Rơi vào bẫy nợ: -$156196"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Ryota Yamamoto",
+      "gender": "male",
+      "country": "Nhật Bản",
+      "country_tier": "T1",
+      "starting_city": "Osaka (Quận Chuo)",
+      "innate_traits": [
+        "giác_ngộ_tâm_linh_tiên_thiên",
+        "tâm_hồn_nghệ_sĩ"
+      ],
+      "years_lived": 76,
+      "max_vitality_recorded": 95,
+      "peak_burnout": 36,
+      "peak_cash": 534192,
+      "final_cash": 491888,
+      "final_net_worth": 491888,
+      "final_status": "deceased",
+      "death_cause": "Suy tim do tuổi già và biến chứng mệt mỏi tích tụ",
+      "scenarios_triggered": [
+        "scenario_infancy_first_steps",
+        "scenario_school_first_decade",
+        "scenario_artisan_trial",
+        "scenario_career_crossroads_28",
+        "scenario_midlife_crossroads",
+        "scenario_legacy_golden_years"
+      ],
+      "ap_stats": {
+        "earned": 208,
+        "spent_actions": 64,
+        "invested_boosts": 0,
+        "converted_wellness": 144
+      },
+      "actions_taken": {
+        "overtime": 48,
+        "study": 0,
+        "wellness": 0,
+        "childhood": 16,
+        "gamble": 0,
+        "breakthrough": 0
+      },
+      "milestones": [
+        "[Tuổi 0] Kích hoạt Kịch bản: Vòng Tay Gia Đình: Những Bước Đi Đầu Đời (0 - 5 Tuổi)",
+        "[Tuổi 6] Kích hoạt Kịch bản: Ngã Rẽ Học Trò: Lớp Học & Bước Đầu Khôn Lớn",
+        "[Tuổi 18] Kích hoạt Kịch bản: Bí Quyết Men Gốm Cổ: Khảo Nghiệm Sư Phụ",
+        "[Tuổi 27] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 28: Giữ Nghề Hay Đổi Đời?",
+        "[Tuổi 37] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 42: Củng Cố Vị Thế Hay Tái Thiết Cuộc Sống?",
+        "[Tuổi 56] Kích hoạt Kịch bản: Hoàng Hôn Cuộc Đời: Trao Quyền Kế Nghiệp & Trọn Vẹn Di Sản"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Huỳnh Ánh Dương",
+      "gender": "female",
+      "country": "Syria",
+      "country_tier": "T3",
+      "starting_city": "Damascus (Khu phố cổ Bab Touma)",
+      "innate_traits": [
+        "tâm_hồn_nghệ_sĩ",
+        "gen_trường_thọ_bách_niên"
+      ],
+      "years_lived": 44,
+      "max_vitality_recorded": 115,
+      "peak_burnout": 11,
+      "peak_cash": 139932,
+      "final_cash": 126427,
+      "final_net_worth": 126427,
+      "final_status": "deceased",
+      "death_cause": "Chiến tranh & Bất ổn tại Aleppo",
+      "scenarios_triggered": [
+        "scenario_infancy_first_steps",
+        "scenario_school_first_decade",
+        "scenario_artisan_trial",
+        "scenario_career_crossroads_28",
+        "scenario_midlife_crossroads"
+      ],
+      "ap_stats": {
+        "earned": 163,
+        "spent_actions": 16,
+        "invested_boosts": 0,
+        "converted_wellness": 147
+      },
+      "actions_taken": {
+        "overtime": 0,
+        "study": 0,
+        "wellness": 0,
+        "childhood": 16,
+        "gamble": 0,
+        "breakthrough": 0
+      },
+      "milestones": [
+        "[Tuổi 0] Kích hoạt Kịch bản: Vòng Tay Gia Đình: Những Bước Đi Đầu Đời (0 - 5 Tuổi)",
+        "[Tuổi 6] Kích hoạt Kịch bản: Ngã Rẽ Học Trò: Lớp Học & Bước Đầu Khôn Lớn",
+        "[Tuổi 18] Kích hoạt Kịch bản: Bí Quyết Men Gốm Cổ: Khảo Nghiệm Sư Phụ",
+        "[Tuổi 25] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 28: Giữ Nghề Hay Đổi Đời?",
+        "[Tuổi 36] Kích hoạt Kịch bản: Ngã Rẽ Tuổi 42: Củng Cố Vị Thế Hay Tái Thiết Cuộc Sống?",
+        "[Tuổi 45] Chuyển giao thế hệ dòng tộc (Rebirth Lineage)"
+      ]
+    }
+  ],
+  "summary": {
+    "total_playthroughs": 10,
+    "total_years_simulated": 736,
+    "average_lifespan": 74,
+    "scenarios_encountered": {
+      "scenario_infancy_first_steps": 10,
+      "scenario_school_first_decade": 10,
+      "scenario_artisan_trial": 10,
+      "scenario_career_crossroads_28": 10,
+      "scenario_midlife_crossroads": 10,
+      "scenario_legacy_golden_years": 9
+    },
+    "ap_economy": {
+      "total_ap_generated": 2204,
+      "total_ap_invested_boosts": 63,
+      "total_ap_converted_wellness": 1919,
+      "total_ap_spent_actions": 311
+    },
+    "financials": {
+      "total_wealth_created_usd": 1672976,
+      "peak_net_worth_usd": 491888,
+      "wealthiest_character": "Ryota Yamamoto (Nhật Bản) - $491,888",
+      "debt_crises_count": 9
+    },
+    "mortality": {
+      "death_causes": {
+        "Suy đa tạng sau một đợt cảm lạnh mùa đông": 2,
+        "Đột quỵ trong giấc ngủ yên bình": 4,
+        "Cơn đau thắt ngực cấp tính không kịp cấp cứu": 1,
+        "Ngừng tuần hoàn tự nhiên do cạn kiệt sinh lực": 1,
+        "Suy tim do tuổi già và biến chứng mệt mỏi tích tụ": 1,
+        "Chiến tranh & Bất ổn tại Aleppo": 1
+      },
+      "reaper_roll_deaths": 9,
+      "burnout_collapse_deaths": 0,
+      "early_accidents": 1
+    },
+    "bigdata_eval": {
+      "country_tier_stats": {
+        "T1": {
+          "runs": 3,
+          "avg_lifespan": 78,
+          "avg_final_wealth": 281544
+        },
+        "T2": {
+          "runs": 5,
+          "avg_lifespan": 75,
+          "avg_final_wealth": 91074
+        },
+        "T3": {
+          "runs": 2,
+          "avg_lifespan": 64,
+          "avg_final_wealth": 186487
+        }
+      },
+      "currency_checks_pass": true,
+      "demographic_checks_pass": true
+    }
+  }
+}

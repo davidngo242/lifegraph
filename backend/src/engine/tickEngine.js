@@ -4,23 +4,30 @@ import { generatePassiveChildhoodEvent } from './rebirthEngine.js';
 // Calculate maximum vitality cap based on biological age
 // If Transhumanism surgery was successful, decay is frozen until transhuman_frozen_until_age
 // If transcendence_sage skill is unlocked, adds permanent +15 vitality cap bonus
-export function calculateMaxVitality(age, transhumanFrozenUntilAge = null, hasTranscendence = false) {
-  const transcendenceBonus = hasTranscendence ? 15 : 0;
+// If iron_constitution trait is present, slows biological decay after age 60 by 40%
+export function calculateMaxVitality(age, transhumanFrozenUntilAge = null, hasTranscendence = false, traits = []) {
+  const traitList = Array.isArray(traits) ? traits : [];
+  const hasIron = traitList.includes('iron_constitution');
+  const hasLongevityAncestry = traitList.includes('longevity_ancestry') || traitList.includes('gen_trường_thọ_bách_niên');
+  const transcendenceBonus = (hasTranscendence ? 15 : 0) + (hasLongevityAncestry ? 15 : 0);
   if (transhumanFrozenUntilAge && age <= transhumanFrozenUntilAge) {
     return 90 + transcendenceBonus; // Frozen from biological decay!
   }
+  const decayMod = hasIron ? 0.60 : 1.0;
   let baseMax = 100;
   if (age <= 40) baseMax = 100;
   else if (age <= 60) baseMax = Math.round(100 - (age - 40) * 1.25); // 40->100, 60->75
-  else if (age <= 80) baseMax = Math.round(75 - (age - 60) * 1.75);  // 60->75, 80->40
-  else baseMax = Math.max(15, Math.round(40 - (age - 80) * 1.2));    // 80->40, 100->16
+  else if (age <= 80) baseMax = Math.round(75 - (age - 60) * 1.75 * decayMod);  // 60->75, 80->40
+  else baseMax = Math.max(15, Math.round(40 - (age - 80) * 1.2 * decayMod));    // 80->40, 100->16
   return baseMax + transcendenceBonus;
 }
 
 // Biological Reaper Death Roll (Exponential mortality from age 70+)
-// If transcendence_sage is unlocked, grace period extended to 75+ and mortality risk halved
-export function evaluateReaperRoll(age, currentVitality, hasTranscendence = false) {
-  const thresholdAge = hasTranscendence ? 75 : 70;
+// If transcendence_sage or longevity_ancestry is unlocked, grace period extended to 75+ and mortality risk halved
+export function evaluateReaperRoll(age, currentVitality, hasTranscendence = false, traits = []) {
+  const traitList = Array.isArray(traits) ? traits : [];
+  const hasLongevityAncestry = traitList.includes('longevity_ancestry');
+  const thresholdAge = (hasTranscendence || hasLongevityAncestry) ? 75 : 70;
   if (age < thresholdAge) return { died: false };
 
   let deathProbability = 0;
@@ -43,8 +50,8 @@ export function evaluateReaperRoll(age, currentVitality, hasTranscendence = fals
     deathProbability += 0.20;
   }
 
-  // Transcendence Sage perk: Halves sudden death probability
-  if (hasTranscendence) {
+  // Transcendence Sage perk / Longevity trait: Halves sudden death probability
+  if (hasTranscendence || hasLongevityAncestry) {
     deathProbability *= 0.50;
   }
 
@@ -77,11 +84,12 @@ export async function processPassivePhase(character, assets, relationships) {
   const hasCapitalEngine = unlockedSkills.includes("capital_engine");
 
   // 1. Natural aging
+  const traits = Array.isArray(character.innate_traits) ? character.innate_traits : [];
   age += 1;
-  const maxVitality = calculateMaxVitality(age, character.transhuman_frozen_until_age, hasTranscendence);
+  const maxVitality = calculateMaxVitality(age, character.transhuman_frozen_until_age, hasTranscendence, traits);
 
-  // 2. Check Reaper Death Roll from age 70+
-  const reaperResult = evaluateReaperRoll(age, vitality, hasTranscendence);
+  // 2. Check Reaper Death Roll from age 70+ (or 75+ if longevity_ancestry / transcendence)
+  const reaperResult = evaluateReaperRoll(age, vitality, hasTranscendence, traits);
   if (reaperResult.died) {
     return {
       updatedCharacter: {
@@ -178,6 +186,32 @@ export async function processPassivePhase(character, assets, relationships) {
     const newValue = Math.max(0, Math.round(asset.current_value * (1 + macroRate)));
     await updateAsset(asset.id, { current_value: newValue });
     asset.current_value = newValue;
+  }
+
+  // Trait passive yields: green_thumb & market_intuition
+  if (traits.includes('green_thumb')) {
+    const agAssets = assets.filter(a => {
+      const name = (a.name || '').toLowerCase();
+      return name.includes('đồn điền') || name.includes('vườn') || name.includes('nông nghiệp') || name.includes('sinh thái');
+    });
+    if (agAssets.length > 0) {
+      const agBonus = agAssets.length * 800;
+      cash += agBonus;
+      totalAssetIncome += agBonus;
+    }
+  }
+
+  if (traits.includes('market_intuition')) {
+    const stockAssets = assets.filter(a => a.type === 'stocks' || a.type === 'stock' || (a.name || '').toLowerCase().includes('cổ phiếu'));
+    if (stockAssets.length > 0) {
+      const stockBonus = Math.round(stockAssets.reduce((sum, s) => sum + Number(s.current_value || 0), 0) * 0.05);
+      cash += stockBonus;
+      totalAssetIncome += stockBonus;
+    }
+  }
+
+  if (traits.includes('resilient_spirit')) {
+    burnout = Math.max(0, burnout - 4);
   }
 
   // 7. Family upkeep & affection + Child aging & unlocked AP

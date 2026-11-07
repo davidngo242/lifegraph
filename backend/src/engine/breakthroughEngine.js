@@ -151,7 +151,9 @@ export function executeBreakthroughAction(character) {
     character.hidden_flags = character.hidden_flags || [];
     if (!character.hidden_flags.includes(outcome.flag)) character.hidden_flags.push(outcome.flag);
   }
-  if (outcome.exp) awardLifeExp(character, outcome.exp, action.title);
+  const isMaverick = (character.innate_traits || []).includes('creative_maverick');
+  const expGain = outcome.exp ? (isMaverick ? outcome.exp * 2 : outcome.exp) : 0;
+  if (expGain > 0) awardLifeExp(character, expGain, action.title);
 
   const history = character.history_log || [];
   history.push({

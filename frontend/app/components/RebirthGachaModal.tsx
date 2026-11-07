@@ -32,16 +32,31 @@ interface RebirthGachaModalProps {
 
 const TRAIT_OPTIONS = [
   { id: "thiên_tài_toán_học", label: "Thiên tài toán học (+Tài chính & Logic đỉnh cao)" },
+  { id: "math_prodigy", label: "Thiên tài logic trừu tượng (Buff tài chính & công nghệ cao)" },
   { id: "gen_trường_thọ_bách_niên", label: "Gen trường thọ bách niên (+20 Max Sinh Lực & Chậm lão hóa)" },
+  { id: "longevity_ancestry", label: "Gia tộc trường thọ (Lùi mốc tử thần từ 70 lên 75 tuổi)" },
   { id: "trí_nhớ_siêu_phàm", label: "Trí nhớ siêu phàm (Học ngoại ngữ & chuyên môn x2 lần)" },
+  { id: "photographic_memory", label: "Ký ức chụp ảnh siêu đẳng (Học nhanh x2 & auto-pass thi cử)" },
   { id: "khỏe_mạnh_vô_song", label: "Khung xương kim cương (+15 Max HP & Dẻo dai)" },
+  { id: "iron_constitution", label: "Thể lực bất khuất (Giảm 40% suy thoái sau tuổi 60)" },
   { id: "tâm_lý_thép", label: "Tâm lý thép (-40% Burnout trước biến cố)" },
+  { id: "resilient_spirit", label: "Tâm thế bình thản vô ưu (Giảm 35% tích tụ Burnout)" },
+  { id: "stoic_zen", label: "Khắc kỷ tịnh tâm (Giảm 50% kiệt sức khi cày việc)" },
   { id: "trực_giác_kinh_doanh", label: "Trực giác kinh doanh (Bản năng ngửi thấy dòng tiền)" },
+  { id: "market_intuition", label: "Trực giác thị trường nhạy bén (+20% Lợi nhuận đầu tư)" },
+  { id: "negotiation_shark", label: "Cá mập đàm phán (-15% Giá khi mua tài sản lớn)" },
+  { id: "code_whisperer", label: "Lập trình viên thiên bẩm (+35% Thù lao công nghệ & AI)" },
+  { id: "charismatic_orator", label: "Hùng biện truyền cảm hứng (+35% Đàm phán & Nhân mạch)" },
+  { id: "polyglot_tongue", label: "Đa ngôn ngữ thần tốc (Lợi thế thương mại quốc tế)" },
+  { id: "green_thumb", label: "Bàn tay ươm mầm sinh thái (+30% Lợi tức nông nghiệp)" },
+  { id: "empathic_healer", label: "Trái tim thấu cảm (+25% Gắn kết & Hồi phục HP)" },
+  { id: "culinary_artist", label: "Nghệ nhân ẩm thực ngũ giác (Mở lối kinh doanh chuỗi F&B)" },
+  { id: "creative_maverick", label: "Tư duy đột phá không giới hạn (Nhân đôi EXP đột phá)" },
   { id: "tâm_hồn_nghệ_sĩ", label: "Tâm hồn nghệ sĩ (Sáng tạo & Thẩm mỹ tinh tế)" },
   { id: "phong_thái_lãnh_đạo", label: "Khí chất lãnh đạo (Uy quyền & Đàm phán lớn)" }
 ];
 
-const REEL_COUNTRIES = ["Việt Nam (T2)", "Nhật Bản (T1)", "Hoa Kỳ (T1)", "Ba Lan (T2)", "Đức (T1)", "Thái Lan (T2)", "Hàn Quốc (T1)"];
+const REEL_COUNTRIES = ["Việt Nam (T2)", "Nhật Bản (T1)", "Hoa Kỳ (T1)", "Ba Lan (T2)", "Syria (T3)", "Thái Lan (T2)", "Na Uy (T1)", "Thụy Sĩ (T1)", "Brazil (T2)", "Haiti (T3)"];
 const REEL_BACKGROUNDS = ["Tài Phiệt Hào Môn", "Gia Đình Trí Thức", "Trung Lưu Ổn Định", "Tiểu Thương Phố Thị", "Nhà Nông Cần Mẫn", "Mồ Côi Tình Thương"];
 const REEL_TRAITS = [
   "thiên_tài_toán_học",
@@ -53,7 +68,12 @@ const REEL_TRAITS = [
   "tâm_hồn_nghệ_sĩ",
   "phong_thái_lãnh_đạo",
   "mắt_nhìn_xuyên_thị_trường",
-  "gen_ngủ_ngắn_sleepless"
+  "gen_ngủ_ngắn_sleepless",
+  "math_prodigy",
+  "longevity_ancestry",
+  "iron_constitution",
+  "market_intuition",
+  "code_whisperer"
 ];
 
 export default function RebirthGachaModal({

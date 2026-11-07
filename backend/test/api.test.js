@@ -285,3 +285,66 @@ test('Debt restructuring relief (family_soft_loan, liquidate_personal_items) whe
   assert.equal(resLiquidate.data.character.cash, -300); // -1500 + 1200
   assert.equal(resLiquidate.data.character.burnout, 30);
 });
+
+test('Cycle 4: Genetics Big Data & Hereditary Traits Integration', async () => {
+  const { GENETICS_BIGDATA } = await import('../src/engine/rebirthEngine.js');
+  const { calculateMaxVitality, evaluateReaperRoll } = await import('../src/engine/tickEngine.js');
+  const { checkGeneticAffinity } = await import('../src/engine/skillEngine.js');
+
+  const traitIds = GENETICS_BIGDATA.map(g => g.id);
+  const requiredTraits = [
+    'math_prodigy', 'market_intuition', 'charismatic_orator', 'iron_constitution',
+    'culinary_artist', 'photographic_memory', 'resilient_spirit', 'code_whisperer',
+    'polyglot_tongue', 'green_thumb', 'empathic_healer', 'negotiation_shark',
+    'stoic_zen', 'creative_maverick', 'longevity_ancestry'
+  ];
+
+  for (const tid of requiredTraits) {
+    assert.ok(traitIds.includes(tid), `Expected trait ${tid} to be in GENETICS_BIGDATA`);
+  }
+
+  // 1. Check iron_constitution slows biological decay after 60
+  const standardVit80 = calculateMaxVitality(80, null, false, []);
+  const ironVit80 = calculateMaxVitality(80, null, false, ['iron_constitution']);
+  assert.ok(ironVit80 > standardVit80, `Expected iron_constitution to preserve more vitality at age 80 (${ironVit80} vs ${standardVit80})`);
+
+  // 2. Check longevity_ancestry extends reaper threshold to 75
+  const roll72Standard = evaluateReaperRoll(72, 80, false, []);
+  const roll72Ancestry = evaluateReaperRoll(72, 80, false, ['longevity_ancestry']);
+  assert.equal(roll72Ancestry.died, false, 'Expected longevity_ancestry to never trigger reaper before 75');
+
+  // 3. Check genetic affinity in skills
+  assert.equal(checkGeneticAffinity({ innate_traits: ['code_whisperer'] }, 'tech_logic'), true);
+  assert.equal(checkGeneticAffinity({ innate_traits: ['negotiation_shark'] }, 'finance_market'), true);
+  assert.equal(checkGeneticAffinity({ innate_traits: ['charismatic_orator'] }, 'leadership_social'), true);
+  assert.equal(checkGeneticAffinity({ innate_traits: ['stoic_zen'] }, 'resilience_health'), true);
+});
+
+test('Cycle 5: Country Big Data: Syria & Expanded Vietnam', async () => {
+  const { getCountryBigData, generateCulturallyAuthenticName } = await import('../src/data/countryBigData.js');
+
+  // 1. Syria Big Data
+  const syria = getCountryBigData('Syria');
+  assert.equal(syria.id, 'T3_Syria');
+  assert.equal(syria.tier, 'T3');
+  assert.equal(syria.currency.code, 'SYP');
+  assert.equal(syria.currency.symbol, '£S');
+  assert.ok(syria.cities.some(c => c.includes('Damascus')));
+  assert.ok(syria.cities.some(c => c.includes('Aleppo')));
+  assert.ok(syria.cities.some(c => c.includes('Homs')));
+  assert.ok(syria.assets.g3_suburban_land.includes('Ô Liu'));
+
+  const syrianName = generateCulturallyAuthenticName('Syria', 'character', 'male');
+  assert.ok(syrianName && syrianName.length > 3);
+
+  // 2. Vietnam Expanded Cities & Assets
+  const vietnam = getCountryBigData('Việt Nam');
+  assert.ok(vietnam.cities.some(c => c.includes('Đà Nẵng')));
+  assert.ok(vietnam.cities.some(c => c.includes('Hải Phòng')));
+  assert.ok(vietnam.cities.some(c => c.includes('Cần Thơ')));
+  assert.ok(vietnam.cities.some(c => c.includes('Nha Trang')));
+  assert.ok(vietnam.cities.some(c => c.includes('Huế')));
+  assert.ok(vietnam.assets.g2_franchise_cafe.includes('Cà Phê Muối'));
+  assert.ok(vietnam.assets.g3_suburban_land.includes('Sầu Riêng'));
+  assert.ok(vietnam.assets.p1_rental_condo.includes('Nghỉ Dưỡng Biển'));
+});

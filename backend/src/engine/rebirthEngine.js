@@ -10,13 +10,13 @@ const COUNTRIES = {
     { id: "T1_USA", name: "Hoa Kỳ", flag: "🇺🇸", safety: 75, economic_score: 92, cities: ["New York (Manhattan)", "San Francisco (Silicon Valley)", "Los Angeles (Beverly Hills)"] }
   ],
   T2: [
-    { id: "T2_Vietnam", name: "Việt Nam", flag: "🇻🇳", safety: 85, economic_score: 68, cities: ["Hà Nội (Quận Ba Đình)", "TP. Hồ Chí Minh (Quận 1)", "Đà Nẵng (Quận Hải Châu)"] },
+    { id: "T2_Vietnam", name: "Việt Nam", flag: "🇻🇳", safety: 85, economic_score: 68, cities: ["Hà Nội (Quận Ba Đình)", "TP. Hồ Chí Minh (Quận 1)", "Đà Nẵng (Quận Hải Châu)", "Hải Phòng (Quận Hồng Bàng)", "Cần Thơ (Quận Ninh Kiều)", "Nha Trang (Trần Phú)", "Huế (Cố Đô Vỹ Dạ)"] },
     { id: "T2_Thailand", name: "Thái Lan", flag: "🇹🇭", safety: 78, economic_score: 65, cities: ["Bangkok (Quận Sukhumvit)", "Chiang Mai (Nimman)"] },
     { id: "T2_Brazil", name: "Brazil", flag: "🇧🇷", safety: 60, economic_score: 62, cities: ["São Paulo (Paulista)", "Rio de Janeiro (Copacabana)"] },
     { id: "T2_Poland", name: "Ba Lan", flag: "🇵🇱", safety: 82, economic_score: 75, cities: ["Warsaw (Quận Mokotów)", "Kraków (Khu phố Stare Miasto)"] }
   ],
   T3: [
-    { id: "T3_Syria", name: "Syria", flag: "🇸🇾", safety: 20, economic_score: 15, cities: ["Damascus (Khu phố cổ Bab Touma)", "Aleppo (Quận Al-Jamiliyah)"] },
+    { id: "T3_Syria", name: "Syria", flag: "🇸🇾", safety: 20, economic_score: 15, cities: ["Damascus (Khu phố cổ Bab Touma)", "Damascus (Quận Al-Mezzeh)", "Aleppo (Khu thành cổ Al-Madina)", "Aleppo (Quận Al-Jamiliyah)", "Homs (Quận Al-Zahra)"] },
     { id: "T3_Haiti", name: "Haiti", flag: "🇭🇹", safety: 25, economic_score: 18, cities: ["Port-au-Prince (Pétion-Ville)"] },
     { id: "T3_Somalia", name: "Somalia", flag: "🇸🇴", safety: 18, economic_score: 12, cities: ["Mogadishu (Waberi)"] }
   ]
@@ -310,6 +310,128 @@ export const GENETICS_BIGDATA = [
     category: "rare",
     rarity: "rare",
     effects: { prestige_boost: true }
+  },
+
+  // 7. Mở Rộng BigData Bộ Gen Mới (Cycle 4 New Genetics Big Data)
+  {
+    id: "math_prodigy",
+    name: "Thiên tài toán học & logic trừu tượng",
+    desc: "Tư duy giải thuật và đại số bậc thầy, buff tỷ lệ thành công ngành tài chính và công nghệ",
+    category: "intellect",
+    rarity: "rare",
+    effects: { math_prodigy: true, study_bonus: 0.35, tech_boost: 0.25 }
+  },
+  {
+    id: "market_intuition",
+    name: "Trực giác thị trường nhạy bén",
+    desc: "Dự cảm chuẩn xác dòng chảy tiền tệ, tăng 20% lợi nhuận đầu tư và lướt sóng",
+    category: "wealth",
+    rarity: "rare",
+    effects: { investment_boost: 0.20, market_intuition: true }
+  },
+  {
+    id: "charismatic_orator",
+    name: "Hùng biện truyền cảm hứng",
+    desc: "Khí chất hùng biện lôi cuốn, tăng mạnh điểm đàm phán và kết nối mạng lưới thượng lưu",
+    category: "social",
+    rarity: "rare",
+    effects: { charisma_bonus: 0.35, negotiation_boost: 0.30 }
+  },
+  {
+    id: "iron_constitution",
+    name: "Thể lực bất khuất",
+    desc: "Cơ địa tráng kiện phi thường, giảm 40% tốc độ suy thoái sinh học sau tuổi 60",
+    category: "physical",
+    rarity: "rare",
+    effects: { max_vitality_delta: 15, aging_decay_reduction: 0.40 }
+  },
+  {
+    id: "culinary_artist",
+    name: "Nghệ nhân ẩm thực ngũ giác",
+    desc: "Vị giác và khứu giác siêu phàm, mở lối kinh doanh thành công chuỗi ẩm thực và nhà hàng",
+    category: "creative",
+    rarity: "uncommon",
+    effects: { culinary_master: true, business_boost: 0.15 }
+  },
+  {
+    id: "photographic_memory",
+    name: "Ký ức chụp ảnh siêu đẳng",
+    desc: "Bộ não chụp ảnh trí nhớ quang học, tăng gấp đôi tốc độ tích lũy kỹ năng và thăng cấp bằng cấp",
+    category: "intellect",
+    rarity: "rare",
+    effects: { learning_speed: 2.0, exam_auto_pass_bonus: 0.20 }
+  },
+  {
+    id: "resilient_spirit",
+    name: "Tâm thế bình thản vô ưu",
+    desc: "Tâm trí kiên định như mặt nước hồ thu, giảm 35% tốc độ tích tụ căng thẳng Burnout",
+    category: "mental",
+    rarity: "rare",
+    effects: { burnout_resistance: 0.35 }
+  },
+  {
+    id: "code_whisperer",
+    name: "Lập trình viên thiên bẩm",
+    desc: "Đọc và viết mã lệnh như tiếng mẹ đẻ, thúc đẩy thăng tiến vượt bậc trong ngành AI và công nghệ",
+    category: "intellect",
+    rarity: "rare",
+    effects: { coding_master: true, tech_salary_mult: 1.35 }
+  },
+  {
+    id: "polyglot_tongue",
+    name: "Đa ngôn ngữ thần tốc",
+    desc: "Khả năng lĩnh hội ngôn ngữ ngoại quốc siêu tốc, tạo lợi thế lớn trong ngoại giao và thương mại quốc tế",
+    category: "social",
+    rarity: "uncommon",
+    effects: { foreign_diplomacy: true, global_trade_boost: 0.25 }
+  },
+  {
+    id: "green_thumb",
+    name: "Đôi bàn tay ươm mầm sinh thái",
+    desc: "Thấu hiểu thực vật và đất mẹ, gia tăng 30% lợi tức đồn điền nông nghiệp và bất động sản sinh thái",
+    category: "wealth",
+    rarity: "uncommon",
+    effects: { agriculture_yield_boost: 0.30 }
+  },
+  {
+    id: "empathic_healer",
+    name: "Trái tim thấu cảm chữa lành",
+    desc: "Hào quang ấm áp lan tỏa, tăng 25% hảo cảm người thân và hồi phục sinh lực nhanh hơn",
+    category: "social",
+    rarity: "uncommon",
+    effects: { family_affinity_boost: 0.25, healing_rate: 1.25 }
+  },
+  {
+    id: "negotiation_shark",
+    name: "Cá mập đàm phán thương trường",
+    desc: "Bản lĩnh đàm phán sắc bén, được chiết khấu thêm 15% khi thâu tóm tài sản lớn",
+    category: "wealth",
+    rarity: "rare",
+    effects: { asset_discount: 0.15 }
+  },
+  {
+    id: "stoic_zen",
+    name: "Khắc kỷ tịnh tâm",
+    desc: "Ý chí tĩnh lặng tuyệt đối, giảm 50% kiệt sức Burnout khi cày việc làm thêm giờ",
+    category: "mental",
+    rarity: "rare",
+    effects: { overtime_burnout_cut: 0.50 }
+  },
+  {
+    id: "creative_maverick",
+    name: "Tư duy đột phá không giới hạn",
+    desc: "Không đi theo lối mòn, nhân đôi điểm thành tựu khi thực hiện các hành động đột phá RPG",
+    category: "creative",
+    rarity: "legendary",
+    effects: { breakthrough_bonus: 2.0 }
+  },
+  {
+    id: "longevity_ancestry",
+    name: "Gia tộc trường thọ",
+    desc: "Bộ gen trường thọ di truyền nhiều thế hệ, lùi cột mốc bắt đầu tính Reaper Roll từ 70 lên 75 tuổi",
+    category: "physical",
+    rarity: "legendary",
+    effects: { reaper_delay_age: 75, max_vitality_delta: 20 }
   }
 ];
 
