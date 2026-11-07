@@ -75,7 +75,80 @@ export function getCurrentScenarioForCharacter(character) {
   const pinned = [...flags].find(f => typeof f === 'string' && f.startsWith('active_scenario:'))?.slice(16);
   eligible.sort((a, b) => Number(b.id === pinned) - Number(a.id === pinned) ||
     (b.priority ?? 0) - (a.priority ?? 0) || a.id.localeCompare(b.id));
-  return eligible.length ? personalizeScenario(eligible[0], character) : null;
+  if (eligible.length) {
+    return personalizeScenario(eligible[0], character);
+  }
+  if (character.active_dilemma && !character.active_dilemma.is_resolved) {
+    return adaptDilemmaToScenario(character.active_dilemma, character);
+  }
+  return null;
+}
+
+export function adaptDilemmaToScenario(dilemma, character) {
+  if (!dilemma) return null;
+  const age = Number(character?.age ?? 0);
+  const theme = age <= 5 ? 'nursery' : age <= 17 ? 'school' : age <= 35 ? 'office' : age <= 55 ? 'cafe' : 'artisan';
+  const sceneName = age <= 5 ? 'Căn phòng ấu thơ' : age <= 17 ? 'Lớp học & Sân trường' : age <= 35 ? 'Không gian công sở' : 'Phòng khách gia đình';
+
+  const hotspots = (dilemma.options || []).slice(0, 3).map((opt, idx) => {
+    const clueId = `clue_${opt.id}`;
+    return {
+      id: `hs_dilemma_${opt.id}`,
+      label: opt.action_title || opt.label || `Gợi ý ${idx + 1}`,
+      icon: idx === 0 ? 'star' : idx === 1 ? 'heart' : 'sparkles',
+      position_x: idx === 0 ? 250 : idx === 1 ? 500 : 750,
+      npc_role: idx === 0 ? 'manager' : idx === 1 ? 'friend' : 'parent',
+      dialogue: {
+        speaker: opt.action_title || opt.label,
+        text: opt.consequence_hint || opt.description || 'Một hướng đi với những thách thức và phần thưởng riêng biệt.',
+        granted_knowledge: clueId
+      }
+    };
+  });
+
+  return {
+    id: dilemma.id,
+    title: dilemma.title || 'Ngã Rẽ Vận Mệnh Thường Niên',
+    description: dilemma.narrative || dilemma.description || 'Đối mặt với ngã rẽ cuộc đời trong năm nay.',
+    location_id: 'decision_stage',
+    scenes: [{
+      id: `scene_${dilemma.id}`,
+      name: sceneName,
+      background_theme: theme,
+      hotspots
+    }],
+    mind_stage: {
+      whispers: {
+        rational: dilemma.internal_voices?.rational || "Hãy suy xét cẩn trọng về nguồn lực và tính toán bước đi tiếp theo.",
+        empathy: dilemma.internal_voices?.heart || "Lắng nghe trực giác và trân trọng cảm xúc của những người xung quanh.",
+        instinct: dilemma.internal_voices?.instinct || "Hành động dứt khoát, nắm bắt cơ hội trước khi thời cơ trôi qua.",
+        dilemma_prompt: dilemma.narrative || dilemma.description
+      }
+    },
+    choices: (dilemma.options || []).map((opt, idx) => ({
+      id: opt.id,
+      title: opt.action_title || opt.label,
+      stance: idx === 0 ? 'Lý trí' : idx === 1 ? 'Thích ứng' : 'Cân bằng',
+      description: opt.consequence_hint || opt.label,
+      cost_ap: opt.cost_ap || 0,
+      check: {
+        type: 'D20',
+        stat: opt.cost_ap > 0 ? 'VITALITY' : 'IQ',
+        target_dc: 10 + idx,
+        bonus_traits: []
+      },
+      outcomes: {
+        success: {
+          narration: `Bạn đã thực hiện quyết định: "${opt.action_title || opt.label}". ${opt.consequence_hint || ''}`,
+          effects: opt.effects || {}
+        },
+        failure: {
+          narration: `Dù gặp một vài trở ngại ban đầu, bạn vẫn kiên định với ngã rẽ: "${opt.action_title || opt.label}".`,
+          effects: opt.effects || {}
+        }
+      }
+    }))
+  };
 }
 
 export function getNextScenarioAge(character) {
@@ -265,6 +338,9 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
   const effects = outcome.effects ?? choice.effects ?? {};
 
   character.action_points = Math.max(0, (character.action_points ?? 0) - cost);
+  if (character.active_dilemma?.id === scenario.id) {
+    character.active_dilemma.is_resolved = true;
+  }
 
   if (effects.cash_delta !== undefined) {
     let cashChange = Number(effects.cash_delta);

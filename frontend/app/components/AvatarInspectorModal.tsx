@@ -3,13 +3,13 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
-import { X } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 
 const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full flex items-center justify-center bg-slate-950 rounded-2xl">
-      <div className="w-8 h-8 rounded-full border-2 border-indigo-500/40 border-t-indigo-400 animate-spin" />
+      <div className="w-7 h-7 rounded-full border-2 border-indigo-500/40 border-t-indigo-400 animate-spin" />
     </div>
   )
 });
@@ -34,6 +34,18 @@ export default function AvatarInspectorModal({
   const age = character.age ?? 0;
   const vitality = character.vitality ?? 80;
   const burnout = character.burnout ?? 0;
+  const traits = character.traits || character.innate_traits || [];
+  const netWorth = character.net_worth || 0;
+
+  const hasGlasses = age >= 4 && traits.some((t: string) =>
+    ['cận_thị_bẩm_sinh', 'code_whisperer', 'nerd', 'mọt_sách', 'thần_đồng_toán_học'].includes(t)
+  );
+  const hasHalo = (inspectorReaction || defaultReaction) === 'meditating' || traits.some((t: string) =>
+    ['giác_ngộ_tâm_linh_tiên_thiên', 'phúc_đức_vô_lượng'].includes(t)
+  );
+  const isWealthy = age >= 16 && (Number(netWorth) >= 500000 || traits.some((t: string) =>
+    ['crazy_rich', 'huyết_thống_trâm_anh', 'con_nhà_nòi'].includes(t)
+  ));
 
   return (
     <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in">
@@ -57,7 +69,7 @@ export default function AvatarInspectorModal({
               </span>
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
-              Xoay chuột để quan sát góc nhìn 360°, ánh sáng phản ứng theo chỉ số kiệt sức (Burnout: {burnout}%)
+              Kéo chuột để xoay 360°, di chuột để đầu nhân vật dõi theo con trỏ tự nhiên
             </p>
           </div>
         </div>
@@ -73,23 +85,44 @@ export default function AvatarInspectorModal({
             reaction={inspectorReaction || defaultReaction}
             isFastForwarding={false}
             showControls={true}
+            traits={traits}
+            netWorth={netWorth}
             className="w-full h-full"
           />
 
-          {/* Status Overlay */}
-          <div className="absolute top-3 left-3 flex flex-col gap-1 pointer-events-none">
-            <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-black/60 text-slate-300 border border-slate-700/60 backdrop-blur">
+          {/* Status & 3D Reactive Features Overlay */}
+          <div className="absolute top-3 left-3 flex flex-col gap-1.5 pointer-events-none">
+            <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-black/60 text-slate-300 border border-slate-700/60 backdrop-blur w-fit">
               Sắc tộc: {character.nationality}
             </span>
             <span
-              className={`text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full border backdrop-blur ${
+              className={`text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full border backdrop-blur w-fit ${
                 burnout > 75
                   ? 'bg-rose-950/80 text-rose-300 border-rose-600 animate-pulse'
                   : 'bg-black/60 text-emerald-300 border-emerald-700/60'
               }`}
             >
-              {burnout > 75 ? '⚠️ Mood: Cinematic Horror (Burnout > 75)' : '✨ Mood: Calm & Warm Light'}
+              {burnout > 75 ? '⚠️ Mood: Cinematic Horror (Burnout > 75)' : '✨ Mood: 3-Point Studio Lighting'}
             </span>
+            
+            {/* Visual 3D Trait Badges */}
+            <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+              {hasGlasses && (
+                <span className="text-[11px] px-2 py-0.5 rounded-full bg-indigo-950/80 text-indigo-300 border border-indigo-500/50 backdrop-blur">
+                  👓 Kính Tri Thức 3D
+                </span>
+              )}
+              {hasHalo && (
+                <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-950/80 text-amber-300 border border-amber-500/50 backdrop-blur">
+                  🪷 Kim Quang Hào Quang 3D
+                </span>
+              )}
+              {isWealthy && (
+                <span className="text-[11px] px-2 py-0.5 rounded-full bg-yellow-950/80 text-yellow-300 border border-yellow-500/50 backdrop-blur">
+                  💎 Trâm Quý Tộc / Tuxedo 3D
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -112,7 +145,7 @@ export default function AvatarInspectorModal({
                 >
                   {r === 'celebrate' && '🎉 Vui Mừng'}
                   {r === 'exhausted' && '😫 Kiệt Sức'}
-                  {r === 'meditating' && '🧘 Thiền Định'}
+                  {r === 'meditating' && '🧘 Thiền Định (Bật Hào Quang)'}
                   {r === 'shocked' && '😱 Kinh Ngạc'}
                   {r === 'negotiating' && '🤝 Thương Lượng'}
                   {r === 'idle' && '😌 Thở Tự Nhiên'}
@@ -125,4 +158,3 @@ export default function AvatarInspectorModal({
     </div>
   );
 }
-

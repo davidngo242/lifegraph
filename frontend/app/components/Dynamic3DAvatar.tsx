@@ -7,7 +7,7 @@ import * as THREE from 'three';
 
 export type AvatarReactionType = 'idle' | 'celebrate' | 'exhausted' | 'meditating' | 'shocked' | 'negotiating';
 
-interface Dynamic3DAvatarProps {
+export interface Dynamic3DAvatarProps {
   nationality?: string;
   gender?: 'male' | 'female' | string;
   age?: number;
@@ -17,6 +17,8 @@ interface Dynamic3DAvatarProps {
   isFastForwarding?: boolean;
   className?: string;
   showControls?: boolean;
+  traits?: string[];
+  netWorth?: number;
 }
 
 // Procedural Skin Tone Mapping based on Nationality
@@ -53,7 +55,9 @@ function ProceduralCharacterMesh({
   burnout = 0,
   vitality = 100,
   reaction = 'idle',
-  isFastForwarding = false
+  isFastForwarding = false,
+  traits = [],
+  netWorth = 0
 }: {
   nationality: string;
   gender?: 'male' | 'female' | string;
@@ -62,9 +66,12 @@ function ProceduralCharacterMesh({
   vitality: number;
   reaction: AvatarReactionType;
   isFastForwarding: boolean;
+  traits?: string[];
+  netWorth?: number;
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const headRef = useRef<THREE.Group>(null);
+  const haloRef = useRef<THREE.Group>(null);
   const leftEyeRef = useRef<THREE.Mesh>(null);
   const rightEyeRef = useRef<THREE.Mesh>(null);
   const mouthRef = useRef<THREE.Mesh>(null);
@@ -78,13 +85,36 @@ function ProceduralCharacterMesh({
   const numericAge = Number(age ?? 0);
   const isBaby = numericAge <= 3;
   const isChild = numericAge > 3 && numericAge < 12;
-  const isTeen = age >= 12 && age < 18;
-  const isElderly = age >= 65;
+  const isTeen = numericAge >= 12 && numericAge < 18;
+  const isElderly = numericAge >= 65;
 
   const headScale = isBaby ? 1.25 : isChild ? 1.12 : isTeen ? 1.05 : 1.0;
   const spineHunch = isElderly ? 0.18 : 0;
 
-  // Materials with physical reactivity to stats (Vitality, Burnout, Age)
+  // Trait Visual Logic
+  const traitList = useMemo(() => Array.isArray(traits) ? traits : [], [traits]);
+
+  const hasGlasses = useMemo(() => {
+    if (numericAge < 4) return false;
+    return traitList.some(t =>
+      ['cận_thị_bẩm_sinh', 'code_whisperer', 'nerd', 'mọt_sách', 'thần_đồng_toán_học'].includes(t)
+    );
+  }, [traitList, numericAge]);
+
+  const hasHalo = useMemo(() => {
+    return reaction === 'meditating' || traitList.some(t =>
+      ['giác_ngộ_tâm_linh_tiên_thiên', 'phúc_đức_vô_lượng'].includes(t)
+    );
+  }, [traitList, reaction]);
+
+  const isWealthy = useMemo(() => {
+    if (numericAge < 16) return false;
+    return (Number(netWorth) >= 500000) || traitList.some(t =>
+      ['crazy_rich', 'huyết_thống_trâm_anh', 'con_nhà_nòi'].includes(t)
+    );
+  }, [traitList, netWorth, numericAge]);
+
+  // Materials with physical reactivity to stats & traits
   const skinMaterial = useMemo(() => {
     let effectiveSkin = skinColor;
     if (vitality < 30) {
@@ -93,15 +123,15 @@ function ProceduralCharacterMesh({
     }
     return new THREE.MeshStandardMaterial({
       color: effectiveSkin,
-      roughness: 0.65,
+      roughness: vitality < 30 ? 0.8 : 0.6,
       metalness: 0.05,
     });
   }, [skinColor, vitality]);
 
   const hairMaterial = useMemo(() => new THREE.MeshStandardMaterial({
     color: hairColor,
-    roughness: 0.8,
-    metalness: 0.1,
+    roughness: 0.65,
+    metalness: 0.15,
   }), [hairColor]);
 
   const eyeMaterial = useMemo(() => new THREE.MeshStandardMaterial({
@@ -113,7 +143,7 @@ function ProceduralCharacterMesh({
   const lipMaterial = useMemo(() => {
     let lipColor = '#e29578';
     if (isBaby || isChild) {
-      lipColor = '#fca5a5'; // Soft natural kid lips, no adult lipstick
+      lipColor = '#fca5a5'; // Soft natural kid lips
     } else if (isFemale) {
       lipColor = burnout > 75 ? '#be123c' : '#fb7185';
     } else {
@@ -126,10 +156,32 @@ function ProceduralCharacterMesh({
     });
   }, [isBaby, isChild, isFemale, burnout]);
 
-  const earringMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+  const goldMaterial = useMemo(() => new THREE.MeshStandardMaterial({
     color: '#fbbf24',
+    roughness: 0.18,
+    metalness: 0.92
+  }), []);
+
+  const haloMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#fef08a',
+    emissive: '#f59e0b',
+    emissiveIntensity: 1.6,
     roughness: 0.2,
-    metalness: 0.8
+    metalness: 0.4
+  }), []);
+
+  const glassesFrameMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#334155',
+    roughness: 0.25,
+    metalness: 0.85
+  }), []);
+
+  const glassesLensMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#bae6fd',
+    transparent: true,
+    opacity: 0.38,
+    roughness: 0.1,
+    metalness: 0.15
   }), []);
 
   const ribbonMaterial = useMemo(() => new THREE.MeshStandardMaterial({
@@ -141,63 +193,64 @@ function ProceduralCharacterMesh({
     let clothColor = isFemale ? '#be185d' : '#4f46e5';
     if (isBaby) {
       clothColor = isFemale ? '#fbcfe8' : '#bae6fd'; // Vải cotton pastel sơ sinh
-    } else if (age <= 5) {
+    } else if (numericAge <= 5) {
       clothColor = isFemale ? '#fce7f3' : '#e0f2fe';
+    } else if (isWealthy) {
+      clothColor = isFemale ? '#4c0519' : '#0f172a'; // Tuxedo / Quý tộc sang trọng
     } else if (burnout > 75) {
       clothColor = '#334155';
     }
     return new THREE.MeshStandardMaterial({
       color: clothColor,
-      roughness: 0.8,
+      roughness: isWealthy ? 0.45 : 0.75,
+      metalness: isWealthy ? 0.2 : 0.05,
     });
-  }, [isBaby, age, burnout, isFemale]);
+  }, [isBaby, numericAge, burnout, isFemale, isWealthy]);
 
-  // Real-time Procedural Animation Loop
+  // Real-time Procedural Animation Loop with Mouse Cursor Tracking
   useFrame((state, delta) => {
     if (isFastForwarding) return; // Freeze to conserve frames
 
     const t = state.clock.getElapsedTime();
 
     if (headRef.current && groupRef.current) {
-      // 1. Natural Breathing Cycle (Laboring/slow breathing if vitality < 30)
+      // 1. Natural Breathing Cycle
       const breatheSpeed = vitality < 30 ? 1.0 : 2.2;
       const breatheAmp = vitality < 30 ? 0.012 : 0.02;
       const breathe = Math.sin(t * breatheSpeed) * breatheAmp;
       
-      // Khắc phục lỗi vị trí Y: Giữ vững Base Y (-0.76) để toàn bộ khuôn mặt & mái tóc luôn nằm trọn trong khung
       const BASE_Y = -0.76;
       let targetPosY = BASE_Y + breathe;
 
-      // 2. Action Reaction Dynamics
-      let targetRotX = spineHunch + (burnout > 75 ? 0.12 : 0);
-      let targetRotY = 0;
+      // 2. Mouse Cursor Head Follow Tracking (Subtle, responsive, organic)
+      const mouseLookX = THREE.MathUtils.clamp(-state.pointer.y * 0.22, -0.22, 0.22);
+      const mouseLookY = THREE.MathUtils.clamp(state.pointer.x * 0.32, -0.32, 0.32);
+
+      // 3. Action Reaction Dynamics
+      let targetRotX = spineHunch + (burnout > 75 ? 0.12 : 0) + mouseLookX;
+      let targetRotY = mouseLookY;
       let targetRotZ = 0;
 
       if (reaction === 'celebrate') {
-        // Joyful nod and side-to-side bobbing
-        targetRotX = Math.sin(t * 8) * 0.15;
-        targetRotY = Math.sin(t * 4) * 0.2;
+        targetRotX = Math.sin(t * 8) * 0.15 + mouseLookX * 0.5;
+        targetRotY = Math.sin(t * 4) * 0.2 + mouseLookY;
         targetPosY += Math.abs(Math.sin(t * 6)) * 0.08;
       } else if (reaction === 'exhausted') {
-        // Head drooping low in fatigue
-        targetRotX = 0.35 + Math.sin(t * 1.2) * 0.04;
+        targetRotX = 0.35 + Math.sin(t * 1.2) * 0.04 + mouseLookX * 0.4;
         targetRotZ = Math.sin(t * 0.8) * 0.05;
       } else if (reaction === 'meditating') {
-        // Peaceful slight head lift and floating
-        targetRotX = -0.12;
+        targetRotX = -0.12 + mouseLookX * 0.3;
         targetPosY += Math.sin(t * 1.5) * 0.06;
       } else if (reaction === 'shocked') {
-        // Sudden jerk backward and jitter
-        targetRotX = -0.22;
-        targetRotY = Math.sin(t * 14) * 0.08;
+        targetRotX = -0.22 + mouseLookX * 0.3;
+        targetRotY = Math.sin(t * 14) * 0.08 + mouseLookY;
       } else if (reaction === 'negotiating') {
-        // Thoughtful inquisitive tilt
         targetRotZ = 0.12 + Math.sin(t * 2.5) * 0.05;
-        targetRotY = Math.sin(t * 1.8) * 0.15;
+        targetRotY = Math.sin(t * 1.8) * 0.15 + mouseLookY;
       } else {
         // Idle gentle sway
-        targetRotY = Math.sin(t * 0.8) * 0.06;
-        targetRotX = spineHunch + Math.sin(t * 1.4) * 0.03;
+        targetRotY += Math.sin(t * 0.8) * 0.06;
+        targetRotX += Math.sin(t * 1.4) * 0.03;
       }
 
       groupRef.current.position.y = targetPosY;
@@ -207,7 +260,13 @@ function ProceduralCharacterMesh({
       headRef.current.rotation.y = THREE.MathUtils.lerp(headRef.current.rotation.y, targetRotY, delta * 6);
       headRef.current.rotation.z = THREE.MathUtils.lerp(headRef.current.rotation.z, targetRotZ, delta * 6);
 
-      // 3. Periodic Eye Blink (every ~3.5 seconds)
+      // 4. Ethereal Halo Orbital Animation
+      if (haloRef.current) {
+        haloRef.current.rotation.y = t * 0.8;
+        haloRef.current.position.y = 0.68 + Math.sin(t * 2) * 0.025;
+      }
+
+      // 5. Periodic Eye Blink (every ~3.5 seconds)
       const blinkCycle = Math.sin(t * 1.8);
       const isBlinking = blinkCycle > 0.96;
       const eyeScaleY = (isBlinking || reaction === 'meditating') ? 0.1 : 1;
@@ -217,7 +276,7 @@ function ProceduralCharacterMesh({
         rightEyeRef.current.scale.y = eyeScaleY;
       }
 
-      // 4. Mouth Reaction Morph
+      // 6. Mouth Reaction Morph
       if (mouthRef.current) {
         if (reaction === 'celebrate') {
           mouthRef.current.scale.set(1.4, 1.4, 1.4);
@@ -263,6 +322,26 @@ function ProceduralCharacterMesh({
           <mesh position={[0, 0.52, 0]} material={skinMaterial}>
             <cylinderGeometry args={[isFemale ? 0.14 : 0.16, isFemale ? 0.17 : 0.19, 0.28, 24]} />
           </mesh>
+
+          {/* Luxury Wealth Lapel Brooch / Gold Accessory */}
+          {isWealthy && (
+            <group position={[0, 0.15, 0]}>
+              <mesh position={[0.2, 0.14, 0.25]} rotation={[0.2, 0.3, 0.4]} material={goldMaterial}>
+                <octahedronGeometry args={[0.042, 0]} />
+              </mesh>
+              {isFemale ? (
+                /* Pearl necklace collar for elite lady */
+                <mesh position={[0, 0.34, 0.08]} rotation={[1.1, 0, 0]} material={goldMaterial}>
+                  <torusGeometry args={[0.19, 0.016, 12, 32]} />
+                </mesh>
+              ) : (
+                /* Gold tie clip / luxury collar accent for gentleman */
+                <mesh position={[0, 0.04, 0.26]} material={goldMaterial}>
+                  <boxGeometry args={[0.032, 0.16, 0.012]} />
+                </mesh>
+              )}
+            </group>
+          )}
         </>
       )}
 
@@ -287,7 +366,6 @@ function ProceduralCharacterMesh({
         {/* Left Eye */}
         <mesh ref={leftEyeRef} position={[-0.17, isBaby ? 0.08 : 0.1, 0.42]} material={eyeMaterial}>
           <sphereGeometry args={[isBaby ? 0.068 : (isFemale ? 0.065 : 0.06), 16, 16]} />
-          {/* Eye shine reflection */}
           <mesh position={[0.022, 0.022, 0.055]}>
             <sphereGeometry args={[0.018, 8, 8]} />
             <meshBasicMaterial color="#ffffff" />
@@ -297,14 +375,13 @@ function ProceduralCharacterMesh({
         {/* Right Eye */}
         <mesh ref={rightEyeRef} position={[0.17, isBaby ? 0.08 : 0.1, 0.42]} material={eyeMaterial}>
           <sphereGeometry args={[isBaby ? 0.068 : (isFemale ? 0.065 : 0.06), 16, 16]} />
-          {/* Eye shine reflection */}
           <mesh position={[0.022, 0.022, 0.055]}>
             <sphereGeometry args={[0.018, 8, 8]} />
             <meshBasicMaterial color="#ffffff" />
           </mesh>
         </mesh>
 
-        {/* Female Eyelash Accents (Only for adults & teens, never on babies!) */}
+        {/* Female Eyelash Accents */}
         {isFemale && !isBaby && !isChild && (
           <group>
             <mesh position={[-0.22, 0.14, 0.42]} rotation={[0, 0, -0.28]} material={eyeMaterial}>
@@ -316,7 +393,7 @@ function ProceduralCharacterMesh({
           </group>
         )}
 
-        {/* Eyebrows (Hidden on babies for pure gentle infant look) */}
+        {/* Eyebrows */}
         {!isBaby && (
           <group>
             <mesh position={[-0.17, 0.21, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? -0.15 : 0.05]} material={hairMaterial}>
@@ -328,8 +405,42 @@ function ProceduralCharacterMesh({
           </group>
         )}
 
+        {/* Procedural 3D Spectacles / Glasses (Cận thị bẩm sinh / Mọt sách / Code Whisperer) */}
+        {hasGlasses && (
+          <group position={[0, isBaby ? 0.08 : 0.1, 0.44]}>
+            {/* Left Rim */}
+            <mesh position={[-0.17, 0, 0]} material={glassesFrameMaterial}>
+              <torusGeometry args={[0.086, 0.011, 16, 32]} />
+            </mesh>
+            {/* Left Lens */}
+            <mesh position={[-0.17, 0, 0]} material={glassesLensMaterial}>
+              <circleGeometry args={[0.08, 24]} />
+            </mesh>
+            {/* Right Rim */}
+            <mesh position={[0.17, 0, 0]} material={glassesFrameMaterial}>
+              <torusGeometry args={[0.086, 0.011, 16, 32]} />
+            </mesh>
+            {/* Right Lens */}
+            <mesh position={[0.17, 0, 0]} material={glassesLensMaterial}>
+              <circleGeometry args={[0.08, 24]} />
+            </mesh>
+            {/* Nose Bridge */}
+            <mesh position={[0, 0.02, 0]} rotation={[0, 0, Math.PI / 2]} material={glassesFrameMaterial}>
+              <cylinderGeometry args={[0.009, 0.009, 0.08, 8]} />
+            </mesh>
+            {/* Left Temple extending to ear */}
+            <mesh position={[-0.26, 0.01, -0.16]} rotation={[0, 0.22, 0]} material={glassesFrameMaterial}>
+              <boxGeometry args={[0.01, 0.009, 0.32]} />
+            </mesh>
+            {/* Right Temple extending to ear */}
+            <mesh position={[0.26, 0.01, -0.16]} rotation={[0, -0.22, 0]} material={glassesFrameMaterial}>
+              <boxGeometry args={[0.01, 0.009, 0.32]} />
+            </mesh>
+          </group>
+        )}
+
         {/* 3D Dynamic State: Quầng thâm mắt do kiệt sức (Burnout > 75 & Người lớn) */}
-        {burnout > 75 && age >= 16 && (
+        {burnout > 75 && numericAge >= 16 && (
           <group position={[0, -0.04, 0.42]}>
             <mesh position={[-0.17, 0.05, 0]}>
               <sphereGeometry args={[0.07, 16, 8]} />
@@ -343,15 +454,15 @@ function ProceduralCharacterMesh({
         )}
 
         {/* 3D Dynamic State: Má hồng bầu bĩnh tuổi ấu thơ (0-5 tuổi) hoặc thiếu nữ */}
-        {(age <= 5 || (isFemale && age < 25)) && (
+        {(numericAge <= 5 || (isFemale && numericAge < 25)) && (
           <group position={[0, -0.08, 0.4]}>
             <mesh position={[-0.22, 0, 0]}>
-              <sphereGeometry args={[isBaby ? 0.09 : (age <= 5 ? 0.075 : 0.05), 16, 8]} />
-              <meshBasicMaterial color="#fb7185" opacity={age <= 5 ? 0.5 : 0.3} transparent />
+              <sphereGeometry args={[isBaby ? 0.09 : (numericAge <= 5 ? 0.075 : 0.05), 16, 8]} />
+              <meshBasicMaterial color="#fb7185" opacity={numericAge <= 5 ? 0.5 : 0.3} transparent />
             </mesh>
             <mesh position={[0.22, 0, 0]}>
-              <sphereGeometry args={[age <= 5 ? 0.075 : 0.05, 16, 8]} />
-              <meshBasicMaterial color="#fb7185" opacity={age <= 5 ? 0.5 : 0.3} transparent />
+              <sphereGeometry args={[numericAge <= 5 ? 0.075 : 0.05, 16, 8]} />
+              <meshBasicMaterial color="#fb7185" opacity={numericAge <= 5 ? 0.5 : 0.3} transparent />
             </mesh>
           </group>
         )}
@@ -378,15 +489,12 @@ function ProceduralCharacterMesh({
           {isBaby ? (
             /* CUTE ADORABLE BABY BEANIE BONNET */
             <group position={[0, 0.06, 0]}>
-              {/* Bonnet Cap */}
               <mesh material={clothMaterial}>
                 <sphereGeometry args={[0.47, 24, 24]} />
               </mesh>
-              {/* Folded Brim */}
               <mesh position={[0, 0.1, 0.28]} rotation={[0.3, 0, 0]} material={clothMaterial}>
                 <torusGeometry args={[0.38, 0.045, 12, 24]} />
               </mesh>
-              {/* Fluffy Pom-Pom on Top */}
               <mesh position={[0, 0.54, 0]} material={ribbonMaterial}>
                 <sphereGeometry args={[0.085, 16, 16]} />
               </mesh>
@@ -394,28 +502,22 @@ function ProceduralCharacterMesh({
           ) : isFemale ? (
             /* FEMALE PROCEDURAL HAIRSTYLE */
             <group>
-              {/* Main Crown Volume */}
               <mesh position={[0, 0.24, -0.04]} material={hairMaterial}>
                 <sphereGeometry args={[0.49, 24, 24]} />
               </mesh>
-              {/* Soft Front Bangs */}
               <mesh position={[0, 0.37, 0.33]} rotation={[0.26, 0, 0]} material={hairMaterial}>
                 <boxGeometry args={[0.44, 0.13, 0.16]} />
               </mesh>
-              {/* Left Flowing Lock */}
               <mesh position={[-0.38, -0.26, 0.08]} rotation={[0.08, 0, -0.08]} material={hairMaterial}>
                 <cylinderGeometry args={[0.07, 0.09, 0.55, 16]} />
               </mesh>
-              {/* Right Flowing Lock */}
               <mesh position={[0.38, -0.26, 0.08]} rotation={[0.08, 0, 0.08]} material={hairMaterial}>
                 <cylinderGeometry args={[0.07, 0.09, 0.55, 16]} />
               </mesh>
-              {/* Back Hair Drape */}
               <mesh position={[0, -0.22, -0.26]} rotation={[-0.08, 0, 0]} material={hairMaterial}>
                 <boxGeometry args={[0.46, 0.52, 0.15]} />
               </mesh>
 
-              {/* Cute Child Hair Ribbons */}
               {isChild && (
                 <group>
                   <mesh position={[-0.36, 0.35, 0.12]} material={ribbonMaterial}>
@@ -427,13 +529,12 @@ function ProceduralCharacterMesh({
                 </group>
               )}
 
-              {/* Elder Hair Bun */}
               {isElderly && (
                 <group>
                   <mesh position={[0, 0.54, -0.12]} material={hairMaterial}>
                     <sphereGeometry args={[0.18, 20, 20]} />
                   </mesh>
-                  <mesh position={[0, 0.54, -0.12]} rotation={[0, 0, 0.4]} material={earringMaterial}>
+                  <mesh position={[0, 0.54, -0.12]} rotation={[0, 0, 0.4]} material={goldMaterial}>
                     <cylinderGeometry args={[0.015, 0.015, 0.45, 12]} />
                   </mesh>
                 </group>
@@ -442,15 +543,12 @@ function ProceduralCharacterMesh({
           ) : (
             /* MALE PROCEDURAL HAIRSTYLE */
             <group>
-              {/* Main Hair Volume */}
               <mesh position={[0, 0.24, -0.05]} material={hairMaterial}>
                 <sphereGeometry args={[0.48, 24, 24]} />
               </mesh>
-              {/* Front Crop */}
               <mesh position={[0, 0.38, 0.32]} rotation={[0.3, 0, 0]} material={hairMaterial}>
                 <boxGeometry args={[0.44, 0.12, 0.15]} />
               </mesh>
-              {/* Sideburns */}
               <mesh position={[-0.43, 0.02, 0.05]} material={hairMaterial}>
                 <boxGeometry args={[0.08, 0.35, 0.18]} />
               </mesh>
@@ -469,13 +567,31 @@ function ProceduralCharacterMesh({
           <sphereGeometry args={[0.09, 16, 16]} />
         </mesh>
 
-        {isFemale && age >= 12 && (
+        {isFemale && numericAge >= 12 && (
           <group>
-            <mesh position={[-0.48, -0.07, 0]} material={earringMaterial}>
+            <mesh position={[-0.48, -0.07, 0]} material={goldMaterial}>
               <sphereGeometry args={[0.035, 16, 16]} />
             </mesh>
-            <mesh position={[0.48, -0.07, 0]} material={earringMaterial}>
+            <mesh position={[0.48, -0.07, 0]} material={goldMaterial}>
               <sphereGeometry args={[0.035, 16, 16]} />
+            </mesh>
+          </group>
+        )}
+
+        {/* Spiritual Halo (Giác ngộ tâm linh / Phúc đức vô lượng / Thiền định) */}
+        {hasHalo && (
+          <group ref={haloRef} position={[0, 0.68, -0.05]} rotation={[0.22, 0, 0]}>
+            <mesh material={haloMaterial}>
+              <torusGeometry args={[0.42, 0.022, 16, 48]} />
+            </mesh>
+            {/* Celestial Motes */}
+            <mesh position={[0.42, 0, 0]}>
+              <sphereGeometry args={[0.028, 8, 8]} />
+              <meshBasicMaterial color="#fef08a" />
+            </mesh>
+            <mesh position={[-0.42, 0, 0]}>
+              <sphereGeometry args={[0.028, 8, 8]} />
+              <meshBasicMaterial color="#fef08a" />
             </mesh>
           </group>
         )}
@@ -484,8 +600,8 @@ function ProceduralCharacterMesh({
   );
 }
 
-// Mood Lighting Controller (Burnout-Reactive)
-function MoodLighting({ burnout = 0 }: { burnout: number }) {
+// Mood Lighting Controller (Burnout & Meditation-Reactive with 3-Point Studio Setup)
+function MoodLighting({ burnout = 0, isMeditating = false }: { burnout: number; isMeditating?: boolean }) {
   const isHighBurnout = burnout > 75;
   const isModerateBurnout = burnout >= 40 && burnout <= 75;
 
@@ -493,22 +609,36 @@ function MoodLighting({ burnout = 0 }: { burnout: number }) {
     <>
       {/* Base Ambient Light */}
       <ambientLight
-        intensity={isHighBurnout ? 0.25 : 0.85}
-        color={isHighBurnout ? '#450a0a' : isModerateBurnout ? '#e2e8f0' : '#fffbeb'}
+        intensity={isHighBurnout ? 0.28 : isMeditating ? 0.95 : 0.85}
+        color={isHighBurnout ? '#450a0a' : isMeditating ? '#fef3c7' : isModerateBurnout ? '#e2e8f0' : '#fffbeb'}
       />
 
-      {/* Main Studio Key Light */}
+      {/* Main Studio Key Light (Warm Key) */}
       <directionalLight
-        position={[2.5, 3.5, 3]}
-        intensity={isHighBurnout ? 0.3 : 1.2}
-        color={isHighBurnout ? '#991b1b' : '#ffffff'}
+        position={[2.8, 3.8, 3.2]}
+        intensity={isHighBurnout ? 0.35 : 1.35}
+        color={isHighBurnout ? '#991b1b' : '#fff7ed'}
       />
 
-      {/* Soft Backlight / Rim Light */}
+      {/* Soft Fill Light (Cool Studio Fill) */}
       <directionalLight
-        position={[-2, 2, -2.5]}
-        intensity={0.4}
-        color={isHighBurnout ? '#dc2626' : '#818cf8'}
+        position={[-3, 1.8, 2]}
+        intensity={isHighBurnout ? 0.2 : 0.6}
+        color={isHighBurnout ? '#581c87' : '#93c5fd'}
+      />
+
+      {/* Crisp Rim Light (Edge Glow) */}
+      <directionalLight
+        position={[0, 3.2, -3.2]}
+        intensity={isHighBurnout ? 1.2 : 1.4}
+        color={isHighBurnout ? '#ef4444' : isMeditating ? '#fbbf24' : '#38bdf8'}
+      />
+
+      {/* Soft Chin Bounce Light (Prevents harsh neck shadow) */}
+      <pointLight
+        position={[0, -1.8, 1.4]}
+        intensity={0.3}
+        color={isHighBurnout ? '#7f1d1d' : '#fde68a'}
       />
 
       {/* CINEMATIC HORROR SPOTLIGHT FROM BELOW (Burnout > 75) */}
@@ -516,7 +646,7 @@ function MoodLighting({ burnout = 0 }: { burnout: number }) {
         <spotLight
           position={[0, -2.2, 1.2]}
           target-position={[0, 0.5, 0]}
-          intensity={2.8}
+          intensity={3.2}
           color="#ef4444"
           angle={0.7}
           penumbra={0.8}
@@ -535,7 +665,9 @@ export default function Dynamic3DAvatar({
   reaction = 'idle',
   isFastForwarding = false,
   className = 'w-full h-full',
-  showControls = true
+  showControls = true,
+  traits = [],
+  netWorth = 0
 }: Dynamic3DAvatarProps) {
   const [mounted, setMounted] = useState(false);
 
@@ -561,7 +693,7 @@ export default function Dynamic3DAvatar({
         className="w-full h-full cursor-grab active:cursor-grabbing"
         gl={{ antialias: true, alpha: true }}
       >
-        <MoodLighting burnout={burnout} />
+        <MoodLighting burnout={burnout} isMeditating={reaction === 'meditating'} />
 
         <Float
           speed={isFastForwarding ? 0 : reaction === 'meditating' ? 2.5 : 1.2}
@@ -576,6 +708,8 @@ export default function Dynamic3DAvatar({
             vitality={vitality}
             reaction={reaction}
             isFastForwarding={isFastForwarding}
+            traits={traits}
+            netWorth={netWorth}
           />
         </Float>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
 import {
@@ -29,6 +29,102 @@ const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
     </div>
   )
 });
+
+// Interactive 3D Depth Particle & Starfield Backdrop
+function DepthStarfieldCanvas({
+  mouseX = 0,
+  mouseY = 0,
+  isFastForwarding = false
+}: {
+  mouseX: number;
+  mouseY: number;
+  isFastForwarding?: boolean;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animId: number;
+    let width = (canvas.width = canvas.parentElement?.clientWidth || 800);
+    let height = (canvas.height = canvas.parentElement?.clientHeight || 240);
+
+    const handleResize = () => {
+      if (!canvas || !canvas.parentElement) return;
+      width = canvas.width = canvas.parentElement.clientWidth;
+      height = canvas.height = canvas.parentElement.clientHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    const count = 38;
+    const particles = Array.from({ length: count }, () => ({
+      x: (Math.random() - 0.5) * width * 1.5,
+      y: (Math.random() - 0.5) * height * 1.5,
+      z: Math.random() * 800 + 100,
+      size: Math.random() * 2 + 1,
+      alpha: Math.random() * 0.7 + 0.3,
+      speed: Math.random() * 0.5 + 0.3
+    }));
+
+    const render = () => {
+      if (isFastForwarding) {
+        animId = requestAnimationFrame(render);
+        return;
+      }
+      ctx.clearRect(0, 0, width, height);
+
+      const cx = width / 2;
+      const cy = height / 2;
+      const pxShift = mouseX * 22;
+      const pyShift = mouseY * 14;
+
+      for (let i = 0; i < count; i++) {
+        const p = particles[i];
+        p.z -= p.speed;
+        if (p.z <= 20) {
+          p.z = 900;
+          p.x = (Math.random() - 0.5) * width * 1.5;
+          p.y = (Math.random() - 0.5) * height * 1.5;
+        }
+
+        const fov = 350;
+        const k = fov / p.z;
+        const sx = cx + (p.x + pxShift) * k;
+        const sy = cy + (p.y + pyShift) * k;
+
+        if (sx >= -10 && sx <= width + 10 && sy >= -10 && sy <= height + 10) {
+          const r = Math.max(0.6, p.size * k * 0.7);
+          const a = Math.min(1, Math.max(0, (1 - p.z / 900) * p.alpha));
+          ctx.beginPath();
+          ctx.arc(sx, sy, r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${a * 0.6})`;
+          ctx.fill();
+
+          if (r > 1.6) {
+            ctx.beginPath();
+            ctx.arc(sx, sy, r * 2.2, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(165, 180, 252, ${a * 0.22})`;
+            ctx.fill();
+          }
+        }
+      }
+
+      animId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animId);
+    };
+  }, [isFastForwarding, mouseX, mouseY]);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-[1] opacity-70" />;
+}
 
 export interface BannerActionFeedback {
   type: 'work' | 'study' | 'wellness' | 'infant' | 'gamble' | 'network' | 'milestone' | 'focus';
@@ -96,6 +192,36 @@ export default function CharacterHeroBanner({
     return { label: "Ổn định", color: "text-emerald-400" };
   };
   const stress = getStress();
+
+  // 3D Parallax Tilt State & Mouse Tracking
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0, px: 0, py: 0 });
+  const handleBannerMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({
+      rx: -py * 4.5,
+      ry: px * 6.5,
+      px,
+      py
+    });
+  };
+  const handleBannerMouseLeave = () => {
+    setTilt({ rx: 0, ry: 0, px: 0, py: 0 });
+  };
+
+  // Trait-driven Visual Customizations
+  const traits = character.traits || character.innate_traits || [];
+  const hasGlasses = age >= 4 && traits.some((t: string) =>
+    ['cận_thị_bẩm_sinh', 'code_whisperer', 'nerd', 'mọt_sách', 'thần_đồng_toán_học'].includes(t)
+  );
+  const hasHalo = reaction === 'meditating' || traits.some((t: string) =>
+    ['giác_ngộ_tâm_linh_tiên_thiên', 'phúc_đức_vô_lượng'].includes(t)
+  );
+  const isWealthy = age >= 16 && (Number(netWorth) >= 500000 || traits.some((t: string) =>
+    ['crazy_rich', 'huyết_thống_trâm_anh', 'con_nhà_nòi'].includes(t)
+  ));
 
   // Dynamic Action Feedback Realtime Overlay
   const [activeFeedback, setActiveFeedback] = useState<BannerActionFeedback | null>(null);
