@@ -62,21 +62,21 @@ export default function LivingRoomBackdropViewport({
   };
 
   return (
-    <div className="w-full rounded-3xl border border-slate-800 bg-slate-950/80 backdrop-blur-xl overflow-hidden shadow-2xl relative transition-all duration-300">
+    <div className="w-full rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-card)] backdrop-blur-xl overflow-hidden shadow-2xl relative transition-all duration-200">
       {/* Top Header Bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800/80 z-20 relative flex-wrap gap-2">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-[var(--bg-card-subtle)] border-b border-[var(--border-subtle)] z-20 relative flex-wrap gap-2">
         <div className="flex items-center gap-2.5">
           <div className={`w-2.5 h-2.5 rounded-full ${
             tier === 'luxury' ? 'bg-amber-400 shadow-[0_0_8px_#f59e0b]' :
             tier === 'middle' ? 'bg-cyan-400 shadow-[0_0_8px_#06b6d4]' :
             'bg-emerald-400 shadow-[0_0_8px_#10b981]'
           } animate-pulse`} />
-          <span className="text-xs font-bold text-white tracking-wide flex items-center gap-1.5">
+          <span className="text-xs font-bold text-[var(--text-primary)] tracking-wide flex items-center gap-1.5">
             {tier === 'luxury' && '🏛️ Dinh Thự Thượng Lưu · View Vịnh Biển & Hồ Bơi Vô Cực'}
             {tier === 'middle' && '🏙️ Căn Hộ Chung Cư Cao Cấp · Skyline Thành Phố Đêm'}
             {tier === 'starter' && '🛏️ Phòng Trọ Khởi Nghiệp · Ngọn Đèn Khắc Khổ'}
           </span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
             {formatCurrency(netWorth, nationality).primary}
           </span>
         </div>
@@ -85,17 +85,17 @@ export default function LivingRoomBackdropViewport({
           {/* Cinema Mode Trigger Button */}
           <button
             onClick={onOpenCinemaMode}
-            className="px-3 py-1 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-amber-600 hover:from-purple-500 hover:to-amber-500 text-white text-[11px] font-bold flex items-center gap-1.5 shadow-md shadow-purple-950/40 transition active:scale-95 animate-pulse"
+            className="px-3 py-1 rounded-xl bg-[var(--bg-card)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] hover:border-amber-400/50 text-[var(--text-primary)] text-[11px] font-bold flex items-center gap-1.5 shadow-sm transition active:scale-95"
             title="Mở phòng ra quyết định với góc nhìn điện ảnh 21:9"
           >
-            <Film className="w-3.5 h-3.5" />
+            <Film className="w-3.5 h-3.5 text-amber-400" />
             <span>Phòng Quyết Định (Cinema Mode)</span>
           </button>
 
           {/* Toggle Expand/Collapse */}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition"
+            className="p-1.5 rounded-lg bg-[var(--bg-card)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition"
             title={isExpanded ? "Thu gọn cửa sổ quan sát" : "Mở rộng cửa sổ quan sát"}
           >
             {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}

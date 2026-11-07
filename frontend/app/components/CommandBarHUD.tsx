@@ -46,7 +46,7 @@ export default function CommandBarHUD({
   const isEmergency = vitality < 30 || burnout > 75;
 
   return (
-    <div className="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 px-3 sm:px-4 md:px-6 py-1.5 sticky top-[53px] z-40 transition-all duration-300">
+    <div className="w-full bg-[var(--bg-card)] backdrop-blur-md border-b border-[var(--border-subtle)] text-[var(--text-primary)] px-3 sm:px-4 md:px-6 py-1.5 sticky top-[53px] z-40 transition-all duration-200">
       <div className="max-w-[1720px] mx-auto flex items-center justify-between gap-2.5 flex-wrap">
         {/* Left: Quick View Toggle & Cinema Mode */}
         <div className="flex items-center gap-2">
@@ -58,7 +58,7 @@ export default function CommandBarHUD({
                 <div className="font-bold text-sky-300 text-xs">
                   {activeView === 'game' ? 'Chuyển sang Xem Nhanh Gia Phả' : 'Chuyển sang Buồng Lái Kiếp Sống'}
                 </div>
-                <div className="text-[11px] text-slate-300">
+                <div className="text-[11px] text-[var(--text-secondary)]">
                   Bật/tắt nhanh giữa góc nhìn buồng lái RPG và cây gia phả tiền nhân.
                 </div>
               </div>
@@ -69,7 +69,7 @@ export default function CommandBarHUD({
               disabled={isLoading}
               className={`px-2.5 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 border transition active:scale-95 ${
                 activeView === 'game'
-                  ? 'bg-slate-950/80 hover:bg-slate-800 border-slate-700/80 text-sky-300 hover:text-white'
+                  ? 'bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border-[var(--border-subtle)] text-sky-300 hover:text-[var(--text-primary)]'
                   : 'bg-sky-600/30 border-sky-400/50 text-sky-200 hover:bg-sky-600/40'
               }`}
             >
@@ -95,9 +95,9 @@ export default function CommandBarHUD({
               <div className="p-0.5">
                 <div className="font-bold text-purple-300 text-xs flex items-center gap-1">
                   <span>🎬 Phòng Quyết Định 21:9</span>
-                  <kbd className="px-1 py-0.2 rounded bg-slate-800 text-[10px] text-slate-300">[D]</kbd>
+                  <kbd className="px-1 py-0.2 rounded bg-[var(--bg-card)] text-[10px] text-[var(--text-secondary)] border border-[var(--border-subtle)]">[D]</kbd>
                 </div>
-                <div className="text-[11px] text-slate-300">
+                <div className="text-[11px] text-[var(--text-secondary)]">
                   Mở không gian đối diện ngã rẽ cuộc đời ở định dạng điện ảnh toàn cảnh 21:9.
                 </div>
               </div>
@@ -106,11 +106,11 @@ export default function CommandBarHUD({
             <button
               onClick={onOpenCinema}
               disabled={isLoading}
-              className="px-2.5 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-purple-500/30 bg-purple-950/30 hover:bg-purple-900/50 text-purple-200 hover:text-white transition active:scale-95"
+              className="px-2.5 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-[var(--border-subtle)] bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] text-[var(--text-primary)] transition active:scale-95"
             >
               <Film className="w-3.5 h-3.5 text-purple-300" />
               <span className="hidden md:inline">Phòng Điện Ảnh</span>
-              <kbd className="px-1.5 py-0.2 rounded bg-purple-950/80 border border-purple-500/40 text-[10px] font-mono text-purple-300 font-bold">
+              <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-purple-300 font-bold">
                 D
               </kbd>
             </button>
@@ -122,7 +122,7 @@ export default function CommandBarHUD({
           {/* Trợ giúp phím tắt button with key badges */}
           <button
             onClick={onOpenShortcutsHelp}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-950/70 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white text-xs transition active:scale-95 group shadow-sm"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs transition active:scale-95 group shadow-sm"
           >
             <Keyboard className="w-3.5 h-3.5 text-indigo-400 group-hover:text-indigo-300" />
             <span className="font-medium text-xs hidden lg:inline">Phím Tắt:</span>
@@ -130,25 +130,25 @@ export default function CommandBarHUD({
             {/* Badges [1], [2], [3], [Space] */}
             <div className="flex items-center gap-1">
               <span className="flex items-center gap-0.5">
-                <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
+                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
                   1
                 </kbd>
-                <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
+                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
                   2
                 </kbd>
-                <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
+                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
                   3
                 </kbd>
-                <span className="text-[10px] text-slate-400 hidden xl:inline ml-0.5">Chọn Ngã Rẽ</span>
+                <span className="text-[10px] text-[var(--text-secondary)] hidden xl:inline ml-0.5">Chọn Ngã Rẽ</span>
               </span>
 
               <span className="text-slate-600 hidden sm:inline">|</span>
 
               <span className="flex items-center gap-1">
-                <kbd className="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-emerald-300 font-bold group-hover:border-emerald-400/60 shadow-sm">
+                <kbd className="px-2 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-emerald-300 font-bold group-hover:border-emerald-400/60 shadow-sm">
                   Space
                 </kbd>
-                <span className="text-[10px] text-slate-400 hidden xl:inline">Sang Năm</span>
+                <span className="text-[10px] text-[var(--text-secondary)] hidden xl:inline">Sang Năm</span>
               </span>
             </div>
 

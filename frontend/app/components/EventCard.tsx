@@ -241,14 +241,14 @@ export default function EventCard({
   };
 
   return (
-    <div className="bg-slate-900/95 border border-slate-800 rounded-3xl p-4 md:p-5 shadow-2xl relative overflow-hidden backdrop-blur-lg flex flex-col gap-3">
+    <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-4 md:p-5 shadow-2xl relative overflow-hidden backdrop-blur-lg flex flex-col gap-3 transition-colors duration-200">
       {/* Ambient background glow */}
-      <div className="absolute top-0 right-0 w-64 h-32 bg-indigo-950/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-64 h-32 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header Bar */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-[12px] font-semibold normal-case px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+          <span className="text-[12px] font-semibold normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
             Sân Khấu Tâm Thức & Biến Cố
           </span>
           {characterAge !== undefined && (
@@ -259,13 +259,13 @@ export default function EventCard({
         </div>
 
         {/* Tab Switcher: RPG Options vs Open-Text AI */}
-        <div className="flex items-center bg-slate-950/80 p-0.5 rounded-xl border border-slate-800 text-[12px]">
+        <div className="flex items-center bg-[var(--bg-card-subtle)] p-0.5 rounded-xl border border-[var(--border-subtle)] text-[12px]">
           <button
             onClick={() => { setActiveTab('standard'); setCustomResult(null); }}
             className={`px-2.5 py-1 rounded-lg font-medium transition ${
               activeTab === 'standard'
-                ? 'bg-indigo-600 text-white shadow-sm font-bold'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-amber-600/30 text-amber-200 border border-amber-500/40 shadow-sm font-bold'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             🎭 Thái Độ Nhập Vai
@@ -274,8 +274,8 @@ export default function EventCard({
             onClick={() => setActiveTab('custom')}
             className={`px-2.5 py-1 rounded-lg font-medium flex items-center gap-1 transition ${
               activeTab === 'custom'
-                ? 'bg-purple-600 text-white shadow-sm font-bold'
-                : 'text-purple-300 hover:text-purple-200'
+                ? 'bg-purple-600/30 text-purple-200 border border-purple-500/40 shadow-sm font-bold'
+                : 'text-purple-300/80 hover:text-purple-200'
             }`}
           >
             <Sparkles className="w-3 h-3 text-amber-300" />
@@ -285,24 +285,24 @@ export default function EventCard({
       </div>
 
       {/* Atmospheric Title */}
-      <h2 className="text-base md:text-lg font-bold text-white tracking-tight leading-snug">
+      <h2 className="text-base md:text-lg font-bold text-[var(--text-primary)] tracking-tight leading-snug">
         {displayTitle}
       </h2>
 
       {/* Narrative Context */}
-      <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800/90 text-slate-200 text-xs md:text-sm leading-relaxed font-sans italic">
+      <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs md:text-sm leading-relaxed font-sans italic">
         "{dilemma.narrative}"
       </div>
 
       {/* INTERNAL EGO VOICES CABINET (Bản Ngã Tranh Luận) */}
-      <div className="rounded-2xl bg-slate-950/70 border border-indigo-500/20 p-2.5 transition">
+      <div className="rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] p-2.5 transition">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[12px] normal-case font-sans tabular-nums font-bold text-slate-400 flex items-center gap-1">
-            <Brain className="w-3 h-3 text-indigo-400" /> Bản Ngã Tranh Luận (Internal Voices)
+          <span className="text-[12px] normal-case font-sans tabular-nums font-bold text-[var(--text-secondary)] flex items-center gap-1">
+            <Brain className="w-3 h-3 text-amber-400" /> Bản Ngã Tranh Luận (Internal Voices)
           </span>
           <button
             onClick={() => setShowMindVoices(!showMindVoices)}
-            className="text-[12px] text-slate-500 hover:text-slate-300 flex items-center gap-0.5"
+            className="text-[12px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-0.5"
           >
             {showMindVoices ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
           </button>
@@ -316,8 +316,8 @@ export default function EventCard({
                 onClick={() => setActiveVoice('logic')}
                 className={`py-1 px-1.5 rounded-lg flex items-center justify-center gap-1 border transition ${
                   activeVoice === 'logic'
-                    ? 'bg-indigo-950/90 border-indigo-400 text-indigo-200 font-bold'
-                    : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'
+                    ? 'bg-indigo-950/80 border-indigo-400/60 text-indigo-200 font-bold'
+                    : 'bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 <Brain className="w-3 h-3 text-indigo-400" />
@@ -328,8 +328,8 @@ export default function EventCard({
                 onClick={() => setActiveVoice('heart')}
                 className={`py-1 px-1.5 rounded-lg flex items-center justify-center gap-1 border transition ${
                   activeVoice === 'heart'
-                    ? 'bg-rose-950/90 border-rose-400 text-rose-200 font-bold'
-                    : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'
+                    ? 'bg-rose-950/80 border-rose-400/60 text-rose-200 font-bold'
+                    : 'bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 <Heart className="w-3 h-3 text-rose-400" />
@@ -340,8 +340,8 @@ export default function EventCard({
                 onClick={() => setActiveVoice('primal')}
                 className={`py-1 px-1.5 rounded-lg flex items-center justify-center gap-1 border transition ${
                   activeVoice === 'primal'
-                    ? 'bg-teal-950/90 border-teal-400 text-teal-200 font-bold'
-                    : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'
+                    ? 'bg-teal-950/80 border-teal-400/60 text-teal-200 font-bold'
+                    : 'bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 <ShieldAlert className="w-3 h-3 text-teal-400" />
@@ -350,7 +350,7 @@ export default function EventCard({
             </div>
 
             {/* Active Voice Whisper */}
-            <div className="text-[12px] font-sans italic text-slate-300 p-2 rounded-xl bg-slate-900/90 border border-slate-800 flex items-start gap-2">
+            <div className="text-[12px] font-sans italic text-[var(--text-secondary)] p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] flex items-start gap-2">
               <span className="text-xs">
                 {activeVoice === 'logic' ? '💡' : activeVoice === 'heart' ? '❤️' : '⚡'}
               </span>
@@ -461,7 +461,7 @@ export default function EventCard({
             return (
               <div
                 key={option.id}
-                className={`w-full flex items-center justify-between p-3 rounded-2xl border transition-all duration-200 bg-slate-950/60 hover:bg-slate-850 border-slate-800 hover:border-indigo-500/60 group`}
+                className={`w-full flex items-center justify-between p-3 rounded-2xl border transition-all duration-200 bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.04)] border-[var(--border-subtle)] hover:border-[var(--border-highlight)] group`}
               >
                 {/* Left: Button Action Title & Consequence Hint */}
                 <button
@@ -472,7 +472,7 @@ export default function EventCard({
                   <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
                     {/* Hotkey badge */}
                     {idx < 3 && (
-                      <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-amber-300 font-mono text-[10px] font-bold group-hover:border-indigo-400 group-hover:text-indigo-200 shadow-sm transition">
+                      <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-300 font-mono text-[10px] font-bold group-hover:border-[var(--border-highlight)] group-hover:text-amber-200 shadow-sm transition">
                         {idx + 1}
                       </kbd>
                     )}
@@ -488,13 +488,13 @@ export default function EventCard({
                       </span>
                     )}
 
-                    <span className="text-xs md:text-sm font-bold text-white group-hover:text-indigo-200 transition truncate">
+                    <span className="text-xs md:text-sm font-bold text-[var(--text-primary)] group-hover:text-amber-200 transition truncate">
                       {actionText}
                     </span>
                   </div>
 
                   {consequence && (
-                    <div className="text-[12px] text-slate-400 group-hover:text-slate-300 font-sans truncate">
+                    <div className="text-[12px] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] font-sans truncate">
                       ↳ {consequence}
                     </div>
                   )}

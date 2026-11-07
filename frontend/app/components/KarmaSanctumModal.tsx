@@ -45,11 +45,11 @@ export default function KarmaSanctumModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-2xl bg-slate-950 border border-purple-500/40 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+      <div className="relative w-full max-w-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition z-20"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition z-20"
         >
           <X className="w-4 h-4" />
         </button>
@@ -71,29 +71,29 @@ export default function KarmaSanctumModal({
                 Luân Hồi Đời {reincarnationCount}
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">
               Nơi lưu trữ công đức vĩnh hằng và thỉnh cầu phước lành tiền kiếp
             </p>
           </div>
         </div>
 
         {/* Karma Balance Strip */}
-        <div className="grid grid-cols-3 gap-3 p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 mb-4 text-xs">
+        <div className="grid grid-cols-3 gap-3 p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] mb-4 text-xs">
           <div>
-            <div className="text-[12px] text-slate-400 normal-case font-sans tabular-nums">Nghiệp Lực Vĩnh Cửu</div>
+            <div className="text-[12px] text-[var(--text-secondary)] normal-case font-sans tabular-nums">Nghiệp Lực Vĩnh Cửu</div>
             <div className="text-xl font-sans tabular-nums font-bold text-amber-300 mt-0.5 flex items-center gap-1">
               <Sparkles className="w-4 h-4 text-purple-400" />
               <span>{karma} Karma</span>
             </div>
           </div>
           <div>
-            <div className="text-[12px] text-slate-400 normal-case font-sans tabular-nums">Tổng Số Năm Đã Sống</div>
+            <div className="text-[12px] text-[var(--text-secondary)] normal-case font-sans tabular-nums">Tổng Số Năm Đã Sống</div>
             <div className="text-xl font-sans tabular-nums font-bold text-white mt-0.5">
               {lifetimeStats.total_years_lived || 0} năm
             </div>
           </div>
           <div>
-            <div className="text-[12px] text-slate-400 normal-case font-sans tabular-nums">Tài sản cao nhất</div>
+            <div className="text-[12px] text-[var(--text-secondary)] normal-case font-sans tabular-nums">Tài sản cao nhất</div>
             <div className="text-xl font-sans tabular-nums font-bold text-emerald-400 mt-0.5">
               ${(lifetimeStats.max_net_worth || 0).toLocaleString()}
             </div>
@@ -123,7 +123,7 @@ export default function KarmaSanctumModal({
             <h3 className="text-xs font-bold text-purple-300 normal-case tracking-normal mb-2 flex items-center gap-1.5">
               <HeartPulse className="w-4 h-4 text-rose-400" /> Thỉnh Cầu Phước Lành Tiền Kiếp
             </h3>
-            <p className="text-[12px] text-slate-400 mb-3 leading-relaxed">
+            <p className="text-[12px] text-[var(--text-secondary)] mb-3 leading-relaxed">
               Dùng Nghiệp Lực tích lũy qua các đời để giải cứu bản thân khi lâm nguy hoặc bế tắc tại thế.
             </p>
 
@@ -132,7 +132,7 @@ export default function KarmaSanctumModal({
               <button
                 disabled={loadingType !== null || karma < 15}
                 onClick={() => handleBlessing('vitality_shield')}
-                className="p-3.5 rounded-2xl bg-slate-950/80 hover:bg-rose-950/30 border border-slate-800 hover:border-rose-500/40 text-left transition active:scale-95 disabled:opacity-40 group"
+                className="p-3.5 rounded-2xl bg-[var(--bg-card)]/80 hover:bg-rose-950/30 border border-[var(--border-subtle)] hover:border-rose-500/40 text-left transition active:scale-95 disabled:opacity-40 group"
               >
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="font-bold text-white group-hover:text-rose-300 text-xs flex items-center gap-1.5">
@@ -143,7 +143,7 @@ export default function KarmaSanctumModal({
                     15 Karma
                   </span>
                 </div>
-                <div className="text-[12px] text-slate-400 leading-snug">
+                <div className="text-[12px] text-[var(--text-secondary)] leading-snug">
                   Hồi phục ngay +25 Sinh lực và xả -35 Burnout khi thể xác kiệt quệ.
                 </div>
               </button>
@@ -152,7 +152,7 @@ export default function KarmaSanctumModal({
               <button
                 disabled={loadingType !== null || karma < 25}
                 onClick={() => handleBlessing('benefactor_grace')}
-                className="p-3.5 rounded-2xl bg-slate-950/80 hover:bg-emerald-950/30 border border-slate-800 hover:border-emerald-500/40 text-left transition active:scale-95 disabled:opacity-40 group"
+                className="p-3.5 rounded-2xl bg-[var(--bg-card)]/80 hover:bg-emerald-950/30 border border-[var(--border-subtle)] hover:border-emerald-500/40 text-left transition active:scale-95 disabled:opacity-40 group"
               >
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="font-bold text-white group-hover:text-emerald-300 text-xs flex items-center gap-1.5">
@@ -163,7 +163,7 @@ export default function KarmaSanctumModal({
                     25 Karma
                   </span>
                 </div>
-                <div className="text-[12px] text-slate-400 leading-snug">
+                <div className="text-[12px] text-[var(--text-secondary)] leading-snug">
                   Nhận cờ &quot;Gia Tộc Hộ Mệnh&quot; (+20 Karma tại thế, tăng độ may mắn).
                 </div>
               </button>
@@ -171,8 +171,8 @@ export default function KarmaSanctumModal({
           </div>
 
           {/* Section 2: Unlocked Perks Portfolio */}
-          <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800">
-            <h3 className="text-xs font-bold text-slate-300 normal-case tracking-normal mb-2 flex items-center gap-1.5">
+          <div className="p-4 rounded-2xl bg-slate-900/70 border border-[var(--border-subtle)]">
+            <h3 className="text-xs font-bold text-[var(--text-secondary)] normal-case tracking-normal mb-2 flex items-center gap-1.5">
               <Award className="w-4 h-4 text-amber-400" /> Kho Tàng Đặc Quyền Vĩnh Cửu
             </h3>
             {unlockedPerks.length === 0 ? (
@@ -195,7 +195,7 @@ export default function KarmaSanctumModal({
             <h3 className="text-xs font-bold text-rose-300 normal-case tracking-normal mb-1 flex items-center gap-1.5">
               <Flame className="w-4 h-4 text-rose-400" /> Kết Thúc Kiếp Này & Tái Sinh Sớm
             </h3>
-            <p className="text-[12px] text-slate-400 mb-3 leading-relaxed">
+            <p className="text-[12px] text-[var(--text-secondary)] mb-3 leading-relaxed">
               Nếu số phận hiện tại bế tắc hoàn toàn, bạn có thể chủ động quy y cửa phật để kết thúc kiếp này sớm và bước vào Vòng Quay Tái Sinh.
             </p>
 
@@ -219,7 +219,7 @@ export default function KarmaSanctumModal({
                 </button>
                 <button
                   onClick={() => setConfirmAbandon(false)}
-                  className="py-2.5 px-3 rounded-xl bg-slate-800 text-slate-300 hover:text-white text-xs transition"
+                  className="py-2.5 px-3 rounded-xl bg-slate-800 text-[var(--text-secondary)] hover:text-white text-xs transition"
                 >
                   Hủy
                 </button>

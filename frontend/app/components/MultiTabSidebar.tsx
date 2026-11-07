@@ -150,7 +150,7 @@ export default function MultiTabSidebar({
   const canMentorship = character.household && !isParentsDeceased && (character.household.family_mentorship_used !== age);
 
   return (
-    <div className="w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-3 md:p-4 shadow-2xl backdrop-blur-xl flex flex-col gap-3 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6.5rem)] overflow-hidden">
+    <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-3 md:p-4 shadow-2xl backdrop-blur-xl flex flex-col gap-3 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6.5rem)] overflow-hidden transition-colors duration-200">
       
       {/* Life Aspiration Quick Banner */}
       {aspiration && (
@@ -160,14 +160,14 @@ export default function MultiTabSidebar({
               onOpenAspirationUpgrade?.();
             }
           }}
-          className={`p-2.5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-slate-950/80 to-indigo-950/40 border border-purple-500/30 flex items-center justify-between gap-3 shadow-sm transition ${
+          className={`p-2.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex items-center justify-between gap-3 shadow-sm transition ${
             aspiration.progress >= 100 || aspiration.is_completed
               ? 'cursor-pointer hover:border-amber-400/60 bg-amber-500/10 border-amber-500/40 animate-pulse'
               : ''
           }`}
         >
           <div className="flex items-center gap-2 min-w-0">
-            <span className="w-7 h-7 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-sm shrink-0">
+            <span className="w-7 h-7 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-sm shrink-0">
               {aspiration.icon || '🎯'}
             </span>
             <div className="min-w-0">
@@ -181,7 +181,7 @@ export default function MultiTabSidebar({
                   </span>
                 )}
               </div>
-              <div className="text-xs font-bold text-white truncate max-w-[150px] sm:max-w-[200px]">
+              <div className="text-xs font-bold text-[var(--text-primary)] truncate max-w-[150px] sm:max-w-[200px]">
                 {aspiration.title}
               </div>
             </div>
@@ -191,7 +191,7 @@ export default function MultiTabSidebar({
             <span className="text-[11px] font-mono font-bold text-amber-300">
               {aspiration.progress}%
             </span>
-            <div className="w-16 h-1.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+            <div className="w-16 h-1.5 bg-[var(--bg-card)] rounded-full overflow-hidden border border-[var(--border-subtle)]">
               <div
                 className={`h-full rounded-full transition-all duration-500 ${
                   aspiration.progress >= 100
@@ -206,21 +206,21 @@ export default function MultiTabSidebar({
       )}
 
       {/* 4-Tab Navigation Header */}
-      <div className="grid grid-cols-4 gap-1 p-1 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-inner shrink-0">
+      <div className="grid grid-cols-4 gap-1 p-1 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] shadow-inner shrink-0">
         <button
           type="button"
           onClick={() => setActiveTab('chronicle')}
           className={`py-2 px-1 rounded-xl text-xs font-bold transition flex flex-col sm:flex-row items-center justify-center gap-1 ${
             activeTab === 'chronicle'
               ? 'bg-gradient-to-r from-indigo-600/30 to-purple-600/30 text-indigo-300 border border-indigo-500/40 shadow-sm'
-              : 'text-slate-400 hover:text-slate-200'
+              : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
           }`}
           title="Nhật Ký Dòng Đời"
         >
           <BookOpen className="w-3.5 h-3.5 shrink-0" />
           <span className="truncate text-[11.5px]">Nhật Ký</span>
           {history.length > 0 && (
-            <span className="text-[9px] font-sans tabular-nums px-1 rounded-full bg-slate-800 text-slate-300 font-semibold hidden md:inline">
+            <span className="text-[9px] font-sans tabular-nums px-1 rounded-full bg-[var(--bg-card)] text-[var(--text-secondary)] font-semibold hidden md:inline">
               {history.length}
             </span>
           )}
@@ -232,7 +232,7 @@ export default function MultiTabSidebar({
           className={`py-2 px-1 rounded-xl text-xs font-bold transition flex flex-col sm:flex-row items-center justify-center gap-1 ${
             activeTab === 'family'
               ? 'bg-gradient-to-r from-emerald-600/30 to-teal-600/30 text-emerald-300 border border-emerald-500/40 shadow-sm'
-              : 'text-slate-400 hover:text-slate-200'
+              : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
           }`}
           title="Mái Ấm Gia Đình"
         >
@@ -246,7 +246,7 @@ export default function MultiTabSidebar({
           className={`py-2 px-1 rounded-xl text-xs font-bold transition flex flex-col sm:flex-row items-center justify-center gap-1 ${
             activeTab === 'wealth'
               ? 'bg-gradient-to-r from-amber-600/30 to-yellow-600/30 text-amber-300 border border-amber-500/40 shadow-sm'
-              : 'text-slate-400 hover:text-slate-200'
+              : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
           }`}
           title="Kinh Tế & Tài Sản"
         >
@@ -260,7 +260,7 @@ export default function MultiTabSidebar({
           className={`py-2 px-1 rounded-xl text-xs font-bold transition flex flex-col sm:flex-row items-center justify-center gap-1 relative ${
             activeTab === 'rpg'
               ? 'bg-gradient-to-r from-purple-600/30 to-pink-600/30 text-purple-300 border border-purple-500/40 shadow-sm'
-              : 'text-slate-400 hover:text-slate-200'
+              : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
           }`}
           title="Cây Kỹ Năng & Nhân Mạch"
         >
@@ -295,9 +295,9 @@ export default function MultiTabSidebar({
           <div className="space-y-3">
             {/* Household Card */}
             {character.household && (
-              <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col gap-2.5 shadow-sm">
+              <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex flex-col gap-2.5 shadow-sm">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-[12px] text-slate-200 flex items-center gap-1.5">
+                  <span className="font-bold text-[12px] text-[var(--text-primary)] flex items-center gap-1.5">
                     👨‍👩‍👧 {!isAdult ? "Mái Ấm Gia Đình" : "Gia Thế Tiền Thân"}
                   </span>
                   {character.household.family_buff && (
@@ -308,7 +308,7 @@ export default function MultiTabSidebar({
                 </div>
 
                 {/* Parents Line */}
-                <div className="flex items-center justify-between text-[11px] text-slate-300 bg-slate-900/60 px-2.5 py-1.5 rounded-xl border border-slate-800/60">
+                <div className="flex items-center justify-between text-[11px] text-[var(--text-secondary)] bg-[var(--bg-card)] px-2.5 py-1.5 rounded-xl border border-[var(--border-subtle)]">
                   <span className="truncate pr-1">
                     {character.household.father_name ? `Bố: ${character.household.father_name}` : "Mồ côi"}
                     {character.household.mother_name ? ` • Mẹ: ${character.household.mother_name}` : ""}
@@ -323,14 +323,14 @@ export default function MultiTabSidebar({
                 </div>
 
                 {/* Family Actions */}
-                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-800/60">
+                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[var(--border-subtle)]">
                   <button
                     onClick={onFamilyMeal}
                     disabled={!canEatFamilyMeal}
                     className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-between ${
                       canEatFamilyMeal
                         ? 'bg-amber-600/20 hover:bg-amber-600/30 text-amber-200 border border-amber-500/40 active:scale-98 shadow'
-                        : 'bg-slate-900/50 text-slate-500 border-slate-800/80 cursor-not-allowed'
+                        : 'bg-[var(--bg-card)] text-slate-500 border border-[var(--border-subtle)] cursor-not-allowed'
                     }`}
                     title={canEatFamilyMeal ? "Dùng bữa cơm gia đình: Giảm căng thẳng, ấm lòng" : "Đã hết phần cơm năm nay"}
                   >
@@ -349,7 +349,7 @@ export default function MultiTabSidebar({
                     className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-between ${
                       canMentorship
                         ? 'bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-200 border border-indigo-500/40 active:scale-98 shadow'
-                        : 'bg-slate-900/50 text-slate-500 border-slate-800/80 cursor-not-allowed'
+                        : 'bg-[var(--bg-card)] text-slate-500 border border-[var(--border-subtle)] cursor-not-allowed'
                     }`}
                     title={canMentorship ? "Nhận lời khuyên cha mẹ: +8 Karma" : "Đợi sang tuổi mới"}
                   >
@@ -366,9 +366,9 @@ export default function MultiTabSidebar({
             )}
 
             {/* Stage Milestone Checklist */}
-            <div className="p-3.5 rounded-2xl bg-gradient-to-b from-indigo-950/40 via-slate-950 to-purple-950/30 border border-indigo-500/30 flex flex-col gap-2.5 shadow-sm">
+            <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex flex-col gap-2.5 shadow-sm">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-[12px] text-white flex items-center gap-1.5 truncate">
+                <span className="font-bold text-[12px] text-[var(--text-primary)] flex items-center gap-1.5 truncate">
                   <Target className="w-3.5 h-3.5 text-indigo-400 shrink-0" /> {stageData.title}
                 </span>
                 <span className="font-sans tabular-nums text-indigo-300 text-[10px] font-semibold bg-indigo-950/80 px-2 py-0.5 rounded-full border border-indigo-500/30 shrink-0">
@@ -378,12 +378,12 @@ export default function MultiTabSidebar({
 
               <div className="space-y-1.5 text-[11px]">
                 {stageData.milestones.map((m, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-slate-300 gap-2">
+                  <div key={idx} className="flex items-center justify-between text-[var(--text-secondary)] gap-2">
                     <span className="flex items-center gap-1.5 truncate">
                       <span className={`text-xs ${m.done ? "text-emerald-400 font-bold" : "text-slate-600"}`}>
                         {m.done ? "✓" : "○"}
                       </span>
-                      <span className={`truncate ${m.done ? "text-slate-400 line-through opacity-75" : "text-slate-200"}`}>
+                      <span className={`truncate ${m.done ? "text-[var(--text-secondary)] line-through opacity-75" : "text-[var(--text-primary)]"}`}>
                         {m.name}
                       </span>
                     </span>
@@ -394,7 +394,7 @@ export default function MultiTabSidebar({
                 ))}
               </div>
 
-              <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
+              <div className="w-full bg-[var(--bg-card)] h-1.5 rounded-full overflow-hidden border border-[var(--border-subtle)]">
                 <div
                   className="h-full bg-indigo-500 transition-all duration-500 rounded-full"
                   style={{ width: `${progressPercent}%` }}
@@ -405,7 +405,7 @@ export default function MultiTabSidebar({
             {/* Button Xem Chi Tiết Gia Tộc */}
             <button
               onClick={onOpenFamily}
-              className="w-full py-2.5 px-3 rounded-xl bg-slate-950/80 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold transition flex items-center justify-center gap-2"
+              className="w-full py-2.5 px-3 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs font-bold transition flex items-center justify-center gap-2"
             >
               <Users className="w-3.5 h-3.5 text-indigo-400" />
               <span>Xem Toàn Bộ Mạng Lưới Quan Hệ ({relationships.length} người) →</span>
@@ -416,9 +416,9 @@ export default function MultiTabSidebar({
         {/* TAB 3: KINH TẾ & TÀI SẢN */}
         {activeTab === 'wealth' && (
           <div className="space-y-3">
-            <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col gap-3 shadow-sm">
+            <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex flex-col gap-3 shadow-sm">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-[12px] text-slate-200 flex items-center gap-1.5">
+                <span className="font-bold text-[12px] text-[var(--text-primary)] flex items-center gap-1.5">
                   <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> Tài Chính & Dòng Tiền
                 </span>
                 <button
@@ -429,9 +429,9 @@ export default function MultiTabSidebar({
                 </button>
               </div>
 
-              <div className="flex items-baseline justify-between bg-slate-900/60 p-3 rounded-xl border border-slate-800/60">
+              <div className="flex items-baseline justify-between bg-[var(--bg-card)] p-3 rounded-xl border border-[var(--border-subtle)]">
                 <div>
-                  <span className="text-[10.5px] text-slate-400 block font-medium">
+                  <span className="text-[10.5px] text-[var(--text-secondary)] block font-medium">
                     {age < 6 ? "Quỹ Bỉm Sữa (Mẹ Giữ)" : isAdult ? "Tiền Mặt Tự Do" : "Tiền Tiêu Vặt"}
                   </span>
                   <span className={`text-base font-sans tabular-nums font-extrabold ${displayCash < 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
@@ -440,7 +440,7 @@ export default function MultiTabSidebar({
                 </div>
 
                 <div className="text-right">
-                  <span className="text-[10.5px] text-slate-400 block font-medium">
+                  <span className="text-[10.5px] text-[var(--text-secondary)] block font-medium">
                     {isAdult ? "Tổng Tài Sản Ròng" : "Quỹ Tín Thác 18t"}
                   </span>
                   <span className="text-sm font-sans tabular-nums font-bold text-teal-300">
@@ -451,9 +451,9 @@ export default function MultiTabSidebar({
             </div>
 
             {/* Assets List Summary */}
-            <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2">
+            <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-slate-300 flex items-center gap-1">
+                <span className="font-bold text-[var(--text-primary)] flex items-center gap-1">
                   <Briefcase className="w-3 h-3 text-amber-400" /> Danh Mục Sở Hữu ({assets.length})
                 </span>
                 <button
@@ -471,8 +471,8 @@ export default function MultiTabSidebar({
               ) : (
                 <div className="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar">
                   {assets.map((a: any, i: number) => (
-                    <div key={i} className="flex items-center justify-between p-2 rounded-xl bg-slate-900/50 border border-slate-800/60 text-xs">
-                      <span className="text-slate-200 font-medium truncate">{a.name}</span>
+                    <div key={i} className="flex items-center justify-between p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs">
+                      <span className="text-[var(--text-primary)] font-medium truncate">{a.name}</span>
                       <span className="text-emerald-400 font-mono font-bold shrink-0 ml-2">
                         +${Number(a.current_value || 0).toLocaleString()}
                       </span>
@@ -488,14 +488,14 @@ export default function MultiTabSidebar({
         {activeTab === 'rpg' && (
           <div className="space-y-2.5">
             {/* Sub-tab toggle */}
-            <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-950 border border-slate-800 text-xs">
+            <div className="flex items-center gap-1 p-1 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs">
               <button
                 type="button"
                 onClick={() => setRpgSubTab('skills')}
                 className={`flex-1 py-1 px-2 rounded-lg font-bold transition flex items-center justify-center gap-1 ${
                   rpgSubTab === 'skills'
                     ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 <span>🌳 Cây Kỹ Năng</span>
@@ -512,7 +512,7 @@ export default function MultiTabSidebar({
                 className={`flex-1 py-1 px-2 rounded-lg font-bold transition flex items-center justify-center gap-1 ${
                   rpgSubTab === 'social'
                     ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 <Users className="w-3 h-3 text-purple-400" />

@@ -296,6 +296,9 @@ Nhằm mang lại trải nghiệm điều khiển liên tục (Flow State) như 
 | <kbd>D</kbd> | Trải Nghiệm Không Gian | `border-purple-500/40 text-purple-300 bg-purple-500/10` | Mở/Đóng Phòng Quyết Định Điện Ảnh tỉ lệ 21:9 Cinema |
 | <kbd>M</kbd> | Âm Thanh Không Gian | `border-cyan-500/40 text-cyan-300 bg-cyan-500/10` | Bật / Tắt nhanh âm thanh nền (Mute Toggle) |
 | <kbd>?</kbd> / <kbd>/</kbd> | Cẩm Nang Trợ Giúp | `border-indigo-500/40 text-indigo-300 bg-indigo-500/10` | Bật nhanh Sổ tay hướng dẫn Dual-Mode Guide |
+| <kbd>K</kbd> | Hệ Thống Bàn Phím | `border-amber-500/40 text-amber-300 bg-amber-500/10` | Bật/tắt Bảng danh mục phím tắt toàn cục (Shortcuts Cheatsheet) |
+| <kbd>E</kbd> | Sinh Tồn Khẩn Cấp | `border-rose-500/40 text-rose-300 bg-rose-500/10` | Mở Trạm Cứu Hộ Khẩn Cấp (Emergency SOS) khi sinh lực nguy kịch |
+| <kbd>Esc</kbd> | Điều Hướng Cửa Sổ | `border-slate-500/40 text-slate-300 bg-slate-500/10` | Đóng nhanh bất kỳ hộp thoại / modal thông tin đang mở |
 
 ---
 
@@ -368,3 +371,63 @@ Mọi cập nhật giao diện trước khi xuất bản lên môi trường Pro
 - [ ] **Kiểm tra Ngưỡng Cấp Cứu SOS:** Đổi chỉ số Máu xuống < 30% hoặc Kiệt Sức lên > 75%, nút SOS nhấp nháy xuất hiện chính xác trên thanh HUD.
 - [ ] **Kiểm tra Cách Ly Phím Tắt (Context Guarding):** Nhấp chuột vào ô chat NPC hoặc ô nhập văn bản và gõ các phím `1`, `2`, `3`, `Space`, `D` — đảm bảo chỉ gõ chữ vào ô nhập mà không làm nhảy năm hay kích hoạt ngã rẽ.
 - [ ] **Kiểm tra Giảm Chuyển Động (Reduced Motion):** Khi hệ điều hành bật `prefers-reduced-motion`, các hiệu ứng rung lắc/nhấp nháy tự động chuyển sang trạng thái tĩnh.
+- [ ] **Kiểm tra Multi-Theme & Anti-FOUC:** Chuyển đổi qua lại giữa 3 theme (Obsidian, Sepia, Cyber), xác nhận giao diện chuyển màu êm dịu, không giật màn hình và lưu đúng vào localStorage.
+
+---
+
+## 10. Tiêu Chuẩn Hệ Thống Multi-Theme & Công Thái Học Thị Giác (Visual Ergonomics)
+
+Nhằm tối ưu hóa trải nghiệm cho các phiên chơi kéo dài (Long-session Gameplay) và bảo vệ thị lực người chơi trong nhiều điều kiện ánh sáng môi trường khác nhau, LifeGraph thiết lập tiêu chuẩn **Công Thái Học Thị Giác (Visual Ergonomics)** thông qua hệ thống Multi-Theme động:
+
+### 10.1. Chi Tiết 3 Phong Cách Thị Giác Cốt Lõi
+
+1. 🌙 **Obsidian Night (Than chì dịu mắt — Mặc Định Khuyên Dùng):**
+   * **Bản sắc:** Tông nền than chì tối êm dịu (`#0c0d12`), triệt tiêu độ tương phản gắt của màu đen tuyệt đối (#000000) và sắc xanh kích thích thị giác.
+   * **Tác động công thái học:** Giữ đồng tử ở trạng thái thư giãn tự nhiên, giảm thiểu hiện tượng mỏi cơ mắt khi tập trung đọc chữ và tương tác chỉ số trong thời gian dài.
+   * **Môi trường phù hợp:** Phiên chơi hàng ngày, môi trường ánh sáng phòng bình thường hoặc màn hình tấm nền OLED/IPS.
+
+2. 📜 **Sepia Warmth (Đêm ấm cúng — Lọc Ánh Sáng Xanh):**
+   * **Bản sắc:** Tông giấy ngà cổ điển (`#161412`), sắc chữ vàng ấm dịu (`#ebd8be`), viền nâu hổ phách mềm mại (`rgba(235, 216, 190, 0.12)`).
+   * **Tác động công thái học:** Cắt giảm tối đa quang phổ ánh sáng xanh bước sóng ngắn (< 450nm) — tác nhân chính gây ức chế Melatonin và mỏi mắt về đêm. Mang lại cảm giác đọc sách bên ánh đèn vàng ấm áp.
+   * **Môi trường phù hợp:** Chơi vào ban đêm, trước khi đi ngủ, hoặc người chơi có cơ địa nhạy cảm với ánh sáng màn hình.
+
+3. ⚡ **Cyber Slate (Neon nguyên bản — Viễn Tưởng Sắc Nét):**
+   * **Bản sắc:** Tông xanh đen vũ trụ (`#020617`), viền cyan neon sắc nét (`rgba(56, 189, 248, 0.25)`), điểm nhấn tím điện tử (`rgba(168, 85, 247, 0.50)`).
+   * **Tác động công thái học:** Tương phản cao, sắc sảo và hiện đại. Mang đậm phong cách buồng lái phi thuyền viễn tưởng nguyên bản của LifeGraph RPG.
+   * **Môi trường phù hợp:** Người chơi yêu thích phong cách Cyberpunk, màn hình Gaming độ sáng cao hoặc chế độ Phòng Điện Ảnh 21:9.
+
+---
+
+### 10.2. Bảng Quy Chuẩn CSS Variables Chuẩn Hóa
+
+Mọi thành phần giao diện (Card, Panel, Text, Border, Header) bắt buộc phải sử dụng các CSS Variables ngữ nghĩa thay vì mã màu cố định cứng:
+
+| CSS Variable | Ý Nghĩa Ngữ Nghĩa | 🌙 Obsidian Night (Mặc định) | 📜 Sepia Warmth (Đêm ấm) | ⚡ Cyber Slate (Neon) |
+| :--- | :--- | :--- | :--- | :--- |
+| `--bg-canvas` | Nền canvas toàn trang | `#0c0d12` (Than chì đậm) | `#161412` (Nâu ngà ấm) | `#020617` (Xanh đen sâu) |
+| `--bg-header` | Nền thanh điều hướng & HUD | `rgba(14, 16, 22, 0.88)` | `rgba(26, 23, 20, 0.90)` | `rgba(2, 6, 23, 0.92)` |
+| `--bg-card` | Nền thẻ container chính | `rgba(18, 20, 28, 0.82)` | `rgba(32, 28, 24, 0.82)` | `rgba(15, 23, 42, 0.82)` |
+| `--bg-card-subtle` | Nền thẻ phụ & Dock tiện ích | `rgba(26, 29, 39, 0.65)` | `rgba(43, 38, 33, 0.65)` | `rgba(30, 41, 59, 0.65)` |
+| `--border-subtle` | Viền ngăn cách nhẹ nhàng | `rgba(255, 255, 255, 0.08)` | `rgba(235, 216, 190, 0.12)` | `rgba(56, 189, 248, 0.25)` |
+| `--border-highlight` | Viền nhấn mạnh / Hover | `rgba(251, 191, 36, 0.35)` | `rgba(217, 119, 6, 0.40)` | `rgba(168, 85, 247, 0.50)` |
+| `--text-primary` | Màu chữ nội dung chính | `#e2e4e9` (Trắng xám dịu) | `#ebd8be` (Vàng ngà êm) | `#f1f5f9` (Trắng sáng) |
+| `--text-secondary` | Màu chữ phụ, nhãn chú thích | `#9da3af` (Xám tro) | `#a89f91` (Nâu xám tro) | `#94a3b8` (Xanh xám tro) |
+| `--accent-gold` | Màu nhấn Vàng Năng Lượng | `#f59e0b` | `#d97706` | `#eab308` |
+| `--accent-emerald` | Màu nhấn Xanh Sinh Lực | `#10b981` | `#059669` | `#06b6d4` |
+| `--accent-rose` | Màu nhấn Đỏ Cảnh Báo | `#f43f5e` | `#e11d48` | `#ec4899` |
+
+---
+
+### 10.3. Kiến Trúc Kỹ Thuật & Phòng Chống FOUC (Anti-FOUC Architecture)
+
+1. **Khởi tạo tức thì (Zero Flash of Unstyled Content - Anti-FOUC):**
+   * Một đoạn mã đồng bộ siêu nhỏ được thực thi ngay trong thẻ `<head>` của `frontend/app/layout.tsx` trước khi bất kỳ thành phần React nào được hydrate:
+     ```javascript
+     var savedTheme = localStorage.getItem('lifegraph_theme') || 'obsidian';
+     document.documentElement.setAttribute('data-theme', savedTheme);
+     ```
+   * Nhờ đó, trình duyệt áp dụng ngay CSS Variables của theme đã chọn, triệt tiêu 100% hiện tượng chớp trắng/chớp màu khi tải lại trang hoặc điều hướng.
+2. **Chuyển màu mượt mà (Smooth Visual Transition):**
+   * Thuộc tính `body { transition: background-color 0.25s ease, color 0.25s ease; }` đảm bảo việc chuyển đổi giữa các theme diễn ra êm ái trong 250ms, không gây giật thị giác.
+3. **Lưu trữ trạng thái bền vững:**
+   * Lựa chọn của người chơi được lưu tức thì vào `localStorage.setItem('lifegraph_theme', newTheme)` và đồng bộ trên toàn bộ phiên làm việc.

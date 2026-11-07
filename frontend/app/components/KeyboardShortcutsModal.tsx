@@ -53,35 +53,53 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShor
       description: 'Bật nhanh Sổ tay hướng dẫn sinh tồn (Game Guide Modal)',
       category: 'Trợ Giúp',
       badgeColor: 'border-indigo-500/40 text-indigo-300 bg-indigo-500/10'
+    },
+    {
+      key: 'K',
+      description: 'Bật / tắt bảng danh mục phím tắt toàn cục (Shortcuts Cheatsheet)',
+      category: 'Hệ Thống',
+      badgeColor: 'border-amber-500/40 text-amber-300 bg-amber-500/10'
+    },
+    {
+      key: 'E',
+      description: 'Mở Trạm Cứu Hộ Khẩn Cấp (Emergency SOS) khi sinh lực suy kiệt',
+      category: 'Sinh Tồn',
+      badgeColor: 'border-rose-500/40 text-rose-300 bg-rose-500/10'
+    },
+    {
+      key: 'Esc',
+      description: 'Đóng nhanh bất kỳ cửa sổ / modal thông tin đang mở',
+      category: 'Điều Hướng',
+      badgeColor: 'border-slate-500/40 text-slate-300 bg-slate-500/10'
     }
   ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-xl bg-slate-950 border border-slate-800 rounded-3xl p-6 md:p-7 shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-6 md:p-7 shadow-2xl overflow-hidden transition-colors duration-200">
         {/* Ambient Glow */}
-        <div className="absolute top-0 right-0 w-64 h-32 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-32 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400">
+            <div className="w-10 h-10 rounded-xl bg-amber-600/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
               <Keyboard className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base md:text-lg font-bold text-white flex items-center gap-2">
+              <h2 className="text-base md:text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
                 Hệ Thống Phím Tắt Toàn Cục
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
                   HOTKEYS
                 </span>
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[var(--text-secondary)]">
                 Thao tác nhanh chóng, đắm chìm trọn vẹn vào dòng thời gian cuộc đời
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800/80 transition"
+            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1.5 rounded-xl hover:bg-[rgba(255,255,255,0.06)] transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -92,14 +110,14 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShor
           {shortcuts.map((item, idx) => (
             <div
               key={idx}
-              className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-slate-900/70 border border-slate-800/80 hover:border-slate-700 transition"
+              className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] hover:border-[var(--border-highlight)] transition"
             >
               <div className="flex-1 min-w-0 pr-2">
-                <div className="text-xs md:text-sm font-semibold text-white leading-snug">
+                <div className="text-xs md:text-sm font-semibold text-[var(--text-primary)] leading-snug">
                   {item.description}
                 </div>
-                <div className="text-[11px] text-slate-500 mt-0.5">
-                  Phân loại: <span className="text-slate-400 font-medium">{item.category}</span>
+                <div className="text-[11px] text-[var(--text-secondary)] mt-0.5">
+                  Phân loại: <span className="text-[var(--text-primary)] font-medium">{item.category}</span>
                 </div>
               </div>
 
@@ -111,7 +129,7 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShor
         </div>
 
         {/* Pro Tip Footer */}
-        <div className="pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center gap-2">
+        <div className="pt-3 border-t border-[var(--border-subtle)] text-[11px] text-[var(--text-secondary)] flex items-center gap-2">
           <span className="text-amber-400 shrink-0">💡</span>
           <span>
             <strong>Ghi chú:</strong> Phím tắt tự động bỏ qua khi con trỏ đang nhập văn bản trong các ô input hoặc khi đang mở các bảng hộp thoại.

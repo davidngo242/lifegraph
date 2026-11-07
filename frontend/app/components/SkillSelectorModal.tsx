@@ -219,11 +219,11 @@ export default function SkillSelectorModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-5 bg-black/85 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-4xl bg-slate-950 border border-amber-500/40 rounded-3xl p-5 md:p-7 shadow-2xl flex flex-col overflow-hidden max-h-[92vh]">
+      <div className="relative w-full max-w-4xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 md:p-7 shadow-2xl flex flex-col overflow-hidden max-h-[92vh]">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition z-20"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition z-20"
         >
           <X className="w-4 h-4" />
         </button>
@@ -232,7 +232,7 @@ export default function SkillSelectorModal({
         <div className="absolute top-0 right-1/4 w-96 h-28 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-4 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border-subtle)] pb-4 mb-4">
           <div className="flex items-center gap-3.5">
             <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl shadow-lg shadow-amber-500/20 shrink-0">
               🎓
@@ -246,7 +246,7 @@ export default function SkillSelectorModal({
                   Tuổi {characterAge}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
+              <p className="text-xs text-[var(--text-secondary)] flex items-center gap-1.5 mt-0.5">
                 <MapPin className="w-3.5 h-3.5 text-rose-400" />
                 <span>Định vị: <strong>{currentCity} ({nationality})</strong></span>
                 <span>•</span>
@@ -256,19 +256,19 @@ export default function SkillSelectorModal({
           </div>
 
           {/* Quick Stats Pill */}
-          <div className="flex items-center gap-2.5 bg-slate-900/90 border border-slate-800 rounded-2xl px-3.5 py-2 shrink-0 self-start sm:self-center">
+          <div className="flex items-center gap-2.5 bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl px-3.5 py-2 shrink-0 self-start sm:self-center">
             <div className="text-center">
-              <span className="text-[12px] text-slate-400 normal-case tracking-normal block">Điểm AP</span>
+              <span className="text-[12px] text-[var(--text-secondary)] normal-case tracking-normal block">Điểm AP</span>
               <span className="text-xs font-bold text-amber-400 font-sans tabular-nums">⚡ {characterAP} AP</span>
             </div>
             <div className="h-6 w-px bg-slate-800" />
             <div className="text-center">
-              <span className="text-[12px] text-slate-400 normal-case tracking-normal block">Tiền Mặt</span>
+              <span className="text-[12px] text-[var(--text-secondary)] normal-case tracking-normal block">Tiền Mặt</span>
               <span className="text-xs font-bold text-emerald-400 font-sans tabular-nums">${characterCash.toLocaleString()}</span>
             </div>
             <div className="h-6 w-px bg-slate-800" />
             <div className="text-center">
-              <span className="text-[12px] text-slate-400 normal-case tracking-normal block">Tổng Cấp Độ</span>
+              <span className="text-[12px] text-[var(--text-secondary)] normal-case tracking-normal block">Tổng Cấp Độ</span>
               <span className="text-xs font-bold text-sky-400 font-sans tabular-nums">★ {totalMasteryScore}/12</span>
             </div>
           </div>
@@ -307,12 +307,12 @@ export default function SkillSelectorModal({
             return (
               <div
                 key={branch.id}
-                className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-amber-500/40 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
+                className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]/80 hover:border-amber-500/40 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
               >
                 {/* Left Column: Icon & Basic Info */}
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-3xl p-2 rounded-xl bg-slate-950 border border-slate-800">{branch.icon}</span>
+                    <span className="text-3xl p-2 rounded-xl bg-slate-950 border border-[var(--border-subtle)]">{branch.icon}</span>
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <h4 className="text-base font-bold text-white">{branch.name}</h4>
@@ -333,12 +333,12 @@ export default function SkillSelectorModal({
                             ? 'bg-sky-500/20 text-sky-300 border-sky-500/40'
                             : currentLevel === 1
                             ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                            : 'bg-slate-800 text-slate-400 border-slate-700'
+                            : 'bg-slate-800 text-[var(--text-secondary)] border-slate-700'
                         }`}>
                           {currentLevel === 0 ? 'Chưa Đào Tạo' : activeLevelConfig?.title}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-400 mt-0.5">{branch.desc}</p>
+                      <p className="text-xs text-[var(--text-secondary)] mt-0.5">{branch.desc}</p>
                     </div>
                   </div>
 
@@ -359,7 +359,7 @@ export default function SkillSelectorModal({
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         <span>Quyền Lợi Đã Kích Hoạt ({currentLevel === 0 ? 'Chưa có' : `Cấp ${currentLevel}`}):</span>
                       </div>
-                      <p className="text-slate-300 text-[12px]">
+                      <p className="text-[var(--text-secondary)] text-[12px]">
                         {currentLevel === 0 ? 'Chưa có quyền lợi thụ động.' : activeLevelConfig?.perkDesc}
                       </p>
                     </div>
@@ -370,7 +370,7 @@ export default function SkillSelectorModal({
                         <Sparkles className="w-3.5 h-3.5" />
                         <span>Mục Tiêu Kế Tiếp ({isMaxed ? 'Đạt Max' : nextLevelConfig?.title}):</span>
                       </div>
-                      <p className="text-slate-300 text-[12px]">
+                      <p className="text-[var(--text-secondary)] text-[12px]">
                         {isMaxed ? 'Đã đạt cảnh giới Đại Sư tối cao, không thể nâng thêm.' : nextLevelConfig?.perkDesc}
                       </p>
                     </div>
@@ -378,12 +378,12 @@ export default function SkillSelectorModal({
                 </div>
 
                 {/* Right Column: Pricing & Exam Action Button */}
-                <div className="shrink-0 flex flex-col items-end justify-center min-w-[200px] border-t md:border-t-0 md:border-l border-slate-800/80 pt-3 md:pt-0 md:pl-4">
+                <div className="shrink-0 flex flex-col items-end justify-center min-w-[200px] border-t md:border-t-0 md:border-l border-[var(--border-subtle)]/80 pt-3 md:pt-0 md:pl-4">
                   {!isMaxed ? (
                     <>
                       {/* Price Tag */}
                       <div className="text-right mb-2.5">
-                        <div className="text-[12px] text-slate-400">Chi phí sát hạch:</div>
+                        <div className="text-[12px] text-[var(--text-secondary)]">Chi phí sát hạch:</div>
                         <div className="flex items-center gap-2 justify-end mt-0.5">
                           <span className="text-xs font-sans tabular-nums font-bold text-amber-400 bg-amber-950/50 px-2 py-0.5 rounded border border-amber-500/30">
                             1 AP
@@ -429,7 +429,7 @@ export default function SkillSelectorModal({
                         <Sparkles className="w-3.5 h-3.5" />
                         <span>ĐẠI SƯ HOÀN MỸ</span>
                       </div>
-                      <span className="text-[12px] text-slate-400 block mt-0.5">Đạt cảnh giới tối cao</span>
+                      <span className="text-[12px] text-[var(--text-secondary)] block mt-0.5">Đạt cảnh giới tối cao</span>
                     </div>
                   )}
                 </div>
@@ -439,7 +439,7 @@ export default function SkillSelectorModal({
         </div>
 
         {/* Footer Info */}
-        <div className="mt-4 pt-3 border-t border-slate-800 text-center text-[12px] text-slate-400 flex items-center justify-center gap-2">
+        <div className="mt-4 pt-3 border-t border-[var(--border-subtle)] text-center text-[12px] text-[var(--text-secondary)] flex items-center justify-center gap-2">
           <BookOpen className="w-3.5 h-3.5 text-amber-400" />
           <span>Vượt qua kỳ sát hạch (Mini-Game) sẽ nhận bằng cấp và kích hoạt quyền lợi vĩnh viễn suốt kiếp sống.</span>
         </div>

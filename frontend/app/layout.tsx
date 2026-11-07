@@ -35,6 +35,8 @@ export default function RootLayout({
               (function() {
                 try {
                   if (typeof window !== 'undefined') {
+                    var savedTheme = localStorage.getItem('lifegraph_theme') || 'obsidian';
+                    document.documentElement.setAttribute('data-theme', savedTheme);
                     var sid = localStorage.getItem('lifegraph_session_id');
                     if (!sid) {
                       sid = 'user_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 9);
@@ -68,7 +70,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-indigo-500 selection:text-white font-sans">
+      <body className="bg-[var(--bg-canvas)] text-[var(--text-primary)] min-h-screen antialiased selection:bg-amber-900/30 selection:text-amber-100 font-sans transition-colors duration-200">
         {children}
       </body>
     </html>

@@ -65,11 +65,11 @@ export default function FamilyDetailModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-      <div className="relative w-full max-w-3xl bg-slate-900 border border-pink-500/30 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+      <div className="relative w-full max-w-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition"
         >
           <X className="w-5 h-5" />
         </button>
@@ -83,18 +83,18 @@ export default function FamilyDetailModal({
             <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
               Gia Tộc & Người Thân Thiết
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-[var(--text-secondary)]">
               Vun đắp tình thân, kết duyên trăm năm và nuôi dưỡng thế hệ thừa kế
             </p>
           </div>
         </div>
 
         {/* Resources Summary */}
-        <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 mb-4 text-xs">
-          <span className="text-slate-300">
+        <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] mb-4 text-xs">
+          <span className="text-[var(--text-secondary)]">
             Ngân sách: <strong className="text-emerald-400 font-sans tabular-nums">${cash.toLocaleString()}</strong> | AP hiện có: <strong className="text-amber-400 font-sans tabular-nums">{actionPoints}</strong>
           </span>
-          <span className="text-slate-400">
+          <span className="text-[var(--text-secondary)]">
             Tổng thành viên: <strong className="text-pink-400">{relationships.length} người</strong>
           </span>
         </div>
@@ -113,14 +113,14 @@ export default function FamilyDetailModal({
           <button
             disabled={loadingAction !== null || actionPoints < 1 || cash < 2000}
             onClick={() => executeAction('gift_parent', 1, 2000)}
-            className="p-3 rounded-2xl bg-slate-950 border border-slate-800 hover:border-pink-500/40 text-left transition active:scale-95 disabled:opacity-40"
+            className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] hover:border-pink-500/40 text-left transition active:scale-95 disabled:opacity-40"
           >
             <div className="flex items-center justify-between mb-1">
               <Gift className="w-4 h-4 text-pink-400" />
               <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
             </div>
             <div className="text-xs font-bold text-white">Báo Hiếu Cha Mẹ</div>
-            <div className="text-[12px] text-slate-400 mt-0.5">Chi $2.000 (Karma +20)</div>
+            <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">Chi $2.000 (Karma +20)</div>
           </button>
 
           {/* Action 2: Hẹn hò (Yêu cầu >= 16 tuổi) */}
@@ -143,7 +143,7 @@ export default function FamilyDetailModal({
                 <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
               </div>
               <div className="text-xs font-bold text-white">Hẹn Hò Gặp Gỡ</div>
-              <div className="text-[12px] text-slate-400 mt-0.5">
+              <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
                 {(characterAge ?? 18) < 16
                   ? `Khóa: Cần 16+ tuổi (Hiện tại: ${characterAge} tuổi)`
                   : 'Chi $1.500 (Tìm bạn đời)'}
@@ -171,7 +171,7 @@ export default function FamilyDetailModal({
                 <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">2 AP</span>
               </div>
               <div className="text-xs font-bold text-white">Tổ Chức Hôn Lễ</div>
-              <div className="text-[12px] text-slate-400 mt-0.5">
+              <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
                 {(characterAge ?? 18) < 18
                   ? `Khóa: Cần 18+ tuổi (Hiện tại: ${characterAge} tuổi)`
                   : 'Chi $10.000 (Thành hôn)'}
@@ -199,7 +199,7 @@ export default function FamilyDetailModal({
                 <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">2 AP</span>
               </div>
               <div className="text-xs font-bold text-white">Sinh Con Kế Thừa</div>
-              <div className="text-[12px] text-slate-400 mt-0.5">
+              <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
                 {(characterAge ?? 18) < 18
                   ? `Khóa: Cần 18+ tuổi (Hiện tại: ${characterAge} tuổi)`
                   : 'Chi $8.000 (Dòng dõi)'}
@@ -212,14 +212,14 @@ export default function FamilyDetailModal({
             <button
               disabled={loadingAction !== null || actionPoints < 1 || cash < 2000}
               onClick={() => executeAction('educate_child', 1, 2000)}
-              className="p-3 rounded-2xl bg-slate-950 border border-slate-800 hover:border-pink-500/40 text-left transition active:scale-95 disabled:opacity-40"
+              className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] hover:border-pink-500/40 text-left transition active:scale-95 disabled:opacity-40"
             >
               <div className="flex items-center justify-between mb-1">
                 <Sparkles className="w-4 h-4 text-emerald-400" />
                 <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
               </div>
               <div className="text-xs font-bold text-white">Dạy Dỗ Con Cái</div>
-              <div className="text-[12px] text-slate-400 mt-0.5">Chi $2.000 (Tình cảm +20)</div>
+              <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">Chi $2.000 (Tình cảm +20)</div>
             </button>
           )}
         </div>
@@ -240,10 +240,10 @@ export default function FamilyDetailModal({
               return (
                 <div
                   key={rel.id}
-                  className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 flex items-center justify-between hover:border-slate-700 transition"
+                  className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex items-center justify-between hover:border-[var(--border-highlight)] transition"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-slate-900 border border-slate-700 flex items-center justify-center text-xl">
+                    <div className="w-10 h-10 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] flex items-center justify-center text-xl">
                       {rel.type === 'spouse' ? '💍' :
                        rel.type === 'child' ? '👶' :
                        rel.type === 'mother' ? '👵' :
@@ -256,7 +256,7 @@ export default function FamilyDetailModal({
                         <span className={`text-[12px] px-2 py-0.5 rounded-full font-medium ${
                           rel.type === 'spouse' ? 'bg-pink-500/20 text-pink-300 border border-pink-500/30' :
                           rel.type === 'child' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' :
-                          'bg-slate-800 text-slate-300'
+                          'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)]'
                         }`}>
                           {rel.type === 'spouse' ? 'Bạn Đời (Vợ/Chồng)' :
                            rel.type === 'child' ? 'Con Cái (Người Thừa Kế)' :
@@ -265,7 +265,7 @@ export default function FamilyDetailModal({
                            rel.type === 'lover' || rel.type === 'partner' ? 'Người Yêu' : 'Người Thân'}
                         </span>
                         {typeof rel.age === 'number' && (
-                          <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-slate-800/90 text-slate-300 border border-slate-700">
+                          <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                             {rel.age} tuổi
                           </span>
                         )}
@@ -289,8 +289,8 @@ export default function FamilyDetailModal({
 
                       {/* Affinity Bar */}
                       <div className="flex items-center gap-2 mt-2 w-48 sm:w-64">
-                        <span className="text-[12px] text-slate-400">Gắn kết:</span>
-                        <div className="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden">
+                        <span className="text-[12px] text-[var(--text-secondary)]">Gắn kết:</span>
+                        <div className="flex-1 h-2 rounded-full bg-[var(--bg-card-subtle)] overflow-hidden border border-[var(--border-subtle)]">
                           <div
                             className={`h-full transition-all duration-500 ${
                               affinity >= 75 ? 'bg-gradient-to-r from-pink-500 to-rose-400' :
@@ -300,7 +300,7 @@ export default function FamilyDetailModal({
                             style={{ width: `${affinity}%` }}
                           />
                         </div>
-                        <span className="text-[12px] font-sans tabular-nums text-slate-300">{affinity}%</span>
+                        <span className="text-[12px] font-sans tabular-nums text-[var(--text-secondary)]">{affinity}%</span>
                       </div>
                     </div>
                   </div>

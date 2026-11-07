@@ -145,6 +145,13 @@ NEXT_PUBLIC_API_URL=/api/game
 * ⚡ **Cơ Chế Synergistic AP (`+1 AP Trợ Lực`):** Đầu tư điểm hành động trực tiếp vào phương án ngã rẽ để tăng +2 điểm gieo xúc xắc D20, tăng +25% Cash, +30% Karma và giảm 50% rủi ro trừ máu/tăng stress.
 * ⚠️ **Hộp Thoại Cảnh Báo Thông Minh (Smart Unspent AP Warning):** Tự động phát hiện khi còn AP dư và đề xuất dùng nốt hoặc chuyển hóa an toàn (+2 HP & -5% Burnout per AP) khi bước sang năm mới.
 
+### 10. Hệ Thống Multi-Theme & Công Thái Học Thị Giác (Visual Ergonomics)
+* 🎨 **3 Phong Cách Thị Giác Chuyên Biệt Chống Mỏi Mắt:**
+  * 🌙 **Obsidian Night (Than chì dịu mắt — Mặc định):** Nền than chì sâu thẳm `#0c0d12`, loại bỏ màu đen tuyệt đối và ánh sáng chói, giữ mắt thư giãn tối đa trong các phiên chơi đường dài.
+  * 📜 **Sepia Warmth (Đêm ấm cúng):** Tông giấy ngà & nâu ấm `#161412`, cắt giảm tối đa ánh sáng xanh gây mỏi mắt, hoàn hảo cho những đêm tĩnh lặng trước khi ngủ.
+  * ⚡ **Cyber Slate (Neon nguyên bản):** Nền xanh đen viễn tưởng `#020617` kết hợp đường viền cyan neon sắc sảo, gợi cảm giác buồng lái phi thuyền không gian.
+* ⚡ **Công Nghệ Chuyển Đổi Tức Thì & Zero-FOUC:** Tích hợp `ThemeSwitcher` trên thanh Header buồng lái, lưu tự động vào `localStorage ('lifegraph_theme')`, ngăn chặn 100% hiện tượng chớp nháy (Anti-FOUC) với hiệu ứng chuyển màu mượt mà 250ms.
+
 ---
 
 ## ⌨️ Bảng Phím Tắt Toàn Cục (Global Hotkeys Cheat-Sheet)
@@ -160,6 +167,9 @@ Nhằm tối ưu hóa trải nghiệm điều khiển liên tục và nhập vai
 | <kbd>D</kbd> | **Mở / Đóng Phòng Quyết Định 21:9** | Trải Nghiệm | Mở không gian điện ảnh toàn cảnh chuẩn Cinema 21:9 tập trung tuyệt đối vào bước ngoặt định mệnh. |
 | <kbd>M</kbd> | **Bật / Tắt Nhạc Nền (Mute Toggle)** | Âm Thanh | Bật hoặc tắt nhanh âm thanh không gian sống và nhạc thiền định nền. |
 | <kbd>?</kbd> hoặc <kbd>/</kbd> | **Mở Cẩm Nang Hướng Dẫn Sinh Tồn** | Trợ Giúp | Truy cập nhanh Bản Đồ Vui Nhộn & Cẩm Nang Tra Cứu RPG (Game Guide Modal). |
+| <kbd>K</kbd> | **Bật / Tắt Bảng Phím Tắt Toàn Cục** | Hệ Thống | Hiển thị bảng tra cứu nhanh toàn bộ hotkeys trên buồng lái (Shortcuts Cheatsheet). |
+| <kbd>E</kbd> | **Trạm Cứu Hộ Khẩn Cấp (Emergency SOS)** | Sinh Tồn | Mở ngay Trạm Cứu Hộ Khẩn Cấp để hồi phục sinh lực và giải tỏa kiệt sức tức thời. |
+| <kbd>Esc</kbd> | **Đóng Nhanh Hộp Thoại / Modal** | Điều Hướng | Đóng tức thì bất kỳ cửa sổ thông tin, bảng tra cứu hoặc modal đang mở trên màn hình. |
 
 > [!TIP]
 > **Cơ chế An Toàn Chống Xung Đột Nhập Liệu (Safe Input & Modal Guarding):**

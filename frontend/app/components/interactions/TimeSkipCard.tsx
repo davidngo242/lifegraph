@@ -22,9 +22,9 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
   const isMinor = characterAge < 18;
 
   return (
-    <div className="bg-slate-900/95 border border-sky-500/40 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+    <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl transition-colors duration-200">
       <div className="flex items-center justify-between mb-4">
-        <span className="text-[12px] font-sans font-medium tracking-wide normal-case px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center gap-1.5">
+        <span className="text-[12px] font-sans font-medium tracking-wide normal-case px-3 py-1 rounded-full bg-sky-500/15 text-sky-300 border border-sky-500/30 flex items-center gap-1.5">
           <FastForward className="w-3.5 h-3.5 animate-pulse" /> Khoảng Lặng Cuộc Đời (Time Skip)
         </span>
         <span className="text-xs font-sans text-sky-400 font-bold">
@@ -32,15 +32,15 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
         </span>
       </div>
 
-      <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-tight">
+      <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-3 tracking-tight">
         {dilemma?.title || "Những Năm Tháng Trôi Qua Êm Đềm"}
       </h2>
 
-      <div className="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 mb-6 text-slate-200 text-sm md:text-base leading-relaxed font-sans italic">
+      <div className="p-5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] mb-6 text-[var(--text-primary)] text-sm md:text-base leading-relaxed font-sans italic">
         "{dilemma?.narrative || "Thời gian trôi qua không một biến cố nào quá lớn, để lại những trải nghiệm định hình cuộc đời."}"
       </div>
 
-      <div className="p-4 rounded-xl bg-sky-950/20 border border-sky-500/20 text-xs text-sky-300 font-sans mb-6 flex items-center gap-2">
+      <div className="p-4 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs text-sky-300 font-sans mb-6 flex items-center gap-2">
         <Clock className="w-4 h-4 text-sky-400 shrink-0" />
         <span>
           {isInfant
@@ -57,7 +57,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
         <button
           disabled={isLoading}
           onClick={() => onContinue('accumulate')}
-          className="p-4 rounded-2xl bg-slate-950 hover:bg-sky-950/40 border border-slate-800 hover:border-sky-500/50 text-left transition active:scale-[0.98] group flex flex-col justify-between"
+          className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.04)] border border-[var(--border-subtle)] hover:border-sky-500/50 text-left transition active:scale-[0.98] group flex flex-col justify-between"
         >
           <div>
             <div className="flex items-center justify-between mb-1.5">
@@ -79,11 +79,11 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
                   </>
                 )}
               </div>
-              <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-sky-300 font-mono text-[10px] font-bold group-hover:border-sky-400 shadow-sm">
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-sky-300 font-mono text-[10px] font-bold group-hover:border-sky-400 shadow-sm">
                 1
               </kbd>
             </div>
-            <p className="text-xs text-slate-400 leading-snug">
+            <p className="text-xs text-[var(--text-secondary)] leading-snug">
               {isInfant
                 ? `Bú sữa mẹ, ăn dặm đầy đủ dưỡng chất và ngủ sâu giấc. Cơ thể lớn nhanh như thổi, tăng cường đề kháng tự nhiên.`
                 : isMinor
@@ -104,7 +104,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
         <button
           disabled={isLoading}
           onClick={() => onContinue('relax')}
-          className="p-4 rounded-2xl bg-slate-950 hover:bg-emerald-950/40 border border-slate-800 hover:border-emerald-500/50 text-left transition active:scale-[0.98] group flex flex-col justify-between"
+          className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.04)] border border-[var(--border-subtle)] hover:border-emerald-500/50 text-left transition active:scale-[0.98] group flex flex-col justify-between"
         >
           <div>
             <div className="flex items-center justify-between mb-1.5">
@@ -126,11 +126,11 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
                   </>
                 )}
               </div>
-              <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-emerald-300 font-mono text-[10px] font-bold group-hover:border-emerald-400 shadow-sm">
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-emerald-300 font-mono text-[10px] font-bold group-hover:border-emerald-400 shadow-sm">
                 2
               </kbd>
             </div>
-            <p className="text-xs text-slate-400 leading-snug">
+            <p className="text-xs text-[var(--text-secondary)] leading-snug">
               {isInfant
                 ? `Vui chơi cùng đồ chơi ngộ nghĩnh, bập bẹ tập nói và đắm chìm trong tình thương yêu che chở vô điều kiện của cha mẹ.`
                 : isMinor
@@ -148,8 +148,8 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
         </button>
       </div>
 
-      <div className="text-center text-[11px] text-slate-500 font-sans mt-2">
-        Nhấn phím <kbd className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-mono">1</kbd> hoặc <kbd className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-mono">2</kbd> để chọn đường hướng, hoặc <kbd className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-mono">Space</kbd> để tiếp tục nhanh.
+      <div className="text-center text-[11px] text-[var(--text-secondary)] font-sans mt-2">
+        Nhấn phím <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card-subtle)] text-[var(--text-primary)] font-mono border border-[var(--border-subtle)]">1</kbd> hoặc <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card-subtle)] text-[var(--text-primary)] font-mono border border-[var(--border-subtle)]">2</kbd> để chọn đường hướng, hoặc <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card-subtle)] text-[var(--text-primary)] font-mono border border-[var(--border-subtle)]">Space</kbd> để tiếp tục nhanh.
       </div>
     </div>
   );

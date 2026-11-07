@@ -37,6 +37,7 @@ import IncomingNpcEventModal from './components/IncomingNpcEventModal';
 import CommandBarHUD from './components/CommandBarHUD';
 import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 import EmergencyRescueModal from './components/EmergencyRescueModal';
+import ThemeSwitcher from './components/ThemeSwitcher';
 
 // Non-binary Interaction Components (V5 & V6)
 import SpectrumSlider from './components/interactions/SpectrumSlider';
@@ -343,6 +344,36 @@ export default function LifeGraphPage() {
       }
 
       const key = e.key;
+
+      // 3a. Escape: Close open modals immediately
+      if (key === 'Escape') {
+        if (showShortcutsModal) { setShowShortcutsModal(false); return; }
+        if (showGuideModal) { setShowGuideModal(false); return; }
+        if (showCinemaDecisionModal) { setShowCinemaDecisionModal(false); return; }
+        if (showEmergencyModal) { setShowEmergencyModal(false); return; }
+        if (showAssetModal) { setShowAssetModal(false); return; }
+        if (showFamilyModal) { setShowFamilyModal(false); return; }
+        if (showKarmaModal) { setShowKarmaModal(false); return; }
+        if (showTarotCardModal) { setShowTarotCardModal(false); return; }
+        if (showSkillSelector) { setShowSkillSelector(false); return; }
+        if (showAspirationUpgradeModal) { setShowAspirationUpgradeModal(false); return; }
+        if (show3DInspectorModal) { setShow3DInspectorModal(false); return; }
+        return;
+      }
+
+      // 3b. Keyboard Shortcuts Cheatsheet (K / k)
+      if (key === 'k' || key === 'K') {
+        e.preventDefault();
+        setShowShortcutsModal(prev => !prev);
+        return;
+      }
+
+      // 3c. Emergency Rescue SOS (E / e)
+      if (key === 'e' || key === 'E') {
+        e.preventDefault();
+        setShowEmergencyModal(prev => !prev);
+        return;
+      }
 
       // 3. Audio toggle (M / m) - available globally
       if (key === 'm' || key === 'M') {
@@ -1373,7 +1404,7 @@ export default function LifeGraphPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col relative selection:bg-indigo-900 selection:text-white overflow-x-hidden font-sans">
+    <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] flex flex-col relative selection:bg-amber-900/30 selection:text-amber-100 overflow-x-hidden font-sans transition-colors duration-250">
       {/* Cinematic Looping Background with Ken Burns Drift */}
       <CinematicBackground scene={visuals?.visual_vibe?.background_scene || "cyber_dusk"} netWorth={netWorth} housing={character?.housing} />
 
@@ -1629,20 +1660,20 @@ export default function LifeGraphPage() {
       )}
 
       {/* Slim Top Navigation */}
-      <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-50 gap-3 max-w-full overflow-visible">
+      <header className="border-b border-[var(--border-subtle)] bg-[var(--bg-header)] backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-50 gap-3 max-w-full overflow-visible transition-colors duration-250">
         {/* 1. Left Zone: Brand Logo & View Switcher Tabs (Đẩy sát sang trái) */}
         <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-wrap">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-amber-500 flex items-center justify-center font-black text-white text-xs shadow-md shadow-indigo-600/30 shrink-0">
               LG
             </div>
-            <span className="font-extrabold text-white text-sm md:text-base tracking-tight hidden sm:inline">
+            <span className="font-extrabold text-[var(--text-primary)] text-sm md:text-base tracking-tight hidden sm:inline">
               LifeGraph 2.0
             </span>
           </div>
 
           {/* View Switcher Pills */}
-          <div className="flex items-center gap-1 bg-slate-950/90 p-1 rounded-2xl border border-slate-800">
+          <div className="flex items-center gap-1 bg-[var(--bg-card-subtle)] p-1 rounded-2xl border border-[var(--border-subtle)]">
             <Tooltip
               position="bottom"
               content="Đại sảnh vận mệnh & gia phả các kiếp sống tiền nhân"
@@ -1652,7 +1683,7 @@ export default function LifeGraphPage() {
                 className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                   activeView === 'home'
                     ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 <Home className="w-3.5 h-3.5" />
@@ -1670,7 +1701,7 @@ export default function LifeGraphPage() {
                   className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                     activeView === 'game'
                       ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
-                      : 'text-slate-400 hover:text-slate-200'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
                 >
                   <Play className="w-3.5 h-3.5 fill-current" />
@@ -1686,7 +1717,7 @@ export default function LifeGraphPage() {
                   onClick={() => setShowRebirthModal(true)}
                   className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                     activeView === 'home'
-                      ? 'text-slate-400 hover:text-purple-300 hover:bg-slate-800/60'
+                      ? 'text-[var(--text-secondary)] hover:text-purple-300 hover:bg-[rgba(255,255,255,0.04)]'
                       : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-600/30 hover:opacity-90'
                   }`}
                 >
@@ -1701,8 +1732,8 @@ export default function LifeGraphPage() {
         {/* 2. Center: Empty spacer for clean breathing room */}
         <div className="flex-1" />
 
-        {/* 3. Right Zone: Clean Quick Actions, Karma & Audio */}
-        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+        {/* 3. Right Zone: Clean Quick Actions, Karma, Theme & Audio */}
+        <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
           {/* Emergency SOS Rescue Button (Only when in critical condition) */}
           {character && !character.is_deceased && (character.vitality < 30 || character.burnout > 75) && (
             <button
@@ -1721,11 +1752,11 @@ export default function LifeGraphPage() {
           >
             <button
               onClick={() => setShowGuideModal(true)}
-              className="py-1 px-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 hover:border-amber-400/60 text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95"
+              className="py-1 px-2 sm:px-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] hover:border-amber-400/60 text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95"
             >
               <BookOpen className="w-3.5 h-3.5 text-amber-300" />
               <span className="hidden sm:inline">Cẩm Nang</span>
-              <kbd className="text-[10px] font-mono px-1 py-0.2 rounded bg-slate-950 border border-amber-500/40 text-amber-300 font-bold">
+              <kbd className="text-[10px] font-mono px-1 py-0.2 rounded bg-slate-950/80 border border-amber-500/40 text-amber-300 font-bold">
                 ?
               </kbd>
             </button>
@@ -1738,7 +1769,7 @@ export default function LifeGraphPage() {
           >
             <button
               onClick={() => setShowKarmaModal(true)}
-              className="py-1 px-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-purple-500/40 hover:border-purple-400 text-white text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
+              className="py-1 px-2 sm:px-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] hover:border-purple-400 text-[var(--text-primary)] text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300/30" />
               <span className="hidden md:inline">Đền Thờ</span>
@@ -1756,7 +1787,7 @@ export default function LifeGraphPage() {
             >
               <button
                 onClick={() => setShowTarotCardModal(true)}
-                className="py-1 px-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 text-slate-300 hover:text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95"
+                className="py-1 px-2 sm:px-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] hover:border-amber-500/50 text-[var(--text-secondary)] hover:text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95"
               >
                 <span>🎴</span>
                 <span className="hidden xl:inline">Thẻ Bài</span>
@@ -1769,6 +1800,9 @@ export default function LifeGraphPage() {
             alerts={emergencyAlerts}
             onDismiss={handleDismissAlert}
           />
+
+          {/* Visual Theme Switcher (Obsidian / Sepia / Cyber) */}
+          <ThemeSwitcher />
 
           {/* Volume Control Slider */}
           <AudioVolumeControl
@@ -1871,7 +1905,7 @@ export default function LifeGraphPage() {
               <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-4 min-w-0 w-full">
                 {/* 1. Active Scenario Cross-Cutting Quest Card (Chỉ hiển thị khi có Kịch bản phù hợp & chưa hoàn thành) */}
                 {activeScenario && !character?.is_deceased && (
-                  <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/60 via-slate-900 to-indigo-950/60 border border-purple-500/40 shadow-xl space-y-2.5">
+                  <div className="p-4 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-xl space-y-2.5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-xs">📖</span>
@@ -1881,18 +1915,18 @@ export default function LifeGraphPage() {
                       </div>
                       <button
                         onClick={() => setShowCinemaDecisionModal(true)}
-                        className="px-2.5 py-1 rounded-xl bg-gradient-to-r from-purple-600/40 to-amber-600/40 hover:from-purple-600 hover:to-amber-600 border border-purple-400/50 text-white text-[12px] font-bold flex items-center gap-1.5 transition shadow-sm animate-pulse"
+                        className="px-2.5 py-1 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] hover:border-amber-400/50 text-[var(--text-primary)] text-[12px] font-bold flex items-center gap-1.5 transition shadow-sm animate-pulse"
                       >
                         <span>🎬 Phòng Quyết Định</span>
                         <Play className="w-3 h-3 fill-current" />
                       </button>
                     </div>
 
-                    <p className="text-xs text-slate-300 font-sans leading-relaxed">
+                    <p className="text-xs text-[var(--text-secondary)] font-sans leading-relaxed">
                       {activeScenario.description}
                     </p>
 
-                    <div className="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[12px] text-slate-400">
+                    <div className="flex items-center justify-between pt-1 border-t border-[var(--border-subtle)] text-[12px] text-[var(--text-secondary)]">
                       <span>
                         {activeScenario.roles ? `Nhân vật liên quan: ${Object.values(activeScenario.roles).join(', ')}` : "Cột mốc ngã rẽ cuộc đời"}
                       </span>
@@ -1908,27 +1942,27 @@ export default function LifeGraphPage() {
                 )}
 
                 {/* 2. Khoang Quyết Định & Hành Động Năm Hợp Nhất (Unified Annual Decision & Action Stage) */}
-                <div className="w-full rounded-3xl border border-slate-800/90 bg-slate-950/85 backdrop-blur-2xl shadow-2xl overflow-hidden flex flex-col">
+                <div className="w-full rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-card)] backdrop-blur-2xl shadow-2xl overflow-hidden flex flex-col transition-colors duration-200">
                   {/* Header chung: Hiển thị tiêu đề năm tuổi, số AP còn lại và gợi ý */}
-                  <div className="px-4 py-3 bg-gradient-to-r from-slate-900/95 via-indigo-950/40 to-slate-900/95 border-b border-slate-800/80 flex items-center justify-between gap-3 flex-wrap">
+                  <div className="px-4 py-3 bg-[var(--bg-card-subtle)] border-b border-[var(--border-subtle)] flex items-center justify-between gap-3 flex-wrap">
                     <div className="flex items-center gap-2">
                       <span className="text-base">🎯</span>
-                      <span className="text-xs md:text-sm font-bold text-white tracking-wide">
+                      <span className="text-xs md:text-sm font-bold text-[var(--text-primary)] tracking-wide">
                         Vòng Đời Năm Nay (Tuổi {character?.age ?? 0})
                       </span>
-                      <span className="text-[11px] font-sans text-slate-400 italic hidden sm:inline">
+                      <span className="text-[11px] font-sans text-[var(--text-secondary)] italic hidden sm:inline">
                         — Dùng AP trước khi đưa ra quyết định chốt năm
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-sans text-slate-400 sm:hidden italic">
+                      <span className="text-[11px] font-sans text-[var(--text-secondary)] sm:hidden italic">
                         Dùng AP trước khi chốt năm
                       </span>
-                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold text-amber-300">
+                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-semibold text-amber-300">
                         <Zap className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                         <span className="font-mono font-bold">{character?.action_points ?? 0}</span>
-                        <span className="text-slate-400 text-[11px]">/ {character?.total_ap ?? 3} AP</span>
+                        <span className="text-[var(--text-secondary)] text-[11px]">/ {character?.total_ap ?? 3} AP</span>
                       </div>
                     </div>
                   </div>
@@ -1940,10 +1974,10 @@ export default function LifeGraphPage() {
                     {renderInteractionComponent()}
                   </div>
 
-                  {/* Cầu nối chiến lược ở giữa: Dải phân cách mỏng phát sáng nhẹ kết nối giữa việc chuẩn bị nguồn lực AP và việc đối diện biến cố */}
+                  {/* Cầu nối chiến lược ở giữa: Dải phân cách mỏng mờ trung tính */}
                   <div className="relative flex items-center justify-center my-1 px-4">
-                    <div className="w-full h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                    <span className="absolute px-3 py-0.5 rounded-full bg-slate-950 border border-indigo-500/30 text-[10px] font-mono font-semibold text-indigo-300 shadow-sm flex items-center gap-1.5">
+                    <div className="w-full h-px bg-[var(--border-subtle)]" />
+                    <span className="absolute px-3 py-0.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono font-semibold text-[var(--text-secondary)] shadow-sm flex items-center gap-1.5">
                       <Zap className="w-3 h-3 text-amber-400" />
                       <span>ĐIỀU HÀNH NGUỒN LỰC AP & HOẠT ĐỘNG NĂM</span>
                     </span>

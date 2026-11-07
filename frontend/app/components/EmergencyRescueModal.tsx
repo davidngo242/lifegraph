@@ -31,7 +31,7 @@ export default function EmergencyRescueModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-lg bg-slate-950 border-2 border-rose-500/60 rounded-3xl p-6 md:p-7 shadow-[0_0_40px_rgba(244,63,94,0.3)] overflow-hidden">
+      <div className="relative w-full max-w-lg bg-[var(--bg-card)] border border-rose-500/60 text-[var(--text-primary)] rounded-3xl p-6 md:p-7 shadow-[0_0_40px_rgba(244,63,94,0.2)] overflow-hidden transition-colors duration-200">
         {/* Red Alert Ambient Glow */}
         <div className="absolute top-0 right-0 w-72 h-36 bg-rose-500/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -42,7 +42,7 @@ export default function EmergencyRescueModal({
               🚨
             </div>
             <div>
-              <h2 className="text-base md:text-lg font-bold text-white flex items-center gap-2">
+              <h2 className="text-base md:text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
                 Cấp Cứu Khẩn Cấp Sinh Mệnh
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 animate-pulse">
                   CRITICAL
@@ -55,7 +55,7 @@ export default function EmergencyRescueModal({
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition"
+            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1.5 rounded-xl hover:bg-[rgba(255,255,255,0.06)] transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -67,22 +67,22 @@ export default function EmergencyRescueModal({
             className={`p-3 rounded-2xl border ${
               isLowVitality
                 ? 'bg-rose-950/40 border-rose-500/50 shadow-inner'
-                : 'bg-slate-900 border-slate-800'
+                : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)]'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1">
-              <span className="text-slate-400 flex items-center gap-1">
+              <span className="text-[var(--text-secondary)] flex items-center gap-1">
                 <HeartPulse className="w-3.5 h-3.5 text-rose-400" /> Sinh Lực
               </span>
               <span
                 className={`font-mono font-bold ${
-                  isLowVitality ? 'text-rose-400 animate-pulse' : 'text-slate-200'
+                  isLowVitality ? 'text-rose-400 animate-pulse' : 'text-[var(--text-primary)]'
                 }`}
               >
                 {vitality}%
               </span>
             </div>
-            <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+            <div className="w-full h-2 bg-[var(--bg-card)] rounded-full overflow-hidden border border-[var(--border-subtle)]">
               <div
                 className="h-full bg-gradient-to-r from-rose-600 to-rose-400 transition-all duration-300"
                 style={{ width: `${Math.min(100, Math.max(0, vitality))}%` }}
@@ -99,22 +99,22 @@ export default function EmergencyRescueModal({
             className={`p-3 rounded-2xl border ${
               isHighBurnout
                 ? 'bg-amber-950/40 border-amber-500/50 shadow-inner'
-                : 'bg-slate-900 border-slate-800'
+                : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)]'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1">
-              <span className="text-slate-400 flex items-center gap-1">
+              <span className="text-[var(--text-secondary)] flex items-center gap-1">
                 <Flame className="w-3.5 h-3.5 text-amber-400" /> Kiệt Sức (Burnout)
               </span>
               <span
                 className={`font-mono font-bold ${
-                  isHighBurnout ? 'text-amber-400 animate-pulse' : 'text-slate-200'
+                  isHighBurnout ? 'text-amber-400 animate-pulse' : 'text-[var(--text-primary)]'
                 }`}
               >
                 {burnout}%
               </span>
             </div>
-            <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+            <div className="w-full h-2 bg-[var(--bg-card)] rounded-full overflow-hidden border border-[var(--border-subtle)]">
               <div
                 className="h-full bg-gradient-to-r from-amber-600 to-rose-500 transition-all duration-300"
                 style={{ width: `${Math.min(100, Math.max(0, burnout))}%` }}
@@ -130,7 +130,7 @@ export default function EmergencyRescueModal({
 
         {/* Emergency Interventions */}
         <div className="space-y-2.5 mb-4">
-          <div className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+          <div className="text-xs font-bold text-[var(--text-secondary)] flex items-center gap-1.5">
             <Activity className="w-3.5 h-3.5 text-emerald-400" />
             <span>Phương Án Cứu Nguy Cấp Tốc:</span>
           </div>
@@ -145,7 +145,7 @@ export default function EmergencyRescueModal({
             className={`w-full p-3.5 rounded-2xl border text-left transition flex items-center justify-between group ${
               actionPoints >= 1
                 ? 'bg-emerald-950/40 hover:bg-emerald-900/60 border-emerald-500/40 hover:border-emerald-400 text-white'
-                : 'bg-slate-900/50 border-slate-800 text-slate-500 opacity-60 cursor-not-allowed'
+                : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] text-slate-500 opacity-60 cursor-not-allowed'
             }`}
           >
             <div className="flex items-center gap-3">
@@ -173,20 +173,20 @@ export default function EmergencyRescueModal({
               onClose();
               onOpenKarmaSanctum();
             }}
-            className="w-full p-3.5 rounded-2xl bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/40 hover:border-purple-400 text-left transition flex items-center justify-between group"
+            className="w-full p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] hover:border-purple-400 text-left transition flex items-center justify-between group"
           >
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-lg shrink-0">
                 ✨
               </div>
               <div>
-                <div className="text-xs md:text-sm font-bold text-white flex items-center gap-2">
+                <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                   <span>Thỉnh Phước Bảo Mạng (Đền Thờ Nghiệp Quả)</span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/30">
                     0 AP · Dùng Karma
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-300">
+                <div className="text-[11px] text-[var(--text-secondary)]">
                   Thỉnh bùa hộ mệnh hoặc phước lành hồi sinh khi cạn kiệt điểm hành động.
                 </div>
               </div>
@@ -199,7 +199,7 @@ export default function EmergencyRescueModal({
         <div className="text-center">
           <button
             onClick={onClose}
-            className="text-xs text-slate-400 hover:text-white py-1 px-3 transition"
+            className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] py-1 px-3 transition"
           >
             Đóng cửa sổ cấp cứu
           </button>

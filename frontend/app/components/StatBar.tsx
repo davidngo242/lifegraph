@@ -33,20 +33,20 @@ export default function StatBar({
   const displayNetWorth = typeof netWorth === 'number' ? netWorth : cash;
 
   return (
-    <div className="w-full bg-slate-900/95 border border-slate-800 rounded-2xl p-4 backdrop-blur-md shadow-2xl flex flex-wrap items-center justify-between gap-3">
+    <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-2xl p-4 backdrop-blur-md shadow-2xl flex flex-wrap items-center justify-between gap-3">
       {/* 1. Sức sống (Vitality with Max Cap) */}
       <div className="flex items-center gap-3 min-w-[190px] flex-1">
         <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400">
           <Heart className="w-5 h-5 fill-rose-500/30" />
         </div>
         <div className="flex-1">
-          <div className="flex justify-between text-xs text-slate-400 mb-1 font-sans">
+          <div className="flex justify-between text-xs text-[var(--text-secondary)] mb-1 font-sans">
             <span className="font-semibold tracking-normal text-[12px]">SỨC SỐNG</span>
-            <span className="text-slate-200 font-sans tabular-nums font-medium">
-              {vitality}<span className="text-slate-500 text-[12px]">/{maxVitality}</span>
+            <span className="text-[var(--text-primary)] font-sans tabular-nums font-medium">
+              {vitality}<span className="text-[var(--text-secondary)] text-[12px]">/{maxVitality}</span>
             </span>
           </div>
-          <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700/50">
+          <div className="w-full bg-[var(--bg-card-subtle)] h-2 rounded-full overflow-hidden border border-[var(--border-subtle)]">
             <div
               className={`h-full transition-all duration-500 rounded-full ${
                 vitality < 25 ? 'bg-rose-500 animate-pulse' : vitality < 55 ? 'bg-amber-400' : 'bg-emerald-400'
@@ -67,9 +67,9 @@ export default function StatBar({
           <DollarSign className="w-5 h-5" />
         </div>
         <div>
-          <div className="text-[12px] text-slate-400 font-semibold tracking-normal font-sans">TIỀN MẶT</div>
+          <div className="text-[12px] text-[var(--text-secondary)] font-semibold tracking-normal font-sans">TIỀN MẶT</div>
           <div className={`text-base font-sans tabular-nums font-bold ${
-            cash < 0 ? 'text-rose-400 tracking-tight' : 'text-slate-100'
+            cash < 0 ? 'text-rose-400 tracking-tight' : 'text-[var(--text-primary)]'
           }`}>
             {cash < 0 ? `-$${Math.abs(cash).toLocaleString()}` : `$${cash.toLocaleString()}`}
           </div>
@@ -82,7 +82,7 @@ export default function StatBar({
           <DollarSign className="w-5 h-5" />
         </div>
         <div>
-          <div className="text-[12px] text-slate-400 font-semibold tracking-normal font-sans">TỔNG TÀI SẢN</div>
+          <div className="text-[12px] text-[var(--text-secondary)] font-semibold tracking-normal font-sans">TỔNG TÀI SẢN</div>
           <div className="text-base font-sans tabular-nums font-bold text-teal-300">
             ${displayNetWorth.toLocaleString()}
           </div>
@@ -97,7 +97,7 @@ export default function StatBar({
           <AlertTriangle className={`w-5 h-5 ${burnout > 80 ? 'animate-bounce' : ''}`} />
         </div>
         <div>
-          <div className="text-[12px] text-slate-400 font-semibold tracking-normal font-sans">TÂM TRÍ</div>
+          <div className="text-[12px] text-[var(--text-secondary)] font-semibold tracking-normal font-sans">TÂM TRÍ</div>
           <div className={`text-sm font-sans font-medium ${stress.color}`}>
             {stress.label}
           </div>
@@ -110,7 +110,7 @@ export default function StatBar({
           <Sparkles className="w-5 h-5" />
         </div>
         <div>
-          <div className="text-[12px] text-slate-400 font-semibold tracking-normal font-sans">NGHIỆP LỰC</div>
+          <div className="text-[12px] text-[var(--text-secondary)] font-semibold tracking-normal font-sans">NGHIỆP LỰC</div>
           <div className="text-sm font-sans tabular-nums font-bold text-purple-300">
             {karma}
           </div>

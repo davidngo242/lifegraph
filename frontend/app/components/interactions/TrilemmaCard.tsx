@@ -29,13 +29,13 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
     : dilemma.title;
 
   return (
-    <div className="bg-slate-900/95 border border-amber-500/40 rounded-3xl p-4 md:p-5 shadow-2xl relative overflow-hidden backdrop-blur-xl animate-in fade-in duration-200">
+    <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-4 md:p-5 shadow-2xl relative overflow-hidden backdrop-blur-xl animate-in fade-in duration-200">
       {/* Ambient glow */}
-      <div className="absolute top-0 right-0 w-64 h-32 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-64 h-32 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header Badge */}
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[12px] font-sans font-bold tracking-wide normal-case px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1.5">
+        <span className="text-[12px] font-sans font-bold tracking-wide normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
           <Triangle className="w-3 h-3 fill-amber-400/30" /> Tam Giác Bất Khả Thi (Trilemma)
         </span>
         {characterAge && (
@@ -45,16 +45,16 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
         )}
       </div>
 
-      <h2 className="text-base md:text-lg font-bold text-white mb-2 tracking-tight">
+      <h2 className="text-base md:text-lg font-bold text-[var(--text-primary)] mb-2 tracking-tight">
         {displayTitle}
       </h2>
 
       {/* Narrative Quote - Compact & Elegant */}
-      <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 mb-3 text-slate-200 text-xs md:text-sm leading-relaxed font-sans italic">
+      <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] mb-3 text-[var(--text-primary)] text-xs md:text-sm leading-relaxed font-sans italic">
         "{dilemma.narrative}"
       </div>
 
-      <div className="text-[12px] font-sans text-slate-400 normal-case tracking-normal mb-2 font-medium flex items-center justify-between">
+      <div className="text-[12px] font-sans text-[var(--text-secondary)] normal-case tracking-normal mb-2 font-medium flex items-center justify-between">
         <span>Chọn 1 trong 3 con đường (Mỗi lựa chọn phải trả một cái giá đắt):</span>
       </div>
 
@@ -67,23 +67,23 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
               key={opt.id}
               disabled={isLoading}
               onClick={() => onSelectOption(opt.id)}
-              className="text-left p-3.5 rounded-2xl bg-slate-950/70 hover:bg-slate-800/90 border-2 border-slate-800/80 hover:border-amber-500/60 transition-all group flex flex-col justify-between min-h-[125px] active:scale-[0.98] shadow-md hover:shadow-amber-500/10"
+              className="text-left p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.04)] border border-[var(--border-subtle)] hover:border-[var(--border-highlight)] transition-all group flex flex-col justify-between min-h-[125px] active:scale-[0.98] shadow-md hover:shadow-amber-500/10"
             >
               <div>
                 <div className="flex items-center justify-between gap-1.5 mb-1.5">
                   <span className={`text-[12px] font-sans font-medium px-2 py-0.5 rounded-full border flex items-center gap-1 shrink-0 ${badge.color}`}>
                     {badge.icon} {badge.label}
                   </span>
-                  <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-amber-300 font-mono text-[10px] font-bold group-hover:border-amber-400 shadow-sm">
+                  <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-300 font-mono text-[10px] font-bold group-hover:border-[var(--border-highlight)] shadow-sm">
                     {idx + 1}
                   </kbd>
                 </div>
-                <div className="text-xs md:text-sm font-bold text-white group-hover:text-amber-200 transition-colors line-clamp-2">
+                <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] group-hover:text-amber-200 transition-colors line-clamp-2">
                   {opt.action_title}
                 </div>
               </div>
 
-              <div className="mt-2 pt-2 border-t border-slate-800/60 flex items-center justify-between text-[12px] text-slate-400 group-hover:text-slate-300">
+              <div className="mt-2 pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between text-[12px] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]">
                 <span className="line-clamp-2">{opt.consequence_hint}</span>
                 <ArrowRight className="w-3.5 h-3.5 text-amber-400 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity ml-1" />
               </div>

@@ -134,7 +134,7 @@ export default function AssetDetailModal({
     return (
       <span className="inline-flex items-baseline gap-1">
         <span className="font-sans tabular-nums font-bold">{sign}{c.primary}</span>
-        <span className="text-[12px] text-slate-400 font-sans font-normal">{c.secondaryVnd}</span>
+        <span className="text-[12px] text-[var(--text-secondary)] font-sans font-normal">{c.secondaryVnd}</span>
       </span>
     );
   };
@@ -220,11 +220,11 @@ export default function AssetDetailModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-3xl p-5 md:p-6 shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+      <div className="relative w-full max-w-4xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 md:p-6 shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition z-20"
+          className="absolute top-4 right-4 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition z-20"
         >
           <X className="w-4 h-4" />
         </button>
@@ -248,8 +248,8 @@ export default function AssetDetailModal({
                 </span>
               )}
             </div>
-            <p className="text-[12px] text-slate-400 mt-0.5 truncate">
-              Định vị: <strong className="text-slate-300 font-medium">{currentCity}</strong> • Quản lý danh mục đầu tư tích lũy và điều kiện sinh hoạt
+            <p className="text-[12px] text-[var(--text-secondary)] mt-0.5 truncate">
+              Định vị: <strong className="text-[var(--text-secondary)] font-medium">{currentCity}</strong> • Quản lý danh mục đầu tư tích lũy và điều kiện sinh hoạt
             </p>
           </div>
         </div>
@@ -268,22 +268,22 @@ export default function AssetDetailModal({
         )}
 
         {/* 3. Overview Stats Bar: Bố cục chữ to chữ nhỏ hài hòa */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-3 rounded-2xl bg-slate-900/90 border border-slate-800 mb-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] mb-3">
           <div className="flex flex-col">
-            <span className="text-[12px] normal-case font-semibold text-slate-400 tracking-normal">Tổng Giá Trị Tài Sản</span>
+            <span className="text-[12px] normal-case font-semibold text-[var(--text-secondary)] tracking-normal">Tổng Giá Trị Tài Sản</span>
             <div className="text-sm md:text-base text-emerald-400 mt-0.5">
               {renderMoney(totalValue)}
             </div>
           </div>
           <div className="flex flex-col">
-            <span className="text-[12px] normal-case font-semibold text-slate-400 tracking-normal">Dòng Tiền Thuần / Năm</span>
+            <span className="text-[12px] normal-case font-semibold text-[var(--text-secondary)] tracking-normal">Dòng Tiền Thuần / Năm</span>
             <div className={`text-sm md:text-base mt-0.5 ${netAnnualFlow >= 0 ? 'text-teal-400' : 'text-rose-400'}`}>
               {renderMoney(netAnnualFlow, true)}
             </div>
           </div>
           <div className="flex flex-col">
-            <span className="text-[12px] normal-case font-semibold text-slate-400 tracking-normal">Nguồn Lực Hiện Có</span>
-            <div className="text-xs text-slate-300 mt-1 flex items-center gap-2 flex-wrap">
+            <span className="text-[12px] normal-case font-semibold text-[var(--text-secondary)] tracking-normal">Nguồn Lực Hiện Có</span>
+            <div className="text-xs text-[var(--text-secondary)] mt-1 flex items-center gap-2 flex-wrap">
               <span>Tiền: {renderMoney(cash)}</span>
               <span>•</span>
               <span>AP: <strong className="text-amber-400 font-sans tabular-nums">{actionPoints}</strong></span>
@@ -306,13 +306,13 @@ export default function AssetDetailModal({
         )}
 
         {/* Tab Switcher */}
-        <div className="flex border-b border-slate-800 mb-2.5 gap-2">
+        <div className="flex border-b border-[var(--border-subtle)] mb-2.5 gap-2">
           <button
             onClick={() => { setActiveTab('portfolio'); setErrorMsg(null); setSuccessMsg(null); }}
             className={`pb-2 px-3 text-xs font-bold normal-case tracking-normal transition border-b-2 ${
               activeTab === 'portfolio'
                 ? 'border-emerald-400 text-emerald-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                : 'border-transparent text-[var(--text-secondary)] hover:text-slate-200'
             }`}
           >
             Tài Sản Sở Hữu ({assets.length})
@@ -322,7 +322,7 @@ export default function AssetDetailModal({
             className={`pb-2 px-3 text-xs font-bold normal-case tracking-normal transition border-b-2 ${
               activeTab === 'market'
                 ? 'border-emerald-400 text-emerald-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                : 'border-transparent text-[var(--text-secondary)] hover:text-slate-200'
             }`}
           >
             Sàn Đầu Tư Thị Trường ({marketAssets.length})
@@ -332,7 +332,7 @@ export default function AssetDetailModal({
             className={`pb-2 px-3 text-xs font-bold normal-case tracking-normal transition border-b-2 ${
               activeTab === 'housing'
                 ? 'border-amber-400 text-amber-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                : 'border-transparent text-[var(--text-secondary)] hover:text-slate-200'
             }`}
           >
             Không Gian Cư Trú (Nơi Ở)
@@ -342,7 +342,7 @@ export default function AssetDetailModal({
         {/* Tier Filter Pills in Market */}
         {activeTab === 'market' && (
           <div className="flex items-center gap-1 overflow-x-auto pb-2 mb-2 scrollbar-none text-[12px]">
-            <span className="text-slate-400 text-[12px] font-semibold normal-case tracking-normal mr-1 flex items-center gap-1 shrink-0">
+            <span className="text-[var(--text-secondary)] text-[12px] font-semibold normal-case tracking-normal mr-1 flex items-center gap-1 shrink-0">
               <Layers className="w-3 h-3 text-indigo-400" /> Cấp Vốn:
             </span>
             {[
@@ -359,7 +359,7 @@ export default function AssetDetailModal({
                 className={`px-2.5 py-1 rounded-lg text-[12px] whitespace-nowrap transition ${
                   selectedTierFilter === pill.id
                     ? 'bg-emerald-600 text-slate-950 font-bold'
-                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                    : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)]'
                 }`}
               >
                 {pill.label}
@@ -386,7 +386,7 @@ export default function AssetDetailModal({
               assets.map(asset => (
                 <div
                   key={asset.id}
-                  className="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800 flex items-center justify-between gap-3 hover:border-slate-700 transition"
+                  className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex items-center justify-between gap-3 hover:border-[var(--border-highlight)] transition"
                 >
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-xl bg-slate-950 text-emerald-400 border border-slate-800 shrink-0">
@@ -394,7 +394,7 @@ export default function AssetDetailModal({
                     </div>
                     <div>
                       <h4 className="text-xs md:text-sm font-semibold text-white">{asset.name}</h4>
-                      <div className="text-[12px] text-slate-400 flex items-center gap-3 mt-0.5 flex-wrap">
+                      <div className="text-[12px] text-[var(--text-secondary)] flex items-center gap-3 mt-0.5 flex-wrap">
                         <span>Giá trị: <strong className="text-emerald-300">{renderMoney(asset.current_value)}</strong></span>
                         {Number((asset as any).annual_cash_flow || (asset as any).cash_flow || 0) > 0 && (
                           <span className="text-teal-400">Thu về: {renderMoney(Number((asset as any).annual_cash_flow || (asset as any).cash_flow), true)}/năm</span>
@@ -442,7 +442,7 @@ export default function AssetDetailModal({
               return (
                 <div
                   key={item.id}
-                  className="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-700 transition"
+                  className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-[var(--border-highlight)] transition"
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -455,8 +455,8 @@ export default function AssetDetailModal({
                         {item.ap_cost} AP
                       </span>
                     </div>
-                    <p className="text-[12px] text-slate-400 mt-1 line-clamp-1">{item.desc}</p>
-                    <div className="text-[12px] text-slate-300 flex items-center gap-3.5 mt-1.5 flex-wrap">
+                    <p className="text-[12px] text-[var(--text-secondary)] mt-1 line-clamp-1">{item.desc}</p>
+                    <div className="text-[12px] text-[var(--text-secondary)] flex items-center gap-3.5 mt-1.5 flex-wrap">
                       <span>Giá: <strong className="text-emerald-400">{renderMoney(item.cost)}</strong></span>
                       {item.cash_flow > 0 && (
                         <span className="text-teal-400">Lợi tức: {renderMoney(item.cash_flow, true)}/năm</span>
@@ -465,7 +465,7 @@ export default function AssetDetailModal({
                         <span className="text-rose-400">Bảo trì: -{renderMoney(item.maintenance)}/năm</span>
                       )}
                       {item.risk_level && (
-                        <span className="text-slate-400 text-[12px]">Rủi ro: <strong className="text-slate-300">{item.risk_level}</strong></span>
+                        <span className="text-[var(--text-secondary)] text-[12px]">Rủi ro: <strong className="text-[var(--text-secondary)]">{item.risk_level}</strong></span>
                       )}
                     </div>
                   </div>
@@ -505,7 +505,7 @@ export default function AssetDetailModal({
                       Nơi Ở Hiện Tại ({currentHousing.status === 'owned' ? 'Chính Chủ' : isMinor ? 'Gia Đình Giám Hộ' : 'Thuê Nhà'})
                     </div>
                     <h3 className="text-xs md:text-sm font-bold text-white truncate mt-0.5">{currentHousing.name}</h3>
-                    <p className="text-[12px] text-slate-400 flex items-center gap-1.5 mt-0.5 truncate">
+                    <p className="text-[12px] text-[var(--text-secondary)] flex items-center gap-1.5 mt-0.5 truncate">
                       <MapPin className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                       <span className="truncate">{currentHousing.address || `Khu dân cư, ${currentCity}`}</span>
                     </p>
@@ -515,7 +515,7 @@ export default function AssetDetailModal({
 
               {/* Housing Tiers Roadmap */}
               <div className="space-y-2.5">
-                <div className="text-[12px] font-bold text-slate-300 normal-case tracking-normal flex items-center gap-1.5">
+                <div className="text-[12px] font-bold text-[var(--text-secondary)] normal-case tracking-normal flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                   Lộ Trình Cư Trú ({currentCity}):
                 </div>
@@ -533,13 +533,13 @@ export default function AssetDetailModal({
                         isCurrent
                           ? 'bg-amber-500/10 border-amber-500/50 shadow-sm'
                           : isPast
-                          ? 'bg-slate-900/30 border-slate-800/60 opacity-60'
-                          : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+                          ? 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)]/60 opacity-60'
+                          : 'bg-slate-900/60 border-slate-800 hover:border-[var(--border-highlight)]'
                       }`}
                     >
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-slate-800 text-slate-300">
+                          <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-slate-800 text-[var(--text-secondary)]">
                             Cấp {ht.tier}
                           </span>
                           <h4 className="text-xs md:text-sm font-semibold text-white">{ht.name}</h4>
@@ -549,8 +549,8 @@ export default function AssetDetailModal({
                             </span>
                           )}
                         </div>
-                        <p className="text-[12px] text-slate-400 mt-1">{ht.description}</p>
-                        <div className="text-[12px] text-slate-300 flex items-center gap-3 mt-1.5 flex-wrap">
+                        <p className="text-[12px] text-[var(--text-secondary)] mt-1">{ht.description}</p>
+                        <div className="text-[12px] text-[var(--text-secondary)] flex items-center gap-3 mt-1.5 flex-wrap">
                           <span>Chi phí: <strong className="text-emerald-400">{renderMoney(cost)}</strong> {ht.buy_price ? '(Sở hữu)' : '/năm'}</span>
                           <span className="text-teal-300">Hạnh phúc: +{ht.happiness_bonus}%</span>
                           <span className="text-rose-300">Sức khỏe: +{ht.health_bonus} HP</span>

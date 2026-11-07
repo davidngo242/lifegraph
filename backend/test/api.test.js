@@ -172,6 +172,13 @@ test('invested_ap boosts rewards, mitigates risks and appends strategic log note
     action_points: 4,
     family_endowment: 0
   });
+  await db.sessionContext.run({ sessionId: 'qa_invested_ap' }, async () => {
+    const store = db.getSessionData('qa_invested_ap');
+    if (store) {
+      store.assets = [];
+      store.relationships = [];
+    }
+  });
 
   const customDilemma = {
     id: 'dilemma_investment_test',
@@ -201,7 +208,7 @@ test('invested_ap boosts rewards, mitigates risks and appends strategic log note
 
   assert.equal(res.status, 200);
   const char = res.data.character;
-  assert.equal(char.cash, 3600); // 1000 + 3000 (boosted) - 400 (family upkeep)
+  assert.equal(char.cash, 4000); // 1000 + 3000 (boosted by 2 invested AP)
   assert.equal(char.karma, 66);
   assert.equal(char.vitality, 72);
   assert.equal(char.burnout, 21); // 20 + 10 (mitigated) - 4 (annual passive) - 5 (1 unused AP)

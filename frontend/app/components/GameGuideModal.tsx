@@ -37,12 +37,12 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-4xl max-h-[92vh] bg-slate-950 border border-slate-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-slate-100"
+        className="relative w-full max-w-4xl max-h-[92vh] bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl shadow-2xl flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         
         {/* ================= HEADER ================= */}
-        <div className="px-5 py-4 border-b border-slate-800/80 bg-slate-900/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shrink-0">
+        <div className="px-5 py-4 border-b border-[var(--border-subtle)] bg-[var(--bg-card-subtle)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-purple-500/20 shrink-0">
               {mode === 'fun' ? (
@@ -64,7 +64,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                   {mode === 'fun' ? 'Bé 6 tuổi cũng hiểu' : 'Dành cho Cao Thủ'}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-[var(--text-secondary)] mt-0.5">
                 {mode === 'fun'
                   ? 'Hướng dẫn siêu ngắn gọn, nhìn tranh là biết cách sống thọ và giàu to!'
                   : 'Toàn bộ chỉ số, công thức cây kỹ năng, nhân mạch và tích sản chuyên sâu.'}
@@ -75,13 +75,13 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
           {/* Right Action: Mode Switcher & Close button */}
           <div className="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-end">
             {/* Mode Switcher Toggle */}
-            <div className="flex items-center bg-slate-950/80 p-1 rounded-2xl border border-slate-800">
+            <div className="flex items-center bg-[var(--bg-card-subtle)] p-1 rounded-2xl border border-[var(--border-subtle)]">
               <button
                 onClick={() => setMode('fun')}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition ${
                   mode === 'fun'
                     ? 'bg-gradient-to-r from-amber-500 to-rose-500 text-white shadow-md shadow-rose-500/30'
-                    : 'text-slate-400 hover:text-white'
+                    : 'text-[var(--text-secondary)] hover:text-white'
                 }`}
               >
                 <span>🧸</span>
@@ -93,7 +93,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition ${
                   mode === 'advanced'
                     ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-600/30'
-                    : 'text-slate-400 hover:text-white'
+                    : 'text-[var(--text-secondary)] hover:text-white'
                 }`}
               >
                 <span>📖</span>
@@ -105,7 +105,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="w-9 h-9 rounded-2xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition active:scale-95 shrink-0"
+              className="w-9 h-9 rounded-2xl bg-slate-800/80 hover:bg-slate-700 text-[var(--text-secondary)] hover:text-white flex items-center justify-center transition active:scale-95 shrink-0"
               aria-label="Đóng bảng hướng dẫn"
             >
               <X className="w-4 h-4" />
@@ -149,7 +149,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <h4 className="font-extrabold text-white text-sm mb-1">
                         Bấm Chọn 1 Việc Làm
                       </h4>
-                      <p className="text-xs text-slate-300 leading-snug">
+                      <p className="text-xs text-[var(--text-secondary)] leading-snug">
                         Bấm <strong className="text-amber-300">Đi làm</strong> kiếm tiền, hoặc bấm <strong className="text-emerald-300">Tập thể dục</strong> để khỏe mạnh!
                       </p>
                     </div>
@@ -167,7 +167,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <h4 className="font-extrabold text-white text-sm mb-1">
                         Bước Sang Tuổi Mới
                       </h4>
-                      <p className="text-xs text-slate-300 leading-snug">
+                      <p className="text-xs text-[var(--text-secondary)] leading-snug">
                         Bấm nút tím to bự <strong className="text-purple-300">"Bước Sang Tuổi Mới"</strong> ở góc phải để lớn lên!
                       </p>
                     </div>
@@ -185,7 +185,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <h4 className="font-extrabold text-white text-sm mb-1">
                         Nhận Quà & Điểm May Mắn
                       </h4>
-                      <p className="text-xs text-slate-300 leading-snug">
+                      <p className="text-xs text-[var(--text-secondary)] leading-snug">
                         Thu thập quà tặng sinh nhật, tăng cấp kinh nghiệm và sống cuộc đời rực rỡ!
                       </p>
                     </div>
@@ -202,7 +202,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       4 Đồ Chơi Sinh Mệnh Bạn Cần Nhìn Mỗi Năm
                     </h3>
                   </div>
-                  <span className="text-xs text-slate-400 hidden sm:inline">
+                  <span className="text-xs text-[var(--text-secondary)] hidden sm:inline">
                     Chỉ cần giữ 4 món này luôn đẹp là thắng!
                   </span>
                 </div>
@@ -223,7 +223,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <h4 className="text-base font-black text-white mb-1.5 flex items-center gap-1.5">
                         <span>Tia Sét Năng Lượng</span>
                       </h4>
-                      <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-medium">
                         Mỗi năm có 3-4 tia sét. Dùng tia sét để làm việc, đi chơi, khám bệnh!
                       </p>
                     </div>
@@ -247,7 +247,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <h4 className="text-base font-black text-white mb-1.5 flex items-center gap-1.5">
                         <span>Trái Tim Khỏe Mạnh</span>
                       </h4>
-                      <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-medium">
                         Trái tim đập thình thịch! Hết tim là ngủm, nhớ ăn ngon ngủ kỹ và đi bác sĩ.
                       </p>
                     </div>
@@ -271,7 +271,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <h4 className="text-base font-black text-white mb-1.5 flex items-center gap-1.5">
                         <span>Ngọn Lửa Áp Lực</span>
                       </h4>
-                      <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-medium">
                         Lửa bốc cao quá là mệt xỉu! Đi uống cà phê, nghỉ ngơi để dập lửa.
                       </p>
                     </div>
@@ -295,7 +295,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <h4 className="text-base font-black text-white mb-1.5 flex items-center gap-1.5">
                         <span>Túi Tiền Tiết Kiệm</span>
                       </h4>
-                      <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-medium">
                         Đi làm để gom tiền mua nhà to, mua đồ chơi và chăm sóc ba mẹ.
                       </p>
                     </div>
@@ -310,31 +310,31 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
 
               {/* 3. 4 MẸO VÀNG DỄ NHỚ CHO NGƯỜI MỚI BẮT ĐẦU */}
               <div className="p-4 rounded-3xl bg-slate-900/70 border border-slate-800">
-                <h4 className="text-xs font-black text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <h4 className="text-xs font-black text-[var(--text-secondary)] uppercase tracking-wider mb-3 flex items-center gap-2">
                   <span>💡</span> 4 Bí Quyết Dễ Ẹc Để Luôn Chiến Thắng
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                   <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-slate-950/60 border border-slate-800/80">
                     <span className="text-lg">🏡</span>
-                    <span className="text-slate-300">
+                    <span className="text-[var(--text-secondary)]">
                       <strong>Nâng cấp chỗ ở:</strong> Đổi phòng trọ lên căn hộ để ngủ ngon và ít bệnh.
                     </span>
                   </div>
                   <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-slate-950/60 border border-slate-800/80">
                     <span className="text-lg">☕</span>
-                    <span className="text-slate-300">
+                    <span className="text-[var(--text-secondary)]">
                       <strong>Thư giãn đúng lúc:</strong> Thấy lửa đỏ &gt; 80% là phải đi dưỡng sinh ngay.
                     </span>
                   </div>
                   <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-slate-950/60 border border-slate-800/80">
                     <span className="text-lg">🤝</span>
-                    <span className="text-slate-300">
+                    <span className="text-[var(--text-secondary)]">
                       <strong>Kết thân với bạn bè:</strong> Khi hoạn nạn bạn bè sẽ cứu nguy cho bạn.
                     </span>
                   </div>
                   <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-slate-950/60 border border-slate-800/80">
                     <span className="text-lg">👶</span>
-                    <span className="text-slate-300">
+                    <span className="text-[var(--text-secondary)]">
                       <strong>Sinh con nối dõi:</strong> Về già để lại nhà cửa cho con cháu chơi tiếp!
                     </span>
                   </div>
@@ -349,7 +349,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                   </div>
                   <div>
                     <h5 className="font-bold text-white text-xs sm:text-sm">Bạn đã sẵn sàng bước vào cuộc đời?</h5>
-                    <p className="text-[11px] text-slate-400">Bấm nút bên dưới để đóng bảng và trải nghiệm ngay!</p>
+                    <p className="text-[11px] text-[var(--text-secondary)]">Bấm nút bên dưới để đóng bảng và trải nghiệm ngay!</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -396,7 +396,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       className={`px-3.5 py-2 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap transition ${
                         isActive
                           ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
-                          : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+                          : 'bg-slate-900/80 text-[var(--text-secondary)] hover:text-white border border-slate-800'
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -413,7 +413,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                     <h3 className="font-bold text-white text-sm mb-1.5 flex items-center gap-2">
                       <TrendingUp className="w-4 h-4 text-emerald-400" /> Hệ Thống Điểm Kỹ Năng (SP) & Tăng Cấp (EXP)
                     </h3>
-                    <p className="text-xs text-slate-300">
+                    <p className="text-xs text-[var(--text-secondary)]">
                       Mỗi khi thanh EXP đầy, bạn nhận <strong>+1 SP</strong> để nâng cấp vào 3 nhánh kỹ năng tối thượng.
                     </p>
                   </div>
@@ -427,11 +427,11 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                         <div className="p-2.5 rounded-xl bg-slate-950/70 border border-amber-900/40">
                           <div className="font-bold text-white mb-0.5">Tier 1: Mắt Thần Định Giá (1 SP)</div>
-                          <div className="text-slate-400 text-[11px]">Giảm 10% giá mua BĐS & cổ phiếu.</div>
+                          <div className="text-[var(--text-secondary)] text-[11px]">Giảm 10% giá mua BĐS & cổ phiếu.</div>
                         </div>
                         <div className="p-2.5 rounded-xl bg-slate-950/70 border border-amber-900/40">
                           <div className="font-bold text-white mb-0.5">Tier 2: Đàm Phán Khắc Nghiệt (2 SP)</div>
-                          <div className="text-slate-400 text-[11px]">Cày việc nhận thêm +35% tiền mặt.</div>
+                          <div className="text-[var(--text-secondary)] text-[11px]">Cày việc nhận thêm +35% tiền mặt.</div>
                         </div>
                         <div className="p-2.5 rounded-xl bg-slate-950/70 border border-amber-900/40">
                           <div className="font-bold text-amber-300 mb-0.5">Tier 3: Cỗ Máy Dòng Tiền (3 SP)</div>
@@ -448,11 +448,11 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                         <div className="p-2.5 rounded-xl bg-slate-950/70 border border-sky-900/40">
                           <div className="font-bold text-white mb-0.5">Tier 1: Hào Quang Cuốn Hút (1 SP)</div>
-                          <div className="text-slate-400 text-[11px]">x2 tốc độ tăng hảo cảm với NPC Quý nhân.</div>
+                          <div className="text-[var(--text-secondary)] text-[11px]">x2 tốc độ tăng hảo cảm với NPC Quý nhân.</div>
                         </div>
                         <div className="p-2.5 rounded-xl bg-slate-950/70 border border-sky-900/40">
                           <div className="font-bold text-white mb-0.5">Tier 2: Mượn Gió Bẻ Măng (2 SP)</div>
-                          <div className="text-slate-400 text-[11px]">Kích hoạt quyền nhờ cậy đặc quyền cứu nguy.</div>
+                          <div className="text-[var(--text-secondary)] text-[11px]">Kích hoạt quyền nhờ cậy đặc quyền cứu nguy.</div>
                         </div>
                         <div className="p-2.5 rounded-xl bg-slate-950/70 border border-sky-900/40">
                           <div className="font-bold text-sky-300 mb-0.5">Tier 3: Đế Chế Nhân Mạch (3 SP)</div>
@@ -469,7 +469,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                         <div className="p-2.5 rounded-xl bg-slate-950/70 border border-purple-900/40">
                           <div className="font-bold text-white mb-0.5">Tier 1: Tâm Lý Thép (1 SP)</div>
-                          <div className="text-slate-400 text-[11px]">Giảm 40% áp lực Burnout khi làm việc.</div>
+                          <div className="text-[var(--text-secondary)] text-[11px]">Giảm 40% áp lực Burnout khi làm việc.</div>
                         </div>
                         <div className="p-2.5 rounded-xl bg-slate-950/70 border border-purple-900/40">
                           <div className="font-bold text-white mb-0.5">Tier 2: Bách Khoa Toàn Thư (2 SP)</div>
@@ -492,7 +492,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                     <h3 className="font-bold text-white text-sm mb-1 flex items-center gap-2">
                       <Users className="w-4 h-4 text-pink-400" /> 4 Hình Mẫu Quý Nhân Đồng Hành
                     </h3>
-                    <p className="text-xs text-slate-300">
+                    <p className="text-xs text-[var(--text-secondary)]">
                       Tương tác tăng Hảo cảm lên <strong>Cấp 3</strong> để mở khóa đặc quyền giải cứu sinh tử.
                     </p>
                   </div>
@@ -550,7 +550,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                     <h3 className="font-bold text-emerald-300 text-sm mb-1 flex items-center gap-2">
                       <DollarSign className="w-4 h-4 text-emerald-400" /> Chiến Lược Tích Sản & Quản Trị Dòng Tiền
                     </h3>
-                    <p className="text-xs text-slate-300">
+                    <p className="text-xs text-[var(--text-secondary)]">
                       Nếu tiền mặt âm (&lt; $0), bạn bị tính lãi nợ <strong>4.5%/năm</strong> và tăng <strong>+25% Burnout</strong>.
                     </p>
                   </div>
@@ -560,7 +560,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <h4 className="font-bold text-white text-xs flex items-center gap-1.5">
                         <span>1. Cày Việc Chủ Động (18 - 35t)</span>
                       </h4>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs text-[var(--text-secondary)]">
                         Dùng AP cày thêm việc để gom vốn mồi từ $1.500 - $4.000/năm. Đừng cày quá sức khi máu thấp!
                       </p>
                     </div>
@@ -569,7 +569,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <h4 className="font-bold text-white text-xs flex items-center gap-1.5">
                         <span>2. Cổ Tức BĐS & Cổ Phiếu</span>
                       </h4>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs text-[var(--text-secondary)]">
                         Mua nhà cho thuê và cổ phiếu bluechip. Mỗi năm tự sinh dòng tiền đều đặn không tốn AP.
                       </p>
                     </div>
@@ -578,7 +578,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       <h4 className="font-bold text-white text-xs flex items-center gap-1.5">
                         <span>3. Chi Phí Gia Đình & Con Cái</span>
                       </h4>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs text-[var(--text-secondary)]">
                         Nuôi con nhỏ hoặc phụng dưỡng cha mẹ sẽ trừ phí sinh hoạt. Giữ dòng tiền cổ tức lớn hơn chi phí!
                       </p>
                     </div>
@@ -602,7 +602,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       </div>
                       <div>
                         <span className="font-bold text-white text-xs mr-2">{stage.title}:</span>
-                        <span className="text-xs text-slate-400">{stage.desc}</span>
+                        <span className="text-xs text-[var(--text-secondary)]">{stage.desc}</span>
                       </div>
                     </div>
                   ))}
@@ -616,7 +616,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
 
         {/* ================= FOOTER ================= */}
         <div className="px-5 py-3.5 border-t border-slate-800 bg-slate-900/90 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
+          <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
             {mode === 'fun' ? (
               <span className="hidden sm:inline">
                 💡 Muốn xem chỉ số chi tiết? Bấm nút <strong>RPG Nâng Cao</strong> ở trên!

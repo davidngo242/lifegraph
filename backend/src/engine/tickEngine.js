@@ -213,7 +213,7 @@ export async function processPassivePhase(character, assets, relationships) {
 
     const isMinorCharacter = (character.age < 18);
     const isParentType = (rel.type === 'parent' || rel.type === 'father' || rel.type === 'mother');
-    const cost = (isMinorCharacter && isParentType) ? 0 : Number(rel.monthly_cost || rel.monthly_upkeep || 0);
+    const cost = (isMinorCharacter && isParentType) ? 0 : (isParentType ? (Number(rel.monthly_cost || rel.monthly_upkeep) || 200) : Number(rel.monthly_cost || rel.monthly_upkeep || 0));
     totalRelationshipCost += cost;
     if (cash < -5000 && rel.affection_level > 20) {
       rel.affection_level = Math.max(10, rel.affection_level - 5);

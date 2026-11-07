@@ -117,71 +117,71 @@ export default function CharacterHeroBanner({
   };
   const socialStatus = getSocialStatus();
 
-  // Living Environment Atmosphere based on Life Stage, Burnout & Vibe
+  // Living Environment Atmosphere based on Life Stage, Burnout & Vibe (Softer warm & dark palette)
   const getBannerEnvironment = () => {
     if (burnout >= 75) {
       return {
-        bgGradient: 'from-rose-950/75 via-purple-950/80 to-slate-950',
-        borderColor: 'border-rose-500/60 shadow-[0_0_30px_rgba(244,63,94,0.25)]',
-        accentGlow: 'bg-rose-600/25',
-        skylineColor: 'text-rose-500/25',
+        bgGradient: 'from-rose-950/45 via-purple-950/40 to-transparent',
+        borderColor: 'border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.15)]',
+        accentGlow: 'bg-rose-600/15',
+        skylineColor: 'text-rose-500/20',
         particleColor: 'bg-rose-400',
         celestialColor: '#f43f5e',
-        celestialGlow: 'bg-rose-500/30'
+        celestialGlow: 'bg-rose-500/20'
       };
     }
     if (age <= 5) {
       return {
-        bgGradient: 'from-sky-950/65 via-indigo-950/70 to-slate-950',
-        borderColor: 'border-sky-500/40 shadow-[0_0_25px_rgba(56,189,248,0.18)]',
-        accentGlow: 'bg-sky-400/25',
-        skylineColor: 'text-sky-400/30',
+        bgGradient: 'from-sky-950/35 via-indigo-950/30 to-transparent',
+        borderColor: 'border-[var(--border-subtle)] shadow-none',
+        accentGlow: 'bg-sky-400/15',
+        skylineColor: 'text-sky-400/20',
         particleColor: 'bg-sky-300',
         celestialColor: '#38bdf8',
-        celestialGlow: 'bg-sky-400/30'
+        celestialGlow: 'bg-sky-400/20'
       };
     }
     if (age <= 17) {
       return {
-        bgGradient: 'from-blue-950/60 via-teal-950/50 to-slate-950',
-        borderColor: 'border-teal-500/40 shadow-[0_0_25px_rgba(45,212,191,0.18)]',
-        accentGlow: 'bg-teal-400/20',
-        skylineColor: 'text-teal-400/25',
+        bgGradient: 'from-blue-950/35 via-teal-950/25 to-transparent',
+        borderColor: 'border-[var(--border-subtle)] shadow-none',
+        accentGlow: 'bg-teal-400/15',
+        skylineColor: 'text-teal-400/15',
         particleColor: 'bg-teal-300',
         celestialColor: '#2dd4bf',
-        celestialGlow: 'bg-teal-400/25'
+        celestialGlow: 'bg-teal-400/15'
       };
     }
     if (age <= 34) {
       return {
-        bgGradient: 'from-indigo-950/75 via-purple-950/70 to-slate-950',
-        borderColor: 'border-indigo-500/50 shadow-[0_0_30px_rgba(99,102,241,0.22)]',
-        accentGlow: 'bg-indigo-500/25',
-        skylineColor: 'text-indigo-400/30',
+        bgGradient: 'from-indigo-950/40 via-purple-950/30 to-transparent',
+        borderColor: 'border-[var(--border-subtle)] shadow-none',
+        accentGlow: 'bg-indigo-500/15',
+        skylineColor: 'text-indigo-400/20',
         particleColor: 'bg-purple-300',
         celestialColor: '#a855f7',
-        celestialGlow: 'bg-purple-500/30'
+        celestialGlow: 'bg-purple-500/20'
       };
     }
     if (age <= 59) {
       return {
-        bgGradient: 'from-amber-950/65 via-purple-950/60 to-slate-950',
-        borderColor: 'border-amber-500/50 shadow-[0_0_30px_rgba(245,158,11,0.22)]',
-        accentGlow: 'bg-amber-500/25',
-        skylineColor: 'text-amber-400/30',
+        bgGradient: 'from-amber-950/40 via-purple-950/25 to-transparent',
+        borderColor: 'border-[var(--border-subtle)] shadow-none',
+        accentGlow: 'bg-amber-500/15',
+        skylineColor: 'text-amber-400/20',
         particleColor: 'bg-amber-300',
         celestialColor: '#f59e0b',
-        celestialGlow: 'bg-amber-500/30'
+        celestialGlow: 'bg-amber-500/20'
       };
     }
     return {
-      bgGradient: 'from-amber-950/75 via-rose-950/50 to-slate-950',
-      borderColor: 'border-amber-500/40 shadow-[0_0_25px_rgba(251,191,36,0.18)]',
-      accentGlow: 'bg-amber-400/20',
-      skylineColor: 'text-amber-400/25',
+      bgGradient: 'from-amber-950/45 via-rose-950/25 to-transparent',
+      borderColor: 'border-[var(--border-subtle)] shadow-none',
+      accentGlow: 'bg-amber-400/15',
+      skylineColor: 'text-amber-400/15',
       particleColor: 'bg-amber-200',
       celestialColor: '#fbbf24',
-      celestialGlow: 'bg-amber-400/25'
+      celestialGlow: 'bg-amber-400/15'
     };
   };
   const env = getBannerEnvironment();
@@ -274,14 +274,14 @@ export default function CharacterHeroBanner({
   const isSevereBurnout = age >= 18 && burnout > 80;
   const isInfant = age <= 5;
 
-  const avatarContainerClasses = `w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 shrink-0 relative shadow-2xl group transition-all duration-500 ${
+  const avatarContainerClasses = `w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border shrink-0 relative shadow-xl group transition-all duration-500 ${
     feedbackAtmo
       ? `${feedbackAtmo.borderRing} animate-pulse scale-[1.02]`
       : isSevereBurnout
-      ? 'border-rose-500 ring-2 ring-rose-500/80 ring-offset-2 ring-offset-slate-950 shadow-[0_0_24px_rgba(244,63,94,0.6)] animate-pulse'
+      ? 'border-rose-500 ring-1 ring-rose-500/80 ring-offset-2 ring-offset-slate-950 shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-pulse'
       : isCriticalVitality
-      ? 'border-rose-400/80 bg-slate-950 animate-[pulse_3s_ease-in-out_infinite] shadow-[0_0_18px_rgba(244,63,94,0.35)]'
-      : 'border-slate-700/80 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 hover:border-indigo-400'
+      ? 'border-rose-400/80 bg-slate-950 animate-[pulse_3s_ease-in-out_infinite] shadow-[0_0_15px_rgba(244,63,94,0.25)]'
+      : 'border-[var(--border-subtle)] bg-[var(--bg-card-subtle)] hover:border-[var(--border-highlight)]'
   }`;
 
   const avatarFilterClasses = `w-full h-full transition-all duration-500 ${
@@ -289,7 +289,7 @@ export default function CharacterHeroBanner({
   }`;
 
   return (
-    <div className={`w-full rounded-3xl bg-slate-950/95 border ${feedbackAtmo ? 'border-indigo-400/70 shadow-[0_0_35px_rgba(99,102,241,0.3)]' : env.borderColor} shadow-2xl backdrop-blur-2xl mb-4 relative overflow-hidden transition-all duration-700`}>
+    <div className={`w-full rounded-3xl bg-[var(--bg-card)] text-[var(--text-primary)] border ${feedbackAtmo ? 'border-[var(--border-highlight)] shadow-[0_0_25px_rgba(251,191,36,0.2)]' : env.borderColor} shadow-xl backdrop-blur-2xl mb-4 relative overflow-hidden transition-all duration-500`}>
       
       {/* 1. CINEMATIC LIVING ATMOSPHERE BACKDROP */}
       <div className={`absolute inset-0 bg-gradient-to-r ${env.bgGradient} pointer-events-none transition-all duration-1000`} />
@@ -416,7 +416,7 @@ export default function CharacterHeroBanner({
           {/* Clean Core Identity Typography */}
           <div className="flex flex-col gap-1 min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap">
-              <h1 className="text-lg md:text-xl font-black text-white tracking-tight truncate">
+              <h1 className="text-lg md:text-xl font-black text-[var(--text-primary)] tracking-tight truncate">
                 {character.name || "LifeGraph"}
               </h1>
 
@@ -428,8 +428,8 @@ export default function CharacterHeroBanner({
             </div>
 
             {/* 1 Dòng Tuổi & Nơi Chốn Tinh Gọn */}
-            <div className="flex items-center gap-1.5 text-xs text-slate-300 flex-wrap">
-              <span className="font-bold text-white bg-slate-900/90 px-2 py-0.5 rounded-md border border-slate-700/60 text-[11px]">
+            <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] flex-wrap">
+              <span className="font-bold text-[var(--text-primary)] bg-[var(--bg-card-subtle)] px-2 py-0.5 rounded-md border border-[var(--border-subtle)] text-[11px]">
                 {age} Tuổi
               </span>
               <span className={`font-bold px-2 py-0.5 rounded-md border text-[10px] flex items-center gap-0.5 ${
@@ -442,12 +442,12 @@ export default function CharacterHeroBanner({
               <span className="text-indigo-300 font-medium text-[11px]">{nationality}</span>
             </div>
 
-            <div className="flex items-center gap-1 text-[11px] text-slate-300 truncate pt-0.5">
+            <div className="flex items-center gap-1 text-[11px] text-[var(--text-secondary)] truncate pt-0.5">
               <MapPin className="w-3 h-3 text-rose-400 shrink-0" />
               <span className="truncate">{character.current_city || nationality}</span>
-              <span className="text-slate-600">•</span>
+              <span className="opacity-40">•</span>
               <Home className="w-3 h-3 text-amber-400 shrink-0" />
-              <span className="truncate text-slate-400">{character.housing?.name || 'Phòng trọ'}</span>
+              <span className="truncate text-[var(--text-secondary)]">{character.housing?.name || 'Phòng trọ'}</span>
             </div>
           </div>
         </div>
