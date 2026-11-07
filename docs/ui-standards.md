@@ -431,3 +431,105 @@ Mọi thành phần giao diện (Card, Panel, Text, Border, Header) bắt buộc
    * Thuộc tính `body { transition: background-color 0.25s ease, color 0.25s ease; }` đảm bảo việc chuyển đổi giữa các theme diễn ra êm ái trong 250ms, không gây giật thị giác.
 3. **Lưu trữ trạng thái bền vững:**
    * Lựa chọn của người chơi được lưu tức thì vào `localStorage.setItem('lifegraph_theme', newTheme)` và đồng bộ trên toàn bộ phiên làm việc.
+
+---
+
+## 11. Tiêu Chuẩn Hoạt Động AP Tuổi Già (Senior AP Sinks: 45+ Tuổi)
+
+Khi nhân vật bước qua tuổi trung niên (`characterAge >= 45`), cơ thể bắt đầu lão hóa tự nhiên và tâm lý chuyển từ giai đoạn "canh bạc tích sản" sang "dưỡng lão & kiến tạo di sản". Hệ thống mở khóa phân vùng hành động tuổi già chuyên biệt tại `ActionPointHub.tsx`:
+
+### 11.1. Danh Mục 3 Hoạt Động Di Sản Cốt Tử
+
+| Hành Động | Chi Phí Nguồn Lực | Tác Động & Hiệu Ứng Game | Cơ Chế Bảo Toàn Di Sản | Trạng Thái Sau Kích Hoạt |
+| :--- | :---: | :--- | :--- | :---: |
+| **Viết Hồi Ký Cuộc Đời (`write_memoir`)** | 2 AP<br>$0 | +25 Karma phúc đức, lưu danh sử sách, đúc kết chiêm nghiệm kiếp sống | Ghi nhận cờ `written_memoir`, được vinh danh trong văn bia hậu thế | Thực hiện 1 lần duy nhất trong đời |
+| **Chỉ Dạy Con Cháu (`grandchild_mentorship`)** | 1 AP<br>$0 | +15 Hảo cảm gia đình, +10 Karma công đức | Truyền dạy kinh nghiệm, gắn kết bền chặt thế hệ kế thừa | Thực hiện nhiều lần mỗi năm |
+| **Lập Di Chúc Sớm (`early_estate_will`)** | 2 AP<br>$1.000 (Phí công chứng) | **Thuế thừa kế giảm từ 30% xuống còn 10%!** | Giữ lại trọn vẹn 90% tổng tài sản cho con cháu kiếp sau thay vì bị khấu trừ 30% | Thực hiện 1 lần duy nhất |
+
+### 11.2. Quy Chuẩn Giao Diện Khay Hoạt Động Dưỡng Lão
+* **Định vị & Phân định:** Nằm ở cuối khay hành động năm (`border-t border-[var(--border-subtle)] mt-3 pt-3`) với tiêu đề *"✨ HOẠT ĐỘNG DƯỠNG LÃO & DI SẢN (45+ TUỔI)"*.
+* **Trực quan nút bấm một lần (One-off Actions):** Khi đã kích hoạt thành công `write_memoir` hoặc `early_estate_will`, nút tự động chuyển sang trạng thái đã hoàn thành (`bg-sky-950/30 text-sky-300` hoặc `bg-amber-950/40 text-amber-200`), hiển thị huy hiệu `✓ Đã Viết Hồi Ký` / `✓ Đã Có Di Chúc` và khóa tương tác an toàn để tránh tiêu hao AP lặp lại.
+
+---
+
+## 12. Tiêu Chuẩn Cứu Trợ Thoát Bẫy Nợ (Debt Restructuring)
+
+Nhằm mô phỏng chân thực bẫy nợ tài chính và cung cấp phương án thoát hiểm thực tế khi nhân vật rơi vào cảnh âm tiền (`cash < 0` hoặc dính cờ `high_debt`):
+
+### 12.1. Ngưỡng Kích Hoạt Cảnh Báo Vỡ Nợ
+* Khi `cash < 0`, hệ thống tính lãi nợ phạt 4.5%/năm và gia tăng áp lực Burnout theo tỷ lệ nợ nần.
+* Tại thanh HUD và hộp thoại `EmergencyRescueModal.tsx`, huy hiệu báo động `🚨 VỠ NỢ` màu đỏ rực xuất hiện kèm phân khu **"Gói Cứu Trợ Tái Cấu Trúc Nợ"**.
+
+### 12.2. Hai Phương Án Tái Cấu Trúc Khẩn Cấp
+
+1. **Vay Mềm Thân Tộc (Family Soft Loan):**
+   * **Chi phí:** 0 AP, giảm -10 Hảo cảm người thân gia đình.
+   * **Hiệu ứng:** Nhận ngay **+$3.000 tiền mặt** tức thời với lãi suất 0%, giải vây khỏi nguy cơ bị ngân hàng phát mãi tài sản.
+   * **Trực quan:** Icon `HandCoins`, viền màu hổ phách ấm `border-amber-500/50 bg-amber-950/40 text-amber-200`.
+
+2. **Bán Gấp Đồ Đạc Cá Nhân (Liquidate Personal Items):**
+   * **Chi phí:** 0 AP, tăng +10 điểm Kiệt Sức (Burnout) do sang chấn tâm lý phải bán tháo đồ kỷ niệm.
+   * **Hiệu ứng:** Thu về **+$1.200 tiền mặt** khẩn cấp.
+   * **Trực quan:** Icon `PackageMinus`, viền xám thép trung tính `border-slate-700 bg-slate-900/90 text-slate-200`.
+
+---
+
+## 13. Tiêu Chuẩn Đồng Hồ Cát Tử Thần (Reaper Suspense Hourglass HUD 70+)
+
+Khi nhân vật đạt ngưỡng đại thọ từ 70 tuổi trở lên (`age >= 70`), cơ chế Biological Reaper Death Roll bắt đầu hoạt động ngầm mỗi năm. LifeGraph trực quan hóa mức độ căng thẳng sinh tử bằng **Đồng Hồ Cát Sinh Mệnh (Reaper Suspense Hourglass)** trên Hero Banner:
+
+### 13.1. Công Thức Ước Tính Tỷ Lệ Sống Thọ (Survival Rate)
+$$\text{survivalRate} = \max\left(10, \min\left(99, \text{round}\left(\frac{\text{vitality}}{\text{maxVitality}} \times \max\left(20, 100 - (\text{age} - 70) \times 2.8\right)\right)\right)\right)$$
+
+* Nếu đã mở khóa kỹ năng tối thượng *Transcendence Sage*, ngưỡng tử thần lùi lại sau tuổi 75 và rủi ro tử vong giảm đi một nửa (x0.5).
+
+### 13.2. Quy Chuẩn Thị Giác HUD
+* **Vị trí:** Tích hợp trực tiếp bên cạnh nhãn tuổi và thanh trạng thái sức khỏe trên `CharacterHeroBanner.tsx`.
+* **Trực quan hóa:**
+  * Huy hiệu dạng viên thuốc viền vàng hổ phách `border border-amber-500/60 bg-amber-950/70 text-amber-300 font-bold`.
+  * Hiệu ứng nhịp đập tim `animate-pulse` kết hợp bóng hào quang ma mị `shadow-[0_0_12px_rgba(245,158,11,0.3)]`.
+  * Biểu tượng `<Hourglass />` xoay chậm vô hạn (`animate-[spin_6s_linear_infinite]`).
+  * Text hiển thị: `Đồng Hồ Cát: ~X% Thọ`.
+* **Tooltip hướng dẫn sinh tồn:** Rà chuột vào hiển thị giải thích chi tiết: *"Bạn đã bước vào ngưỡng đại thọ 70+. Tỷ lệ vượt qua thử thách sinh tử năm nay ước tính ~X%. Hãy duy trì Sinh Lực cao, dưỡng sinh an tịnh và lập di chúc sớm!"*.
+
+---
+
+## 14. Tiêu Chuẩn Đồ Họa Phòng Quyết Định Điện Ảnh 21:9 & 3D Interactive
+
+Phòng Quyết Định Điện Ảnh (**21:9 Cinema Decision Room**) là không gian nhập vai đỉnh cao của LifeGraph, biến mỗi bước ngoặt cuộc đời thành một trường đoạn điện ảnh tương tác chân thực:
+
+### 14.1. Khung Hình Điện Ảnh Hollywood 21:9 (Anamorphic Cinema Framing)
+* **Tỷ lệ khung hình:** Chuẩn điện ảnh Ultra-wide 21:9 (`aspect-[21/9]`), mô phỏng ống kính Anamorphic của các rạp chiếu phim chuyên nghiệp.
+* **Viền cuộn phim đục lỗ (Film Reel Perforations):** Hai dải đen Letterbox trên và dưới viền các lỗ đục cuộn phim 35mm hoài niệm, tạo cảm giác người chơi đang thưởng lãm chính cuốn phim cuộc đời mình.
+* **Hiệu ứng tối góc quang học (Anamorphic Vignette):** Bốn góc màn hình được phủ lớp vignette mờ tối tự nhiên, dồn toàn bộ sự chú ý của mắt vào tâm điểm không gian 3D.
+
+### 14.2. Bộ Kỹ Xảo Ánh Sáng Thể Tích & Hạt Bụi 3D (3D Volumetric Lighting & Atmospheric FX)
+1. **Tia Sáng Thể Tích (Volumetric Sunbeam 3D / God Rays):**
+   * Chiếu xiên từ cửa sổ góc nghiêng 0.89 rad xuyên qua phòng khách.
+   * Cấu trúc hình nón kép (Primary Cone R1=1.9, R2=3.8 kết hợp Core Ray đậm đặc bên trong).
+   * Hiệu ứng nhịp thở khí quyển (Atmospheric Breathing) điều biến độ mờ theo hàm sóng: `opacity = 0.16 + sin(t * 1.1) * 0.035`.
+   * Tự động biến đổi màu sắc theo Theme đang chọn:
+     * *Obsidian Night:* Vàng nhạt ấm áp (`#fef08a`).
+     * *Sepia Warmth:* Hổ phách hoàng hôn (`#f59e0b`).
+     * *Cyber Slate:* Xanh cyan neon sắc lạnh (`#38bdf8`).
+2. **Hạt Bụi Ánh Sáng Lơ Lửng (Floating Dust Motes 3D):**
+   * 35 hạt bụi ánh sáng được sinh ngẫu nhiên theo tọa độ hình nón của luồng sáng.
+   * Dao động vi mô theo quy luật Brownian Motion trong không gian 3D, tái hiện bầu không khí tĩnh lặng, sâu lắng của căn phòng.
+3. **Quả Cầu Hologram Đánh Dấu Hotspot (Holographic Beacon Sphere):**
+   * Điểm tương tác 3D nổi lơ lửng với vòng quét radar xoay tròn và hiệu ứng phát quang bán kính 0.36 unit.
+   * Khi nhân vật tiến lại gần, vòng sáng bung nở và kích hoạt âm thanh phản hồi.
+4. **Hệ Thống Chiếu Sáng Studio 3 Điểm (3-Point Studio Lighting):**
+   * *Key Light:* Nguồn sáng chính streaming từ cửa sổ góc `[2.5, 6.5, -4.5]`, cường độ 2.2 lux.
+   * *Fill Light:* Ánh sáng lấp đầy dịu nhẹ khử bóng gắt.
+   * *Rim Light:* Đèn viền tóc tách nhân vật khỏi hậu cảnh tối.
+   * *Specular Reflection Floor:* Mặt sàn nhà phản xạ ánh sáng gương tự nhiên với độ nhám bóng tinh tế.
+
+### 14.3. Hộp Thoại Visual Novel Persona & Lăng Kính Tâm Trí Tri-Prism
+* **Hộp Thoại Visual Novel Persona Deck:**
+  * Neo cố định dưới chân viewport 21:9 với viền kính mờ `backdrop-blur-2xl` và hiệu ứng đổ bóng `shadow-2xl`.
+  * Hiển thị chân dung NPC biểu cảm, lời thoại phong cách Persona / Cyberpunk 2077 và các manh mối khám phá được từ hiện trường.
+* **Lăng Kính Tâm Trí (Tri-Prism Ego Stage):**
+  * Ba Bản Ngã nội tâm được hiển thị dưới dạng 3 lăng kính tam phân:
+    * 🧠 **Lý Trí (*Logic*):** Lăng kính xanh lam tri thức, phân tích xác suất và lợi ích kinh tế.
+    * ❤️ **Trái Tim (*Empathy*):** Lăng kính hồng ngọc tình thân, kêu gọi đạo đức và sự gắn kết.
+    * 🛡️ **Sinh Tồn (*Primal Instinct*):** Lăng kính hổ phách tự vệ, cảnh báo rủi ro kiệt quệ và an toàn tính mạng.

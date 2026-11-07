@@ -152,6 +152,21 @@ NEXT_PUBLIC_API_URL=/api/game
   * ⚡ **Cyber Slate (Neon nguyên bản):** Nền xanh đen viễn tưởng `#020617` kết hợp đường viền cyan neon sắc sảo, gợi cảm giác buồng lái phi thuyền không gian.
 * ⚡ **Công Nghệ Chuyển Đổi Tức Thì & Zero-FOUC:** Tích hợp `ThemeSwitcher` trên thanh Header buồng lái, lưu tự động vào `localStorage ('lifegraph_theme')`, ngăn chặn 100% hiện tượng chớp nháy (Anti-FOUC) với hiệu ứng chuyển màu mượt mà 250ms.
 
+### 11. Hoạt Động Dưỡng Lão & Kiến Tạo Di Sản (Senior AP Sinks: 45+ Tuổi)
+* 📜 **Viết Hồi Ký Cuộc Đời (`2 AP`):** Đúc kết chiêm nghiệm kiếp sống, nhận +25 Karma phúc đức và lưu danh sử sách cho các thế hệ hậu sinh.
+* 👶 **Chỉ Dạy Con Cháu (`1 AP`):** Truyền thụ kinh nghiệm thương trường và bài học nhân sinh (+15 Hảo cảm gia đình, +10 Karma).
+* ⚖️ **Lập Di Chúc Sớm (`2 AP + $1.000`):** Lập di chúc công chứng sớm để **giảm thuế thừa kế của thế hệ sau từ 30% xuống còn 10%**, bảo toàn 90% gia sản truyền thừa!
+
+### 12. Cứu Trợ Thoát Bẫy Nợ & Đồng Hồ Cát Tử Thần (Reaper Suspense Hourglass HUD 70+)
+* 🚨 **Tái Cấu Trúc Bẫy Nợ (Debt Restructuring):** Kích hoạt tự động khi âm tiền (`cash < 0`): Vay mềm thân tộc 0% lãi suất (+ $3.000 tiền mặt) hoặc Bán gấp đồ đạc cá nhân (+ $1.200 tiền mặt giải vây khẩn cấp).
+* ⏳ **Đồng Hồ Cát Sinh Mệnh (Reaper Suspense Hourglass HUD 70+):** Trực quan hóa tỷ lệ sống thọ theo thời gian thực trên Hero Banner với biểu tượng đồng hồ cát xoay vô hạn và hiệu ứng nhịp tim đập cảnh báo sinh tử.
+
+### 13. Phòng Quyết Định Điện Ảnh 21:9 & Kỹ Xảo 3D Đỉnh Cao
+* 🎬 **Chuẩn Điện Ảnh Hollywood 21:9:** Tỷ lệ khung hình Ultra-wide 21:9 anamorphic, viền dải phim đục lỗ 35mm và hiệu ứng tối góc quang học.
+* ☀️ **Tia Sáng Thể Tích (Volumetric Sunbeam / God Rays):** Luồng sáng xiên qua cửa sổ với nhịp thở khí quyển biến đổi theo Theme (Obsidian / Sepia / Cyber).
+* ✨ **Hạt Bụi Ánh Sáng 3D (Floating Dust Motes):** 35 hạt bụi lơ lửng chuyển động Brownian Motion chân thực trong luồng sáng.
+* 🌐 **Holographic Beacon & Hộp Thoại Persona:** Điểm đánh dấu Hotspot 3D phát quang kết hợp hộp thoại Visual Novel Persona Deck và Lăng kính tâm trí Tri-Prism (Lý Trí, Trái Tim, Sinh Tồn).
+
 ---
 
 ## ⌨️ Bảng Phím Tắt Toàn Cục (Global Hotkeys Cheat-Sheet)
@@ -161,15 +176,14 @@ Nhằm tối ưu hóa trải nghiệm điều khiển liên tục và nhập vai
 | Phím Tắt | Chức Năng Chính | Phân Loại | Ngữ Cảnh & Mô Tả Chi Tiết |
 | :---: | :--- | :--- | :--- |
 | <kbd>Space</kbd> | **Tiếp Tục / Bước Sang Năm Mới** | Điều Khiển Lượt | Tự động kích hoạt lượt thời gian tiếp theo; trong sự kiện Bỏ Qua Thời Gian (*Time Skip*), tự động chọn nhánh tích lũy mặc định. |
-| <kbd>1</kbd> | **Chọn Phương Án 1** | Quyết Định | Kích hoạt lựa chọn 1 trong Biến cố Ngã rẽ, Đối thoại NPC, Tam giác nghịch lý (*Trilemma*), hoặc Khoảng lặng tích lũy. |
-| <kbd>2</kbd> | **Chọn Phương Án 2** | Quyết Định | Kích hoạt lựa chọn 2 trong Biến cố Ngã rẽ, Đối thoại NPC, Tam giác nghịch lý, hoặc Khoảng lặng thư giãn. |
-| <kbd>3</kbd> | **Chọn Phương Án 3** | Quyết Định | Kích hoạt lựa chọn 3 trong Tam giác nghịch lý đánh đổi sinh tồn hoặc ngã rẽ 3 phương án. |
+| <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd> | **Chọn Phương Án 1, 2, 3** | Quyết Định | Kích hoạt lựa chọn ngã rẽ tại Buồng Lái hoặc trong Sân Khấu Tâm Thức (Mind Stage) Phòng 21:9. |
 | <kbd>D</kbd> | **Mở / Đóng Phòng Quyết Định 21:9** | Trải Nghiệm | Mở không gian điện ảnh toàn cảnh chuẩn Cinema 21:9 tập trung tuyệt đối vào bước ngoặt định mệnh. |
-| <kbd>M</kbd> | **Bật / Tắt Nhạc Nền (Mute Toggle)** | Âm Thanh | Bật hoặc tắt nhanh âm thanh không gian sống và nhạc thiền định nền. |
+| <kbd>M</kbd> | **Bật/Tắt Nhạc / Mở Mind Stage 21:9** | Âm Thanh / Nhập Vai | Nhấn tại Buồng Lái = Mute toggle; Nhấn trong Phòng Điện Ảnh 21:9 = Mở Sân Khấu Tâm Thức 3 Bản Ngã. |
+| <kbd>J</kbd> | **Mở Sổ Tay Manh Mối (Journal)** | Điều Tra | Bật / Tắt sổ tay manh mối và tri thức thu thập từ nhân vật trong Phòng Quyết Định 21:9. |
 | <kbd>?</kbd> hoặc <kbd>/</kbd> | **Mở Cẩm Nang Hướng Dẫn Sinh Tồn** | Trợ Giúp | Truy cập nhanh Bản Đồ Vui Nhộn & Cẩm Nang Tra Cứu RPG (Game Guide Modal). |
 | <kbd>K</kbd> | **Bật / Tắt Bảng Phím Tắt Toàn Cục** | Hệ Thống | Hiển thị bảng tra cứu nhanh toàn bộ hotkeys trên buồng lái (Shortcuts Cheatsheet). |
 | <kbd>E</kbd> | **Trạm Cứu Hộ Khẩn Cấp (Emergency SOS)** | Sinh Tồn | Mở ngay Trạm Cứu Hộ Khẩn Cấp để hồi phục sinh lực và giải tỏa kiệt sức tức thời. |
-| <kbd>Esc</kbd> | **Đóng Nhanh Hộp Thoại / Modal** | Điều Hướng | Đóng tức thì bất kỳ cửa sổ thông tin, bảng tra cứu hoặc modal đang mở trên màn hình. |
+| <kbd>Esc</kbd> | **Đóng Hộp Thoại / Thoát Về Buồng Lái** | Điều Hướng | Đóng tức thì modal đang mở; hoặc đóng Mind Stage/thoát Phòng Điện Ảnh 21:9 quay về Cockpit. |
 
 > [!TIP]
 > **Cơ chế An Toàn Chống Xung Đột Nhập Liệu (Safe Input & Modal Guarding):**

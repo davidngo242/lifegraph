@@ -19,11 +19,14 @@ Trong các tựa game mô phỏng cuộc đời dạng lượt (Turn-based Life 
 | Phím | Tên Thao Tác | Phân Loại | Ngữ Cảnh Hoạt Động | Điều Kiện Ràng Buộc | Mã Màu Ký Hiệu |
 | :---: | :--- | :--- | :--- | :--- | :--- |
 | <kbd>Space</kbd> | **Bước Sang Năm Mới / Tiếp Tục** | Tiến Trình | Buồng Lái Kiếp Sống (`activeView === 'game'`) | Nhân vật còn sống, không có modal che phủ, không gõ phím | Xanh ngọc lục bảo (`emerald`) |
-| <kbd>1</kbd> | **Chọn Lựa Chọn 1** | Quyết Định | Ngã rẽ / Đối thoại / Tam giác / Tuổi thơ | Có biến cố đang chờ lựa chọn phương án | Vàng hổ phách (`amber`) |
-| <kbd>2</kbd> | **Chọn Lựa Chọn 2** | Quyết Định | Ngã rẽ / Đối thoại / Tam giác / Tuổi thơ | Có biến cố đang chờ lựa chọn phương án | Vàng hổ phách (`amber`) |
-| <kbd>3</kbd> | **Chọn Lựa Chọn 3** | Quyết Định | Tam giác nghịch lý (*Trilemma*) hoặc Biến cố 3 nhánh | Có ít nhất 3 lựa chọn khả dụng | Vàng hổ phách (`amber`) |
+| <kbd>1</kbd> | **Chọn Lựa Chọn 1** | Quyết Định | Ngã rẽ / Đối thoại / Tam giác / Mind Stage 21:9 | Có biến cố đang chờ lựa chọn phương án | Vàng hổ phách (`amber`) |
+| <kbd>2</kbd> | **Chọn Lựa Chọn 2** | Quyết Định | Ngã rẽ / Đối thoại / Tam giác / Mind Stage 21:9 | Có biến cố đang chờ lựa chọn phương án | Vàng hổ phách (`amber`) |
+| <kbd>3</kbd> | **Chọn Lựa Chọn 3** | Quyết Định | Tam giác nghịch lý / Mind Stage 21:9 | Có ít nhất 3 lựa chọn khả dụng | Vàng hổ phách (`amber`) |
 | <kbd>D</kbd> | **Phòng Quyết Định 21:9** | Trải Nghiệm | Buồng Lái Kiếp Sống | Nhân vật còn sống, không trong các modal quan trọng | Tím hoàng gia (`purple`) |
-| <kbd>M</kbd> | **Bật/Tắt Âm Thanh (Mute)** | Tiện Ích | Toàn cầu (Bất kỳ màn hình nào) | Không gõ phím, giữ nguyên âm lượng đã chỉnh | Xanh lơ (`cyan`) |
+| <kbd>M</kbd> | **Bật/Tắt Âm Thanh / Mở Mind Stage** | Tiện Ích / Nhập Vai | Toàn cầu (Cockpit) / Phòng Điện Ảnh 21:9 | Nhấn ở Cockpit = Mute; Nhấn trong Phòng 21:9 = Mở Mind Stage | Xanh lơ / Tím (`cyan / purple`) |
+| <kbd>J</kbd> | **Mở Sổ Tay Manh Mối (Journal)** | Nhập Vai | Phòng Quyết Định 21:9 | Đang ở chế độ xem rạp chiếu 21:9 | Hổ phách (`amber`) |
+| <kbd>Esc</kbd> | **Đóng Bảng / Về Buồng Lái** | Điều Hướng | Phòng Quyết Định 21:9 | Đóng Mind Stage/Journal hoặc thoát về Cockpit | Xám thép (`slate`) |
+| <kbd>A / D</kbd> | **Di Chuyển Nhân Vật 3D** | Tương Tác | Phòng Quyết Định 21:9 | Bước đi trên sàn tương tác 3D | Xanh ngọc (`emerald`) |
 | <kbd>?</kbd> hoặc <kbd>/</kbd> | **Mở Sổ Tay & Phím Tắt** | Trợ Giúp | Toàn cầu (Bất kỳ màn hình nào) | Không gõ phím | Tím chàm (`indigo`) |
 
 ---
@@ -144,6 +147,14 @@ Hệ thống phím tắt được nhúng trực tiếp vào các component giao 
 ### 6.5. Điều Khiển Âm Thanh (AudioVolumeControl)
 - Tooltip và nút nhạc nền hiển thị huy hiệu <kbd>M</kbd> nhắc nhở người chơi có thể tắt/bật âm thanh bất cứ lúc nào.
 
+### 6.6. Phòng Quyết Định Điện Ảnh 21:9 (InteractiveScene2D)
+Trong không gian điện ảnh toàn cảnh tỷ lệ 21:9, hệ thống kích hoạt bộ phím tắt chuyên sâu phục vụ tương tác 3D và đối thoại:
+* **<kbd>M</kbd> — Mở Sân Khấu Tâm Thức (Mind Stage):** Bung mở giao diện lăng kính 3 Bản Ngã (Lý Trí, Trái Tim, Sinh Tồn) để lắng nghe lời khuyên nội tâm.
+* **<kbd>J</kbd> — Mở Sổ Tay Manh Mối (Journal):** Xem danh sách manh mối và tri thức thu thập được từ các nhân vật trong cảnh.
+* **<kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd> — Chọn Phương Án Ngã Rẽ:** Lựa chọn phương án hành động trực tiếp ngay trên Mind Stage mà không cần dùng chuột.
+* **<kbd>Esc</kbd> — Thoát / Đóng Bảng:** Khi đang mở Mind Stage hoặc Sổ tay manh mối, nhấn <kbd>Esc</kbd> để đóng bảng; khi ở màn hình 21:9 chính, nhấn <kbd>Esc</kbd> để trở về Buồng Lái Kiếp Sống (Cockpit View).
+* **<kbd>A</kbd> / <kbd>D</kbd> hoặc Phím Mũi Tên <kbd>←</kbd> / <kbd>→</kbd>:** Di chuyển nhân vật 3D trên sàn nhà để tiếp cận các quả cầu Hologram Hotspot.
+
 ---
 
 ## 7. Hướng Dẫn Mở Rộng Dành Cho Lập Trình Viên (Developer Guide)
@@ -201,3 +212,7 @@ Cập nhật danh sách phím trong `frontend/app/components/KeyboardShortcutsMo
 | 8 | Báo động SOS khi HP < 30 | Đưa HP về 25% | Nút SOS Cấp Cứu hiển thị nhấp nháy trên HUD | ✅ Đạt |
 | 9 | Bấm phím số <kbd>1, 2, 3</kbd> khi còn AP | Nhấn số lựa chọn khi AP > chi phí | Hiển thị Banner Smart Unspent AP Warning màu hổ phách | ✅ Đạt |
 | 10 | Bấm <kbd>Space</kbd> tại màn hình xúc xắc D20 | Nhấn Space khi FateDiceCheck mở | Lắc xúc xắc D20 và cộng dồn điểm AP Trợ Lực (+2/AP) | ✅ Đạt |
+| 11 | Bấm <kbd>M</kbd> trong Phòng Điện Ảnh 21:9 | Nhấn M khi đang ở màn hình 21:9 | Mở Sân Khấu Tâm Thức (Mind Stage) lăng kính 3 Bản Ngã | ✅ Đạt |
+| 12 | Bấm <kbd>J</kbd> trong Phòng Điện Ảnh 21:9 | Nhấn J khi đang ở màn hình 21:9 | Bật/tắt Sổ tay manh mối (Journal) | ✅ Đạt |
+| 13 | Bấm <kbd>1, 2, 3</kbd> trong Mind Stage 21:9 | Nhấn số khi Mind Stage mở | Chọn phương án ngã rẽ tương ứng | ✅ Đạt |
+| 14 | Bấm <kbd>Esc</kbd> trong Phòng Điện Ảnh 21:9 | Nhấn Esc khi mở bảng hoặc cảnh chính | Đóng bảng hoặc trở về Buồng Lái Kiếp Sống | ✅ Đạt |
