@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Target, Award, Sparkles, CheckCircle2 } from 'lucide-react';
+import Tooltip from './Tooltip';
 
 export interface AspirationData {
   aspiration_id: string;
@@ -39,18 +40,22 @@ export default function AspirationProgressBar({ aspiration }: AspirationProgress
               <span className="text-[12px] font-sans tabular-nums normal-case px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/25 font-bold tracking-normal">
                 Khát Vọng Đời Người
               </span>
-              <h4 className="text-xs md:text-sm font-bold text-white tracking-wide">
-                {aspiration.title}
-              </h4>
+              <Tooltip content={aspiration.target_summary || aspiration.title}>
+                <h4 className="text-xs md:text-sm font-bold text-white tracking-wide cursor-help">
+                  {aspiration.title}
+                </h4>
+              </Tooltip>
               {isCompleted && (
                 <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 font-bold animate-bounce">
                   <CheckCircle2 className="w-3 h-3" /> Đạt Thành Tựu!
                 </span>
               )}
             </div>
-            <p className="text-[12px] text-slate-400 mt-0.5 line-clamp-1">
-              {aspiration.target_summary}
-            </p>
+            <Tooltip content={aspiration.target_summary}>
+              <p className="text-[12px] text-slate-400 mt-0.5 line-clamp-1 cursor-help">
+                {aspiration.target_summary}
+              </p>
+            </Tooltip>
           </div>
         </div>
 
@@ -75,13 +80,14 @@ export default function AspirationProgressBar({ aspiration }: AspirationProgress
           </div>
 
           {aspiration.milestones_achieved && aspiration.milestones_achieved.length > 0 && (
-            <span className="text-[12px] text-emerald-400/90 font-medium truncate max-w-xs">
-              ✓ {aspiration.milestones_achieved[aspiration.milestones_achieved.length - 1]}
-            </span>
+            <Tooltip content={aspiration.milestones_achieved[aspiration.milestones_achieved.length - 1]}>
+              <span className="text-[12px] text-emerald-400/90 font-medium truncate max-w-xs cursor-help">
+                ✓ {aspiration.milestones_achieved[aspiration.milestones_achieved.length - 1]}
+              </span>
+            </Tooltip>
           )}
         </div>
       </div>
     </div>
   );
 }
-

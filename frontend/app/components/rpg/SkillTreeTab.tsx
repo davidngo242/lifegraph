@@ -40,6 +40,7 @@ interface SkillTreeTabProps {
   skillTree?: Record<string, SkillBranch>;
   onUnlockSkill: (skillId: string) => Promise<void>;
   isLoading?: boolean;
+  characterAge?: number;
 }
 
 const DEFAULT_TREE: Record<string, SkillBranch> = {

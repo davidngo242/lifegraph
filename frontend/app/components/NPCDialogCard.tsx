@@ -15,6 +15,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import FateDiceCheck from './FateDiceCheck';
+import Tooltip from './Tooltip';
 
 interface NPCDialogCardProps {
   dilemma: any;
@@ -254,14 +255,18 @@ export default function NPCDialogCard({
                         </span>
                       )}
 
-                      <span className="text-xs md:text-sm font-bold text-white group-hover:text-indigo-200 transition truncate">
-                        {option.action_title || option.label}
-                      </span>
+                      <Tooltip content={option.action_title || option.label}>
+                        <span className="text-xs md:text-sm font-bold text-white group-hover:text-indigo-200 transition truncate cursor-help">
+                          {option.action_title || option.label}
+                        </span>
+                      </Tooltip>
                     </div>
 
-                    <div className="text-[12px] text-slate-400 mt-0.5 truncate">
-                      ↳ {option.consequence_hint || option.effects_hint || "Lời nói định hình thái độ đối phương."}
-                    </div>
+                    <Tooltip content={`Dự báo phản ứng: ${option.consequence_hint || option.effects_hint || "Lời nói định hình thái độ đối phương."}`}>
+                      <div className="text-[12px] text-slate-400 mt-0.5 truncate cursor-help">
+                        ↳ {option.consequence_hint || option.effects_hint || "Lời nói định hình thái độ đối phương."}
+                      </div>
+                    </Tooltip>
                   </div>
 
                   <div className="flex items-center gap-1.5 shrink-0">

@@ -152,59 +152,6 @@ export default function MultiTabSidebar({
   return (
     <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-3 md:p-4 shadow-2xl backdrop-blur-xl flex flex-col gap-3 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6.5rem)] overflow-hidden transition-colors duration-200">
       
-      {/* Life Aspiration Quick Banner */}
-      {aspiration && (
-        <div
-          onClick={() => {
-            if (aspiration.progress >= 100 || aspiration.is_completed) {
-              onOpenAspirationUpgrade?.();
-            }
-          }}
-          className={`p-2.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex items-center justify-between gap-3 shadow-sm transition ${
-            aspiration.progress >= 100 || aspiration.is_completed
-              ? 'cursor-pointer hover:border-amber-400/60 bg-amber-500/10 border-amber-500/40 animate-pulse'
-              : ''
-          }`}
-        >
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="w-7 h-7 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-sm shrink-0">
-              {aspiration.icon || '🎯'}
-            </span>
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] font-bold text-purple-300 uppercase tracking-wider">
-                  Khát Vọng
-                </span>
-                {aspiration.progress >= 100 && (
-                  <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-bounce">
-                    Đạt Mục Tiêu!
-                  </span>
-                )}
-              </div>
-              <div className="text-xs font-bold text-[var(--text-primary)] truncate max-w-[150px] sm:max-w-[200px]">
-                {aspiration.title}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-end gap-1 shrink-0">
-            <span className="text-[11px] font-mono font-bold text-amber-300">
-              {aspiration.progress}%
-            </span>
-            <div className="w-16 h-1.5 bg-[var(--bg-card)] rounded-full overflow-hidden border border-[var(--border-subtle)]">
-              <div
-                className={`h-full rounded-full transition-all duration-500 ${
-                  aspiration.progress >= 100
-                    ? 'bg-gradient-to-r from-amber-400 to-emerald-400'
-                    : 'bg-gradient-to-r from-purple-500 to-indigo-400'
-                }`}
-                style={{ width: `${Math.min(100, aspiration.progress)}%` }}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* 4-Tab Navigation Header */}
       <div className="grid grid-cols-4 gap-1 p-1 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] shadow-inner shrink-0">
         <button
@@ -301,18 +248,26 @@ export default function MultiTabSidebar({
                     👨‍👩‍👧 {!isAdult ? "Mái Ấm Gia Đình" : "Gia Thế Tiền Thân"}
                   </span>
                   {character.household.family_buff && (
-                    <span className="text-[10px] font-semibold text-amber-300 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 truncate max-w-[150px]">
-                      ⭐ {character.household.family_buff.name}
-                    </span>
+                    <Tooltip content={`Gia đạo gia truyền: ${character.household.family_buff.name}`}>
+                      <span className="text-[10px] font-semibold text-amber-300 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 truncate max-w-[150px] cursor-help">
+                        ⭐ {character.household.family_buff.name}
+                      </span>
+                    </Tooltip>
                   )}
                 </div>
 
                 {/* Parents Line */}
                 <div className="flex items-center justify-between text-[11px] text-[var(--text-secondary)] bg-[var(--bg-card)] px-2.5 py-1.5 rounded-xl border border-[var(--border-subtle)]">
-                  <span className="truncate pr-1">
-                    {character.household.father_name ? `Bố: ${character.household.father_name}` : "Mồ côi"}
-                    {character.household.mother_name ? ` • Mẹ: ${character.household.mother_name}` : ""}
-                  </span>
+                  {(() => {
+                    const parentText = `${character.household.father_name ? `Bố: ${character.household.father_name}` : "Mồ côi"}${character.household.mother_name ? ` • Mẹ: ${character.household.mother_name}` : ""}`;
+                    return (
+                      <Tooltip content={parentText}>
+                        <span className="truncate pr-1 cursor-help">
+                          {parentText}
+                        </span>
+                      </Tooltip>
+                    );
+                  })()}
                   <span className={`shrink-0 text-[10px] font-sans px-1.5 py-0.2 rounded font-semibold ${
                     isParentsDeceased
                       ? 'bg-rose-950/50 text-rose-300 border border-rose-800/60'
@@ -472,7 +427,9 @@ export default function MultiTabSidebar({
                 <div className="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar">
                   {assets.map((a: any, i: number) => (
                     <div key={i} className="flex items-center justify-between p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs">
-                      <span className="text-[var(--text-primary)] font-medium truncate">{a.name}</span>
+                      <Tooltip content={`${a.name} (${a.type || 'Tài sản'}): Giá trị $${Number(a.current_value || 0).toLocaleString()}`}>
+                        <span className="text-[var(--text-primary)] font-medium truncate cursor-help">{a.name}</span>
+                      </Tooltip>
                       <span className="text-emerald-400 font-mono font-bold shrink-0 ml-2">
                         +${Number(a.current_value || 0).toLocaleString()}
                       </span>
@@ -484,62 +441,18 @@ export default function MultiTabSidebar({
           </div>
         )}
 
-        {/* TAB 4: RPG KỸ NĂNG & NHÂN MẠCH */}
+        {/* TAB 4: RPG CÂY KỸ NĂNG (NƠI DUY NHẤT TRONG GAME) */}
         {activeTab === 'rpg' && (
           <div className="space-y-2.5">
-            {/* Sub-tab toggle */}
-            <div className="flex items-center gap-1 p-1 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs">
-              <button
-                type="button"
-                onClick={() => setRpgSubTab('skills')}
-                className={`flex-1 py-1 px-2 rounded-lg font-bold transition flex items-center justify-center gap-1 ${
-                  rpgSubTab === 'skills'
-                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
-              >
-                <span>🌳 Cây Kỹ Năng</span>
-                {(character.skill_points || 0) > 0 && (
-                  <span className="text-[9px] font-sans tabular-nums px-1.5 rounded-full bg-amber-500 text-slate-950 font-black animate-pulse">
-                    +{character.skill_points} SP
-                  </span>
-                )}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setRpgSubTab('social')}
-                className={`flex-1 py-1 px-2 rounded-lg font-bold transition flex items-center justify-center gap-1 ${
-                  rpgSubTab === 'social'
-                    ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
-              >
-                <Users className="w-3 h-3 text-purple-400" />
-                <span>Mạng Lưới Xã Hội</span>
-              </button>
-            </div>
-
-            {rpgSubTab === 'skills' ? (
-              <SkillTreeTab
-                skillPoints={character?.skill_points || 0}
-                unlockedSkills={character?.unlocked_skills || []}
-                onUnlockSkill={async (id) => {
-                  if (onUnlockSkill) await onUnlockSkill(id);
-                }}
-                isLoading={isLoading}
-              />
-            ) : (
-              <SocialLinksTab
-                socialLinks={character?.social_links || []}
-                actionPoints={character?.action_points || 0}
-                cash={cash}
-                onInteract={async (id, type) => {
-                  if (onNpcInteract) await onNpcInteract(id, type);
-                }}
-                isLoading={isLoading}
-              />
-            )}
+            <SkillTreeTab
+              skillPoints={character?.skill_points || 0}
+              unlockedSkills={character?.unlocked_skills || []}
+              characterAge={character?.age ?? 0}
+              onUnlockSkill={async (id) => {
+                if (onUnlockSkill) await onUnlockSkill(id);
+              }}
+              isLoading={isLoading}
+            />
           </div>
         )}
 

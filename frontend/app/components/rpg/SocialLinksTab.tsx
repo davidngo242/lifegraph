@@ -169,19 +169,33 @@ export default function SocialLinksTab({
                   {npc.perks.map(p => {
                     const isUnlocked = npc.linkLevel >= p.level;
                     return (
-                      <div key={p.level} className="flex items-start gap-1.5">
-                        <span className={`shrink-0 mt-0.5 ${isUnlocked ? 'text-amber-400 font-bold' : 'text-slate-600'}`}>
-                          {isUnlocked ? '★' : '☆'}
-                        </span>
-                        <div className="flex-1 truncate">
-                          <strong className={isUnlocked ? 'text-amber-200' : 'text-slate-500'}>
-                            Cấp {p.level}: {p.title}
-                          </strong>
-                          <span className={`block truncate text-[10px] ${isUnlocked ? 'text-slate-300' : 'text-slate-600'}`}>
-                            {p.desc}
+                      <Tooltip
+                        key={p.level}
+                        className="w-full"
+                        position="top"
+                        content={
+                          <div className="space-y-0.5">
+                            <strong className="text-amber-300 block">
+                              Cấp {p.level}: {p.title}
+                            </strong>
+                            <div className="text-[11.5px] text-slate-200">{p.desc}</div>
+                          </div>
+                        }
+                      >
+                        <div className="w-full flex items-start gap-1.5 cursor-help">
+                          <span className={`shrink-0 mt-0.5 ${isUnlocked ? 'text-amber-400 font-bold' : 'text-slate-600'}`}>
+                            {isUnlocked ? '★' : '☆'}
                           </span>
+                          <div className="flex-1 truncate">
+                            <strong className={isUnlocked ? 'text-amber-200' : 'text-slate-500'}>
+                              Cấp {p.level}: {p.title}
+                            </strong>
+                            <span className={`block truncate text-[10px] ${isUnlocked ? 'text-slate-300' : 'text-slate-600'}`}>
+                              {p.desc}
+                            </span>
+                          </div>
                         </div>
-                      </div>
+                      </Tooltip>
                     );
                   })}
                 </div>

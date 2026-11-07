@@ -488,15 +488,19 @@ export default function EventCard({
                       </span>
                     )}
 
-                    <span className="text-xs md:text-sm font-bold text-[var(--text-primary)] group-hover:text-amber-200 transition truncate">
-                      {actionText}
-                    </span>
+                    <Tooltip content={actionText}>
+                      <span className="text-xs md:text-sm font-bold text-[var(--text-primary)] group-hover:text-amber-200 transition truncate cursor-help">
+                        {actionText}
+                      </span>
+                    </Tooltip>
                   </div>
 
                   {consequence && (
-                    <div className="text-[12px] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] font-sans truncate">
-                      ↳ {consequence}
-                    </div>
+                    <Tooltip content={`Dự báo hệ quả: ${consequence}`}>
+                      <div className="text-[12px] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] font-sans truncate cursor-help">
+                        ↳ {consequence}
+                      </div>
+                    </Tooltip>
                   )}
                 </button>
 

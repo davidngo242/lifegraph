@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Dices, Sparkles, Shield, AlertTriangle, CheckCircle2, ChevronRight, X, Flame } from 'lucide-react';
+import Tooltip from './Tooltip';
 
 interface FateDiceCheckProps {
   option: any;
@@ -109,9 +110,11 @@ export default function FateDiceCheck({
             <span className="text-[12px] normal-case font-sans tabular-nums font-bold tracking-normal text-indigo-300 block">
               Thử Thách Định Mệnh (Fate Skill Check)
             </span>
-            <span className="text-xs text-slate-400 truncate max-w-[240px] block">
-              {dilemmaTitle || "Ngã rẽ số phận"}
-            </span>
+            <Tooltip content={dilemmaTitle || "Ngã rẽ số phận"}>
+              <span className="text-xs text-slate-400 truncate max-w-[240px] block cursor-help">
+                {dilemmaTitle || "Ngã rẽ số phận"}
+              </span>
+            </Tooltip>
           </div>
         </div>
 
@@ -132,12 +135,16 @@ export default function FateDiceCheck({
           <span className="text-[12px] normal-case font-sans tabular-nums text-amber-400 font-bold block mb-0.5">
             Hành động đã chọn:
           </span>
-          <span className="text-sm font-bold text-white block truncate">
-            {actionText}
-          </span>
-          <span className="text-[12px] text-slate-400 font-sans italic line-clamp-1">
-            {option?.consequence_hint || option?.effects_hint || "Hệ quả sẽ được ghi vào biên niên sử"}
-          </span>
+          <Tooltip content={actionText}>
+            <span className="text-sm font-bold text-white block truncate cursor-help">
+              {actionText}
+            </span>
+          </Tooltip>
+          <Tooltip content={option?.consequence_hint || option?.effects_hint || "Hệ quả sẽ được ghi vào biên niên sử"}>
+            <span className="text-[12px] text-slate-400 font-sans italic line-clamp-1 cursor-help">
+              {option?.consequence_hint || option?.effects_hint || "Hệ quả sẽ được ghi vào biên niên sử"}
+            </span>
+          </Tooltip>
         </div>
 
         <div className="text-right shrink-0">

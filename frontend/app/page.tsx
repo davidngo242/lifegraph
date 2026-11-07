@@ -2016,15 +2016,7 @@ export default function LifeGraphPage() {
                         <span className="font-mono font-bold">{character?.action_points ?? 0}</span>
                         <span className="text-[var(--text-secondary)] text-[11px]">/ {character?.total_ap ?? 3} AP</span>
                       </div>
-                      <button
-                        onClick={() => setActiveView('decision')}
-                        className="px-2.5 py-1 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 hover:text-white border border-amber-500/30 text-[11px] font-bold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
-                        title="Vào không gian 3D chiêm nghiệm cuộc đời (Phím tắt: D)"
-                      >
-                        <Clapperboard className="w-3 h-3" />
-                        <span className="hidden sm:inline">Phòng Quyết Định 3D</span>
-                        <kbd className="px-1 py-0.2 rounded bg-amber-950/80 border border-amber-500/40 text-[9px] font-mono">D</kbd>
-                      </button>
+                      
                     </div>
                   </div>
 

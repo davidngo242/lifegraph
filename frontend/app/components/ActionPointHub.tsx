@@ -31,8 +31,6 @@ import {
 } from 'lucide-react';
 import { MiniGameType } from './minigames/MiniGameHostModal';
 import Tooltip from './Tooltip';
-import SkillTreeTab from './rpg/SkillTreeTab';
-import SocialLinksTab from './rpg/SocialLinksTab';
 
 interface ActionPointHubProps {
   isEmbedded?: boolean;
@@ -110,7 +108,6 @@ export default function ActionPointHub({
   const [actionNotice, setActionNotice] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [activeButton, setActiveButton] = useState<string | null>(null);
   const [actionMode, setActionMode] = useState<'individual' | 'focus'>('individual');
-  const [centerTab, setCenterTab] = useState<'actions' | 'skills' | 'social'>('actions');
 
   const traits = character?.innate_traits || [];
   const hasTradeTrait = traits.includes('trực_giác_kinh_doanh') || traits.includes('mắt_nhìn_xuyên_thị_trường');
@@ -303,78 +300,7 @@ export default function ActionPointHub({
         </div>
       )}
 
-      {/* Primary RPG Center Tabs */}
-      <div className="flex items-center justify-between pb-2 mb-2 border-b border-[var(--border-subtle)] gap-2 flex-wrap">
-        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] shadow-inner">
-          <button
-            type="button"
-            onClick={() => setCenterTab('actions')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
-              centerTab === 'actions'
-                ? 'bg-amber-500/15 text-amber-200 border border-amber-500/30 shadow-sm'
-                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-            }`}
-          >
-            <Zap className="w-3.5 h-3.5 text-amber-400" />
-            <span>Hoạt Động & AP</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setCenterTab('skills')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
-              centerTab === 'skills'
-                ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
-                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-            }`}
-          >
-            <span>🌳 Cây Kỹ Năng</span>
-            {(character?.skill_points || 0) > 0 && (
-              <span className="text-[10px] font-sans tabular-nums px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-pulse">
-                +{character.skill_points} SP
-              </span>
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setCenterTab('social')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
-              centerTab === 'social'
-                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm'
-                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-            }`}
-          >
-            <Users className="w-3.5 h-3.5 text-purple-400" />
-            <span>Nhân Mạch</span>
-            <span className="text-[10px] font-sans tabular-nums px-1.5 py-0.2 rounded-full bg-purple-950 text-purple-300 border border-purple-500/30 font-semibold">
-              {character?.social_links?.length || 4}
-            </span>
-          </button>
-        </div>
-      </div>
-
-      {centerTab === 'skills' ? (
-        <SkillTreeTab
-          skillPoints={character?.skill_points || 0}
-          unlockedSkills={character?.unlocked_skills || []}
-          onUnlockSkill={async (id) => {
-            if (onUnlockSkill) await onUnlockSkill(id);
-          }}
-          isLoading={isLoading}
-        />
-      ) : centerTab === 'social' ? (
-        <SocialLinksTab
-          socialLinks={character?.social_links || []}
-          actionPoints={actionPoints}
-          cash={cash}
-          onInteract={async (id, type) => {
-            if (onNpcInteract) await onNpcInteract(id, type);
-          }}
-          isLoading={isLoading}
-        />
-      ) : (
-        <>
+      {/* Khoang Hoạt Động & Tiêu Thụ AP Duy Nhất */}
       {/* Header: AP Counter & Stage Indicator */}
       <div className="flex items-center justify-between pb-2.5 border-b border-[var(--border-subtle)] gap-3">
         <div className="flex items-center gap-2">
@@ -628,28 +554,103 @@ export default function ActionPointHub({
               </div>
             </div>
 
-            {/* Development status pills */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3 text-[12px]">
-              <div className="p-2 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-2">
-                <span className="text-base">🍼</span>
-                <div>
-                  <div className="text-white font-semibold text-[12px]">Dinh Dưỡng Bú Mẹ</div>
-                  <div className="text-[12px] text-emerald-400">+15 Thể chất tự động / năm</div>
-                </div>
+            {/* Hoạt Động Ấu Thơ Tự Chọn (0 - 5 Tuổi · Tiêu 1 AP) */}
+            <div className="mb-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Hoạt Động Ấu Thơ Tự Chọn (Tiêu 1 AP):</span>
+                </span>
+                <span className="text-[11px] font-mono text-amber-300/80">
+                  Còn {actionPoints}/{totalAp} AP
+                </span>
               </div>
-              <div className="p-2 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-2">
-                <span className="text-base">🧸</span>
-                <div>
-                  <div className="text-white font-semibold text-[12px]">Tập Đi & Khám Phá</div>
-                  <div className="text-[12px] text-sky-400">Phát triển nhận thức tự nhiên</div>
-                </div>
-              </div>
-              <div className="p-2 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-2">
-                <span className="text-base">🏡</span>
-                <div>
-                  <div className="text-white font-semibold text-[12px]">Vòng Tay Phụ Mẫu</div>
-                  <div className="text-[12px] text-pink-400">Bình an ấm êm vô lo</div>
-                </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-xs">
+                {/* 1. Bú Mẹ & Ăn Dặm */}
+                <button
+                  disabled={isLoading || actionPoints < 1 || activeButton !== null}
+                  onClick={() => handleChildActionTrigger('eat_grow', 0)}
+                  className="p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40"
+                >
+                  <span className="text-2xl shrink-0">🍼</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-white group-hover:text-amber-300 flex items-center justify-between">
+                      <span>Bú Mẹ &amp; Ăn Dặm</span>
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                    </div>
+                    <div className="text-[11px] text-emerald-400 mt-0.5 font-medium">+15 Thể chất, +5 HP</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">Hấp thu dinh dưỡng ngọt lành</div>
+                  </div>
+                </button>
+
+                {/* 2. Tắm Nắng Sớm Tự Nhiên */}
+                <button
+                  disabled={isLoading || actionPoints < 1 || activeButton !== null}
+                  onClick={() => handleChildActionTrigger('sunbath', 0)}
+                  className="p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40"
+                >
+                  <span className="text-2xl shrink-0">☀️</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-white group-hover:text-amber-300 flex items-center justify-between">
+                      <span>Tắm Nắng Sớm</span>
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                    </div>
+                    <div className="text-[11px] text-amber-400 mt-0.5 font-medium">+10 Đề kháng, -5 Stress</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">Hấp thu Vitamin D tự nhiên</div>
+                  </div>
+                </button>
+
+                {/* 3. Đồ Chơi Trí Não Sơ Khai */}
+                <button
+                  disabled={isLoading || actionPoints < 1 || activeButton !== null}
+                  onClick={() => handleChildActionTrigger('toy_brain', 0)}
+                  className="p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40"
+                >
+                  <span className="text-2xl shrink-0">🧸</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-white group-hover:text-sky-300 flex items-center justify-between">
+                      <span>Đồ Chơi Trí Não</span>
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                    </div>
+                    <div className="text-[11px] text-sky-400 mt-0.5 font-medium">+10 Trí tuệ, +5 Karma</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">Xếp hình, kích thích giác quan</div>
+                  </div>
+                </button>
+
+                {/* 4. Tập Đi & Bập Bẹ */}
+                <button
+                  disabled={isLoading || actionPoints < 1 || activeButton !== null}
+                  onClick={() => handleChildActionTrigger('toddler_walk', 0)}
+                  className="p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40"
+                >
+                  <span className="text-2xl shrink-0">👶</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-white group-hover:text-emerald-300 flex items-center justify-between">
+                      <span>Tập Đi &amp; Bập Bẹ</span>
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                    </div>
+                    <div className="text-[11px] text-emerald-400 mt-0.5 font-medium">+3 Max HP, +8 Thể lực</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">Chập chững những bước đầu đời</div>
+                  </div>
+                </button>
+
+                {/* 5. Làm Nũng Vòng Tay Mẹ */}
+                <button
+                  disabled={isLoading || actionPoints < 1 || activeButton !== null}
+                  onClick={() => handleChildActionTrigger('cuddle_parents', 0)}
+                  className="p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-pink-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40"
+                >
+                  <span className="text-2xl shrink-0">💖</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-white group-hover:text-pink-300 flex items-center justify-between">
+                      <span>Làm Nũng Phụ Mẫu</span>
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                    </div>
+                    <div className="text-[11px] text-pink-400 mt-0.5 font-medium">+15 Tình cảm, -10 Stress</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">Ấm êm trong vòng tay cha mẹ</div>
+                  </div>
+                </button>
               </div>
             </div>
 
@@ -772,53 +773,88 @@ export default function ActionPointHub({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <button
-                disabled={isLoading || activeButton !== null || actionPoints < 1}
-                onClick={() => handleFocusClick('hustle')}
-                className="p-2 rounded-xl bg-slate-900/80 hover:bg-amber-950/50 border border-slate-800 hover:border-amber-500/50 text-left transition active:scale-95 group disabled:opacity-40"
+              <Tooltip
+                className="w-full"
+                position="top"
+                content={
+                  <div className="text-[12px] space-y-1">
+                    <strong className="text-amber-300">
+                      {characterAge >= 18 ? 'Cày Cuốc Hết Mình (3 AP):' : characterAge >= 13 ? 'Làm Thêm & Tự Lập (3 AP):' : 'Vận Động Năng Lượng (3 AP):'}
+                    </strong>
+                    <div>{characterAge >= 18 ? 'Dồn toàn bộ nỗ lực kiếm tiền, thặng dư +$3,500 - $7,000 USD' : characterAge >= 13 ? 'Tự thân làm thêm kiếm +$250 USD tiền túi tuổi teen' : 'Chơi thể thao tăng +15 Thể chất, sảng khoái'}</div>
+                  </div>
+                }
               >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-                    <span>💼</span> {characterAge >= 18 ? 'Cày Cuốc Hết Mình' : characterAge >= 13 ? 'Làm Thêm & Tự Lập' : 'Vận Động Năng Lượng'}
-                  </span>
-                  <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
-                </div>
-                <div className="text-[12px] text-slate-400 group-hover:text-amber-200 truncate">
-                  {characterAge >= 18 ? '+$3,500-$7,000 Thặng dư' : characterAge >= 13 ? '+$250 tiền túi tuổi teen' : '+15 Thể chất, sảng khoái'}
-                </div>
-              </button>
+                <button
+                  disabled={isLoading || activeButton !== null || actionPoints < 1}
+                  onClick={() => handleFocusClick('hustle')}
+                  className="w-full p-2 rounded-xl bg-slate-900/80 hover:bg-amber-950/50 border border-slate-800 hover:border-amber-500/50 text-left transition active:scale-95 group disabled:opacity-40 cursor-pointer"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                      <span>💼</span> {characterAge >= 18 ? 'Cày Cuốc Hết Mình' : characterAge >= 13 ? 'Làm Thêm & Tự Lập' : 'Vận Động Năng Lượng'}
+                    </span>
+                    <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
+                  </div>
+                  <div className="text-[12px] text-slate-400 group-hover:text-amber-200 truncate">
+                    {characterAge >= 18 ? '+$3,500-$7,000 Thặng dư' : characterAge >= 13 ? '+$250 tiền túi tuổi teen' : '+15 Thể chất, sảng khoái'}
+                  </div>
+                </button>
+              </Tooltip>
 
-              <button
-                disabled={isLoading || activeButton !== null || actionPoints < 1}
-                onClick={() => handleFocusClick('study')}
-                className="p-2 rounded-xl bg-slate-900/80 hover:bg-sky-950/50 border border-slate-800 hover:border-sky-500/50 text-left transition active:scale-95 group disabled:opacity-40"
+              <Tooltip
+                className="w-full"
+                position="top"
+                content={
+                  <div className="text-[12px] space-y-1">
+                    <strong className="text-sky-300">Đèn Sách Tri Thức (3 AP):</strong>
+                    <div>Dành trọn thời gian nghiên cứu chuyên sâu, tích lũy +22 Karma học thuật, đỗ đạt vinh hiển.</div>
+                  </div>
+                }
               >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-bold text-sky-300 flex items-center gap-1.5">
-                    <span>📖</span> Đèn Sách Tri Thức
-                  </span>
-                  <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
-                </div>
-                <div className="text-[12px] text-slate-400 group-hover:text-sky-200 truncate">
-                  +22 Karma học thuật, đỗ đạt
-                </div>
-              </button>
+                <button
+                  disabled={isLoading || activeButton !== null || actionPoints < 1}
+                  onClick={() => handleFocusClick('study')}
+                  className="w-full p-2 rounded-xl bg-slate-900/80 hover:bg-sky-950/50 border border-slate-800 hover:border-sky-500/50 text-left transition active:scale-95 group disabled:opacity-40 cursor-pointer"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-sky-300 flex items-center gap-1.5">
+                      <span>📖</span> Đèn Sách Tri Thức
+                    </span>
+                    <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
+                  </div>
+                  <div className="text-[12px] text-slate-400 group-hover:text-sky-200 truncate">
+                    +22 Karma học thuật, đỗ đạt
+                  </div>
+                </button>
+              </Tooltip>
 
-              <button
-                disabled={isLoading || activeButton !== null || actionPoints < 1}
-                onClick={() => handleFocusClick('wellness')}
-                className="p-2 rounded-xl bg-slate-900/80 hover:bg-emerald-950/50 border border-slate-800 hover:border-emerald-500/50 text-left transition active:scale-95 group disabled:opacity-40"
+              <Tooltip
+                className="w-full"
+                position="top"
+                content={
+                  <div className="text-[12px] space-y-1">
+                    <strong className="text-emerald-300">Dưỡng Sinh & Chữa Lành (3 AP):</strong>
+                    <div>Nghỉ ngơi tĩnh dưỡng, hồi phục +25 Sinh lực và xóa sạch 45 điểm Stress độc hại.</div>
+                  </div>
+                }
               >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
-                    <span>🌿</span> Dưỡng Sinh & Chữa Lành
-                  </span>
-                  <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
-                </div>
-                <div className="text-[12px] text-slate-400 group-hover:text-emerald-200 truncate">
-                  +25 Sinh lực, xóa sạch 45 Stress
-                </div>
-              </button>
+                <button
+                  disabled={isLoading || activeButton !== null || actionPoints < 1}
+                  onClick={() => handleFocusClick('wellness')}
+                  className="w-full p-2 rounded-xl bg-slate-900/80 hover:bg-emerald-950/50 border border-slate-800 hover:border-emerald-500/50 text-left transition active:scale-95 group disabled:opacity-40 cursor-pointer"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                      <span>🌿</span> Dưỡng Sinh & Chữa Lành
+                    </span>
+                    <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">3 AP</span>
+                  </div>
+                  <div className="text-[12px] text-slate-400 group-hover:text-emerald-200 truncate">
+                    +25 Sinh lực, xóa sạch 45 Stress
+                  </div>
+                </button>
+              </Tooltip>
             </div>
           </div>
         )}
@@ -1323,9 +1359,6 @@ export default function ActionPointHub({
           </div>
         )}
       </div>
-
-      </>
-      )}
 
       {/* TỐI ƯU HÓA: DOCK ĐIỀU KHIỂN NHANH (Sàn Tài Sản, Gia Tộc, Rèn Kỹ Năng & Bỏ Qua 3 Năm) */}
       <div className="pt-2.5 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2.5">

@@ -16,6 +16,7 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { formatCurrency } from '../utils/currencyUtils';
+import Tooltip from './Tooltip';
 
 interface StickyProfileSidebarProps {
   character: any;
@@ -171,18 +172,26 @@ export default function StickyProfileSidebar({
           👨‍👩‍👧 {!isAdult ? "Mái Ấm Gia Đình" : "Gia Thế Tiền Thân"}
         </span>
         {character.household.family_buff && (
-          <span className="text-[10px] font-semibold text-amber-300 px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 truncate max-w-[140px]">
-            ⭐ {character.household.family_buff.name}
-          </span>
+          <Tooltip content={`Gia đạo gia truyền: ${character.household.family_buff.name}`}>
+            <span className="text-[10px] font-semibold text-amber-300 px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 truncate max-w-[140px] cursor-help">
+              ⭐ {character.household.family_buff.name}
+            </span>
+          </Tooltip>
         )}
       </div>
 
       {/* Parents Line */}
       <div className="flex items-center justify-between text-[11px] text-slate-300 bg-slate-900/60 px-2.5 py-1.5 rounded-xl border border-slate-800/60">
-        <span className="truncate pr-1">
-          {character.household.father_name ? `Bố: ${character.household.father_name}` : "Mồ côi"}
-          {character.household.mother_name ? ` • Mẹ: ${character.household.mother_name}` : ""}
-        </span>
+        {(() => {
+          const parentText = `${character.household.father_name ? `Bố: ${character.household.father_name}` : "Mồ côi"}${character.household.mother_name ? ` • Mẹ: ${character.household.mother_name}` : ""}`;
+          return (
+            <Tooltip content={parentText}>
+              <span className="truncate pr-1 cursor-help">
+                {parentText}
+              </span>
+            </Tooltip>
+          );
+        })()}
         <span className={`shrink-0 text-[10px] font-sans px-1.5 py-0.2 rounded font-semibold ${
           isParentsDeceased
             ? 'bg-rose-950/50 text-rose-300 border border-rose-800/60'

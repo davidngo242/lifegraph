@@ -3,6 +3,7 @@
 import React from 'react';
 import { ChevronLeft, Film, Sparkles, Compass, Clapperboard, MousePointerClick } from 'lucide-react';
 import InteractiveScene2D from './InteractiveScene2D';
+import Tooltip from './Tooltip';
 
 interface CinemaDecisionRoomModalProps {
   isOpen: boolean;
@@ -86,14 +87,18 @@ export default function CinemaDecisionRoomModal({
 
             {/* Scenario Title with Artistic Serif & Age Badge */}
             <div className="flex items-center gap-2.5 min-w-0">
-              <h3 className="font-serif text-xs sm:text-base font-semibold text-[var(--text-primary)] tracking-wide italic truncate drop-shadow">
-                {scenarioTitle}
-              </h3>
+              <Tooltip content={scenarioTitle}>
+                <h3 className="font-serif text-xs sm:text-base font-semibold text-[var(--text-primary)] tracking-wide italic truncate drop-shadow cursor-help">
+                  {scenarioTitle}
+                </h3>
+              </Tooltip>
               <div className="hidden md:flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[11px] font-sans font-bold text-amber-300 shrink-0">
                 <Sparkles className="w-3 h-3 text-amber-400" />
                 <span>Tuổi {age}</span>
                 <span className="text-[var(--text-secondary)]">•</span>
-                <span className="text-[var(--text-secondary)] font-normal truncate max-w-[120px]">{currentCity}</span>
+                <Tooltip content={`Đô thị hiện tại: ${currentCity}`}>
+                  <span className="text-[var(--text-secondary)] font-normal truncate max-w-[120px] cursor-help">{currentCity}</span>
+                </Tooltip>
               </div>
             </div>
           </div>

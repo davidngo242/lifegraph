@@ -4,6 +4,7 @@ import React from 'react';
 import { Newspaper, TrendingUp, TrendingDown, Gamepad2, ChevronRight, X, Sparkles, HeartHandshake } from 'lucide-react';
 import { MiniGameType } from './minigames/MiniGameHostModal';
 import { formatCurrency } from '../utils/currencyUtils';
+import Tooltip from './Tooltip';
 
 export interface AnnualDigestData {
   age_reached: number;
@@ -86,16 +87,27 @@ export default function AnnualDigestBanner({
 
       {/* Milestone Game Button */}
       {digest.milestone_challenge && (
-        <button
-          onClick={() => onLaunchMiniGame(digest.milestone_challenge!.game_type)}
-          className="w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-bold flex items-center justify-between transition active:scale-98 shadow-md"
+        <Tooltip
+          content={
+            <div className="space-y-0.5">
+              <div className="font-bold text-amber-300">🎮 Thử Thách Cột Mốc ({digest.milestone_challenge.age} tuổi)</div>
+              <div className="text-slate-200">{digest.milestone_challenge.title}</div>
+            </div>
+          }
+          position="top"
+          className="w-full"
         >
-          <span className="flex items-center gap-1.5 truncate">
-            <Gamepad2 className="w-3.5 h-3.5 shrink-0" />
-            <span className="truncate">Thử Thách ({digest.milestone_challenge.age}t): {digest.milestone_challenge.title}</span>
-          </span>
-          <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-        </button>
+          <button
+            onClick={() => onLaunchMiniGame(digest.milestone_challenge!.game_type)}
+            className="w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-bold flex items-center justify-between transition active:scale-98 shadow-md cursor-pointer"
+          >
+            <span className="flex items-center gap-1.5 min-w-0">
+              <Gamepad2 className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">Thử Thách ({digest.milestone_challenge.age}t): {digest.milestone_challenge.title}</span>
+            </span>
+            <ChevronRight className="w-3.5 h-3.5 shrink-0 ml-1" />
+          </button>
+        </Tooltip>
       )}
 
       {/* Childhood Passive Chronicle / Prodigy Event Strip */}
@@ -125,12 +137,21 @@ export default function AnnualDigestBanner({
 
       {/* Additional Family Events if any and no duplicate with childhood */}
       {!digest.childhood_event && digest.family_events && digest.family_events.length > 0 && (
-        <div className="pt-1.5 border-t border-slate-800/60 flex items-center gap-2 text-[12px] text-slate-300">
-          <HeartHandshake className="w-3.5 h-3.5 text-pink-400 shrink-0" />
-          <span className="truncate">{digest.family_events[0]}</span>
-        </div>
+        <Tooltip
+          content={
+            <div className="text-slate-200 text-xs leading-relaxed">
+              {digest.family_events[0]}
+            </div>
+          }
+          position="top"
+          className="w-full"
+        >
+          <div className="pt-1.5 border-t border-slate-800/60 flex items-center gap-2 text-[12px] text-slate-300 cursor-help">
+            <HeartHandshake className="w-3.5 h-3.5 text-pink-400 shrink-0" />
+            <span className="truncate">{digest.family_events[0]}</span>
+          </div>
+        </Tooltip>
       )}
     </div>
   );
 }
-

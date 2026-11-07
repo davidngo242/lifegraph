@@ -19,6 +19,7 @@ import {
   Lock
 } from 'lucide-react';
 import { formatCurrency } from '../utils/currencyUtils';
+import Tooltip from './Tooltip';
 
 interface Asset {
   id: string;
@@ -248,9 +249,15 @@ export default function AssetDetailModal({
                 </span>
               )}
             </div>
-            <p className="text-[12px] text-[var(--text-secondary)] mt-0.5 truncate">
-              Định vị: <strong className="text-[var(--text-secondary)] font-medium">{currentCity}</strong> • Quản lý danh mục đầu tư tích lũy và điều kiện sinh hoạt
-            </p>
+            <Tooltip
+              content={`Định vị: ${currentCity} • Quản lý danh mục đầu tư tích lũy và điều kiện sinh hoạt`}
+              position="bottom"
+              className="w-full"
+            >
+              <p className="text-[12px] text-[var(--text-secondary)] mt-0.5 truncate cursor-help">
+                Định vị: <strong className="text-[var(--text-secondary)] font-medium">{currentCity}</strong> • Quản lý danh mục đầu tư tích lũy và điều kiện sinh hoạt
+              </p>
+            </Tooltip>
           </div>
         </div>
 
@@ -388,12 +395,14 @@ export default function AssetDetailModal({
                   key={asset.id}
                   className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex items-center justify-between gap-3 hover:border-[var(--border-highlight)] transition"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
                     <div className="p-2 rounded-xl bg-slate-950 text-emerald-400 border border-slate-800 shrink-0">
                       <TrendingUp className="w-4 h-4" />
                     </div>
-                    <div>
-                      <h4 className="text-xs md:text-sm font-semibold text-white">{asset.name}</h4>
+                    <div className="min-w-0">
+                      <Tooltip content={asset.name} position="top" className="min-w-0">
+                        <h4 className="text-xs md:text-sm font-semibold text-white truncate cursor-help">{asset.name}</h4>
+                      </Tooltip>
                       <div className="text-[12px] text-[var(--text-secondary)] flex items-center gap-3 mt-0.5 flex-wrap">
                         <span>Giá trị: <strong className="text-emerald-300">{renderMoney(asset.current_value)}</strong></span>
                         {Number((asset as any).annual_cash_flow || (asset as any).cash_flow || 0) > 0 && (
@@ -447,7 +456,21 @@ export default function AssetDetailModal({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-base">{item.icon || '💼'}</span>
-                      <h4 className="text-xs md:text-sm font-semibold text-white truncate">{item.name}</h4>
+                      <Tooltip
+                        content={
+                          <div className="space-y-1">
+                            <div className="font-bold text-amber-300">{item.name}</div>
+                            <div className="text-slate-200 text-xs leading-relaxed">{item.desc}</div>
+                            <div className="text-[11px] text-emerald-300 font-mono">
+                              Giá: {renderMoney(item.cost)} • Cấp {item.tier_label}
+                            </div>
+                          </div>
+                        }
+                        position="top"
+                        className="min-w-0"
+                      >
+                        <h4 className="text-xs md:text-sm font-semibold text-white truncate cursor-help">{item.name}</h4>
+                      </Tooltip>
                       <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
                         {item.tier_label}
                       </span>
@@ -504,11 +527,15 @@ export default function AssetDetailModal({
                     <div className="text-[12px] normal-case font-bold text-amber-400 tracking-normal">
                       Nơi Ở Hiện Tại ({currentHousing.status === 'owned' ? 'Chính Chủ' : isMinor ? 'Gia Đình Giám Hộ' : 'Thuê Nhà'})
                     </div>
-                    <h3 className="text-xs md:text-sm font-bold text-white truncate mt-0.5">{currentHousing.name}</h3>
-                    <p className="text-[12px] text-[var(--text-secondary)] flex items-center gap-1.5 mt-0.5 truncate">
-                      <MapPin className="w-3.5 h-3.5 text-rose-400 shrink-0" />
-                      <span className="truncate">{currentHousing.address || `Khu dân cư, ${currentCity}`}</span>
-                    </p>
+                    <Tooltip content={currentHousing.name} position="top" className="truncate">
+                      <h3 className="text-xs md:text-sm font-bold text-white truncate mt-0.5 cursor-help">{currentHousing.name}</h3>
+                    </Tooltip>
+                    <Tooltip content={currentHousing.address || `Khu dân cư, ${currentCity}`} position="bottom" className="truncate">
+                      <p className="text-[12px] text-[var(--text-secondary)] flex items-center gap-1.5 mt-0.5 truncate cursor-help">
+                        <MapPin className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                        <span className="truncate">{currentHousing.address || `Khu dân cư, ${currentCity}`}</span>
+                      </p>
+                    </Tooltip>
                   </div>
                 </div>
               </div>
@@ -542,7 +569,9 @@ export default function AssetDetailModal({
                           <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-slate-800 text-[var(--text-secondary)]">
                             Cấp {ht.tier}
                           </span>
-                          <h4 className="text-xs md:text-sm font-semibold text-white">{ht.name}</h4>
+                          <Tooltip content={ht.name} position="top" className="min-w-0">
+                            <h4 className="text-xs md:text-sm font-semibold text-white truncate cursor-help">{ht.name}</h4>
+                          </Tooltip>
                           {isCurrent && (
                             <span className="text-[12px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
                               Đang Ở
@@ -601,4 +630,3 @@ export default function AssetDetailModal({
     </div>
   );
 }
-

@@ -628,10 +628,14 @@ export default function CharacterHeroBanner({
 
             <div className="flex items-center gap-1 text-[11px] text-[var(--text-secondary)] truncate pt-0.5">
               <MapPin className="w-3 h-3 text-rose-400 shrink-0" />
-              <span className="truncate">{character.current_city || nationality}</span>
+              <Tooltip content={`Thành phố cư ngụ: ${character.current_city || nationality}`}>
+                <span className="truncate max-w-[120px] cursor-help">{character.current_city || nationality}</span>
+              </Tooltip>
               <span className="opacity-40">•</span>
               <Home className="w-3 h-3 text-amber-400 shrink-0" />
-              <span className="truncate text-[var(--text-secondary)]">{character.housing?.name || 'Phòng trọ'}</span>
+              <Tooltip content={`Chỗ ở hiện tại: ${character.housing?.name || 'Phòng trọ'}`}>
+                <span className="truncate text-[var(--text-secondary)] max-w-[120px] cursor-help">{character.housing?.name || 'Phòng trọ'}</span>
+              </Tooltip>
             </div>
           </div>
         </div>
@@ -646,10 +650,12 @@ export default function CharacterHeroBanner({
                 <span>{socialStatus.title}</span>
               </span>
 
-              <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-sky-500/40 bg-sky-950/60 text-sky-200 font-bold flex items-center gap-1 shadow-sm">
-                <Briefcase className="w-3 h-3 text-sky-400" />
-                <span>{character.occupation || (age < 6 ? "Ấu nhi" : age < 18 ? "Học sinh" : "Lao động tự do")}</span>
-              </span>
+              <Tooltip content={`Nghề nghiệp: ${character.occupation || (age < 6 ? "Ấu nhi" : age < 18 ? "Học sinh" : "Lao động tự do")}`}>
+                <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-sky-500/40 bg-sky-950/60 text-sky-200 font-bold flex items-center gap-1 shadow-sm cursor-help">
+                  <Briefcase className="w-3 h-3 text-sky-400" />
+                  <span className="truncate max-w-[130px]">{character.occupation || (age < 6 ? "Ấu nhi" : age < 18 ? "Học sinh" : "Lao động tự do")}</span>
+                </span>
+              </Tooltip>
 
               {character.is_transhuman && (
                 <span className="text-[11px] font-sans px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold animate-pulse">
@@ -704,14 +710,25 @@ export default function CharacterHeroBanner({
                 {character.innate_traits.map((t: string) => {
                   const ft = formatTrait(t);
                   return (
-                    <span
+                    <Tooltip
                       key={t}
-                      className={`font-medium px-2 py-0.5 rounded-full border text-[10.5px] flex items-center gap-1 transition ${ft.badgeStyle}`}
-                      title={ft.desc}
+                      content={
+                        <div className="space-y-0.5">
+                          <div className="font-bold text-amber-300 flex items-center gap-1">
+                            <span>{ft.icon}</span>
+                            <span>{ft.name}</span>
+                          </div>
+                          <div className="text-[11.5px] text-slate-200">{ft.desc}</div>
+                        </div>
+                      }
                     >
-                      <span>{ft.icon}</span>
-                      <span>{ft.name}</span>
-                    </span>
+                      <span
+                        className={`font-medium px-2 py-0.5 rounded-full border text-[10.5px] flex items-center gap-1 transition cursor-help ${ft.badgeStyle}`}
+                      >
+                        <span>{ft.icon}</span>
+                        <span>{ft.name}</span>
+                      </span>
+                    </Tooltip>
                   );
                 })}
               </div>
@@ -719,15 +736,23 @@ export default function CharacterHeroBanner({
               <span className="text-slate-400 text-[10.5px]">Hạt giống số phận đang nảy mầm...</span>
             )}
 
-            <div className="text-slate-400 flex items-center gap-1 text-[10.5px] truncate max-w-xs">
-              <span className="text-indigo-400 font-semibold">🎯 Trọng tâm:</span>
-              <span className="text-slate-300 truncate font-medium">
-                {age < 6 ? "Gắn kết phụ mẫu & bồi dưỡng thể chất" :
-                 age < 18 ? "Học vấn đèn sách & rèn chí lập thân" :
-                 age < 35 ? "Lập thân lập nghiệp & tích lũy tài sản" :
-                 age < 60 ? "Trụ cột gia tộc & củng cố cơ đồ" : "Di sản hoàng hôn & truyền thừa"}
-              </span>
-            </div>
+            {(() => {
+              const focusText =
+                age < 6 ? "Gắn kết phụ mẫu & bồi dưỡng thể chất" :
+                age < 18 ? "Học vấn đèn sách & rèn chí lập thân" :
+                age < 35 ? "Lập thân lập nghiệp & tích lũy tài sản" :
+                age < 60 ? "Trụ cột gia tộc & củng cố cơ đồ" : "Di sản hoàng hôn & truyền thừa";
+              return (
+                <Tooltip content={`Trọng tâm giai đoạn ${age} tuổi: ${focusText}`}>
+                  <div className="text-slate-400 flex items-center gap-1 text-[10.5px] truncate max-w-xs cursor-help">
+                    <span className="text-indigo-400 font-semibold">🎯 Trọng tâm:</span>
+                    <span className="text-slate-300 truncate font-medium">
+                      {focusText}
+                    </span>
+                  </div>
+                </Tooltip>
+              );
+            })()}
           </div>
 
           {/* Row C: Khát Vọng Cuộc Đời (Life Aspiration Hub) */}

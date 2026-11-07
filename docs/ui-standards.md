@@ -602,3 +602,45 @@ Nhằm xóa bỏ hoàn toàn chân dung 2D tĩnh và nâng tầm trải nghiệm
    * Khi người dùng lia chuột qua banner, các vì sao dịch chuyển thị sai nghịch chiều theo từng lớp độ sâu, tạo cảm giác như đang ngắm nhìn một vũ trụ thu nhỏ sống động phía sau buồng lái nhân vật.
    * Tự động ngắt render khi kích hoạt Fast Forward hoặc ẩn tab, giải phóng hoàn toàn GPU.
 
+
+
+---
+
+## 16. Quy Chuẩn Tiếp Cận Văn Bản Toàn Diện & Hover Tooltip Không Che Khuất (Zero-Clipping & Universal Tooltip Standard v2.3)
+
+Nhằm giải quyết triệt để vấn đề văn bản dài bị cắt ngắn dạng `Né tránh va chạm nguy hiểm, tốc đ...` hoặc `0t • Sinh Lự...` làm mất ngữ cảnh cốt truyện và giảm tính thấu hiểu của người chơi, hệ thống áp dụng Quy chuẩn Hover Tooltip toàn diện (Universal Tooltip Matrix):
+
+### 16.1. Triết Lý Xóa Bỏ Văn Bản Bị Cắt Cụt (Zero-Clipping Guarantee)
+1. **Tuyệt đối không dùng `title=""` thuần HTML:**
+   - Thuộc tính `title` mặc định của trình duyệt có độ trễ 2-3 giây, không phản ứng với thiết bị cảm ứng, và font chữ đơn điệu không khớp phong cách Cyberpunk/Dark Fantasy của game.
+   - 100% tooltip phải sử dụng `<Tooltip>` Component chuẩn (`frontend/app/components/Tooltip.tsx`) với lớp nổi `z-[9999]`, mũi tên chỉ hướng tam giác tự động, và hiệu ứng chuyển động mượt mà (`duration-150 animate-in fade-in zoom-in-95`).
+2. **Chiến lược Hiển Thị Hai Lớp (Two-Tier Progressive Disclosure):**
+   - **Lớp 1 (Trực quan trên thẻ):** Cho phép `line-clamp-2` hoặc `truncate` để bảo toàn lưới layout không bị vỡ hoặc lệch hàng.
+   - **Lớp 2 (Hover/Tap tức thì):** Rê chuột hoặc chạm nhẹ sẽ kích hoạt bảng thông tin nổi (Floating Popover) hiển thị 100% nội dung nguyên bản, bao gồm: Tên định danh, Huy hiệu phân loại, Diễn giải chi tiết, và Các giá trị số bổ trợ (Buffs, Cost, Karma, Điểm AP).
+
+### 16.2. Ma Trận Phủ Tooltip Trên Toàn Bộ Giao Diện (Universal Coverage Matrix)
+- **Hồ Sơ Luân Hồi Sinh Mệnh (`RebirthGachaModal.tsx`):**
+  - Thẻ Mã Gen Di Truyền Tiên Thiên (Tố chất & Lời nguyền).
+  - Xuất thân gia tộc & Lịch sử dòng họ.
+  - Gói Kịch bản Khởi đầu (Reality Starter Packs).
+  - Cửa hàng Đặc quyền Nghiệp quả (Karma Shop Perks).
+  - Thẻ chọn Tố chất Thiên phú (Smart Trait Picker).
+- **Hero Banner Nhân Vật 3D (`CharacterHeroBanner.tsx`):**
+  - Toàn bộ Huy hiệu Mã Gen trên Bệ Hologram 3D.
+  - Dòng Trọng tâm giai đoạn (`🎯 Trọng tâm: Tích lũy tri thức & Kết bạn`).
+  - Nơi cư trú & Nghề nghiệp đương nhiệm.
+- **Thanh Công Cụ Điểm Hành Động (`ActionPointHub.tsx`):**
+  - Thẻ Chế Độ Tập Trung Năm (Hustle, Study, Wellness).
+  - 100% nút hành động theo từng lứa tuổi (Sơ sinh, Thiếu nhi, Vị thành niên, Trưởng thành, Dưỡng lão).
+- **Trung Tâm Quyết Định & Biến Cố Cuộc Đời (`CinemaDecisionRoomModal.tsx`, `EventCard.tsx`, `NPCDialogCard.tsx`, `FateDiceCheck.tsx`):**
+  - Tựa đề kịch bản & Mô tả bối cảnh.
+  - Lựa chọn hành động & Dự báo hệ quả (Consequence preview).
+- **Hệ Thống RPG Kỹ Năng & Quan Hệ (`SkillTreeTab.tsx`, `SocialLinksTab.tsx`):**
+  - Nhánh kỹ năng thụ động, cấp độ và hiệu ứng kích hoạt.
+  - Tầng thân thiết NPC và đặc quyền xã hội (Social Link Perks).
+- **Quản Trị Tài Sản & Nhà Ở (`AssetDetailModal.tsx`):**
+  - Tên và phân loại tài sản thị trường.
+  - Lộ trình cư trú và địa chỉ chi tiết nhà ở.
+- **Bản Tin Năm & MMO Toàn Cầu (`AnnualDigestBanner.tsx`, `MmoWeatherBar.tsx`):**
+  - Tựa đề thử thách cột mốc & Biến cố gia đình.
+  - Dải tin tức vĩ mô MMO thế giới thực Open-Meteo.

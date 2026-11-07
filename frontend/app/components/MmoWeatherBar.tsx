@@ -85,13 +85,26 @@ export default function MmoWeatherBar({
         <span className="text-[12px] font-sans tabular-nums normal-case px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold shrink-0 flex items-center gap-1">
           <Radio className="w-2.5 h-2.5 animate-pulse text-rose-400" /> MMO Vĩ Mô
         </span>
-        <span className="truncate text-slate-300 text-[12px]">
-          {latestNews ? (
-            <span>{latestNews.headline}</span>
-          ) : (
-            <span>Thị trường toàn cầu duy trì trạng thái cân bằng. Cán cân cung cầu ổn định.</span>
-          )}
-        </span>
+        <Tooltip
+          content={
+            <div className="space-y-0.5 text-xs max-w-sm">
+              <div className="font-bold text-amber-300">📡 Bản Tin Kinh Tế & Xã Hội Toàn Cầu</div>
+              <div className="text-slate-200 leading-relaxed">
+                {latestNews?.headline || 'Thị trường toàn cầu duy trì trạng thái cân bằng. Cán cân cung cầu ổn định.'}
+              </div>
+            </div>
+          }
+          position="bottom"
+          className="truncate flex-1 min-w-0"
+        >
+          <span className="truncate text-slate-300 text-[12px] cursor-help block">
+            {latestNews ? (
+              <span>{latestNews.headline}</span>
+            ) : (
+              <span>Thị trường toàn cầu duy trì trạng thái cân bằng. Cán cân cung cầu ổn định.</span>
+            )}
+          </span>
+        </Tooltip>
       </div>
 
       {/* Right: MMO Macro Equilibrium Pill with Tooltip */}
@@ -120,4 +133,3 @@ export default function MmoWeatherBar({
     </div>
   );
 }
-
