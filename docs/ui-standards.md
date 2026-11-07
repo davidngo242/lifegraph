@@ -686,3 +686,41 @@ Nhằm nâng cấp trải nghiệm thị giác lên chuẩn Game RPG Anime thư�
 3. **Studio Xem Kép & Nút Chuyển Đổi Trên Buồng Lái:**
    * Tại **Hero Banner**: Nút chuyển đổi nhanh `[3D] / [SPINE]` giúp người chơi linh hoạt chọn kiểu avatar hiển thị theo sở thích.
    * Tại **Phòng Thử Nghiệm Studio (`AvatarInspectorModal.tsx`)**: Bố cục 2 tab `[Spine 2D Live]` và `[3D Chibi Anime]` với bảng điều khiển 10 hoạt ảnh trực quan hệt như studio Spine PRO.
+
+
+---
+
+## 18. Kiến Trúc Đại Thụ Sinh Mệnh Toàn Năng (The Grand Unified Dynamic Life Tree v3.0)
+
+Nhằm xóa bỏ hoàn toàn hội chứng "chia block hình chữ nhật ngột ngạt", LifeGraph nâng cấp toàn bộ không gian hành động thành **Đại Thụ Sinh Mệnh Toàn Năng (`DynamicLifeTree.tsx`)** — hợp nhất toàn bộ các yếu tố sống còn của đời người vào một thực thể cây sinh thái trực quan duy nhất:
+
+### 18.1. Khai Tử Hoàn Toàn Bảng Thẻ Cũ (Sunset Legacy Card Grid)
+* Bảng thẻ xám cũ dạng lưới (`grid-cols-5`) và nút chuyển đổi chế độ `[🌳 Cây Sinh Mệnh] / [📋 Bảng Thẻ]` đã được xóa bỏ vĩnh viễn khỏi `ActionPointHub.tsx`.
+* Giảm hơn 1.200 dòng mã dư thừa, giảm 11 kB kích thước bundle trang chủ, loại bỏ 100% cảm giác "quản trị văn phòng/Notion/Jira".
+
+### 18.2. Bản Đồ Cấu Trúc 3 Trụ Cột Đời Người Trên Đại Thụ
+1. **Gốc Rễ Cội Nguồn (Roots - Chân Cây / Phía Nam):**
+   * Tone màu: Ngọc bích thiên nhiên (`border-emerald-500/40 bg-emerald-950/40`).
+   * Hiển thị: Phụ mẫu (Bố, Mẹ, Tình trạng bình an/đã khuất/mồ côi) và Gia phong gia truyền (`family_buff`).
+   * Tương tác tình thân 1-click:
+     - `[🥣 Bữa Cơm Tình Thân / Bầu Sữa]`: Tăng 10 HP, giảm 15 Burnout.
+     - `[💬 Lời Khuyên Phụ Mẫu]`: Tăng 8 Karma tri thức.
+   * Nút gọi mở: `[🌿 Phả Hệ Dòng Tộc ↗]` kết nối trực tiếp cây gia phả thế hệ.
+2. **Cành Hoàng Kim Tài Sản (Golden Branch - Góc Trên Phải / Đông Bắc):**
+   * Tone màu: Hổ phách hoàng kim (`border-amber-500/40 bg-amber-950/50`).
+   * Hiển thị: Dòng tiền mặt tự do, Tổng tài sản ròng, và số lượng Bất động sản / Doanh nghiệp / Cổ phiếu tích lũy.
+   * Nút gọi mở: `[🏛️ Sàn Tài Sản ↗]` kết nối Sàn giao dịch thị trường và danh mục tài sản.
+3. **Nhánh Tinh Hoa Kỹ Năng (Mystic Branch - Góc Trên Trái / Tây Bắc):**
+   * Tone màu: Thạch anh tím (`border-purple-500/40 bg-purple-950/60`).
+   * Hiển thị: Cấp độ nhân sinh (`Lv.X`), Điểm Kỹ Năng khả dụng (`+{sp} SP`).
+   * Phím tắt đặc quyền kích hoạt nhanh: `📈 Lướt Sóng Cổ Phiếu`, `🧘 Thiền Định Siêu Việt`, `🥂 Tiệc VIP Thượng Lưu`.
+   * Nút gọi mở: `[🔮 Cây Kỹ Năng ↗]` kết nối cây kỹ năng RPG chuyên sâu.
+4. **Lõi Thần Mộc & Tán Lá Hành Động (Trunk & Action Canopy - Trung Tâm):**
+   * Lõi Sinh Mệnh trung tâm: Hiển thị bộ đếm năng lượng AP phát sáng với hiệu ứng sóng lan tỏa (`radial-gradient` + `animate-ping`).
+   * Nhánh cành Bezier SVG: Các đường cong vector hữu cơ phát quang với chùm hạt năng lượng `stroke-dasharray` chuyển động liên tục.
+   * Vệ tinh hành động biến thiên theo độ tuổi:
+     - *0–5 tuổi (Ấu thơ):* Bú Mẹ, Tắm Nắng, Đồ Chơi Trí Não, Tập Đi, Làm Nũng.
+     - *6–17 tuổi (Học trò):* Học Bài Ở Trường, Việc Nhà Phụ Mẹ, Đá Bóng Cùng Bạn, Khám Phá Thiên Nhiên, Tâm Sự Cha Mẹ.
+     - *18+ tuổi (Trưởng thành):* Cày Cuốc Kiếm Tiền, Đèn Sách Tri Thức, Dưỡng Sinh Hồi Phục, Mở Rộng Nhân Mạch, Lướt Sóng & Thử Vận.
+   * Đỉnh ngọn cây: Node Đột Phá Tiên Thiên (2 AP) rực rỡ với hiệu ứng kim quang.
+   * Thanh điều khiển thời gian: Phím tắt chuyển nhanh `[Lên Lớp 1 (6 tuổi)]` và `[+1 Tuổi]`.
