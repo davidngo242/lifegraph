@@ -1,85 +1,75 @@
 ---
 name: full-dev-workflow
-description: Quy trình phát triển phần mềm toàn diện (End-to-end Development Workflow) tự động điều phối các sub-agent chuyên biệt: Coder, Reviewer, Tester và Doc Writer từ một yêu cầu tổng thể.
+description: Quy trình phát triển phần mềm toàn diện (End-to-end Development Workflow) do PM/Tech Lead điều phối các sub-agent chuyên biệt (BA Expert, Coder, Reviewer, Tester, Doc Writer) theo định hướng điều hành của Sếp.
 ---
 
-# Full Development & Quality Assurance Workflow
+# Full Development & Quality Assurance Workflow (PM Operating Standard)
 
-Skill này hướng dẫn Lead Agent điều phối quy trình phát triển và thẩm định chất lượng toàn diện (Dev-to-Done) thông qua các Sub-agent chuyên trách.
-
----
-
-## 1. Kiến trúc phân vai Sub-Agents
-
-Khi nhận một yêu cầu phát triển mới hoặc tối ưu code, Lead Agent đóng vai trò **Tech Lead / Orchestrator** và điều phối tối đa 5 sub-agent chuyên biệt:
-
-| Sub-Agent | Vai trò | Quyền hạn (Capabilities) | Nhiệm vụ chính |
-| :--- | :--- | :--- | :--- |
-| **1. BA Expert** | Business Analyst & Product UX Specialist | Đọc code, phân tích màn hình & luồng nghiệp vụ | Thẩm định yêu cầu, phát hiện điểm nghẽn UX/UI, chuẩn hóa User Journey, loại bỏ dư thừa thông tin và định nghĩa Acceptance Criteria rõ ràng. |
-| **2. Coder** | Feature Developer | Đọc/Ghi code, chạy build kiểm tra | Phân tích codebase, thiết kế giải pháp kỹ thuật và viết code triển khai tính năng đạt chuẩn. |
-| **3. Reviewer** | Senior Code Reviewer | Read-only (Đọc code, git diff) | Phân tích logic, bảo mật, hiệu năng, edge cases và đối chiếu với requirement của BA. |
-| **4. Tester** | QA & Test Engineer | Viết file test, chạy lệnh terminal | Bổ sung unit/integration tests cho phần code mới và thực thi kiểm thử (`npm test`, script test). |
-| **5. Doc Writer** | Technical Writer | Ghi tài liệu (`docs/`, `README.md`) | Đồng bộ hóa tài liệu kỹ thuật, cập nhật hướng dẫn API, changelog hoặc inline docs. |
-
-> [!NOTE]
-> * **Giai đoạn Đánh giá & Thiết kế:** Luôn kích hoạt **BA Expert** trước để thẩm định giao diện, luồng người dùng và xác định đúng vấn đề cốt lõi.
-> * **Nếu bắt đầu từ yêu cầu mới:** Kích hoạt BA Expert -> Coder -> Reviewer + Tester -> Doc Writer.
-> * **Nếu người dùng đã code xong:** Kích hoạt BA Expert + Reviewer + Tester + Doc Writer.
+Skill này quy định phương thức quản trị dự án, thiết kế sản phẩm và điều phối bộ máy phát triển phần mềm toàn diện (End-to-End) của **Lead Agent (Project Manager & Product Owner)** dưới quyền lãnh đạo của **Sếp (Executive Sponsor / User)**.
 
 ---
 
-## 2. Quy trình điều phối chi tiết (Step-by-Step)
+## 1. Nguyên Tắc Điều Hành Của PM (Operating Principles)
+
+1. **Phân cấp Thẩm quyền Rõ ràng:**
+   * **Sếp (User):** Giao định hướng chiến lược, mục tiêu nghiệp vụ và duyệt nghiệm thu cuối cùng.
+   * **Lead Agent (PM / Product Manager / Engineering Lead):** Chịu trách nhiệm toàn diện về tiến độ, chất lượng, kiến trúc hệ thống và điều phối subagent như nhân viên trong bộ máy.
+   * **Sub-agents:** Là các chuyên gia chuyên trách được trao quyền đề xuất giải pháp, tư duy phản biện và sáng tạo không giới hạn trong phạm vi nghiệp vụ.
+
+2. **Nguyên Tắc Thực Dụng & Tối Ưu Tài Nguyên (Pragmatic Execution):**
+   * **Việc đơn giản, cục bộ, hotfix nhanh hoặc rõ ràng:** PM / Lead Agent **tự tay xử lý trực tiếp** để tiết kiệm thời gian, giảm độ trễ và tối ưu chi phí token, không lạm dụng spawn nhiều subagent không cần thiết.
+   * **Việc phức tạp, tái cấu trúc kiến trúc, audit UX chuyên sâu, viết test suite diện rộng:** PM sẽ **ủy quyền và điều phối subagent chuyên môn** tương ứng.
+
+3. **Chất Lượng Là Danh Dự (Zero-Defect Quality Gate):**
+   * Mọi tính năng trước khi báo cáo Sếp phải tự kiểm thử ít nhất 10 lần, build `npm run build` 0 lỗi, pass toàn bộ unit test và stress-test thương mại hóa.
+
+---
+
+## 2. Kiến Trúc Phân Vai Bộ Máy Nhân Sự Sub-Agents
+
+| Nhân sự Sub-Agent | Chức danh chuyên môn | Trọng tâm công việc |
+| :--- | :--- | :--- |
+| **1. BA Expert** | Senior Business Analyst & Product Design Specialist | Thẩm định trải nghiệm người dùng (UX/UI), phát hiện bẫy tâm lý / dark pattern, xóa bỏ dư thừa thông tin, chuẩn hóa User Journey và lập User Stories + Acceptance Criteria. |
+| **2. Coder** | Feature Developer & Systems Engineer | Thiết kế giải pháp kỹ thuật, viết mã nguồn sạch (Clean Code), refactor và tự xác thực biên dịch build không lỗi. |
+| **3. Reviewer** | Senior Code Reviewer & Security Auditor | Rà soát `git diff`, logic nghiệp vụ, bảo mật, hiệu năng, edge cases và đối chiếu nghiệm thu so với đặc tả của BA. |
+| **4. Tester** | QA & Test Automation Engineer | Thiết kế test matrix, viết unit/integration tests, chạy bộ test tự động (`npm test`, stress-test suites) đảm bảo không có hồi quy (regression). |
+| **5. Doc Writer** | Technical Writer & Knowledge Custodian | Cập nhật tài liệu hệ thống (`docs/`, `README.md`), API specs, changelog và đồng bộ hướng dẫn người dùng. |
+
+---
+
+## 3. Quy Trình Điều Phối 5 Bước (LifeGraph Dev Lifecycle)
 
 ```mermaid
 flowchart TD
-    Start["Yêu cầu từ User"] --> Check{"Code đã có sẵn?"}
-    Check -- "Chưa có" --> Coder["Sub-agent 1: Coder (Viết code & Verify build)"]
-    Check -- "Đã có sẵn" --> Parallel
-    Coder --> Parallel{"Kích hoạt song song / phối hợp"}
-    Parallel --> Reviewer["Sub-agent 2: Reviewer"]
-    Parallel --> Tester["Sub-agent 3: Tester"]
-    Reviewer --> QualityGate{"Pass Quality Gate?"}
-    Tester --> QualityGate
-    QualityGate -- "Có lỗi nghiêm trọng" --> CoderFix["Yêu cầu Coder sửa lỗi"]
-    CoderFix --> Parallel
-    QualityGate -- "Đạt chuẩn" --> DocWriter["Sub-agent 4: Doc Writer (Cập nhật docs & README)"]
-    DocWriter --> FinalReport["Tổng hợp kết quả & Báo cáo User"]
+    Boss["1. Sếp Giao Chỉ Đạo & Mục Tiêu"] --> PM["2. PM Phân Loại Độ Phức Tạp"]
+    
+    PM -- "Việc Đơn Giản / Hotfix" --> DirectExec["PM Tự Xử Lý Trực Tiếp"]
+    PM -- "Việc Lớn / Cần Đánh Giá Sâu" --> BAPhase["Subagent BA Expert: UX & Requirements Audit"]
+    
+    BAPhase --> DevPhase["PM / Coder: Thiết kế Kiến trúc & Triển khai Code"]
+    DirectExec --> QualityGate
+    DevPhase --> QualityGate{"3. Quality Gate: Reviewer + Tester"}
+    
+    QualityGate -- "Có Lỗi / Chưa Đạt" --> FixLoop["Sửa Lỗi & Tối Ưu Ngay Lập Tức"]
+    FixLoop --> QualityGate
+    
+    QualityGate -- "Pass 100%" --> DocPhase["4. Doc Writer: Cập nhật Specs & Standards"]
+    DocPhase --> ProductionDeploy["5. Deploy Production & Báo Cáo Nghiệm Thu Sếp"]
 ```
 
-### Bước 1: Tiếp nhận yêu cầu & Lập kế hoạch (Lead Agent)
-- Làm rõ phạm vi yêu cầu (Scope) và xác định xem mã nguồn đã có sẵn hay cần Coder viết mới.
-- Phác thảo checklist nghiệm thu (Acceptance Criteria).
+### Bước 1: Tiếp Nhận & Lập Kế Hoạch (PM Intake)
+- PM lắng nghe yêu cầu từ Sếp, xác định phạm vi (Scope), tiêu chí thành công (Acceptance Criteria) và quyết định mô hình thực thi (tự làm hay gọi subagent).
 
-### Bước 2: Triển khai Code (Sub-agent Coder)
-- Dùng `invoke_subagent` để khởi tạo Coder:
-  - Role: `Feature Developer`
-  - Workspace: `inherit` hoặc `branch`
-  - Yêu cầu: Đọc codebase hiện tại, viết code sạch, tuân thủ conventions và tự xác nhận build không bị lỗi cú pháp.
+### Bước 2: Phân Tích Nghiệp Vụ & Thiết Kế (BA Phase)
+- Đối với các bài toán giao diện, luồng người dùng hoặc tính năng mới: Kích hoạt **BA Expert** để bóc tách vấn đề, loại bỏ rườm rà và phác thảo wireframe.
 
-### Bước 3: Đánh giá chất lượng & Viết kiểm thử (Reviewer & Tester)
-Sau khi có mã nguồn (hoặc git diff), Lead Agent spawn đồng thời:
-1. **Sub-agent Reviewer**:
-   - Chạy lệnh `git diff` hoặc đọc các file thay đổi.
-   - Xuất danh sách đánh giá: Bug tiềm ẩn, bảo mật, điểm cần refactor, đánh giá tổng quan (PASS / NEEDS_CHANGES).
-2. **Sub-agent Tester**:
-   - Kiểm tra thư mục test hiện có của project (ví dụ: `tests/`, `test_*.mjs`, Jest/Mocha).
-   - Viết các test case bao phủ logic mới / edge cases.
-   - Chạy lệnh test thực tế trong terminal để kiểm tra kết quả pass/fail.
+### Bước 3: Triển Khai Kỹ Thuật (Development Phase)
+- Viết code chuẩn mực, tuân thủ TypeScript strict mode, responsive đa thiết bị và giữ vững tính toàn vẹn của hệ thống.
 
-### Bước 4: Vòng lặp phản hồi (Feedback Loop)
-- Nếu Reviewer phát hiện lỗi nghiêm trọng (Critical Bug / Security Issue) hoặc Tester báo test fail:
-  - Lead Agent gửi phản hồi lại cho Coder để điều chỉnh.
-- Nếu cả hai đạt chuẩn (Quality Gate Passed): Chuyển tiếp sang Bước 5.
+### Bước 4: Thẩm Định Độc Lập & Kiểm Thử Nghiêm Ngặt (QA & Review Gate)
+- Kích hoạt **Reviewer** soi chiếu chất lượng code.
+- Kích hoạt **Tester** chạy toàn bộ test suite (unit tests, stress tests).
 
-### Bước 5: Cập nhật tài liệu (Sub-agent Doc Writer)
-- Spawn **Sub-agent Doc Writer**:
-  - Đối chiếu tính năng mới với các tài liệu trong `docs/` và `README.md`.
-  - Cập nhật tài liệu API, hướng dẫn cấu hình hoặc usage guides.
-
-### Bước 6: Tổng kết & Trả kết quả (Lead Agent)
-- Thu thập kết quả từ tất cả các sub-agent.
-- Tạo một Artifact tổng kết gồm:
-  - Tóm tắt thay đổi code.
-  - Đánh giá của Reviewer (Kèm đề xuất nếu có).
-  - Báo cáo kết quả test (Số lượng test cases, trạng thái pass/fail).
-  - Danh sách tài liệu đã được cập nhật.
+### Bước 5: Cập Nhật Tài Liệu & Báo Cáo Nghiệm Thu Sếp
+- Kích hoạt **Doc Writer** đồng bộ `docs/ui-standards.md`, `README.md`.
+- Triển khai lên Production (Vercel & Render) và báo cáo ngắn gọn, súc tích cho Sếp.

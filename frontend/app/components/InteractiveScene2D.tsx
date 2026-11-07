@@ -16,6 +16,7 @@ import {
   AlertCircle,
   Compass,
   ArrowRight,
+  ArrowLeft,
   Brain,
   Shield,
   Layers,
@@ -231,9 +232,15 @@ const HOTSPOT_LIFE_IMPACTS: { [key: string]: { perk: string; icon: string; categ
   }
 };
 
+const cleanDialogueText = (text: string) => {
+  if (!text) return '';
+  return text.normalize('NFC').trim();
+};
+
 const cleanWhisper = (text: string) => {
   if (!text) return '';
   return text
+    .normalize('NFC')
     .replace(/^[^:]{1,25}:\s*['"]?/, '')
     .replace(/^(Lý Trí|Trái Tim|Bản Năng|Lý trí|Trái tim|Bản năng)[\s:'"]*/i, '')
     .replace(/['"]$/, '')
@@ -525,7 +532,7 @@ function ProceduralRoom3D({
 
       {/* Grid Floor Lines for 3D Depth */}
       <gridHelper
-        args={[16, 16, activeTheme === 'cyberpunk' ? '#0ea5e9' : '#475569', activeTheme === 'cyberpunk' ? '#0369a1' : '#334155']}
+        args={[16, 16, activeTheme === 'cyberpunk' ? '#0284c7' : '#334155', activeTheme === 'cyberpunk' ? '#0369a1' : '#1e293b']}
         position={[0, 0.005, 0]}
       />
 
@@ -638,11 +645,25 @@ function ProceduralRoom3D({
             </mesh>
           </group>
 
-          {/* Soft Circular Rug under Player Area */}
-          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.015, -0.2]}>
-            <circleGeometry args={[2.2, 32]} />
-            <meshStandardMaterial color="#be185d" roughness={0.9} opacity={0.6} transparent />
-          </mesh>
+          {/* Warm Braided Nursery Rug */}
+          <group position={[0, 0.015, -0.2]}>
+            <mesh rotation={[-Math.PI / 2, 0, 0]}>
+              <ringGeometry args={[1.7, 2.2, 48]} />
+              <meshStandardMaterial
+                color={activeTheme === 'sepia' ? '#b45309' : activeTheme === 'cyberpunk' ? '#0ea5e9' : '#d97706'}
+                roughness={0.9}
+              />
+            </mesh>
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.001, 0]}>
+              <circleGeometry args={[1.7, 48]} />
+              <meshStandardMaterial
+                color={activeTheme === 'sepia' ? '#451a03' : activeTheme === 'cyberpunk' ? '#0f172a' : '#334155'}
+                roughness={0.85}
+                opacity={0.65}
+                transparent
+              />
+            </mesh>
+          </group>
         </group>
       )}
 
@@ -1139,8 +1160,9 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
   // Visual Novel Dialogue HUD State
   const [activeDialogue, setActiveDialogue] = useState<any | null>(null);
 
-  // Mind Stage D20 Modal
+  // Mind Stage D20 Modal & Dual-Pane Persistent Decision Deck
   const [showMindStage, setShowMindStage] = useState<boolean>(false);
+  const [activeWhisperTab, setActiveWhisperTab] = useState<'rational' | 'empathy' | 'instinct'>('rational');
   const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
   const [apInvestment, setApInvestment] = useState<number>(0);
   const [safeguardTerm, setSafeguardTerm] = useState<'standard' | 'time_cap' | 'deposit'>('standard');
@@ -1237,6 +1259,14 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
     return scenario.scenes.find(s => s.id === currentSceneId) || scenario.scenes[0] || null;
   }, [scenario, currentSceneId]);
 
+  // All Scene Hotspots Explored (Zero Dead-End Trigger)
+  const allVisited = useMemo(() => {
+    if (!currentScene?.hotspots || currentScene.hotspots.length === 0) return false;
+    return currentScene.hotspots.every(h =>
+      h.dialogue?.granted_knowledge && knowledgeBase.includes(h.dialogue.granted_knowledge)
+    );
+  }, [currentScene, knowledgeBase]);
+
   // Keyboard navigation & Shortcuts (A/D movement, 1/2/3 selection, M for Mind Stage, J for Journal)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -1252,24 +1282,28 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
         return;
       }
 
-      if (showMindStage) {
-        if (e.key === '1' && scenario?.choices?.[0]) {
-          setSelectedChoiceId(scenario.choices[0].id);
-        } else if (e.key === '2' && scenario?.choices?.[1]) {
-          setSelectedChoiceId(scenario.choices[1].id);
-        } else if (e.key === '3' && scenario?.choices?.[2]) {
-          setSelectedChoiceId(scenario.choices[2].id);
-        } else if (e.key === 'Escape') {
-          setShowMindStage(false);
-          setSelectedChoiceId(null);
-          setRollResult(null);
-        }
-        return;
-      }
-
       if (showJournal) {
         if (e.key === 'Escape' || e.key === 'j' || e.key === 'J') {
           setShowJournal(false);
+          return;
+        }
+      }
+
+      if (e.key === '1' && scenario?.choices?.[0]) {
+        setSelectedChoiceId(scenario.choices[0].id);
+        return;
+      } else if (e.key === '2' && scenario?.choices?.[1]) {
+        setSelectedChoiceId(scenario.choices[1].id);
+        return;
+      } else if (e.key === '3' && scenario?.choices?.[2]) {
+        setSelectedChoiceId(scenario.choices[2].id);
+        return;
+      } else if (e.key === 'Escape') {
+        if (selectedChoiceId) {
+          setSelectedChoiceId(null);
+          setRollResult(null);
+        } else if (onBackToCockpit) {
+          onBackToCockpit();
         }
         return;
       }
@@ -1279,8 +1313,6 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
         setTarget3DPos(prev => ({ ...prev, x: Math.min(4.5, prev.x + STEP) }));
       } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         setTarget3DPos(prev => ({ ...prev, x: Math.max(-4.5, prev.x - STEP) }));
-      } else if (e.key === 'm' || e.key === 'M') {
-        setShowMindStage(true);
       } else if (e.key === 'j' || e.key === 'J') {
         setShowJournal(prev => !prev);
       }
@@ -1457,45 +1489,43 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
   return (
     <div className="w-full bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col select-none relative group">
       {/* =========================================================================
-          PHẦN 1: KHÔNG GIAN 3D ĐA CHIỀU (3D ISOMETRIC / PERSPECTIVE VIEWPORT)
+          TOP COMMAND STRIP: AUTHORITATIVE SCENARIO HEADER & VITALS (US-01, US-03)
           ========================================================================= */}
-      <div className="relative w-full h-[360px] md:h-[420px] bg-slate-950 overflow-hidden">
-        {/* Floating Top Control HUD */}
-        <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between gap-2 pointer-events-none flex-wrap">
-          {/* Left: Return to Cockpit & Scenario Identity */}
-          <div className="flex items-center gap-2 pointer-events-auto flex-wrap">
-            {onBackToCockpit && (
-              <button
-                onClick={onBackToCockpit}
-                className="px-2.5 py-1 rounded-xl bg-gradient-to-r from-indigo-950/90 to-purple-950/90 hover:from-indigo-900 hover:to-purple-900 text-indigo-200 hover:text-white border border-indigo-500/40 text-[11px] font-bold flex items-center gap-1.5 transition active:scale-95 shadow-md shrink-0"
-              >
-                <span>⬅️ Trở Về Cockpit</span>
-                {(character?.action_points || 0) > 0 && (
-                  <span className="px-1 py-0.2 rounded bg-emerald-500/30 text-emerald-300 text-[9px] font-mono">
-                    {character.action_points} AP
-                  </span>
-                )}
-              </button>
-            )}
+      <div className="px-4 py-3 bg-slate-950/95 border-b border-slate-800/80 flex items-center justify-between gap-3 flex-wrap z-30">
+        {/* Left: Cockpit Navigation & Scenario Identity */}
+        <div className="flex items-center gap-2.5 flex-wrap">
+          {onBackToCockpit && (
+            <button
+              onClick={onBackToCockpit}
+              className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-md shrink-0"
+              title="Trở về Cockpit chính (Phím Esc)"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-slate-400" />
+              <span>Trở Về Cockpit (Esc)</span>
+            </button>
+          )}
 
-            <span className="px-2.5 py-1 rounded-xl bg-purple-950/80 text-purple-300 border border-purple-500/40 text-[10.5px] font-mono font-bold backdrop-blur-md shadow-md flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-1 rounded-xl bg-purple-950/80 text-purple-300 border border-purple-500/40 text-xs font-mono font-bold backdrop-blur-md shadow-md flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-purple-400" />
               <span>{scenario.title}</span>
             </span>
 
             {nextScenarioAge && scenario?.id === 'mind_sanctuary' && (
-              <span className="hidden md:inline-flex px-2.5 py-1 rounded-xl bg-amber-950/80 text-amber-300 border border-amber-500/40 text-[10.5px] font-mono font-bold backdrop-blur-md shadow-md items-center gap-1">
-                <span>⏳ Ngã Rẽ Kế: Tuổi {nextScenarioAge}</span>
+              <span className="hidden md:inline-flex px-2 py-0.5 rounded-lg bg-amber-950/80 text-amber-300 border border-amber-500/40 text-[10.5px] font-mono font-bold">
+                ⏳ Ngã Rẽ Kế: Tuổi {nextScenarioAge}
               </span>
             )}
+          </div>
 
-            {/* Scene Selector Pills */}
-            <div className="hidden sm:flex items-center gap-1 p-1 rounded-xl bg-slate-900/90 border border-slate-800/80 backdrop-blur-md">
+          {/* Scene Selector Pills if multiple */}
+          {scenario.scenes.length > 1 && (
+            <div className="hidden sm:flex items-center gap-1 p-0.5 rounded-xl bg-slate-900/90 border border-slate-800/80">
               {scenario.scenes.map(s => (
                 <button
                   key={s.id}
                   onClick={() => handleSwitchScene(s.id)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition ${
+                  className={`px-2 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition ${
                     s.id === currentSceneId
                       ? 'bg-purple-600 text-white shadow'
                       : 'text-slate-400 hover:text-white'
@@ -1506,599 +1536,551 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
                 </button>
               ))}
             </div>
-          </div>
+          )}
+        </div>
 
-          {/* Center / Right: Live Character Life HUD & Quick AP/Clues Indicators */}
-          <div className="flex items-center gap-2 pointer-events-auto flex-wrap">
-            {/* Live Character Stats Cockpit Bar inside 3D */}
-            <div className="hidden lg:flex items-center gap-2.5 px-3 py-1 rounded-xl bg-slate-950/90 border border-slate-800/80 backdrop-blur-md text-[11px] font-medium font-sans shadow-md">
-              <span className="text-rose-400 flex items-center gap-1 font-bold" title="Sinh Lực Hiện Tại">
-                <Heart className="w-3.5 h-3.5 fill-rose-400/30 text-rose-400" /> {character?.vitality ?? 80}/{character?.max_vitality ?? 100}
-              </span>
-              <span className="text-slate-700">•</span>
-              <span className="text-amber-400 flex items-center gap-1 font-bold" title="Căng Thẳng">
-                <Flame className="w-3.5 h-3.5 text-amber-400" /> {character?.burnout ?? 0}%
-              </span>
-              <span className="text-slate-700">•</span>
-              <span className="text-emerald-400 font-mono font-bold" title="Tiền Mặt">
-                ${(Number(character?.cash) || 0).toLocaleString()}
-              </span>
-            </div>
-
-            <button
-              onClick={() => setShowJournal(true)}
-              className="px-2.5 py-1 rounded-xl bg-amber-950/80 text-amber-300 border border-amber-500/40 text-[10.5px] font-mono font-bold backdrop-blur-md shadow-md flex items-center gap-1.5 hover:bg-amber-900/60 transition"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-amber-400" />
-              <span>Manh Mối ({knowledgeBase.length})</span>
-            </button>
-
-            <span className="px-2.5 py-1 rounded-xl bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 text-[10.5px] font-mono font-bold backdrop-blur-md shadow-md">
+        {/* Right: Consolidated Character Vitals Bar & Journal (US-01) */}
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="flex items-center gap-2.5 px-3 py-1 rounded-xl bg-slate-900/90 border border-slate-800 backdrop-blur-md text-xs font-medium font-sans shadow-md">
+            <span className="text-rose-400 flex items-center gap-1 font-bold" title="Sinh Lực Hiện Tại">
+              <Heart className="w-3.5 h-3.5 fill-rose-400/30 text-rose-400" /> {character?.vitality ?? 80}/{character?.max_vitality ?? 100}
+            </span>
+            <span className="text-slate-700">•</span>
+            <span className="text-amber-400 flex items-center gap-1 font-bold" title="Căng Thẳng">
+              <Flame className="w-3.5 h-3.5 text-amber-400" /> {character?.burnout ?? 0}%
+            </span>
+            <span className="text-slate-700">•</span>
+            <span className="text-emerald-400 font-mono font-bold" title="Năng Lượng Hành Động Khả Dụng">
               ⚡ {character?.action_points ?? actionPoints} AP
             </span>
-
-            <button
-              onClick={() => setShowMindStage(true)}
-              className="px-3 py-1 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-purple-600/40 flex items-center gap-1.5 transition active:scale-95"
-            >
-              <Brain className="w-3.5 h-3.5" />
-              <span>Ngã Rẽ Tâm Trí</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Floating 3D Interaction Tip */}
-        <div className="absolute top-12 left-3 z-10 pointer-events-none hidden md:flex items-center gap-2 text-[10px] font-mono text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded-md backdrop-blur border border-slate-800">
-          <span>🖱️ Nhấp sàn 3D để bước đi</span>
-          <span>•</span>
-          <span>✨ Nhấp đài phát quang để khám phá</span>
-          <span>•</span>
-          <span>⌨️ Phím A/D</span>
-        </div>
-
-        {/* 3D WebGL Canvas Stage */}
-        <Canvas
-          shadows
-          camera={{ position: [0, 4.4, 7.2], fov: 38 }}
-          className="w-full h-full cursor-crosshair"
-          gl={{ antialias: true, alpha: false }}
-        >
-          {/* Lighting Rig: 3-Point Studio Architecture */}
-          <ambientLight intensity={0.55} color={ambientLightColor} />
-          {/* 1. Key Light: Sunbeam streaming from window [0, 3.2, -3.95] */}
-          <directionalLight
-            position={[2.5, 6.5, -4.5]}
-            intensity={2.2}
-            castShadow
-            shadow-mapSize={[1024, 1024]}
-            shadow-bias={-0.0005}
-            color={keyLightColor}
-          />
-          {/* 2. Fill Light: Soft bounce light from opposite room angle */}
-          <directionalLight
-            position={[-4.5, 3.5, 4.5]}
-            intensity={0.6}
-            color={fillLightColor}
-          />
-          {/* 3. Rim Light: Highlights character silhouette separation from background */}
-          <pointLight
-            position={[0, 2.2, -1.8]}
-            intensity={1.2}
-            color={rimLightColor}
-            distance={6}
-            decay={2}
-          />
-
-          {/* Procedural 3D Environment Room with Specular Floor & God Rays */}
-          <ProceduralRoom3D
-            theme={currentScene.background_theme}
-            sceneId={currentSceneId}
-            activeTheme={activeTheme}
-            sunbeamColor={sunbeamColor}
-          />
-
-          {/* Clickable 3D Invisible Raycast Floor */}
-          <mesh
-            rotation={[-Math.PI / 2, 0, 0]}
-            position={[0, 0.02, 0]}
-            visible={false}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleFloorClick(e.point.x, e.point.z);
-            }}
-          >
-            <planeGeometry args={[14, 8]} />
-          </mesh>
-
-          {/* 3D Interactive Hotspot Beacons */}
-          {currentScene.hotspots.map((h) => {
-            const isVisited = h.dialogue?.granted_knowledge && knowledgeBase.includes(h.dialogue.granted_knowledge);
-            return (
-              <HotspotBeacon3D
-                key={h.id}
-                hotspot={h}
-                isVisited={Boolean(isVisited)}
-                onClick={() => handleTriggerHotspot(h)}
-              />
-            );
-          })}
-
-          {/* Target Destination Beacon Marker */}
-          <TargetDecal3D position={target3DPos} />
-
-          {/* 3D Rigged Animated Character */}
-          <StageCharacter3D
-            character={character}
-            targetX={target3DPos.x}
-            targetZ={target3DPos.z}
-            onPositionUpdate={(x, z) => setChar3DPos({ x, z })}
-          />
-        </Canvas>
-
-        {/* Quick Hotspot Ribbons (Docked at the bottom edge of the 3D Stage) */}
-        <div className="absolute bottom-2 left-3 right-3 z-20 flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar pointer-events-auto">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-300 font-bold bg-slate-900/80 px-2 py-1 rounded-lg border border-slate-800 backdrop-blur shrink-0">
-            Điểm Khám Phá:
-          </span>
-          {currentScene.hotspots.map((h) => {
-            const isVisited = h.dialogue?.granted_knowledge && knowledgeBase.includes(h.dialogue.granted_knowledge);
-            return (
-              <button
-                key={h.id}
-                onClick={() => handleTriggerHotspot(h)}
-                className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 whitespace-nowrap backdrop-blur-md shadow-lg ${
-                  isVisited
-                    ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900'
-                    : 'bg-slate-900/85 border-slate-700/80 text-slate-200 hover:border-purple-400 hover:text-white'
-                }`}
-              >
-                <span>{h.npc_role === 'parent' ? '👨‍👩‍👧' : h.npc_role === 'partner' ? '👩‍💼' : h.npc_role === 'manager' ? '👨‍💼' : h.npc_role === 'friend' ? '🧑‍💻' : '📦'}</span>
-                <span>{h.label}</span>
-                {isVisited && <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* =========================================================================
-          PHẦN 2: KHUNG ĐỐI THOẠI & CỐT TRUYỆN ĐIỆN ẢNH (PERSONA / CYBERPUNK 2077 DECK)
-          Tích hợp trực tiếp vào chân viewport 21:9 với viền hào quang sắc độ
-          ========================================================================= */}
-      <div className="w-full bg-[var(--bg-card)]/95 border-t border-[var(--border-subtle)] p-4 md:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 backdrop-blur-2xl shadow-2xl relative overflow-hidden transition-colors">
-        {/* Holographic Top Horizon Laser Accent */}
-        <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-purple-500/60 to-transparent pointer-events-none" />
-
-        {/* Left: Speaker Portrait Box with Dynamic Role Chromatic Glow */}
-        <div className="flex items-center gap-4 min-w-0">
-          <div className="relative shrink-0">
-            <div
-              className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border-2 transition-all duration-300 ${
-                activeDialogue?.npc_role === 'parent'
-                  ? 'bg-rose-950/80 border-rose-500 text-rose-300 shadow-[0_0_20px_rgba(244,63,94,0.35)] ring-2 ring-rose-500/25'
-                  : activeDialogue?.npc_role === 'partner'
-                  ? 'bg-pink-950/80 border-pink-500 text-pink-300 shadow-[0_0_20px_rgba(236,72,153,0.35)] ring-2 ring-pink-500/25'
-                  : activeDialogue?.npc_role === 'manager'
-                  ? 'bg-sky-950/80 border-sky-500 text-sky-300 shadow-[0_0_20px_rgba(56,189,248,0.35)] ring-2 ring-sky-500/25'
-                  : activeDialogue?.npc_role === 'friend'
-                  ? 'bg-indigo-950/80 border-indigo-500 text-indigo-300 shadow-[0_0_20px_rgba(99,102,241,0.35)] ring-2 ring-indigo-500/25'
-                  : 'bg-purple-950/80 border-purple-500 text-purple-300 shadow-[0_0_20px_rgba(168,85,247,0.35)] ring-2 ring-purple-500/25'
-              }`}
-            >
-              {activeDialogue?.npc_role === 'parent'
-                ? '👨‍👩‍👧'
-                : activeDialogue?.npc_role === 'partner'
-                ? '👩‍💼'
-                : activeDialogue?.npc_role === 'manager'
-                ? '👨‍💼'
-                : activeDialogue?.npc_role === 'friend'
-                ? '🧑‍💻'
-                : '🧠'}
-            </div>
-            {/* Live Camera Recording Micro-Badge */}
-            <div className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-black/90 text-[8.5px] font-mono font-bold text-amber-300 border border-amber-500/50 shadow flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
-              <span>LIVE</span>
-            </div>
+            <span className="text-slate-700">•</span>
+            <span className="text-emerald-400 font-mono font-bold" title="Tiền Mặt">
+              ${(Number(character?.cash) || 0).toLocaleString()}
+            </span>
           </div>
 
-          {/* Dialogue Speaker & Narrative Content */}
-          <div className="flex flex-col gap-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-bold text-sm text-[var(--text-primary)]">
-                {activeDialogue?.speaker || `${character?.name || "Bạn"} (Nội tâm)`}
-              </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
-                {activeDialogue?.npc_role ? `Vai trò: ${activeDialogue.npc_role}` : "Bối cảnh hiện tại"}
-              </span>
-            </div>
-
-            <p className="text-xs md:text-sm text-slate-100 leading-relaxed font-serif italic max-w-3xl drop-shadow-sm">
-              "{activeDialogue?.text || scenario.description}"
-            </p>
-
-            {/* Future Life Orientation Impact Pill */}
-            {activeDialogue?.hotspot_id && HOTSPOT_LIFE_IMPACTS[activeDialogue.hotspot_id] && (
-              <div className="mt-1.5 inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-gradient-to-r from-indigo-950/80 to-purple-950/70 border border-indigo-400/50 text-indigo-300 text-xs font-medium animate-in fade-in slide-in-from-left-2 shadow-sm w-fit">
-                <Compass className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                <span>Định hướng tương lai: </span>
-                <span className="font-bold">{HOTSPOT_LIFE_IMPACTS[activeDialogue.hotspot_id].perk}</span>
-              </div>
-            )}
-
-            {/* Clue Discovered Notification Banner */}
-            {activeDialogue?.granted_knowledge && (
-              <div className="mt-1.5 inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-gradient-to-r from-amber-950/80 to-yellow-950/70 border border-amber-400/50 text-amber-300 text-xs font-medium animate-in fade-in slide-in-from-left-2 shadow-sm w-fit">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span>Mở khóa tri thức: </span>
-                <span className="font-bold">
-                  {KNOWLEDGE_LABELS[activeDialogue.granted_knowledge]?.label || activeDialogue.granted_knowledge}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Right: Action Navigation Hub */}
-        <div className="flex items-center gap-2.5 shrink-0 self-end md:self-center">
           <button
             onClick={() => setShowJournal(true)}
-            className="px-3 py-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-slate-700/80 text-[var(--text-secondary)] hover:text-white border border-[var(--border-subtle)] transition flex items-center gap-1.5 shadow"
+            className="px-2.5 py-1.5 rounded-xl bg-amber-950/80 text-amber-300 border border-amber-500/40 text-xs font-mono font-bold backdrop-blur-md shadow-md flex items-center gap-1.5 hover:bg-amber-900/60 transition"
             title="Mở Sổ Tay Manh Mối (Phím J)"
           >
-            <BookOpen className="w-4 h-4 text-amber-400" />
-            <span className="text-xs font-semibold hidden sm:inline">Sổ Tay</span>
-            <kbd className="px-1 py-0.2 rounded bg-black/40 text-[9px] font-mono text-amber-300 border border-amber-400/30">
-              J
-            </kbd>
-          </button>
-
-          <button
-            onClick={() => setShowMindStage(true)}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-500 hover:to-sky-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-purple-600/30 transition active:scale-95"
-            title="Đối Diện Ngã Rẽ Tâm Trí (Phím M)"
-          >
-            <Brain className="w-4 h-4 animate-pulse" />
-            <span>Đối Diện Ngã Rẽ</span>
-            <kbd className="px-1.5 py-0.5 rounded bg-black/30 text-[9px] font-mono text-purple-200 border border-white/20">
-              M
-            </kbd>
+            <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Manh Mối</span>
+            <span>({knowledgeBase.length})</span>
           </button>
         </div>
       </div>
 
       {/* =========================================================================
-          PHẦN 3: SÂN KHẤU TÂM TRÍ - D20 MIND STAGE MODAL
+          DUAL-PANE STAGE: 3D DIORAMA (LEFT 7 COLS) + PERSISTENT DECISION DECK (RIGHT 5 COLS) (US-04)
           ========================================================================= */}
-      {showMindStage && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="max-w-4xl w-full bg-slate-950 border border-purple-500/40 rounded-3xl p-6 md:p-8 shadow-2xl relative max-h-[92vh] overflow-y-auto custom-scrollbar space-y-6">
-            <button
-              onClick={() => {
-                setShowMindStage(false);
-                setSelectedChoiceId(null);
-                setRollResult(null);
-              }}
-              className="absolute top-5 right-5 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white"
-            >
-              <X className="w-5 h-5" />
-            </button>
+      <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[580px]">
+        {/* LEFT COLUMN: 3D Isometric Viewport + Dialogue Deck (7 cols) */}
+        <div className="lg:col-span-7 flex flex-col border-b lg:border-b-0 lg:border-r border-slate-800/80 bg-slate-950">
+          <div className="relative w-full h-[360px] md:h-[440px] bg-slate-950 overflow-hidden">
+            {/* Controls Indicator */}
+            <div className="absolute top-2.5 left-3 z-10 pointer-events-none hidden sm:flex items-center gap-2 text-[10px] font-mono text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-lg backdrop-blur border border-slate-800">
+              <span>🖱️ Nhấp sàn để bước đi</span>
+              <span>•</span>
+              <span>✨ Nhấp đài phát quang</span>
+              <span>•</span>
+              <span>⌨️ Phím A/D</span>
+            </div>
 
-            {/* Mind Stage Title */}
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <Brain className="w-4 h-4 text-purple-400" />
-                <span className="text-[10px] font-mono uppercase tracking-wider text-purple-400 font-bold">
-                  Sân Khấu Tâm Trí · Ngã Rẽ Định Mệnh
+            {/* 3D WebGL Canvas Viewport (US-06) */}
+            <Canvas
+              shadows
+              camera={{ position: [0, 3.2, 5.8], fov: 40 }}
+              className="w-full h-full cursor-crosshair"
+              gl={{ antialias: true, alpha: false }}
+            >
+              <ambientLight intensity={0.55} color={ambientLightColor} />
+              <directionalLight
+                position={[2.5, 6.5, -4.5]}
+                intensity={2.2}
+                castShadow
+                shadow-mapSize={[1024, 1024]}
+                shadow-bias={-0.0005}
+                color={keyLightColor}
+              />
+              <directionalLight
+                position={[-4.5, 3.5, 4.5]}
+                intensity={0.6}
+                color={fillLightColor}
+              />
+              <pointLight
+                position={[0, 2.2, -1.8]}
+                intensity={1.2}
+                color={rimLightColor}
+                distance={6}
+                decay={2}
+              />
+
+              <ProceduralRoom3D
+                theme={currentScene.background_theme}
+                sceneId={currentSceneId}
+                activeTheme={activeTheme}
+                sunbeamColor={sunbeamColor}
+              />
+
+              <mesh
+                rotation={[-Math.PI / 2, 0, 0]}
+                position={[0, 0.02, 0]}
+                visible={false}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFloorClick(e.point.x, e.point.z);
+                }}
+              >
+                <planeGeometry args={[14, 8]} />
+              </mesh>
+
+              {currentScene.hotspots.map((h) => {
+                const isVisited = h.dialogue?.granted_knowledge && knowledgeBase.includes(h.dialogue.granted_knowledge);
+                return (
+                  <HotspotBeacon3D
+                    key={h.id}
+                    hotspot={h}
+                    isVisited={Boolean(isVisited)}
+                    onClick={() => handleTriggerHotspot(h)}
+                  />
+                );
+              })}
+
+              <TargetDecal3D position={target3DPos} />
+
+              <StageCharacter3D
+                character={character}
+                targetX={target3DPos.x}
+                targetZ={target3DPos.z}
+                onPositionUpdate={(x, z) => setChar3DPos({ x, z })}
+              />
+            </Canvas>
+
+            {/* Quick Hotspot Ribbons Docked at bottom of 3D */}
+            <div className="absolute bottom-2 left-3 right-3 z-20 flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar pointer-events-auto">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-300 font-bold bg-slate-900/80 px-2 py-1 rounded-lg border border-slate-800 backdrop-blur shrink-0">
+                Điểm Khám Phá:
+              </span>
+              {currentScene.hotspots.map((h) => {
+                const isVisited = h.dialogue?.granted_knowledge && knowledgeBase.includes(h.dialogue.granted_knowledge);
+                return (
+                  <button
+                    key={h.id}
+                    onClick={() => handleTriggerHotspot(h)}
+                    className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 whitespace-nowrap backdrop-blur-md shadow-lg ${
+                      isVisited
+                        ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900'
+                        : 'bg-slate-900/85 border-slate-700/80 text-slate-200 hover:border-purple-400 hover:text-white'
+                    }`}
+                  >
+                    <span>{h.npc_role === 'parent' ? '👨‍👩‍👧' : h.npc_role === 'partner' ? '👩‍💼' : h.npc_role === 'manager' ? '👨‍💼' : h.npc_role === 'friend' ? '🧑‍💻' : '📦'}</span>
+                    <span>{h.label}</span>
+                    {isVisited && <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Zero Dead-End Golden Guidance Banner (US-05) */}
+          {allVisited && (
+            <div className="mx-3 my-2.5 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 border border-amber-400/60 text-amber-200 text-xs font-medium flex items-center justify-between gap-2 shadow-lg backdrop-blur-md animate-in fade-in slide-in-from-top-1">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-amber-400 animate-pulse shrink-0" />
+                <span>✨ <strong>Ký ức ấu thơ đã đủ đầy!</strong> Bạn đã khám phá hết manh mối. Hãy đưa ra quyết định bên phải →</span>
+              </div>
+              <ArrowRight className="w-4 h-4 text-amber-400 shrink-0 hidden sm:block animate-bounce" />
+            </div>
+          )}
+
+          {/* Cinema Dialogue Deck (US-02 font bug resolved with font-sans font-medium & cleanDialogueText) */}
+          <div className="w-full bg-[var(--bg-card)]/95 border-t border-[var(--border-subtle)] p-4 flex-1 flex flex-col justify-between backdrop-blur-xl relative">
+            <div className="flex items-start gap-3.5">
+              <div className="relative shrink-0">
+                <div
+                  className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl border-2 transition-all duration-300 ${
+                    activeDialogue?.npc_role === 'parent'
+                      ? 'bg-rose-950/80 border-rose-500 text-rose-300 shadow-[0_0_20px_rgba(244,63,94,0.35)] ring-2 ring-rose-500/25'
+                      : activeDialogue?.npc_role === 'partner'
+                      ? 'bg-pink-950/80 border-pink-500 text-pink-300 shadow-[0_0_20px_rgba(236,72,153,0.35)] ring-2 ring-pink-500/25'
+                      : activeDialogue?.npc_role === 'manager'
+                      ? 'bg-sky-950/80 border-sky-500 text-sky-300 shadow-[0_0_20px_rgba(56,189,248,0.35)] ring-2 ring-sky-500/25'
+                      : activeDialogue?.npc_role === 'friend'
+                      ? 'bg-indigo-950/80 border-indigo-500 text-indigo-300 shadow-[0_0_20px_rgba(99,102,241,0.35)] ring-2 ring-indigo-500/25'
+                      : 'bg-purple-950/80 border-purple-500 text-purple-300 shadow-[0_0_20px_rgba(168,85,247,0.35)] ring-2 ring-purple-500/25'
+                  }`}
+                >
+                  {activeDialogue?.npc_role === 'parent'
+                    ? '👨‍👩‍👧'
+                    : activeDialogue?.npc_role === 'partner'
+                    ? '👩‍💼'
+                    : activeDialogue?.npc_role === 'manager'
+                    ? '👨‍💼'
+                    : activeDialogue?.npc_role === 'friend'
+                    ? '🧑‍💻'
+                    : '🧠'}
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1 min-w-0 flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-bold text-sm text-[var(--text-primary)]">
+                    {activeDialogue?.speaker || `${character?.name || "Bạn"} (Nội tâm)`}
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
+                    {activeDialogue?.npc_role ? `Vai trò: ${activeDialogue.npc_role}` : "Bối cảnh"}
+                  </span>
+                </div>
+
+                <p className="text-xs md:text-sm text-slate-100 leading-relaxed font-sans font-medium drop-shadow-sm">
+                  &ldquo;{cleanDialogueText(activeDialogue?.text || scenario.description)}&rdquo;
+                </p>
+
+                {activeDialogue?.hotspot_id && HOTSPOT_LIFE_IMPACTS[activeDialogue.hotspot_id] && (
+                  <div className="mt-1 inline-flex items-center gap-2 px-2.5 py-0.5 rounded-lg bg-indigo-950/80 border border-indigo-400/50 text-indigo-300 text-xs font-medium w-fit">
+                    <Compass className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                    <span>Định hướng tương lai: <strong>{HOTSPOT_LIFE_IMPACTS[activeDialogue.hotspot_id].perk}</strong></span>
+                  </div>
+                )}
+
+                {activeDialogue?.granted_knowledge && (
+                  <div className="mt-1 inline-flex items-center gap-2 px-2.5 py-0.5 rounded-lg bg-amber-950/80 border border-amber-400/50 text-amber-300 text-xs font-medium w-fit">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                    <span>Mở khóa tri thức: <strong>{KNOWLEDGE_LABELS[activeDialogue.granted_knowledge]?.label || activeDialogue.granted_knowledge}</strong></span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: Persistent Decision Deck (5 cols) (US-04) */}
+        <div id="decision-deck" className="lg:col-span-5 flex flex-col bg-slate-950/90 p-4 sm:p-5 overflow-y-auto max-h-[820px] custom-scrollbar space-y-4">
+          {/* Deck Header */}
+          <div className="border-b border-slate-800/80 pb-3">
+            <div className="flex items-center gap-2 mb-1">
+              <Brain className="w-4 h-4 text-purple-400" />
+              <span className="text-[10px] font-mono uppercase tracking-wider text-purple-400 font-bold">
+                Sân Khấu Tâm Trí · Ngã Rẽ Định Mệnh
+              </span>
+            </div>
+            <h3 className="text-base sm:text-lg font-bold text-white font-sans">{scenario.title}</h3>
+            {scenario.mind_stage?.whispers?.dilemma_prompt && (
+              <p className="text-xs text-slate-300 mt-1 font-sans leading-relaxed">
+                {scenario.mind_stage.whispers.dilemma_prompt}
+              </p>
+            )}
+          </div>
+
+          {/* Tri-Prism Ego Whispers Tabs */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-900/90 border border-slate-800">
+              <button
+                type="button"
+                onClick={() => setActiveWhisperTab('rational')}
+                className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1.5 transition ${
+                  activeWhisperTab === 'rational'
+                    ? 'bg-sky-500/20 text-sky-300 border border-sky-400/50 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Brain className="w-3.5 h-3.5 text-sky-400" />
+                <span>Lý Trí</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveWhisperTab('empathy')}
+                className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1.5 transition ${
+                  activeWhisperTab === 'empathy'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-400/50 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Heart className="w-3.5 h-3.5 text-amber-400" />
+                <span>Trái Tim</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveWhisperTab('instinct')}
+                className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1.5 transition ${
+                  activeWhisperTab === 'instinct'
+                    ? 'bg-rose-500/20 text-rose-300 border border-rose-400/50 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Zap className="w-3.5 h-3.5 text-rose-400" />
+                <span>Bản Năng</span>
+              </button>
+            </div>
+
+            {/* Active Whisper Quote */}
+            <div
+              className={`p-3 rounded-xl border text-xs leading-relaxed transition-all duration-200 ${
+                activeWhisperTab === 'rational'
+                  ? 'bg-sky-950/40 border-sky-400/40 text-sky-200 shadow-[0_0_15px_rgba(56,189,248,0.1)]'
+                  : activeWhisperTab === 'empathy'
+                  ? 'bg-amber-950/40 border-amber-400/40 text-amber-200 shadow-[0_0_15px_rgba(245,158,11,0.1)]'
+                  : 'bg-rose-950/40 border-rose-400/40 text-rose-200 shadow-[0_0_15px_rgba(244,63,94,0.1)]'
+              }`}
+            >
+              <div className="font-bold text-[10.5px] uppercase tracking-wider mb-1 opacity-80">
+                {activeWhisperTab === 'rational' && '❄️ Lăng Kính Băng Giá (Lý Trí)'}
+                {activeWhisperTab === 'empathy' && '✨ Lăng Kính Hổ Phách (Trái Tim)'}
+                {activeWhisperTab === 'instinct' && '🔥 Lăng Kính Đỏ Thẫm (Bản Năng)'}
+              </div>
+              <p className="font-sans font-medium text-[11.5px] leading-snug">
+                &ldquo;
+                {activeWhisperTab === 'rational' && cleanWhisper(scenario.mind_stage?.whispers?.rational || '')}
+                {activeWhisperTab === 'empathy' && cleanWhisper(scenario.mind_stage?.whispers?.empathy || '')}
+                {activeWhisperTab === 'instinct' && cleanWhisper(scenario.mind_stage?.whispers?.instinct || '')}
+                &rdquo;
+              </p>
+            </div>
+          </div>
+
+          {/* Roll Result Display (In-place on the right pane!) */}
+          {rollResult ? (
+            <div className="p-4 rounded-2xl bg-slate-900 border-2 border-emerald-500/60 shadow-xl space-y-3 animate-in zoom-in-95">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                <div>
+                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">
+                    Kết Quả Định Mệnh ({rollResult.outcome_key?.toUpperCase() || 'THÀNH CÔNG'})
+                  </span>
+                  <h4 className="text-sm font-bold text-white mt-1">{rollResult.choice_title}</h4>
+                </div>
+
+                {rollResult.roll && (
+                  <div className="text-right">
+                    <div className="text-[10px] text-slate-400">Xúc xắc D20</div>
+                    <div className="text-base font-bold font-mono text-emerald-400">
+                      {rollResult.roll.d20_base} + {rollResult.roll.trait_bonus + rollResult.roll.stat_bonus + rollResult.roll.ap_bonus} = {rollResult.roll.total_score} (vs DC {rollResult.roll.target_dc})
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <p className="text-xs text-slate-200 font-sans leading-relaxed bg-slate-950/70 p-3 rounded-xl border border-slate-800">
+                &ldquo;{rollResult.narration}&rdquo;
+              </p>
+
+              <div className="flex justify-end pt-1">
+                <button
+                  onClick={() => {
+                    setRollResult(null);
+                    setSelectedChoiceId(null);
+                    if (onBackToCockpit) onBackToCockpit();
+                  }}
+                  className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg"
+                >
+                  Tiếp Tục Hành Trình
+                </button>
+              </div>
+            </div>
+          ) : (
+            /* Choices List */
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
+                <span>Chọn Phương Án Đối Diện:</span>
+                <span className="text-[10.5px] font-mono text-purple-300 lowercase font-normal">
+                  (Phím 1, 2, 3)
                 </span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white font-serif">{scenario.title}</h2>
-              <p className="text-xs text-slate-300 mt-1 font-serif">{scenario.mind_stage?.whispers?.dilemma_prompt}</p>
-            </div>
 
-            {/* 3 Internal Ego Whispers - Tri-Prism Sân Khấu Tâm Trí */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {/* 1. Lý Trí: Xanh Băng Giá (Ice Blue) */}
-              <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-sky-950/60 via-slate-900/70 to-cyan-950/50 border border-sky-400/40 text-xs space-y-1.5 shadow-[0_0_20px_rgba(56,189,248,0.15)]">
-                <div className="font-bold text-sky-300 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <Brain className="w-4 h-4 text-sky-400 drop-shadow" />
-                    <span className="font-sans tracking-wide">Lý Trí</span>
-                  </div>
-                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-sky-900/50 text-sky-300 border border-sky-500/30 uppercase">
-                    Lăng Kính Băng Giá
-                  </span>
-                </div>
-                <p className="text-slate-200 leading-relaxed font-serif text-[12px]">
-                  {cleanWhisper(scenario.mind_stage?.whispers?.rational || '')}
-                </p>
-              </div>
+              <div className="space-y-2.5">
+                {scenario.choices.map((choice, idx) => {
+                  const missingKnowledge = (choice.knowledge_requirements || []).filter(k => !knowledgeBase.includes(k));
+                  const isUnderUncertainty = missingKnowledge.length > 0;
+                  const cleanChoiceTitle = choice.title.replace(/^\[[^\]]+\]\s*/, '').trim();
+                  const isSelected = selectedChoiceId === choice.id;
 
-              {/* 2. Trái Tim: Vàng Hổ Phách Ấm (Warm Amber) */}
-              <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-amber-950/60 via-slate-900/70 to-orange-950/50 border border-amber-400/40 text-xs space-y-1.5 shadow-[0_0_20px_rgba(245,158,11,0.15)]">
-                <div className="font-bold text-amber-300 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <Heart className="w-4 h-4 text-amber-400 drop-shadow" />
-                    <span className="font-sans tracking-wide">Trái Tim</span>
-                  </div>
-                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-amber-900/50 text-amber-300 border border-amber-500/30 uppercase">
-                    Lăng Kính Hổ Phách
-                  </span>
-                </div>
-                <p className="text-slate-200 leading-relaxed font-serif text-[12px]">
-                  {cleanWhisper(scenario.mind_stage?.whispers?.empathy || '')}
-                </p>
-              </div>
-
-              {/* 3. Bản Năng: Đỏ Thẫm Kiên Định (Crimson) */}
-              <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-rose-950/60 via-slate-900/70 to-red-950/50 border border-rose-400/40 text-xs space-y-1.5 shadow-[0_0_20px_rgba(244,63,94,0.15)]">
-                <div className="font-bold text-rose-300 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <Zap className="w-4 h-4 text-rose-400 drop-shadow" />
-                    <span className="font-sans tracking-wide">Bản Năng</span>
-                  </div>
-                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-rose-900/50 text-rose-300 border border-rose-500/30 uppercase">
-                    Lăng Kính Đỏ Thẫm
-                  </span>
-                </div>
-                <p className="text-slate-200 leading-relaxed font-serif text-[12px]">
-                  {cleanWhisper(scenario.mind_stage?.whispers?.instinct || '')}
-                </p>
-              </div>
-            </div>
-
-            {/* Roll Result Display (If resolved) */}
-            {rollResult ? (
-              <div className="p-5 rounded-2xl bg-slate-900 border-2 border-emerald-500/60 shadow-xl space-y-3 animate-in zoom-in-95">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                  <div>
-                    <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">
-                      Kết Quả Định Mệnh ({rollResult.outcome_key?.toUpperCase()})
-                    </span>
-                    <h3 className="text-base font-bold text-white mt-1">{rollResult.choice_title}</h3>
-                  </div>
-
-                  {rollResult.roll && (
-                    <div className="text-right">
-                      <div className="text-[11px] text-slate-400">Xúc xắc D20</div>
-                      <div className="text-lg font-bold font-mono text-emerald-400">
-                        {rollResult.roll.d20_base} + {rollResult.roll.trait_bonus + rollResult.roll.stat_bonus + rollResult.roll.ap_bonus} = {rollResult.roll.total_score} (vs DC {rollResult.roll.target_dc})
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <p className="text-xs text-slate-200 font-serif leading-relaxed italic bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                  "{rollResult.narration}"
-                </p>
-
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => {
-                      setShowMindStage(false);
-                      setRollResult(null);
-                    }}
-                    className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition"
-                  >
-                    Tiếp Tục Hành Trình
-                  </button>
-                </div>
-              </div>
-            ) : (
-              /* Choices List */
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  <span>Chọn Phương Án Đối Diện Ngã Rẽ:</span>
-                  <span className="text-[11px] font-mono text-purple-300 lowercase font-normal hidden sm:inline">
-                    (Dùng phím 1, 2, 3 để chọn nhanh)
-                  </span>
-                </div>
-
-                <div className="space-y-3">
-                  {scenario.choices.map((choice, idx) => {
-                    const missingKnowledge = (choice.knowledge_requirements || []).filter(k => !knowledgeBase.includes(k));
-                    const isUnderUncertainty = missingKnowledge.length > 0;
-                    const cleanChoiceTitle = choice.title.replace(/^\[[^\]]+\]\s*/, '').trim();
-                    const isSelected = selectedChoiceId === choice.id;
-
-                    return (
-                      <div
-                        key={choice.id}
-                        onClick={() => setSelectedChoiceId(choice.id)}
-                        className={`p-4 rounded-2xl border transition-all duration-200 cursor-pointer backdrop-blur-xl relative ${
-                          isSelected
-                            ? 'bg-gradient-to-br from-purple-950/80 via-indigo-950/70 to-slate-900/90 border-purple-400/90 shadow-[0_0_25px_rgba(168,85,247,0.3)] ring-1 ring-purple-400/50'
-                            : isUnderUncertainty
-                            ? 'bg-slate-900/70 border-amber-500/40 hover:border-amber-400/70 hover:bg-slate-900/85'
-                            : 'bg-slate-900/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/90'
-                        }`}
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="space-y-1.5 flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              {/* Quick Hotkey Badge */}
-                              <span className="px-1.5 py-0.5 rounded bg-black/60 border border-white/10 text-[10px] font-mono font-bold text-slate-300">
-                                Phím {idx + 1}
+                  return (
+                    <div
+                      key={choice.id}
+                      onClick={() => setSelectedChoiceId(choice.id)}
+                      className={`p-3.5 rounded-2xl border transition-all duration-200 cursor-pointer backdrop-blur-xl relative ${
+                        isSelected
+                          ? 'bg-gradient-to-br from-purple-950/80 via-indigo-950/70 to-slate-900/90 border-purple-400/90 shadow-[0_0_20px_rgba(168,85,247,0.3)] ring-1 ring-purple-400/50'
+                          : isUnderUncertainty
+                          ? 'bg-slate-900/70 border-amber-500/40 hover:border-amber-400/70 hover:bg-slate-900/85'
+                          : 'bg-slate-900/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/90'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2.5">
+                        <div className="space-y-1 flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="px-1.5 py-0.5 rounded bg-black/60 border border-white/10 text-[9.5px] font-mono font-bold text-slate-300">
+                              Phím {idx + 1}
+                            </span>
+                            <span className="font-bold text-sm text-white">{cleanChoiceTitle}</span>
+                            {isUnderUncertainty ? (
+                              <span className="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-amber-950/90 text-amber-300 border border-amber-500/50 flex items-center gap-1 font-semibold">
+                                <Zap className="w-3 h-3 text-amber-400" />
+                                <span>Bất định (+{missingKnowledge.length * 2} DC)</span>
                               </span>
-                              <span className="font-bold text-sm sm:text-base text-white">{cleanChoiceTitle}</span>
-                              {isUnderUncertainty ? (
-                                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-950/90 text-amber-300 border border-amber-500/50 flex items-center gap-1 font-semibold">
-                                  <Zap className="w-3 h-3 text-amber-400" />
-                                  <span>Bất định (+{missingKnowledge.length * 2} DC)</span>
-                                </span>
-                              ) : (
-                                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-700/60 font-semibold">
-                                  {choice.stance}
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-xs sm:text-[13px] text-slate-200 leading-relaxed font-serif">{choice.description}</p>
+                            ) : (
+                              <span className="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-emerald-950/90 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 font-semibold">
+                                <CheckCircle className="w-3 h-3 text-emerald-400" />
+                                <span>Đủ dữ kiện (-2 DC)</span>
+                              </span>
+                            )}
                           </div>
 
-                          {/* Con Dấu Số Phận (Seal of Destiny DC Medallion) */}
+                          <p className="text-xs text-slate-300 leading-relaxed font-sans">{choice.description}</p>
+
+                          {/* DC Check & Stat requirements */}
                           {choice.check && (
-                            <div className="shrink-0 flex flex-col items-end gap-1">
-                              <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-950/90 to-yellow-950/90 border border-amber-400/60 text-amber-300 font-mono font-bold text-xs shadow-[0_0_15px_rgba(251,191,36,0.25)] flex items-center gap-1.5">
-                                <Award className="w-3.5 h-3.5 text-amber-400" />
-                                <span>DC {choice.check.target_dc + (missingKnowledge.length * 2)} · {choice.check.stat}</span>
-                              </div>
-                              {choice.cost_ap !== undefined && choice.cost_ap > 0 && (
-                                <span className="text-[10px] font-mono text-purple-300 font-semibold">
-                                  Tiêu tốn {choice.cost_ap} AP
+                            <div className="flex items-center gap-2 pt-1 text-[11px] font-mono flex-wrap">
+                              <span className="text-purple-300 font-bold bg-purple-950/70 px-2 py-0.5 rounded-lg border border-purple-500/40">
+                                Thử thách: {choice.check.stat?.toUpperCase()} (DC {choice.check.target_dc})
+                              </span>
+                              {choice.check.bonus_traits && choice.check.bonus_traits.length > 0 && (
+                                <span className="text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded-lg border border-amber-500/30">
+                                  Lợi thế tố chất: {choice.check.bonus_traits.join(', ')}
                                 </span>
                               )}
                             </div>
                           )}
                         </div>
+                      </div>
 
-                        {/* Missing Clues Warning */}
-                        {isUnderUncertainty && (
-                          <div className="mt-2.5 text-[11px] text-amber-300/90 font-mono flex items-center gap-1.5 pt-2 border-t border-slate-800/80">
-                            <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-                            <span>Cần khám phá thêm manh mối: {missingKnowledge.map(k => KNOWLEDGE_LABELS[k]?.label || k).join(", ")}</span>
-                          </div>
-                        )}
-
-                        {isSelected && (
-                          <div className="mt-4 pt-4 border-t border-slate-800/80 space-y-3.5 animate-in fade-in">
-                            {/* Strategic Negotiation Safeguard Clauses (Bản Giao Kèo Đàm Phán) */}
-                            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2.5">
-                              <div className="flex items-center justify-between text-xs flex-wrap gap-2">
-                                <span className="font-bold text-slate-200 flex items-center gap-1.5">
-                                  <Shield className="w-3.5 h-3.5 text-indigo-400" /> Điều Khoản Đảm Bảo Đàm Phán (Destiny Pact):
-                                </span>
-                                <span className="text-[10px] font-mono text-indigo-300 font-semibold px-2 py-0.5 rounded bg-indigo-950 border border-indigo-500/30">
-                                  {safeguardTerm === 'time_cap' ? 'Giới hạn 15h/tuần (-50% Burnout)' : safeguardTerm === 'deposit' ? 'Tạm ứng bảo đảm (+10% Tiền)' : 'Tiêu Chuẩn (Không ràng buộc)'}
-                                </span>
-                              </div>
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                {[
-                                  { id: 'standard', label: 'Tiêu Chuẩn', desc: 'Tự do hoàn toàn, không ràng buộc phụ' },
-                                  { id: 'time_cap', label: 'Khống Chế 15h/Tuần', desc: 'Giảm 50% nguy cơ kiệt sức / Burnout' },
-                                  { id: 'deposit', label: 'Tạm Ứng Tiền Mặt', desc: 'Tăng 10% thu nhập dòng tiền ban đầu' }
-                                ].map(opt => (
-                                  <button
-                                    key={opt.id}
-                                    type="button"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setSafeguardTerm(opt.id as any);
-                                    }}
-                                    className={`p-2.5 rounded-xl border text-left text-xs transition duration-150 ${
-                                      safeguardTerm === opt.id
-                                        ? 'bg-gradient-to-br from-indigo-950 to-purple-950/90 border-indigo-400 text-white shadow-[0_0_12px_rgba(99,102,241,0.3)] ring-1 ring-indigo-400/40'
-                                        : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
-                                    }`}
-                                  >
-                                    <div className="font-bold text-[11.5px]">{opt.label}</div>
-                                    <div className="text-[10px] text-slate-400 mt-0.5 leading-snug">{opt.desc}</div>
-                                  </button>
-                                ))}
-                              </div>
+                      {/* Selected Choice: Safeguards + AP Investment + Roll Button */}
+                      {isSelected && (
+                        <div className="mt-3.5 pt-3 border-t border-purple-500/30 space-y-3 animate-in fade-in">
+                          {/* Safeguard Options */}
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
+                              <Shield className="w-3.5 h-3.5 text-indigo-400" />
+                              <span>Điều Khoản Bảo Hộ Tâm Trí:</span>
+                            </label>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                              {[
+                                { id: 'standard', label: 'Tiêu Chuẩn', desc: 'Không ràng buộc thêm' },
+                                { id: 'time_cap', label: 'Bảo Toàn HP', desc: 'Chống tụt sâu sinh lực khi rủi ro' },
+                                { id: 'deposit', label: 'Tối Ưu Cash', desc: 'Bảo vệ dòng tiền dự phòng' }
+                              ].map(opt => (
+                                <button
+                                  key={opt.id}
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSafeguardTerm(opt.id as any);
+                                  }}
+                                  className={`p-2 rounded-xl border text-left text-xs transition duration-150 ${
+                                    safeguardTerm === opt.id
+                                      ? 'bg-gradient-to-br from-indigo-950 to-purple-950/90 border-indigo-400 text-white shadow-[0_0_12px_rgba(99,102,241,0.3)] ring-1 ring-indigo-400/40'
+                                      : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                                  }`}
+                                >
+                                  <div className="font-bold text-[11px]">{opt.label}</div>
+                                  <div className="text-[9.5px] text-slate-400 mt-0.5 leading-snug">{opt.desc}</div>
+                                </button>
+                              ))}
                             </div>
+                          </div>
 
-                            {/* Bottom Row: AP Energy Booster & Confirm Button */}
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-                              {actionPoints > 0 ? (
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="text-xs text-slate-300 font-mono flex items-center gap-1">
-                                    <Zap className="w-3.5 h-3.5 text-amber-400" />
-                                    <span>Dồn AP Trợ Lực:</span>
-                                  </span>
-                                  <div className="flex items-center gap-1.5">
-                                    {[0, 1, 2].map(ap => (
-                                      <button
-                                        key={ap}
-                                        type="button"
-                                        disabled={actionPoints < ap}
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          setApInvestment(ap);
-                                        }}
-                                        className={`px-3 py-1 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1 ${
-                                          apInvestment === ap
-                                            ? 'bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.4)]'
-                                            : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'
-                                        }`}
-                                        title={`Dồn ${ap} AP tăng tỷ lệ thành công (+${ap * 2} DC) và giảm rủi ro`}
-                                      >
-                                        <span>+{ap} AP</span>
-                                        {ap > 0 && <span className="text-[10px] opacity-80">(+{ap * 2} DC)</span>}
-                                      </button>
-                                    ))}
-                                  </div>
+                          {/* AP Energy Booster & Roll Action */}
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-1">
+                            {actionPoints > 0 ? (
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-[11px] text-slate-300 font-mono flex items-center gap-1">
+                                  <Zap className="w-3.5 h-3.5 text-amber-400" />
+                                  <span>Dồn AP:</span>
+                                </span>
+                                <div className="flex items-center gap-1.5">
+                                  {[0, 1, 2].map(ap => (
+                                    <button
+                                      key={ap}
+                                      type="button"
+                                      disabled={actionPoints < ap}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setApInvestment(ap);
+                                      }}
+                                      className={`px-2.5 py-1 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1 ${
+                                        apInvestment === ap
+                                          ? 'bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.4)]'
+                                          : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'
+                                      }`}
+                                    >
+                                      <span>+{ap} AP</span>
+                                      {ap > 0 && <span className="text-[9.5px] opacity-80">(+{ap * 2} DC)</span>}
+                                    </button>
+                                  ))}
                                 </div>
-                              ) : <div />}
+                              </div>
+                            ) : <div />}
 
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleConfirmChoice(choice.id);
-                                }}
-                                disabled={isResolving}
-                                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-500 hover:to-sky-500 text-white font-extrabold text-xs uppercase tracking-wider shadow-xl shadow-purple-600/30 transition-all active:scale-95 flex items-center justify-center gap-2 shrink-0"
-                              >
-                                {isResolving ? (
-                                  <>
-                                    <Compass className="w-4 h-4 animate-spin text-amber-300" />
-                                    <span>Đang Đổ Xúc Xắc D20...</span>
-                                  </>
-                                ) : (
-                                  <>
-                                    <span>Đổ Xúc Xắc D20 & Quyết Định</span>
-                                    <ArrowRight className="w-4 h-4" />
-                                  </>
-                                )}
-                              </button>
-                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleConfirmChoice(choice.id);
+                              }}
+                              disabled={isResolving}
+                              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-500 hover:to-sky-500 text-white font-extrabold text-xs uppercase tracking-wider shadow-xl shadow-purple-600/30 transition-all active:scale-95 flex items-center justify-center gap-2 shrink-0"
+                            >
+                              {isResolving ? (
+                                <>
+                                  <Compass className="w-4 h-4 animate-spin text-amber-300" />
+                                  <span>Đang Đổ Xúc Xắc D20...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <span>Đổ Xúc Xắc D20 & Quyết Định</span>
+                                  <ArrowRight className="w-4 h-4" />
+                                </>
+                              )}
+                            </button>
                           </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Option to Postpone Decision */}
-                <div className="mt-4 pt-3 border-t border-slate-800">
-                  <div
-                    onClick={() => setSelectedChoiceId('CHOICE_POSTPONE_OBSERVE')}
-                    className={`p-3 rounded-2xl border transition-all cursor-pointer ${
-                      selectedChoiceId === 'CHOICE_POSTPONE_OBSERVE'
-                        ? 'bg-slate-900 border-slate-400 text-white'
-                        : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-xs text-slate-300">
-                        [Trì Hoãn Quyết Định] Tiếp Tục Quan Sát & Tích Lũy Thêm (0 AP)
-                      </span>
-                      <span className="text-[10px] font-mono text-slate-400">Không tốn AP</span>
+                        </div>
+                      )}
                     </div>
+                  );
+                })}
+              </div>
 
-                    {selectedChoiceId === 'CHOICE_POSTPONE_OBSERVE' && (
-                      <div className="mt-3 pt-3 border-t border-slate-800 flex justify-end">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleConfirmChoice('CHOICE_POSTPONE_OBSERVE');
-                          }}
-                          disabled={isResolving}
-                          className="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs uppercase tracking-wider transition"
-                        >
-                          Xác Nhận Trì Hoãn & Quay Lại Cảnh 3D
-                        </button>
-                      </div>
-                    )}
+              {/* Postpone Option */}
+              <div className="pt-2 border-t border-slate-800/80">
+                <div
+                  onClick={() => setSelectedChoiceId('CHOICE_POSTPONE_OBSERVE')}
+                  className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
+                    selectedChoiceId === 'CHOICE_POSTPONE_OBSERVE'
+                      ? 'bg-slate-900 border-slate-400 text-white'
+                      : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-slate-300">
+                      [Trì Hoãn Quyết Định] Tiếp Tục Quan Sát & Tích Lũy Thêm (0 AP)
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-500">Miễn phí</span>
                   </div>
+
+                  {selectedChoiceId === 'CHOICE_POSTPONE_OBSERVE' && (
+                    <div className="mt-2.5 pt-2 border-t border-slate-800 flex justify-end">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleConfirmChoice('CHOICE_POSTPONE_OBSERVE');
+                        }}
+                        disabled={isResolving}
+                        className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs uppercase tracking-wider transition"
+                      >
+                        Xác Nhận Trì Hoãn
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       {/* =========================================================================
-          PHẦN 4: SỔ TAY TRI THỨC (JOURNAL DRAWER)
+          SỔ TAY TRI THỨC (JOURNAL DRAWER)
           ========================================================================= */}
       {showJournal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex justify-end animate-in fade-in">
@@ -2107,7 +2089,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-amber-400" />
-                  <h3 className="text-base font-bold text-white">Sổ Tay Manh Mối Cuộc Đời</h3>
+                  <h3 className="text-base font-bold text-white font-sans">Sổ Tay Manh Mối Cuộc Đời</h3>
                 </div>
                 <button
                   onClick={() => setShowJournal(false)}
@@ -2117,9 +2099,9 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
                 </button>
               </div>
 
-              <div className="space-y-2.5">
+              <div className="space-y-2.5 max-h-[75vh] overflow-y-auto custom-scrollbar">
                 {knowledgeBase.length === 0 ? (
-                  <p className="text-xs text-slate-500 italic">
+                  <p className="text-xs text-slate-500 italic font-sans">
                     Bạn chưa khám phá manh mối nào. Hãy tương tác với các đài phát quang và nhân vật trong không gian 3D.
                   </p>
                 ) : (
@@ -2129,7 +2111,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
                         <span>{KNOWLEDGE_LABELS[k]?.icon || "💡"}</span>
                         <span>{KNOWLEDGE_LABELS[k]?.label || k}</span>
                       </div>
-                      <p className="text-[11px] text-slate-400 leading-relaxed font-serif">
+                      <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
                         {KNOWLEDGE_LABELS[k]?.desc || "Thông tin đã ghi nhận từ trải nghiệm thực tế."}
                       </p>
                     </div>
@@ -2140,7 +2122,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
 
             <button
               onClick={() => setShowJournal(false)}
-              className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold"
+              className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold font-sans"
             >
               Đóng Sổ Tay
             </button>
@@ -2153,7 +2135,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
         <div className="fixed inset-0 z-[120] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
           <div className="w-full max-w-sm bg-slate-900 border border-slate-700 rounded-2xl p-5 shadow-2xl space-y-3">
             <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-              <h4 className="font-bold text-sm text-white flex items-center gap-2">
+              <h4 className="font-bold text-sm text-white flex items-center gap-2 font-sans">
                 <AlertCircle className="w-4 h-4 text-amber-400" />
                 {sceneNotice.title}
               </h4>
@@ -2161,13 +2143,13 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <p className="text-xs text-slate-300 font-serif leading-relaxed">
+            <p className="text-xs text-slate-300 font-sans leading-relaxed">
               {sceneNotice.message}
             </p>
             <div className="flex justify-end pt-2">
               <button
                 onClick={() => setSceneNotice(null)}
-                className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition"
+                className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition font-sans"
               >
                 Đã hiểu
               </button>

@@ -2184,54 +2184,9 @@ export default function LifeGraphPage() {
           </>
         )}
 
-        {/* 4. Decision Room View (First-Class Cinema Decision View) */}
+        {/* 4. Decision Room View (First-Class Cinema Decision View - Single Unified Stage) */}
         {activeView === 'decision' && (
-          <div className="w-full max-w-7xl mx-auto space-y-4 animate-in fade-in duration-300">
-            {/* Top Navigation & Life Vitals Strip for Decision Mode */}
-            <div className="p-3.5 sm:p-4 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-xl flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setActiveView('game')}
-                  className="px-3.5 py-1.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-indigo-600/30 transition active:scale-95 group"
-                >
-                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-                  <span>Trở Về Cockpit Sinh Tồn</span>
-                  <kbd className="hidden sm:inline px-1.5 py-0.5 rounded bg-indigo-900/60 border border-indigo-400/30 text-[10px] font-mono">D</kbd>
-                </button>
-                <div className="h-5 w-px bg-[var(--border-subtle)] hidden sm:block" />
-                <div className="flex items-center gap-2">
-                  <span className="text-base">🎬</span>
-                  <div>
-                    <h2 className="text-xs sm:text-sm font-bold text-[var(--text-primary)]">
-                      {activeScenario ? (activeScenario.title || "Phòng Quyết Định 21:9") : "Phòng Trầm Tư & Chiêm Nghiệm"}
-                    </h2>
-                    <p className="text-[11px] text-[var(--text-secondary)]">
-                      {activeScenario ? "Đối thoại nhân vật & thu thập manh mối để tăng tỷ lệ thành công" : "Tĩnh tâm, rà soát mục tiêu và chuẩn bị cho cột mốc tiếp theo"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Vitals Quick Glance */}
-              <div className="flex items-center gap-2 sm:gap-3 text-xs font-bold">
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300">
-                  <Heart className="w-3.5 h-3.5 fill-rose-500/30 text-rose-400" />
-                  <span>{character?.vitality ?? 80}/{character?.max_vitality ?? 100}</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-950/40 border border-amber-500/30 text-amber-300">
-                  <Flame className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{character?.burnout ?? 0}%</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-300">
-                  <span>⚡</span>
-                  <span>{character?.action_points ?? 0} AP</span>
-                </div>
-                <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-sky-950/40 border border-sky-500/30 text-sky-300 font-mono">
-                  <span>${(Number(character?.cash) || 0).toLocaleString()}</span>
-                </div>
-              </div>
-            </div>
-
+          <div className="w-full max-w-7xl mx-auto animate-in fade-in duration-300">
             {/* Embedded 3D Interactive Cinema Decision Scene */}
             <InteractiveScene2D
               character={character}

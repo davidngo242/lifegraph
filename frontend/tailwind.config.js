@@ -17,8 +17,9 @@ module.exports = {
           'sans-serif',
         ],
         serif: [
-          '"Merriweather"',
           '"Lora"',
+          '"Be Vietnam Pro"',
+          '"Merriweather"',
           'Georgia',
           'Cambria',
           'serif',
