@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { X, Film, Sparkles, ChevronLeft, Volume2, Shield } from 'lucide-react';
+import { ChevronLeft, Film, Sparkles, Compass, Clapperboard, MousePointerClick } from 'lucide-react';
 import InteractiveScene2D from './InteractiveScene2D';
 
 interface CinemaDecisionRoomModalProps {
@@ -23,43 +23,103 @@ export default function CinemaDecisionRoomModal({
 }: CinemaDecisionRoomModalProps) {
   if (!isOpen) return null;
 
+  const age = character?.age ?? 25;
+  const currentCity = character?.current_city || character?.nationality || "Việt Nam";
+  const scenarioTitle = activeScenario?.title || "Phòng Ra Quyết Định · Không Gian Đối Thoại Vận Mệnh";
+  const scenarioDesc = activeScenario?.description || "Mỗi ngã rẽ cuộc đời là một thước phim bất khả hồi... Manh mối quá khứ đang soi tỏ bước ngoặt tương lai.";
+
   return (
-    <div className="fixed inset-0 z-50 bg-black flex flex-col justify-between overflow-hidden animate-in fade-in duration-300">
-      {/* 21:9 Top Cinematic Letterbox Bar */}
-      <div className="h-14 sm:h-16 bg-slate-950/95 border-b border-slate-800/80 px-4 sm:px-8 flex items-center justify-between z-30 shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-purple-600/20 border border-purple-500/40 text-purple-300 text-xs font-bold">
-            <Film className="w-3.5 h-3.5 text-purple-400" />
-            <span>CINEMA MODE · 21:9</span>
-          </div>
-          <div className="hidden sm:block h-4 w-px bg-slate-800" />
-          <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide truncate max-w-md">
-            {activeScenario?.title || "Phòng Ra Quyết Định · Không Gian Đối Thoại Vận Mệnh"}
-          </h3>
+    <div className="fixed inset-0 z-50 bg-[var(--bg-canvas)] flex flex-col justify-between overflow-hidden animate-in fade-in duration-300 select-none">
+      {/* =========================================================================
+          1. TOP CINEMATIC 21:9 LETTERBOX BAR (Hollywood Production Header)
+          ========================================================================= */}
+      <div className="relative z-30 bg-[var(--bg-header)]/95 backdrop-blur-xl border-b border-[var(--border-subtle)] text-[var(--text-primary)] shadow-2xl shrink-0 flex flex-col transition-colors duration-200">
+        {/* Vintage 35mm Film Reel Perforations Strip */}
+        <div className="w-full flex items-center justify-between overflow-hidden opacity-40 py-1 px-2 border-b border-white/5 bg-black/20">
+          {Array.from({ length: 36 }).map((_, i) => (
+            <div
+              key={i}
+              className="w-2.5 h-1 sm:w-3 sm:h-1.5 rounded-[1.5px] bg-black/90 border border-white/10 shrink-0 mx-1 shadow-inner"
+            />
+          ))}
         </div>
 
-        <div className="flex items-center gap-3">
-          <span className="hidden md:inline text-[11px] text-slate-400 font-sans">
-            Tương tác nhân vật & Thu thập manh mối ngã rẽ
-          </span>
-          <button
-            onClick={onClose}
-            className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500 text-xs font-bold flex items-center gap-1.5 transition active:scale-95 shadow-md"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            <span>Trở Về Cockpit</span>
-          </button>
+        {/* Main Header Content */}
+        <div className="h-14 sm:h-16 px-4 sm:px-8 flex items-center justify-between gap-4">
+          {/* Left: Live Take Indicator & Scenario Title */}
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+            {/* Live Camera Recording Badge */}
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/70 border border-rose-500/40 text-rose-300 text-xs font-mono font-bold shadow-[0_0_15px_rgba(244,63,94,0.2)] shrink-0">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500 shadow-[0_0_8px_#f43f5e]"></span>
+              </span>
+              <span className="tracking-widest uppercase font-extrabold text-[10px] sm:text-[11px] text-rose-300 hidden xs:inline">
+                CINEMA 21:9 · LIVE TAKE
+              </span>
+              <span className="tracking-widest uppercase font-extrabold text-[10px] text-rose-300 xs:hidden">
+                21:9
+              </span>
+            </div>
+
+            <div className="hidden sm:block h-5 w-px bg-[var(--border-subtle)]" />
+
+            {/* Scenario Title with Artistic Serif & Age Badge */}
+            <div className="flex items-center gap-2.5 min-w-0">
+              <h3 className="font-serif text-xs sm:text-base font-semibold text-[var(--text-primary)] tracking-wide italic truncate drop-shadow">
+                {scenarioTitle}
+              </h3>
+              <div className="hidden md:flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[11px] font-sans font-bold text-amber-300 shrink-0">
+                <Sparkles className="w-3 h-3 text-amber-400" />
+                <span>Tuổi {age}</span>
+                <span className="text-[var(--text-secondary)]">•</span>
+                <span className="text-[var(--text-secondary)] font-normal truncate max-w-[120px]">{currentCity}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Return to Cockpit Action Button */}
+          <div className="flex items-center gap-3 shrink-0">
+            <button
+              onClick={onClose}
+              className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.08)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:border-[var(--border-highlight)] text-xs font-bold flex items-center gap-2 transition active:scale-95 shadow-lg group"
+            >
+              <ChevronLeft className="w-4 h-4 text-sky-400 group-hover:-translate-x-0.5 transition-transform" />
+              <span className="hidden sm:inline">Trở Về Cockpit</span>
+              <span className="sm:hidden">Cockpit</span>
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-[var(--text-secondary)] group-hover:text-amber-300 transition">
+                Esc
+              </kbd>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Main Cinematic Viewport Stage (Interactive 3D Living Room) */}
-      <div className="flex-1 relative w-full overflow-y-auto overflow-x-hidden bg-slate-950">
-        <div className="max-w-6xl mx-auto p-2 sm:p-4 h-full flex flex-col justify-center">
+      {/* =========================================================================
+          2. MAIN CINEMATIC VIEWPORT STAGE (Anamorphic Lens & 3D Interactive World)
+          ========================================================================= */}
+      <div className="flex-1 relative w-full overflow-y-auto overflow-x-hidden bg-[var(--bg-canvas)]">
+        {/* Anamorphic Lens Flare Overlay Effects (Top Left Cyan & Top Right Amber) */}
+        <div className="absolute top-0 left-0 w-80 sm:w-96 h-28 sm:h-36 bg-gradient-to-br from-cyan-500/15 via-sky-400/5 to-transparent blur-3xl pointer-events-none z-10" />
+        <div className="absolute top-1 left-6 w-56 sm:w-72 h-[1.5px] bg-gradient-to-r from-cyan-400/60 via-sky-300/30 to-transparent blur-[0.5px] pointer-events-none z-10" />
+
+        <div className="absolute top-0 right-0 w-80 sm:w-96 h-28 sm:h-36 bg-gradient-to-bl from-amber-500/15 via-yellow-400/5 to-transparent blur-3xl pointer-events-none z-10" />
+        <div className="absolute top-1 right-6 w-56 sm:w-72 h-[1.5px] bg-gradient-to-l from-amber-400/60 via-yellow-300/30 to-transparent blur-[0.5px] pointer-events-none z-10" />
+
+        {/* Cinematic Vignette Overlay (Dark edges drawing focus to center stage) */}
+        <div
+          className="absolute inset-0 pointer-events-none z-20"
+          style={{
+            background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.45) 85%, rgba(0, 0, 0, 0.82) 100%)'
+          }}
+        />
+
+        {/* Stage Content */}
+        <div className="relative z-10 max-w-6xl mx-auto p-2 sm:p-4 h-full flex flex-col justify-center">
           <InteractiveScene2D
             character={character}
             onScenarioResolved={(res) => {
               if (onScenarioResolved) onScenarioResolved(res);
-              // Option to keep open or return to cockpit
             }}
             onAdvanceYear={onAdvanceYear}
             onBackToCockpit={onClose}
@@ -67,16 +127,58 @@ export default function CinemaDecisionRoomModal({
         </div>
       </div>
 
-      {/* 21:9 Bottom Cinematic Letterbox Bar */}
-      <div className="h-10 sm:h-12 bg-slate-950/95 border-t border-slate-800/80 px-4 sm:px-8 flex items-center justify-between z-30 shrink-0 text-[11px] text-slate-400 font-sans">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>Góc nhìn điện ảnh toàn cảnh · Quyết định của bạn sẽ định hình toàn bộ dòng đời nhân vật.</span>
+      {/* =========================================================================
+          3. BOTTOM CINEMATIC 21:9 LETTERBOX BAR (Director Subtitles & Key Hints)
+          ========================================================================= */}
+      <div className="relative z-30 bg-[var(--bg-header)]/95 backdrop-blur-xl border-t border-[var(--border-subtle)] text-[var(--text-primary)] shadow-2xl shrink-0 flex flex-col transition-colors duration-200">
+        {/* Main Footer Content */}
+        <div className="py-2 sm:py-2.5 px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
+          {/* Left / Center: Dramatic Director Subtitle Ticker */}
+          <div className="flex items-center gap-2.5 text-center sm:text-left min-w-0 max-w-2xl">
+            <Clapperboard className="w-3.5 h-3.5 text-amber-400 shrink-0 hidden sm:block" />
+            <p className="font-serif italic text-xs sm:text-[13px] text-[var(--text-primary)]/90 tracking-wide line-clamp-1">
+              "{scenarioDesc}"
+            </p>
+          </div>
+
+          {/* Right: Intuitive Keyboard Shortcuts & Hotkey Badges */}
+          <div className="flex items-center gap-3 text-[11px] text-[var(--text-secondary)] font-sans shrink-0">
+            <span className="flex items-center gap-1">
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-sky-300 font-bold">
+                Esc
+              </kbd>
+              <span className="hidden xs:inline">Cockpit</span>
+            </span>
+
+            <span className="text-[var(--border-subtle)]">•</span>
+
+            <span className="flex items-center gap-1">
+              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-300 font-bold">
+                <MousePointerClick className="w-3 h-3 text-amber-400" />
+                <span>Hotspot</span>
+              </span>
+              <span className="hidden md:inline">Manh Mối</span>
+            </span>
+
+            <span className="text-[var(--border-subtle)]">•</span>
+
+            <span className="flex items-center gap-1">
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-emerald-300 font-bold">
+                1, 2, 3
+              </kbd>
+              <span className="hidden xs:inline">Ngã Rẽ</span>
+            </span>
+          </div>
         </div>
-        <div className="hidden sm:flex items-center gap-3 text-slate-500">
-          <span>Nhấn 'Trở Về Cockpit' bất kỳ lúc nào</span>
-          <span>•</span>
-          <span>LifeGraph Cinematic Engine</span>
+
+        {/* Vintage 35mm Film Reel Perforations Strip at Bottom Edge */}
+        <div className="w-full flex items-center justify-between overflow-hidden opacity-40 py-1 px-2 border-t border-white/5 bg-black/20">
+          {Array.from({ length: 36 }).map((_, i) => (
+            <div
+              key={i}
+              className="w-2.5 h-1 sm:w-3 sm:h-1.5 rounded-[1.5px] bg-black/90 border border-white/10 shrink-0 mx-1 shadow-inner"
+            />
+          ))}
         </div>
       </div>
     </div>
