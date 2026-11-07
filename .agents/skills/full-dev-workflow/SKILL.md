@@ -86,12 +86,17 @@ flowchart TD
 > Toàn bộ nhân viên, subagent và các lượt phát triển tiếp theo **BẮT BUỘC TUÂN THỦ 100%** các đặc tả kiến trúc cốt lõi dưới đây đã được Sếp phê duyệt:
 
 ### 4.1. Đại Thụ Sinh Mệnh Toàn Năng (The Grand Unified Dynamic Life Tree)
-* **Khai tử Bảng Thẻ (Sunset Legacy Card Grid):** Xóa bỏ hoàn toàn dạng hiển thị thẻ xám hình chữ nhật tĩnh và nút gạt chế độ. Toàn bộ không gian hành động của game là **Cây Sinh Mệnh Động duy nhất**.
+* **Khai tử Bảng Thẻ & Tách Rời (Sunset Legacy Card Grid):** Toàn bộ không gian sinh mệnh của game là **Cây Sinh Mệnh Động duy nhất (`DynamicLifeTree.tsx`)**, không còn phân mảnh hay để thất lạc các hệ thống tiến trình.
 * **Cấu Trúc Hợp Nhất 3 Trụ Cột Đời Người:**
   1. **Gốc Rễ (Roots - Chân Cây / Hướng Nam):** Gia Đình & Cội Nguồn (Phụ mẫu, Gia phong gia truyền, Tương tác 1-click Bữa cơm +10 HP / Lời khuyên +8 Karma, Nút mở Phả Hệ Dòng Tộc).
-  2. **Cành Hoàng Kim (Golden Branch - Góc Trên Phải / Đông Bắc):** Tài Sản & Thịnh Vượng (Dòng tiền mặt, Tổng tài sản ròng, Số lượng BĐS/Cổ phiếu, Nút mở Sàn Giao Dịch Tài Sản).
-  3. **Nhánh Tinh Hoa (Mystic Branch - Góc Trên Trái / Tây Bắc):** Kỹ Năng & Trí Tuệ (Cấp độ nhân sinh Lv, Điểm SP khả dụng, Nút mở Cây Kỹ Năng RPG, Phím tắt kích hoạt nhanh Lướt Sóng 📈, Thiền Định 🧘, Tiệc VIP 🥂).
-  4. **Lõi Thần Mộc & Tán Lá (Trunk & Canopy - Trung Tâm):** Điểm AP phát quang, Các Node Vệ Tinh Hành Động quay quanh trục bằng đường cong Bezier chuyển động hạt năng lượng theo tuổi (Ấu thơ 0-5t, Học trò 6-17t, Trưởng thành 18+t), Đột Phá Tiên Thiên (2 AP) tại đỉnh cây, Phím tắt chuyển nhanh thời gian.
+  2. **Cành Hoàng Kim (Golden Branch - Đông Bắc):** Tài Sản & Thịnh Vượng (Dòng tiền mặt, Tổng tài sản ròng, Số lượng BĐS/Cổ phiếu, Nút mở Sàn Giao Dịch Tài Sản).
+  3. **Nhánh Tinh Hoa (Mystic Branch - Tây Bắc):** Kỹ Năng & Trí Tuệ (Cấp độ nhân sinh Lv, Điểm SP khả dụng, Nút 1-click mở Cây Kỹ Năng RPG, Phím tắt kích hoạt nhanh Lướt Sóng 📈, Thiền Định 🧘, Tiệc VIP 🥂).
+  4. **Nhánh Nhân Mạch Quý Nhân (Social Links Branch - Trung Tâm Tán Lá):** Mạng lưới 4 NPC Archetypes (Quý Nhân Bảo Trợ, Chiến Hữu Tri Kỷ, Kình Địch Thương Trường, Hậu Bối Kế Thừa), tương tác 1 AP trò chuyện, tặng quà, và đặc quyền mượn lực giải cứu khi bĩ cực (`request_favor`).
+  5. **Lõi Thần Mộc & Tán Lá (Trunk & Canopy - Trung Tâm):** Điểm AP phát quang, Các Node Vệ Tinh Hành Động quay quanh trục bằng đường cong Bezier chuyển động hạt năng lượng theo tuổi (Ấu thơ 0-5t, Học trò 6-17t, Trưởng thành 18+t), Đột Phá Tiên Thiên (2 AP) tại đỉnh cây, Phím tắt chuyển nhanh thời gian.
+* **3 Chế Độ Góc Nhìn Sinh Thái Tích Hợp (`treeViewMode`):**
+  - `🌿 Vòng Đời & Hành Động`: Lõi thần mộc điều khiển AP và bước ngoặt tuổi tác.
+  - `🌟 Cây Kỹ Năng`: Toàn bộ Cây Kỹ Năng 3 nhánh Tri-Branch RPG Build (`SkillTreeTab.tsx`) & Cộng Hưởng Thần Mộc (`TREE_RESONANCES`).
+  - `👥 Nhân Mạch Quý Nhân`: Mạng lưới xã hội chuyên sâu (`SocialLinksTab.tsx`) với thanh đo Hảo cảm (Link Level 1 -> 5) và các ân huệ đặc quyền.
 
 ### 4.2. Quy Chuẩn Universal Zero-Clipping Tooltips
 * Tuyệt đối không để text bị cắt cụt dạng `...` thô kệch trên màn hình.
@@ -107,3 +112,18 @@ flowchart TD
 
 ### 4.4. Quy Tắc Không Trùng Lặp Chỉ Số (Zero Metric Duplication)
 * Mỗi thông số lớn (như Khát Vọng Đời Người, Điểm AP) chỉ được có 1 vị trí hiển thị trọng tâm duy nhất trên màn hình, tuyệt đối không lặp lại ở cả Hero Banner lẫn Sidebar gây rối mắt.
+
+### 4.5. Kiến Trúc Đại Thụ Kỹ Năng Tam Vị Nhất Thể (The Trinity Life Mastery RPG Tree)
+* Tích hợp 3 trụ cột sinh mệnh RPG:
+  - 🌿 **Gia Phong & Huyết Thống (`social`)**: Gốc rễ dòng tộc, chữ hiếu gia phong, nuôi dạy con cháu và thừa kế gia phả bất diệt (`charisma_magnet`, `leverage_power`, `syndicate_kingmaker`).
+  - 🪙 **Tư Bản & Sản Nghiệp (`wealth`)**: Thâu tóm sản nghiệp hoàng kim, đàm phán sắc bén, đòn bẩy thị trường và cỗ máy dòng tiền tự động (`market_sense_1`, `negotiation_master`, `capital_engine`).
+  - 🔮 **Thân Tâm & Trí Tuệ (`sage`)**: Khắc kỷ tịnh tâm giải tỏa kiệt sức, bách khoa toàn thư thi cử và giác ngộ nghiệp quả trường sinh (`stoic_mind`, `encyclopedic_brain`, `transcendence_sage`).
+* **Hệ Thống Cộng Hưởng Tam Giác Sinh Mệnh (Triangle Resonance Synergies)**:
+  - 🏛️ *Quỹ Tín Thác Gia Tộc (Gia Phong + Tư Bản)*: Yêu cầu Cấp 2 cả 2 nhánh. Cắt giảm 50% chi phí duy trì dinh thự và bảo lãnh vay vốn 0% lãi suất khi khủng hoảng.
+  - 🚀 *Kỳ Lân Đổi Mới (Tư Bản + Trí Tuệ)*: Yêu cầu Cấp 2 cả 2 nhánh. Tăng +15% cổ tức tài chính hàng năm và giảm 30% kiệt sức khi làm việc trí óc.
+  - 📜 *Danh Gia Trí Thức (Gia Phong + Trí Tuệ)*: Yêu cầu Cấp 2 cả 2 nhánh. Tích lũy +15 Karma danh vọng gia tộc mỗi năm và tăng tỉ lệ con cái sinh ra mang gen Thần Đồng.
+  - 🌟 *Tam Vị Nhất Thể Hoàn Hảo (Đại Cảnh Giới)*: Mở khóa Cấp 3 cả 3 nhánh. Bảo tồn 100% Karma luân hồi, thưởng +25 Karma tối thượng/năm và vĩnh viễn +2 AP khởi đầu mọi kiếp sau.
+
+### 4.6. Quy Chuẩn Độc Quyền Dòng Chảy Nhật Ký Cột Phải (Dedicated Life Chronicle Stream)
+* Cột phải (`MultiTabSidebar.tsx`) dành riêng 100% diện tích cho `Nhật Ký Hành Trình Cuộc Đời` (`NarrativeFeed.tsx`).
+* Tuyệt đối cấm tạo lại các tab Gia Đình, Tài Sản, Kỹ Năng ở cột phải để tránh phân mảnh dữ liệu với Đại Thụ Sinh Mệnh bên trái. Mọi thao tác tương tác sâu được quy hoạch vào các modal chuyên biệt: `FamilyDetailModal`, `AssetDetailModal`, `SkillTreeModal`.

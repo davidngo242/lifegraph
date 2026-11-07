@@ -19,7 +19,7 @@ import AnnualDigestBanner, { AnnualDigestData } from './components/AnnualDigestB
 import EmergencyNotificationHub, { EmergencyAlert } from './components/EmergencyNotificationHub';
 import AudioVolumeControl from './components/AudioVolumeControl';
 import KarmaSanctumModal from './components/KarmaSanctumModal';
-import SkillSelectorModal from './components/SkillSelectorModal';
+import SkillTreeModal from './components/SkillTreeModal';
 import MultiTabSidebar from './components/MultiTabSidebar';
 import CharacterHeroBanner, { BannerActionFeedback } from './components/CharacterHeroBanner';
 import AvatarInspectorModal from './components/AvatarInspectorModal';
@@ -1541,15 +1541,19 @@ export default function LifeGraphPage() {
 
       {/* Multi-Skill Training Catalog Modal */}
       {showSkillSelector && (
-        <SkillSelectorModal
-          characterAge={character?.age || 0}
+        <SkillTreeModal
           character={character}
-          onRegisterExam={handleRegisterSkillExam}
-          onSelectSkill={(gameType) => {
+          skillPoints={character?.skill_points || 0}
+          unlockedSkills={character?.unlocked_skills || []}
+          onUnlockSkill={handleUnlockSkill}
+          onLaunchMiniGame={(gameType) => {
             setShowSkillSelector(false);
             launchMiniGame(gameType);
           }}
+          relationships={relationships}
+          assets={assets}
           onClose={() => setShowSkillSelector(false)}
+          isLoading={loading}
         />
       )}
 

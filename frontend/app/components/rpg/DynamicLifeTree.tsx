@@ -29,6 +29,8 @@ import {
 } from 'lucide-react';
 import Tooltip from '../Tooltip';
 import { formatCurrency } from '../../utils/currencyUtils';
+import SkillTreeTab from './SkillTreeTab';
+import SocialLinksTab from './SocialLinksTab';
 
 export interface LifeTreeNode {
   id: string;
@@ -77,6 +79,8 @@ export interface DynamicLifeTreeProps {
   onOpenAssets?: () => void;
   onOpenFamily?: () => void;
   onOpenSkillHub?: () => void;
+  onUnlockSkill?: (skillId: string) => Promise<void>;
+  onNpcInteract?: (npcId: string, actionType: 'socialize' | 'gift' | 'request_favor') => Promise<void>;
   onFamilyMeal?: () => void;
   onFamilyMentorship?: () => void;
   onRpgActivePerk?: (type: string) => void;
@@ -102,11 +106,14 @@ export default function DynamicLifeTree({
   onOpenAssets,
   onOpenFamily,
   onOpenSkillHub,
+  onUnlockSkill,
+  onNpcInteract,
   onFamilyMeal,
   onFamilyMentorship,
   onRpgActivePerk,
   isLoading = false
 }: DynamicLifeTreeProps) {
+  const [treeViewMode, setTreeViewMode] = useState<'life_actions' | 'skill_tree' | 'social_links'>('life_actions');
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [pulseActiveId, setPulseActiveId] = useState<string | null>(null);
 
@@ -575,104 +582,177 @@ export default function DynamicLifeTree({
       </div>
 
       {/* ========================================================================= */}
-      {/* 2 MAIN PILLARS: NHÁNH KỸ NĂNG (TÂY BẮC) & NHÁNH TÀI SẢN (ĐÔNG BẮC) */}
+      {/* 3 UNIFIED ECOSYSTEM TABS (ĐẠI THỤ SINH MỆNH TOÀN NĂNG) */}
       {/* ========================================================================= */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 relative z-10">
-        {/* PILLAR 1: KỸ NĂNG & THẦN THÁI (TÂY BẮC) */}
-        <div className="p-2.5 rounded-2xl bg-gradient-to-r from-purple-950/60 via-slate-900 to-slate-950 border border-purple-500/30 flex items-center justify-between gap-2 shadow-md">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-sm shrink-0">
-              🔮
+      <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-900/90 border border-slate-800 w-full sm:w-fit self-start shrink-0 relative z-10 flex-wrap">
+        <button
+          type="button"
+          onClick={() => setTreeViewMode('life_actions')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition ${
+            treeViewMode === 'life_actions'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 shadow-md shadow-emerald-500/25'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <span>🌿 Vòng Đời & Hành Động</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setTreeViewMode('skill_tree')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition ${
+            treeViewMode === 'skill_tree'
+              ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-md shadow-purple-500/25'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <span>🌟 Cây Kỹ Năng</span>
+          {(character?.skill_points || 0) > 0 && (
+            <span className="px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 text-[10px] font-mono font-black animate-pulse">
+              +{character.skill_points} SP
             </span>
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-[10px] font-bold text-purple-300 uppercase tracking-wider">
-                  Nhánh Kỹ Năng & Trí Tuệ
-                </span>
-                {(character?.skill_points || 0) > 0 && (
-                  <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-pulse">
-                    +{character.skill_points} SP
-                  </span>
-                )}
-              </div>
-              <div className="text-xs font-bold text-white truncate">
-                Lv.{character?.life_level || 1} · {character?.unlocked_skills?.length || 0} Tố Chất Đã Rèn
-              </div>
-            </div>
-          </div>
+          )}
+        </button>
 
-          <div className="flex items-center gap-1.5 shrink-0">
-            {/* Quick Skill Perks */}
-            {onRpgActivePerk && character?.unlocked_skills?.includes('market_sense_1') && (
-              <Tooltip content="Lướt sóng cổ phiếu: Dùng 1 AP chớp thời cơ thị trường sinh lời">
-                <button
-                  disabled={isLoading || actionPoints < 1}
-                  onClick={() => onRpgActivePerk('stock_trading')}
-                  className="p-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/40 text-emerald-300 text-xs transition"
-                >
-                  📈
-                </button>
-              </Tooltip>
-            )}
-            {onRpgActivePerk && character?.unlocked_skills?.includes('stoic_mind_1') && (
-              <Tooltip content="Thiền định siêu việt: Dùng 1 AP xóa tan Burnout kiệt sức">
-                <button
-                  disabled={isLoading || actionPoints < 1}
-                  onClick={() => onRpgActivePerk('zen_meditation')}
-                  className="p-1.5 rounded-lg bg-indigo-950/80 hover:bg-indigo-900 border border-indigo-500/40 text-indigo-300 text-xs transition"
-                >
-                  🧘
-                </button>
-              </Tooltip>
-            )}
-
-            {onOpenSkillHub && (
-              <button
-                type="button"
-                onClick={onOpenSkillHub}
-                className="px-2.5 py-1.5 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/50 text-purple-200 text-[11px] font-bold transition flex items-center gap-1 active:scale-95"
-              >
-                <span>Cây Kỹ Năng</span>
-                <ArrowUpRight className="w-3 h-3" />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* PILLAR 2: TÀI SẢN & THỊNH VƯỢNG (ĐÔNG BẮC) */}
-        <div className="p-2.5 rounded-2xl bg-gradient-to-r from-amber-950/50 via-slate-900 to-slate-950 border border-amber-500/30 flex items-center justify-between gap-2 shadow-md">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-sm shrink-0">
-              🪙
-            </span>
-            <div className="min-w-0">
-              <span className="text-[10px] font-bold text-amber-300 uppercase tracking-wider block">
-                Cành Hoàng Kim Tài Sản
-              </span>
-              <div className="text-xs font-bold text-white truncate flex items-center gap-1.5">
-                <span className="text-emerald-400 font-mono">{formattedCash.primary}</span>
-                <span className="text-slate-500 text-[10px]">• Ròng {formattedNetWorth.primary}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1.5 shrink-0">
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-950 text-amber-300 border border-amber-500/20">
-              {assets.length} Tài sản
-            </span>
-            {onOpenAssets && (
-              <button
-                type="button"
-                onClick={onOpenAssets}
-                className="px-2.5 py-1.5 rounded-xl bg-amber-600/30 hover:bg-amber-600/50 border border-amber-500/50 text-amber-200 text-[11px] font-bold transition flex items-center gap-1 active:scale-95"
-              >
-                <span>Sàn Tài Sản</span>
-                <ArrowUpRight className="w-3 h-3" />
-              </button>
-            )}
-          </div>
-        </div>
+        <button
+          type="button"
+          onClick={() => setTreeViewMode('social_links')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition ${
+            treeViewMode === 'social_links'
+              ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md shadow-sky-500/25'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <span>👥 Nhân Mạch Quý Nhân</span>
+          <span className="px-1.5 py-0.2 rounded-full bg-sky-950 text-sky-300 border border-sky-500/40 text-[10px] font-mono font-bold">
+            {character?.social_links?.length || 4}
+          </span>
+        </button>
       </div>
+
+      {treeViewMode === 'life_actions' && (
+        <>
+          {/* ========================================================================= */}
+          {/* 3 SACRED CANOPY PILLARS: KỸ NĂNG (TÂY BẮC), NHÂN MẠCH (TRUNG TÂM), TÀI SẢN (ĐÔNG BẮC) */}
+          {/* ========================================================================= */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 relative z-10">
+            {/* PILLAR 1: KỸ NĂNG & TRÍ TUỆ (TÂY BẮC) */}
+            <div className="p-2.5 rounded-2xl bg-gradient-to-br from-purple-950/60 via-slate-900 to-slate-950 border border-purple-500/30 flex items-center justify-between gap-2 shadow-md">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-sm shrink-0">
+                  🔮
+                </span>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-[10px] font-bold text-purple-300 uppercase tracking-wider">
+                      Nhánh Kỹ Năng
+                    </span>
+                    {(character?.skill_points || 0) > 0 && (
+                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-pulse">
+                        +{character.skill_points} SP
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-xs font-bold text-white truncate">
+                    Lv.{character?.life_level || 1} · {character?.unlocked_skills?.length || 0} Tố Chất
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1 shrink-0">
+                {onRpgActivePerk && character?.unlocked_skills?.includes('market_sense_1') && (
+                  <Tooltip content="Lướt sóng cổ phiếu: Dùng 1 AP chớp thời cơ thị trường sinh lời">
+                    <button
+                      disabled={isLoading || actionPoints < 1}
+                      onClick={() => onRpgActivePerk('stock_trading')}
+                      className="p-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/40 text-emerald-300 text-xs transition"
+                    >
+                      📈
+                    </button>
+                  </Tooltip>
+                )}
+                {onRpgActivePerk && character?.unlocked_skills?.includes('stoic_mind_1') && (
+                  <Tooltip content="Thiền định siêu việt: Dùng 1 AP xóa tan Burnout kiệt sức">
+                    <button
+                      disabled={isLoading || actionPoints < 1}
+                      onClick={() => onRpgActivePerk('zen_meditation')}
+                      className="p-1 rounded-lg bg-indigo-950/80 hover:bg-indigo-900 border border-indigo-500/40 text-indigo-300 text-xs transition"
+                    >
+                      🧘
+                    </button>
+                  </Tooltip>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setTreeViewMode('skill_tree')}
+                  className="px-2 py-1 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/50 text-purple-200 text-[10.5px] font-bold transition flex items-center gap-1 active:scale-95"
+                >
+                  <span>Mở Cây</span>
+                  <ArrowUpRight className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+
+            {/* PILLAR 2: NHÂN MẠCH QUÝ NHÂN */}
+            <div className="p-2.5 rounded-2xl bg-gradient-to-br from-sky-950/60 via-slate-900 to-slate-950 border border-sky-500/30 flex items-center justify-between gap-2 shadow-md">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="w-8 h-8 rounded-xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sm shrink-0">
+                  👥
+                </span>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-[10px] font-bold text-sky-300 uppercase tracking-wider">
+                      Nhân Mạch Quý Nhân
+                    </span>
+                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40 font-mono">
+                      {character?.social_links?.length || 4}
+                    </span>
+                  </div>
+                  <div className="text-xs font-bold text-white truncate">
+                    {character?.social_links?.filter((n: any) => n.linkLevel >= 2).length || 0} Quý Nhân Thân Thiết
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setTreeViewMode('social_links')}
+                className="px-2 py-1 rounded-xl bg-sky-600/30 hover:bg-sky-600/50 border border-sky-500/50 text-sky-200 text-[10.5px] font-bold transition flex items-center gap-1 active:scale-95 shrink-0"
+              >
+                <span>Giao Lưu</span>
+                <ArrowUpRight className="w-3 h-3" />
+              </button>
+            </div>
+
+            {/* PILLAR 3: CÀNH HOÀNG KIM TÀI SẢN (ĐÔNG BẮC) */}
+            <div className="p-2.5 rounded-2xl bg-gradient-to-br from-amber-950/50 via-slate-900 to-slate-950 border border-amber-500/30 flex items-center justify-between gap-2 shadow-md">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-sm shrink-0">
+                  🪙
+                </span>
+                <div className="min-w-0">
+                  <span className="text-[10px] font-bold text-amber-300 uppercase tracking-wider block">
+                    Cành Hoàng Kim
+                  </span>
+                  <div className="text-xs font-bold text-white truncate flex items-center gap-1.5">
+                    <span className="text-emerald-400 font-mono">{formattedCash.primary}</span>
+                    <span className="text-slate-500 text-[10px]">• {assets.length} Tài sản</span>
+                  </div>
+                </div>
+              </div>
+
+              {onOpenAssets && (
+                <button
+                  type="button"
+                  onClick={onOpenAssets}
+                  className="px-2 py-1 rounded-xl bg-amber-600/30 hover:bg-amber-600/50 border border-amber-500/50 text-amber-200 text-[10.5px] font-bold transition flex items-center gap-1 active:scale-95 shrink-0"
+                >
+                  <span>Sàn Tài Sản</span>
+                  <ArrowUpRight className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+          </div>
 
       {/* ========================================================================= */}
       {/* SVG CANVAS: TRỤC THẦN MỘC & CÁC VỆ TINH HÀNH ĐỘNG HẰNG NĂM */}
@@ -959,6 +1039,94 @@ export default function DynamicLifeTree({
           )}
         </div>
       </div>
+    </>
+  )}
+
+  {/* ========================================================================= */}
+  {/* 4. VIEW MODE 2: CÂY KỸ NĂNG TRI-BRANCH RPG BUILD */}
+  {/* ========================================================================= */}
+  {treeViewMode === 'skill_tree' && (
+    <div className="relative z-10 space-y-3 animate-in fade-in duration-200">
+      <div className="flex items-center justify-between p-3 rounded-2xl bg-purple-950/40 border border-purple-500/30 flex-wrap gap-2">
+        <div className="flex items-center gap-2.5">
+          <span className="p-2 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/40 text-lg">
+            🌟
+          </span>
+          <div>
+            <h4 className="text-sm font-bold text-white flex items-center gap-2">
+              <span>Cây Kỹ Năng Cuộc Đời (Tri-Branch RPG Build)</span>
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-mono font-bold">
+                {character?.skill_points || 0} Điểm SP Khả Dụng
+              </span>
+            </h4>
+            <p className="text-[11px] text-slate-400">
+              Rèn luyện tố chất: Thương Trường &amp; Tài Phiệt, Uy Quyền &amp; Nhân Mạch, Tâm Thức &amp; Chân Nhân.
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => setTreeViewMode('life_actions')}
+          className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold border border-slate-700 transition active:scale-95"
+        >
+          ← Trở Về Vòng Đời
+        </button>
+      </div>
+
+      <SkillTreeTab
+        skillPoints={character?.skill_points || 0}
+        unlockedSkills={character?.unlocked_skills || []}
+        characterAge={characterAge}
+        onUnlockSkill={async (id) => {
+          if (onUnlockSkill) await onUnlockSkill(id);
+        }}
+        isLoading={isLoading}
+      />
     </div>
+  )}
+
+  {/* ========================================================================= */}
+  {/* 5. VIEW MODE 3: MẠNG LƯỚI NHÂN MẠCH QUÝ NHÂN (SOCIAL LINKS) */}
+  {/* ========================================================================= */}
+  {treeViewMode === 'social_links' && (
+    <div className="relative z-10 space-y-3 animate-in fade-in duration-200">
+      <div className="flex items-center justify-between p-3 rounded-2xl bg-sky-950/40 border border-sky-500/30 flex-wrap gap-2">
+        <div className="flex items-center gap-2.5">
+          <span className="p-2 rounded-xl bg-sky-500/20 text-sky-300 border border-sky-500/40 text-lg">
+            👥
+          </span>
+          <div>
+            <h4 className="text-sm font-bold text-white flex items-center gap-2">
+              <span>Mạng Lưới Nhân Mạch Quý Nhân (Social Links)</span>
+              <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40 text-xs font-mono font-bold">
+                {character?.social_links?.length || 4} Quý Nhân
+              </span>
+            </h4>
+            <p className="text-[11px] text-slate-400">
+              Gắn kết 4 Archetypes: Quý Nhân Bảo Trợ, Chiến Hữu Tri Kỷ, Kình Địch, Hậu Bối Kế Thừa.
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => setTreeViewMode('life_actions')}
+          className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold border border-slate-700 transition active:scale-95"
+        >
+          ← Trở Về Vòng Đời
+        </button>
+      </div>
+
+      <SocialLinksTab
+        socialLinks={character?.social_links || []}
+        actionPoints={actionPoints}
+        cash={cash}
+        onInteract={async (npcId, actionType) => {
+          if (onNpcInteract) await onNpcInteract(npcId, actionType);
+        }}
+        isLoading={isLoading}
+      />
+    </div>
+  )}
+</div>
   );
 }

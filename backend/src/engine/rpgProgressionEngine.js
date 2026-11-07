@@ -12,13 +12,51 @@ export const LEVEL_TIERS = [
   { minLevel: 71, maxLevel: 100, title: "Huyền Thoại Bất Tử", rank: "Living Legend", expPerLevel: 4000 }
 ];
 
-// Tri-Branch Skill Tree Definitions
+// Tri-Branch Trinity Skill Tree Definitions (Tam Vị Nhất Thể: Gia Phong - Tư Bản - Thân Tâm)
 export const SKILL_TREE = {
+  social: {
+    id: "social",
+    name: "🌿 Gia Phong & Huyết Thống",
+    icon: "🌿",
+    description: "Gốc rễ dòng tộc, kết nối huyết thống, nuôi dạy hiền tài và truyền thừa gia phả muôn đời.",
+    skills: [
+      {
+        id: "charisma_magnet",
+        tier: 1,
+        name: "Hiếu Đạo Gia Phong",
+        icon: "✨",
+        costSp: 1,
+        requires: null,
+        description: "Gia đạo thuận hòa, chữ hiếu làm đầu. Tăng gấp đôi tốc độ tăng cấp hảo cảm Social Link với các NPC và người thân.",
+        effects: { social_link_exp_boost: 2.0, network_cost_discount: 0.5, family_meal_bonus: true }
+      },
+      {
+        id: "leverage_power",
+        tier: 2,
+        name: "Gia Tộc Đồng Tâm",
+        icon: "⚖️",
+        costSp: 2,
+        requires: "charisma_magnet",
+        description: "Dòng họ tương trợ, quý nhân đỡ đầu. Có thể nhờ cậy quý nhân can thiệp xóa nợ xấu hoặc bảo lãnh thăng chức.",
+        effects: { unlock_npc_favor: true, crisis_bailout_available: true, housing_loan_discount: 0.4 }
+      },
+      {
+        id: "syndicate_kingmaker",
+        tier: 3,
+        name: "Đại Gia Tộc Bất Diệt",
+        icon: "🏛️",
+        costSp: 3,
+        requires: "leverage_power",
+        description: "Gia phả hiển hách, thế gia vọng tộc. Đời sau thừa hưởng trọn vẹn mạng lưới danh giá và giảm 50% thuế thừa kế.",
+        effects: { dynasty_influence_bonus: 50, patron_inheritance: true, estate_tax_relief: 0.5 }
+      }
+    ]
+  },
   wealth: {
     id: "wealth",
-    name: "Thương Trường & Tài Phiệt",
-    icon: "💼",
-    description: "Làm chủ dòng tiền, thâu tóm tài sản và tối ưu hóa lợi nhuận đầu tư.",
+    name: "🪙 Tư Bản & Sản Nghiệp",
+    icon: "🪙",
+    description: "Làm chủ dòng tiền, thâu tóm sản nghiệp hoàng kim và tự động hóa cỗ máy tài chính.",
     skills: [
       {
         id: "market_sense_1",
@@ -33,7 +71,7 @@ export const SKILL_TREE = {
       {
         id: "negotiation_master",
         tier: 2,
-        name: "Đàm Phán Khắc Nghiệt",
+        name: "Đàm Phán Sắc Bén & Đòn Bẩy",
         icon: "🤝",
         costSp: 2,
         requires: "market_sense_1",
@@ -43,7 +81,7 @@ export const SKILL_TREE = {
       {
         id: "capital_engine",
         tier: 3,
-        name: "Cỗ Máy Dòng Tiền",
+        name: "Cỗ Máy Dòng Tiền Tự Động",
         icon: "👑",
         costSp: 3,
         requires: "negotiation_master",
@@ -52,58 +90,20 @@ export const SKILL_TREE = {
       }
     ]
   },
-  social: {
-    id: "social",
-    name: "Uy Quyền & Nhân Mạch",
-    icon: "🤝",
-    description: "Mở rộng quan hệ quý nhân, thao túng cục diện xã hội và nâng đỡ gia tộc.",
-    skills: [
-      {
-        id: "charisma_magnet",
-        tier: 1,
-        name: "Hào Quang Cuốn Hút",
-        icon: "✨",
-        costSp: 1,
-        requires: null,
-        description: "Khí chất cuốn hút tự nhiên. Tăng gấp đôi tốc độ tăng cấp hảo cảm Social Link với các NPC.",
-        effects: { social_link_exp_boost: 2.0, network_cost_discount: 0.5 }
-      },
-      {
-        id: "leverage_power",
-        tier: 2,
-        name: "Mượn Gió Bẻ Măng",
-        icon: "⚖️",
-        costSp: 2,
-        requires: "charisma_magnet",
-        description: "Nhờ cậy quý nhân tháo gỡ bế tắc. Có thể yêu cầu Quý nhân can thiệp xóa nợ xấu hoặc bảo lãnh thăng chức.",
-        effects: { unlock_npc_favor: true, crisis_bailout_available: true }
-      },
-      {
-        id: "syndicate_kingmaker",
-        tier: 3,
-        name: "Đế Chế Nhân Mạch",
-        icon: "🏛️",
-        costSp: 3,
-        requires: "leverage_power",
-        description: "Nắm trong tay mạng lưới đầu sỏ. Đời sau thừa hưởng sẵn các mối quan hệ đỡ đầu danh giá từ đời trước.",
-        effects: { dynasty_influence_bonus: 50, patron_inheritance: true }
-      }
-    ]
-  },
   sage: {
     id: "sage",
-    name: "Tâm Thức & Chân Nhân",
-    icon: "🧘",
-    description: "Rèn giũa tâm trí thép, trường thọ vô ưu và tích lũy đại phước đức chuyển kiếp.",
+    name: "🔮 Thân Tâm & Trí Tuệ",
+    icon: "🔮",
+    description: "Rèn giũa tâm trí khắc kỷ, mở khóa bách khoa toàn thư và giác ngộ đại phước đức trường sinh.",
     skills: [
       {
         id: "stoic_mind",
         tier: 1,
-        name: "Tâm Lý Thép",
+        name: "Khắc Kỷ Tịnh Tâm",
         icon: "🛡️",
         costSp: 1,
         requires: null,
-        description: "Khắc kỷ vững vàng. Giảm 40% lượng Burnout phải nhận từ công việc và biến cố cuộc sống.",
+        description: "Khắc kỷ vững vàng, tâm bất biến. Giảm 40% lượng Burnout phải nhận từ công việc và biến cố cuộc sống.",
         effects: { burnout_reduction: 0.4 }
       },
       {
@@ -129,6 +129,59 @@ export const SKILL_TREE = {
     ]
   }
 };
+
+// Triangle Resonance Synergies Configuration (Cộng Hưởng Tam Giác Sinh Mệnh)
+export const TREE_RESONANCES = [
+  {
+    id: "family_trust_fund",
+    name: "Quỹ Tín Thác Gia Tộc",
+    icon: "🏛️",
+    pairNames: ["Gia Phong", "Tư Bản"],
+    reqSkills: ["leverage_power", "negotiation_master"],
+    description: "Gia tộc đồng tâm hòa quyện đòn bẩy tài chính. Giảm 50% chi phí duy trì dinh thự/tài sản và cung cấp hỗ trợ tài chính 0% lãi suất khi khủng hoảng.",
+    effects: { maintenance_discount: 0.5, zero_interest_rescue: true }
+  },
+  {
+    id: "tech_unicorn",
+    name: "Kỳ Lân Đổi Mới",
+    icon: "🚀",
+    pairNames: ["Tư Bản", "Trí Tuệ"],
+    reqSkills: ["negotiation_master", "encyclopedic_brain"],
+    description: "Tư bản nhạy bén hòa quyện bách khoa trí tuệ. Tăng +15% cổ tức thụ động từ tài sản tài chính và giảm thiểu hao tổn trí não.",
+    effects: { tech_dividend_boost: 0.15, mental_burnout_discount: 0.3 }
+  },
+  {
+    id: "scholarly_dynasty",
+    name: "Danh Gia Trí Thức",
+    icon: "📜",
+    pairNames: ["Gia Phong", "Trí Tuệ"],
+    reqSkills: ["leverage_power", "encyclopedic_brain"],
+    description: "Thế gia đạo học uyên bác. Tích lũy thêm +15 Karma danh vọng gia tộc mỗi năm và tăng tỉ lệ con cái sở hữu tố chất Thần Đồng.",
+    effects: { annual_clan_karma: 15, child_talent_rate: 0.5 }
+  },
+  {
+    id: "trinity_perfection",
+    name: "Tam Vị Nhất Thể Hoàn Hảo",
+    icon: "🌟",
+    pairNames: ["Gia Phong", "Tư Bản", "Trí Tuệ"],
+    reqSkills: ["syndicate_kingmaker", "capital_engine", "transcendence_sage"],
+    description: "Đại cảnh giới tối thượng: Gia Tộc Bất Diệt + Cỗ Máy Dòng Tiền + Giác Ngộ Niết Bàn. Thừa kế trọn vẹn phước báo luân hồi và +25 Karma tối thượng/năm.",
+    effects: { karma_preservation: 1.0, permanent_starting_ap: 2, annual_transcendence_karma: 25 }
+  }
+];
+
+export function calculateTreeResonances(unlockedSkills = []) {
+  const skillsSet = new Set(Array.isArray(unlockedSkills) ? unlockedSkills : []);
+  return TREE_RESONANCES.map(res => {
+    const fulfilled = res.reqSkills.every(req => skillsSet.has(req));
+    const activeCount = res.reqSkills.filter(req => skillsSet.has(req)).length;
+    return {
+      ...res,
+      isActive: fulfilled,
+      progress: `${activeCount}/${res.reqSkills.length}`
+    };
+  });
+}
 
 // Initial default NPC roster for a character if not yet created
 export function generateDefaultNpcs(nationality = "Việt Nam") {

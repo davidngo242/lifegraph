@@ -724,3 +724,34 @@ Nhằm xóa bỏ hoàn toàn hội chứng "chia block hình chữ nhật ngột
      - *18+ tuổi (Trưởng thành):* Cày Cuốc Kiếm Tiền, Đèn Sách Tri Thức, Dưỡng Sinh Hồi Phục, Mở Rộng Nhân Mạch, Lướt Sóng & Thử Vận.
    * Đỉnh ngọn cây: Node Đột Phá Tiên Thiên (2 AP) rực rỡ với hiệu ứng kim quang.
    * Thanh điều khiển thời gian: Phím tắt chuyển nhanh `[Lên Lớp 1 (6 tuổi)]` và `[+1 Tuổi]`.
+
+
+---
+
+## 19. Tiêu Chuẩn Đại Thụ Kỹ Năng Tam Vị Nhất Thể (The Trinity Life Mastery RPG Skill Tree v3.2)
+
+Hợp nhất Gia Đình (Huyết Thống), Tài Sản (Tư Bản) và Kỹ Năng (Thân Tâm) thành một hệ thống thăng tiến RPG liền mạch:
+
+### 19.1. Ba Nhánh Thần Mộc (Tri-Branch RPG Build)
+1. **🌿 Nhánh Gia Phong & Huyết Thống (`social`):**
+   * *Cấp 1: Hiếu Đạo Gia Phong (`charisma_magnet`)* — Tăng gấp đôi tốc độ hảo cảm Social Link và tình cảm người thân.
+   * *Cấp 2: Gia Tộc Đồng Tâm (`leverage_power`)* — Nhờ cậy quý nhân xóa nợ, bảo lãnh thăng chức, giảm 40% chi phí mua nhà đầu đời.
+   * *Cấp 3: Đại Gia Tộc Bất Diệt (`syndicate_kingmaker`)* — Thừa kế trọn vẹn gia phả, giảm 50% thuế thừa kế cho đời sau.
+2. **🪙 Nhánh Tư Bản & Sản Nghiệp (`wealth`):**
+   * *Cấp 1: Mắt Thần Định Giá (`market_sense_1`)* — Giảm 10% giá mua BĐS, tăng 15% lợi nhuận lướt sóng.
+   * *Cấp 2: Đàm Phán Sắc Bén & Đòn Bẩy (`negotiation_master`)* — Tăng +35% thù lao OT, tăng thu nhập hàng năm.
+   * *Cấp 3: Cỗ Máy Dòng Tiền Tự Động (`capital_engine`)* — Tự động sinh $25.000/năm thụ động không hao tổn sinh lực.
+3. **🔮 Nhánh Thân Tâm & Trí Tuệ (`sage`):**
+   * *Cấp 1: Khắc Kỷ Tịnh Tâm (`stoic_mind`)* — Giảm 40% lượng Burnout phải gánh chịu từ công việc và biến cố.
+   * *Cấp 2: Bách Khoa Toàn Thư (`encyclopedic_brain`)* — Tự động qua môn điểm tối đa, +25 Karma/năm.
+   * *Cấp 3: Giác Ngộ Niết Bàn (`transcendence_sage`)* — +15 Thể lực tối đa, thọ thêm 10 năm, x2 Karma chuyển kiếp.
+
+### 19.2. Hệ Thống Cộng Hưởng Tam Giác Sinh Mệnh (Resonance Synergies)
+* **🏛️ Quỹ Tín Thác Gia Tộc (Gia Phong + Tư Bản):** Kích hoạt khi mở khóa Cấp 2 cả 2 nhánh. Giảm 50% chi phí duy trì dinh thự và tài sản, hỗ trợ vay vốn không lãi khi cạn kiệt.
+* **🚀 Kỳ Lân Đổi Mới (Tư Bản + Trí Tuệ):** Kích hoạt khi mở khóa Cấp 2 cả 2 nhánh. Tăng +15% cổ tức tài chính hàng năm và giảm 30% kiệt sức khi làm việc trí óc.
+* **📜 Danh Gia Trí Thức (Gia Phong + Trí Tuệ):** Kích hoạt khi mở khóa Cấp 2 cả 2 nhánh. Tăng +15 Karma danh vọng gia tộc mỗi năm và tăng tỉ lệ con cái sở hữu tố chất Thần Đồng.
+* **🌟 Tam Vị Nhất Thể Hoàn Hảo (Gia Phong + Tư Bản + Trí Tuệ):** Kích hoạt khi mở khóa Cấp 3 cả 3 nhánh. Bảo tồn 100% phước báo luân hồi, +25 Karma/năm và vĩnh viễn +2 AP khởi đầu kiếp sau.
+
+### 19.3. Quy Chuẩn Không Trùng Lặp Cột Phải (Strict Single Chronicle Stream)
+* Cột phải (`MultiTabSidebar.tsx`) tuyệt đối không hiển thị lại các tab [Gia Đình], [Tài Sản], [Kỹ Năng]. Toàn bộ diện tích sidebar được giải phóng cho `Nhật Ký Hành Trình Cuộc Đời` (`NarrativeFeed.tsx`).
+* Mọi thao tác tương tác sâu được quy hoạch vào các modal chuyên biệt: `FamilyDetailModal.tsx`, `AssetDetailModal.tsx`, và `SkillTreeModal.tsx`.

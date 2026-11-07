@@ -7,7 +7,9 @@ import {
   interactNpc,
   getLevelInfo,
   SKILL_TREE,
-  LEVEL_TIERS
+  LEVEL_TIERS,
+  TREE_RESONANCES,
+  calculateTreeResonances
 } from '../src/engine/rpgProgressionEngine.js';
 import { processPassivePhase, calculateMaxVitality } from '../src/engine/tickEngine.js';
 
@@ -146,4 +148,51 @@ test('RPG Engine: Passive Tick wirings (Capital Engine, Stoic Mind, Encyclopedic
   const transCap = calculateMaxVitality(31, null, true);
   assert.equal(transCap, baseCap + 15);
   assert.equal(updatedCharacter.max_vitality, transCap);
+});
+
+test('RPG Engine: Trinity Tree Resonances calculation and passive discount synergies', async () => {
+  // Test calculateTreeResonances
+  const partialSkills = ['leverage_power', 'negotiation_master'];
+  const resonances = calculateTreeResonances(partialSkills);
+  
+  const familyTrust = resonances.find(r => r.id === 'family_trust_fund');
+  assert.ok(familyTrust);
+  assert.equal(familyTrust.isActive, true);
+  assert.equal(familyTrust.progress, '2/2');
+
+  const techUnicorn = resonances.find(r => r.id === 'tech_unicorn');
+  assert.ok(techUnicorn);
+  assert.equal(techUnicorn.isActive, false);
+  assert.equal(techUnicorn.progress, '1/2'); // has negotiation_master only
+
+  // Test Trinity passive phase maintenance discount
+  const character = {
+    id: 'test_char_resonance',
+    age: 35,
+    cash: 20000,
+    vitality: 80,
+    max_vitality: 100,
+    burnout: 10,
+    karma: 50,
+    action_points: 3,
+    unlocked_skills: ['leverage_power', 'negotiation_master'],
+    hidden_flags: [],
+    household: { parents_status: 'alive' }
+  };
+
+  const assets = [
+    {
+      id: 'villa_1',
+      name: 'Biệt Thự Đồi Cọ',
+      current_value: 500000,
+      annual_cash_flow: 10000,
+      maintenance_cost_per_tick: 4000
+    }
+  ];
+
+  const { updatedCharacter, passiveSummary } = await processPassivePhase(character, assets, []);
+  
+  // Total maintenance was 4,000; with family_trust_fund 50% discount it must be 2,000
+  assert.equal(passiveSummary.annual_digest.cash_flow.maintenance, 2000);
+  assert.ok(passiveSummary.annual_digest.family_events.some(e => e.includes('Quỹ Tín Thác Gia Tộc')));
 });

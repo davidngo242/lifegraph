@@ -194,6 +194,8 @@ export default function ActionPointHub({
         onOpenAssets={onOpenAssets}
         onOpenFamily={onOpenFamily}
         onOpenSkillHub={onOpenSkillHub}
+        onUnlockSkill={onUnlockSkill}
+        onNpcInteract={onNpcInteract}
         onFamilyMeal={onFamilyMeal}
         onFamilyMentorship={onFamilyMentorship}
         onRpgActivePerk={onRpgActivePerk ? (type) => handleAction(`perk_${type}`, () => onRpgActivePerk(type), 1, type === 'vip_networking' ? 1500 : 0) : undefined}
