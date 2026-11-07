@@ -24,7 +24,8 @@ import {
   MessageSquare,
   Award,
   Footprints,
-  Maximize2
+  Maximize2,
+  Zap
 } from 'lucide-react';
 
 // =========================================================================
@@ -183,23 +184,31 @@ const cleanWhisper = (text: string) => {
 // CINEMATIC VOLUMETRIC SUNBEAM (God Rays through Window)
 // =========================================================================
 function VolumetricSunbeam3D({ color = '#fef08a' }: { color?: string }) {
-  const materialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const outerConeRef = useRef<THREE.MeshBasicMaterial>(null);
+  const coreConeRef = useRef<THREE.MeshBasicMaterial>(null);
+  const haloRef = useRef<THREE.MeshBasicMaterial>(null);
 
   useFrame((state) => {
-    if (materialRef.current) {
-      const t = state.clock.getElapsedTime();
-      // Atmospheric breathing / pulsing of light intensity
-      materialRef.current.opacity = 0.16 + Math.sin(t * 1.2) * 0.035;
+    const t = state.clock.getElapsedTime();
+    // Atmospheric breathing / multi-harmonic pulsing of volumetric god rays
+    if (outerConeRef.current) {
+      outerConeRef.current.opacity = 0.16 + Math.sin(t * 1.1) * 0.035;
+    }
+    if (coreConeRef.current) {
+      coreConeRef.current.opacity = 0.11 + Math.cos(t * 1.5) * 0.025;
+    }
+    if (haloRef.current) {
+      haloRef.current.opacity = 0.05 + Math.sin(t * 0.7) * 0.015;
     }
   });
 
   return (
     <group position={[0, 1.6, -1.98]} rotation={[0.89, 0, 0]}>
-      {/* Primary Volumetric Cone Beam */}
+      {/* 1. Primary Volumetric Cone Beam */}
       <mesh>
         <cylinderGeometry args={[1.9, 3.8, 5.2, 32, 1, true]} />
         <meshBasicMaterial
-          ref={materialRef}
+          ref={outerConeRef}
           color={color}
           transparent={true}
           opacity={0.16}
@@ -208,13 +217,27 @@ function VolumetricSunbeam3D({ color = '#fef08a' }: { color?: string }) {
           side={THREE.DoubleSide}
         />
       </mesh>
-      {/* Secondary Inner Core Beam for Concentrated Sunlight Glow */}
+      {/* 2. Secondary Inner Core Beam for Concentrated Sunlight Glow */}
       <mesh>
         <cylinderGeometry args={[1.1, 2.3, 5.0, 24, 1, true]} />
         <meshBasicMaterial
+          ref={coreConeRef}
           color={color}
           transparent={true}
-          opacity={0.10}
+          opacity={0.11}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+      {/* 3. Soft Tertiary Atmospheric Ambient Light Halo */}
+      <mesh>
+        <cylinderGeometry args={[2.4, 4.4, 5.3, 24, 1, true]} />
+        <meshBasicMaterial
+          ref={haloRef}
+          color={color}
+          transparent={true}
+          opacity={0.05}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
           side={THREE.DoubleSide}
@@ -809,43 +832,123 @@ function HotspotBeacon3D({
   onClick: () => void;
 }) {
   const meshRef = useRef<THREE.Group>(null);
+  const outerCageRef = useRef<THREE.Group>(null);
+  const shockwaveRef = useRef<THREE.Mesh>(null);
+  const [hovered, setHovered] = useState(false);
+
   const posX = ((hotspot.position_x - 450) / 450) * 4.6;
   const posZ = -0.5;
 
-  const color = isVisited ? '#10b981' : hotspot.icon === 'heart' ? '#f43f5e' : hotspot.icon === 'briefcase' ? '#38bdf8' : '#f59e0b';
+  const color = isVisited
+    ? '#10b981'
+    : hotspot.icon === 'heart' || hotspot.npc_role === 'parent' || hotspot.npc_role === 'partner'
+    ? '#f43f5e'
+    : hotspot.icon === 'briefcase' || hotspot.npc_role === 'manager'
+    ? '#38bdf8'
+    : hotspot.icon === 'coffee' || hotspot.npc_role === 'friend'
+    ? '#a855f7'
+    : '#f59e0b';
 
   useFrame((state) => {
-    if (!meshRef.current) return;
     const t = state.clock.getElapsedTime();
-    meshRef.current.rotation.y = t * 1.5;
+
+    // 1. Floating vertical bounce + spin
+    if (meshRef.current) {
+      meshRef.current.position.y = 1.25 + Math.sin(t * 2.2 + posX) * 0.12;
+      meshRef.current.rotation.y = t * 1.4;
+    }
+
+    // 2. Counter-rotating holographic outer cage
+    if (outerCageRef.current) {
+      outerCageRef.current.rotation.y = -t * 0.9;
+      outerCageRef.current.rotation.x = Math.sin(t * 0.8) * 0.25;
+    }
+
+    // 3. Dynamic expanding shockwave ripple ring on the floor
+    if (shockwaveRef.current) {
+      const cycleTime = 1.4;
+      const progress = ((t * 0.9 + Math.abs(posX) * 0.5) % cycleTime) / cycleTime; // 0 to 1
+      const scale = 0.8 + progress * 1.5; // 0.8 to 2.3
+      shockwaveRef.current.scale.set(scale, scale, 1);
+      if (shockwaveRef.current.material && 'opacity' in shockwaveRef.current.material) {
+        (shockwaveRef.current.material as THREE.MeshBasicMaterial).opacity = Math.max(0, (1 - progress) * 0.75);
+      }
+    }
   });
 
   return (
-    <group position={[posX, 0, posZ]} onClick={(e) => { e.stopPropagation(); onClick(); }}>
-      {/* Pulsing Floor Ring */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
-        <ringGeometry args={[0.35, 0.48, 32]} />
-        <meshBasicMaterial color={color} opacity={0.8} transparent />
+    <group
+      position={[posX, 0, posZ]}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+    >
+      {/* 1. Static Floor Foundation Glow Ring */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.015, 0]}>
+        <ringGeometry args={[0.26, 0.38, 32]} />
+        <meshBasicMaterial color={color} opacity={hovered ? 0.95 : 0.65} transparent />
       </mesh>
 
-      {/* Holographic Vertical Light Column */}
+      {/* 2. Expanding Hologram Shockwave Pulse Ring */}
+      <mesh ref={shockwaveRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
+        <ringGeometry args={[0.28, 0.36, 32]} />
+        <meshBasicMaterial
+          color={color}
+          opacity={0.65}
+          transparent
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+
+      {/* 3. Holographic Tapered Vertical Light Column Shaft */}
       <mesh position={[0, 0.65, 0]}>
-        <cylinderGeometry args={[0.05, 0.18, 1.3, 16]} />
-        <meshBasicMaterial color={color} opacity={0.25} transparent />
+        <cylinderGeometry args={[0.04, 0.22, 1.3, 16, 1, true]} />
+        <meshBasicMaterial
+          color={color}
+          opacity={hovered ? 0.38 : 0.22}
+          transparent
+          blending={THREE.AdditiveBlending}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+        />
       </mesh>
 
-      {/* Rotating 3D Floating Gemstone / Diamond */}
-      <group ref={meshRef} position={[0, 1.3, 0]}>
-        <mesh>
-          <octahedronGeometry args={[0.22]} />
+      {/* 4. Floating 3D Holographic Beacon Orb Assembly */}
+      <group ref={meshRef} position={[0, 1.25, 0]}>
+        {/* Core Glowing Energy Sphere */}
+        <mesh scale={hovered ? 1.22 : 1.0}>
+          <sphereGeometry args={[0.13, 20, 20]} />
           <meshStandardMaterial
             color={color}
             emissive={color}
-            emissiveIntensity={0.6}
-            roughness={0.2}
-            metalness={0.8}
+            emissiveIntensity={hovered ? 2.0 : 1.3}
+            roughness={0.15}
+            metalness={0.85}
           />
         </mesh>
+
+        {/* Counter-rotating Outer Holographic Lattice Cage */}
+        <group ref={outerCageRef} scale={hovered ? 1.25 : 1.0}>
+          <mesh>
+            <icosahedronGeometry args={[0.24, 0]} />
+            <meshStandardMaterial
+              color={color}
+              emissive={color}
+              emissiveIntensity={0.7}
+              wireframe={true}
+              transparent={true}
+              opacity={0.85}
+            />
+          </mesh>
+          {/* Equatorial Orbit Ring */}
+          <mesh rotation={[Math.PI / 3, 0, 0]}>
+            <torusGeometry args={[0.28, 0.014, 8, 32]} />
+            <meshBasicMaterial color={color} transparent opacity={0.75} />
+          </mesh>
+        </group>
       </group>
     </group>
   );
@@ -949,20 +1052,57 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
     return scenario.scenes.find(s => s.id === currentSceneId) || scenario.scenes[0] || null;
   }, [scenario, currentSceneId]);
 
-  // Keyboard navigation A/D
+  // Keyboard navigation & Shortcuts (A/D movement, 1/2/3 selection, M for Mind Stage, J for Journal)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (showMindStage) return;
+      // Ignore keystrokes when user is focused in input fields
+      const activeEl = document.activeElement;
+      if (
+        activeEl &&
+        (activeEl.tagName === 'INPUT' ||
+          activeEl.tagName === 'TEXTAREA' ||
+          activeEl.tagName === 'SELECT' ||
+          (activeEl as HTMLElement).isContentEditable)
+      ) {
+        return;
+      }
+
+      if (showMindStage) {
+        if (e.key === '1' && scenario?.choices?.[0]) {
+          setSelectedChoiceId(scenario.choices[0].id);
+        } else if (e.key === '2' && scenario?.choices?.[1]) {
+          setSelectedChoiceId(scenario.choices[1].id);
+        } else if (e.key === '3' && scenario?.choices?.[2]) {
+          setSelectedChoiceId(scenario.choices[2].id);
+        } else if (e.key === 'Escape') {
+          setShowMindStage(false);
+          setSelectedChoiceId(null);
+          setRollResult(null);
+        }
+        return;
+      }
+
+      if (showJournal) {
+        if (e.key === 'Escape' || e.key === 'j' || e.key === 'J') {
+          setShowJournal(false);
+        }
+        return;
+      }
+
       const STEP = 0.8;
       if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
         setTarget3DPos(prev => ({ ...prev, x: Math.min(4.5, prev.x + STEP) }));
       } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         setTarget3DPos(prev => ({ ...prev, x: Math.max(-4.5, prev.x - STEP) }));
+      } else if (e.key === 'm' || e.key === 'M') {
+        setShowMindStage(true);
+      } else if (e.key === 'j' || e.key === 'J') {
+        setShowJournal(prev => !prev);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showMindStage]);
+  }, [showMindStage, showJournal, scenario]);
 
   // Handle 3D Floor Click
   const handleFloorClick = (worldX: number, worldZ: number) => {
@@ -1273,50 +1413,64 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
       </div>
 
       {/* =========================================================================
-          PHẦN 2: KHUNG ĐỐI THOẠI & CỐT TRUYỆN LIỀN MẠCH (VISUAL NOVEL STORY DECK)
-          Tích hợp trực tiếp trong CÙNG 1 BLOCK hoạt ảnh như Game nhập vai đỉnh cao
+          PHẦN 2: KHUNG ĐỐI THOẠI & CỐT TRUYỆN ĐIỆN ẢNH (PERSONA / CYBERPUNK 2077 DECK)
+          Tích hợp trực tiếp vào chân viewport 21:9 với viền hào quang sắc độ
           ========================================================================= */}
-      <div className="w-full bg-slate-900/95 border-t border-slate-800/80 p-4 md:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 backdrop-blur-xl">
-        {/* Left: Speaker Portrait Box */}
-        <div className="flex items-center gap-3.5 min-w-0">
+      <div className="w-full bg-[var(--bg-card)]/95 border-t border-[var(--border-subtle)] p-4 md:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 backdrop-blur-2xl shadow-2xl relative overflow-hidden transition-colors">
+        {/* Holographic Top Horizon Laser Accent */}
+        <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-purple-500/60 to-transparent pointer-events-none" />
+
+        {/* Left: Speaker Portrait Box with Dynamic Role Chromatic Glow */}
+        <div className="flex items-center gap-4 min-w-0">
           <div className="relative shrink-0">
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border-2 shadow-xl ${
-              activeDialogue?.npc_role === 'parent'
-                ? 'bg-rose-950/80 border-rose-500 text-rose-300'
+            <div
+              className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border-2 transition-all duration-300 ${
+                activeDialogue?.npc_role === 'parent'
+                  ? 'bg-rose-950/80 border-rose-500 text-rose-300 shadow-[0_0_20px_rgba(244,63,94,0.35)] ring-2 ring-rose-500/25'
+                  : activeDialogue?.npc_role === 'partner'
+                  ? 'bg-pink-950/80 border-pink-500 text-pink-300 shadow-[0_0_20px_rgba(236,72,153,0.35)] ring-2 ring-pink-500/25'
+                  : activeDialogue?.npc_role === 'manager'
+                  ? 'bg-sky-950/80 border-sky-500 text-sky-300 shadow-[0_0_20px_rgba(56,189,248,0.35)] ring-2 ring-sky-500/25'
+                  : activeDialogue?.npc_role === 'friend'
+                  ? 'bg-indigo-950/80 border-indigo-500 text-indigo-300 shadow-[0_0_20px_rgba(99,102,241,0.35)] ring-2 ring-indigo-500/25'
+                  : 'bg-purple-950/80 border-purple-500 text-purple-300 shadow-[0_0_20px_rgba(168,85,247,0.35)] ring-2 ring-purple-500/25'
+              }`}
+            >
+              {activeDialogue?.npc_role === 'parent'
+                ? '👨‍👩‍👧'
                 : activeDialogue?.npc_role === 'partner'
-                ? 'bg-pink-950/80 border-pink-500 text-pink-300'
+                ? '👩‍💼'
                 : activeDialogue?.npc_role === 'manager'
-                ? 'bg-sky-950/80 border-sky-500 text-sky-300'
+                ? '👨‍💼'
                 : activeDialogue?.npc_role === 'friend'
-                ? 'bg-indigo-950/80 border-indigo-500 text-indigo-300'
-                : 'bg-purple-950/80 border-purple-500 text-purple-300'
-            }`}>
-              {activeDialogue?.npc_role === 'parent' ? '👨‍👩‍👧' : activeDialogue?.npc_role === 'partner' ? '👩‍💼' : activeDialogue?.npc_role === 'manager' ? '👨‍💼' : activeDialogue?.npc_role === 'friend' ? '🧑‍💻' : '🧠'}
+                ? '🧑‍💻'
+                : '🧠'}
             </div>
-            <div className="absolute -bottom-1 -right-1 px-1 py-0.2 rounded bg-black/85 text-[8.5px] font-mono font-bold text-amber-300 border border-amber-500/40">
-              LIVE
+            {/* Live Camera Recording Micro-Badge */}
+            <div className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-black/90 text-[8.5px] font-mono font-bold text-amber-300 border border-amber-500/50 shadow flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
+              <span>LIVE</span>
             </div>
           </div>
 
           {/* Dialogue Speaker & Narrative Content */}
           <div className="flex flex-col gap-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-bold text-sm text-white">
+              <span className="font-bold text-sm text-[var(--text-primary)]">
                 {activeDialogue?.speaker || `${character?.name || "Bạn"} (Nội tâm)`}
               </span>
-              <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                 {activeDialogue?.npc_role ? `Vai trò: ${activeDialogue.npc_role}` : "Bối cảnh hiện tại"}
               </span>
             </div>
 
-            <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-serif italic max-w-3xl">
+            <p className="text-xs md:text-sm text-slate-100 leading-relaxed font-serif italic max-w-3xl drop-shadow-sm">
               "{activeDialogue?.text || scenario.description}"
             </p>
 
-            
             {/* Future Life Orientation Impact Pill */}
             {activeDialogue?.hotspot_id && HOTSPOT_LIFE_IMPACTS[activeDialogue.hotspot_id] && (
-              <div className="mt-1 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-indigo-500/15 border border-indigo-500/40 text-indigo-300 text-xs font-medium animate-in fade-in slide-in-from-left-2 w-fit">
+              <div className="mt-1.5 inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-gradient-to-r from-indigo-950/80 to-purple-950/70 border border-indigo-400/50 text-indigo-300 text-xs font-medium animate-in fade-in slide-in-from-left-2 shadow-sm w-fit">
                 <Compass className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
                 <span>Định hướng tương lai: </span>
                 <span className="font-bold">{HOTSPOT_LIFE_IMPACTS[activeDialogue.hotspot_id].perk}</span>
@@ -1325,10 +1479,12 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
 
             {/* Clue Discovered Notification Banner */}
             {activeDialogue?.granted_knowledge && (
-              <div className="mt-1 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs font-medium animate-in fade-in slide-in-from-left-2 w-fit">
+              <div className="mt-1.5 inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-gradient-to-r from-amber-950/80 to-yellow-950/70 border border-amber-400/50 text-amber-300 text-xs font-medium animate-in fade-in slide-in-from-left-2 shadow-sm w-fit">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                 <span>Mở khóa tri thức: </span>
-                <span className="font-bold">{KNOWLEDGE_LABELS[activeDialogue.granted_knowledge]?.label || activeDialogue.granted_knowledge}</span>
+                <span className="font-bold">
+                  {KNOWLEDGE_LABELS[activeDialogue.granted_knowledge]?.label || activeDialogue.granted_knowledge}
+                </span>
               </div>
             )}
           </div>
@@ -1338,18 +1494,26 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
         <div className="flex items-center gap-2.5 shrink-0 self-end md:self-center">
           <button
             onClick={() => setShowJournal(true)}
-            className="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition"
-            title="Mở Sổ Tay Manh Mối"
+            className="px-3 py-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-slate-700/80 text-[var(--text-secondary)] hover:text-white border border-[var(--border-subtle)] transition flex items-center gap-1.5 shadow"
+            title="Mở Sổ Tay Manh Mối (Phím J)"
           >
             <BookOpen className="w-4 h-4 text-amber-400" />
+            <span className="text-xs font-semibold hidden sm:inline">Sổ Tay</span>
+            <kbd className="px-1 py-0.2 rounded bg-black/40 text-[9px] font-mono text-amber-300 border border-amber-400/30">
+              J
+            </kbd>
           </button>
 
           <button
             onClick={() => setShowMindStage(true)}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-purple-600/30 transition active:scale-95"
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-500 hover:to-sky-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-purple-600/30 transition active:scale-95"
+            title="Đối Diện Ngã Rẽ Tâm Trí (Phím M)"
           >
-            <Brain className="w-4 h-4" />
+            <Brain className="w-4 h-4 animate-pulse" />
             <span>Đối Diện Ngã Rẽ</span>
+            <kbd className="px-1.5 py-0.5 rounded bg-black/30 text-[9px] font-mono text-purple-200 border border-white/20">
+              M
+            </kbd>
           </button>
         </div>
       </div>
@@ -1383,34 +1547,52 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
               <p className="text-xs text-slate-300 mt-1 font-serif">{scenario.mind_stage?.whispers?.dilemma_prompt}</p>
             </div>
 
-            {/* 3 Internal Ego Whispers */}
+            {/* 3 Internal Ego Whispers - Tri-Prism Sân Khấu Tâm Trí */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div className="p-3 rounded-2xl bg-blue-950/40 border border-blue-500/30 text-xs space-y-1">
-                <div className="font-bold text-blue-300 flex items-center gap-1.5">
-                  <Brain className="w-3.5 h-3.5 text-blue-400" />
-                  <span>Lý Trí</span>
+              {/* 1. Lý Trí: Xanh Băng Giá (Ice Blue) */}
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-sky-950/60 via-slate-900/70 to-cyan-950/50 border border-sky-400/40 text-xs space-y-1.5 shadow-[0_0_20px_rgba(56,189,248,0.15)]">
+                <div className="font-bold text-sky-300 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <Brain className="w-4 h-4 text-sky-400 drop-shadow" />
+                    <span className="font-sans tracking-wide">Lý Trí</span>
+                  </div>
+                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-sky-900/50 text-sky-300 border border-sky-500/30 uppercase">
+                    Lăng Kính Băng Giá
+                  </span>
                 </div>
-                <p className="text-slate-300 leading-relaxed font-serif text-[11.5px]">
+                <p className="text-slate-200 leading-relaxed font-serif text-[12px]">
                   {cleanWhisper(scenario.mind_stage?.whispers?.rational || '')}
                 </p>
               </div>
 
-              <div className="p-3 rounded-2xl bg-rose-950/40 border border-rose-500/30 text-xs space-y-1">
-                <div className="font-bold text-rose-300 flex items-center gap-1.5">
-                  <Heart className="w-3.5 h-3.5 text-rose-400" />
-                  <span>Trái Tim</span>
+              {/* 2. Trái Tim: Vàng Hổ Phách Ấm (Warm Amber) */}
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-amber-950/60 via-slate-900/70 to-orange-950/50 border border-amber-400/40 text-xs space-y-1.5 shadow-[0_0_20px_rgba(245,158,11,0.15)]">
+                <div className="font-bold text-amber-300 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <Heart className="w-4 h-4 text-amber-400 drop-shadow" />
+                    <span className="font-sans tracking-wide">Trái Tim</span>
+                  </div>
+                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-amber-900/50 text-amber-300 border border-amber-500/30 uppercase">
+                    Lăng Kính Hổ Phách
+                  </span>
                 </div>
-                <p className="text-slate-300 leading-relaxed font-serif text-[11.5px]">
+                <p className="text-slate-200 leading-relaxed font-serif text-[12px]">
                   {cleanWhisper(scenario.mind_stage?.whispers?.empathy || '')}
                 </p>
               </div>
 
-              <div className="p-3 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-xs space-y-1">
-                <div className="font-bold text-amber-300 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Bản Năng</span>
+              {/* 3. Bản Năng: Đỏ Thẫm Kiên Định (Crimson) */}
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-rose-950/60 via-slate-900/70 to-red-950/50 border border-rose-400/40 text-xs space-y-1.5 shadow-[0_0_20px_rgba(244,63,94,0.15)]">
+                <div className="font-bold text-rose-300 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <Zap className="w-4 h-4 text-rose-400 drop-shadow" />
+                    <span className="font-sans tracking-wide">Bản Năng</span>
+                  </div>
+                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-rose-900/50 text-rose-300 border border-rose-500/30 uppercase">
+                    Lăng Kính Đỏ Thẫm
+                  </span>
                 </div>
-                <p className="text-slate-300 leading-relaxed font-serif text-[11.5px]">
+                <p className="text-slate-200 leading-relaxed font-serif text-[12px]">
                   {cleanWhisper(scenario.mind_stage?.whispers?.instinct || '')}
                 </p>
               </div>
@@ -1455,79 +1637,96 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
               </div>
             ) : (
               /* Choices List */
-              <div className="space-y-2.5">
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Chọn Phương Án Đối Diện Ngã Rẽ:
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  <span>Chọn Phương Án Đối Diện Ngã Rẽ:</span>
+                  <span className="text-[11px] font-mono text-purple-300 lowercase font-normal hidden sm:inline">
+                    (Dùng phím 1, 2, 3 để chọn nhanh)
+                  </span>
                 </div>
 
-                <div className="space-y-2.5">
-                  {scenario.choices.map(choice => {
+                <div className="space-y-3">
+                  {scenario.choices.map((choice, idx) => {
                     const missingKnowledge = (choice.knowledge_requirements || []).filter(k => !knowledgeBase.includes(k));
                     const isUnderUncertainty = missingKnowledge.length > 0;
                     const cleanChoiceTitle = choice.title.replace(/^\[[^\]]+\]\s*/, '').trim();
+                    const isSelected = selectedChoiceId === choice.id;
 
                     return (
                       <div
                         key={choice.id}
                         onClick={() => setSelectedChoiceId(choice.id)}
-                        className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${
-                          selectedChoiceId === choice.id
-                            ? 'bg-purple-950/60 border-purple-500 shadow-lg shadow-purple-900/20'
+                        className={`p-4 rounded-2xl border transition-all duration-200 cursor-pointer backdrop-blur-xl relative ${
+                          isSelected
+                            ? 'bg-gradient-to-br from-purple-950/80 via-indigo-950/70 to-slate-900/90 border-purple-400/90 shadow-[0_0_25px_rgba(168,85,247,0.3)] ring-1 ring-purple-400/50'
                             : isUnderUncertainty
-                            ? 'bg-slate-900/70 border-amber-500/30 hover:border-amber-500/60'
-                            : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+                            ? 'bg-slate-900/70 border-amber-500/40 hover:border-amber-400/70 hover:bg-slate-900/85'
+                            : 'bg-slate-900/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/90'
                         }`}
                       >
                         <div className="flex items-start justify-between gap-3">
-                          <div className="space-y-1">
+                          <div className="space-y-1.5 flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-bold text-sm text-white">{cleanChoiceTitle}</span>
+                              {/* Quick Hotkey Badge */}
+                              <span className="px-1.5 py-0.5 rounded bg-black/60 border border-white/10 text-[10px] font-mono font-bold text-slate-300">
+                                Phím {idx + 1}
+                              </span>
+                              <span className="font-bold text-sm sm:text-base text-white">{cleanChoiceTitle}</span>
                               {isUnderUncertainty ? (
-                                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-500/40 flex items-center gap-1 font-semibold">
-                                  <span>⚡ Bất định (+{missingKnowledge.length * 2} DC)</span>
+                                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-950/90 text-amber-300 border border-amber-500/50 flex items-center gap-1 font-semibold">
+                                  <Zap className="w-3 h-3 text-amber-400" />
+                                  <span>Bất định (+{missingKnowledge.length * 2} DC)</span>
                                 </span>
                               ) : (
-                                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800/50 font-semibold">
+                                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-700/60 font-semibold">
                                   {choice.stance}
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-slate-300 leading-relaxed font-serif">{choice.description}</p>
+                            <p className="text-xs sm:text-[13px] text-slate-200 leading-relaxed font-serif">{choice.description}</p>
                           </div>
 
+                          {/* Con Dấu Số Phận (Seal of Destiny DC Medallion) */}
                           {choice.check && (
-                            <div className="shrink-0 text-right">
-                              <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30 font-bold">
-                                DC {choice.check.target_dc + (missingKnowledge.length * 2)} ({choice.check.stat})
-                              </span>
+                            <div className="shrink-0 flex flex-col items-end gap-1">
+                              <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-950/90 to-yellow-950/90 border border-amber-400/60 text-amber-300 font-mono font-bold text-xs shadow-[0_0_15px_rgba(251,191,36,0.25)] flex items-center gap-1.5">
+                                <Award className="w-3.5 h-3.5 text-amber-400" />
+                                <span>DC {choice.check.target_dc + (missingKnowledge.length * 2)} · {choice.check.stat}</span>
+                              </div>
+                              {choice.cost_ap !== undefined && choice.cost_ap > 0 && (
+                                <span className="text-[10px] font-mono text-purple-300 font-semibold">
+                                  Tiêu tốn {choice.cost_ap} AP
+                                </span>
+                              )}
                             </div>
                           )}
                         </div>
 
+                        {/* Missing Clues Warning */}
                         {isUnderUncertainty && (
-                          <div className="mt-2 text-[11px] text-amber-400/90 font-mono flex items-center gap-1.5 pt-1.5 border-t border-slate-800/60">
+                          <div className="mt-2.5 text-[11px] text-amber-300/90 font-mono flex items-center gap-1.5 pt-2 border-t border-slate-800/80">
                             <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-                            <span>Cần khám phá thêm: {missingKnowledge.map(k => KNOWLEDGE_LABELS[k]?.label || k).join(", ")}</span>
+                            <span>Cần khám phá thêm manh mối: {missingKnowledge.map(k => KNOWLEDGE_LABELS[k]?.label || k).join(", ")}</span>
                           </div>
                         )}
 
-                        {selectedChoiceId === choice.id && (
-                          <div className="mt-3.5 pt-3.5 border-t border-slate-800 space-y-3 animate-in fade-in">
-                            {/* Strategic Negotiation Safeguard Clauses */}
-                            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
-                              <div className="flex items-center justify-between text-xs">
-                                <span className="font-bold text-slate-300 flex items-center gap-1.5">
-                                  <Shield className="w-3.5 h-3.5 text-indigo-400" /> Điều Khoản Đảm Bảo Đàm Phán:
+                        {isSelected && (
+                          <div className="mt-4 pt-4 border-t border-slate-800/80 space-y-3.5 animate-in fade-in">
+                            {/* Strategic Negotiation Safeguard Clauses (Bản Giao Kèo Đàm Phán) */}
+                            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2.5">
+                              <div className="flex items-center justify-between text-xs flex-wrap gap-2">
+                                <span className="font-bold text-slate-200 flex items-center gap-1.5">
+                                  <Shield className="w-3.5 h-3.5 text-indigo-400" /> Điều Khoản Đảm Bảo Đàm Phán (Destiny Pact):
                                 </span>
-                                <span className="text-[10px] font-mono text-indigo-300 font-semibold">
-                                  {safeguardTerm === 'time_cap' ? 'Giới hạn 15h/tuần (-50% Burnout)' : safeguardTerm === 'deposit' ? 'Tạm ứng bảo đảm (+10% Tiền)' : 'Mặc định'}
+                                <span className="text-[10px] font-mono text-indigo-300 font-semibold px-2 py-0.5 rounded bg-indigo-950 border border-indigo-500/30">
+                                  {safeguardTerm === 'time_cap' ? 'Giới hạn 15h/tuần (-50% Burnout)' : safeguardTerm === 'deposit' ? 'Tạm ứng bảo đảm (+10% Tiền)' : 'Tiêu Chuẩn (Không ràng buộc)'}
                                 </span>
                               </div>
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                                 {[
-                                  { id: 'standard', label: 'Tiêu Chuẩn', desc: 'Không ràng buộc phụ' },
-                                  { id: 'time_cap', label: 'Khống Chế 15h/Tuần', desc: 'Giảm 50% nguy cơ kiệt sức' },
-                                  { id: 'deposit', label: 'Tạm Ứng Tiền Mặt', desc: 'Tăng 10% dòng tiền ban đầu' }
+                                  { id: 'standard', label: 'Tiêu Chuẩn', desc: 'Tự do hoàn toàn, không ràng buộc phụ' },
+                                  { id: 'time_cap', label: 'Khống Chế 15h/Tuần', desc: 'Giảm 50% nguy cơ kiệt sức / Burnout' },
+                                  { id: 'deposit', label: 'Tạm Ứng Tiền Mặt', desc: 'Tăng 10% thu nhập dòng tiền ban đầu' }
                                 ].map(opt => (
                                   <button
                                     key={opt.id}
@@ -1536,24 +1735,28 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
                                       e.stopPropagation();
                                       setSafeguardTerm(opt.id as any);
                                     }}
-                                    className={`p-2 rounded-lg border text-left text-xs transition ${
+                                    className={`p-2.5 rounded-xl border text-left text-xs transition duration-150 ${
                                       safeguardTerm === opt.id
-                                        ? 'bg-indigo-950/80 border-indigo-400 text-white shadow-sm'
-                                        : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                                        ? 'bg-gradient-to-br from-indigo-950 to-purple-950/90 border-indigo-400 text-white shadow-[0_0_12px_rgba(99,102,241,0.3)] ring-1 ring-indigo-400/40'
+                                        : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
                                     }`}
                                   >
-                                    <div className="font-semibold text-[11px]">{opt.label}</div>
-                                    <div className="text-[9.5px] text-slate-400">{opt.desc}</div>
+                                    <div className="font-bold text-[11.5px]">{opt.label}</div>
+                                    <div className="text-[10px] text-slate-400 mt-0.5 leading-snug">{opt.desc}</div>
                                   </button>
                                 ))}
                               </div>
                             </div>
 
-                            <div className="flex items-center justify-between gap-3">
-                              {actionPoints > 0 && (
-                                <div className="flex items-center gap-2">
-                                  <span className="text-xs text-slate-400 font-mono">Dồn thêm AP (+2 DC/AP):</span>
-                                  <div className="flex items-center gap-1">
+                            {/* Bottom Row: AP Energy Booster & Confirm Button */}
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                              {actionPoints > 0 ? (
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="text-xs text-slate-300 font-mono flex items-center gap-1">
+                                    <Zap className="w-3.5 h-3.5 text-amber-400" />
+                                    <span>Dồn AP Trợ Lực:</span>
+                                  </span>
+                                  <div className="flex items-center gap-1.5">
                                     {[0, 1, 2].map(ap => (
                                       <button
                                         key={ap}
@@ -1563,18 +1766,20 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
                                           e.stopPropagation();
                                           setApInvestment(ap);
                                         }}
-                                        className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
+                                        className={`px-3 py-1 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1 ${
                                           apInvestment === ap
-                                            ? 'bg-amber-500 text-black'
-                                            : 'bg-slate-800 text-slate-300'
+                                            ? 'bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.4)]'
+                                            : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'
                                         }`}
+                                        title={`Dồn ${ap} AP tăng tỷ lệ thành công (+${ap * 2} DC) và giảm rủi ro`}
                                       >
-                                        +{ap} AP
+                                        <span>+{ap} AP</span>
+                                        {ap > 0 && <span className="text-[10px] opacity-80">(+{ap * 2} DC)</span>}
                                       </button>
                                     ))}
                                   </div>
                                 </div>
-                              )}
+                              ) : <div />}
 
                               <button
                                 onClick={(e) => {
@@ -1582,17 +1787,17 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
                                   handleConfirmChoice(choice.id);
                                 }}
                                 disabled={isResolving}
-                                className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-purple-600/30 transition flex items-center gap-1.5"
+                                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-500 hover:to-sky-500 text-white font-extrabold text-xs uppercase tracking-wider shadow-xl shadow-purple-600/30 transition-all active:scale-95 flex items-center justify-center gap-2 shrink-0"
                               >
                                 {isResolving ? (
                                   <>
-                                    <Compass className="w-3.5 h-3.5 animate-spin" />
-                                    <span>Đang Đổ Xúc Xắc...</span>
+                                    <Compass className="w-4 h-4 animate-spin text-amber-300" />
+                                    <span>Đang Đổ Xúc Xắc D20...</span>
                                   </>
                                 ) : (
                                   <>
                                     <span>Đổ Xúc Xắc D20 & Quyết Định</span>
-                                    <ArrowRight className="w-3.5 h-3.5" />
+                                    <ArrowRight className="w-4 h-4" />
                                   </>
                                 )}
                               </button>
