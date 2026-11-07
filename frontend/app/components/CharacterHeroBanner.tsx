@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
 import SpineCharacterAvatar from './SpineCharacterAvatar';
+import SidekickPetCompanion from './SidekickPetCompanion';
 import {
   Cpu,
   Maximize2,
@@ -549,13 +550,14 @@ export default function CharacterHeroBanner({
                 ) : (
                   <SpineCharacterAvatar
                     nationality={character.nationality}
-                    gender={character.gender || 'female'}
+                    gender={character.gender || 'male'}
                     age={age}
                     burnout={burnout}
                     vitality={vitality}
                     animation={reaction === 'celebrate' ? 'Jump' : reaction === 'exhausted' ? 'Idle_2' : reaction === 'shocked' ? 'Idle_1' : 'Front_idle'}
                     showBones={false}
                     netWorth={netWorth}
+                    traits={traits}
                     className="w-full h-full"
                   />
                 )}
@@ -622,6 +624,23 @@ export default function CharacterHeroBanner({
               >
                 <Maximize2 className="w-3 h-3" />
               </button>
+            </div>
+
+            {/* MOBA Sidekick Pet Companion (Deenoh dragon / Kitsune / Cat / Pup) */}
+            <div
+              className="absolute -bottom-2 -right-3 md:-right-4 z-20 cursor-pointer pointer-events-auto transition-transform hover:scale-110 active:scale-95"
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpen3DInspector();
+              }}
+              title="Linh thú MOBA đồng hành (Sidekick Pet) - Nhấp để xem Studio chi tiết"
+            >
+              <SidekickPetCompanion
+                netWorth={netWorth}
+                vitality={vitality}
+                burnout={burnout}
+                className="w-12 h-12 md:w-14 md:h-14 drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
+              />
             </div>
           </div>
 

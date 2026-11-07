@@ -128,6 +128,34 @@ runTest('CharacterHeroBanner includes seamless 3D / SPINE mode toggle button on 
   assert.ok(bannerSource.includes("bannerAvatarMode === '3d' ? '3D' : 'SPINE'"), 'Must have mode switcher pill');
 });
 
+// -------------------------------------------------------------
+// 5. MOBA Sidekick Pet Companion & Life-Stage Morphing Verification
+// -------------------------------------------------------------
+const sidekickPath = path.resolve(rootDir, 'frontend', 'app', 'components', 'SidekickPetCompanion.tsx');
+assert.ok(fs.existsSync(sidekickPath), 'SidekickPetCompanion.tsx must exist');
+const sidekickSource = fs.readFileSync(sidekickPath, 'utf8');
+
+runTest('SidekickPetCompanion implements 4 MOBA pets including Deenoh the Dragon', () => {
+  assert.ok(sidekickSource.includes('dragon'), 'Must support dragon companion');
+  assert.ok(sidekickSource.includes('fox'), 'Must support fox companion');
+  assert.ok(sidekickSource.includes('cat'), 'Must support cat companion');
+  assert.ok(sidekickSource.includes('puppy'), 'Must support puppy companion');
+  assert.ok(sidekickSource.includes('Deenoh'), 'Must feature Deenoh the Dragon');
+  assert.ok(sidekickSource.includes('getRecommendedSidekick'), 'Must recommend companion by netWorth');
+});
+
+runTest('SpineCharacterAvatar supports MOBA Gotcha_Pose and Life Progression Morphing', () => {
+  assert.ok(spineSource.includes('Gotcha_Pose'), 'Must support MOBA Gotcha_Pose');
+  assert.ok(spineSource.includes('isBaby'), 'Must support infant stage');
+  assert.ok(spineSource.includes('isPoor'), 'Must support poor socio-economic tier');
+  assert.ok(spineSource.includes('isUltraRich'), 'Must support ultra-rich tycoon tier');
+});
+
+runTest('SidekickPetCompanion is mounted in CharacterHeroBanner and AvatarInspectorModal', () => {
+  assert.ok(bannerSource.includes('SidekickPetCompanion'), 'CharacterHeroBanner must render SidekickPetCompanion');
+  assert.ok(modalSource.includes('SidekickPetCompanion'), 'AvatarInspectorModal must render SidekickPetCompanion');
+});
+
 console.log(`\n======================================================================`);
 console.log(`📊 TEST SUITE SUMMARY: ${passedTests}/${totalTests} Tests Passed (${Math.round((passedTests/totalTests)*100)}%)`);
 console.log(`🎉 ALL CHIBI 3D & SPINE 2D AVATAR QUALITY GATES PASSED FLAWLESSLY!`);

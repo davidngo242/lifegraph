@@ -7,6 +7,7 @@ import SpineCharacterAvatar, {
   SpineAnimationType,
   SPINE_ANIMATION_LIST
 } from './SpineCharacterAvatar';
+import SidekickPetCompanion from './SidekickPetCompanion';
 import { X, Sparkles, Eye, Film, Play, Sliders, Layers } from 'lucide-react';
 
 const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
@@ -157,15 +158,29 @@ export default function AvatarInspectorModal({
               <div className="flex-1 w-full h-full relative z-0 flex items-center justify-center p-2">
                 <SpineCharacterAvatar
                   nationality={character.nationality}
-                  gender={character.gender || 'female'}
+                  gender={character.gender || 'male'}
                   age={age}
                   burnout={burnout}
                   vitality={vitality}
                   animation={selectedSpineAnim}
                   showBones={showSpineBones}
                   netWorth={netWorth}
+                  traits={traits}
                   className="w-full h-full"
                 />
+
+                {/* Sidekick Pet Companion on Stage */}
+                <div className="absolute bottom-3 right-3 z-10 flex flex-col items-center p-2 rounded-2xl bg-black/60 border border-slate-700/60 backdrop-blur shadow-xl">
+                  <SidekickPetCompanion
+                    netWorth={netWorth}
+                    vitality={vitality}
+                    burnout={burnout}
+                    className="w-14 h-14 sm:w-16 sm:h-16"
+                  />
+                  <span className="text-[10px] font-bold text-amber-300 font-mono mt-0.5">
+                    {netWorth >= 5000000 ? '🐲 Deenoh Dragon' : netWorth >= 500000 ? '🦊 Kitsune Spirit' : netWorth >= 25000 ? '🐱 Mochi Cat' : '🐶 Lucky Pup'}
+                  </span>
+                </div>
               </div>
 
               {/* Spine Coordinate / Bone Meta Bar */}
@@ -288,6 +303,19 @@ export default function AvatarInspectorModal({
                     </span>
                   )}
                 </div>
+              </div>
+
+              {/* Sidekick Pet Companion on 3D Stage */}
+              <div className="absolute bottom-3 right-3 z-10 flex flex-col items-center p-2 rounded-2xl bg-black/60 border border-slate-700/60 backdrop-blur shadow-xl">
+                <SidekickPetCompanion
+                  netWorth={netWorth}
+                  vitality={vitality}
+                  burnout={burnout}
+                  className="w-14 h-14 sm:w-16 sm:h-16"
+                />
+                <span className="text-[10px] font-bold text-amber-300 font-mono mt-0.5">
+                  {netWorth >= 5000000 ? '🐲 Deenoh Dragon' : netWorth >= 500000 ? '🦊 Kitsune Spirit' : netWorth >= 25000 ? '🐱 Mochi Cat' : '🐶 Lucky Pup'}
+                </span>
               </div>
             </div>
 
