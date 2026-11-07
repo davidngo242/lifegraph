@@ -11,18 +11,20 @@ Skill này hướng dẫn Lead Agent điều phối quy trình phát triển và
 
 ## 1. Kiến trúc phân vai Sub-Agents
 
-Khi nhận một yêu cầu phát triển mới hoặc tối ưu code, Lead Agent đóng vai trò **Tech Lead / Orchestrator** và điều phối tối đa 4 sub-agent:
+Khi nhận một yêu cầu phát triển mới hoặc tối ưu code, Lead Agent đóng vai trò **Tech Lead / Orchestrator** và điều phối tối đa 5 sub-agent chuyên biệt:
 
 | Sub-Agent | Vai trò | Quyền hạn (Capabilities) | Nhiệm vụ chính |
 | :--- | :--- | :--- | :--- |
-| **1. Coder** *(Tùy chọn nếu code từ đầu)* | Feature Developer | Đọc/Ghi code, chạy build kiểm tra | Phân tích codebase, thiết kế giải pháp và viết code triển khai tính năng. |
-| **2. Reviewer** | Senior Code Reviewer | Read-only (Đọc code, git diff) | Phân tích logic, bảo mật, hiệu năng, edge cases và đối chiếu với requirement. |
-| **3. Tester** | QA & Test Engineer | Viết file test, chạy lệnh terminal | Bổ sung unit/integration tests cho phần code mới và thực thi kiểm thử (`npm test`, script test). |
-| **4. Doc Writer** | Technical Writer | Ghi tài liệu (`docs/`, `README.md`) | Đồng bộ hóa tài liệu kỹ thuật, cập nhật hướng dẫn API, changelog hoặc inline docs. |
+| **1. BA Expert** | Business Analyst & Product UX Specialist | Đọc code, phân tích màn hình & luồng nghiệp vụ | Thẩm định yêu cầu, phát hiện điểm nghẽn UX/UI, chuẩn hóa User Journey, loại bỏ dư thừa thông tin và định nghĩa Acceptance Criteria rõ ràng. |
+| **2. Coder** | Feature Developer | Đọc/Ghi code, chạy build kiểm tra | Phân tích codebase, thiết kế giải pháp kỹ thuật và viết code triển khai tính năng đạt chuẩn. |
+| **3. Reviewer** | Senior Code Reviewer | Read-only (Đọc code, git diff) | Phân tích logic, bảo mật, hiệu năng, edge cases và đối chiếu với requirement của BA. |
+| **4. Tester** | QA & Test Engineer | Viết file test, chạy lệnh terminal | Bổ sung unit/integration tests cho phần code mới và thực thi kiểm thử (`npm test`, script test). |
+| **5. Doc Writer** | Technical Writer | Ghi tài liệu (`docs/`, `README.md`) | Đồng bộ hóa tài liệu kỹ thuật, cập nhật hướng dẫn API, changelog hoặc inline docs. |
 
 > [!NOTE]
-> * **Nếu người dùng đã code xong:** Bỏ qua Sub-agent Coder, kích hoạt ngay bộ ba **Reviewer + Tester + Doc Writer**.
-> * **Nếu bắt đầu từ yêu cầu mới:** Kích hoạt Coder trước, sau đó kích hoạt 3 sub-agents còn lại.
+> * **Giai đoạn Đánh giá & Thiết kế:** Luôn kích hoạt **BA Expert** trước để thẩm định giao diện, luồng người dùng và xác định đúng vấn đề cốt lõi.
+> * **Nếu bắt đầu từ yêu cầu mới:** Kích hoạt BA Expert -> Coder -> Reviewer + Tester -> Doc Writer.
+> * **Nếu người dùng đã code xong:** Kích hoạt BA Expert + Reviewer + Tester + Doc Writer.
 
 ---
 

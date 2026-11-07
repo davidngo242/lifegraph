@@ -90,6 +90,8 @@ export default function RebirthGachaModal({
   const [selectedPerks, setSelectedPerks] = useState<{ [key: string]: boolean }>({});
   const [selectedStarterPack, setSelectedStarterPack] = useState<'standard' | 'genz_startup' | 'crazy_rich' | 'street_hustler'>('standard');
   const [chosenTrait, setChosenTrait] = useState<string>("thiên_tài_toán_học");
+  const [activeKarmaTab, setActiveKarmaTab] = useState<'packs' | 'perks'>('packs');
+  const [showTraitPicker, setShowTraitPicker] = useState<boolean>(false);
   const [rollResult, setRollResult] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -107,10 +109,38 @@ export default function RebirthGachaModal({
   };
 
   const STARTER_PACKS = [
-    { id: 'standard', name: 'Vô Thường', icon: '🌟', badge: '0t • Tự Do Tuổi Thơ', karmaCost: 0, desc: 'Trải nghiệm trọn vẹn từ 0 tuổi, tự do rèn dũa nhân cách.' },
-    { id: 'street_hustler', name: 'Bàn Tay Trắng', icon: '🥊', badge: '0t • Sinh Lực Cao', karmaCost: 200, desc: 'Bắt đầu từ 0 tuổi với thể lực dẻo dai và ý chí thép vượt khó.' },
-    { id: 'genz_startup', name: 'Gen Z Tiên Phong', icon: '💻', badge: '0t • Tư Duy Số', karmaCost: 800, desc: 'Bắt đầu từ 0 tuổi cùng tư duy công nghệ và logic sớm.' },
-    { id: 'crazy_rich', name: 'Hào Môn Thừa Kế', icon: '🏰', badge: '0t • Quỹ $250k (18t)', karmaCost: 2500, desc: 'Sinh ra ở vạch đích: Thừa kế quỹ tín thác $250.000 khi tròn 18 tuổi.' }
+    {
+      id: 'standard',
+      name: 'Vô Thường Tự Do',
+      icon: '🌟',
+      badge: 'Khởi đầu tự do · 0 tuổi',
+      karmaCost: 0,
+      desc: 'Trải nghiệm tuổi thơ bình dị, tự do rèn dũa nhân cách và định hình tương lai.'
+    },
+    {
+      id: 'street_hustler',
+      name: 'Bàn Tay Trắng Vượt Khó',
+      icon: '🥊',
+      badge: 'Ý chí thép · Thể lực cao',
+      karmaCost: 200,
+      desc: 'Bắt đầu từ 0 tuổi với thể lực dẻo dai và ý chí bất khuất vượt qua mọi nghịch cảnh.'
+    },
+    {
+      id: 'genz_startup',
+      name: 'Gen Z Tiên Phong',
+      icon: '💻',
+      badge: 'Tư duy số · Công nghệ AI',
+      karmaCost: 800,
+      desc: 'Chào đời với tư duy thuật toán và logic nhạy bén, mở lối thăng tiến công nghệ sớm.'
+    },
+    {
+      id: 'crazy_rich',
+      name: 'Hào Môn Thừa Kế',
+      icon: '🏰',
+      badge: 'Quỹ tín thác $250.000',
+      karmaCost: 2500,
+      desc: 'Sinh ra ở vạch đích, mở khóa tài sản thừa kế $250.000 khi tròn 18 tuổi.'
+    }
   ];
 
   const starterPackCost = STARTER_PACKS.find(p => p.id === selectedStarterPack)?.karmaCost || 0;
@@ -242,22 +272,40 @@ export default function RebirthGachaModal({
           </div>
         )}
 
-        {/* Gender Selection Toggle */}
+        {/* Karma Ledger Status Bar */}
         {!rollResult && !isSpinning && (
-          <div className="mb-3.5 p-3 rounded-2xl bg-slate-900/90 border border-slate-800 text-xs">
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-sans font-semibold text-slate-300 uppercase tracking-wide text-[11px] flex items-center gap-1.5">
-                <span>👤 Định Hình Giới Tính (Gender Identity)</span>
+          <div className="flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-purple-950/50 via-slate-900/90 to-indigo-950/50 border border-purple-500/30 mb-3 backdrop-blur-md">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 shrink-0">
+                <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-purple-300 block">Ví Nghiệp Lực Tiền Kiếp</span>
+                <span className="text-xs font-bold text-white font-mono">{karma.toLocaleString()} Karma Khả Dụng</span>
+              </div>
+            </div>
+            <div className="text-right">
+              <span className="text-[10.5px] text-slate-400 block font-medium">
+                {totalCost > 0 ? 'Đang phân bổ:' : 'Khả dụng:'}
               </span>
-              <span className="text-[10px] text-slate-400 font-mono">
-                {selectedGender === 'random' ? 'Tùy duyên bánh xe số phận' : selectedGender === 'male' ? 'Hóa thân Nhân vật Nam (♂️)' : 'Hóa thân Nhân vật Nữ (♀️)'}
+              <span className={`text-xs font-bold font-mono ${totalCost > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                {totalCost > 0 ? `-${totalCost.toLocaleString()} Karma` : `${currentAvailableKarma.toLocaleString()} Karma`}
               </span>
             </div>
-            <div className="grid grid-cols-3 gap-2">
+          </div>
+        )}
+
+        {/* Gender Selection Compact Row */}
+        {!rollResult && !isSpinning && (
+          <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-900/80 border border-slate-800 mb-3 text-xs">
+            <span className="text-slate-300 font-semibold flex items-center gap-1.5 text-[11px] shrink-0">
+              <span>👤 Bản Thể Giới Tính:</span>
+            </span>
+            <div className="flex items-center gap-1.5">
               {[
-                { id: 'random', label: 'Ngẫu Nhiên', icon: '🎲', color: 'border-slate-700 bg-slate-950 text-slate-300' },
-                { id: 'male', label: 'Nam Giới', icon: '♂️', color: 'border-indigo-500 bg-indigo-950/60 text-indigo-300' },
-                { id: 'female', label: 'Nữ Giới', icon: '♀️', color: 'border-rose-500 bg-rose-950/60 text-rose-300' }
+                { id: 'random', label: 'Tùy Duyên', icon: '🎲' },
+                { id: 'male', label: 'Nam Giới (♂)', icon: '👦' },
+                { id: 'female', label: 'Nữ Giới (♀)', icon: '👧' }
               ].map(item => {
                 const isSelected = selectedGender === item.id;
                 return (
@@ -265,10 +313,10 @@ export default function RebirthGachaModal({
                     key={item.id}
                     type="button"
                     onClick={() => setSelectedGender(item.id as any)}
-                    className={`py-2 px-3 rounded-xl border font-bold text-xs flex items-center justify-center gap-2 transition active:scale-98 ${
+                    className={`py-1 px-3 rounded-xl border text-[11px] font-bold flex items-center gap-1.5 transition active:scale-95 ${
                       isSelected
-                        ? `${item.color} ring-2 ring-purple-500/60 shadow-md`
-                        : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-white'
+                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white border-purple-400 shadow-md shadow-purple-600/30 ring-1 ring-purple-400'
+                        : 'bg-slate-950/80 text-slate-400 border-slate-800 hover:text-white hover:border-slate-700'
                     }`}
                   >
                     <span>{item.icon}</span>
@@ -280,18 +328,55 @@ export default function RebirthGachaModal({
           </div>
         )}
 
-        {/* Contemporary Reality Starter Packs (Karma Endgame Unlocks) */}
+        {/* 2-Category Tab Selector */}
         {!rollResult && !isSpinning && (
-          <div className="mb-4 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 text-xs">
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-sans font-semibold text-slate-300 normal-case tracking-wide text-[12px] flex items-center gap-1.5">
-                <span>🎭 Kịch Bản Khởi Đầu (Reality Starter Packs)</span>
-              </span>
-              <span className="text-[12px] text-slate-400 font-sans tabular-nums">
-                Đòi hỏi tích lũy Karma từ tiền kiếp
+          <div className="flex items-center p-1 rounded-2xl bg-slate-950/90 border border-slate-800 mb-3.5">
+            <button
+              type="button"
+              onClick={() => setActiveKarmaTab('packs')}
+              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
+                activeKarmaTab === 'packs'
+                  ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>🎭 1. Gói Kịch Bản Đời Người</span>
+              {starterPackCost > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full bg-white/20 text-white text-[10px] font-mono">
+                  -{starterPackCost} K
+                </span>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveKarmaTab('perks')}
+              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
+                activeKarmaTab === 'perks'
+                  ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>🔮 2. Tùy Chọn Phước Báo</span>
+              {perksCost > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full bg-white/20 text-white text-[10px] font-mono">
+                  -{perksCost} K
+                </span>
+              )}
+            </button>
+          </div>
+        )}
+
+        {/* Tab 1: Contemporary Reality Starter Packs */}
+        {!rollResult && !isSpinning && activeKarmaTab === 'packs' && (
+          <div className="space-y-2 mb-4 animate-in fade-in duration-200">
+            <div className="flex items-center justify-between text-xs px-1">
+              <span className="text-slate-400 text-[11px]">Chọn 1 kịch bản khởi nguyên để mở đường cho số mệnh:</span>
+              <span className="text-purple-400 font-mono text-[11px] font-bold">
+                {selectedStarterPack === 'standard' ? 'Gói Cơ Bản (0 K)' : `Đã chọn: ${STARTER_PACKS.find(p => p.id === selectedStarterPack)?.name}`}
               </span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {STARTER_PACKS.map(pack => {
                 const isSelected = selectedStarterPack === pack.id;
                 const canAfford = karma >= pack.karmaCost;
@@ -301,43 +386,43 @@ export default function RebirthGachaModal({
                     type="button"
                     onClick={() => {
                       if (!canAfford) {
-                        setErrorMessage(`🔒 Kịch bản "${pack.name}" yêu cầu tối thiểu ${pack.karmaCost.toLocaleString()} Karma vĩnh cửu. Bạn hiện có ${karma} Karma (cần thêm ${(pack.karmaCost - karma).toLocaleString()} Karma từ các kiếp trước để mở khóa)!`);
+                        setErrorMessage(`🔒 Kịch bản "${pack.name}" yêu cầu tối thiểu ${pack.karmaCost.toLocaleString()} Karma vĩnh cửu. Bạn hiện có ${karma} Karma (cần thêm ${(pack.karmaCost - karma).toLocaleString()} Karma từ tiền kiếp)!`);
                         return;
                       }
                       setErrorMessage(null);
                       setSelectedStarterPack(pack.id as any);
                     }}
-                    className={`p-2.5 rounded-xl border text-left transition-all relative flex flex-col justify-between cursor-pointer ${
+                    className={`p-3 rounded-2xl border text-left transition-all relative flex flex-col justify-between cursor-pointer ${
                       isSelected
-                        ? 'bg-purple-950/70 border-purple-400 text-white shadow-md shadow-purple-950/40 ring-1 ring-purple-400'
+                        ? 'bg-gradient-to-br from-purple-950/80 to-slate-900 border-purple-400 text-white shadow-lg shadow-purple-950/50 ring-2 ring-purple-400/80'
                         : canAfford
-                        ? 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700 active:scale-98'
-                        : 'bg-slate-950/50 border-slate-900 text-slate-500 hover:border-rose-500/50'
+                        ? 'bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-900 active:scale-[0.99]'
+                        : 'bg-slate-950/40 border-slate-900 text-slate-500 opacity-60 hover:border-rose-500/40'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-base">{pack.icon}</span>
-                        {!canAfford ? (
-                          <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-rose-950/60 text-rose-400 border border-rose-800/80 font-bold flex items-center gap-0.5">
-                            🔒 {pack.karmaCost}
+                        <span className="text-2xl">{pack.icon}</span>
+                        {pack.karmaCost === 0 ? (
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+                            Miễn Phí
                           </span>
-                        ) : pack.karmaCost > 0 ? (
-                          <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-purple-950/60 text-purple-300 border border-purple-500/40 font-bold">
-                            -{pack.karmaCost} K
+                        ) : canAfford ? (
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-purple-950/60 text-purple-300 border border-purple-500/40 font-mono">
+                            {pack.karmaCost.toLocaleString()} Karma
                           </span>
                         ) : (
-                          <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 font-bold">
-                            0 Karma
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-950/60 text-rose-400 border border-rose-800/80 font-mono flex items-center gap-1">
+                            🔒 {pack.karmaCost.toLocaleString()} K
                           </span>
                         )}
                       </div>
-                      <div className="font-bold text-xs text-white leading-snug min-h-[30px] flex items-center">{pack.name}</div>
-                      <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-slate-900 text-amber-300 border border-slate-800 block w-fit my-1 font-semibold truncate max-w-full">
+                      <div className="font-bold text-sm text-white">{pack.name}</div>
+                      <span className="text-[10.5px] px-2 py-0.5 rounded-md bg-slate-950 text-amber-300 border border-slate-800 block w-fit my-1 font-semibold">
                         {pack.badge}
                       </span>
                     </div>
-                    <p className="text-[12px] text-slate-400 leading-tight mt-1">{pack.desc}</p>
+                    <p className="text-[11px] text-slate-400 leading-snug mt-1.5">{pack.desc}</p>
                   </button>
                 );
               })}
@@ -345,68 +430,51 @@ export default function RebirthGachaModal({
           </div>
         )}
 
-        {/* Karma Shop (Chỉ tương tác TRƯỚC khi quay bánh xe định mệnh) */}
-        {!rollResult && !isSpinning && (
-          <div className="mb-5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800 text-xs">
-            <div className="flex items-center justify-between mb-2.5">
-              <span className="font-sans font-semibold text-slate-300 normal-case tracking-wide text-[12px]">
-                Cửa Hàng Nghiệp Lực (Karma Shop):
+        {/* Tab 2: Karma Shop Perks */}
+        {!rollResult && !isSpinning && activeKarmaTab === 'perks' && (
+          <div className="space-y-2 mb-4 animate-in fade-in duration-200">
+            <div className="flex items-center justify-between text-xs px-1">
+              <span className="text-slate-400 text-[11px]">Tùy chọn gia hộ kiếp sống bằng phước báo cá nhân:</span>
+              <span className="text-purple-400 font-mono text-[11px] font-bold">
+                {perksCost > 0 ? `Đã chọn: ${Object.keys(selectedPerks).filter(k => selectedPerks[k]).length} Phước Báo` : 'Chưa chọn'}
               </span>
-              <div className="text-right">
-                <span className="font-sans tabular-nums font-bold text-purple-400 text-xs md:text-sm flex items-center gap-1 justify-end">
-                  <Sparkles className="w-3.5 h-3.5" /> {currentAvailableKarma} Karma Khả Dụng
-                </span>
-                {totalCost > 0 && (
-                  <span className="text-[12px] font-sans tabular-nums font-semibold text-rose-400 block">
-                    (Đã chọn mua: -{totalCost} Karma)
-                  </span>
-                )}
-              </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {[
                 {
                   key: "longevity_root",
                   title: "Cốt Cách Trường Thọ",
+                  icon: "🌿",
                   cost: 80,
                   desc: "+15 Max Sinh Lực, kháng bệnh và giảm suy kiệt.",
-                  lockedStyle: "bg-amber-950/40 border-amber-500/60 text-amber-300",
-                  iconColor: "text-amber-400",
-                  priceColor: "text-amber-400",
-                  hoverBorder: "hover:border-amber-500/50"
+                  color: "amber"
                 },
                 {
                   key: "lock_t1_t2",
                   title: "Tránh Đói Khổ",
+                  icon: "🛡️",
                   cost: 150,
-                  desc: "Cấm sinh ở vùng chiến tranh, nghèo đói cùng cực.",
-                  lockedStyle: "bg-indigo-950/40 border-indigo-500/60 text-indigo-300",
-                  iconColor: "text-indigo-400",
-                  priceColor: "text-indigo-400",
-                  hoverBorder: "hover:border-indigo-500/50"
+                  desc: "Chỉ sinh tại quốc gia Tier 1 / Tier 2 (Thịnh Vượng).",
+                  color: "indigo"
                 },
                 {
                   key: "guarantee_middle_class",
-                  title: "Trung Lưu+",
+                  title: "Gia Cảnh Khá Giả",
+                  icon: "🏰",
                   cost: 250,
                   desc: "Đảm bảo gia cảnh từ Trung Lưu trở lên, không mồ côi.",
-                  lockedStyle: "bg-emerald-950/40 border-emerald-500/60 text-emerald-300",
-                  iconColor: "text-emerald-400",
-                  priceColor: "text-emerald-400",
-                  hoverBorder: "hover:border-emerald-500/50"
+                  color: "emerald"
                 },
                 {
                   key: "choose_trait",
-                  title: "Khóa Mã Gen",
+                  title: "Khóa Mã Gen Bẩm Sinh",
+                  icon: "🧬",
                   cost: 400,
-                  desc: "Khóa 1 tố chất siêu việt bẩm sinh vào thân xác.",
-                  lockedStyle: "bg-purple-950/40 border-purple-500/60 text-purple-300",
-                  iconColor: "text-purple-400",
-                  priceColor: "text-purple-400",
-                  hoverBorder: "hover:border-purple-500/50"
+                  desc: "Khóa 1 tố chất siêu việt tiên thiên vào thân xác.",
+                  color: "purple"
                 }
-              ].map((item) => {
+              ].map(item => {
                 const isOwnedPermanent = unlockedPerks.includes(item.key);
                 const isBought = !!selectedPerks[item.key];
                 const isLocked = isOwnedPermanent || isBought;
@@ -421,53 +489,65 @@ export default function RebirthGachaModal({
                         handleBuyPerk(item.key, item.cost);
                       }
                     }}
-                    className={`p-2.5 rounded-xl border flex flex-col justify-between transition ${
+                    className={`p-3 rounded-2xl border flex flex-col justify-between transition-all ${
                       isLocked
-                        ? `${item.lockedStyle} shadow-md cursor-default`
+                        ? 'bg-purple-950/70 border-purple-400 text-white shadow-lg shadow-purple-950/40 ring-2 ring-purple-400/80 cursor-default'
                         : isDisabled
-                        ? 'bg-slate-950/30 border-slate-900/80 text-slate-600 opacity-40 cursor-not-allowed select-none'
-                        : `bg-slate-950/60 border-slate-800 text-slate-400 ${item.hoverBorder} hover:bg-slate-900 cursor-pointer active:scale-95`
+                        ? 'bg-slate-950/40 border-slate-900 text-slate-500 opacity-60 cursor-not-allowed select-none'
+                        : 'bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-900 cursor-pointer active:scale-[0.99]'
                     }`}
-                    title={isDisabled ? `Không đủ Karma (cần ${item.cost} Karma)` : undefined}
                   >
                     <div>
-                      <div className="flex items-center justify-between mb-1">
-                        <span className={`font-bold text-[12px] ${isDisabled ? 'text-slate-500' : ''}`}>
-                          {item.title}
-                        </span>
-                        {isLocked && <CheckCircle2 className={`w-3.5 h-3.5 ${item.iconColor} shrink-0`} />}
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xl">{item.icon}</span>
+                          <span className="font-bold text-xs md:text-sm text-white">
+                            {item.title}
+                          </span>
+                        </div>
+                        {isLocked && (
+                          <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
+                            ✓ Đã Bật
+                          </span>
+                        )}
                       </div>
-                      <div className={`text-[12px] leading-snug ${isDisabled ? 'text-slate-600' : 'text-slate-500'}`}>
+                      <p className="text-[11px] text-slate-400 leading-snug">
                         {item.desc}
-                      </div>
+                      </p>
                     </div>
-                    <div className="mt-2 pt-1.5 border-t border-slate-800/60 flex items-center justify-between">
+
+                    <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between">
                       {isOwnedPermanent ? (
-                        <span className={`text-[12px] font-bold ${item.priceColor}`}>ĐÃ CÓ</span>
+                        <span className="text-[11px] font-bold text-emerald-400">ĐÃ SỞ HỮU VĨNH VIỄN</span>
                       ) : isBought ? (
                         <>
-                          <span className={`text-[12px] font-bold ${item.priceColor}`}>✓ ĐÃ MUA</span>
+                          <span className="text-[11px] font-bold text-purple-300 font-mono">-{item.cost} Karma</span>
                           <button
                             type="button"
                             onClick={(e) => handleCancelPerk(item.key, e)}
-                            className="text-[12px] text-slate-400 hover:text-rose-400 underline font-medium"
+                            className="text-[11px] text-slate-400 hover:text-rose-400 underline font-semibold transition"
                           >
-                            Hủy
+                            Bỏ chọn
                           </button>
                         </>
                       ) : isDisabled ? (
-                        <>
-                          <span className="text-[12px] font-sans tabular-nums text-slate-600 line-through">
+                        <div className="flex items-center justify-between w-full">
+                          <span className="text-[11px] font-mono text-slate-500 line-through">
                             {item.cost} Karma
                           </span>
-                          <span className="text-[12px] px-1 py-0.2 rounded bg-slate-900 text-slate-500 border border-slate-800">
-                            Thiếu
+                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-950/50 text-rose-400 border border-rose-800/60 font-semibold">
+                            Thiếu {(item.cost - currentAvailableKarma).toLocaleString()} K
                           </span>
-                        </>
+                        </div>
                       ) : (
-                        <span className={`text-[12px] font-sans tabular-nums font-bold ${item.priceColor}`}>
-                          {item.cost} Karma
-                        </span>
+                        <div className="flex items-center justify-between w-full">
+                          <span className="text-[11px] font-mono font-bold text-amber-300">
+                            {item.cost} Karma
+                          </span>
+                          <span className="text-[10px] px-2 py-0.5 rounded-lg bg-indigo-600/30 text-indigo-200 border border-indigo-500/40 font-bold group-hover:bg-indigo-600 transition">
+                            + Kích Hoạt
+                          </span>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -475,27 +555,77 @@ export default function RebirthGachaModal({
               })}
             </div>
 
-            {/* Genetic trait selector if 400 Karma perk active */}
+            {/* Trait selector chip if 400 Karma perk active */}
             {(selectedPerks.choose_trait || unlockedPerks.includes('choose_trait')) && (
-              <div className="mt-2.5 p-2.5 rounded-xl bg-slate-950 border border-purple-500/40 animate-fadeIn">
-                <span className="text-[12px] text-purple-300 font-semibold block mb-1.5">Chọn 1 Mã Gen Thiên Phú Muốn Khóa:</span>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {TRAIT_OPTIONS.map(opt => (
-                    <button
-                      key={opt.id}
-                      onClick={() => setChosenTrait(opt.id)}
-                      className={`p-1.5 rounded-lg text-[12px] text-left transition border ${
-                        chosenTrait === opt.id 
-                          ? 'bg-purple-600 text-white border-purple-400 font-bold shadow-md shadow-purple-600/30' 
-                          : 'bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700'
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
+              <div className="mt-3 p-3 rounded-2xl bg-purple-950/40 border border-purple-500/40 flex items-center justify-between gap-3 animate-fadeIn">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-xl shrink-0">{formatTrait(chosenTrait).icon}</span>
+                  <div className="min-w-0">
+                    <span className="text-[10.5px] uppercase font-bold text-purple-300 block">Mã Gen Đã Khóa:</span>
+                    <span className="text-xs font-bold text-white truncate block">{formatTrait(chosenTrait).name}</span>
+                  </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setShowTraitPicker(true)}
+                  className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shrink-0 transition shadow-md shadow-purple-600/30"
+                >
+                  🔄 Đổi Mã Gen
+                </button>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Trait Picker Dialog Modal */}
+        {showTraitPicker && (
+          <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">
+            <div className="max-w-lg w-full bg-slate-950 border border-purple-500/40 rounded-3xl p-5 shadow-2xl space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <span>🧬</span>
+                  <span>Chọn 1 Mã Gen Thiên Phú Muốn Khóa</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setShowTraitPicker(false)}
+                  className="p-1 rounded-full bg-slate-800 text-slate-400 hover:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="max-h-72 overflow-y-auto space-y-1.5 custom-scrollbar pr-1">
+                {TRAIT_OPTIONS.map(opt => {
+                  const ft = formatTrait(opt.id);
+                  const isChosen = chosenTrait === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => {
+                        setChosenTrait(opt.id);
+                        setShowTraitPicker(false);
+                      }}
+                      className={`w-full p-2.5 rounded-xl border text-left transition flex items-center justify-between gap-2.5 ${
+                        isChosen
+                          ? 'bg-purple-600 text-white border-purple-400 font-bold shadow-md'
+                          : 'bg-slate-900/80 text-slate-300 border-slate-800 hover:bg-slate-800 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-lg shrink-0">{ft.icon}</span>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold truncate">{ft.name}</div>
+                          <div className="text-[10.5px] opacity-75 truncate">{ft.desc}</div>
+                        </div>
+                      </div>
+                      {isChosen && <CheckCircle2 className="w-4 h-4 text-white shrink-0" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         )}
 
@@ -684,18 +814,25 @@ export default function RebirthGachaModal({
             </div>
           </div>
         ) : (
-          <button
-            disabled={isSpinning}
-            onClick={spinDestinyWheel}
-            className={`w-full py-4 rounded-xl font-bold text-sm tracking-normal normal-case transition-all duration-300 flex items-center justify-center gap-2 shadow-xl ${
-              isSpinning 
-                ? 'bg-slate-800 text-slate-500 cursor-not-allowed' 
-                : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-indigo-600/25 active:scale-[0.98]'
-            }`}
-          >
-            <Sparkles className={`w-4 h-4 ${isSpinning ? 'animate-spin' : ''}`} />
-            <span>Quay Bánh Xe Định Mệnh (Bắt Đầu Kiếp Mới)</span>
-          </button>
+          <div className="pt-1">
+            <button
+              disabled={isSpinning}
+              onClick={spinDestinyWheel}
+              className={`w-full py-3.5 px-6 rounded-2xl font-bold text-sm tracking-normal normal-case transition-all duration-300 flex items-center justify-center gap-2.5 shadow-xl ${
+                isSpinning 
+                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed' 
+                  : 'bg-gradient-to-r from-purple-600 via-indigo-600 to-emerald-600 hover:opacity-95 text-white shadow-indigo-600/30 ring-1 ring-purple-400/50 active:scale-[0.98]'
+              }`}
+            >
+              <Sparkles className={`w-4 h-4 ${isSpinning ? 'animate-spin text-amber-300' : 'text-amber-300'}`} />
+              <span>Quay Bánh Xe Định Mệnh (Bắt Đầu Kiếp Mới)</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <div className="flex items-center justify-between text-[11px] text-slate-400 px-2 mt-2">
+              <span>Đang phân bổ: <strong className="text-purple-300 font-mono">{totalCost.toLocaleString()} Karma</strong></span>
+              <span>Khởi đầu: <strong className="text-emerald-400">0 Tuổi (Cockpit Sơ Sinh)</strong></span>
+            </div>
+          </div>
         )}
       </div>
     </div>
