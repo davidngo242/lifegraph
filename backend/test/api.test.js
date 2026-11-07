@@ -160,3 +160,53 @@ test('a trust fund is released once when advancing through adulthood', async () 
   const next = await request('qa_endowment', '/tick', { advance_only: true });
   assert.equal(next.data.character.history_log.filter(x => x.event?.includes('Cột Mốc Tuổi 18')).length, 1);
 });
+
+
+test('invested_ap boosts rewards, mitigates risks and appends strategic log note', async () => {
+  await seed('qa_invested_ap', {
+    age: 22,
+    cash: 1000,
+    vitality: 80,
+    burnout: 20,
+    karma: 50,
+    action_points: 4,
+    family_endowment: 0
+  });
+
+  const customDilemma = {
+    id: 'dilemma_investment_test',
+    title: 'Thử Thách Đầu Tư Mạo Hiểm',
+    type: 'STANDARD',
+    options: [
+      {
+        id: 'opt_high_risk_venture',
+        action_title: 'Dốc Vốn Khởi Nghiệp Công Nghệ',
+        cost_ap: 1,
+        effects: {
+          cash_delta: 2000,
+          karma_delta: 10,
+          vitality_delta: -20,
+          burnout_delta: 20
+        }
+      }
+    ]
+  };
+
+  const res = await request('qa_invested_ap', '/tick', {
+    choice_id: 'opt_high_risk_venture',
+    interaction_type: 'STANDARD',
+    invested_ap: 2,
+    previous_dilemma: customDilemma
+  });
+
+  assert.equal(res.status, 200);
+  const char = res.data.character;
+  assert.equal(char.cash, 3600); // 1000 + 3000 (boosted) - 400 (family upkeep)
+  assert.equal(char.karma, 66);
+  assert.equal(char.vitality, 72);
+  assert.equal(char.burnout, 21); // 20 + 10 (mitigated) - 4 (annual passive) - 5 (1 unused AP)
+
+  const strategicLog = char.history_log.find(l => l.event?.includes('Trợ Lực Chiến Lược') || l.choice?.includes('Trợ lực +2 AP'));
+  assert.ok(strategicLog, 'History log should record strategic invested AP');
+  assert.ok(strategicLog.choice.includes('Trợ lực +2 AP') || strategicLog.note?.includes('2 AP'));
+});

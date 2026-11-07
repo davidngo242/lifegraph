@@ -226,6 +226,7 @@ export default function LifeGraphPage() {
     interaction_type?: string;
     interaction_result?: any;
     advance_only?: boolean;
+    invested_ap?: number;
   }) => {
     setLoading(true);
     setErrorMsg(null);
@@ -264,6 +265,15 @@ export default function LifeGraphPage() {
           icon: data.combo_triggered.icon || '🔥'
         });
       }
+      if (data.passiveSummary?.converted_ap_notice) {
+        triggerBannerFeedback({
+          type: 'wellness',
+          title: 'Dưỡng Sinh Phục Hồi (Bảo Toàn AP Dư)',
+          subtitle: data.passiveSummary.converted_ap_notice,
+          delta: `+${data.passiveSummary.unused_ap_vitality_gain || 0} HP · -${data.passiveSummary.unused_ap_burnout_relief || 0}% Burnout`,
+          icon: '🌿'
+        });
+      }
       if (data.scenario !== undefined) setActiveScenario(data.scenario);
       if (data.aspiration) setAspiration(data.aspiration);
       if (data.passiveSummary?.annual_digest) setAnnualDigest(data.passiveSummary.annual_digest);
@@ -276,8 +286,12 @@ export default function LifeGraphPage() {
   };
 
   // Specific Action Handlers
-  const handleSelectChoice = (optionId: string) => {
-    submitInteraction({ choice_id: optionId, interaction_type: "STANDARD" });
+  const handleSelectChoice = (optionId: string, investedAp: number = 0) => {
+    submitInteraction({
+      choice_id: optionId,
+      interaction_type: "STANDARD",
+      invested_ap: investedAp
+    });
   };
 
   const handleSpectrumSubmit = (sliderValue: number) => {

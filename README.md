@@ -140,6 +140,11 @@ NEXT_PUBLIC_API_URL=/api/game
   * Hỗ trợ 2 phương án cứu sinh tức thời: **Dưỡng Sinh Phục Hồi Toàn Diện (1 AP)** giải tỏa kiệt sức hoặc **Thỉnh Phước Bảo Mạng (0 AP)** tại Đền Thờ Nghiệp Quả Karma khi đã cạn sạch điểm hành động.
 * ⌨️ **Gợi Ý Phím Tắt Trực Quan (Interactive Key Badges):** Hiển thị trực tiếp các phím tắt cốt lõi (`[1] [2] [3]`, `[Space]`, `[?]`) kèm nút tra cứu nhanh cheat-sheet.
 
+### 9. Khoang Quyết Định Hợp Nhất & Cơ Chế Synergistic AP
+* 🎯 **Khoang Quyết Định & Hành Động Năm Hợp Nhất (Unified Annual Stage):** Thẻ biến cố ngã rẽ và khay hành động điều hành nguồn lực AP được bao bọc trong một container duy nhất (`rounded-3xl`), dẹp bỏ tình trạng phân mảnh thị giác và viền lồng viền (`isEmbedded={true}`).
+* ⚡ **Cơ Chế Synergistic AP (`+1 AP Trợ Lực`):** Đầu tư điểm hành động trực tiếp vào phương án ngã rẽ để tăng +2 điểm gieo xúc xắc D20, tăng +25% Cash, +30% Karma và giảm 50% rủi ro trừ máu/tăng stress.
+* ⚠️ **Hộp Thoại Cảnh Báo Thông Minh (Smart Unspent AP Warning):** Tự động phát hiện khi còn AP dư và đề xuất dùng nốt hoặc chuyển hóa an toàn (+2 HP & -5% Burnout per AP) khi bước sang năm mới.
+
 ---
 
 ## ⌨️ Bảng Phím Tắt Toàn Cục (Global Hotkeys Cheat-Sheet)

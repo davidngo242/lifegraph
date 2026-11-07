@@ -7,6 +7,7 @@ interface FateDiceCheckProps {
   option: any;
   character?: any;
   dilemmaTitle?: string;
+  investedAp?: number;
   onComplete: () => void;
   onCancel: () => void;
   isLoading?: boolean;
@@ -16,6 +17,7 @@ export default function FateDiceCheck({
   option,
   character,
   dilemmaTitle,
+  investedAp = 0,
   onComplete,
   onCancel,
   isLoading = false
@@ -35,11 +37,12 @@ export default function FateDiceCheck({
   const risk = option?.risk_percent ?? 25;
   const dc = risk >= 60 ? 14 : risk >= 35 ? 12 : 10;
 
-  // Compute stat modifiers from character
+  // Compute stat modifiers from character & invested AP
   const traitsBonus = (character?.innate_traits && character.innate_traits.length > 0) ? 1 : 0;
   const vitalityBonus = (character?.vitality && character.vitality >= 75) ? 1 : 0;
   const effortBonus = (option?.cost_ap && option.cost_ap >= 2) ? 1 : 0;
-  const totalModifier = traitsBonus + vitalityBonus + effortBonus;
+  const apModifier = (investedAp || 0) * 2;
+  const totalModifier = traitsBonus + vitalityBonus + effortBonus + apModifier;
 
   const startRolling = () => {
     if (rollState !== 'ready') return;
@@ -215,7 +218,7 @@ export default function FateDiceCheck({
               <div className="text-[12px] font-sans tabular-nums text-slate-300 mt-1">
                 Điểm xúc xắc: <span className="font-bold text-white">{finalScore.baseRoll}</span>
                 {finalScore.modifier > 0 && (
-                  <span className="text-emerald-400 font-bold"> + {finalScore.modifier} (Bản Lĩnh)</span>
+                  <span className="text-emerald-400 font-bold"> + {finalScore.modifier} (Bản Lĩnh{apModifier > 0 ? ' & AP Trợ Lực' : ''})</span>
                 )}
                 {' '} = <span className="font-extrabold text-white text-xs">{finalScore.total}</span>
                 {' '}(Mục tiêu: {finalScore.dc}+)
@@ -240,8 +243,13 @@ export default function FateDiceCheck({
           <Flame className="w-3 h-3 text-emerald-400" /> Thể trạng sung mãn: +{vitalityBonus}
         </span>
         {effortBonus > 0 && (
-          <span className="flex items-center gap-1 bg-slate-900 px-2 py-0.5 rounded-md border border-slate-800 text-amber-300">
-            ⚡ AP Đầu tư: +{effortBonus}
+          <span className="flex items-center gap-1 bg-slate-900 px-2 py-0.5 rounded-md border border-slate-800 text-slate-300">
+            ⚡ AP Tiêu chuẩn: +{effortBonus}
+          </span>
+        )}
+        {apModifier > 0 && (
+          <span className="flex items-center gap-1 bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-md border border-amber-500/40 font-bold animate-pulse">
+            ⚡ Trợ lực AP: +{apModifier} điểm gieo quẻ
           </span>
         )}
       </div>

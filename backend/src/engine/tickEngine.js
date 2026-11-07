@@ -362,9 +362,15 @@ export async function processPassivePhase(character, assets, relationships) {
   // 12. Dynamic AP Economy (V7.5 Living Ecosystem)
   // Unused AP from previous year converts to peaceful recovery
   const unusedAP = Number(character.action_points) || 0;
+  const unusedApVitalityGain = unusedAP * 2;
+  const unusedApBurnoutRelief = unusedAP * 5;
+  const convertedApNotice = unusedAP > 0
+    ? `🌿 Chuyển hóa ${unusedAP} AP dư thành Dưỡng Sinh: +${unusedApVitalityGain} HP & -${unusedApBurnoutRelief}% Burnout.`
+    : null;
+
   if (unusedAP > 0) {
-    vitality = Math.min(maxVitality, vitality + (unusedAP * 2));
-    burnout = Math.max(0, burnout - (unusedAP * 5));
+    vitality = Math.min(maxVitality, vitality + unusedApVitalityGain);
+    burnout = Math.max(0, burnout - unusedApBurnoutRelief);
   }
 
   // Base AP = 3
@@ -455,8 +461,16 @@ export async function processPassivePhase(character, assets, relationships) {
       macroCalamityNotice,
       maxVitality,
       globalIndices,
+      unused_ap_converted: unusedAP,
+      unused_ap_vitality_gain: unusedApVitalityGain,
+      unused_ap_burnout_relief: unusedApBurnoutRelief,
+      converted_ap_notice: convertedApNotice,
       annual_digest: {
         age_reached: age,
+        unused_ap_converted: unusedAP,
+        unused_ap_vitality_gain: unusedApVitalityGain,
+        unused_ap_burnout_relief: unusedApBurnoutRelief,
+        converted_ap_notice: convertedApNotice,
         headline: age === 18 
           ? "🎓 Chính Thức Tròn 18 Tuổi: Bước Vào Đời & Tự Chủ Tài Chính"
           : age < 18 
@@ -477,6 +491,7 @@ export async function processPassivePhase(character, assets, relationships) {
         },
         childhood_event: childhoodPassiveEvent,
         family_events: [
+          ...(convertedApNotice ? [convertedApNotice] : []),
           ...(capitalEngineBonus > 0 ? [`👑 Cỗ Máy Dòng Tiền: Thu về +$${capitalEngineBonus.toLocaleString()} lợi tức thụ động không hao tổn sinh lực.`] : []),
           ...(hasEncyclopedic ? [`📚 Bách Khoa Toàn Thư: Trí tuệ uyên thâm đem lại +25 Karma danh vọng học thuật.`] : []),
           ...(childhoodPassiveEvent ? [`${childhoodPassiveEvent.title}: ${childhoodPassiveEvent.narrative}`] : []),

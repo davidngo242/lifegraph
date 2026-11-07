@@ -15,9 +15,11 @@ import {
   Dices,
   Flame,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  X
 } from 'lucide-react';
 import Tooltip from './Tooltip';
+import FateDiceCheck from './FateDiceCheck';
 
 interface Option {
   id: string;
@@ -41,7 +43,7 @@ interface EventCardProps {
   actionPoints: number;
   characterAge?: number;
   character?: any;
-  onSelectOption: (optionId: string) => void;
+  onSelectOption: (optionId: string, investedAp?: number) => void;
   onCustomResolve?: (actionText: string) => Promise<any>;
   isLoading: boolean;
 }
@@ -61,7 +63,17 @@ export default function EventCard({
   const [customResult, setCustomResult] = useState<any>(null);
   const [resolveError, setResolveError] = useState<string | null>(null);
 
-  // Active Fate Dice Roll Stage
+  // Invested AP state & Smart Unspent Warning
+  const [investedApMap, setInvestedApMap] = useState<Record<string, number>>({});
+  const [pendingUnspentWarning, setPendingUnspentWarning] = useState<{
+    option: Option;
+    investedAp: number;
+    unspentAP: number;
+  } | null>(null);
+  const [rollingCheck, setRollingCheck] = useState<{
+    option: Option;
+    investedAp: number;
+  } | null>(null);
 
   // Mind Voices Expansion State
   const [activeVoice, setActiveVoice] = useState<'logic' | 'heart' | 'primal'>('logic');
@@ -73,6 +85,25 @@ export default function EventCard({
         <Compass className="w-7 h-7 animate-spin text-indigo-400/80 mb-2" />
         <p className="text-xs normal-case font-sans font-medium text-slate-400">Đang điều phối bước ngoặt cuộc đời...</p>
       </div>
+    );
+  }
+
+  // Active Fate Dice Roll Stage
+  if (rollingCheck && dilemma) {
+    return (
+      <FateDiceCheck
+        option={rollingCheck.option}
+        character={character}
+        dilemmaTitle={dilemma.title}
+        investedAp={rollingCheck.investedAp}
+        onComplete={() => {
+          const { option, investedAp } = rollingCheck;
+          setRollingCheck(null);
+          onSelectOption(option.id, investedAp);
+        }}
+        onCancel={() => setRollingCheck(null)}
+        isLoading={isLoading}
+      />
     );
   }
 
@@ -159,10 +190,35 @@ export default function EventCard({
     };
   };
 
+  const proceedOptionExecution = (option: Option, investedAp: number = 0) => {
+    setPendingUnspentWarning(null);
+    const risk = option.risk_percent ?? 0;
+    // Kích hoạt FateDiceCheck khi lựa chọn có rủi ro (risk_percent >= 30 hoặc khi có AP trợ lực), trước khi gọi onSelectOption(optionId, investedAp)
+    if (risk >= 30 || investedAp > 0) {
+      setRollingCheck({ option, investedAp });
+    } else {
+      onSelectOption(option.id, investedAp);
+    }
+  };
+
   const handleOptionClick = (option: Option) => {
-    // Legacy options already carry a server-defined effect. Do not display a client-only
-    // success/failure roll that cannot affect that result.
-    if (!isLoading) onSelectOption(option.id);
+    if (isLoading) return;
+    const costAp = option.cost_ap !== undefined ? option.cost_ap : 1;
+    const currentInvested = investedApMap[option.id] || 0;
+    const totalCost = costAp + currentInvested;
+    const unspentAP = actionPoints - totalCost;
+
+    if (unspentAP > 0) {
+      // Smart Unspent AP Warning
+      setPendingUnspentWarning({
+        option,
+        investedAp: currentInvested,
+        unspentAP
+      });
+      return;
+    }
+
+    proceedOptionExecution(option, currentInvested);
   };
 
   const handleSendCustomAction = async () => {
@@ -306,6 +362,86 @@ export default function EventCard({
         )}
       </div>
 
+      {/* Smart Unspent AP Warning Banner */}
+      {pendingUnspentWarning && (
+        <div className="p-3.5 rounded-2xl bg-amber-950/70 border-2 border-amber-500/60 text-amber-200 shadow-xl flex flex-col gap-2.5 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="flex items-center justify-between gap-2 border-b border-amber-500/30 pb-2">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">⚠️</span>
+              <div>
+                <div className="font-bold text-white text-xs md:text-sm">
+                  Năm nay bạn vẫn còn <span className="text-amber-400 font-extrabold font-mono text-sm">{pendingUnspentWarning.unspentAP} AP</span> chưa dùng!
+                </div>
+                <div className="text-[11px] text-amber-300/80">
+                  Hành động đang chọn: <strong className="text-white">{pendingUnspentWarning.option.action_title || pendingUnspentWarning.option.label}</strong>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => setPendingUnspentWarning(null)}
+              className="text-amber-400 hover:text-white p-1 rounded-lg"
+              title="Đóng"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+            {/* Tùy chọn 1: Đầu tư 1 AP vào lựa chọn này */}
+            <button
+              type="button"
+              disabled={pendingUnspentWarning.unspentAP < 1}
+              onClick={() => {
+                const opt = pendingUnspentWarning.option;
+                const newInvested = (pendingUnspentWarning.investedAp || 0) + 1;
+                setInvestedApMap(prev => ({ ...prev, [opt.id]: newInvested }));
+                proceedOptionExecution(opt, newInvested);
+              }}
+              className="p-2.5 rounded-xl bg-gradient-to-r from-amber-600/30 to-amber-500/30 hover:from-amber-600/50 hover:to-amber-500/50 border border-amber-400/60 text-white font-bold text-left transition flex flex-col justify-between group active:scale-95 shadow-md"
+            >
+              <div className="flex items-center gap-1.5 text-amber-300 font-bold mb-1">
+                <Zap className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <span>⚡ Đầu tư 1 AP</span>
+              </div>
+              <span className="text-[11px] text-slate-300 font-normal leading-tight">
+                Vào lựa chọn này (+15% tỷ lệ thành công)
+              </span>
+            </button>
+
+            {/* Tùy chọn 2: Chuyển hóa thành Dưỡng Sinh */}
+            <button
+              type="button"
+              onClick={() => {
+                const opt = pendingUnspentWarning.option;
+                proceedOptionExecution(opt, pendingUnspentWarning.investedAp);
+              }}
+              className="p-2.5 rounded-xl bg-gradient-to-r from-emerald-600/30 to-teal-600/30 hover:from-emerald-600/50 hover:to-teal-600/50 border border-emerald-400/60 text-white font-bold text-left transition flex flex-col justify-between group active:scale-95 shadow-md"
+            >
+              <div className="flex items-center gap-1.5 text-emerald-300 font-bold mb-1">
+                <span>🌿 Chuyển hóa Dưỡng Sinh</span>
+              </div>
+              <span className="text-[11px] text-slate-300 font-normal leading-tight">
+                (+{pendingUnspentWarning.unspentAP * 2} HP) & Chốt Năm
+              </span>
+            </button>
+
+            {/* Tùy chọn 3: Quay lại dùng AP */}
+            <button
+              type="button"
+              onClick={() => setPendingUnspentWarning(null)}
+              className="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white font-bold text-left transition flex flex-col justify-between active:scale-95 shadow-md"
+            >
+              <div className="flex items-center gap-1.5 text-slate-300 font-bold mb-1">
+                <span>↩️ Quay lại dùng AP</span>
+              </div>
+              <span className="text-[11px] text-slate-400 font-normal leading-tight">
+                Dùng nốt AP ở Action Hub bên dưới
+              </span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* TAB 1: Roleplay Choice Buttons with Stances & Fate Roll */}
       {activeTab === 'standard' && (
         <div className="space-y-2.5">
@@ -314,8 +450,11 @@ export default function EventCard({
             const consequence = option.consequence_hint || option.effects_hint || "Hệ quả sẽ được ghi nhận vào dòng thời gian.";
             const risk = getRiskLabel(option.risk_percent);
             const costAp = option.cost_ap !== undefined ? option.cost_ap : 1;
-            const hasEnoughAP = actionPoints >= costAp;
-            const isDisabled = !hasEnoughAP || isLoading;
+            const isCurrentlyInvested = (investedApMap[option.id] || 0) > 0;
+            const totalRequiredAp = costAp + (investedApMap[option.id] || 0);
+            const hasEnoughAP = actionPoints >= totalRequiredAp;
+            const isDisabled = (!hasEnoughAP && !isCurrentlyInvested) || isLoading;
+            const canInvestMore = actionPoints >= costAp + 1;
 
             const stance = getOptionStance(option, idx);
 
@@ -343,7 +482,7 @@ export default function EventCard({
                       {stance.tag}
                     </span>
 
-                    {stance.needsRoll && (
+                    {(stance.needsRoll || isCurrentlyInvested) && (
                       <span className="text-[12px] font-sans tabular-nums text-amber-400 flex items-center gap-0.5">
                         <Dices className="w-2.5 h-2.5" /> Thử thách
                       </span>
@@ -362,7 +501,39 @@ export default function EventCard({
                 </button>
 
                 {/* Right: Info Tooltip + Risk Badge + AP Cost */}
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 flex-wrap sm:flex-nowrap justify-end">
+                  {/* Toggle [⚡ +1 AP Trợ Lực] button */}
+                  <button
+                    type="button"
+                    disabled={isLoading || (!isCurrentlyInvested && !canInvestMore)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isCurrentlyInvested) {
+                        setInvestedApMap(prev => ({ ...prev, [option.id]: 0 }));
+                      } else if (canInvestMore) {
+                        setInvestedApMap(prev => ({ ...prev, [option.id]: 1 }));
+                      }
+                    }}
+                    className={`px-2 py-1 rounded-xl text-[11px] font-bold border transition flex items-center gap-1 ${
+                      isCurrentlyInvested
+                        ? 'bg-amber-500/25 border-amber-400 text-amber-300 shadow-md shadow-amber-500/25 animate-pulse'
+                        : canInvestMore
+                        ? 'bg-slate-900/90 hover:bg-amber-950/40 border-slate-700 hover:border-amber-500/50 text-slate-300 hover:text-amber-300 active:scale-95'
+                        : 'bg-slate-950/60 border-slate-800 text-slate-600 cursor-not-allowed opacity-40'
+                    }`}
+                    title={
+                      isCurrentlyInvested
+                        ? "Đang trợ lực +1 AP (Bấm để hủy)"
+                        : canInvestMore
+                        ? "Bấm để đầu tư +1 AP trợ lực, tăng tỷ lệ thành công và hạn chế rủi ro"
+                        : "Không đủ AP để trợ lực thêm"
+                    }
+                  >
+                    <Zap className={`w-3 h-3 ${isCurrentlyInvested ? 'fill-amber-400 text-amber-400' : ''}`} />
+                    <span className="hidden sm:inline">{isCurrentlyInvested ? 'Đã Trợ Lực +1 AP' : '+1 AP Trợ Lực'}</span>
+                    <span className="sm:hidden">{isCurrentlyInvested ? '+1 AP' : '+1 AP'}</span>
+                  </button>
+
                   <Tooltip content={<div className="font-sans italic text-slate-300">{consequence}</div>}>
                     <button className="text-slate-500 hover:text-indigo-300 transition p-1">
                       <HelpCircle className="w-3.5 h-3.5" />
@@ -380,7 +551,7 @@ export default function EventCard({
                         : 'bg-slate-900 border-slate-700 text-amber-400'
                     }`}>
                       <Zap className={`w-3 h-3 ${hasEnoughAP ? 'fill-current' : ''}`} />
-                      {costAp} AP
+                      {totalRequiredAp} AP
                     </span>
                   )}
                 </div>

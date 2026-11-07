@@ -2768,7 +2768,7 @@ router.post('/action/rpg-active-perk', async (req, res) => {
 // POST /api/game/tick - Advance simulation
 router.post('/tick', async (req, res) => {
   try {
-    const { choice_id, interaction_type, type: rawType, interaction_result, advance_only } = req.body;
+    const { choice_id, interaction_type, type: rawType, interaction_result, advance_only, invested_ap = 0 } = req.body;
     const previous_dilemma = advance_only ? null : (req.body.previous_dilemma || getSessionData().currentDilemma);
     let character = await getLivingCharacter(res);
     if (!character) return;
@@ -2864,7 +2864,17 @@ router.post('/tick', async (req, res) => {
       } else if (type === "TRILEMMA" && previous_dilemma.trilemma_options) {
         const chosenId = choice_id || interaction_result?.choice_id || "TRI_A";
         const selected = previous_dilemma.trilemma_options.find(o => o.id === chosenId) || previous_dilemma.trilemma_options[0];
-        const effects = selected.effects || {};
+        let effects = { ...(selected.effects || {}) };
+        const invested = Math.floor(Math.max(0, Number(invested_ap) || 0));
+        let actualInvested = 0;
+        if (invested > 0 && character.action_points >= invested) {
+          actualInvested = invested;
+          character.action_points -= actualInvested;
+          if (effects.cash_delta && effects.cash_delta > 0) effects.cash_delta = Math.round(effects.cash_delta * (1 + 0.25 * actualInvested));
+          if (effects.karma_delta && effects.karma_delta > 0) effects.karma_delta = Math.round(effects.karma_delta * (1 + 0.3 * actualInvested));
+          if (effects.vitality_delta && effects.vitality_delta < 0) effects.vitality_delta = Math.round(effects.vitality_delta * 0.5);
+          if (effects.burnout_delta && effects.burnout_delta > 0) effects.burnout_delta = Math.round(effects.burnout_delta * 0.5);
+        }
 
         character.cash = Number(character.cash) + Number(effects.cash_delta || 0);
         character.vitality = Math.max(10, Math.min(100, character.vitality + Number(effects.vitality_delta || 0)));
@@ -2888,11 +2898,23 @@ router.post('/tick', async (req, res) => {
         }
 
         lastChoiceOutcome = selected.action_title;
-        historyLog.push({
+        const logEntry = {
           age: character.age,
           event: previous_dilemma.title,
           choice: lastChoiceOutcome
-        });
+        };
+        if (actualInvested > 0) {
+          logEntry.note = `Nhờ đầu tư ${actualInvested} AP chuẩn bị kỹ lưỡng, bạn đã gia tăng tỷ lệ thành công và hạn chế tối đa rủi ro.`;
+          logEntry.choice = `${lastChoiceOutcome} (⚡ Trợ lực +${actualInvested} AP)`;
+        }
+        historyLog.push(logEntry);
+        if (actualInvested > 0) {
+          historyLog.push({
+            age: character.age,
+            event: `[Trợ Lực Chiến Lược] ${previous_dilemma.title}`,
+            choice: `Nhờ đầu tư ${actualInvested} AP chuẩn bị kỹ lưỡng, bạn đã gia tăng tỷ lệ thành công và hạn chế tối đa rủi ro.`
+          });
+        }
       } else if (type === "TIME_SKIP") {
         const skip = (previous_dilemma && previous_dilemma.time_skip_data) ? previous_dilemma.time_skip_data : {
           years_jump: 3,
@@ -2951,9 +2973,38 @@ router.post('/tick', async (req, res) => {
         if (selectedOption) {
           lastChoiceOutcome = selectedOption.action_title || selectedOption.label || "";
           const costAP = selectedOption.cost_ap ?? 1;
+          const invested = Math.floor(Math.max(0, Number(invested_ap) || 0));
 
           if (character.action_points >= costAP) {
-            const effects = selectedOption.effects || {};
+            let actualInvested = 0;
+            if (invested > 0 && character.action_points >= (costAP + invested)) {
+              actualInvested = invested;
+              character.action_points -= actualInvested;
+            }
+
+            let effects = { ...(selectedOption.effects || {}) };
+
+            if (actualInvested > 0) {
+              if (effects.cash_delta && effects.cash_delta > 0) {
+                effects.cash_delta = Math.round(effects.cash_delta * (1 + 0.25 * actualInvested));
+              }
+              if (effects.karma_delta) {
+                if (effects.karma_delta > 0) {
+                  effects.karma_delta = Math.round(effects.karma_delta * (1 + 0.3 * actualInvested));
+                } else {
+                  effects.karma_delta = Math.round(effects.karma_delta * 0.5);
+                }
+              } else {
+                effects.karma_delta = 5 * actualInvested;
+              }
+              if (effects.vitality_delta && effects.vitality_delta < 0) {
+                effects.vitality_delta = Math.round(effects.vitality_delta * 0.5);
+              }
+              if (effects.burnout_delta && effects.burnout_delta > 0) {
+                effects.burnout_delta = Math.round(effects.burnout_delta * 0.5);
+              }
+            }
+
             character.cash = Number(character.cash) + Number(effects.cash_delta || 0);
             character.burnout = Math.max(0, Math.min(100, Number(character.burnout) + Number(effects.burnout_delta || 0)));
             character.karma = Math.max(0, Math.min(100, Number(character.karma) + Number(effects.karma_delta || 0)));
@@ -2979,11 +3030,24 @@ router.post('/tick', async (req, res) => {
               });
             }
 
-            historyLog.push({
+            const choiceTitle = selectedOption.action_title || selectedOption.label;
+            const logEntry = {
               age: character.age,
               event: previous_dilemma.title,
-              choice: selectedOption.action_title || selectedOption.label
-            });
+              choice: choiceTitle
+            };
+            if (actualInvested > 0) {
+              logEntry.note = `Nhờ đầu tư ${actualInvested} AP chuẩn bị kỹ lưỡng, bạn đã gia tăng tỷ lệ thành công và hạn chế tối đa rủi ro.`;
+              logEntry.choice = `${choiceTitle} (⚡ Trợ lực +${actualInvested} AP)`;
+            }
+            historyLog.push(logEntry);
+            if (actualInvested > 0) {
+              historyLog.push({
+                age: character.age,
+                event: `[Trợ Lực Chiến Lược] ${previous_dilemma.title}`,
+                choice: `Nhờ đầu tư ${actualInvested} AP chuẩn bị kỹ lưỡng, bạn đã gia tăng tỷ lệ thành công và hạn chế tối đa rủi ro.`
+              });
+            }
           }
         }
       }

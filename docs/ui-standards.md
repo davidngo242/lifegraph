@@ -248,6 +248,39 @@ flowchart TD
 
 ---
 
+### 4.4. Cơ Chế Synergistic AP (AP Trợ Lực Vào Quyết Định Chiến Lược)
+
+Bên cạnh việc dùng AP cho các hoạt động thường niên tại khay dưới, người chơi có thể trực tiếp đầu tư AP vào một quyết định ngã rẽ cụ thể để **trợ lực chiến lược (Synergistic AP Investment)**:
+
+* **Trực quan nút bấm `[+1 AP Trợ Lực]`:**
+  * Xuất hiện tại mỗi thẻ lựa chọn ngã rẽ (`EventCard`, `TrilemmaCard`).
+  * Trạng thái chưa đầu tư: `bg-slate-900/90 hover:bg-amber-950/40 border-slate-700 text-slate-300 hover:text-amber-300`.
+  * Trạng thái đã đầu tư: `bg-amber-500/25 border-amber-400 text-amber-300 shadow-md shadow-amber-500/25 animate-pulse` với nhãn đổi thành `[Đã Trợ Lực +1 AP]`. Người chơi có thể bấm lại để hoàn trả AP.
+* **Quy tắc cộng hưởng chiến lược (Synergistic Mechanics):**
+  * **Tăng xác suất thành công khi gieo xúc xắc (Fate Dice):** Mỗi +1 AP trợ lực bổ sung **+2 điểm trực tiếp** vào điểm xúc xắc D20 (`apModifier = investedAp * 2`), làm tăng đáng kể cơ hội vượt qua mốc DC Thách thức.
+  * **Khuếch đại lợi nhuận:** Gia tăng **+25% Cash** và **+30% Karma** cho các kết quả tích cực.
+  * **Giảm thiểu rủi ro sinh mệnh (Risk Mitigation):** Giảm **50% mức trừ Sinh Lực (HP)** và giảm **50% mức gia tăng Kiệt Sức (Burnout)** nếu lựa chọn xảy ra biến cố tiêu cực.
+  * **Ghi danh Di chúc Tiền Kiếp (Heritage Chronicle):** Lịch sử cuộc đời ghi nhận dòng vinh danh đặc biệt: *"Nhờ đầu tư X AP chuẩn bị kỹ lưỡng, bạn đã gia tăng tỷ lệ thành công và hạn chế tối đa rủi ro"*.
+
+---
+
+### 4.5. Hộp Thoại Cảnh Báo Thông Minh Khi Còn AP Dư (Smart Unspent AP Warning)
+
+Nhằm bảo vệ người chơi khỏi việc bấm nhầm chốt năm khi chưa kịp tận dụng hết điểm hành động (AP) mà vẫn tôn trọng quyền tự do lựa chọn tốc độ chơi:
+
+* **Điều kiện kích hoạt:**
+  * Tự động xuất hiện dạng banner thông minh ngay khi người chơi bấm vào một lựa chọn ngã rẽ trong khi vẫn còn AP dư (`unspentAP = actionPoints - totalCost > 0`).
+* **Thiết kế giao diện Banner (`Smart Unspent AP Warning`):**
+  * Nền cảnh báo ấm áp `bg-amber-950/70 border-2 border-amber-500/60 rounded-2xl p-3.5 shadow-xl`, hiệu ứng xuất hiện `animate-in fade-in slide-in-from-top-2 duration-200`.
+  * Biểu tượng `⚠️` và dòng thông điệp định hướng rõ ràng: *"Năm nay bạn vẫn còn X AP chưa dùng!"*.
+* **Nguyên tắc "Lựa Chọn Kép Minh Bạch (Dual Smart Choices)":**
+  1. **Nút 1 — "⚡ Dùng Nốt AP Ngay":** Người chơi có thể quay lại khay hành động năm (Action Dock) để làm thêm việc hoặc bấm `+1 AP Trợ Lực` vào chính lựa chọn này để nhận thưởng lớn hơn.
+  2. **Nút 2 — "🌿 Vẫn Chốt Năm (Chuyển AP Dư Thành Máu)":** Tiếp tục thực thi lựa chọn mà không sợ thiệt thòi. Hệ thống cam kết tự động chuyển hóa toàn bộ AP chưa dùng:
+     * Mỗi **1 AP dư** ➔ Tự động chuyển thành **+2 HP (Sinh Lực)** và **–5% Burnout (Kiệt Sức)** khi bước sang năm mới.
+     * Thông báo kết quả chuyển hóa xuất hiện rõ ràng tại Bản Tin Thường Niên (Annual Digest) và Banner phản hồi tức thì.
+
+---
+
 ## 5. Chuẩn Mực Phím Tắt Toàn Cục & Tiếp Cận Bàn Phím (Global Hotkeys & Accessibility)
 
 Nhằm mang lại trải nghiệm điều khiển liên tục (Flow State) như các tựa game RPG kinh điển, LifeGraph thiết lập chuẩn phím tắt toàn cục 1 chạm:

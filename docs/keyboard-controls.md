@@ -118,8 +118,17 @@ graph LR
 
 Hệ thống phím tắt được nhúng trực tiếp vào các component giao diện thông qua thẻ `<kbd>` phong cách Monospace hiện đại:
 
-### 6.1. Ngã Rẽ Cuộc Đời (EventCard)
-- Các nút hành động được đánh số phím <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd> ở góc trái cùng với nhãn phong thái nhập vai (Roleplay Stance).
+### 6.1. Ngã Rẽ Cuộc Đời (EventCard), AP Trợ Lực & Thử Thách Xúc Xắc
+- **Phím chọn phương án:** Các nút hành động được đánh số phím <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd> ở góc trái cùng với nhãn phong thái nhập vai (Roleplay Stance).
+- **Kết hợp chuột & phím với AP Trợ Lực (`+1 AP`):**
+  - Người chơi có thể nhấp chuột vào nút `[+1 AP Trợ Lực]` trên bất kỳ phương án nào để đầu tư thêm điểm hành động, sau đó nhấn phím số <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd> để kích hoạt phương án kèm điểm cộng hưởng.
+- **Tương tác bàn phím với Cảnh Báo AP Dư (Smart Unspent AP Warning):**
+  - Khi người chơi bấm phím số <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd> mà nhân vật vẫn còn AP dư (`unspentAP > 0`), hệ thống sẽ dừng lại hiển thị Banner cảnh báo thông minh màu hổ phách để người chơi quyết định: quay lại dùng nốt AP hoặc bấm "Vẫn Chốt Năm" để chuyển hóa AP thành Máu (+2 HP & -5% Burnout per AP).
+- **Màn hình Gieo Quẻ Xúc Xắc Số Phận (FateDiceCheck):**
+  - Khi phương án được chọn có rủi ro (`risk >= 30%`) hoặc có AP trợ lực, hệ thống tự động mở màn hình gieo quẻ D20.
+  - Người chơi có thể nhấn phím <kbd>Space</kbd> hoặc click **"Gieo Xúc Xắc D20"** để tung quẻ.
+  - Huy hiệu `⚡ Trợ lực AP: +X điểm gieo quẻ` hiển thị nổi bật điểm cộng trực tiếp (+2 điểm/AP) giúp vượt qua DC Threshold dễ dàng.
+  - Nhấn <kbd>Space</kbd> hoặc click **"Xác Nhận Kết Quả"** để hoàn tất lượt và chuyển tiếp kiếp sống.
 
 ### 6.2. Tam Giác Nghịch Lý (TrilemmaCard)
 - 3 cột lựa chọn tương ứng với 3 phím <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd> hiển thị nổi bật ở góc trên bên phải của từng thẻ lựa chọn.
@@ -190,3 +199,5 @@ Cập nhật danh sách phím trong `frontend/app/components/KeyboardShortcutsMo
 | 6 | Nhập text trong ô chat NPC | Gõ chữ "1 2 3 space d m" vào input | Chữ xuất hiện trong input, không kích hoạt hotkey | ✅ Đạt |
 | 7 | Nhấn <kbd>Ctrl+C</kbd> / <kbd>Alt+Tab</kbd> | Bấm phím kết hợp | Hệ điều hành xử lý bình thường, không bị chặn | ✅ Đạt |
 | 8 | Báo động SOS khi HP < 30 | Đưa HP về 25% | Nút SOS Cấp Cứu hiển thị nhấp nháy trên HUD | ✅ Đạt |
+| 9 | Bấm phím số <kbd>1, 2, 3</kbd> khi còn AP | Nhấn số lựa chọn khi AP > chi phí | Hiển thị Banner Smart Unspent AP Warning màu hổ phách | ✅ Đạt |
+| 10 | Bấm <kbd>Space</kbd> tại màn hình xúc xắc D20 | Nhấn Space khi FateDiceCheck mở | Lắc xúc xắc D20 và cộng dồn điểm AP Trợ Lực (+2/AP) | ✅ Đạt |

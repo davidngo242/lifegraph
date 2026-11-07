@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { recordAndCheckCombo, resetAnnualActions } from '../src/engine/comboActionEngine.js';
 import { getBreakthroughForAge, executeBreakthroughAction } from '../src/engine/breakthroughEngine.js';
 import { evaluateIncomingNpcEvent } from '../src/engine/incomingSocialEngine.js';
+import { processPassivePhase } from '../src/engine/tickEngine.js';
 
 test('Combo Engine: records actions and triggers Thân Tâm Khang Kiện combo', () => {
   const character = {
@@ -79,3 +80,45 @@ test('Incoming Social Engine: generates valid NPC event with options and effects
     }
   }
 });
+
+test('Dynamic AP Economy: unused AP converts to vitality gain, burnout relief and converted_ap_notice', async () => {
+  const character = {
+    age: 25,
+    cash: 5000,
+    vitality: 70,
+    max_vitality: 100,
+    burnout: 40,
+    action_points: 3,
+    hidden_flags: [],
+    household: { parents_status: 'alive' }
+  };
+
+  const { updatedCharacter, passiveSummary } = await processPassivePhase(character, [], []);
+
+  assert.equal(passiveSummary.unused_ap_converted, 3);
+  assert.equal(passiveSummary.unused_ap_vitality_gain, 6); // 3 * 2
+  assert.equal(passiveSummary.unused_ap_burnout_relief, 15); // 3 * 5
+  assert.ok(passiveSummary.converted_ap_notice);
+  assert.ok(passiveSummary.converted_ap_notice.includes('Chuyển hóa 3 AP dư thành Dưỡng Sinh: +6 HP & -15% Burnout'));
+  assert.ok(passiveSummary.annual_digest.family_events.some(e => e.includes('Chuyển hóa 3 AP dư')));
+
+  // Vitality and Burnout updated correctly (burnout accounts for -4 annual passive recovery + -15 AP relief)
+  assert.equal(updatedCharacter.vitality, 76); // 70 + 6
+  assert.equal(updatedCharacter.burnout, 21); // 40 - 4 (annual passive) - 15 (AP conversion)
+
+  // When AP is 0
+  const charZeroAp = {
+    age: 25,
+    cash: 5000,
+    vitality: 70,
+    max_vitality: 100,
+    burnout: 40,
+    action_points: 0,
+    hidden_flags: [],
+    household: { parents_status: 'alive' }
+  };
+  const resZero = await processPassivePhase(charZeroAp, [], []);
+  assert.equal(resZero.passiveSummary.unused_ap_converted, 0);
+  assert.equal(resZero.passiveSummary.converted_ap_notice, null);
+});
+
