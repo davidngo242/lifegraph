@@ -187,6 +187,20 @@ NEXT_PUBLIC_API_URL=/api/game
 * 🚨 **Cảnh Báo Trực Quan Điện Ảnh `🚨 TÌNH HUỐNG SINH TỬ NGUY CẤP`:**
   * Trong Phòng Quyết Định Điện Ảnh 21:9 (`CinemaDecisionRoomModal.tsx`), hệ thống tự động nhận diện các kịch bản hiểm nguy sinh tử (`fever`, `river`, `crisis`, `sinh tử`, `nguy cấp`, `đuối nước`) để kích hoạt huy hiệu báo động đỏ nhịp đập (`animate-pulse`) và đổi dải viền rạp chiếu sang sắc đỏ thẫm đe dọa sinh mệnh (`bg-rose-950/40 border-rose-500/60 shadow-[0_0_20px_rgba(244,63,94,0.3)]`).
 
+### 15. Hệ Thống Studio Nhân Vật Chibi 3D & Hoạt Cảnh Xương Spine 2D PRO Live
+* 🎨 **Đôi Mắt Anime Chibi Đa Lớp (Catchlights & Blinking):**
+  * Tái cấu trúc toàn diện diện mạo nhân vật theo phong cách Chibi Anime: Đôi mắt to tròn long lanh với tròng đen chuyển sắc theo quốc tịch, đồng tử sâu thẳm, 2 đốm sáng phản chiếu (Catchlights kép), hàng mi cong sắc nét và chu kỳ chớp mắt tự nhiên 3.5s - 5s.
+  * Hai gò má ửng hồng đào (Peach Blush) cùng nét cười chúm chím dễ thương.
+* 🌿 **Mái Tóc Bồng Bềnh & Phụ Kiện Đặc Trưng Cốt Truyện:**
+  * Mái tóc uốn sóng nhiều tầng với tóc mái tỉa nhánh (Bangs) và hai lọn tóc mai uốn lượn ôm sát hai bên má hệt như nhân vật nữ Bắc Âu trong tranh mẫu.
+  * **Vòng hoa lá quả mọng đỏ (Forest Berry Garland Crown)** và **Túi da đeo chéo phiêu lưu (Crossbody Satchel)** đính chùm lá cây may mắn.
+* 🎬 **Trình Hoạt Ảnh Khung Xương Spine 2D Live (10 Native Animations):**
+  * Tích hợp công nghệ hoạt ảnh xương Spine 2D PRO với 10 cử động mượt mà 60 FPS: `Front_idle`, `Front_Talk`, `Vibing`, `Jump`, `Walk`, `Run`, `Walk_Handup`, `Idle_1`, `Idle_2`, `Back_idle`.
+  * Hỗ trợ bật/tắt hiển thị điểm xương Rigging (`Show Bones`) mô phỏng giao diện làm việc của Spine Studio.
+* 🔄 **Chế Độ Xem Kép & Nút Chuyển Đổi Trên Buồng Lái:**
+  * Nút chuyển đổi nhanh `[3D] / [SPINE]` trên khung Avatar của Hero Banner giúp người chơi tự do lựa chọn hiển thị mô hình 3D xoay chiều sâu hoặc hoạt ảnh 2D Spine sống động.
+  * Phòng Thử Nghiệm Mở Rộng (`AvatarInspectorModal.tsx`) tích hợp 2 tab chuyên sâu: `[Spine 2D Live]` và `[3D Chibi Anime]`.
+
 ---
 
 ## ⌨️ Bảng Phím Tắt Toàn Cục (Global Hotkeys Cheat-Sheet)

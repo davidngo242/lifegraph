@@ -644,3 +644,45 @@ Nhằm giải quyết triệt để vấn đề văn bản dài bị cắt ngắ
 - **Bản Tin Năm & MMO Toàn Cầu (`AnnualDigestBanner.tsx`, `MmoWeatherBar.tsx`):**
   - Tựa đề thử thách cột mốc & Biến cố gia đình.
   - Dải tin tức vĩ mô MMO thế giới thực Open-Meteo.
+
+
+---
+
+## 17. Chuẩn Hóa Avatar Chibi Anime 3D & Hoạt Cảnh Xương Spine 2D (Chibi & Spine Studio v2.4 Standard)
+
+Nhằm nâng cấp trải nghiệm thị giác lên chuẩn Game RPG Anime thương mại cao cấp, LifeGraph trang bị song song hai công nghệ hiển thị Avatar: **Mô hình 3D Stylized Chibi Anime** kết hợp **Bộ Hoạt Ảnh Xương 2D Spine PRO Live**:
+
+### 17.1. Đặc Tả Đồ Họa 3D Stylized Chibi Anime (`Dynamic3DAvatar.tsx`)
+1. **Đôi Mắt Anime Biểu Cảm Sâu (Expressive Multi-layer Anime Eyes):**
+   * **Cấu trúc 5 lớp chi tiết:** Lòng trắng (Sclera) hình khối cong $\to$ Tròng mắt to tròn (Iris) đổ màu chuyển sắc theo sắc tộc $\to$ Con ngươi đen nhánh (Pupil) $\to$ Điểm bắt sáng chính (Primary Catchlight ở góc 10h) $\to$ Điểm bắt sáng phụ (Secondary Soft Sparkle ở góc 4h) $\to$ Hàng lông mi trên cong vút (Eyelash Arc).
+   * **Vòng Lặp Chớp Mắt Tự Nhiên (Blinking Loop):** Chu kỳ chớp mắt ngẫu nhiên 3.5s - 5s, hai mắt khép lại trong 120ms rồi mở ra, tạo cảm giác sinh mệnh chân thực.
+   * **Đôi Má Hồng Đào (Peach Blush):** Hai vệt ửng hồng phớt nhẹ ở gò má với độ trong suốt tự nhiên, tạo nét thơ ngây và dễ thương đặc trưng của phong cách Chibi.
+2. **Mái Tóc Bồng Bềnh Nhiều Tầng Lớp (Layered Volumetric Hair):**
+   * **Tóc Mái (Bangs):** Các tép tóc hình búp rủ xuống trán uốn lượn tự nhiên có khoảng hở để lộ hàng chân mày.
+   * **Lọn Tóc Mai (Side Locks):** Hai lọn tóc buông dài phủ qua vai, ôm lấy hai bên má uốn sóng mềm mại hệt như nhân vật nữ Bắc Âu trong tranh mẫu.
+   * **Độ Dày Tóc Sau Vai (Back Volume):** Khối tóc bồng bềnh uốn sóng xòe ra sau vai.
+3. **Phụ Kiện Theo Cốt Truyện & Lứa Tuổi:**
+   * 🌿 **Vòng Hoa Lá Quả Mọng (Forest Berry Garland Crown):** Vòng dây leo kết hợp lá thường xuân xanh rêu và các hạt quả mọng đỏ rực rỡ (Ruby Red Berries), kích hoạt cho nhân vật Bắc Âu / Na Uy, hoặc thời kỳ ấu thơ - học trò, hoặc người có gen yêu thiên nhiên/dược thảo.
+   * 🎒 **Túi Da Đeo Chéo Phiêu Lưu (Crossbody Satchel):** Dây đai da vắt chéo qua ngực và túi da nâu bên hông có chùm lá cây trang trí.
+4. **Đa Dạng Hóa Bản Sắc (Diversity Matrix):**
+   * **Sắc tộc & Quốc gia:** Màu da, màu tóc, màu tròng mắt và hoa văn trang phục tự động biến chuyển theo quốc gia (Na Uy, Việt Nam, Nhật Bản, Syria, Somalia).
+   * **Địa vị xã hội:** Trang phục biến đổi từ vải thô mộc mạc (Bĩ cực) đến áo tunic thường nhật (Cần lao), âu phục lịch sự (Trung lưu) và áo dạ viền lông thú nạm vàng ròng (Quý tộc tài phiệt).
+
+### 17.2. Hoạt Ảnh Khung Xương Spine 2D PRO (`SpineCharacterAvatar.tsx`)
+1. **Kiến Trúc Khung Xương Động (Hierarchical Skeletal IK/FK Engine):**
+   * Xây dựng hệ thống xương ảo: `root`, `spine`, `neck`, `head`, `left_arm`, `right_arm`, `left_leg`, `right_leg`, `satchel`, `garland`.
+   * Hỗ trợ bật/tắt hiển thị điểm xương `Bones Visible` (các điểm tròn cyan và đỏ như trong giao diện phần mềm Spine PRO chuyên nghiệp).
+2. **Bộ 10 Hoạt Ảnh Bản Quyền (10 Native Animations):**
+   * `Front_idle`: Đứng yên hít thở nhẹ nhàng, nhấp nháy mắt, tóc đung đưa theo gió.
+   * `Front_Talk`: Gật đầu nhẹ, mấp máy miệng trò chuyện, biểu cảm tương tác sinh động.
+   * `Vibing`: Lắc lư đầu và thân theo nhịp điệu cực chill, tóc và áo nảy nhẹ.
+   * `Jump`: Khuỵu gối bật nhảy lên không trung, túi xách và lọn tóc nảy lên trên cao.
+   * `Walk`: Bước đi khoan thai, hai tay đánh nhịp nhịp nhàng.
+   * `Run`: Chạy nhanh dứt khoát, người hơi chúi về phía trước.
+   * `Walk_Handup`: Vừa bước đi vừa giơ tay vẫy chào thân thiện.
+   * `Idle_1`: Nghiêng đầu tò mò, chớp chớp mắt dễ thương.
+   * `Idle_2`: Chắp hai tay trước bụng, mỉm cười e ấp dịu dàng.
+   * `Back_idle`: Xoay lưng nhìn từ phía sau, khoe trọn mái tóc uốn sóng bồng bềnh và túi đeo bên hông.
+3. **Studio Xem Kép & Nút Chuyển Đổi Trên Buồng Lái:**
+   * Tại **Hero Banner**: Nút chuyển đổi nhanh `[3D] / [SPINE]` giúp người chơi linh hoạt chọn kiểu avatar hiển thị theo sở thích.
+   * Tại **Phòng Thử Nghiệm Studio (`AvatarInspectorModal.tsx`)**: Bố cục 2 tab `[Spine 2D Live]` và `[3D Chibi Anime]` với bảng điều khiển 10 hoạt ảnh trực quan hệt như studio Spine PRO.
