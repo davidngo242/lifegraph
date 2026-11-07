@@ -859,12 +859,14 @@ const handleHeirRebirth = async (req, res) => {
     const childName = childRecord?.name || "Hậu Duệ Thừa Kế";
     const childAge = typeof childRecord?.age === 'number' ? childRecord.age : 0;
 
-    // 1. Calculate 30% Inheritance Tax (V7.5 Specification)
+    // 1. Calculate Inheritance Tax (10% if early_will_established, otherwise 30%)
     const totalAssetValue = parentAssets.reduce((sum, a) => sum + Number(a.current_value || 0), 0);
     const parentNetWorth = Math.max(0, (Number(parent.cash) || 0) + totalAssetValue);
-    const estateTax = Math.round(parentNetWorth * 0.30);
+    const hasEarlyWill = Boolean(parent.early_will_established || parent.hidden_flags?.includes('early_will_established'));
+    const estateTaxRate = hasEarlyWill ? 0.10 : 0.30;
+    const estateTax = Math.round(parentNetWorth * estateTaxRate);
     const inheritedNetWorth = Math.max(0, parentNetWorth - estateTax);
-    const inheritedCash = Math.max(0, Math.round(Number(parent.cash ?? 0) * 0.70));
+    const inheritedCash = Math.max(0, Math.round(Number(parent.cash ?? 0) * (1 - estateTaxRate)));
 
     // 2. Vendetta Transfer (Sổ Thù Vặt Dòng Tộc)
     const inheritedNpcs = [];
@@ -950,7 +952,9 @@ const handleHeirRebirth = async (req, res) => {
         {
           age: childAge,
           event: `Chào đời / Thừa kế thế hệ thứ ${generation} của dòng họ ${parent.name}.`,
-          choice: `Kế thừa $${inheritedNetWorth.toLocaleString()} sau khi nộp 30% Thuế Thừa Kế ($${estateTax.toLocaleString()}).`
+          choice: hasEarlyWill
+            ? `Kế thừa ${inheritedNetWorth.toLocaleString()} với Thuế Thừa Kế ưu đãi 10% nhờ Di Chúc Sớm (${estateTax.toLocaleString()}).`
+            : `Kế thừa ${inheritedNetWorth.toLocaleString()} sau khi nộp 30% Thuế Thừa Kế (${estateTax.toLocaleString()}).`
         }
       ],
       generation,
@@ -1055,6 +1059,8 @@ const handleHeirRebirth = async (req, res) => {
         parent_name: parent.name,
         generation,
         estate_tax: estateTax,
+        tax_rate: estateTaxRate,
+        has_early_will: hasEarlyWill,
         inherited_amount: inheritedNetWorth,
         enemies_count: enemiesCount,
         allies_count: alliesCount
@@ -1954,6 +1960,205 @@ router.post('/action/family', async (req, res) => {
     res.status(400).json({ error: "Hành động gia đình không hợp lệ!" });
   } catch (err) {
     res.status(500).json({ error: "Thao tác gia đình thất bại", message: err.message });
+  }
+});
+
+// POST /api/game/action/senior - Hoạt Động Tiêu AP Tuổi Già (Senior AP Sinks: 45+ Tuổi)
+router.post('/action/senior', async (req, res) => {
+  try {
+    const { action_type } = req.body;
+    let character = await getLivingCharacter(res);
+    if (!character) return;
+
+    if ((Number(character.age) || 0) < 45) {
+      return res.status(400).json({
+        error: `Chỉ mở khóa cho người từng trải từ 45 tuổi trở lên (Hiện tại: ${character.age} tuổi)!`
+      });
+    }
+
+    const history = character.history_log || [];
+    if (!character.hidden_flags) character.hidden_flags = [];
+
+    if (action_type === 'write_memoir') {
+      const costAP = 2;
+      if ((character.action_points || 0) < costAP) {
+        return res.status(400).json({ error: "Cần tối thiểu 2 AP để tĩnh tâm chấp bút hồi ký cuộc đời!" });
+      }
+
+      character.action_points -= costAP;
+      character.karma = Math.min(100, (Number(character.karma) || 0) + 25);
+      character.written_memoir = true;
+      if (!character.hidden_flags.includes('written_memoir')) {
+        character.hidden_flags.push('written_memoir');
+      }
+
+      history.push({
+        age: character.age,
+        event: 'Viết hồi ký cuộc đời',
+        choice: 'Đúc kết bài học nhân sinh (+25 Karma, lưu danh hậu thế)'
+      });
+      character.history_log = history;
+      await updateCharacter(character.id, character);
+
+      return res.json({
+        success: true,
+        message: "Đã hoàn thành cuốn hồi ký cuộc đời, truyền lại trí tuệ và công đức cho muôn đời sau (+25 Karma)!",
+        character
+      });
+    }
+
+    if (action_type === 'grandchild_mentorship') {
+      const costAP = 1;
+      if ((character.action_points || 0) < costAP) {
+        return res.status(400).json({ error: "Cần tối thiểu 1 AP để chỉ dạy, bồi dưỡng thế hệ con cháu!" });
+      }
+
+      character.action_points -= costAP;
+      character.karma = Math.min(100, (Number(character.karma) || 0) + 10);
+      character.mentored_heir = true;
+      if (!character.hidden_flags.includes('mentored_heir')) {
+        character.hidden_flags.push('mentored_heir');
+      }
+
+      // Boost affinity of family members
+      try {
+        const relationships = await getRelationships(character.id);
+        for (const rel of relationships) {
+          if (rel.type === 'child' || rel.type === 'spouse' || rel.type === 'relative') {
+            rel.affinity = Math.min(100, (Number(rel.affinity) || 50) + 15);
+            await updateRelationship(rel.id, rel);
+          }
+        }
+      } catch (err) {
+        console.error("Lỗi cập nhật hảo cảm người thân:", err);
+      }
+
+      history.push({
+        age: character.age,
+        event: 'Truyền thụ kinh nghiệm cho con cháu',
+        choice: 'Bồi dưỡng thế hệ kế cận (+15 Hảo cảm gia đình, +10 Karma)'
+      });
+      character.history_log = history;
+      await updateCharacter(character.id, character);
+
+      return res.json({
+        success: true,
+        message: "Đã dành thời gian chỉ dạy thế hệ thừa kế, củng cố tình thân và đạo đức gia tộc (+15 Gắn kết, +10 Karma)!",
+        character
+      });
+    }
+
+    if (action_type === 'early_estate_will') {
+      const costAP = 2;
+      const costCash = 1000;
+      if ((character.action_points || 0) < costAP) {
+        return res.status(400).json({ error: "Cần tối thiểu 2 AP để hoàn tất thủ tục lập di chúc hợp pháp!" });
+      }
+      if ((Number(character.cash) || 0) < costCash) {
+        return res.status(400).json({ error: "Cần $1.000 để chi trả lệ phí công chứng và pháp lý di chúc!" });
+      }
+
+      character.action_points -= costAP;
+      character.cash -= costCash;
+      character.early_will_established = true;
+      if (!character.hidden_flags.includes('early_will_established')) {
+        character.hidden_flags.push('early_will_established');
+      }
+
+      history.push({
+        age: character.age,
+        event: 'Lập di chúc & quy hoạch thừa kế',
+        choice: 'Công chứng di chúc hợp pháp, giảm thuế thừa kế từ 30% xuống chỉ còn 10%'
+      });
+      character.history_log = history;
+      await updateCharacter(character.id, character);
+
+      return res.json({
+        success: true,
+        message: "Đã hoàn tất công chứng di chúc thừa kế! Thế hệ sau sẽ được giảm thuế thừa kế từ 30% xuống chỉ còn 10%!",
+        character
+      });
+    }
+
+    return res.status(400).json({ error: "Loại hành động dưỡng lão không hợp lệ!" });
+  } catch (err) {
+    res.status(500).json({ error: "Thao tác dưỡng lão thất bại", message: err.message });
+  }
+});
+
+// POST /api/game/action/debt-relief - Tái Cấu Trúc Nợ & Thoát Bẫy Nghèo (Debt Restructuring)
+router.post('/action/debt-relief', async (req, res) => {
+  try {
+    const { relief_type } = req.body;
+    let character = await getLivingCharacter(res);
+    if (!character) return;
+
+    if ((Number(character.cash) || 0) >= 0) {
+      return res.status(400).json({
+        error: "Tài chính của bạn chưa rơi vào tình trạng âm nợ! Không cần kích hoạt gói cứu trợ thoát bẫy nghèo."
+      });
+    }
+
+    const history = character.history_log || [];
+    if (!character.hidden_flags) character.hidden_flags = [];
+
+    if (relief_type === 'family_soft_loan') {
+      character.cash = Number(character.cash) + 3000;
+      character.family_soft_loan_taken = true;
+      if (!character.hidden_flags.includes('family_soft_loan_taken')) {
+        character.hidden_flags.push('family_soft_loan_taken');
+      }
+
+      // Trừ nhẹ 10 điểm hảo cảm gia tộc
+      try {
+        const relationships = await getRelationships(character.id);
+        for (const rel of relationships) {
+          if (rel.type === 'father' || rel.type === 'mother' || rel.type === 'parent' || rel.type === 'spouse') {
+            rel.affinity = Math.max(0, (Number(rel.affinity) || 50) - 10);
+            await updateRelationship(rel.id, rel);
+          }
+        }
+      } catch (err) {
+        console.error("Lỗi cập nhật hảo cảm khi vay mềm:", err);
+      }
+
+      history.push({
+        age: character.age,
+        event: 'Cứu trợ tài chính thân tộc',
+        choice: 'Vay mềm $3,000 khẩn cấp 0% lãi suất (-10 Gắn kết gia đình)'
+      });
+      character.history_log = history;
+      await updateCharacter(character.id, character);
+
+      return res.json({
+        success: true,
+        message: "Gia đình đã gom góp gói cứu trợ khẩn cấp $3,000 giúp bạn tạm thoát khỏi khủng hoảng nợ nần (-10 Gắn kết)!",
+        character
+      });
+    }
+
+    if (relief_type === 'liquidate_personal_items') {
+      character.cash = Number(character.cash) + 1200;
+      character.burnout = Math.min(100, (Number(character.burnout) || 0) + 10);
+
+      history.push({
+        age: character.age,
+        event: 'Thanh lý tư trang cá nhân',
+        choice: 'Bán gấp đồ đạc thu về $1,200 tiền mặt (+10% Kiệt sức)'
+      });
+      character.history_log = history;
+      await updateCharacter(character.id, character);
+
+      return res.json({
+        success: true,
+        message: "Đã bán thanh lý các vật dụng cá nhân, thu về $1,200 tiền mặt để bù đắp thâm hụt (+10 Kiệt sức)!",
+        character
+      });
+    }
+
+    return res.status(400).json({ error: "Phương án cứu trợ nợ không hợp lệ!" });
+  } catch (err) {
+    res.status(500).json({ error: "Cứu trợ nợ thất bại", message: err.message });
   }
 });
 

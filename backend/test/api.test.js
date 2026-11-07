@@ -217,3 +217,71 @@ test('invested_ap boosts rewards, mitigates risks and appends strategic log note
   assert.ok(strategicLog, 'History log should record strategic invested AP');
   assert.ok(strategicLog.choice.includes('Trợ lực +2 AP') || strategicLog.note?.includes('2 AP'));
 });
+
+test('Senior AP sinks (write_memoir, grandchild_mentorship, early_estate_will) and 10% reduced inheritance tax', async () => {
+  await seed('qa_senior', { age: 50, action_points: 3, cash: 5000, karma: 50 });
+
+  // 1. Write memoir
+  const resMemoir = await request('qa_senior', '/action/senior', { action_type: 'write_memoir' });
+  assert.equal(resMemoir.status, 200);
+  assert.equal(resMemoir.data.character.karma, 75);
+  assert.equal(resMemoir.data.character.written_memoir, true);
+
+  // 2. Mentorship
+  const resMentor = await request('qa_senior', '/action/senior', { action_type: 'grandchild_mentorship' });
+  assert.equal(resMentor.status, 200);
+  assert.equal(resMentor.data.character.karma, 85);
+  assert.equal(resMentor.data.character.mentored_heir, true);
+
+  // 3. Early Estate Will (costs 2 AP & $1000)
+  await db.sessionContext.run({ sessionId: 'qa_senior' }, async () => {
+    const c = await db.getLatestCharacter();
+    await db.updateCharacter(c.id, { action_points: 2 });
+  });
+  const resWill = await request('qa_senior', '/action/senior', { action_type: 'early_estate_will' });
+  assert.equal(resWill.status, 200);
+  assert.equal(resWill.data.character.cash, 4000);
+  assert.equal(resWill.data.character.early_will_established, true);
+
+  // 4. Test continue child inheritance tax with early will
+  const rels = await db.sessionContext.run({ sessionId: 'qa_senior' }, async () => {
+    const c = await db.getLatestCharacter();
+    await db.updateCharacter(c.id, { is_deceased: true });
+    const child = await db.addRelationship({
+      character_id: c.id,
+      name: 'Nguyen Van Con',
+      type: 'child',
+      age: 20,
+      status: 'alive'
+    });
+    return child;
+  });
+
+  const resHeir = await request('qa_senior', '/continue-child', { child_id: rels.id });
+  assert.equal(resHeir.status, 200);
+  assert.equal(resHeir.data.inheritance_summary.has_early_will, true);
+  assert.equal(resHeir.data.inheritance_summary.tax_rate, 0.10);
+});
+
+test('Debt restructuring relief (family_soft_loan, liquidate_personal_items) when cash < 0', async () => {
+  await seed('qa_debt', { age: 25, cash: -2000, burnout: 10 });
+
+  // 1. Family Soft Loan ($3,000)
+  const resLoan = await request('qa_debt', '/action/debt-relief', { relief_type: 'family_soft_loan' });
+  assert.equal(resLoan.status, 200);
+  assert.equal(resLoan.data.character.cash, 1000); // -2000 + 3000
+
+  // 2. Reject if cash >= 0
+  const resReject = await request('qa_debt', '/action/debt-relief', { relief_type: 'family_soft_loan' });
+  assert.equal(resReject.status, 400);
+
+  // 3. Liquidate personal items ($1,200, +10 Burnout)
+  await db.sessionContext.run({ sessionId: 'qa_debt' }, async () => {
+    const c = await db.getLatestCharacter();
+    await db.updateCharacter(c.id, { cash: -1500, burnout: 20 });
+  });
+  const resLiquidate = await request('qa_debt', '/action/debt-relief', { relief_type: 'liquidate_personal_items' });
+  assert.equal(resLiquidate.status, 200);
+  assert.equal(resLiquidate.data.character.cash, -300); // -1500 + 1200
+  assert.equal(resLiquidate.data.character.burnout, 30);
+});

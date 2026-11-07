@@ -1,16 +1,18 @@
 'use client';
 
 import React from 'react';
-import { HeartPulse, Activity, Flame, ChevronRight, X } from 'lucide-react';
+import { HeartPulse, Activity, Flame, ChevronRight, X, AlertOctagon, HandCoins, PackageMinus } from 'lucide-react';
 
 interface EmergencyRescueModalProps {
   isOpen: boolean;
   onClose: () => void;
   vitality: number;
   burnout: number;
+  cash?: number;
   actionPoints: number;
   onPerformWellness: () => Promise<any> | void;
   onOpenKarmaSanctum: () => void;
+  onDebtRelief?: (reliefType: 'family_soft_loan' | 'liquidate_personal_items') => Promise<any> | void;
   isLoading?: boolean;
 }
 
@@ -19,15 +21,18 @@ export default function EmergencyRescueModal({
   onClose,
   vitality,
   burnout,
+  cash = 0,
   actionPoints,
   onPerformWellness,
   onOpenKarmaSanctum,
+  onDebtRelief,
   isLoading
 }: EmergencyRescueModalProps) {
   if (!isOpen) return null;
 
   const isLowVitality = vitality < 30;
   const isHighBurnout = burnout > 75;
+  const isDebtCrisis = cash < 0;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
@@ -60,6 +65,22 @@ export default function EmergencyRescueModal({
             <X className="w-5 h-5" />
           </button>
         </div>
+
+        {/* Debt Crisis Alert Banner if Cash < 0 */}
+        {isDebtCrisis && (
+          <div className="mb-4 p-3 rounded-2xl bg-rose-950/60 border border-rose-500/60 text-rose-200 text-xs shadow-inner flex items-center justify-between gap-3 animate-pulse">
+            <div className="flex items-center gap-2">
+              <AlertOctagon className="w-5 h-5 text-rose-400 shrink-0" />
+              <div>
+                <strong className="text-white block font-sans">BẪY NỢ NGUY NGẬP (ÂM TIỀN MẶT)</strong>
+                <span>Tài khoản hiện tại: <strong className="font-mono text-rose-300">-${Math.abs(cash).toLocaleString()}</strong>. Cần giải cứu cấp tốc để tránh phá sản!</span>
+              </div>
+            </div>
+            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-rose-900 border border-rose-400 text-rose-200 font-bold shrink-0">
+              VỠ NỢ
+            </span>
+          </div>
+        )}
 
         {/* Vital Meters */}
         <div className="grid grid-cols-2 gap-3 my-4">
@@ -193,6 +214,72 @@ export default function EmergencyRescueModal({
             </div>
             <ChevronRight className="w-4 h-4 text-purple-400 group-hover:translate-x-1 transition-transform shrink-0" />
           </button>
+
+          {/* Rescue Option 3 & 4: Debt Restructuring if in debt */}
+          {isDebtCrisis && onDebtRelief && (
+            <>
+              <div className="pt-2 text-xs font-bold text-rose-300 flex items-center gap-1.5 border-t border-rose-500/20">
+                <HandCoins className="w-3.5 h-3.5 text-rose-400" />
+                <span>Gói Cứu Trợ Tái Cấu Trúc Nợ:</span>
+              </div>
+
+              {/* Family Soft Loan */}
+              <button
+                disabled={isLoading}
+                onClick={async () => {
+                  await onDebtRelief('family_soft_loan');
+                  onClose();
+                }}
+                className="w-full p-3.5 rounded-2xl bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/50 hover:border-amber-400 text-left transition flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300 shrink-0">
+                    <HandCoins className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-xs md:text-sm font-bold text-amber-200 flex items-center gap-2">
+                      <span>Vay Mềm Thân Tộc (Family Soft Loan)</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                        +$3.000
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-slate-300">
+                      Huy động người thân hỗ trợ khẩn cấp (+ $3.000 tiền mặt, -10 Hảo cảm gia đình).
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-amber-400 group-hover:translate-x-1 transition-transform shrink-0" />
+              </button>
+
+              {/* Liquidate Personal Items */}
+              <button
+                disabled={isLoading}
+                onClick={async () => {
+                  await onDebtRelief('liquidate_personal_items');
+                  onClose();
+                }}
+                className="w-full p-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 hover:border-slate-500 text-left transition flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-600 flex items-center justify-center text-slate-300 shrink-0">
+                    <PackageMinus className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-xs md:text-sm font-bold text-slate-200 flex items-center gap-2">
+                      <span>Bán Gấp Đồ Đạc Cá Nhân (Liquidate Items)</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-slate-800 text-emerald-400 border border-slate-600 font-bold">
+                        +$1.200
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      Thanh lý tài sản cá nhân giải vây tức thì (+ $1.200, +10 Căng thẳng Burnout).
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform shrink-0" />
+              </button>
+            </>
+          )}
         </div>
 
         {/* Footer */}

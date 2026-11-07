@@ -48287,5 +48287,228 @@
         ]
       }
     }
+  ],
+  [
+    "qa_test_debt",
+    {
+      "character": {
+        "id": "5d869335-5699-43d1-847f-7a13e2a1d519",
+        "name": "Dương Ánh Dương",
+        "gender": "female",
+        "age": 0,
+        "generation": 1,
+        "parent_name": null,
+        "country": "Việt Nam",
+        "nationality": "Việt Nam",
+        "country_code": "T2_Vietnam",
+        "nationality_code": "T2_Vietnam",
+        "country_flag": "🇻🇳",
+        "country_tier": "T2",
+        "current_city": "Hà Nội (Quận Ba Đình)",
+        "housing": {
+          "tier": 1,
+          "id": "slum_shared",
+          "name": "Phòng trọ / Mái ấm bình dân",
+          "address": "Hẻm lao động, Hà Nội (Quận Ba Đình)",
+          "status": "rented"
+        },
+        "occupation": "Trẻ sơ sinh",
+        "background": "Gia đình nông dân nghèo / Lao động chân tay",
+        "background_type": "poor",
+        "household": {
+          "father_name": "Dương Hoàng Nam",
+          "father_job": "Công nhân xưởng máy / Buôn bán nhỏ",
+          "father_status": "alive",
+          "father_age": 28,
+          "mother_name": "Đặng Tú Anh",
+          "mother_job": "Lao động tự do / Nội trợ gia đình",
+          "mother_status": "alive",
+          "mother_age": 26,
+          "annual_allowance": 100,
+          "family_vibe": "Gia đình đầm ấm nhưng chật vật mưu sinh.",
+          "family_buff": {
+            "id": "labor_resilience",
+            "name": "Gia Phong Cần Lao",
+            "description": "Tôi luyện tính tự lập (+15% Chống chịu kiệt sức)",
+            "stat": "resilience",
+            "bonus": 0.15
+          },
+          "family_meals_available": 1,
+          "parents_status": "alive",
+          "marital_status": "happy"
+        },
+        "innate_traits": [
+          "gen_ngủ_ngắn_sleepless",
+          "khỏe_mạnh_vô_song"
+        ],
+        "traits_detailed": [
+          {
+            "id": "gen_ngủ_ngắn_sleepless",
+            "name": "Hội chứng ngủ ngắn gen DEC2",
+            "desc": "Chỉ cần 4 tiếng ngủ mỗi đêm là hồi phục 100% năng lượng, sở hữu thêm +1 Điểm Hành Động (AP)",
+            "category": "rare",
+            "rarity": "legendary",
+            "effects": {
+              "bonus_ap": 1
+            }
+          },
+          {
+            "id": "khỏe_mạnh_vô_song",
+            "name": "Khung xương kim cương",
+            "desc": "Cơ địa dẻo dai bẩm sinh, +15 Max Sinh Lực, đề kháng vượt trội với biến đổi thời tiết",
+            "category": "physical",
+            "rarity": "rare",
+            "effects": {
+              "max_vitality_delta": 15,
+              "disease_resistance": 0.4
+            }
+          }
+        ],
+        "personality_flags": [],
+        "vitality": 105,
+        "max_vitality": 110,
+        "transhuman_frozen_until_age": null,
+        "is_transhuman": false,
+        "cash": -2000,
+        "family_endowment": 800,
+        "burnout": 0,
+        "karma": 100,
+        "action_points": 4,
+        "skills": {
+          "tech_logic": {
+            "level": 0,
+            "name": "Trí Tuệ & Công Nghệ"
+          },
+          "finance_market": {
+            "level": 0,
+            "name": "Tài Chính & Thương Trường"
+          },
+          "resilience_health": {
+            "level": 0,
+            "name": "Sinh Lực & Khắc Kỷ"
+          },
+          "leadership_social": {
+            "level": 0,
+            "name": "Lãnh Đạo & Ngoại Giao"
+          }
+        },
+        "hidden_flags": [
+          "poverty_grit"
+        ],
+        "delayed_flags": [],
+        "recent_event_tags": [],
+        "experienced_scenarios": [],
+        "timeline_snapshots": [
+          {
+            "age": 0,
+            "net_worth": 0,
+            "vitality": 90,
+            "burnout": 0,
+            "event": "Chào đời tại Việt Nam (🇻🇳)"
+          }
+        ],
+        "global_indices": {
+          "economy": 65,
+          "social": 65,
+          "environment": 65
+        },
+        "history_log": [
+          {
+            "age": 0,
+            "event": "Chào đời tại Việt Nam 🇻🇳 trong một gia đình nông dân nghèo / lao động chân tay.",
+            "choice": "Cất tiếng khóc chào đời"
+          }
+        ],
+        "is_deceased": false,
+        "death_cause": "",
+        "death_age": null,
+        "life_level": 1,
+        "level": 1,
+        "life_exp": 0,
+        "exp": 0,
+        "skill_points": 1,
+        "sp": 1,
+        "unlocked_skills": [],
+        "created_at": "2026-11-07T05:53:56.671Z"
+      },
+      "assets": [],
+      "relationships": [
+        {
+          "id": "24bfa31b-419e-410a-9550-9104444098a8",
+          "character_id": "5d869335-5699-43d1-847f-7a13e2a1d519",
+          "type": "father",
+          "name": "Dương Hoàng Nam",
+          "age": 28,
+          "status": "alive",
+          "affection_level": 85,
+          "monthly_cost": 0
+        },
+        {
+          "id": "4faa485c-fcd1-426c-b9d7-aa6c9ff62750",
+          "character_id": "5d869335-5699-43d1-847f-7a13e2a1d519",
+          "type": "mother",
+          "name": "Đặng Tú Anh",
+          "age": 26,
+          "status": "alive",
+          "affection_level": 90,
+          "monthly_cost": 0
+        }
+      ],
+      "npcs": [
+        {
+          "id": "4f506122-ebd9-49de-8451-af6b7af7905c",
+          "character_id": "5d869335-5699-43d1-847f-7a13e2a1d519",
+          "name": "Lê Hoàng",
+          "role": "Bạn nối khố / Đồng nghiệp đầu đời",
+          "status": "alive",
+          "affinity": 75,
+          "memory_notes": "Cùng nhau lớn lên và chia sẻ từng chiếc bánh mì thời thiếu thốn.",
+          "last_encountered_age": 0,
+          "avatar_color": "#38bdf8"
+        },
+        {
+          "id": "3bb36878-fce8-461b-a886-3fa6f57ab48a",
+          "character_id": "5d869335-5699-43d1-847f-7a13e2a1d519",
+          "name": "Bác Ba 'Cơm Tấm'",
+          "role": "Ân nhân xóm nghèo",
+          "status": "alive",
+          "affinity": 85,
+          "memory_notes": "Từng cho bạn ăn nợ nhiều tháng liền khi gia đình khánh kiệt.",
+          "last_encountered_age": 0,
+          "avatar_color": "#34d399"
+        }
+      ],
+      "tickEvents": [],
+      "currentDilemma": null,
+      "playerAccount": {
+        "id": "qa_test_debt",
+        "total_karma": 250,
+        "unlocked_perks": [],
+        "reincarnation_count": 1,
+        "lifetime_stats": {
+          "total_years_lived": 0,
+          "max_net_worth": 0,
+          "total_deaths": 0
+        },
+        "ancestral_lineage": [
+          {
+            "id": "founder_gen_1",
+            "generation": 1,
+            "name": "Vũ Chấn Hưng",
+            "nationality": "Việt Nam",
+            "age": 76,
+            "status": "ascended_nirvana",
+            "cause_of_passing": "Đắc Đạo Niết Bàn (Ascended to Nirvana)",
+            "max_net_worth": 1850000,
+            "cash": 240000,
+            "karma": 95,
+            "aspiration_title": "Khai Sáng & Đức Hạnh",
+            "epitaph_quote": "Thân tựa phù vân nơi trần thế, tâm an tĩnh tại giữa hư không. Dòng họ hưng vượng nhờ đức sáng muôn đời.",
+            "blessing": "+150 Nghiệp Lực Khởi Tổ & Hộ Mệnh Muôn Đời",
+            "recorded_at": "2026-10-31T05:53:56.669Z"
+          }
+        ]
+      }
+    }
   ]
 ]

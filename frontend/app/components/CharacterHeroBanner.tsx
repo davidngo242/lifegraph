@@ -15,7 +15,8 @@ import {
   Smile,
   ShieldCheck,
   AlertTriangle,
-  Activity
+  Activity,
+  Hourglass
 } from 'lucide-react';
 import Tooltip from './Tooltip';
 
@@ -77,6 +78,7 @@ export default function CharacterHeroBanner({
   const happiness = Math.max(10, Math.min(100, Math.round(rawHappiness)));
   const isHappyBuffActive = happiness >= 75;
   const apGainPerYear = vitality >= 70 ? 4 : vitality >= 40 ? 3 : 2;
+  const survivalRate = Math.max(10, Math.min(99, Math.round((vitality / maxVitality) * Math.max(20, 100 - (age - 70) * 2.8))));
 
   const getHealthStatus = () => {
     if (vitality >= 80) return { label: "Sung mãn", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" };
@@ -471,6 +473,19 @@ export default function CharacterHeroBanner({
                 <span className="text-[11px] font-sans px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold animate-pulse">
                   <Cpu className="w-3 h-3 inline mr-0.5" /> Bán Thần
                 </span>
+              )}
+
+              {age >= 70 && (
+                <Tooltip content={
+                  <div className="text-[12px] max-w-xs leading-relaxed">
+                    <strong className="text-amber-300">⏳ Đồng Hồ Cát Sinh Mệnh (Tuổi {age}):</strong> Bạn đã bước vào ngưỡng đại thọ 70+. Tỷ lệ vượt qua thử thách sinh tử năm nay ước tính: <span className="text-amber-300 font-bold">~{survivalRate}%</span>. Hãy duy trì Sinh Lực cao, dưỡng sinh an tịnh và lập di chúc sớm!
+                  </div>
+                }>
+                  <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-amber-500/60 bg-amber-950/70 text-amber-300 font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.3)] animate-pulse cursor-help">
+                    <Hourglass className="w-3 h-3 text-amber-400 animate-[spin_6s_linear_infinite]" />
+                    <span>Đồng Hồ Cát: ~{survivalRate}% Thọ</span>
+                  </span>
+                </Tooltip>
               )}
             </div>
 

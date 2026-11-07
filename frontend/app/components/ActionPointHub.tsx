@@ -23,7 +23,11 @@ import {
   Award,
   Sun,
   Shield,
-  Info
+  Info,
+  Scroll,
+  FileText,
+  HandHeart,
+  Coins
 } from 'lucide-react';
 import { MiniGameType } from './minigames/MiniGameHostModal';
 import Tooltip from './Tooltip';
@@ -61,6 +65,8 @@ interface ActionPointHubProps {
   breakthroughAction?: any;
   onBreakthrough?: () => Promise<string | void>;
   onRpgActivePerk?: (type: string) => Promise<string | void>;
+  onSeniorAction?: (actionType: 'write_memoir' | 'grandchild_mentorship' | 'early_estate_will') => Promise<string | void>;
+  onDebtRelief?: (reliefType: 'family_soft_loan' | 'liquidate_personal_items') => Promise<string | void>;
   hiddenFlags?: string[];
   isLoading: boolean;
 }
@@ -96,6 +102,8 @@ export default function ActionPointHub({
   breakthroughAction,
   onBreakthrough,
   onRpgActivePerk,
+  onSeniorAction,
+  onDebtRelief,
   hiddenFlags = [],
   isLoading
 }: ActionPointHubProps) {
@@ -161,6 +169,55 @@ export default function ActionPointHub({
       showToast('error', err.message || 'Thao tác thất bại');
     } finally {
       setActiveButton(null);
+    }
+  };
+
+  const handleSeniorActionTrigger = (actionType: 'write_memoir' | 'grandchild_mentorship' | 'early_estate_will', reqAp: number, reqCash: number) => {
+    if (onSeniorAction) {
+      handleAction(actionType, () => onSeniorAction(actionType), reqAp, reqCash);
+    } else {
+      handleAction(actionType, async () => {
+        const res = await fetch('/api/game/action/senior', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action_type: actionType })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Thao tác dưỡng lão thất bại');
+        return data.message;
+      }, reqAp, reqCash);
+    }
+  };
+
+  const handleDebtReliefTrigger = async (reliefType: 'family_soft_loan' | 'liquidate_personal_items') => {
+    if (onDebtRelief) {
+      try {
+        setActiveButton(reliefType);
+        const resMsg = await onDebtRelief(reliefType);
+        if (typeof resMsg === 'string' && resMsg) {
+          showToast('success', resMsg);
+        }
+      } catch (err: any) {
+        showToast('error', err.message || 'Thao tác thoát nợ thất bại.');
+      } finally {
+        setActiveButton(null);
+      }
+    } else {
+      try {
+        setActiveButton(reliefType);
+        const res = await fetch('/api/game/action/debt-relief', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ relief_type: reliefType })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Thao tác thoát nợ thất bại');
+        showToast('success', data.message);
+      } catch (err: any) {
+        showToast('error', err.message || 'Thao tác thoát nợ thất bại.');
+      } finally {
+        setActiveButton(null);
+      }
     }
   };
 
@@ -412,6 +469,66 @@ export default function ActionPointHub({
           </div>
         </Tooltip>
       </div>
+
+      {/* CỨU TRỢ THOÁT BẪY NGHÈO (DEBT RESTRUCTURING) KHI CASH < 0 */}
+      {cash < 0 && (
+        <div className="my-2.5 p-3.5 rounded-2xl bg-gradient-to-r from-rose-950/70 via-amber-950/40 to-rose-950/70 border border-rose-500/60 shadow-lg text-xs animate-in fade-in">
+          <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xl shrink-0">🚨</span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-rose-300">CỨU TRỢ THOÁT BẪY NGHÈO (DEBT RELIEF)</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-900 border border-rose-500/50 text-rose-200 font-bold">
+                    NỢ: -${Math.abs(cash).toLocaleString()}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-300 mt-0.5">
+                  Tài chính đang rơi vào trạng thái âm nợ. Kích hoạt ngay các giải pháp tái cấu trúc nợ khẩn cấp:
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button
+              disabled={isLoading || activeButton !== null}
+              onClick={() => handleDebtReliefTrigger('family_soft_loan')}
+              className="p-2.5 rounded-xl bg-slate-900/90 hover:bg-amber-950/80 border border-amber-500/50 hover:border-amber-400 text-left transition group active:scale-95 shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-bold text-amber-200 text-xs flex items-center gap-1.5">
+                  <Coins className="w-3.5 h-3.5 text-amber-400" /> Vay Mềm Thân Tộc
+                </span>
+                <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                  +$3.000
+                </span>
+              </div>
+              <div className="text-[11px] text-slate-400 group-hover:text-slate-300">
+                Người thân hỗ trợ khẩn cấp (Hảo cảm -10)
+              </div>
+            </button>
+
+            <button
+              disabled={isLoading || activeButton !== null}
+              onClick={() => handleDebtReliefTrigger('liquidate_personal_items')}
+              className="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 hover:border-slate-500 text-left transition group active:scale-95 shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-bold text-slate-200 text-xs flex items-center gap-1.5">
+                  <FileText className="w-3.5 h-3.5 text-slate-300" /> Bán Gấp Đồ Đạc Cá Nhân
+                </span>
+                <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-800 text-emerald-400 border border-slate-600">
+                  +$1.200
+                </span>
+              </div>
+              <div className="text-[11px] text-slate-400 group-hover:text-slate-300">
+                Thanh lý tư trang thu hồi vốn (+10 Burnout)
+              </div>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* BREAKTHROUGH ACTION CARD (2 AP) */}
       {breakthroughAction && onBreakthrough && (
@@ -1120,6 +1237,90 @@ export default function ActionPointHub({
               </button>
             </Tooltip>
           </>
+        )}
+
+        {/* PHÂN VÙNG DI SẢN & DƯỠNG LÃO (SENIOR AP SINKS: 45+ TUỔI) */}
+        {characterAge >= 45 && (
+          <div className="col-span-full mt-3 pt-3 border-t border-[var(--border-subtle)]">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-1.5">
+                <Scroll className="w-4 h-4 text-amber-400" />
+                <span className="text-xs font-bold text-[var(--text-primary)]">Di Sản & Dưỡng Lão (45+ Tuổi)</span>
+                <span className="text-[10px] font-sans px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-semibold">
+                  Truyền thừa
+                </span>
+              </div>
+              <span className="text-[11px] text-[var(--text-secondary)] hidden sm:inline">
+                Quy hoạch di chúc và để lại phúc ấm cho thế hệ kế cận
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              {/* Option 1: Viết hồi ký */}
+              <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Viết Hồi Ký Cuộc Đời:</strong> Chi 2 AP để ghi lại chiêm nghiệm, bài học và di sản tinh thần (+25 Karma, lưu danh sử sách).</div>}>
+                <button
+                  disabled={isLoading || activeButton !== null || actionPoints < 2 || Boolean(character?.written_memoir || hiddenFlags.includes('written_memoir'))}
+                  onClick={() => handleSeniorActionTrigger('write_memoir', 2, 0)}
+                  className={`w-full p-2.5 rounded-2xl border text-left transition group active:scale-95 ${
+                    Boolean(character?.written_memoir || hiddenFlags.includes('written_memoir'))
+                      ? 'bg-sky-950/30 border-sky-500/30 text-sky-300 cursor-default opacity-85'
+                      : 'bg-slate-950/70 hover:bg-sky-950/40 border-slate-800 hover:border-sky-500/50 text-white disabled:opacity-40'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-base">📜</span>
+                    <span className="text-[11px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">2 AP</span>
+                  </div>
+                  <div className="font-bold text-xs truncate">
+                    {Boolean(character?.written_memoir || hiddenFlags.includes('written_memoir')) ? '✓ Đã Viết Hồi Ký' : 'Viết Hồi Ký'}
+                  </div>
+                  <div className="text-[11px] text-sky-400 font-sans tabular-nums truncate mt-0.5">
+                    {Boolean(character?.written_memoir || hiddenFlags.includes('written_memoir')) ? 'Lưu danh sử sách' : '+25 Karma phúc đức'}
+                  </div>
+                </button>
+              </Tooltip>
+
+              {/* Option 2: Chỉ dạy con cháu */}
+              <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Chỉ Dạy Con Cháu:</strong> Chi 1 AP truyền thụ kinh nghiệm xương máu cho thế hệ sau (+15 Hảo cảm gia đình, +10 Karma).</div>}>
+                <button
+                  disabled={isLoading || activeButton !== null || actionPoints < 1}
+                  onClick={() => handleSeniorActionTrigger('grandchild_mentorship', 1, 0)}
+                  className="w-full p-2.5 rounded-2xl bg-slate-950/70 hover:bg-pink-950/40 border border-slate-800 hover:border-pink-500/50 text-left transition group active:scale-95 disabled:opacity-40"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-base">👨‍👩‍👧‍👦</span>
+                    <span className="text-[11px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                  </div>
+                  <div className="font-bold text-white group-hover:text-pink-300 text-xs truncate">Chỉ Dạy Con Cháu</div>
+                  <div className="text-[11px] text-pink-400 font-sans tabular-nums truncate mt-0.5">+15 Gắn kết, +10 Karma</div>
+                </button>
+              </Tooltip>
+
+              {/* Option 3: Lập di chúc sớm */}
+              <Tooltip className="w-full" content={<div className="text-[12px]"><strong>Lập Di Chúc Sớm:</strong> Chi 2 AP và $1.000 lệ phí công chứng. <strong>Thuế thừa kế của thế hệ sau giảm từ 30% xuống còn chỉ 10%!</strong></div>}>
+                <button
+                  disabled={isLoading || activeButton !== null || actionPoints < 2 || cash < 1000 || Boolean(character?.early_will_established || hiddenFlags.includes('early_will_established'))}
+                  onClick={() => handleSeniorActionTrigger('early_estate_will', 2, 1000)}
+                  className={`w-full p-2.5 rounded-2xl border text-left transition group active:scale-95 ${
+                    Boolean(character?.early_will_established || hiddenFlags.includes('early_will_established'))
+                      ? 'bg-amber-950/40 border-amber-500/50 text-amber-200 cursor-default opacity-85'
+                      : 'bg-slate-950/70 hover:bg-amber-950/40 border-slate-800 hover:border-amber-500/50 text-white disabled:opacity-40'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-base">🏛️</span>
+                    <span className="text-[11px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">2 AP • $1k</span>
+                  </div>
+                  <div className="font-bold text-xs truncate">
+                    {Boolean(character?.early_will_established || hiddenFlags.includes('early_will_established')) ? '✓ Đã Có Di Chúc' : 'Lập Di Chúc Sớm'}
+                  </div>
+                  <div className="text-[11px] text-amber-400 font-sans tabular-nums truncate mt-0.5">
+                    {Boolean(character?.early_will_established || hiddenFlags.includes('early_will_established')) ? 'Thuế thừa kế chỉ 10%' : 'Giảm thuế thừa kế 10%'}
+                  </div>
+                </button>
+              </Tooltip>
+            </div>
+          </div>
         )}
       </div>
 

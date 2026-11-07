@@ -947,6 +947,69 @@ export default function LifeGraphPage() {
     }
   };
 
+  const handleSeniorAction = async (actionType: 'write_memoir' | 'grandchild_mentorship' | 'early_estate_will'): Promise<string> => {
+    try {
+      setLoading(true);
+      const res = await fetch(`${API_BASE}/action/senior`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action_type: actionType })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || err.error || "Thao tác dưỡng lão thất bại.");
+      }
+      const data = await res.json();
+      if (data.character) setCharacter(data.character);
+      triggerAvatarReaction(actionType === 'early_estate_will' ? 'celebrate' : 'meditating');
+      triggerBannerFeedback({
+        type: 'milestone',
+        title: actionType === 'early_estate_will' ? 'Lập Di Chúc Sớm Thành Công' : actionType === 'write_memoir' ? 'Xuất Bản Hồi Ký Cuộc Đời' : 'Chỉ Dạy Thế Hệ Kế Cận',
+        subtitle: data.message || 'Truyền thừa di sản cho hậu duệ đời sau',
+        delta: actionType === 'early_estate_will' ? 'Thuế Thừa Kế Giảm Còn 10%' : actionType === 'write_memoir' ? '+25 Karma Vĩnh Cửu' : '+15 Gắn Kết, +10 Karma',
+        icon: actionType === 'early_estate_will' ? '🏛️' : actionType === 'write_memoir' ? '📜' : '👨‍👩‍👧‍👦'
+      });
+      return data.message;
+    } catch (err: any) {
+      setErrorMsg(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDebtRelief = async (reliefType: 'family_soft_loan' | 'liquidate_personal_items'): Promise<string> => {
+    try {
+      setLoading(true);
+      const res = await fetch(`${API_BASE}/action/debt-relief`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ relief_type: reliefType })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || err.error || "Thao tác cứu trợ thoát nợ thất bại.");
+      }
+      const data = await res.json();
+      if (data.character) setCharacter(data.character);
+      if (data.relationships) setRelationships(data.relationships);
+      triggerAvatarReaction('celebrate');
+      triggerBannerFeedback({
+        type: 'milestone',
+        title: reliefType === 'family_soft_loan' ? 'Nhận Gói Cứu Trợ Thân Tộc' : 'Thanh Lý Đồ Đạc Cá Nhân',
+        subtitle: data.message || 'Giải cứu tài chính thoát khỏi bẫy nợ',
+        delta: reliefType === 'family_soft_loan' ? '+$3.000 Tiền Mặt, -10 Hảo Cảm' : '+$1.200 Tiền Mặt, +10 Burnout',
+        icon: reliefType === 'family_soft_loan' ? '🤝' : '📦'
+      });
+      return data.message;
+    } catch (err: any) {
+      setErrorMsg(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleChildhoodAction = async (actionId: string): Promise<string> => {
     const res = await fetch(`${API_BASE}/action/childhood`, {
       method: 'POST',
@@ -1528,9 +1591,11 @@ export default function LifeGraphPage() {
         onClose={() => setShowEmergencyModal(false)}
         vitality={character?.vitality ?? 100}
         burnout={character?.burnout ?? 0}
+        cash={Number(character?.cash ?? 0)}
         actionPoints={character?.action_points ?? 0}
         onPerformWellness={handleWellness}
         onOpenKarmaSanctum={() => setShowKarmaModal(true)}
+        onDebtRelief={handleDebtRelief}
         isLoading={loading}
       />
 
@@ -1734,8 +1799,8 @@ export default function LifeGraphPage() {
 
         {/* 3. Right Zone: Clean Quick Actions, Karma, Theme & Audio */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
-          {/* Emergency SOS Rescue Button (Only when in critical condition) */}
-          {character && !character.is_deceased && (character.vitality < 30 || character.burnout > 75) && (
+          {/* Emergency SOS Rescue Button (Only when in critical condition or in debt) */}
+          {character && !character.is_deceased && (character.vitality < 30 || character.burnout > 75 || Number(character.cash ?? 0) < 0) && (
             <button
               onClick={() => setShowEmergencyModal(true)}
               className="py-1 px-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs flex items-center gap-1.5 animate-pulse shadow-lg shadow-rose-950 active:scale-95 transition"
@@ -2017,6 +2082,8 @@ export default function LifeGraphPage() {
                         breakthroughAction={breakthroughAction}
                         onBreakthrough={handleBreakthroughAction}
                         onRpgActivePerk={handleRpgActivePerk}
+                        onSeniorAction={handleSeniorAction}
+                        onDebtRelief={handleDebtRelief}
                         hiddenFlags={character.hidden_flags || []}
                         isLoading={loading}
                       />
