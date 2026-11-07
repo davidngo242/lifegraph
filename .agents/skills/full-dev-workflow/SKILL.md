@@ -127,3 +127,7 @@ flowchart TD
 ### 4.6. Quy Chuẩn Độc Quyền Dòng Chảy Nhật Ký Cột Phải (Dedicated Life Chronicle Stream)
 * Cột phải (`MultiTabSidebar.tsx`) dành riêng 100% diện tích cho `Nhật Ký Hành Trình Cuộc Đời` (`NarrativeFeed.tsx`).
 * Tuyệt đối cấm tạo lại các tab Gia Đình, Tài Sản, Kỹ Năng ở cột phải để tránh phân mảnh dữ liệu với Đại Thụ Sinh Mệnh bên trái. Mọi thao tác tương tác sâu được quy hoạch vào các modal chuyên biệt: `FamilyDetailModal`, `AssetDetailModal`, `SkillTreeModal`.
+
+### 4.7. Khai Tử Thanh Không Gian Sống Dưới Đáy (LivingRoom Backdrop Retirement)
+* Đã gỡ bỏ vĩnh viễn thanh ngang phụ `LivingRoomBackdropViewport` (hiển thị "Phòng Trọ Khởi Nghiệp - Ngọn Đèn Khắc Khổ / Cinema Mode").
+* Căn cứ: Cột trái đã có nút bấm Phòng Quyết Định 3D màu vàng hổ phách nổi bật ở đỉnh và thanh điều hướng chính. Việc để thanh ngang ở đáy màn hình gây nhiễu thị giác và chiếm dụng không gian hiển thị của Đại Thụ Sinh Mệnh.

@@ -755,3 +755,7 @@ Hợp nhất Gia Đình (Huyết Thống), Tài Sản (Tư Bản) và Kỹ Năng
 ### 19.3. Quy Chuẩn Không Trùng Lặp Cột Phải (Strict Single Chronicle Stream)
 * Cột phải (`MultiTabSidebar.tsx`) tuyệt đối không hiển thị lại các tab [Gia Đình], [Tài Sản], [Kỹ Năng]. Toàn bộ diện tích sidebar được giải phóng cho `Nhật Ký Hành Trình Cuộc Đời` (`NarrativeFeed.tsx`).
 * Mọi thao tác tương tác sâu được quy hoạch vào các modal chuyên biệt: `FamilyDetailModal.tsx`, `AssetDetailModal.tsx`, và `SkillTreeModal.tsx`.
+
+### 19.4. Khai Tử Thanh Living Room Viewport Đáy Màn Hình (Retirement of Legacy Backdrop Bar)
+* Gỡ bỏ hoàn toàn thanh ngang phụ `LivingRoomBackdropViewport.tsx` (hiển thị "Phòng Trọ Khởi Nghiệp - Ngọn Đèn Khắc Khổ [0 $]" và nút Cinema Mode phụ).
+* Căn cứ: Khu vực quyết định đã được hợp nhất vào nút bấm Cinema vàng hổ phách nổi bật (`Bước Vào Phòng Quyết Định 3D [D] →`) ngay sát dưới Đại Thụ Sinh Mệnh và trên thanh Header Bar. Việc đặt thêm thanh ngang phụ ở đáy màn hình làm phân mảnh thị giác và che khuất không gian hiển thị của cây sinh mệnh.

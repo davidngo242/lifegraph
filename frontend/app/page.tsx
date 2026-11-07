@@ -23,7 +23,6 @@ import SkillTreeModal from './components/SkillTreeModal';
 import MultiTabSidebar from './components/MultiTabSidebar';
 import CharacterHeroBanner, { BannerActionFeedback } from './components/CharacterHeroBanner';
 import AvatarInspectorModal from './components/AvatarInspectorModal';
-import LivingRoomBackdropViewport from './components/LivingRoomBackdropViewport';
 import CinemaDecisionRoomModal from './components/CinemaDecisionRoomModal';
 import InteractiveScene2D from './components/InteractiveScene2D';
 import type { AvatarReactionType } from './components/Dynamic3DAvatar';
@@ -2117,18 +2116,6 @@ export default function LifeGraphPage() {
                     </div>
                   </div>
                 </div>
-
-                {/* 3. Dynamic Living Room Viewport (Cửa sổ không gian sống - Thu gọn thanh lịch) */}
-                {character && (
-                  <LivingRoomBackdropViewport
-                    netWorth={netWorth}
-                    housing={character?.housing}
-                    age={character?.age}
-                    nationality={character?.nationality}
-                    onOpenCinemaMode={() => setActiveView('decision')}
-                    activeScenarioTitle={activeScenario?.title}
-                  />
-                )}
               </div>
 
               {/* Right Column: Multi-Tab Sidebar (lg:col-span-5 xl:col-span-4) */}
