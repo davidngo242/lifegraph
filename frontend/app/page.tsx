@@ -25,6 +25,7 @@ import CharacterHeroBanner, { BannerActionFeedback } from './components/Characte
 import AvatarInspectorModal from './components/AvatarInspectorModal';
 import LivingRoomBackdropViewport from './components/LivingRoomBackdropViewport';
 import CinemaDecisionRoomModal from './components/CinemaDecisionRoomModal';
+import InteractiveScene2D from './components/InteractiveScene2D';
 import type { AvatarReactionType } from './components/Dynamic3DAvatar';
 import AspirationUpgradeModal from './components/AspirationUpgradeModal';
 import LifeGraphHomePortal from './components/LifeGraphHomePortal';
@@ -45,7 +46,7 @@ import IllusionCard from './components/interactions/IllusionCard';
 import TrilemmaCard from './components/interactions/TrilemmaCard';
 import TimeSkipCard from './components/interactions/TimeSkipCard';
 
-import { Sparkles, Volume2, VolumeX, ShieldAlert, Cpu, Globe2, AlertTriangle, Activity, Home, Feather, Play, BookOpen, Zap } from 'lucide-react';
+import { Sparkles, Volume2, VolumeX, ShieldAlert, Cpu, Globe2, AlertTriangle, Activity, Home, Feather, Play, BookOpen, Zap, Clapperboard, ArrowLeft, Heart, Flame } from 'lucide-react';
 
 const API_BASE = '/api/game';
 
@@ -93,7 +94,7 @@ export default function LifeGraphPage() {
   const [showShortcutsModal, setShowShortcutsModal] = useState<boolean>(false);
   const [showEmergencyModal, setShowEmergencyModal] = useState<boolean>(false);
   const [activeScenario, setActiveScenario] = useState<any>(null);
-  const [activeView, setActiveView] = useState<'home' | 'game' | 'lineage'>('home');
+  const [activeView, setActiveView] = useState<'home' | 'game' | 'decision'>('home');
   const [showCinemaDecisionModal, setShowCinemaDecisionModal] = useState<boolean>(false);
   const [lineage, setLineage] = useState<any[]>([]);
   const [nirvanaBanner, setNirvanaBanner] = useState<any | null>(null);
@@ -358,6 +359,7 @@ export default function LifeGraphPage() {
         if (showSkillSelector) { setShowSkillSelector(false); return; }
         if (showAspirationUpgradeModal) { setShowAspirationUpgradeModal(false); return; }
         if (show3DInspectorModal) { setShow3DInspectorModal(false); return; }
+        if (activeView === 'decision') { setActiveView('game'); return; }
         return;
       }
 
@@ -409,7 +411,7 @@ export default function LifeGraphPage() {
 
         if (character && !character.is_deceased && !otherModalOpen) {
           e.preventDefault();
-          setShowCinemaDecisionModal(prev => !prev);
+          setActiveView(prev => (prev === 'decision' ? 'game' : 'decision'));
           return;
         }
       }
@@ -2098,7 +2100,7 @@ export default function LifeGraphPage() {
                     housing={character?.housing}
                     age={character?.age}
                     nationality={character?.nationality}
-                    onOpenCinemaMode={() => setShowCinemaDecisionModal(true)}
+                    onOpenCinemaMode={() => setActiveView('decision')}
                     activeScenarioTitle={activeScenario?.title}
                   />
                 )}

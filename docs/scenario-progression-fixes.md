@@ -57,3 +57,112 @@ Deploy the backend and frontend as a compatible pair. A frontend-only Vercel pre
 ## Deliberately deferred audit work
 
 This is a correctness/progression fix, not a new game concept or a claim that all 34 audit items are closed. The generic SPECTRUM curves, full multi-year lifecycle simulation, dual parent-state model, late-game wealth drain, richer occupation/equity gameplay, art/mobile polish, distributed transactions/locks and server-verifiable minigame scoring remain separate work. Perceived fun and retention still need human playtesting after the corrected build is deployed.
+
+
+---
+
+## Infancy & Childhood Healthcare Progression (Kịch Bản Sinh Tử & Y Tế Nhi Khoa)
+
+Commit `91990b8` integrates specialized crisis scenarios for infancy and childhood, together with a country-tier healthcare system, infant mortality safeguard with Karma reimbursement, and parental child healthcare duties.
+
+### 1. Scenario Architecture & Pack Integration
+
+Two crisis scenarios were added across `pack_infancy_first_steps.json` and `pack_school_childhood.json`:
+
+| Scenario ID | Arc & Stage | Age Range | Prerequisites | Excluded Flags | Priority |
+| :--- | :--- | :---: | :--- | :--- | :---: |
+| `scenario_infancy_fever_crisis` | `arc_infancy` (Stage 2) | 1–5 | `childhood_fever_experienced` | `infancy_fever_crisis_resolved` | 90 |
+| `scenario_childhood_river_current` | `arc_school_childhood` (Stage 2) | 8–16 | None | `childhood_river_current_resolved` | 85 |
+
+### 2. Hotspots, NPC Roles & Knowledge Contracts
+
+Both scenarios provide 3 interactive hotspots with distinct NPC dialogues, affinity deltas, and knowledge tokens that feed into `InteractiveScene2D.tsx`:
+
+#### Infancy Fever Crisis (`scenario_infancy_fever_crisis`)
+- **Hotspot `hs_fever_cloth`** (Khăn ấm & túi chườm hạ sốt):
+  - *Knowledge:* `infant_emergency_fever_patch`.
+  - *Perk:* Kỹ năng sơ cứu hạ nhiệt chuẩn y khoa (+5 Vitality, phòng co giật).
+- **Hotspot `hs_doctor_clinic`** (Bác sĩ trực trạm xá nhi - NPC `doctor`):
+  - *Affinity:* +10 Affinity với bác sĩ trực.
+  - *Knowledge:* `infant_pediatric_guidance`.
+  - *Perk:* Đặc quyền bảo hộ y tế nhi khoa chuyên sâu (+10 Vitality, +10 Karma).
+- **Hotspot `hs_mother_prayer`** (Lời cầu nguyện & cái ôm của Mẹ - NPC `parent`):
+  - *Affinity:* +25 Affinity với Mẹ.
+  - *Knowledge:* `infant_maternal_prayer`.
+  - *Perk:* Sức mạnh ý chí mẫu tử thiêng liêng (+25 Hảo cảm mẹ, hồi phục thần tốc).
+
+#### Childhood River Current (`scenario_childhood_river_current`)
+- **Hotspot `hs_river_flow`** (Dòng nước xoáy mùa mưa lũ):
+  - *Knowledge:* `river_current_awareness`.
+  - *Perk:* Bản lĩnh nhận diện dòng nước xoáy ngầm (+15% tỷ lệ sống sót sông nước).
+- **Hotspot `hs_drowning_friend`** (Tiếng kêu cứu của bạn bè - NPC `friend`):
+  - *Affinity:* +15 Affinity với bạn thời thơ ấu.
+  - *Knowledge:* `friend_panic_signal`.
+  - *Perk:* Nghĩa hiệp tương thân tương ái (+20 Karma, tình bạn tri kỷ cả đời).
+- **Hotspot `hs_bamboo_bank`** (Bụi tre bờ sông cứu sinh):
+  - *Knowledge:* `riverbank_bamboo_grip`.
+  - *Perk:* Tư duy ứng biến dụng cụ cứu nạn an toàn tuyệt đối (+15 Karma).
+
+### 3. Mind Stage Tri-Prism & D20 Choice Resolution
+
+| Choice ID | Title | Stance | Req Knowledge | Stat Check & DC | Success Effects | Failure Effects |
+| :--- | :--- | :---: | :--- | :--- | :--- | :--- |
+| `CHOICE_FEVER_COOL_DOWN` | Chườm Khăn Hạ Nhiệt | LÝ TRÍ | `infant_emergency_fever_patch` | IQ (DC 10) | +5 Vitality, +5 Karma | +2 Vitality, +2 Karma |
+| `CHOICE_RUSH_HOSPITAL` | Nhập Viện Tuyến Đầu | TRÁI TIM | `infant_pediatric_guidance` | EQ (DC 9) | -$50 Cash, +10 Vitality, +10 Karma | -$50 Cash, +5 Vitality, +5 Karma |
+| `CHOICE_IMMUNE_FIGHT` | Đề Kháng Tự Thân | BẢN NĂNG | None | Vitality (DC 12) | +8 Vitality, +5 Karma | -5 Vitality, +5 Karma |
+| `CHOICE_SWIM_RESCUE` | Bơi Xuống Cứu Bạn | BẢN NĂNG | `river_current_awareness` | Vitality (DC 12) | +10 Vitality, +20 Karma, Commitment `Dũng sĩ sông nước` | -15 Vitality, +10 Karma |
+| `CHOICE_BAMBOO_POLE` | Dùng Cành Tre Đưa Ra | LÝ TRÍ | `riverbank_bamboo_grip` | IQ (DC 10) | +15 Karma, Commitment `Tư duy cứu hộ chuẩn mực` | +8 Karma |
+| `CHOICE_CALL_VILLAGERS` | Hô Hoán Khẩn Cấp | TRÁI TIM | `friend_panic_signal` | EQ (DC 9) | +10 Karma, Commitment `Cảnh giới báo động kịp thời` | +5 Karma |
+
+### 4. Country Healthcare Disparity & Tick Engine Mechanics
+
+The national simulation model (`backend/src/data/countryBigData.js` and `countryData.js`) includes a dedicated `healthcare` block:
+
+```json
+"healthcare": {
+  "infant_survival_rate": 98.8,
+  "emergency_quality": "tier2_accessible",
+  "clinic_cost_factor": 0.6,
+  "description": "Mạng lưới trạm y tế và viện nhi tuyến trung ương dễ tiếp cận"
+}
+```
+
+- **Tier 1 (Nhật Bản, Thụy Sĩ, Na Uy, Mỹ):** Tỷ lệ sống sót trẻ sơ sinh cao từ 99.4% – 99.8%; hệ số viện phí từ 1.2x – 2.0x.
+- **Tier 2 (Việt Nam, Ba Lan, Thái Lan, Brazil):** Tỷ lệ sống sót 97.5% – 99.2%; trạm xá dễ tiếp cận với hệ số 0.6x – 0.8x.
+- **Tier 3 (Syria, Haiti):** Tỷ lệ sống sót 93.8% – 94.2%; y tế khan hiếm, rủi ro biến chứng cao.
+
+#### Passive Phase Tick Simulation (`processPassivePhase` in `tickEngine.js`):
+1. **Ấu Thơ Nguy Cấp (`age < 6`):**
+   - Rủi ro kích hoạt: 35% nếu có gen bệnh di truyền (`hasVulnerableGenetics`), hoặc 20% tại quốc gia Tier 3.
+   - Khi kích hoạt, gán cờ ẩn `childhood_fever_experienced` (tiền đề mở kịch bản `scenario_infancy_fever_crisis`).
+   - Nếu có trợ cấp gia đình hoặc tiền mặt $\ge$ `40 * clinic_cost_factor`: hồi phục an toàn (`+2 Vitality`, `+5 Karma`).
+   - Nếu kiệt quệ tiền bạc và thuộc hộ nghèo: trừ nặng `-25 Vitality`.
+2. **Cơ Chế Bồi Hoàn Phúc Đức Non Yểu (+120 Karma):**
+   - Nếu trẻ nhỏ dưới 6 tuổi qua đời (`vitality <= 0 && age < 6`), nguyên nhân tử vong là `"Biến chứng viêm phổi cấp tính thuở ấu thơ"`.
+   - Hệ thống tự động bồi hoàn **+120 Karma** (`karmaReimbursed = 120`), giúp người chơi không bị thiệt thòi về điểm phúc nghiệp khi luân hồi sang kiếp mới.
+3. **Mô Phỏng Trách Nhiệm Nuôi Con (`rel.type === 'child'`, `rel.age < 10`):**
+   - Xác suất con nhỏ bị sốt/nhiễm lạnh là 18% (nước T1/T2) hoặc 28% (nước T3).
+   - Tự động trừ tiền khám `35 * clinic_cost_factor`, tăng **+6 Hảo cảm phụ tử/mẫu tử** và nhận **+5 Karma** công đức dưỡng dục.
+
+### 5. Visual Alert in Cinema Decision Room 21:9
+
+In `frontend/app/components/CinemaDecisionRoomModal.tsx`:
+- Detects crisis scenarios via regular expression:
+  ```ts
+  const isCrisisScenario = 
+    /fever|river|crisis|sinh tử|nguy cấp|đuối nước|cứu hộ/i.test(activeScenario?.id || '') ||
+    /fever|river|crisis|sinh tử|nguy cấp|đuối nước|cứu hộ/i.test(activeScenario?.title || '') ||
+    /fever|river|crisis|sinh tử|nguy cấp|đuối nước|cứu hộ/i.test(activeScenario?.arc_id || '');
+  ```
+- Renders an animated pulse badge: `🚨 TÌNH HUỐNG SINH TỬ NGUY CẤP` (`animate-pulse` with ping animation).
+- Switches letterbox styling to emergency red: `bg-rose-950/40 border-b border-rose-500/60 shadow-[0_0_20px_rgba(244,63,94,0.3)]`.
+
+### 6. Automated Quality Assurance
+
+All scenarios and mechanics are thoroughly covered in `backend/test/infancy_pediatric_scenarios.test.js`:
+- ✅ `scenario_infancy_fever_crisis` structure, hotspots, and choice resolution (100% pass).
+- ✅ `scenario_childhood_river_current` structure, hotspots, and choice resolution (100% pass).
+- ✅ Passive childhood health emergency disparity test (Tier 3 -25 HP vs Supported +2 HP/+5 Karma).
+- ✅ Fatal infant illness +120 Karma reimbursement & `is_deceased` assertion.
+- ✅ Parental child fever event & affection/karma bump verification.
+- ✅ National pediatric healthcare statistics integrity check across all tiers.

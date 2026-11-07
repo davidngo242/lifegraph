@@ -533,3 +533,16 @@ Phòng Quyết Định Điện Ảnh (**21:9 Cinema Decision Room**) là không 
     * 🧠 **Lý Trí (*Logic*):** Lăng kính xanh lam tri thức, phân tích xác suất và lợi ích kinh tế.
     * ❤️ **Trái Tim (*Empathy*):** Lăng kính hồng ngọc tình thân, kêu gọi đạo đức và sự gắn kết.
     * 🛡️ **Sinh Tồn (*Primal Instinct*):** Lăng kính hổ phách tự vệ, cảnh báo rủi ro kiệt quệ và an toàn tính mạng.
+
+
+### 14.4. Quy Chuẩn Cảnh Báo Trực Quan Tình Huống Sinh Tử Nguy Cấp (Emergency Crisis Visual Cues)
+Khi người chơi đối mặt với các kịch bản mang tính sinh tử sống còn ở thuở ấu thơ hay niên thiếu (`scenario_infancy_fever_crisis`, `scenario_childhood_river_current` hoặc các biến cố có nhãn `crisis`, `sinh tử`, `nguy cấp`, `đuối nước`):
+* **Nhận Diện Kịch Bản Nguy Kịch (Crisis Scenario Detection):**
+  * Tự động quét regex trên `id`, `title` hoặc `arc_id`: `/fever|river|crisis|sinh tử|nguy cấp|đuối nước|cứu hộ/i`.
+* **Biến Đổi Dải Letterbox Đỏ Thẫm Báo Động (Letterbox Bar Metamorphosis):**
+  * Thay thế màu nền mặc định bằng dải đỏ thẫm cảnh báo nguy kịch: `bg-rose-950/40 border-b border-rose-500/60 shadow-[0_0_20px_rgba(244,63,94,0.3)] backdrop-blur-xl`.
+* **Huy Hiệu Nhịp Đập Khẩn Cấp (Pulsing Emergency Badge):**
+  * Thay thế nhãn `CINEMA 21:9 · LIVE TAKE` thông thường bằng huy hiệu đỏ rực `🚨 TÌNH HUỐNG SINH TỬ NGUY CẤP` (`bg-rose-900/90 border border-rose-400 text-rose-100 font-mono font-bold shadow-[0_0_18px_rgba(244,63,94,0.5)] animate-pulse`).
+  * Tích hợp chấm radar phát xung `animate-ping` màu hồng ngọc (`bg-rose-300` / `bg-rose-400` với `shadow-[0_0_8px_#f43f5e]`), tạo cảm giác hồi hộp và cấp bách tột độ.
+* **Quy Tắc Nhập Tâm & Hành Động:**
+  * Giữ nguyên tỷ lệ 21:9, các Hotspot cấp cứu (túi chườm, bác sĩ trực, cành tre cứu hộ) phát quang rõ nét để người chơi kịp thời thu thập manh mối trước khi ra quyết định sống còn tại Sân Khấu Tâm Thức.

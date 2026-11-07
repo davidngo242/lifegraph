@@ -167,6 +167,26 @@ NEXT_PUBLIC_API_URL=/api/game
 * ✨ **Hạt Bụi Ánh Sáng 3D (Floating Dust Motes):** 35 hạt bụi lơ lửng chuyển động Brownian Motion chân thực trong luồng sáng.
 * 🌐 **Holographic Beacon & Hộp Thoại Persona:** Điểm đánh dấu Hotspot 3D phát quang kết hợp hộp thoại Visual Novel Persona Deck và Lăng kính tâm trí Tri-Prism (Lý Trí, Trái Tim, Sinh Tồn).
 
+### 14. Kịch Bản Sinh Tử Ấu Thơ & Hệ Thống Y Tế Nhi Khoa Quốc Gia (Infancy & Childhood Healthcare)
+* 👶 **Tuyến Sơ Sinh — `scenario_infancy_fever_crisis` ("Cơn Sốt Co Giật Nửa Đêm & Ranh Giới Sinh Tử", 1–5 Tuổi):**
+  * Tái hiện tình huống trẻ nhỏ sốt cao co giật 40°C giữa mùa gió lạnh, kích hoạt từ biến cố thụ động đầu đời.
+  * **3 Điểm chạm Hotspot tương tác:** Khăn ấm & túi chườm hạ sốt (`hs_fever_cloth`), Bác sĩ trực trạm xá nhi (`hs_doctor_clinic`), và Lời cầu nguyện & cái ôm của Mẹ (`hs_mother_prayer`).
+  * **3 Phương án ngã rẽ Bản Ngã:** *Chườm Khăn Hạ Nhiệt & Hồi Sức Chuẩn Y Khoa* (Lý Trí), *Khẩn Cấp Nhập Viện Nhi Tuyến Đầu* (Trái Tim), hoặc *Kích Hoạt Miễn Dịch Tự Thân Vượt Cơn Sốt* (Sinh Tồn).
+* 🌊 **Tuyến Tuổi Thơ — `scenario_childhood_river_current` ("Hiểm Họa Dòng Sông Mùa Lũ & Nghịch Cảnh Đuối Nước", 8–16 Tuổi):**
+  * Mô phỏng nghịch cảnh mùa nước nổi khi bạn đồng hành bị xoáy nước cuốn trôi giữa dòng sông quê.
+  * **3 Điểm chạm Hotspot tương tác:** Dòng nước xoáy mùa mưa lũ (`hs_river_flow`), Tiếng kêu cứu của bạn bè (`hs_drowning_friend`), và Bụi tre bờ sông cứu sinh (`hs_bamboo_bank`).
+  * **3 Phương án ứng biến:** *Lao Xuống Dòng Nước Xiết Cứu Bạn* (Bản Năng - D20 Vitality DC 12), *Dùng Cành Tre Dài Đưa Ra & Neo Chắc Điểm Tựa* (Lý Trí - D20 IQ DC 10), hoặc *Hô Hoán Khẩn Cấp & Dẫn Đội Cứu Hộ Đến* (Trái Tim - D20 EQ DC 9).
+* 🏥 **Hệ Thống Y Tế Quốc Gia & Thống Kê Nhi Khoa Chân Thực:**
+  * Tích hợp chỉ số chuyên sâu cho từng quốc gia trong `COUNTRY_DATA`: **Tỷ lệ sống sót của trẻ sơ sinh** (`infant_survival_rate` từ 93.8% ở Haiti, 94.2% ở Syria đến 98.8% ở Việt Nam, 99.8% ở Nhật Bản, Na Uy, Thụy Sĩ) và **Hệ số viện phí nhi khoa** (`clinic_cost_factor` từ 0.4x đến 2.0x).
+  * Điều kiện sống khó khăn tại các quốc gia Tier 3 hoặc gia cảnh nghèo khó đẩy cao rủi ro biến chứng viêm phổi (-25 HP nếu không có viện phí thuốc men).
+* ☸️ **Cơ Chế Bồi Hoàn Phúc Đức Luân Hồi (+120 Karma):**
+  * Trẻ nhỏ dưới 6 tuổi không may qua đời vì bạo bệnh cấp tính (`age < 6`) sẽ được hệ thống bồi hoàn tức thì **+120 Điểm Karma** cho linh hồn người chơi, bảo toàn nhân quả phúc thiện và mở ra kiếp sống tái sinh may mắn, đủ đầy hơn.
+* 🍼 **Trách Nhiệm Phụ Huynh & Rủi Ro Ốm Sốt Của NPC Con Cái:**
+  * Mô phỏng nghĩa vụ làm cha mẹ hàng năm trong vòng lặp thụ động (`processPassivePhase`): Con cái dưới 10 tuổi (`rel.type === 'child'`) có rủi ro bị sốt mọc răng hoặc nhiễm lạnh.
+  * Người chơi trích tiền chi trả viện phí trạm xá nhi, đổi lại nhận **+6 Điểm Hảo Cảm Gia Đình** và **+5 Điểm Karma** công đức dưỡng dục.
+* 🚨 **Cảnh Báo Trực Quan Điện Ảnh `🚨 TÌNH HUỐNG SINH TỬ NGUY CẤP`:**
+  * Trong Phòng Quyết Định Điện Ảnh 21:9 (`CinemaDecisionRoomModal.tsx`), hệ thống tự động nhận diện các kịch bản hiểm nguy sinh tử (`fever`, `river`, `crisis`, `sinh tử`, `nguy cấp`, `đuối nước`) để kích hoạt huy hiệu báo động đỏ nhịp đập (`animate-pulse`) và đổi dải viền rạp chiếu sang sắc đỏ thẫm đe dọa sinh mệnh (`bg-rose-950/40 border-rose-500/60 shadow-[0_0_20px_rgba(244,63,94,0.3)]`).
+
 ---
 
 ## ⌨️ Bảng Phím Tắt Toàn Cục (Global Hotkeys Cheat-Sheet)

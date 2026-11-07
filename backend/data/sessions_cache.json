@@ -48510,5 +48510,66 @@
         ]
       }
     }
+  ],
+  [
+    "session_child_fever_test",
+    {
+      "character": {
+        "id": "char_parent_test",
+        "age": 28,
+        "cash": 500,
+        "vitality": 80,
+        "max_vitality": 100,
+        "burnout": 20,
+        "karma": 50,
+        "nationality": "Việt Nam",
+        "hidden_flags": [],
+        "innate_traits": []
+      },
+      "assets": [],
+      "relationships": [
+        {
+          "id": "rel_child_baby",
+          "character_id": "char_parent_test",
+          "name": "Bé Bắp",
+          "type": "child",
+          "age": 4,
+          "status": "alive",
+          "affection_level": 56
+        }
+      ],
+      "npcs": [],
+      "tickEvents": [],
+      "currentDilemma": null,
+      "playerAccount": {
+        "id": "session_child_fever_test",
+        "total_karma": 250,
+        "unlocked_perks": [],
+        "reincarnation_count": 0,
+        "lifetime_stats": {
+          "total_years_lived": 0,
+          "max_net_worth": 0,
+          "total_deaths": 0
+        },
+        "ancestral_lineage": [
+          {
+            "id": "founder_gen_1",
+            "generation": 1,
+            "name": "Vũ Chấn Hưng",
+            "nationality": "Việt Nam",
+            "age": 76,
+            "status": "ascended_nirvana",
+            "cause_of_passing": "Đắc Đạo Niết Bàn (Ascended to Nirvana)",
+            "max_net_worth": 1850000,
+            "cash": 240000,
+            "karma": 95,
+            "aspiration_title": "Khai Sáng & Đức Hạnh",
+            "epitaph_quote": "Thân tựa phù vân nơi trần thế, tâm an tĩnh tại giữa hư không. Dòng họ hưng vượng nhờ đức sáng muôn đời.",
+            "blessing": "+150 Nghiệp Lực Khởi Tổ & Hộ Mệnh Muôn Đời",
+            "recorded_at": "2026-10-31T07:03:50.819Z"
+          }
+        ]
+      }
+    }
   ]
 ]

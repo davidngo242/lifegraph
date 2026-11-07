@@ -241,6 +241,110 @@ const cleanWhisper = (text: string) => {
 };
 
 // =========================================================================
+// MIND SANCTUARY GENERATOR (Ambient 3D Contemplation Chamber when no scenario is active)
+// =========================================================================
+function getPersonalizedSanctuaryScenario(character: any, nextScenarioAge?: number | null): ScenarioData {
+  const age = Number(character?.age ?? 25);
+  const name = character?.name || "Bạn";
+  const job = character?.job_title || character?.career || "Tự Do";
+  const cash = Number(character?.cash ?? 0).toLocaleString();
+  const burnout = Number(character?.burnout ?? 0);
+  const health = Number(character?.vitality ?? 80);
+
+  let statusObservation = "Bạn đang ở độ tuổi tràn đầy năng lượng.";
+  if (age < 18) {
+    statusObservation = "Giai đoạn học vấn và định hình nhân cách. Mỗi quyết định nhỏ hôm nay đều đặt nền móng cho tương lai.";
+  } else if (age < 35) {
+    statusObservation = "Những năm tháng thanh xuân lập nghiệp. Cân bằng giữa cống hiến sự nghiệp và gìn giữ thể chất.";
+  } else if (age < 50) {
+    statusObservation = "Giai đoạn tích lũy tài sản và khẳng định vị thế. Trách nhiệm gia đình và xã hội đang lớn dần.";
+  } else {
+    statusObservation = "Những năm tháng chiêm nghiệm chín chắn. Tích lũy di sản và truyền thụ trí tuệ cho thế hệ tiếp theo.";
+  }
+
+  const nextMilestoneMsg = nextScenarioAge
+    ? `Cột mốc ngã rẽ cuộc đời tiếp theo dự kiến tại tuổi ${nextScenarioAge}. Bạn còn ${Math.max(1, nextScenarioAge - age)} năm để chuẩn bị.`
+    : "Hiện tại cuộc sống đang trôi qua tương đối êm đềm, không có biến cố nguy cấp.";
+
+  return {
+    id: "mind_sanctuary",
+    title: "Phòng Trầm Tư · Không Gian Chiêm Nghiệm Cuộc Đời",
+    description: `Tâm thất tĩnh lặng của ${name} (Tuổi ${age} · ${job}). ${statusObservation} ${nextMilestoneMsg}`,
+    scenes: [
+      {
+        id: "scene_sanctuary",
+        name: "Không Gian Trầm Tư",
+        background_theme: "office",
+        hotspots: [
+          {
+            id: "hotspot_sanctuary_meditation",
+            label: "Ghế Tĩnh Tâm",
+            icon: "🧘",
+            position_x: 220,
+            dialogue: {
+              speaker: `${name} (Nội tâm)`,
+              text: burnout > 50
+                ? `Chỉ số kiệt sức của bạn đang ở mức khá cao (${burnout}%). Một khoảng lặng hít thở sâu lúc này sẽ giúp xoa dịu thần kinh.`
+                : `Tâm trí bạn hiện tại khá an định (${burnout}% căng thẳng). Hãy giữ tinh thần sáng suốt này để vượt qua mọi thử thách!`
+            }
+          },
+          {
+            id: "hotspot_sanctuary_archive",
+            label: "Tủ Kỷ Niệm & Manh Mối",
+            icon: "📚",
+            position_x: 450,
+            dialogue: {
+              speaker: "Ký Ức Đã Qua",
+              text: `Bạn đã sống qua ${age} năm với tài sản hiện có là $${cash}. Mọi quyết định trong quá khứ đã tôi luyện nên con người bạn hôm nay.`
+            }
+          },
+          {
+            id: "hotspot_sanctuary_window",
+            label: "Cửa Sổ Nhìn Vận Mệnh",
+            icon: "🪟",
+            position_x: 680,
+            dialogue: {
+              speaker: "Tầm Nhìn Cuộc Đời",
+              text: `${nextMilestoneMsg} Hãy tận dụng những năm tháng bình yên này để nâng cao kỹ năng và gia tăng tài sản phòng vệ!`
+            }
+          }
+        ]
+      }
+    ],
+    mind_stage: {
+      whispers: {
+        rational: health < 50
+          ? "Sức khỏe đang suy giảm, ưu tiên hàng đầu là nghỉ ngơi và bồi bổ thể lực."
+          : "Tài chính và thể lực đang ổn định. Cân nhắc đầu tư học tập thêm kỹ năng mới.",
+        empathy: "Đừng quên hỏi thăm gia đình, đối tác và những người thân yêu xung quanh bạn.",
+        instinct: "Mỗi ngày trôi qua là một cơ hội. Giữ vững niềm tin vào con đường đã chọn.",
+        dilemma_prompt: "Tâm trí bạn đang ở trạng thái bình hòa. Bạn muốn định hướng tâm thức như thế nào?"
+      }
+    },
+    choices: [
+      {
+        id: "CHOICE_REFLECT_REST",
+        title: "Tọa Thiền Tĩnh Tâm (Thư Giãn Thần Kinh)",
+        stance: "inner_peace",
+        description: "Ngồi tĩnh lặng lắng nghe nhịp thở, buông bỏ lo toan bộn bề để lấy lại sự minh mẫn."
+      },
+      {
+        id: "CHOICE_REVIEW_GOALS",
+        title: "Chiêm Nghiệm Chiến Lược Dài Hạn",
+        stance: "rational",
+        description: "Rà soát lại danh mục đầu tư, kế hoạch sự nghiệp và định hướng cho các năm tiếp theo."
+      },
+      {
+        id: "CHOICE_RETURN_COCKPIT",
+        title: "Sẵn Sàng Trở Về Cockpit Sinh Tồn",
+        stance: "ready",
+        description: "Tâm thế đã vững vàng, quay trở lại Bàn Điều Hành Cockpit để tiếp tục hành động và bước sang năm mới."
+      }
+    ]
+  };
+}
+
+// =========================================================================
 // CINEMATIC VOLUMETRIC SUNBEAM (God Rays through Window)
 // =========================================================================
 function VolumetricSunbeam3D({ color = '#fef08a' }: { color?: string }) {
@@ -1026,6 +1130,8 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
   const [actionPoints, setActionPoints] = useState<number>(3);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const [nextScenarioAge, setNextScenarioAge] = useState<number | null>(null);
+
   // 3D Character Target & Walking State
   const [char3DPos, setChar3DPos] = useState<{ x: number; z: number }>({ x: -1.5, z: 0.2 });
   const [target3DPos, setTarget3DPos] = useState<{ x: number; z: number }>({ x: -1.5, z: 0.2 });
@@ -1080,6 +1186,9 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
         const res = await fetch('/api/game/scenario/current');
         if (!res.ok) throw new Error("Không thể tải kịch bản.");
         const data = await res.json();
+        if (data.next_scenario_age) {
+          setNextScenarioAge(data.next_scenario_age);
+        }
         if (data.scenario) {
           setScenario(data.scenario);
           const initialSceneId = data.current_scene_id || data.scenario.scenes?.[0]?.id || "scene_nursery";
@@ -1096,9 +1205,25 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
               isDefaultIntro: true
             });
           }
+        } else {
+          // Graceful fallback to Mind Sanctuary!
+          const sanctuary = getPersonalizedSanctuaryScenario(character, data.next_scenario_age);
+          setScenario(sanctuary);
+          setCurrentSceneId("scene_sanctuary");
+          setKnowledgeBase(data.knowledge_base || []);
+          setCommitments(data.commitments || []);
+          setActionPoints(data.action_points ?? 3);
+          setActiveDialogue({
+            speaker: `${character?.name || "Bạn"} (Tĩnh tâm)`,
+            text: sanctuary.description,
+            isDefaultIntro: true
+          });
         }
       } catch (err) {
         console.error(err);
+        const sanctuary = getPersonalizedSanctuaryScenario(character, null);
+        setScenario(sanctuary);
+        setCurrentSceneId("scene_sanctuary");
       } finally {
         setIsLoading(false);
       }
@@ -1181,6 +1306,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
       text: `Bạn đã bước vào không gian: ${targetScene?.name || sceneId}. Hãy quan sát các manh mối xung quanh!`,
       isDefaultIntro: true
     });
+    if (scenario?.id === 'mind_sanctuary') return;
     try {
       await fetch('/api/game/scenario/transition', {
         method: 'POST',
@@ -1197,6 +1323,17 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
     // 1. Walk to hotspot location in 3D
     const targetX = ((hotspot.position_x - 450) / 450) * 4.6;
     setTarget3DPos({ x: targetX, z: -0.2 });
+
+    // In Mind Sanctuary, handle interaction locally without server API
+    if (scenario?.id === 'mind_sanctuary') {
+      setActiveDialogue({
+        speaker: hotspot.dialogue?.speaker || hotspot.label,
+        text: hotspot.dialogue?.text || "...",
+        granted_knowledge: hotspot.dialogue?.granted_knowledge,
+        npc_role: hotspot.npc_role
+      });
+      return;
+    }
 
     // 2. Call server interaction API
     try {
@@ -1231,6 +1368,34 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
 
   // Confirm Mind Stage Choice (D20 Resolution)
   const handleConfirmChoice = async (choiceId: string) => {
+    if (scenario?.id === 'mind_sanctuary') {
+      if (choiceId === 'CHOICE_RETURN_COCKPIT') {
+        setShowMindStage(false);
+        if (onBackToCockpit) onBackToCockpit();
+        return;
+      }
+      setIsResolving(true);
+      setTimeout(() => {
+        setIsResolving(false);
+        setRollResult({
+          success: true,
+          choice_id: choiceId,
+          choice_title: choiceId === 'CHOICE_REFLECT_REST' ? "Tọa Thiền Tĩnh Tâm" : "Chiêm Nghiệm Chiến Lược Dài Hạn",
+          narration: choiceId === 'CHOICE_REFLECT_REST'
+            ? "Tâm trí bạn trở nên thanh thản, dịu mát. Một luồng sinh khí mới lan tỏa, giúp bạn buông bỏ những áp lực đè nặng."
+            : "Bạn đã sắp xếp lại các suy nghĩ và định hình rõ ràng hơn con đường sắp tới. Sự tỉnh táo này sẽ là lợi thế lớn trong tương lai.",
+          character_state: {
+            action_points: actionPoints,
+            vitality: character?.vitality ?? 80,
+            burnout: Math.max(0, (character?.burnout ?? 20) - 5),
+            cash: character?.cash ?? 0
+          }
+        });
+        if (onScenarioResolved) onScenarioResolved({ sanctuary: true });
+      }, 400);
+      return;
+    }
+
     try {
       setIsResolving(true);
       const res = await fetch('/api/game/scenario/resolve-mindstage', {
@@ -1269,7 +1434,25 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
     );
   }
 
-  if (!scenario || !currentScene) return null;
+  if (!scenario || !currentScene) {
+    return (
+      <div className="w-full h-96 flex flex-col items-center justify-center bg-slate-950 rounded-3xl border border-slate-800 p-8 shadow-2xl text-center space-y-3">
+        <Sparkles className="w-8 h-8 text-amber-400 animate-pulse" />
+        <h3 className="text-base font-bold text-white">Không Gian Trầm Tư Đang Sẵn Sàng</h3>
+        <p className="text-xs text-slate-400 max-w-md">
+          Chưa có ngã rẽ nào đang diễn ra ở thời điểm hiện tại. Hãy quay lại Bàn Điều Hành Cockpit để tiếp tục trải nghiệm!
+        </p>
+        {onBackToCockpit && (
+          <button
+            onClick={onBackToCockpit}
+            className="px-4 py-2 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow-lg"
+          >
+            ⬅ Trở Về Cockpit Sinh Tồn
+          </button>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="w-full bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col select-none relative group">
@@ -1286,7 +1469,7 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
                 onClick={onBackToCockpit}
                 className="px-2.5 py-1 rounded-xl bg-gradient-to-r from-indigo-950/90 to-purple-950/90 hover:from-indigo-900 hover:to-purple-900 text-indigo-200 hover:text-white border border-indigo-500/40 text-[11px] font-bold flex items-center gap-1.5 transition active:scale-95 shadow-md shrink-0"
               >
-                <span>⬅️ Bàn Điều Hành Cuộc Sống</span>
+                <span>⬅️ Trở Về Cockpit</span>
                 {(character?.action_points || 0) > 0 && (
                   <span className="px-1 py-0.2 rounded bg-emerald-500/30 text-emerald-300 text-[9px] font-mono">
                     {character.action_points} AP
@@ -1299,6 +1482,12 @@ export default function InteractiveScene2D({ onScenarioResolved, character, onBa
               <Sparkles className="w-3.5 h-3.5 text-purple-400" />
               <span>{scenario.title}</span>
             </span>
+
+            {nextScenarioAge && scenario?.id === 'mind_sanctuary' && (
+              <span className="hidden md:inline-flex px-2.5 py-1 rounded-xl bg-amber-950/80 text-amber-300 border border-amber-500/40 text-[10.5px] font-mono font-bold backdrop-blur-md shadow-md items-center gap-1">
+                <span>⏳ Ngã Rẽ Kế: Tuổi {nextScenarioAge}</span>
+              </span>
+            )}
 
             {/* Scene Selector Pills */}
             <div className="hidden sm:flex items-center gap-1 p-1 rounded-xl bg-slate-900/90 border border-slate-800/80 backdrop-blur-md">
