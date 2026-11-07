@@ -418,7 +418,17 @@ export default function CharacterHeroBanner({
   }`;
 
   return (
-    <div className={`w-full rounded-3xl bg-[var(--bg-card)] text-[var(--text-primary)] border ${feedbackAtmo ? 'border-[var(--border-highlight)] shadow-[0_0_25px_rgba(251,191,36,0.2)]' : env.borderColor} shadow-xl backdrop-blur-2xl mb-4 relative overflow-hidden transition-all duration-500`}>
+    <div
+      onMouseMove={handleBannerMouseMove}
+      onMouseLeave={handleBannerMouseLeave}
+      style={{
+        perspective: 1200,
+        transform: `perspective(1200px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
+        transformStyle: 'preserve-3d',
+        transition: 'transform 0.15s ease-out'
+      }}
+      className={`w-full rounded-3xl bg-[var(--bg-card)] text-[var(--text-primary)] border ${feedbackAtmo ? 'border-[var(--border-highlight)] shadow-[0_0_25px_rgba(251,191,36,0.2)]' : env.borderColor} shadow-xl backdrop-blur-2xl mb-4 relative overflow-hidden transition-all duration-500`}
+    >
       
       {/* 1. CINEMATIC LIVING ATMOSPHERE BACKDROP */}
       <div className={`absolute inset-0 bg-gradient-to-r ${env.bgGradient} pointer-events-none transition-all duration-1000`} />
@@ -427,6 +437,9 @@ export default function CharacterHeroBanner({
       {feedbackAtmo && (
         <div className={`absolute inset-0 bg-gradient-to-r ${feedbackAtmo.glowGradient} pointer-events-none transition-all duration-500 animate-pulse z-[2]`} />
       )}
+
+      {/* Interactive 3D Depth Particle & Constellation Field */}
+      <DepthStarfieldCanvas mouseX={tilt.px} mouseY={tilt.py} isFastForwarding={isFastForwarding} />
       
       {/* Drifting Atmospheric Clouds & Mist */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 select-none animate-banner-drift">
@@ -441,8 +454,11 @@ export default function CharacterHeroBanner({
         </svg>
       </div>
 
-      {/* Pulsing Celestial Moon/Sun with Orbital Ring */}
-      <div className="absolute top-2 right-12 md:right-28 pointer-events-none select-none">
+      {/* Pulsing Celestial Moon/Sun with Orbital Ring & 3D Parallax Shift */}
+      <div
+        className="absolute top-2 right-12 md:right-28 pointer-events-none select-none transition-transform duration-200"
+        style={{ transform: `translate(${tilt.px * 24}px, ${tilt.py * 16}px)` }}
+      >
         <div className={`w-28 h-28 md:w-36 md:h-36 rounded-full ${env.celestialGlow} blur-2xl animate-pulse`} />
         <div className="absolute top-4 left-4 w-16 h-16 md:w-20 md:h-20 rounded-full border border-white/20 flex items-center justify-center animate-[spin_60s_linear_infinite]">
           <div className="w-9 h-9 md:w-11 md:h-11 rounded-full opacity-80 blur-[0.8px]" style={{ backgroundColor: env.celestialColor }} />
@@ -492,54 +508,93 @@ export default function CharacterHeroBanner({
         {/* Left: 3D Avatar (ĐỘC BẢN 3D - BỎ HOÀN TOÀN 2D) + Core Identity */}
         <div className="flex items-center gap-4 md:gap-5 min-w-0 flex-1">
           
-          {/* Avatar 3D Stage with Dynamic State Indicators */}
-          <div className={avatarContainerClasses}>
-            <div className={avatarFilterClasses}>
-              <Dynamic3DAvatar
-                nationality={character.nationality}
-                gender={character.gender || 'male'}
-                age={age}
-                burnout={burnout}
-                vitality={vitality}
-                reaction={reaction}
-                isFastForwarding={isFastForwarding}
-                showControls={false}
-                className="w-full h-full"
+          {/* Avatar 3D Holographic Stage with Dynamic Ground Reticle */}
+          <div className="relative shrink-0 flex flex-col items-center">
+            {/* Holographic Projection Disc under Avatar */}
+            <div className="absolute -bottom-2 w-28 md:w-36 h-6 pointer-events-none select-none z-0">
+              <div
+                className={`w-full h-full rounded-[100%] blur-sm animate-pulse ${
+                  isCriticalVitality
+                    ? 'bg-gradient-to-r from-transparent via-rose-500/40 to-transparent'
+                    : isSevereBurnout
+                    ? 'bg-gradient-to-r from-transparent via-amber-500/35 to-transparent'
+                    : hasHalo
+                    ? 'bg-gradient-to-r from-transparent via-amber-400/50 to-transparent'
+                    : 'bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent'
+                }`}
               />
+              <div className="absolute inset-0 rounded-[100%] border border-cyan-400/40 border-dashed animate-[spin_24s_linear_infinite]" />
+              <div className="absolute inset-1 rounded-[100%] border border-indigo-400/30" />
             </div>
 
-            {/* DYNAMIC AVATAR STATE OVERLAYS */}
-            
-
-            {/* 2. Sinh lực nguy kịch (vitality < 30): Nhịp tim đập chậm cảnh báo */}
-            {isCriticalVitality && (
-              <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-rose-950/90 border border-rose-500/60 text-[12px] font-sans tabular-nums text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow z-20">
-                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
-                <span>💔 Yếu ớt</span>
+            {/* Avatar 3D Stage with Dynamic State Indicators */}
+            <div className={avatarContainerClasses}>
+              <div className={avatarFilterClasses}>
+                <Dynamic3DAvatar
+                  nationality={character.nationality}
+                  gender={character.gender || 'male'}
+                  age={age}
+                  burnout={burnout}
+                  vitality={vitality}
+                  reaction={reaction}
+                  isFastForwarding={isFastForwarding}
+                  showControls={false}
+                  traits={traits}
+                  netWorth={netWorth}
+                  className="w-full h-full"
+                />
               </div>
-            )}
 
-            {/* 3. Kiệt sức tâm trí tột cùng (burnout > 80 & tuổi >= 18): Vignette đỏ + Quầng thâm */}
-            {isSevereBurnout && (
-              <>
-                <div className="absolute inset-0 pointer-events-none z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-rose-950/20 to-rose-950/60" />
-                <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-rose-950/90 border border-rose-500/70 text-[12px] font-sans tabular-nums text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow z-20">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping" />
-                  <span>⚡ Kiệt sức</span>
+              {/* DYNAMIC AVATAR STATE OVERLAYS */}
+              {/* 2. Sinh lực nguy kịch (vitality < 30): Nhịp tim đập chậm cảnh báo */}
+              {isCriticalVitality && (
+                <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-rose-950/90 border border-rose-500/60 text-[12px] font-sans tabular-nums text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow z-20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
+                  <span>💔 Yếu ớt</span>
                 </div>
-              </>
-            )}
+              )}
 
-            
+              {/* 3. Kiệt sức tâm trí tột cùng (burnout > 80 & tuổi >= 18): Vignette đỏ + Quầng thâm */}
+              {isSevereBurnout && (
+                <>
+                  <div className="absolute inset-0 pointer-events-none z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-rose-950/20 to-rose-950/60" />
+                  <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-rose-950/90 border border-rose-500/70 text-[12px] font-sans tabular-nums text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow z-20">
+                    <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping" />
+                    <span>⚡ Kiệt sức</span>
+                  </div>
+                </>
+              )}
 
-            {/* 360 Fullscreen Trigger */}
-            <button
-              onClick={onOpen3DInspector}
-              className="absolute top-1 right-1 p-1 rounded-md bg-black/75 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/60 backdrop-blur-md opacity-0 group-hover:opacity-100 transition shadow z-20"
-              title="Mở phòng kiểm định 360°"
-            >
-              <Maximize2 className="w-3 h-3" />
-            </button>
+              {/* 3D Visual Trait Badges on Avatar Container */}
+              {(hasGlasses || hasHalo || isWealthy) && (
+                <div className="absolute bottom-1 left-1 right-1 flex items-center justify-center gap-1 pointer-events-none z-20">
+                  {hasGlasses && (
+                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-slate-950/85 border border-indigo-500/60 text-indigo-300 font-sans backdrop-blur shadow" title="3D Kính Cận Tri Thức">
+                      👓 Kính
+                    </span>
+                  )}
+                  {hasHalo && (
+                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-950/85 border border-amber-500/60 text-amber-300 font-sans backdrop-blur shadow" title="3D Kim Quang Hào Quang">
+                      🪷 Hào quang
+                    </span>
+                  )}
+                  {isWealthy && (
+                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-yellow-950/85 border border-yellow-500/60 text-yellow-300 font-sans backdrop-blur shadow" title="3D Trâm Quý Tộc / Tuxedo">
+                      💎 Quý tộc
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* 360 Fullscreen Trigger */}
+              <button
+                onClick={onOpen3DInspector}
+                className="absolute top-1 right-1 p-1 rounded-md bg-black/75 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/60 backdrop-blur-md opacity-0 group-hover:opacity-100 transition shadow z-20"
+                title="Mở phòng kiểm định 360°"
+              >
+                <Maximize2 className="w-3 h-3" />
+              </button>
+            </div>
           </div>
 
           {/* Clean Core Identity Typography */}

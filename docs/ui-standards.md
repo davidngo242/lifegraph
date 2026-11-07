@@ -560,3 +560,45 @@ Nhằm xóa bỏ hoàn toàn cảm giác rời rạc khiến người dùng bỏ
    * Không gian 3D ấm cúng với 3 điểm tương tác: *Ghế Tĩnh Tâm (hồi phục Burnout)*, *Tủ Kỷ Niệm (xem lại di sản & tài sản)*, và *Cửa Sổ Vận Mệnh (thông báo trước cột mốc ngã rẽ ở tuổi tiếp theo)*.
 4. **Thanh Chỉ Số Sinh Tồn Trực Quan (Mini-Vitals Strip):**
    * Đỉnh phòng quyết định luôn ghim dải chỉ số thực tế: Máu (HP), Căng thẳng (Burnout), Điểm hành động (AP), và Tiền mặt (Cash), giúp người chơi luôn nắm chắc tình trạng sinh tồn khi cân nhắc các lựa chọn.
+
+---
+
+## 15. Chuẩn Hóa Avatar 3D Procedural & Hero Banner Tích Hợp Không Gian 3D (v2.2 Standard)
+
+Nhằm xóa bỏ hoàn toàn chân dung 2D tĩnh và nâng tầm trải nghiệm thị giác của LifeGraph lên chuẩn RPG hiện đại, hệ thống Avatar và Hero Banner được nâng cấp toàn diện sang kiến trúc tích hợp 3D không gian thực (True 3D Spatial Cockpit).
+
+### 15.1. Mô Hình Avatar 3D Độc Bản Đa Tầng (Procedural Rigged 3D Avatar)
+1. **Chiếu Sáng Điện Ảnh 3 Điểm Chuẩn Studio (3-Point Cinematic PBR Setup):**
+   * **Key Light:** Nguồn sáng ấm rực rỡ (`#fff7ed`), cường độ 1.35 lux, đặt tại góc trên trước mặt `[2.8, 3.8, 3.2]`.
+   * **Fill Light:** Nguồn sáng lấp đầy dịu mát (`#93c5fd`), cường độ 0.6 lux, khử bóng gắt phía dưới hàm và hốc mắt.
+   * **Rim Light (Ánh Sáng Ven Khối):** Đèn ven sắc nét từ phía sau (`#38bdf8` khi khỏe mạnh, `#fbbf24` khi thiền định, `#ef4444` khi kiệt sức), tạo viền sáng tách biệt nhân vật nổi bật trên nền trời.
+   * **Chin Bounce Light:** Nguồn sáng hắt nhẹ từ phía dưới (`#fde68a`), tái tạo độ tán xạ ánh sáng dưới da (Subsurface Scattering).
+2. **Cơ Chế Mắt Dõi Theo Con Trỏ Chuột Tự Nhiên (Smooth Pointer Head-Tracking):**
+   * Trong vòng lặp render Three.js (`useFrame`), vị trí chuột chuẩn hóa (`state.pointer.x`, `state.pointer.y`) được ánh xạ thành góc xoay đầu nhẹ nhàng:
+     * Góc nghiêng gật/ngước: $\text{rotX} \in [-0.22, 0.22]\text{ rad}$.
+     * Góc quay trái/phải: $\text{rotY} \in [-0.32, 0.32]\text{ rad}$.
+   * Kết hợp mượt mà với nhịp thở sinh học và phản ứng tâm lý (Vui mừng, Ngơ ngác, Mệt mỏi, Thiền định).
+3. **Trực Quan Hóa Phụ Kiện 3D Theo Mã Gen Di Truyền & Địa Vị (Trait-Reactive 3D Gear):**
+   * 👓 **Kính Cận Tri Thức 3D (`cận_thị_bẩm_sinh`, `code_whisperer`, `nerd`, `mọt_sách`):**
+     * Gọng kính kim loại titanium thanh mảnh (`torusGeometry`), cầu kính uốn cong và tròng kính thủy tinh phản chiếu ánh sáng tự nhiên (`opacity: 0.38`). Kích hoạt từ 4 tuổi trở lên.
+   * 🪷 **Vòng Kim Quang Hào Quang Tiên Thiên (`giác_ngộ_tâm_linh_tiên_thiên`, `phúc_đức_vô_lượng`, hoặc phản ứng `meditating`):**
+     * Vòng tròn hào quang hoàng kim phát sáng lơ lửng trên đỉnh đầu (`haloMaterial` với `emissive: #f59e0b, emissiveIntensity: 1.6`), quay nhẹ nhàng xung quanh trục Y kèm các hạt tinh tú quay đồng hành.
+   * 💎 **Trâm Quý Tộc / Tuxedo Dạ Hội (`crazy_rich`, `huyết_thống_trâm_anh`, hoặc Tài Sản $\ge \$500.000$):**
+     * Trâm cài áo đa diện nạm vàng ròng trên ve áo nhân vật nam/nữ, dây chuyền ngọc trai sang trọng cho nhân vật nữ và tông màu âu phục nhung đen quý phái.
+
+### 15.2. Hero Banner Tích Hợp Không Gian 3D (3D Integrated Spatial Cockpit)
+1. **Bệ Phóng Hologram Không Trọng Lực (Holographic 3D Stage Podium):**
+   * Avatar không còn bị giam trong một khung chữ nhật 2D phẳng lì, mà tọa lạc trên một **Bệ Chiếu Hologram Đa Tầng**:
+     * Đĩa phát xạ năng lượng elip phía dưới phát xung nhịp nhàng theo nhịp tim và trạng thái sinh mệnh.
+     * Vòng tròn radar công nghệ tương lai xoay tròn ngược chiều kim đồng hồ (`animate-[spin_24s_linear_infinite]`).
+     * Các huy hiệu phụ kiện 3D thu nhỏ gắn liền với bệ phóng để người chơi nhận diện ngay các tố chất đang kích hoạt.
+2. **Hiệu Ứng Nghiêng Thẻ 3D Không Gian Chiều Sâu (Interactive 3D Card Parallax Tilt):**
+   * Toàn bộ khối Banner phản hồi tức thời theo vị trí chuột người dùng:
+     * Góc nghiêng trục X & Y: `rotateX(-py * 4.5deg) rotateY(px * 6.5deg)`.
+     * Thuộc tính `perspective: 1200px` và `transformStyle: 'preserve-3d'` tạo chiều sâu tách bạch giữa tiền cảnh, bệ hologram và bầu trời.
+     * Tự động đàn hồi về trạng thái cân bằng khi rê chuột ra ngoài (`transform 0.15s ease-out`).
+3. **Bầu Trời Tinh Tú 3D Tương Tác Chiều Sâu (`DepthStarfieldCanvas`):**
+   * Tích hợp canvas hạt 3D hiệu năng cao dựng chuyển động tinh tú theo chiều sâu $Z \in [100, 900]$.
+   * Khi người dùng lia chuột qua banner, các vì sao dịch chuyển thị sai nghịch chiều theo từng lớp độ sâu, tạo cảm giác như đang ngắm nhìn một vũ trụ thu nhỏ sống động phía sau buồng lái nhân vật.
+   * Tự động ngắt render khi kích hoạt Fast Forward hoặc ẩn tab, giải phóng hoàn toàn GPU.
+
