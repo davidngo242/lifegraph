@@ -2032,6 +2032,7 @@ export default function LifeGraphPage() {
                         vitality={character.vitality || 80}
                         characterAge={character.age || 0}
                         cash={Number(character.cash || 0)}
+                        netWorth={netWorth}
                         character={character}
                         relationships={relationships}
                         assets={assets}
@@ -2041,6 +2042,8 @@ export default function LifeGraphPage() {
                         onAnnualFocus={handleAnnualFocus}
                         onOpenAssets={() => setShowAssetModal(true)}
                         onOpenFamily={() => setShowFamilyModal(true)}
+                        onFamilyMeal={handleFamilyMeal}
+                        onFamilyMentorship={handleFamilyMentorship}
                         onOvertime={handleOvertime}
                         onStudy={handleStudy}
                         onWellness={handleWellness}

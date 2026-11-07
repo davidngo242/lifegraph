@@ -17,9 +17,18 @@ import {
   TrendingUp,
   Dices,
   Flame,
-  ArrowUpRight
+  ArrowUpRight,
+  DollarSign,
+  Building,
+  Home,
+  Utensils,
+  MessageSquare,
+  FastForward,
+  CheckCircle2,
+  Lock
 } from 'lucide-react';
 import Tooltip from '../Tooltip';
+import { formatCurrency } from '../../utils/currencyUtils';
 
 export interface LifeTreeNode {
   id: string;
@@ -31,8 +40,8 @@ export interface LifeTreeNode {
   flavor: string;
   isBreakthrough?: boolean;
   disabled?: boolean;
-  angleDeg: number; // Position around the circle
-  distanceRatio: number; // 0.6 - 1.0 from center
+  angleDeg: number;
+  distanceRatio: number;
   color: {
     border: string;
     bg: string;
@@ -42,10 +51,16 @@ export interface LifeTreeNode {
   };
 }
 
-interface DynamicLifeTreeProps {
+export interface DynamicLifeTreeProps {
   characterAge: number;
   actionPoints: number;
   totalAp: number;
+  vitality?: number;
+  cash?: number;
+  netWorth?: number;
+  character?: any;
+  relationships?: any[];
+  assets?: any[];
   onChildAction?: (actionKey: string, apCost?: number) => void;
   onAdultAction?: (actionKey: string, apCost: number, cashCost: number) => void;
   onBreakthrough?: () => void;
@@ -59,6 +74,12 @@ interface DynamicLifeTreeProps {
   } | null;
   onFastForwardToSchool?: () => void;
   onTimeSkip?: () => void;
+  onOpenAssets?: () => void;
+  onOpenFamily?: () => void;
+  onOpenSkillHub?: () => void;
+  onFamilyMeal?: () => void;
+  onFamilyMentorship?: () => void;
+  onRpgActivePerk?: (type: string) => void;
   isLoading?: boolean;
 }
 
@@ -66,16 +87,38 @@ export default function DynamicLifeTree({
   characterAge,
   actionPoints,
   totalAp,
+  vitality = 80,
+  cash = 0,
+  netWorth = 0,
+  character,
+  relationships = [],
+  assets = [],
   onChildAction,
   onAdultAction,
   onBreakthrough,
   breakthroughAction,
   onFastForwardToSchool,
   onTimeSkip,
+  onOpenAssets,
+  onOpenFamily,
+  onOpenSkillHub,
+  onFamilyMeal,
+  onFamilyMentorship,
+  onRpgActivePerk,
   isLoading = false
 }: DynamicLifeTreeProps) {
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [pulseActiveId, setPulseActiveId] = useState<string | null>(null);
+
+  const nationality = character?.nationality || 'Việt Nam';
+  const formattedCash = formatCurrency(cash, nationality);
+  const formattedNetWorth = formatCurrency(netWorth, nationality);
+
+  // Household & Parents status
+  const household = character?.household;
+  const isParentsDeceased = household?.parents_status === 'deceased' || household?.parents_status === 'deceased_or_abandoned';
+  const canEatMeal = household && !isParentsDeceased && (household.family_meals_available ?? 1) > 0;
+  const canMentor = household && !isParentsDeceased && (household.family_mentorship_used !== characterAge);
 
   // Generate dynamic nodes based on life stage
   const getNodesForStage = (): LifeTreeNode[] => {
@@ -174,7 +217,6 @@ export default function DynamicLifeTree({
         }
       ];
 
-      // Add breakthrough node if available
       if (breakthroughAction) {
         nodes.push({
           id: 'breakthrough',
@@ -382,34 +424,34 @@ export default function DynamicLifeTree({
         category: 'family',
         icon: '🤝',
         apCost: 1,
-        gainText: '+Quan hệ quý nhân, Cơ hội làm ăn',
-        flavor: 'Gặp gỡ đối tác, giao lưu bạn bè và tìm kiếm tri kỷ',
-        angleDeg: 95,
-        distanceRatio: 0.75,
-        color: {
-          border: 'border-indigo-500/50',
-          bg: 'bg-indigo-950/70',
-          glow: '#6366f1',
-          text: 'text-indigo-300',
-          line: '#4f46e5'
-        }
-      },
-      {
-        id: 'gamble',
-        title: 'Thử Thách Vận May',
-        category: 'career',
-        icon: '🎲',
-        apCost: 1,
-        gainText: 'Lướt sóng may rủi tài chính',
-        flavor: 'Thử vận may lướt sóng hoặc mua vé số đổi đời',
-        angleDeg: 155,
-        distanceRatio: 0.75,
+        gainText: 'Gặp gỡ tri kỷ, Mở lối làm ăn',
+        flavor: 'Tham gia hội thảo, mở rộng các mối quan hệ chất lượng',
+        angleDeg: 90,
+        distanceRatio: 0.76,
         color: {
           border: 'border-purple-500/50',
           bg: 'bg-purple-950/70',
           glow: '#a855f7',
           text: 'text-purple-300',
           line: '#9333ea'
+        }
+      },
+      {
+        id: 'gamble',
+        title: 'Lướt Sóng & Thử Vận',
+        category: 'career',
+        icon: '🎲',
+        apCost: 1,
+        gainText: 'Cơ hội x2 vốn hoặc rủi ro',
+        flavor: 'Đầu tư mạo hiểm nắm bắt các chu kỳ tài sản chớp nhoáng',
+        angleDeg: 150,
+        distanceRatio: 0.72,
+        color: {
+          border: 'border-fuchsia-500/50',
+          bg: 'bg-fuchsia-950/70',
+          glow: '#d946ef',
+          text: 'text-fuchsia-300',
+          line: '#c026d3'
         }
       }
     ];
@@ -447,77 +489,206 @@ export default function DynamicLifeTree({
     setPulseActiveId(node.id);
     setTimeout(() => setPulseActiveId(null), 600);
 
-    if (node.id === 'breakthrough' && onBreakthrough) {
-      onBreakthrough();
+    if (node.isBreakthrough) {
+      if (onBreakthrough) onBreakthrough();
       return;
     }
 
-    if (characterAge <= 17 && onChildAction) {
-      onChildAction(node.id, node.apCost);
-      return;
-    }
-
-    if (onAdultAction) {
-      onAdultAction(node.id, node.apCost, 0);
+    if (characterAge <= 5) {
+      if (onChildAction) onChildAction(node.id, node.apCost);
+    } else {
+      if (onAdultAction) onAdultAction(node.id, node.apCost, 0);
     }
   };
 
-  // Dimensions & Center Coordinate for SVG Layout
+  // SVG Dimension Constants
   const canvasWidth = 640;
-  const canvasHeight = 360;
+  const canvasHeight = 340;
   const centerX = canvasWidth / 2;
-  const centerY = canvasHeight / 2 + 10;
+  const centerY = canvasHeight / 2;
   const baseRadius = 145;
 
   return (
-    <div className="w-full rounded-3xl bg-gradient-to-b from-slate-950 via-slate-900/90 to-slate-950 border border-indigo-500/30 p-4 shadow-2xl relative overflow-hidden select-none">
-      {/* Background radial cosmic glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none animate-pulse" />
+    <div className="w-full rounded-3xl bg-slate-950/95 border border-indigo-500/30 p-3 sm:p-4 shadow-2xl relative overflow-hidden flex flex-col gap-3 backdrop-blur-xl">
+      {/* Background Starfield Aura */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[340px] bg-gradient-to-br from-indigo-900/15 via-purple-900/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-      {/* Header bar of Life Tree */}
-      <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-slate-800/80 z-10 relative">
-        <div className="flex items-center gap-2">
+      {/* Top Header Bar */}
+      <div className="flex items-center justify-between gap-3 flex-wrap relative z-10 pb-2 border-b border-slate-800/80">
+        <div className="flex items-center gap-2.5">
           <span className="p-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30">
             <Sparkles className="w-4 h-4 animate-spin" style={{ animationDuration: '8s' }} />
           </span>
           <div>
             <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide flex items-center gap-2">
-              <span>Cây Sinh Mệnh Động (Interactive Life Tree)</span>
+              <span>Đại Thụ Sinh Mệnh Toàn Năng</span>
               <span className="text-[10px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                 Tuổi {characterAge}
               </span>
             </h3>
             <p className="text-[11px] text-slate-400 hidden sm:block">
-              Mỗi nhánh là một ngã rẽ cuộc đời. Chạm vào nhánh hoa để thi triển hành động sinh tồn.
+              Hệ sinh thái cuộc đời: Gốc Rễ Gia Đình · Nhánh Kỹ Năng · Cành Tài Sản · Tán Lá Hành Động.
             </p>
           </div>
         </div>
 
-        {/* AP Balance Indicator */}
+        {/* AP Balance Indicator & Quick Controls */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 px-3 py-1 rounded-xl bg-slate-950/90 border border-amber-500/30 text-xs font-semibold text-amber-300">
-            <Zap className="w-3.5 h-3.5 fill-amber-400 text-amber-400 animate-pulse" />
-            <span className="font-mono font-bold text-sm">{actionPoints}</span>
-            <span className="text-slate-500 text-[11px]">/ {totalAp} AP</span>
+          <Tooltip content="Điểm Hành Động (Action Points): Năng lượng sinh tồn dùng để thực hiện các bước ngoặt cuộc đời trong năm nay.">
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-900 border border-amber-500/40 text-xs font-semibold text-amber-300 shadow-sm cursor-help">
+              <Zap className="w-3.5 h-3.5 fill-amber-400 text-amber-400 animate-pulse" />
+              <span className="font-mono font-bold text-sm">{actionPoints}</span>
+              <span className="text-slate-500 text-[11px]">/ {totalAp} AP</span>
+            </div>
+          </Tooltip>
+
+          {/* Quick fast-forwards */}
+          {characterAge < 6 && onFastForwardToSchool && (
+            <Tooltip content="Tua nhanh qua giai đoạn 0-5 tuổi, bước thẳng vào Lớp 1 (6 tuổi) với ký ức tuổi thơ êm đềm.">
+              <button
+                onClick={() => {
+                  if (window.confirm("Bỏ qua giai đoạn bập bẹ để bước thẳng vào Lớp 1 (6 Tuổi)?")) {
+                    onFastForwardToSchool();
+                  }
+                }}
+                disabled={isLoading}
+                className="px-2.5 py-1 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-[11px] flex items-center gap-1 shadow transition active:scale-95"
+              >
+                <FastForward className="w-3 h-3 text-amber-300" />
+                <span>Lên Lớp 1</span>
+              </button>
+            </Tooltip>
+          )}
+
+          {onTimeSkip && (
+            <Tooltip content="Bỏ qua các hành động còn lại, tích trữ AP sang hồi phục sinh lực và bước sang tuổi kế tiếp (+1 tuổi).">
+              <button
+                onClick={onTimeSkip}
+                disabled={isLoading}
+                className="px-2.5 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-[11px] border border-slate-700 transition active:scale-95"
+              >
+                <span>+1 Tuổi</span>
+              </button>
+            </Tooltip>
+          )}
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 2 MAIN PILLARS: NHÁNH KỸ NĂNG (TÂY BẮC) & NHÁNH TÀI SẢN (ĐÔNG BẮC) */}
+      {/* ========================================================================= */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 relative z-10">
+        {/* PILLAR 1: KỸ NĂNG & THẦN THÁI (TÂY BẮC) */}
+        <div className="p-2.5 rounded-2xl bg-gradient-to-r from-purple-950/60 via-slate-900 to-slate-950 border border-purple-500/30 flex items-center justify-between gap-2 shadow-md">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-sm shrink-0">
+              🔮
+            </span>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[10px] font-bold text-purple-300 uppercase tracking-wider">
+                  Nhánh Kỹ Năng & Trí Tuệ
+                </span>
+                {(character?.skill_points || 0) > 0 && (
+                  <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-pulse">
+                    +{character.skill_points} SP
+                  </span>
+                )}
+              </div>
+              <div className="text-xs font-bold text-white truncate">
+                Lv.{character?.life_level || 1} · {character?.unlocked_skills?.length || 0} Tố Chất Đã Rèn
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 shrink-0">
+            {/* Quick Skill Perks */}
+            {onRpgActivePerk && character?.unlocked_skills?.includes('market_sense_1') && (
+              <Tooltip content="Lướt sóng cổ phiếu: Dùng 1 AP chớp thời cơ thị trường sinh lời">
+                <button
+                  disabled={isLoading || actionPoints < 1}
+                  onClick={() => onRpgActivePerk('stock_trading')}
+                  className="p-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/40 text-emerald-300 text-xs transition"
+                >
+                  📈
+                </button>
+              </Tooltip>
+            )}
+            {onRpgActivePerk && character?.unlocked_skills?.includes('stoic_mind_1') && (
+              <Tooltip content="Thiền định siêu việt: Dùng 1 AP xóa tan Burnout kiệt sức">
+                <button
+                  disabled={isLoading || actionPoints < 1}
+                  onClick={() => onRpgActivePerk('zen_meditation')}
+                  className="p-1.5 rounded-lg bg-indigo-950/80 hover:bg-indigo-900 border border-indigo-500/40 text-indigo-300 text-xs transition"
+                >
+                  🧘
+                </button>
+              </Tooltip>
+            )}
+
+            {onOpenSkillHub && (
+              <button
+                type="button"
+                onClick={onOpenSkillHub}
+                className="px-2.5 py-1.5 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/50 text-purple-200 text-[11px] font-bold transition flex items-center gap-1 active:scale-95"
+              >
+                <span>Cây Kỹ Năng</span>
+                <ArrowUpRight className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* PILLAR 2: TÀI SẢN & THỊNH VƯỢNG (ĐÔNG BẮC) */}
+        <div className="p-2.5 rounded-2xl bg-gradient-to-r from-amber-950/50 via-slate-900 to-slate-950 border border-amber-500/30 flex items-center justify-between gap-2 shadow-md">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-sm shrink-0">
+              🪙
+            </span>
+            <div className="min-w-0">
+              <span className="text-[10px] font-bold text-amber-300 uppercase tracking-wider block">
+                Cành Hoàng Kim Tài Sản
+              </span>
+              <div className="text-xs font-bold text-white truncate flex items-center gap-1.5">
+                <span className="text-emerald-400 font-mono">{formattedCash.primary}</span>
+                <span className="text-slate-500 text-[10px]">• Ròng {formattedNetWorth.primary}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-950 text-amber-300 border border-amber-500/20">
+              {assets.length} Tài sản
+            </span>
+            {onOpenAssets && (
+              <button
+                type="button"
+                onClick={onOpenAssets}
+                className="px-2.5 py-1.5 rounded-xl bg-amber-600/30 hover:bg-amber-600/50 border border-amber-500/50 text-amber-200 text-[11px] font-bold transition flex items-center gap-1 active:scale-95"
+              >
+                <span>Sàn Tài Sản</span>
+                <ArrowUpRight className="w-3 h-3" />
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* SVG Canvas for Organic Tree Branches */}
-      <div className="relative w-full h-[320px] sm:h-[350px] overflow-hidden flex items-center justify-center">
+      {/* ========================================================================= */}
+      {/* SVG CANVAS: TRỤC THẦN MỘC & CÁC VỆ TINH HÀNH ĐỘNG HẰNG NĂM */}
+      {/* ========================================================================= */}
+      <div className="relative w-full h-[320px] sm:h-[350px] overflow-hidden flex items-center justify-center rounded-2xl bg-slate-950/60 border border-slate-800/80">
         <svg
           viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
           className="absolute inset-0 w-full h-full pointer-events-none"
         >
           <defs>
-            {/* Animated Energy Flow Gradient */}
             <linearGradient id="treePulseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#818cf8" stopOpacity="0.8" />
               <stop offset="50%" stopColor="#f59e0b" stopOpacity="1" />
               <stop offset="100%" stopColor="#10b981" stopOpacity="0.8" />
             </linearGradient>
 
-            {/* Core Pulse Filter */}
             <filter id="coreGlow" x="-30%" y="-30%" width="160%" height="160%">
               <feGaussianBlur stdDeviation="6" result="blur" />
               <feMerge>
@@ -527,7 +698,7 @@ export default function DynamicLifeTree({
             </filter>
           </defs>
 
-          {/* Central Trunk Ambient Tree Ring Circles */}
+          {/* Central Trunk Ambient Circles */}
           <circle
             cx={centerX}
             cy={centerY}
@@ -557,7 +728,6 @@ export default function DynamicLifeTree({
             const targetX = centerX + Math.cos(rad) * (baseRadius * node.distanceRatio * 1.35);
             const targetY = centerY + Math.sin(rad) * (baseRadius * node.distanceRatio * 0.95);
 
-            // Calculate bezier control points for natural curving tree branch
             const midX = (centerX + targetX) / 2;
             const midY = (centerY + targetY) / 2 - 18;
             const pathD = `M ${centerX} ${centerY} Q ${midX} ${midY} ${targetX} ${targetY}`;
@@ -567,7 +737,6 @@ export default function DynamicLifeTree({
 
             return (
               <g key={`branch-${node.id}`}>
-                {/* Background Shadow Branch */}
                 <path
                   d={pathD}
                   fill="none"
@@ -577,7 +746,6 @@ export default function DynamicLifeTree({
                   className="transition-all duration-300"
                 />
 
-                {/* Animated Pulsing Particle Beam when playable */}
                 {canAfford && (
                   <path
                     d={pathD}
@@ -599,87 +767,70 @@ export default function DynamicLifeTree({
         <Tooltip
           content={
             <div className="space-y-1 text-xs">
-              <div className="font-bold text-amber-300">⚡ Cội Nguồn Sinh Mệnh (Life Core)</div>
-              <div className="text-slate-200">
-                Tuổi hiện tại: <strong>{characterAge} tuổi</strong> • Năng lượng AP: <strong>{actionPoints}/{totalAp}</strong>
-              </div>
-              <div className="text-[11px] text-slate-400">
-                Tất cả tiềm năng phát triển phân nhánh từ cội nguồn này.
-              </div>
+              <div className="font-bold text-amber-300">Lõi Sinh Mệnh Trung Tâm:</div>
+              <div>Bản thể hội tụ năng lượng sống, định hình các lựa chọn thường niên.</div>
+              <div className="text-[11px] text-purple-300 font-mono">Khả dụng: {actionPoints}/{totalAp} AP</div>
             </div>
           }
         >
           <div
-            className="absolute z-20 flex flex-col items-center justify-center p-3 rounded-full bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 border-2 border-indigo-400 shadow-[0_0_25px_rgba(99,102,241,0.5)] cursor-pointer hover:scale-105 transition active:scale-95"
+            className="absolute z-20 w-24 h-24 sm:w-28 sm:h-28 rounded-full flex flex-col items-center justify-center p-2 text-center select-none shadow-2xl transition-all duration-300 cursor-pointer group"
             style={{
-              left: `${(centerX / canvasWidth) * 100}%`,
-              top: `${(centerY / canvasHeight) * 100}%`,
-              transform: 'translate(-50%, -50%)'
+              background: 'radial-gradient(circle, rgba(99,102,241,0.35) 0%, rgba(15,23,42,0.95) 75%)',
+              boxShadow: '0 0 35px rgba(99,102,241,0.4)',
+              border: '2px solid rgba(129,140,248,0.6)'
             }}
           >
-            <div className="relative">
-              <span className="text-2xl sm:text-3xl animate-pulse">
-                {characterAge <= 2 ? '🍼' : characterAge <= 5 ? '🧸' : characterAge <= 17 ? '🎒' : '🌟'}
-              </span>
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-amber-400 text-slate-950 font-mono font-black text-[9px] flex items-center justify-center shadow">
-                {actionPoints}
-              </div>
+            <div className="absolute inset-0 rounded-full border border-indigo-400/40 animate-ping opacity-25 pointer-events-none" />
+
+            <div className="w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-sm shadow-inner group-hover:scale-110 transition-transform">
+              {characterAge < 6 ? '🌱' : characterAge < 18 ? '🎒' : '⚡'}
             </div>
-            <span className="text-[10px] font-sans font-bold text-indigo-200 mt-0.5">
-              {characterAge}T
-            </span>
+
+            <div className="text-[11px] font-sans font-bold text-white mt-1 leading-none tracking-tight">
+              {actionPoints > 0 ? `${actionPoints} AP` : 'Hết AP'}
+            </div>
+            <div className="text-[9.5px] text-indigo-300 font-mono mt-0.5 opacity-80">
+              Lõi Sinh Mệnh
+            </div>
           </div>
         </Tooltip>
 
         {/* ========================================================================= */}
-        {/* SATELLITE ACTION NODES (NHÁNH HOA HÀNH ĐỘNG) */}
+        {/* SATELLITE ACTION NODES (VỆ TINH HÀNH ĐỘNG QUAY QUANH TRỤC) */}
         {/* ========================================================================= */}
         {nodes.map(node => {
           const rad = (node.angleDeg * Math.PI) / 180;
-          const posX = centerX + Math.cos(rad) * (baseRadius * node.distanceRatio * 1.35);
-          const posY = centerY + Math.sin(rad) * (baseRadius * node.distanceRatio * 0.95);
+          const leftPercent = 50 + (Math.cos(rad) * (baseRadius * node.distanceRatio * 1.35) / canvasWidth) * 100;
+          const topPercent = 50 + (Math.sin(rad) * (baseRadius * node.distanceRatio * 0.95) / canvasHeight) * 100;
 
-          const pctX = (posX / canvasWidth) * 100;
-          const pctY = (posY / canvasHeight) * 100;
-
-          const canAfford = actionPoints >= node.apCost;
           const isHovered = hoveredNodeId === node.id;
           const isPulsing = pulseActiveId === node.id;
+          const canAfford = actionPoints >= node.apCost;
 
           return (
             <div
               key={node.id}
-              className="absolute z-20"
+              className="absolute z-30 -translate-x-1/2 -translate-y-1/2"
               style={{
-                left: `${pctX}%`,
-                top: `${pctY}%`,
-                transform: 'translate(-50%, -50%)'
+                left: `${leftPercent}%`,
+                top: `${topPercent}%`
               }}
               onMouseEnter={() => setHoveredNodeId(node.id)}
               onMouseLeave={() => setHoveredNodeId(null)}
             >
               <Tooltip
-                position="top"
                 content={
                   <div className="space-y-1 text-xs max-w-xs">
-                    <div className="flex items-center justify-between gap-2 border-b border-slate-700/60 pb-1">
-                      <span className="font-bold text-amber-300 flex items-center gap-1">
-                        <span>{node.icon}</span>
-                        <span>{node.title}</span>
-                      </span>
-                      <span className="font-mono text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                    <div className="flex items-center gap-1.5 font-bold text-amber-300">
+                      <span>{node.icon}</span>
+                      <span>{node.title}</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">
                         {node.apCost} AP
                       </span>
                     </div>
-                    <div className="text-[11px] font-semibold text-emerald-300 font-sans">
-                      {node.gainText}
-                    </div>
-                    <div className="text-[11px] text-slate-300 leading-snug">
-                      {node.flavor}
-                    </div>
-                    <div className="text-[10px] text-indigo-300 pt-0.5 italic">
-                      {canAfford ? '✨ Sẵn sàng thực hiện (-' + node.apCost + ' AP)' : '🔒 Không đủ Điểm Hành Động'}
-                    </div>
+                    <div className="text-slate-200">{node.gainText}</div>
+                    <div className="text-[11px] text-slate-400 italic">{node.flavor}</div>
                   </div>
                 }
               >
@@ -687,47 +838,35 @@ export default function DynamicLifeTree({
                   type="button"
                   disabled={isLoading || !canAfford}
                   onClick={() => handleNodeClick(node)}
-                  className={`group relative flex items-center gap-1.5 p-2 rounded-2xl border transition-all duration-300 text-left ${
-                    node.color.border
-                  } ${node.color.bg} ${
-                    isPulsing ? 'scale-125 ring-4 ring-amber-400' : ''
+                  className={`relative p-2 sm:p-2.5 rounded-2xl border text-left transition-all duration-300 flex items-center gap-2 select-none active:scale-95 shadow-xl ${
+                    node.isBreakthrough
+                      ? 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950 border-amber-400 text-amber-200 ring-2 ring-amber-400/60 shadow-amber-900/40 animate-pulse'
+                      : node.color.bg + ' ' + node.color.border + ' ' + node.color.text
                   } ${
-                    canAfford
-                      ? 'cursor-pointer hover:scale-110 hover:shadow-[0_0_20px_' + node.color.glow + '] active:scale-95'
-                      : 'opacity-40 grayscale cursor-not-allowed'
+                    isHovered ? 'scale-110 z-40 shadow-2xl ring-2 ring-white/50' : ''
+                  } ${
+                    isPulsing ? 'scale-95 ring-4 ring-emerald-400' : ''
+                  } ${
+                    !canAfford ? 'opacity-40 cursor-not-allowed grayscale-[0.4]' : 'cursor-pointer hover:border-white'
                   }`}
                   style={{
-                    boxShadow: canAfford
-                      ? isHovered
-                        ? `0 0 18px ${node.color.glow}`
-                        : `0 0 8px ${node.color.glow}40`
-                      : 'none'
+                    boxShadow: isHovered ? `0 0 20px ${node.color.glow}` : undefined
                   }}
                 >
-                  {/* Floating Action Icon with mini badge */}
-                  <div className="relative shrink-0">
-                    <span className="text-xl sm:text-2xl filter drop-shadow">
-                      {node.icon}
-                    </span>
-                    <span className="absolute -bottom-1 -right-1 text-[8.5px] font-mono font-bold px-1 rounded-full bg-slate-950 text-amber-300 border border-amber-500/40">
-                      {node.apCost}
-                    </span>
-                  </div>
-
-                  {/* Title & gain teaser (Hidden on very narrow screens) */}
-                  <div className="hidden sm:block min-w-0 pr-1">
-                    <div className="text-xs font-bold text-white truncate max-w-[100px]">
+                  <span className="text-lg sm:text-xl shrink-0 group-hover:scale-125 transition-transform">
+                    {node.icon}
+                  </span>
+                  <div className="min-w-0 pr-1 hidden sm:block">
+                    <div className="text-xs font-bold truncate max-w-[110px] text-white">
                       {node.title}
                     </div>
-                    <div className="text-[9.5px] font-sans truncate text-emerald-300 font-medium max-w-[100px]">
+                    <div className="text-[10px] opacity-80 truncate max-w-[110px] font-mono">
                       {node.gainText}
                     </div>
                   </div>
-
-                  {/* Pulsing beacon ping if can afford */}
-                  {canAfford && isHovered && (
-                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
-                  )}
+                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-black/40 text-amber-300 border border-white/10 shrink-0 font-bold">
+                    {node.apCost} AP
+                  </span>
                 </button>
               </Tooltip>
             </div>
@@ -735,42 +874,89 @@ export default function DynamicLifeTree({
         })}
       </div>
 
-      {/* Bottom Quick Controls Strip */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-2.5 mt-1 border-t border-slate-800/80 z-10 relative">
-        <div className="flex items-center gap-2 flex-wrap">
-          {characterAge <= 5 && onFastForwardToSchool && (
-            <Tooltip content="Bỏ qua các bước chập chững sơ sinh để tiến thẳng đến năm 6 tuổi với đầy đủ thể chất & ký ức tuổi thơ nguyên vẹn.">
-              <button
-                onClick={() => {
-                  if (window.confirm("Bỏ qua giai đoạn bập bẹ để bước thẳng vào Lớp 1 (6 Tuổi) với đầy đủ ký ức tuổi thơ êm đềm?")) {
-                    onFastForwardToSchool();
-                  }
-                }}
-                disabled={isLoading}
-                className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-md cursor-pointer"
-              >
-                <Compass className="w-3.5 h-3.5 text-amber-300" />
-                <span>Chuyển đến năm 6 tuổi (Tiểu học)</span>
-              </button>
-            </Tooltip>
-          )}
-
-          {onTimeSkip && (
-            <Tooltip content="Bước sang năm tiếp theo, tiêu thụ toàn bộ AP dư thành dưỡng chất hồi phục sinh lực và lớn lên 1 tuổi.">
-              <button
-                onClick={onTimeSkip}
-                disabled={isLoading}
-                className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-xs border border-slate-700/80 transition active:scale-95 cursor-pointer flex items-center gap-1.5"
-              >
-                <span>Sang năm tiếp theo (+1 tuổi)</span>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-              </button>
-            </Tooltip>
-          )}
+      {/* ========================================================================= */}
+      {/* 3RD PILLAR: GỐC RỄ GIA ĐÌNH & CỘI NGUỒN (CHÂN CÂY / PHÍA NAM) */}
+      {/* ========================================================================= */}
+      <div className="p-3 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-950 border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md relative z-10">
+        <div className="flex items-center gap-2.5 min-w-0 w-full sm:w-auto">
+          <span className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-sm shrink-0">
+            🌿
+          </span>
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-wider">
+                Gốc Rễ Gia Đình & Cội Nguồn
+              </span>
+              {household?.family_buff && (
+                <span className="text-[10px] font-semibold text-amber-300 px-2 py-0.2 rounded-full bg-amber-500/10 border border-amber-500/20">
+                  ⭐ {household.family_buff.name}
+                </span>
+              )}
+            </div>
+            <div className="text-xs text-slate-300 truncate">
+              {household?.father_name ? `Bố: ${household.father_name}` : 'Mồ côi'}
+              {household?.mother_name ? ` • Mẹ: ${household.mother_name}` : ''}
+              <span className={`ml-2 text-[10px] px-1.5 py-0.2 rounded font-semibold ${isParentsDeceased ? 'text-rose-400 bg-rose-950/60' : 'text-emerald-400 bg-emerald-950/60'}`}>
+                {isParentsDeceased ? 'Đã khuất' : 'Bình an'}
+              </span>
+            </div>
+          </div>
         </div>
 
-        <div className="text-[11px] text-slate-400 italic">
-          * Cây sinh mệnh tự động đâm chồi và mở thêm nhánh khi bạn lớn lên
+        {/* 1-Click Family Interactions & Phả Hệ Button */}
+        <div className="flex items-center gap-2 flex-wrap justify-end shrink-0 w-full sm:w-auto">
+          {onFamilyMeal && !isParentsDeceased && (
+            <Tooltip content={canEatMeal ? "Bữa cơm đầm ấm: Tăng 10 HP và giảm 15 Burnout" : "Đã dùng bữa cơm trong năm nay"}>
+              <button
+                type="button"
+                onClick={onFamilyMeal}
+                disabled={!canEatMeal || isLoading}
+                className={`py-1.5 px-3 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition border ${
+                  canEatMeal
+                    ? 'bg-amber-950/60 hover:bg-amber-900/60 text-amber-200 border-amber-500/40 active:scale-95 shadow'
+                    : 'bg-slate-900/40 text-slate-500 border-slate-800 cursor-not-allowed opacity-60'
+                }`}
+              >
+                <Utensils className="w-3.5 h-3.5 text-amber-400" />
+                <span>{characterAge < 6 ? 'Bầu Sữa Mẹ' : 'Bữa Cơm'}</span>
+                <span className="text-[10px] font-mono text-amber-300/80 ml-1">
+                  {canEatMeal ? '+10 HP' : 'Đã dùng'}
+                </span>
+              </button>
+            </Tooltip>
+          )}
+
+          {onFamilyMentorship && !isParentsDeceased && (
+            <Tooltip content={canMentor ? "Lời khuyên phụ mẫu: Tiếp thu kinh nghiệm cha mẹ, +8 Karma" : "Đã nhận lời khuyên trong năm nay"}>
+              <button
+                type="button"
+                onClick={onFamilyMentorship}
+                disabled={!canMentor || isLoading}
+                className={`py-1.5 px-3 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition border ${
+                  canMentor
+                    ? 'bg-indigo-950/60 hover:bg-indigo-900/60 text-indigo-200 border-indigo-500/40 active:scale-95 shadow'
+                    : 'bg-slate-900/40 text-slate-500 border-slate-800 cursor-not-allowed opacity-60'
+                }`}
+              >
+                <MessageSquare className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Lời Khuyên</span>
+                <span className="text-[10px] font-mono text-indigo-300/80 ml-1">
+                  {canMentor ? '+8 Karma' : 'Đã dùng'}
+                </span>
+              </button>
+            </Tooltip>
+          )}
+
+          {onOpenFamily && (
+            <button
+              type="button"
+              onClick={onOpenFamily}
+              className="px-3 py-1.5 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-200 text-xs font-bold transition flex items-center gap-1 active:scale-95"
+            >
+              <span>Phả Hệ Dòng Tộc</span>
+              <ArrowUpRight className="w-3 h-3" />
+            </button>
+          )}
         </div>
       </div>
     </div>
