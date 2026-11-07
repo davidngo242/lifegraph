@@ -110,6 +110,8 @@ function ProceduralCharacterMesh({
   const hairGroupRef = useRef<THREE.Group>(null);
   const garlandRef = useRef<THREE.Group>(null);
   const satchelRef = useRef<THREE.Group>(null);
+  const leftArmRef = useRef<THREE.Group>(null);
+  const rightArmRef = useRef<THREE.Group>(null);
 
   const isFemale = gender === 'female';
   const skinColor = useMemo(() => getSkinTone(nationality), [nationality]);
@@ -356,6 +358,46 @@ function ProceduralCharacterMesh({
           mouthRef.current.scale.set(1, 1, 1);
         }
       }
+
+      // 7. Spine-style Dynamic Skeletal Arm Poses (Gotcha Pose / Hands on Hips / Victory / Zen)
+      if (leftArmRef.current && rightArmRef.current) {
+        if (reaction === 'celebrate') {
+          // V-shape victory cheer with celebratory bounce
+          const armBounce = Math.sin(t * 8) * 0.12;
+          leftArmRef.current.rotation.z = THREE.MathUtils.lerp(leftArmRef.current.rotation.z, 2.3 + armBounce, 0.15);
+          leftArmRef.current.rotation.x = THREE.MathUtils.lerp(leftArmRef.current.rotation.x, -0.2, 0.15);
+          rightArmRef.current.rotation.z = THREE.MathUtils.lerp(rightArmRef.current.rotation.z, -2.3 - armBounce, 0.15);
+          rightArmRef.current.rotation.x = THREE.MathUtils.lerp(rightArmRef.current.rotation.x, -0.2, 0.15);
+        } else if (reaction === 'exhausted' || vitality < 30) {
+          // Limp drooping arms
+          leftArmRef.current.rotation.z = THREE.MathUtils.lerp(leftArmRef.current.rotation.z, 0.15, 0.1);
+          leftArmRef.current.rotation.x = THREE.MathUtils.lerp(leftArmRef.current.rotation.x, 0.35, 0.1);
+          rightArmRef.current.rotation.z = THREE.MathUtils.lerp(rightArmRef.current.rotation.z, -0.15, 0.1);
+          rightArmRef.current.rotation.x = THREE.MathUtils.lerp(rightArmRef.current.rotation.x, 0.35, 0.1);
+        } else if (reaction === 'meditating') {
+          // Zen Lotus Mudra: hands folded peacefully in front
+          leftArmRef.current.rotation.z = THREE.MathUtils.lerp(leftArmRef.current.rotation.z, 0.9, 0.1);
+          leftArmRef.current.rotation.x = THREE.MathUtils.lerp(leftArmRef.current.rotation.x, -0.65, 0.1);
+          rightArmRef.current.rotation.z = THREE.MathUtils.lerp(rightArmRef.current.rotation.z, -0.9, 0.1);
+          rightArmRef.current.rotation.x = THREE.MathUtils.lerp(rightArmRef.current.rotation.x, -0.65, 0.1);
+        } else if (reaction === 'shocked') {
+          // Hands clutching cheeks/chest
+          leftArmRef.current.rotation.z = THREE.MathUtils.lerp(leftArmRef.current.rotation.z, 1.4, 0.2);
+          leftArmRef.current.rotation.x = THREE.MathUtils.lerp(leftArmRef.current.rotation.x, -0.8, 0.2);
+          rightArmRef.current.rotation.z = THREE.MathUtils.lerp(rightArmRef.current.rotation.z, -1.4, 0.2);
+          rightArmRef.current.rotation.x = THREE.MathUtils.lerp(rightArmRef.current.rotation.x, -0.8, 0.2);
+        } else {
+          // Default MOBA Champion Gotcha_Pose (Hands on hips, confident anime posture with organic breathing sway)
+          const armSway = Math.sin(t * breatheSpeed) * 0.035;
+          leftArmRef.current.rotation.z = THREE.MathUtils.lerp(leftArmRef.current.rotation.z, 0.68 + armSway, 0.08);
+          leftArmRef.current.rotation.x = THREE.MathUtils.lerp(leftArmRef.current.rotation.x, -0.28, 0.08);
+          leftArmRef.current.rotation.y = THREE.MathUtils.lerp(leftArmRef.current.rotation.y, 0.32, 0.08);
+
+          rightArmRef.current.rotation.z = THREE.MathUtils.lerp(rightArmRef.current.rotation.z, -0.68 - armSway, 0.08);
+          rightArmRef.current.rotation.x = THREE.MathUtils.lerp(rightArmRef.current.rotation.x, -0.28, 0.08);
+          rightArmRef.current.rotation.y = THREE.MathUtils.lerp(rightArmRef.current.rotation.y, -0.32, 0.08);
+        }
+      }
     }
   });
 
@@ -385,6 +427,32 @@ function ProceduralCharacterMesh({
           <mesh position={[isFemale ? 0.38 : 0.45, 0.32, 0]} material={clothMaterial}>
             <sphereGeometry args={[isFemale ? 0.15 : 0.18, 16, 16]} />
           </mesh>
+
+          {/* Left Arm & Hand (Skeletal Gotcha Pose Rigging) */}
+          <group ref={leftArmRef} position={[isFemale ? -0.38 : -0.45, 0.32, 0]}>
+            <mesh position={[0, -0.16, 0]} material={clothMaterial}>
+              <cylinderGeometry args={[0.085, 0.075, 0.28, 16]} />
+            </mesh>
+            <mesh position={[0, -0.36, 0.06]} material={skinMaterial}>
+              <cylinderGeometry args={[0.07, 0.065, 0.22, 16]} />
+            </mesh>
+            <mesh position={[0, -0.48, 0.09]} material={skinMaterial}>
+              <sphereGeometry args={[0.08, 16, 16]} />
+            </mesh>
+          </group>
+
+          {/* Right Arm & Hand (Skeletal Gotcha Pose Rigging) */}
+          <group ref={rightArmRef} position={[isFemale ? 0.38 : 0.45, 0.32, 0]}>
+            <mesh position={[0, -0.16, 0]} material={clothMaterial}>
+              <cylinderGeometry args={[0.085, 0.075, 0.28, 16]} />
+            </mesh>
+            <mesh position={[0, -0.36, 0.06]} material={skinMaterial}>
+              <cylinderGeometry args={[0.07, 0.065, 0.22, 16]} />
+            </mesh>
+            <mesh position={[0, -0.48, 0.09]} material={skinMaterial}>
+              <sphereGeometry args={[0.08, 16, 16]} />
+            </mesh>
+          </group>
 
           {/* Neck */}
           <mesh position={[0, 0.52, 0]} material={skinMaterial}>
@@ -771,10 +839,10 @@ export default function Dynamic3DAvatar({
   const isMeditating = reaction === 'meditating';
 
   return (
-    <div className={`relative flex items-center justify-center overflow-hidden ${className}`}>
+    <div className={`relative flex items-center justify-center overflow-visible ${className}`}>
       <Canvas
-        camera={{ position: [0, 0.1, 2.3], fov: 42 }}
-        className="w-full h-full cursor-grab active:cursor-grabbing"
+        camera={{ position: [0, 0.08, 2.15], fov: 42 }}
+        className="w-full h-full cursor-grab active:cursor-grabbing overflow-visible"
         gl={{ antialias: true, alpha: true }}
       >
         <MoodLighting burnout={burnout} isMeditating={isMeditating} />

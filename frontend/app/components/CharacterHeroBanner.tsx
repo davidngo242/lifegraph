@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
-import SpineCharacterAvatar from './SpineCharacterAvatar';
 import SidekickPetCompanion from './SidekickPetCompanion';
 import {
   Cpu,
@@ -227,7 +226,6 @@ export default function CharacterHeroBanner({
 
   // Dynamic Action Feedback Realtime Overlay
   const [activeFeedback, setActiveFeedback] = useState<BannerActionFeedback | null>(null);
-  const [bannerAvatarMode, setBannerAvatarMode] = useState<'3d' | 'spine'>('3d');
 
   useEffect(() => {
     if (actionFeedback && actionFeedback.timestamp) {
@@ -406,17 +404,18 @@ export default function CharacterHeroBanner({
   const isSevereBurnout = age >= 18 && burnout > 80;
   const isInfant = age <= 5;
 
-  const avatarContainerClasses = `w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border shrink-0 relative shadow-xl group transition-all duration-500 ${
+  // Borderless, Expanded 3D Avatar (Tràn banner không viền hộp chữ nhật)
+  const avatarContainerClasses = `w-36 h-40 md:w-44 md:h-48 lg:w-48 lg:h-52 shrink-0 relative overflow-visible group transition-all duration-500 flex items-center justify-center select-none pointer-events-auto ${
     feedbackAtmo
-      ? `${feedbackAtmo.borderRing} animate-pulse scale-[1.02]`
+      ? 'scale-[1.03]'
       : isSevereBurnout
-      ? 'border-rose-500 ring-1 ring-rose-500/80 ring-offset-2 ring-offset-slate-950 shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-pulse'
+      ? 'animate-pulse'
       : isCriticalVitality
-      ? 'border-rose-400/80 bg-slate-950 animate-[pulse_3s_ease-in-out_infinite] shadow-[0_0_15px_rgba(244,63,94,0.25)]'
-      : 'border-[var(--border-subtle)] bg-[var(--bg-card-subtle)] hover:border-[var(--border-highlight)]'
+      ? 'opacity-85'
+      : ''
   }`;
 
-  const avatarFilterClasses = `w-full h-full transition-all duration-500 ${
+  const avatarFilterClasses = `w-full h-full overflow-visible transition-all duration-500 ${
     isCriticalVitality ? 'grayscale-[0.65] opacity-80 contrast-90' : ''
   }`;
 
@@ -514,7 +513,7 @@ export default function CharacterHeroBanner({
           {/* Avatar 3D Holographic Stage with Dynamic Ground Reticle */}
           <div className="relative shrink-0 flex flex-col items-center">
             {/* Holographic Projection Disc under Avatar */}
-            <div className="absolute -bottom-2 w-28 md:w-36 h-6 pointer-events-none select-none z-0">
+            <div className="absolute -bottom-3 w-36 md:w-44 lg:w-48 h-8 pointer-events-none select-none z-0">
               <div
                 className={`w-full h-full rounded-[100%] blur-sm animate-pulse ${
                   isCriticalVitality
@@ -530,86 +529,56 @@ export default function CharacterHeroBanner({
               <div className="absolute inset-1 rounded-[100%] border border-indigo-400/30" />
             </div>
 
-            {/* Avatar 3D Stage with Dynamic State Indicators */}
+            {/* Borderless 3D Avatar (Tràn Banner Không Viền Vuông) */}
             <div className={avatarContainerClasses}>
               <div className={avatarFilterClasses}>
-                {bannerAvatarMode === '3d' ? (
-                  <Dynamic3DAvatar
-                    nationality={character.nationality}
-                    gender={character.gender || 'male'}
-                    age={age}
-                    burnout={burnout}
-                    vitality={vitality}
-                    reaction={reaction}
-                    isFastForwarding={isFastForwarding}
-                    showControls={false}
-                    traits={traits}
-                    netWorth={netWorth}
-                    className="w-full h-full"
-                  />
-                ) : (
-                  <SpineCharacterAvatar
-                    nationality={character.nationality}
-                    gender={character.gender || 'male'}
-                    age={age}
-                    burnout={burnout}
-                    vitality={vitality}
-                    animation={reaction === 'celebrate' ? 'Jump' : reaction === 'exhausted' ? 'Idle_2' : reaction === 'shocked' ? 'Idle_1' : 'Front_idle'}
-                    showBones={false}
-                    netWorth={netWorth}
-                    traits={traits}
-                    className="w-full h-full"
-                  />
-                )}
+                <Dynamic3DAvatar
+                  nationality={character.nationality}
+                  gender={character.gender || 'male'}
+                  age={age}
+                  burnout={burnout}
+                  vitality={vitality}
+                  reaction={reaction}
+                  isFastForwarding={isFastForwarding}
+                  showControls={false}
+                  traits={traits}
+                  netWorth={netWorth}
+                  className="w-full h-full overflow-visible pointer-events-auto"
+                />
               </div>
-
-              {/* Mode Switcher Pill (3D Chibi / 2D Spine) */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setBannerAvatarMode(prev => prev === '3d' ? 'spine' : '3d');
-                }}
-                className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-black/85 hover:bg-black text-[9px] font-mono font-bold text-amber-300 border border-amber-500/40 backdrop-blur shadow transition active:scale-95 z-20"
-                title="Chuyển đổi kiểu hiển thị: 3D Chibi Studio hoặc Hoạt cảnh Spine 2D"
-              >
-                {bannerAvatarMode === '3d' ? '3D' : 'SPINE'}
-              </button>
 
               {/* DYNAMIC AVATAR STATE OVERLAYS */}
               {/* 2. Sinh lực nguy kịch (vitality < 30): Nhịp tim đập chậm cảnh báo */}
               {isCriticalVitality && (
-                <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-rose-950/90 border border-rose-500/60 text-[12px] font-sans tabular-nums text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow z-20">
+                <div className="absolute -top-1 left-0 px-2 py-0.5 rounded-full bg-rose-950/90 border border-rose-500/60 text-[11px] font-sans tabular-nums text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
                   <span>💔 Yếu ớt</span>
                 </div>
               )}
 
-              {/* 3. Kiệt sức tâm trí tột cùng (burnout > 80 & tuổi >= 18): Vignette đỏ + Quầng thâm */}
+              {/* 3. Kiệt sức tâm trí tột cùng (burnout > 80 & tuổi >= 18) */}
               {isSevereBurnout && (
-                <>
-                  <div className="absolute inset-0 pointer-events-none z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-rose-950/20 to-rose-950/60" />
-                  <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-rose-950/90 border border-rose-500/70 text-[12px] font-sans tabular-nums text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow z-20">
-                    <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping" />
-                    <span>⚡ Kiệt sức</span>
-                  </div>
-                </>
+                <div className="absolute -top-1 left-0 px-2 py-0.5 rounded-full bg-rose-950/90 border border-rose-500/70 text-[11px] font-sans tabular-nums text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping" />
+                  <span>⚡ Kiệt sức</span>
+                </div>
               )}
 
-              {/* 3D Visual Trait Badges on Avatar Container */}
+              {/* 3D Visual Trait Badges on Avatar Stage */}
               {(hasGlasses || hasHalo || isWealthy) && (
-                <div className="absolute bottom-1 left-1 right-1 flex items-center justify-center gap-1 pointer-events-none z-20">
+                <div className="absolute -bottom-2.5 left-0 right-0 flex items-center justify-center gap-1.5 pointer-events-none z-20">
                   {hasGlasses && (
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-slate-950/85 border border-indigo-500/60 text-indigo-300 font-sans backdrop-blur shadow" title="3D Kính Cận Tri Thức">
+                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-slate-950/90 border border-indigo-500/60 text-indigo-300 font-sans backdrop-blur-md shadow-lg" title="3D Kính Cận Tri Thức">
                       👓 Kính
                     </span>
                   )}
                   {hasHalo && (
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-950/85 border border-amber-500/60 text-amber-300 font-sans backdrop-blur shadow" title="3D Kim Quang Hào Quang">
+                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-950/90 border border-amber-500/60 text-amber-300 font-sans backdrop-blur-md shadow-lg" title="3D Kim Quang Hào Quang">
                       🪷 Hào quang
                     </span>
                   )}
                   {isWealthy && (
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-yellow-950/85 border border-yellow-500/60 text-yellow-300 font-sans backdrop-blur shadow" title="3D Trâm Quý Tộc / Tuxedo">
+                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-yellow-950/90 border border-yellow-500/60 text-yellow-300 font-sans backdrop-blur-md shadow-lg" title="3D Trâm Quý Tộc / Tuxedo">
                       💎 Quý tộc
                     </span>
                   )}
@@ -619,10 +588,10 @@ export default function CharacterHeroBanner({
               {/* 360 Fullscreen Trigger */}
               <button
                 onClick={onOpen3DInspector}
-                className="absolute top-1 right-1 p-1 rounded-md bg-black/75 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/60 backdrop-blur-md opacity-0 group-hover:opacity-100 transition shadow z-20"
+                className="absolute top-0 right-0 p-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/60 backdrop-blur-md opacity-0 group-hover:opacity-100 transition shadow-lg z-20 cursor-pointer"
                 title="Mở phòng kiểm định 360°"
               >
-                <Maximize2 className="w-3 h-3" />
+                <Maximize2 className="w-3.5 h-3.5" />
               </button>
             </div>
 

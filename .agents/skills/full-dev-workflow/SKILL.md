@@ -131,3 +131,14 @@ flowchart TD
 ### 4.7. Khai Tử Thanh Không Gian Sống Dưới Đáy (LivingRoom Backdrop Retirement)
 * Đã gỡ bỏ vĩnh viễn thanh ngang phụ `LivingRoomBackdropViewport` (hiển thị "Phòng Trọ Khởi Nghiệp - Ngọn Đèn Khắc Khổ / Cinema Mode").
 * Căn cứ: Cột trái đã có nút bấm Phòng Quyết Định 3D màu vàng hổ phách nổi bật ở đỉnh và thanh điều hướng chính. Việc để thanh ngang ở đáy màn hình gây nhiễu thị giác và chiếm dụng không gian hiển thị của Đại Thụ Sinh Mệnh.
+
+### 4.8. Quy Chuẩn Avatar 3D Tràn Banner Không Viền Hộp (Borderless Unified 3D Living Avatar Standard)
+* **Khai tử nút chuyển đổi phân tách `[3D] / [SPINE]`:** Hợp nhất một trải nghiệm avatar 3D cao cấp duy nhất, loại bỏ cảm giác phân mảnh giữa 2 chế độ hiển thị rời rạc.
+* **Tích hợp hoạt cảnh bộ xương kiểu Spine vào 3D:** Mô hình 3D Procedural Rigging Mesh (`Dynamic3DAvatar.tsx`) sở hữu đầy đủ các tư thế sống động như Spine:
+  - MOBA Champion `Gotcha_Pose`: Hai tay chống nạnh tự tin, ngực nở, đầu nghiêng nhẹ, nhịp thở hữu cơ.
+  - Tư thế Victory Celebrate: Hai tay vung cao chữ V bật nhảy vui tươi.
+  - Tư thế Zen Lotus Mudra: Chắp tay tịnh tâm thiền định.
+  - Phản ứng Yếu ớt / Kiệt sức: Tay buông thõng, cơ thể chùng xuống, mắt chớp chậm.
+* **Bỏ hoàn toàn viền vuông hộp chữ nhật:** Xóa bỏ khung ảnh thẻ `rounded-2xl border bg-slate-900 overflow-hidden`.
+* **Phóng to kích thước & Tràn Banner:** Kích thước mở rộng lên `w-36 h-40 md:w-44 md:h-48 lg:w-48 lg:h-52` với cơ chế `overflow-visible`, cho phép đỉnh đầu, vòng hoa nguyệt quế và hào quang kim quang tràn tự nhiên ra mặt nền Banner.
+* **Bệ phóng ba chiều (Holographic Reticle Pedestal):** Mở rộng dưới chân nhân vật (`w-36 md:w-44 lg:w-48 h-8`) với các vòng laser neon cyan/amber xoay đồng tâm, neo giữ nhân vật vững chãi trên sàn tàu không gian/sân khấu số mệnh.

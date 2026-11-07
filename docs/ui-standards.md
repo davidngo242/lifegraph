@@ -759,3 +759,27 @@ Hợp nhất Gia Đình (Huyết Thống), Tài Sản (Tư Bản) và Kỹ Năng
 ### 19.4. Khai Tử Thanh Living Room Viewport Đáy Màn Hình (Retirement of Legacy Backdrop Bar)
 * Gỡ bỏ hoàn toàn thanh ngang phụ `LivingRoomBackdropViewport.tsx` (hiển thị "Phòng Trọ Khởi Nghiệp - Ngọn Đèn Khắc Khổ [0 $]" và nút Cinema Mode phụ).
 * Căn cứ: Khu vực quyết định đã được hợp nhất vào nút bấm Cinema vàng hổ phách nổi bật (`Bước Vào Phòng Quyết Định 3D [D] →`) ngay sát dưới Đại Thụ Sinh Mệnh và trên thanh Header Bar. Việc đặt thêm thanh ngang phụ ở đáy màn hình làm phân mảnh thị giác và che khuất không gian hiển thị của cây sinh mệnh.
+
+---
+
+## 20. Tiêu Chuẩn Nhân Vật 3D Tràn Banner & Tích Hợp Hoạt Cảnh Bộ Xương Spine (Unified Borderless 3D Living Hero Standard v3.3)
+
+Nhằm xóa bỏ hoàn toàn cảm giác "bị nhốt trong ô thẻ vuông" và thống nhất hệ thống nhân vật thành một trải nghiệm 3D duy nhất:
+
+### 20.1. Khai Tử Chế Độ Chia Tách 3D / Spine
+* Không còn nút bấm chuyển đổi `[3D] / [SPINE]` gây phân tâm người chơi.
+* Nhân vật hiển thị mặc định 100% bằng **3D Living Avatar Engine** với hiệu ứng đồ họa chân thực, đổ bóng thời gian thực và độ sâu trường ảnh.
+
+### 20.2. Tích Hợp Hoạt Cảnh Biểu Cảm Bộ Xương Vào 3D
+* **Gotcha_Pose (Mặc định):** Hai tay chống nạnh tự tin, ngực nở nhịp nhàng theo nhịp thở sinh học, đầu dõi theo con trỏ chuột mượt mà.
+* **Biểu cảm đa tầng:**
+  - *Ăn mừng (Celebrate):* Giơ hai tay lên cao, nhún gối tươi cười rạng rỡ.
+  - *Kiệt sức (Exhausted / Vitality < 30):* Hai tay buông thõng, hô hấp dốc, hào quang mờ tối.
+  - *Thiền định (Meditating):* Hai tay chắp ấn Mudra, thân thể lơ lửng bồng bềnh và hào quang kim quang xoay quanh đầu.
+  - *Kinh ngạc (Shocked):* Hai tay ôm má, miệng mở tròn, đồng tử mở rộng.
+
+### 20.3. Quy Chuẩn Không Viền Hộp (Borderless & Full Canvas Bleed)
+* **Xóa viền vuông:** Gỡ bỏ hoàn toàn `rounded-2xl`, `border`, `bg-slate-900` và `overflow-hidden`.
+* **Kích thước phóng to:** Mở rộng từ 96px/128px lên **144px–208px** (`w-36 h-40 md:w-44 md:h-48 lg:w-48 lg:h-52`).
+* **Tràn Banner (`overflow-visible`):** Đỉnh đầu nhân vật, cành nguyệt quế Na Uy, vòng hào quang kim quang và cánh tay vươn tràn ra ngoài khung, hòa vào bầu trời sao của Hero Banner.
+* **Bệ phóng Holographic Disc:** Bệ phát quang laser neon cyan/amber (`w-36 md:w-44 lg:w-48 h-8`) được mở rộng trực tiếp dưới chân nhân vật, tạo cảm giác nhân vật đứng sừng sững trên sân khấu số mệnh.
