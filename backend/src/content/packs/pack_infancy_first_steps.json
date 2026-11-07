@@ -120,6 +120,206 @@
           "desc": "Ngoan nào con yêu. Ba mẹ sẽ luôn là điểm tựa bình yên nhất che chở cho con khôn lớn."
         }
       }
+    },
+    {
+      "id": "scenario_infancy_fever_crisis",
+      "arc_id": "arc_infancy",
+      "stage": 2,
+      "title": "Cơn Sốt Co Giật Nửa Đêm & Ranh Giới Sinh Tử",
+      "description": "Nửa đêm giữa mùa gió lạnh, cơn sốt cao 40 độ bất ngờ ập đến khiến cơ thể bé bỏng co giật. Ranh giới giữa sự sống và hiểm nguy chỉ cách một gang tay...",
+      "location_id": "pediatric_clinic",
+      "roles": {
+        "parent": "Mẹ (Lo lắng tột cùng & túc trực bên con)",
+        "doctor": "Bác sĩ nhi khoa trực cấp cứu"
+      },
+      "prerequisites": {
+        "min_age": 1,
+        "max_age": 5,
+        "required_flags": [
+          "childhood_fever_experienced"
+        ],
+        "excluded_flags": [
+          "infancy_fever_crisis_resolved"
+        ]
+      },
+      "scenes": [
+        {
+          "id": "scene_fever_night",
+          "name": "Phòng ngủ cấp cứu nửa đêm",
+          "background_theme": "nursery_fever",
+          "hotspots": [
+            {
+              "id": "hs_fever_cloth",
+              "label": "Khăn ấm & túi chườm hạ sốt",
+              "icon": "coffee",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Góc chăm sóc",
+                "text": "Khăn ấm vắt ráo chườm trán và bẹn giúp tản nhiệt an toàn, ngăn chặn co giật trước khi thuốc phát huy tác dụng.",
+                "granted_knowledge": "infant_emergency_fever_patch",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "hs_doctor_clinic",
+              "label": "Bác sĩ trực trạm xá nhi",
+              "icon": "award",
+              "position_x": 500,
+              "npc_role": "doctor",
+              "dialogue": {
+                "speaker": "Bác sĩ trực",
+                "text": "Cơn sốt cao co giật ở trẻ nhỏ cần theo dõi sát đường thở và bù nước điện giải khẩn cấp. Mỗi giây phút đều quý giá!",
+                "granted_knowledge": "infant_pediatric_guidance",
+                "affinity_delta": 10,
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "hs_mother_prayer",
+              "label": "Lời cầu nguyện & cái ôm của Mẹ",
+              "icon": "heart",
+              "position_x": 760,
+              "npc_role": "parent",
+              "dialogue": {
+                "speaker": "Người Mẹ",
+                "text": "Cầu xin trời phật che chở cho con tôi bình an... Con ngoan hãy cố lên, mẹ luôn ở bên ôm chặt lấy con!",
+                "granted_knowledge": "infant_maternal_prayer",
+                "affinity_delta": 25,
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Cơn sốt thiêu đốt thân nhiệt, trong cơn mê man bản năng sinh tồn và tình thương gia đình đang thúc giục điều gì?",
+          "rational": "Chườm ấm hạ nhiệt chuẩn khoa học, thở đều và kiểm soát cơn co giật để bảo vệ các tế bào thần kinh non nớt.",
+          "empathy": "Ôm chặt lấy bàn tay mẹ, cảm nhận dòng sữa và hơi ấm mẫu tử vô bờ để có thêm sức mạnh vượt qua bão bệnh.",
+          "instinct": "Kích hoạt cơ chế miễn dịch tự thân, gồng từng tế bào kháng thể kiên cường đập tan virus gây sốt."
+        }
+      },
+      "choices": [
+        {
+          "id": "CHOICE_FEVER_COOL_DOWN",
+          "title": "Chườm Khăn Hạ Nhiệt & Hồi Sức Chuẩn Y Khoa",
+          "stance": "LÝ TRÍ",
+          "description": "Áp dụng chườm ấm các huyệt tản nhiệt, uống dung dịch bù nước và theo dõi sát chỉ số sinh tồn.",
+          "knowledge_requirements": [
+            "infant_emergency_fever_patch"
+          ],
+          "cost_ap": 0,
+          "check": {
+            "type": "d20",
+            "stat": "iq",
+            "target_dc": 9
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Nhờ chườm ấm đúng cách và hạ nhiệt kịp thời, cơn sốt hạ dần từ 40 độ xuống mức an toàn. Não bộ được bảo vệ nguyên vẹn.",
+              "commitments": [
+                "Ý thức tự chăm sóc sức khỏe"
+              ],
+              "effects": {
+                "vitality_delta": 5,
+                "karma_delta": 5
+              }
+            },
+            "failure": {
+              "narration": "Cơn sốt kéo dài khiến cơ thể mệt mỏi nhưng phương pháp chườm ấm đã giữ nhiệt độ không tăng vọt thêm.",
+              "effects": {
+                "vitality_delta": 2,
+                "karma_delta": 2
+              }
+            }
+          }
+        },
+        {
+          "id": "CHOICE_RUSH_HOSPITAL",
+          "title": "Vượt Đêm Đến Bệnh Viện Nhi Khẩn Cấp",
+          "stance": "TRÁI TIM",
+          "description": "Gia đình đưa ngay đến viện nhi cấp cứu, truyền dịch và nhận phác đồ điều trị chuyên sâu của bác sĩ.",
+          "knowledge_requirements": [
+            "infant_pediatric_guidance"
+          ],
+          "cost_ap": 1,
+          "check": {
+            "type": "d20",
+            "stat": "eq",
+            "target_dc": 9
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Đội ngũ y bác sĩ can thiệp kịp thời! Bạn cắt cơn sốt hoàn toàn và được bồi bổ thể trạng tối ưu trong vòng tay cha mẹ.",
+              "commitments": [
+                "Ơn nghĩa đội ngũ y bác sĩ"
+              ],
+              "effects": {
+                "cash_delta": -50,
+                "vitality_delta": 10,
+                "karma_delta": 10
+              }
+            },
+            "failure": {
+              "narration": "Được cấp cứu an toàn sau đêm trắng căng thẳng tại bệnh viện. Gia đình tốn kém viện phí nhưng giữ được tính mạng con.",
+              "effects": {
+                "cash_delta": -50,
+                "vitality_delta": 5,
+                "karma_delta": 5
+              }
+            }
+          }
+        },
+        {
+          "id": "CHOICE_IMMUNE_FIGHT",
+          "title": "Bản Năng Kháng Thể Bất Khuất Vượt Cơn Sốt",
+          "stance": "BẢN NĂNG",
+          "description": "Gồng mình kiên cường tự kích hoạt hệ thống miễn dịch tự nhiên, chống chọi với cơn sốt co giật.",
+          "knowledge_requirements": [],
+          "cost_ap": 0,
+          "check": {
+            "type": "d20",
+            "stat": "vitality",
+            "target_dc": 10
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Hệ miễn dịch phi thường đã chiến thắng! Kháng thể tự nhiên trỗi dậy mạnh mẽ giúp cơ thể dẻo dai kiên cường hơn gấp bội.",
+              "commitments": [
+                "Kháng thể vàng bất khuất"
+              ],
+              "effects": {
+                "vitality_delta": 8,
+                "burnout_delta": -5,
+                "karma_delta": 5
+              }
+            },
+            "failure": {
+              "narration": "Cơn sốt rút cạn nhiều thể lực nhưng cuối cùng cơ thể nhỏ bé cũng thoát khỏi lưỡi hái tử thần.",
+              "effects": {
+                "vitality_delta": -5,
+                "karma_delta": 5
+              }
+            }
+          }
+        }
+      ],
+      "priority": 85,
+      "completion_flag": "infancy_fever_crisis_resolved",
+      "knowledge_labels": {
+        "infant_emergency_fever_patch": {
+          "label": "Khăn ấm & túi chườm hạ sốt",
+          "desc": "Khăn ấm vắt ráo chườm trán và bẹn giúp tản nhiệt an toàn, ngăn chặn co giật trước khi thuốc phát huy tác dụng."
+        },
+        "infant_pediatric_guidance": {
+          "label": "Bác sĩ trực trạm xá nhi",
+          "desc": "Cơn sốt cao co giật ở trẻ nhỏ cần theo dõi sát đường thở và bù nước điện giải khẩn cấp. Mỗi giây phút đều quý giá!"
+        },
+        "infant_maternal_prayer": {
+          "label": "Lời cầu nguyện & cái ôm của Mẹ",
+          "desc": "Cầu xin trời phật che chở cho con tôi bình an... Con ngoan hãy cố lên, mẹ luôn ở bên ôm chặt lấy con!"
+        }
+      }
     }
   ]
 }

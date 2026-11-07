@@ -134,11 +134,71 @@ const KNOWLEDGE_LABELS: { [key: string]: { label: string; icon: string; desc: st
     label: "Tình yêu thương vô điều kiện của Cha Mẹ",
     icon: "❤️",
     desc: "Vòng tay phụ mẫu là bến đỗ vững chãi nhất giúp bạn an tâm khôn lớn."
+  },
+  infant_emergency_fever_patch: {
+    label: "Khăn ấm & túi chườm hạ sốt",
+    icon: "🧊",
+    desc: "Khăn ấm vắt ráo chườm trán và bẹn giúp tản nhiệt an toàn, ngăn chặn co giật trước khi thuốc phát huy tác dụng."
+  },
+  infant_pediatric_guidance: {
+    label: "Bác sĩ trực trạm xá nhi",
+    icon: "🩺",
+    desc: "Cơn sốt cao co giật ở trẻ nhỏ cần theo dõi sát đường thở và bù nước điện giải khẩn cấp. Mỗi giây phút đều quý giá!"
+  },
+  infant_maternal_prayer: {
+    label: "Lời cầu nguyện & cái ôm của Mẹ",
+    icon: "🙏",
+    desc: "Cầu xin trời phật che chở cho con tôi bình an... Con ngoan hãy cố lên, mẹ luôn ở bên ôm chặt lấy con!"
+  },
+  river_current_awareness: {
+    label: "Dòng nước xoáy mùa mưa lũ",
+    icon: "🌊",
+    desc: "Nước chảy xiết tạo thành các hố xoáy ngầm nguy hiểm. Bơi ngược dòng sẽ nhanh chóng bị kiệt sức!"
+  },
+  friend_panic_signal: {
+    label: "Tiếng kêu cứu của bạn bè",
+    icon: "🚨",
+    desc: "Cứu tớ với! Chân tớ bị chuột rút rồi, nước cuốn mạnh quá không vào bờ được!"
+  },
+  riverbank_bamboo_grip: {
+    label: "Bụi tre bờ sông cứu sinh",
+    icon: "🎋",
+    desc: "Những thân tre già dài và dẻo dai bên bờ là vật cứu hộ tuyệt vời để người trên bờ vươn ra cho người dưới nước bám vào."
   }
 };
 
 
 const HOTSPOT_LIFE_IMPACTS: { [key: string]: { perk: string; icon: string; category: string } } = {
+  hs_fever_cloth: {
+    perk: "Kỹ năng sơ cứu hạ nhiệt chuẩn y khoa (+5 Vitality, phòng co giật)",
+    icon: "🧊",
+    category: "Y Tế"
+  },
+  hs_doctor_clinic: {
+    perk: "Đặc quyền bảo hộ y tế nhi khoa chuyên sâu (+10 Vitality, +10 Karma)",
+    icon: "🩺",
+    category: "Y Tế"
+  },
+  hs_mother_prayer: {
+    perk: "Sức mạnh ý chí mẫu tử thiêng liêng (+25 Hảo cảm mẹ, hồi phục thần tốc)",
+    icon: "❤️",
+    category: "Gia Đạo"
+  },
+  hs_river_flow: {
+    perk: "Bản lĩnh nhận diện dòng nước xoáy ngầm (+15% tỷ lệ sống sót sông nước)",
+    icon: "🌊",
+    category: "Sinh Tồn"
+  },
+  hs_drowning_friend: {
+    perk: "Nghĩa hiệp tương thân tương ái (+20 Karma, tình bạn tri kỷ cả đời)",
+    icon: "🤝",
+    category: "Nhân Cách"
+  },
+  hs_bamboo_bank: {
+    perk: "Tư duy ứng biến dụng cụ cứu nạn an toàn tuyệt đối (+15 Karma)",
+    icon: "🎋",
+    category: "Trí Tuệ"
+  },
   hotspot_baby_blocks: {
     perk: "Ươm mầm Tư Duy Logic & Nghiên Cứu (+15% tỷ lệ đỗ trường chuyên)",
     icon: "🧩",

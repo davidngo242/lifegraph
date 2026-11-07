@@ -1,5 +1,6 @@
 import { updateAsset, updateRelationship } from '../db/db.js';
 import { generatePassiveChildhoodEvent } from './rebirthEngine.js';
+import { getCountryBigData } from '../data/countryBigData.js';
 
 // Calculate maximum vitality cap based on biological age
 // If Transhumanism surgery was successful, decay is frozen until transhuman_frozen_until_age
@@ -87,6 +88,13 @@ export async function processPassivePhase(character, assets, relationships) {
   const traits = Array.isArray(character.innate_traits) ? character.innate_traits : [];
   age += 1;
   const maxVitality = calculateMaxVitality(age, character.transhuman_frozen_until_age, hasTranscendence, traits);
+
+  const nationality = character.nationality || "Việt Nam";
+  const countryData = getCountryBigData(nationality);
+  const isTier3Country = (countryData?.tier === 'T3' || character.country_tier === 'T3');
+  const hasVulnerableGenetics = traits.some(t => 
+    ['hệ_miễn_dịch_yếu', 'tiền_sử_tim_mạch_di_truyền', 'weak_immune_system', 'delicate_health'].includes(t)
+  );
 
   // 2. Check Reaper Death Roll from age 70+ (or 75+ if longevity_ancestry / transcendence)
   const reaperResult = evaluateReaperRoll(age, vitality, hasTranscendence, traits);
@@ -217,6 +225,7 @@ export async function processPassivePhase(character, assets, relationships) {
   // 7. Family upkeep & affection + Child aging & unlocked AP
   let totalRelationshipCost = 0;
   let newlyAdultChildrenCount = 0;
+  const childHealthEvents = [];
 
   for (const rel of relationships) {
     if (rel.status !== 'deceased') {
@@ -226,6 +235,19 @@ export async function processPassivePhase(character, assets, relationships) {
       if (rel.type === 'child' && prevAge < 18 && rel.age >= 18) {
         newlyAdultChildrenCount++;
         flagsSet.add(`child_grown_up_${rel.id}`);
+      }
+
+      // Child Fever Risk (age < 10)
+      if (rel.type === 'child' && rel.age < 10) {
+        const feverRisk = isTier3Country ? 0.28 : 0.18;
+        if (Math.random() < feverRisk) {
+          const clinicFee = Math.round(35 * (countryData?.healthcare?.clinic_cost_factor || 1.0));
+          const paidFee = cash > 0 ? Math.min(cash, clinicFee) : 0;
+          cash -= paidFee;
+          karma = Math.min(100, (Number(karma) || 50) + 5);
+          rel.affection_level = Math.min(100, (Number(rel.affection_level) || 50) + 6);
+          childHealthEvents.push(`🏥 Con của bạn (${rel.name}, ${rel.age} tuổi) bị sốt mọc răng/nhiễm lạnh. Bạn đã tận tình mua thuốc men chăm sóc ($${paidFee}), con đã bình phục an toàn (+5 Karma, +6 Hảo cảm).`);
+        }
       }
 
       // Elderly parent natural passing
@@ -350,7 +372,28 @@ export async function processPassivePhase(character, assets, relationships) {
     vitalityChange -= 10;
   }
 
-  // 10. Natural vitality decline with age
+  // 10. Natural vitality decline with age & Childhood Health Emergency
+  let childhoodHealthCrisisNotice = null;
+  if (age < 6 && (hasVulnerableGenetics || isTier3Country)) {
+    const feverTriggerChance = hasVulnerableGenetics ? 0.35 : 0.20;
+    if (Math.random() < feverTriggerChance) {
+      flagsSet.add("childhood_fever_experienced");
+      const clinicCost = Math.round(40 * (countryData?.healthcare?.clinic_cost_factor || 1.0));
+      const familySupport = (character.household?.annual_allowance || 0) > 0 || cash >= clinicCost || (character.family_background && character.family_background !== 'poor');
+
+      if (familySupport) {
+        if (cash >= clinicCost) cash -= clinicCost;
+        vitalityChange += 2;
+        karma = Math.min(100, (Number(karma) || 50) + 5);
+        childhoodHealthCrisisNotice = `🏥 Sức khỏe ấu thơ: Năm ${age} tuổi, bạn trải qua cơn sốt co giật cấp tính. Nhờ gia đình tận tình chạy chữa và trạm xá tiếp ứng kịp thời ($${clinicCost}), bạn đã an toàn vượt qua nghịch cảnh.`;
+      } else {
+        // Severe untreated childhood illness in strained conditions
+        vitalityChange -= 25;
+        childhoodHealthCrisisNotice = `⚠️ Hiểm họa nhi khoa: Nơi bạn sinh sống thiếu thốn thuốc men y tế, cơn viêm phổi cấp tính đã bào mòn nghiêm trọng sinh lực non nớt (-25 HP).`;
+      }
+    }
+  }
+
   if (age > 65) {
     vitalityChange -= 3;
   } else if (age > 50) {
@@ -361,8 +404,13 @@ export async function processPassivePhase(character, assets, relationships) {
   // Vitality is strictly capped by maxVitality!
   vitality = Math.max(0, Math.min(maxVitality, vitality + vitalityChange));
 
-  // If vitality hits 0, character dies of exhaustion
+  // If vitality hits 0, character dies
   if (vitality <= 0) {
+    const isChildDeath = age < 6;
+    const deathCause = isChildDeath
+      ? "Biến chứng viêm phổi cấp tính thuở ấu thơ"
+      : "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)";
+    const finalKarma = isChildDeath ? ((Number(karma) || 0) + 120) : karma;
     return {
       updatedCharacter: {
         ...character,
@@ -370,13 +418,15 @@ export async function processPassivePhase(character, assets, relationships) {
         vitality: 0,
         max_vitality: maxVitality,
         is_deceased: true,
-        death_cause: "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
-        death_age: age
+        death_cause: deathCause,
+        death_age: age,
+        karma: finalKarma
       },
       passiveSummary: {
         died: true,
-        cause: "Kiệt quệ sinh lực hoàn toàn",
-        ageReached: age
+        cause: deathCause,
+        ageReached: age,
+        karmaReimbursed: isChildDeath ? 120 : 0
       }
     };
   }
@@ -526,6 +576,8 @@ export async function processPassivePhase(character, assets, relationships) {
         childhood_event: childhoodPassiveEvent,
         family_events: [
           ...(convertedApNotice ? [convertedApNotice] : []),
+          ...(childhoodHealthCrisisNotice ? [childhoodHealthCrisisNotice] : []),
+          ...childHealthEvents,
           ...(capitalEngineBonus > 0 ? [`👑 Cỗ Máy Dòng Tiền: Thu về +$${capitalEngineBonus.toLocaleString()} lợi tức thụ động không hao tổn sinh lực.`] : []),
           ...(hasEncyclopedic ? [`📚 Bách Khoa Toàn Thư: Trí tuệ uyên thâm đem lại +25 Karma danh vọng học thuật.`] : []),
           ...(childhoodPassiveEvent ? [`${childhoodPassiveEvent.title}: ${childhoodPassiveEvent.narrative}`] : []),

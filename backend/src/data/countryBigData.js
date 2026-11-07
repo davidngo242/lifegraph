@@ -12,6 +12,7 @@ export const COUNTRY_BIGDATA = {
     tier: "T2",
     safety: 78,
     economic_score: 65,
+    healthcare: {"infant_survival_rate":98.6,"emergency_quality":"tier2_accessible","clinic_cost_factor":0.7,"description":"Hệ thống y tế công cộng và du lịch y tế phát triển nhanh"},
     currency: { code: "THB", symbol: "฿", rate_to_usd: 36, name: "Baht Thái" },
     cities: [
       "Bangkok (Quận Sukhumvit)",
@@ -85,6 +86,7 @@ export const COUNTRY_BIGDATA = {
     tier: "T2",
     safety: 85,
     economic_score: 68,
+    healthcare: {"infant_survival_rate":98.8,"emergency_quality":"tier2_accessible","clinic_cost_factor":0.6,"description":"Mạng lưới trạm y tế và viện nhi tuyến trung ương dễ tiếp cận"},
     currency: { code: "VND", symbol: "₫", rate_to_usd: 25000, name: "Việt Nam Đồng" },
     cities: [
       "Hà Nội (Quận Ba Đình)",
@@ -159,6 +161,7 @@ export const COUNTRY_BIGDATA = {
     tier: "T1",
     safety: 75,
     economic_score: 92,
+    healthcare: {"infant_survival_rate":99.4,"emergency_quality":"tier1_worldclass","clinic_cost_factor":2,"description":"Hệ thống bệnh viện kỹ thuật cao nhưng chi phí bảo hiểm đắt đỏ"},
     currency: { code: "USD", symbol: "$", rate_to_usd: 1.0, name: "Đô La Mỹ" },
     cities: [
       "New York (Manhattan)",
@@ -232,6 +235,7 @@ export const COUNTRY_BIGDATA = {
     tier: "T1",
     safety: 92,
     economic_score: 85,
+    healthcare: {"infant_survival_rate":99.8,"emergency_quality":"tier1_worldclass","clinic_cost_factor":1.2,"description":"Mạng lưới y tế cộng đồng và chăm sóc bà mẹ trẻ em chuẩn mực"},
     currency: { code: "JPY", symbol: "¥", rate_to_usd: 150, name: "Yên Nhật" },
     cities: [
       "Tokyo (Quận Shibuya)",
@@ -305,6 +309,7 @@ export const COUNTRY_BIGDATA = {
     tier: "T2",
     safety: 82,
     economic_score: 75,
+    healthcare: {"infant_survival_rate":99.2,"emergency_quality":"tier2_accessible","clinic_cost_factor":0.8,"description":"Hệ thống bảo hiểm y tế toàn dân NFZ và trạm xá châu Âu"},
     currency: { code: "PLN", symbol: "zł", rate_to_usd: 4.0, name: "Złoty Ba Lan" },
     cities: [
       "Warsaw (Quận Mokotów)",
@@ -378,6 +383,7 @@ export const COUNTRY_BIGDATA = {
     tier: "T3",
     safety: 25,
     economic_score: 18,
+    healthcare: {"infant_survival_rate":93.8,"emergency_quality":"tier3_crisis_strained","clinic_cost_factor":0.4,"description":"Cơ sở hạ tầng y tế nghèo nàn, phụ thuộc viện trợ quốc tế"},
     currency: { code: "HTG", symbol: "G", rate_to_usd: 132, name: "Gourde Haiti" },
     cities: [
       "Port-au-Prince (Pétion-Ville)",
@@ -450,6 +456,7 @@ export const COUNTRY_BIGDATA = {
     tier: "T1",
     safety: 95,
     economic_score: 90,
+    healthcare: {"infant_survival_rate":99.8,"emergency_quality":"tier1_worldclass","clinic_cost_factor":1.3,"description":"Y tế phúc lợi Bắc Âu chất lượng cao và miễn phí cho trẻ nhỏ"},
     currency: { code: "NOK", symbol: "kr", rate_to_usd: 10.8, name: "Krone Na Uy" },
     cities: [
       "Oslo (Quận Frogner)",
@@ -523,6 +530,7 @@ export const COUNTRY_BIGDATA = {
     tier: "T1",
     safety: 96,
     economic_score: 95,
+    healthcare: {"infant_survival_rate":99.8,"emergency_quality":"tier1_worldclass","clinic_cost_factor":1.5,"description":"Hệ thống y tế nhi khoa tiên tiến bậc nhất thế giới"},
     currency: { code: "CHF", symbol: "CHF", rate_to_usd: 0.90, name: "Franc Thụy Sĩ" },
     cities: [
       "Zurich (Quận Altstadt)",
@@ -596,6 +604,7 @@ export const COUNTRY_BIGDATA = {
     tier: "T2",
     safety: 60,
     economic_score: 62,
+    healthcare: {"infant_survival_rate":97.5,"emergency_quality":"tier2_accessible","clinic_cost_factor":0.8,"description":"Hệ thống y tế công cộng SUS phủ rộng nhưng quá tải ở đô thị"},
     currency: { code: "BRL", symbol: "R$", rate_to_usd: 5.6, name: "Real Brazil" },
     cities: [
       "São Paulo (Quận Paulista)",
@@ -669,6 +678,7 @@ export const COUNTRY_BIGDATA = {
     tier: "T3",
     safety: 20,
     economic_score: 15,
+    healthcare: {"infant_survival_rate":94.2,"emergency_quality":"tier3_crisis_strained","clinic_cost_factor":0.5,"description":"Cơ sở hạ tầng y tế chịu ảnh hưởng xung đột, thuốc men khan hiếm"},
     currency: { code: "SYP", symbol: "£S", rate_to_usd: 13000, name: "Bảng Syria (SYP)" },
     cities: [
       "Damascus (Khu phố cổ Bab Touma)",

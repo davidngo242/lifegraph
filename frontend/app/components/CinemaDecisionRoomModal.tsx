@@ -28,12 +28,17 @@ export default function CinemaDecisionRoomModal({
   const scenarioTitle = activeScenario?.title || "Phòng Ra Quyết Định · Không Gian Đối Thoại Vận Mệnh";
   const scenarioDesc = activeScenario?.description || "Mỗi ngã rẽ cuộc đời là một thước phim bất khả hồi... Manh mối quá khứ đang soi tỏ bước ngoặt tương lai.";
 
+  const isCrisisScenario = 
+    /fever|river|crisis|sinh tử|nguy cấp|đuối nước|cứu hộ/i.test(activeScenario?.id || '') ||
+    /fever|river|crisis|sinh tử|nguy cấp|đuối nước|cứu hộ/i.test(activeScenario?.title || '') ||
+    /fever|river|crisis|sinh tử|nguy cấp|đuối nước|cứu hộ/i.test(activeScenario?.arc_id || '');
+
   return (
     <div className="fixed inset-0 z-50 bg-[var(--bg-canvas)] flex flex-col justify-between overflow-hidden animate-in fade-in duration-300 select-none">
       {/* =========================================================================
           1. TOP CINEMATIC 21:9 LETTERBOX BAR (Hollywood Production Header)
           ========================================================================= */}
-      <div className="relative z-30 bg-[var(--bg-header)]/95 backdrop-blur-xl border-b border-[var(--border-subtle)] text-[var(--text-primary)] shadow-2xl shrink-0 flex flex-col transition-colors duration-200">
+      <div className={`relative z-30 ${isCrisisScenario ? 'bg-rose-950/40 border-b border-rose-500/60 shadow-[0_0_20px_rgba(244,63,94,0.3)]' : 'bg-[var(--bg-header)]/95 border-b border-[var(--border-subtle)]'} backdrop-blur-xl text-[var(--text-primary)] shadow-2xl shrink-0 flex flex-col transition-colors duration-300`}>
         {/* Vintage 35mm Film Reel Perforations Strip */}
         <div className="w-full flex items-center justify-between overflow-hidden opacity-40 py-1 px-2 border-b border-white/5 bg-black/20">
           {Array.from({ length: 36 }).map((_, i) => (
@@ -48,19 +53,34 @@ export default function CinemaDecisionRoomModal({
         <div className="h-14 sm:h-16 px-4 sm:px-8 flex items-center justify-between gap-4">
           {/* Left: Live Take Indicator & Scenario Title */}
           <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-            {/* Live Camera Recording Badge */}
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/70 border border-rose-500/40 text-rose-300 text-xs font-mono font-bold shadow-[0_0_15px_rgba(244,63,94,0.2)] shrink-0">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500 shadow-[0_0_8px_#f43f5e]"></span>
-              </span>
-              <span className="tracking-widest uppercase font-extrabold text-[10px] sm:text-[11px] text-rose-300 hidden xs:inline">
-                CINEMA 21:9 · LIVE TAKE
-              </span>
-              <span className="tracking-widest uppercase font-extrabold text-[10px] text-rose-300 xs:hidden">
-                21:9
-              </span>
-            </div>
+            {/* Live Camera Recording or Emergency Crisis Badge */}
+            {isCrisisScenario ? (
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-rose-900/90 border border-rose-400 text-rose-100 text-xs font-mono font-bold shadow-[0_0_18px_rgba(244,63,94,0.5)] shrink-0 animate-pulse">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-300 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-400 shadow-[0_0_8px_#f43f5e]"></span>
+                </span>
+                <span className="tracking-wider uppercase font-black text-[10px] sm:text-[11px] text-white hidden xs:inline">
+                  🚨 TÌNH HUỐNG SINH TỬ NGUY CẤP
+                </span>
+                <span className="tracking-wider uppercase font-black text-[10px] text-white xs:hidden">
+                  🚨 SINH TỬ
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/70 border border-rose-500/40 text-rose-300 text-xs font-mono font-bold shadow-[0_0_15px_rgba(244,63,94,0.2)] shrink-0">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500 shadow-[0_0_8px_#f43f5e]"></span>
+                </span>
+                <span className="tracking-widest uppercase font-extrabold text-[10px] sm:text-[11px] text-rose-300 hidden xs:inline">
+                  CINEMA 21:9 · LIVE TAKE
+                </span>
+                <span className="tracking-widest uppercase font-extrabold text-[10px] text-rose-300 xs:hidden">
+                  21:9
+                </span>
+              </div>
+            )}
 
             <div className="hidden sm:block h-5 w-px bg-[var(--border-subtle)]" />
 

@@ -227,6 +227,197 @@
           "desc": "Con cứ cố gắng hết sức là ba mẹ tự hào rồi. Nhớ giữ gìn sức khỏe, đừng thức quá khuya con nhé."
         }
       }
+    },
+    {
+      "id": "scenario_childhood_river_current",
+      "arc_id": "arc_school_childhood",
+      "stage": 2,
+      "title": "Hiểm Họa Dòng Sông Mùa Lũ & Nghịch Cảnh Đuối Nước",
+      "description": "Mùa mưa lũ về, dòng sông quê cuồn cuộn nước xiết. Trong lúc chơi đùa ven sông, bạn đồng hành bất ngờ trượt chân ngã vào dòng nước xoáy nguy cấp...",
+      "location_id": "village_riverbank",
+      "roles": {
+        "friend": "Bạn thời thơ ấu (Đang vùng vẫy giữa dòng xoáy)",
+        "villager": "Dân làng & Đội cứu hộ đường thủy"
+      },
+      "prerequisites": {
+        "min_age": 8,
+        "max_age": 16,
+        "required_flags": [],
+        "excluded_flags": [
+          "childhood_river_current_resolved"
+        ]
+      },
+      "scenes": [
+        {
+          "id": "scene_river_bank",
+          "name": "Bờ sông mùa lũ dữ",
+          "background_theme": "river_storm",
+          "hotspots": [
+            {
+              "id": "hs_river_flow",
+              "label": "Dòng nước xoáy mùa mưa lũ",
+              "icon": "alert",
+              "position_x": 200,
+              "dialogue": {
+                "speaker": "Dòng sông mùa lũ",
+                "text": "Nước chảy xiết tạo thành các hố xoáy ngầm nguy hiểm. Bơi ngược dòng sẽ nhanh chóng bị kiệt sức!",
+                "granted_knowledge": "river_current_awareness",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "hs_drowning_friend",
+              "label": "Tiếng kêu cứu của bạn bè",
+              "icon": "heart",
+              "position_x": 500,
+              "npc_role": "friend",
+              "dialogue": {
+                "speaker": "Bạn đuối nước",
+                "text": "Cứu tớ với! Chân tớ bị chuột rút rồi, nước cuốn mạnh quá không vào bờ được!",
+                "granted_knowledge": "friend_panic_signal",
+                "affinity_delta": 15,
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "hs_bamboo_bank",
+              "label": "Bụi tre bờ sông cứu sinh",
+              "icon": "star",
+              "position_x": 780,
+              "dialogue": {
+                "speaker": "Bờ tre cứu hộ",
+                "text": "Những thân tre già dài và dẻo dai bên bờ là vật cứu hộ tuyệt vời để người trên bờ vươn ra cho người dưới nước bám vào.",
+                "granted_knowledge": "riverbank_bamboo_grip",
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Bạn bè đang chới với giữa dòng nước dữ, sinh mạng ngàn cân treo sợi tóc. Bạn sẽ hành động ra sao?",
+          "rational": "Dùng trí thông minh tìm cành tre dài đưa ra và giữ vững điểm tựa trên bờ, tuyệt đối không manh động để tránh cả hai cùng gặp nạn.",
+          "empathy": "Hô hoán thật lớn, chạy thục mạng gọi người lớn và đội cứu hộ trong làng đến ứng cứu khẩn cấp.",
+          "instinct": "Lòng dũng cảm bùng cháy, lao mình xuống dòng nước tiếp cận bạn bè và dìu nhau vào bờ an toàn."
+        }
+      },
+      "choices": [
+        {
+          "id": "CHOICE_SWIM_RESCUE",
+          "title": "Lao Xuống Dòng Nước Xiết Cứu Bạn",
+          "stance": "BẢN NĂNG",
+          "description": "Dũng cảm nhảy xuống sông, dùng kỹ năng bơi lội tiếp cận từ phía sau để kéo bạn thoát khỏi xoáy nước.",
+          "knowledge_requirements": [
+            "river_current_awareness"
+          ],
+          "cost_ap": 0,
+          "check": {
+            "type": "d20",
+            "stat": "vitality",
+            "target_dc": 12
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Kỳ tích xuất hiện! Bạn khéo léo bơi theo dòng nước xiết, nắm chặt cổ áo bạn và dìu vào bờ an toàn trong sự thán phục của cả làng.",
+              "commitments": [
+                "Dũng sĩ sông nước"
+              ],
+              "effects": {
+                "vitality_delta": 10,
+                "karma_delta": 20
+              }
+            },
+            "failure": {
+              "narration": "Dòng nước xoáy quá mạnh khiến bạn bị sặc nước và kiệt sức trầy xước khắp người, may mắn dân làng kịp vớt cả hai lên bờ an toàn.",
+              "effects": {
+                "vitality_delta": -15,
+                "karma_delta": 10
+              }
+            }
+          }
+        },
+        {
+          "id": "CHOICE_BAMBOO_POLE",
+          "title": "Dùng Cành Tre Dài Đưa Ra & Neo Chắc Điểm Tựa",
+          "stance": "LÝ TRÍ",
+          "description": "Chặt nhanh cành tre dài bên bờ chìa ra cho bạn bám chặt, rồi cùng giữ vững tư thế kéo bạn vào vùng nước cạn.",
+          "knowledge_requirements": [
+            "riverbank_bamboo_grip"
+          ],
+          "cost_ap": 0,
+          "check": {
+            "type": "d20",
+            "stat": "iq",
+            "target_dc": 10
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Cứu hộ thành công hoàn hảo! Cành tre chắc chắn kéo bạn vào sát bờ an toàn tuyệt đối mà không ai bị nguy hiểm.",
+              "commitments": [
+                "Tư duy cứu hộ chuẩn mực"
+              ],
+              "effects": {
+                "karma_delta": 15
+              }
+            },
+            "failure": {
+              "narration": "Cành tre trượt tay một lần nhưng bạn kịp ghìm lại giữ bạn đứng vững cho đến khi người lớn tới kéo lên.",
+              "effects": {
+                "karma_delta": 8
+              }
+            }
+          }
+        },
+        {
+          "id": "CHOICE_CALL_VILLAGERS",
+          "title": "Hô Hoán Khẩn Cấp & Dẫn Đội Cứu Hộ Đến",
+          "stance": "TRÁI TIM",
+          "description": "Vừa hô hoán lớn báo động vừa chạy thục mạng gọi người lớn và ngư dân mang dây thừng, phao cứu sinh ra cứu.",
+          "knowledge_requirements": [
+            "friend_panic_signal"
+          ],
+          "cost_ap": 0,
+          "check": {
+            "type": "d20",
+            "stat": "eq",
+            "target_dc": 9
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Tiếng hô hoán khẩn cấp đánh động các ngư dân dũng cảm. Họ quăng phao và kéo bạn lên thuyền cứu nạn kịp thời!",
+              "commitments": [
+                "Cảnh giới báo động kịp thời"
+              ],
+              "effects": {
+                "karma_delta": 10
+              }
+            },
+            "failure": {
+              "narration": "Dân làng nghe thấy và chạy đến hỗ trợ kịp thời, đưa bạn của bạn về trạm y tế sơ cứu qua cơn nguy kịch.",
+              "effects": {
+                "karma_delta": 5
+              }
+            }
+          }
+        }
+      ],
+      "priority": 85,
+      "completion_flag": "childhood_river_current_resolved",
+      "knowledge_labels": {
+        "river_current_awareness": {
+          "label": "Dòng nước xoáy mùa mưa lũ",
+          "desc": "Nước chảy xiết tạo thành các hố xoáy ngầm nguy hiểm. Bơi ngược dòng sẽ nhanh chóng bị kiệt sức!"
+        },
+        "friend_panic_signal": {
+          "label": "Tiếng kêu cứu của bạn bè",
+          "desc": "Cứu tớ với! Chân tớ bị chuột rút rồi, nước cuốn mạnh quá không vào bờ được!"
+        },
+        "riverbank_bamboo_grip": {
+          "label": "Bụi tre bờ sông cứu sinh",
+          "desc": "Những thân tre già dài và dẻo dai bên bờ là vật cứu hộ tuyệt vời để người trên bờ vươn ra cho người dưới nước bám vào."
+        }
+      }
     }
   ]
 }
