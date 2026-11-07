@@ -170,7 +170,9 @@ test('invested_ap boosts rewards, mitigates risks and appends strategic log note
     burnout: 20,
     karma: 50,
     action_points: 4,
-    family_endowment: 0
+    family_endowment: 0,
+    innate_traits: [],
+    unlocked_skills: []
   });
   await db.sessionContext.run({ sessionId: 'qa_invested_ap' }, async () => {
     const store = db.getSessionData('qa_invested_ap');

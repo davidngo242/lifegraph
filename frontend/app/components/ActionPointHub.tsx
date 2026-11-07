@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { MiniGameType } from './minigames/MiniGameHostModal';
 import Tooltip from './Tooltip';
+import DynamicLifeTree from './rpg/DynamicLifeTree';
 
 interface ActionPointHubProps {
   isEmbedded?: boolean;
@@ -108,6 +109,7 @@ export default function ActionPointHub({
   const [actionNotice, setActionNotice] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [activeButton, setActiveButton] = useState<string | null>(null);
   const [actionMode, setActionMode] = useState<'individual' | 'focus'>('individual');
+  const [displayMode, setDisplayMode] = useState<'tree' | 'grid'>('tree');
 
   const traits = character?.innate_traits || [];
   const hasTradeTrait = traits.includes('trực_giác_kinh_doanh') || traits.includes('mắt_nhìn_xuyên_thị_trường');
@@ -330,35 +332,67 @@ export default function ActionPointHub({
           </div>
         </div>
 
-        {/* Segmented Mode Switcher (1 AP vs 3 AP Focus) for Age >= 6 */}
-        {characterAge >= 6 && onAnnualFocus && (
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* View Mode Switcher: Dynamic Life Tree vs Classic Grid */}
           <div className="flex items-center gap-1 bg-[var(--bg-card-subtle)] p-1 rounded-2xl border border-[var(--border-subtle)] shadow-inner">
-            <button
-              type="button"
-              onClick={() => setActionMode('individual')}
-              className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
-                actionMode === 'individual'
-                  ? 'bg-amber-500/15 text-amber-200 border border-amber-500/30 shadow-sm'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              <span>⚡ Từng Việc</span>
-              <span className="text-[10px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-950 text-amber-400 border border-amber-500/30 font-semibold">1 AP</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActionMode('focus')}
-              className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
-                actionMode === 'focus'
-                  ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              <span>🎯 Trọng Tâm Năm</span>
-              <span className="text-[10px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-400 border border-indigo-500/30 font-semibold">3 AP</span>
-            </button>
+            <Tooltip content="Chế độ Cây Sinh Mệnh Động: Tỏa các nhánh năng lượng và node hành động sinh động">
+              <button
+                type="button"
+                onClick={() => setDisplayMode('tree')}
+                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer ${
+                  displayMode === 'tree'
+                    ? 'bg-gradient-to-r from-indigo-600/30 to-purple-600/30 text-indigo-300 border border-indigo-500/40 shadow-sm'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                <span>🌳 Cây Sinh Mệnh</span>
+              </button>
+            </Tooltip>
+            <Tooltip content="Chế độ Bảng Thẻ Truyền Thống: Danh sách lưới các ô hành động kinh điển">
+              <button
+                type="button"
+                onClick={() => setDisplayMode('grid')}
+                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer ${
+                  displayMode === 'grid'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                <span>📋 Bảng Thẻ</span>
+              </button>
+            </Tooltip>
           </div>
-        )}
+
+          {/* Segmented Mode Switcher (1 AP vs 3 AP Focus) for Age >= 6 */}
+          {characterAge >= 6 && onAnnualFocus && (
+            <div className="flex items-center gap-1 bg-[var(--bg-card-subtle)] p-1 rounded-2xl border border-[var(--border-subtle)] shadow-inner">
+              <button
+                type="button"
+                onClick={() => setActionMode('individual')}
+                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                  actionMode === 'individual'
+                    ? 'bg-amber-500/15 text-amber-200 border border-amber-500/30 shadow-sm'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                <span>⚡ Từng Việc</span>
+                <span className="text-[10px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-950 text-amber-400 border border-amber-500/30 font-semibold">1 AP</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActionMode('focus')}
+                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                  actionMode === 'focus'
+                    ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                <span>🎯 Trọng Tâm Năm</span>
+                <span className="text-[10px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-400 border border-indigo-500/30 font-semibold">3 AP</span>
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* AP Pips Counter with Tooltip */}
         <Tooltip content={<div className="text-[12px]">Bạn có <strong>{actionPoints}/{totalAp} AP</strong> khả dụng trong năm. Các hoạt động tốn AP giúp phát triển tài chính, sức khỏe, học vấn và mở rộng mạng lưới quan hệ.</div>}>
@@ -458,31 +492,43 @@ export default function ActionPointHub({
 
       {/* BREAKTHROUGH ACTION CARD (2 AP) */}
       {breakthroughAction && onBreakthrough && (
-        <div className="my-2.5 p-3 rounded-2xl bg-gradient-to-r from-amber-950/60 via-slate-900 to-amber-950/60 border border-amber-500/50 shadow-lg">
-          <div className="flex items-center justify-between mb-1.5 flex-wrap gap-2">
-            <div className="flex items-center gap-2">
-              <span className="text-xl shrink-0">{breakthroughAction.icon || '🚀'}</span>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-amber-200">{breakthroughAction.title}</span>
-                  <span className="text-[10px] font-sans px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold shrink-0">
-                    ĐỘT PHÁ · 2 AP
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-300 leading-relaxed mt-0.5">
-                  {breakthroughAction.description}
-                </p>
-              </div>
+        <Tooltip
+          position="top"
+          className="w-full"
+          content={
+            <div className="space-y-1 text-xs">
+              <div className="font-bold text-amber-300">🚀 Đột Phá Số Mệnh Cột Mốc: {breakthroughAction.title}</div>
+              <div className="text-slate-200">{breakthroughAction.description}</div>
+              <div className="text-[10px] text-amber-400 font-mono">Chi phí: {breakthroughAction.costAp || 2} Điểm Hành Động (AP)</div>
             </div>
-            <button
-              disabled={isLoading || actionPoints < 2 || activeButton !== null}
-              onClick={() => handleAction('breakthrough', onBreakthrough, 2, breakthroughAction.costCash || 0)}
-              className="py-1.5 px-3 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-slate-950 text-xs font-bold transition shadow-md active:scale-95 disabled:opacity-40 shrink-0"
-            >
-              Tiến Hành (2 AP)
-            </button>
+          }
+        >
+          <div className="my-2.5 p-3 rounded-2xl bg-gradient-to-r from-amber-950/60 via-slate-900 to-amber-950/60 border border-amber-500/50 shadow-lg cursor-help">
+            <div className="flex items-center justify-between mb-1.5 flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xl shrink-0">{breakthroughAction.icon || '🚀'}</span>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-amber-200">{breakthroughAction.title}</span>
+                    <span className="text-[10px] font-sans px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold shrink-0">
+                      ĐỘT PHÁ · {breakthroughAction.costAp || 2} AP
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed mt-0.5">
+                    {breakthroughAction.description}
+                  </p>
+                </div>
+              </div>
+              <button
+                disabled={isLoading || actionPoints < (breakthroughAction.costAp || 2) || activeButton !== null}
+                onClick={() => handleAction('breakthrough', onBreakthrough, breakthroughAction.costAp || 2, breakthroughAction.costCash || 0)}
+                className="py-1.5 px-3 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-slate-950 text-xs font-bold transition shadow-md active:scale-95 disabled:opacity-40 shrink-0 cursor-pointer"
+              >
+                Tiến Hành ({breakthroughAction.costAp || 2} AP)
+              </button>
+            </div>
           </div>
-        </div>
+        </Tooltip>
       )}
 
       {/* ACTIVE RPG SKILL PERKS BAR */}
@@ -523,8 +569,31 @@ export default function ActionPointHub({
         </div>
       )}
 
-      {/* DYNAMIC AGE-APPROPRIATE ACTION TILES */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 my-2.5 w-full">
+      {/* 1. DYNAMIC LIFE TREE VIEW */}
+      {displayMode === 'tree' ? (
+        <div className="my-2.5">
+          <DynamicLifeTree
+            characterAge={characterAge}
+            actionPoints={actionPoints}
+            totalAp={totalAp}
+            onChildAction={handleChildActionTrigger}
+            onAdultAction={(actionKey, ap, cash) => {
+              if (actionKey === 'work') handleAction('work', onOvertime, ap, cash);
+              else if (actionKey === 'study') handleAction('study', onStudy, ap, cash);
+              else if (actionKey === 'wellness') handleAction('wellness', onWellness, ap, cash);
+              else if (actionKey === 'network' && onNetwork) handleAction('network', onNetwork, ap, cash);
+              else if (actionKey === 'gamble' && onGamble) handleAction('gamble', onGamble, ap, cash);
+            }}
+            breakthroughAction={breakthroughAction}
+            onBreakthrough={onBreakthrough ? () => handleAction('breakthrough', onBreakthrough, breakthroughAction?.costAp || 2, breakthroughAction?.costCash || 0) : undefined}
+            onFastForwardToSchool={onFastForwardToSchool}
+            onTimeSkip={onTimeSkip}
+            isLoading={isLoading || activeButton !== null}
+          />
+        </div>
+      ) : (
+        /* 2. DYNAMIC CLASSIC GRID VIEW */
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 my-2.5 w-full">
         {/* ========================================================================= */}
         {/* 1. GIAI ĐOẠN 0 - 5 TUỔI: ẤU THƠ ĐƯỢC GIA ĐÌNH NUÔI DƯỠNG TỰ ĐỘNG */}
         {/* ========================================================================= */}
@@ -539,19 +608,23 @@ export default function ActionPointHub({
                 <div>
                   <h4 className="text-xs font-bold text-white flex items-center gap-2">
                     Mái Ấm Gia Đình Nuôi Dưỡng (0–5 Tuổi)
-                    <span className="text-[12px] font-sans tabular-nums font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                      Tự Động Nuôi Lớn
-                    </span>
+                    <Tooltip content="Hệ thống tự động chăm sóc và cung cấp dinh dưỡng trọn vẹn dưới 6 tuổi">
+                      <span className="text-[12px] font-sans tabular-nums font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 cursor-help">
+                        Tự Động Nuôi Lớn
+                      </span>
+                    </Tooltip>
                   </h4>
                   <p className="text-[12px] text-slate-400 mt-0.5">
                     Dưới 6 tuổi, bé được phụ mẫu toàn tâm chăm bẵm, thể chất & trí tuệ tự nhiên phát triển không cần tiêu hao sức lực tự thân.
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-1.5 text-[12px] font-sans tabular-nums text-slate-400 bg-slate-900 px-2.5 py-1 rounded-xl border border-slate-800">
-                <Shield className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Bảo bọc 100% chi phí</span>
-              </div>
+              <Tooltip content="Phụ mẫu và người giám hộ gánh vác 100% sinh hoạt phí, sữa bỉm và y tế gia đình">
+                <div className="flex items-center gap-1.5 text-[12px] font-sans tabular-nums text-slate-400 bg-slate-900 px-2.5 py-1 rounded-xl border border-slate-800 cursor-help">
+                  <Shield className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Bảo bọc 100% chi phí</span>
+                </div>
+              </Tooltip>
             </div>
 
             {/* Hoạt Động Ấu Thơ Tự Chọn (0 - 5 Tuổi · Tiêu 1 AP) */}
@@ -568,89 +641,149 @@ export default function ActionPointHub({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-xs">
                 {/* 1. Bú Mẹ & Ăn Dặm */}
-                <button
-                  disabled={isLoading || actionPoints < 1 || activeButton !== null}
-                  onClick={() => handleChildActionTrigger('eat_grow', 0)}
-                  className="p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40"
-                >
-                  <span className="text-2xl shrink-0">🍼</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-bold text-white group-hover:text-amber-300 flex items-center justify-between">
-                      <span>Bú Mẹ &amp; Ăn Dặm</span>
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                <Tooltip
+                  className="w-full"
+                  position="top"
+                  content={
+                    <div className="space-y-0.5 text-xs">
+                      <div className="font-bold text-emerald-300">🍼 Bú Mẹ & Ăn Dặm (1 AP)</div>
+                      <div className="text-slate-200">Hấp thu nguồn sữa mẹ ngọt lành và vi chất thiết yếu để phát triển thể chất nhanh chóng.</div>
+                      <div className="text-[10px] text-emerald-400 font-mono">+15 Thể chất • +5 Max HP</div>
                     </div>
-                    <div className="text-[11px] text-emerald-400 mt-0.5 font-medium">+15 Thể chất, +5 HP</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">Hấp thu dinh dưỡng ngọt lành</div>
-                  </div>
-                </button>
+                  }
+                >
+                  <button
+                    disabled={isLoading || actionPoints < 1 || activeButton !== null}
+                    onClick={() => handleChildActionTrigger('eat_grow', 0)}
+                    className="w-full p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40 cursor-pointer"
+                  >
+                    <span className="text-2xl shrink-0">🍼</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-white group-hover:text-amber-300 flex items-center justify-between">
+                        <span>Bú Mẹ &amp; Ăn Dặm</span>
+                        <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                      </div>
+                      <div className="text-[11px] text-emerald-400 mt-0.5 font-medium">+15 Thể chất, +5 HP</div>
+                      <div className="text-[10px] text-slate-400 mt-0.5">Hấp thu dinh dưỡng ngọt lành</div>
+                    </div>
+                  </button>
+                </Tooltip>
 
                 {/* 2. Tắm Nắng Sớm Tự Nhiên */}
-                <button
-                  disabled={isLoading || actionPoints < 1 || activeButton !== null}
-                  onClick={() => handleChildActionTrigger('sunbath', 0)}
-                  className="p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40"
-                >
-                  <span className="text-2xl shrink-0">☀️</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-bold text-white group-hover:text-amber-300 flex items-center justify-between">
-                      <span>Tắm Nắng Sớm</span>
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                <Tooltip
+                  className="w-full"
+                  position="top"
+                  content={
+                    <div className="space-y-0.5 text-xs">
+                      <div className="font-bold text-amber-300">☀️ Tắm Nắng Sớm (1 AP)</div>
+                      <div className="text-slate-200">Phơi nắng ban mai tổng hợp Vitamin D tự nhiên làm chắc xương và tăng cường miễn dịch.</div>
+                      <div className="text-[10px] text-amber-400 font-mono">+10 Đề kháng • -5 Stress</div>
                     </div>
-                    <div className="text-[11px] text-amber-400 mt-0.5 font-medium">+10 Đề kháng, -5 Stress</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">Hấp thu Vitamin D tự nhiên</div>
-                  </div>
-                </button>
+                  }
+                >
+                  <button
+                    disabled={isLoading || actionPoints < 1 || activeButton !== null}
+                    onClick={() => handleChildActionTrigger('sunbath', 0)}
+                    className="w-full p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40 cursor-pointer"
+                  >
+                    <span className="text-2xl shrink-0">☀️</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-white group-hover:text-amber-300 flex items-center justify-between">
+                        <span>Tắm Nắng Sớm</span>
+                        <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                      </div>
+                      <div className="text-[11px] text-amber-400 mt-0.5 font-medium">+10 Đề kháng, -5 Stress</div>
+                      <div className="text-[10px] text-slate-400 mt-0.5">Hấp thu Vitamin D tự nhiên</div>
+                    </div>
+                  </button>
+                </Tooltip>
 
                 {/* 3. Đồ Chơi Trí Não Sơ Khai */}
-                <button
-                  disabled={isLoading || actionPoints < 1 || activeButton !== null}
-                  onClick={() => handleChildActionTrigger('toy_brain', 0)}
-                  className="p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40"
-                >
-                  <span className="text-2xl shrink-0">🧸</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-bold text-white group-hover:text-sky-300 flex items-center justify-between">
-                      <span>Đồ Chơi Trí Não</span>
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                <Tooltip
+                  className="w-full"
+                  position="top"
+                  content={
+                    <div className="space-y-0.5 text-xs">
+                      <div className="font-bold text-sky-300">🧸 Đồ Chơi Trí Não (1 AP)</div>
+                      <div className="text-slate-200">Xếp hình khối và phân biệt màu sắc kích thích khả năng tư duy logic và nhận thức thế giới.</div>
+                      <div className="text-[10px] text-sky-400 font-mono">+10 Trí tuệ • +5 Karma</div>
                     </div>
-                    <div className="text-[11px] text-sky-400 mt-0.5 font-medium">+10 Trí tuệ, +5 Karma</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">Xếp hình, kích thích giác quan</div>
-                  </div>
-                </button>
+                  }
+                >
+                  <button
+                    disabled={isLoading || actionPoints < 1 || activeButton !== null}
+                    onClick={() => handleChildActionTrigger('toy_brain', 0)}
+                    className="w-full p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40 cursor-pointer"
+                  >
+                    <span className="text-2xl shrink-0">🧸</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-white group-hover:text-sky-300 flex items-center justify-between">
+                        <span>Đồ Chơi Trí Não</span>
+                        <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                      </div>
+                      <div className="text-[11px] text-sky-400 mt-0.5 font-medium">+10 Trí tuệ, +5 Karma</div>
+                      <div className="text-[10px] text-slate-400 mt-0.5">Xếp hình, kích thích giác quan</div>
+                    </div>
+                  </button>
+                </Tooltip>
 
                 {/* 4. Tập Đi & Bập Bẹ */}
-                <button
-                  disabled={isLoading || actionPoints < 1 || activeButton !== null}
-                  onClick={() => handleChildActionTrigger('toddler_walk', 0)}
-                  className="p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40"
-                >
-                  <span className="text-2xl shrink-0">👶</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-bold text-white group-hover:text-emerald-300 flex items-center justify-between">
-                      <span>Tập Đi &amp; Bập Bẹ</span>
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                <Tooltip
+                  className="w-full"
+                  position="top"
+                  content={
+                    <div className="space-y-0.5 text-xs">
+                      <div className="font-bold text-emerald-300">👶 Tập Đi & Bập Bẹ (1 AP)</div>
+                      <div className="text-slate-200">Chập chững những bước chân đầu đời, luyện gân cốt và mở rộng dung tích phổi.</div>
+                      <div className="text-[10px] text-emerald-400 font-mono">+3 Max HP • +8 Thể lực</div>
                     </div>
-                    <div className="text-[11px] text-emerald-400 mt-0.5 font-medium">+3 Max HP, +8 Thể lực</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">Chập chững những bước đầu đời</div>
-                  </div>
-                </button>
+                  }
+                >
+                  <button
+                    disabled={isLoading || actionPoints < 1 || activeButton !== null}
+                    onClick={() => handleChildActionTrigger('toddler_walk', 0)}
+                    className="w-full p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40 cursor-pointer"
+                  >
+                    <span className="text-2xl shrink-0">👶</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-white group-hover:text-emerald-300 flex items-center justify-between">
+                        <span>Tập Đi &amp; Bập Bẹ</span>
+                        <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                      </div>
+                      <div className="text-[11px] text-emerald-400 mt-0.5 font-medium">+3 Max HP, +8 Thể lực</div>
+                      <div className="text-[10px] text-slate-400 mt-0.5">Chập chững những bước đầu đời</div>
+                    </div>
+                  </button>
+                </Tooltip>
 
                 {/* 5. Làm Nũng Vòng Tay Mẹ */}
-                <button
-                  disabled={isLoading || actionPoints < 1 || activeButton !== null}
-                  onClick={() => handleChildActionTrigger('cuddle_parents', 0)}
-                  className="p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-pink-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40"
-                >
-                  <span className="text-2xl shrink-0">💖</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-bold text-white group-hover:text-pink-300 flex items-center justify-between">
-                      <span>Làm Nũng Phụ Mẫu</span>
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                <Tooltip
+                  className="w-full"
+                  position="top"
+                  content={
+                    <div className="space-y-0.5 text-xs">
+                      <div className="font-bold text-pink-300">💖 Làm Nũng Phụ Mẫu (1 AP)</div>
+                      <div className="text-slate-200">Ôm ấp và đón nhận năng lượng che chở dịu dàng từ cha mẹ, xóa tan lo lắng bất an.</div>
+                      <div className="text-[10px] text-pink-400 font-mono">+15 Tình cảm • -10 Stress</div>
                     </div>
-                    <div className="text-[11px] text-pink-400 mt-0.5 font-medium">+15 Tình cảm, -10 Stress</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">Ấm êm trong vòng tay cha mẹ</div>
-                  </div>
-                </button>
+                  }
+                >
+                  <button
+                    disabled={isLoading || actionPoints < 1 || activeButton !== null}
+                    onClick={() => handleChildActionTrigger('cuddle_parents', 0)}
+                    className="w-full p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-pink-500/50 text-left transition active:scale-95 group shadow-sm flex items-start gap-2.5 disabled:opacity-40 cursor-pointer"
+                  >
+                    <span className="text-2xl shrink-0">💖</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-white group-hover:text-pink-300 flex items-center justify-between">
+                        <span>Làm Nũng Phụ Mẫu</span>
+                        <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">1 AP</span>
+                      </div>
+                      <div className="text-[11px] text-pink-400 mt-0.5 font-medium">+15 Tình cảm, -10 Stress</div>
+                      <div className="text-[10px] text-slate-400 mt-0.5">Ấm êm trong vòng tay cha mẹ</div>
+                    </div>
+                  </button>
+                </Tooltip>
               </div>
             </div>
 
@@ -724,34 +857,40 @@ export default function ActionPointHub({
             <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
               <div className="flex items-center gap-2 flex-wrap">
                 {onFastForwardToSchool && (
-                  <button
-                    onClick={() => {
-                      if (window.confirm("Bỏ qua giai đoạn bập bẹ để bước thẳng vào Lớp 1 (6 Tuổi) với đầy đủ ký ức tuổi thơ êm đềm?")) {
-                        onFastForwardToSchool();
-                      }
-                    }}
-                    disabled={isLoading}
-                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white font-bold text-xs flex items-center gap-2 transition active:scale-95 shadow-md shadow-indigo-950"
-                  >
-                    <FastForward className="w-4 h-4 text-amber-300" />
-                    <span>Chuyển đến năm 6 tuổi (Tiểu học)</span>
-                  </button>
+                  <Tooltip content="Tua nhanh qua giai đoạn 0-5 tuổi, hệ thống tự động bồi dưỡng thể chất và trí tuệ bình dị, bước thẳng vào Lớp 1 (6 tuổi).">
+                    <button
+                      onClick={() => {
+                        if (window.confirm("Bỏ qua giai đoạn bập bẹ để bước thẳng vào Lớp 1 (6 Tuổi) với đầy đủ ký ức tuổi thơ êm đềm?")) {
+                          onFastForwardToSchool();
+                        }
+                      }}
+                      disabled={isLoading}
+                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white font-bold text-xs flex items-center gap-2 transition active:scale-95 shadow-md shadow-indigo-950"
+                    >
+                      <FastForward className="w-4 h-4 text-amber-300" />
+                      <span>Chuyển đến năm 6 tuổi (Tiểu học)</span>
+                    </button>
+                  </Tooltip>
                 )}
 
                 {onTimeSkip && (
-                  <button
-                    onClick={onTimeSkip}
-                    disabled={isLoading}
-                    className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-xs border border-slate-700/80 transition active:scale-95"
-                  >
-                    <span>Sang năm tiếp theo (+1 tuổi)</span>
-                  </button>
+                  <Tooltip content="Bỏ qua các hành động còn lại của năm nay, tích trữ AP dư thừa sang hồi phục sinh lực và bước sang tuổi kế tiếp (+1 tuổi).">
+                    <button
+                      onClick={onTimeSkip}
+                      disabled={isLoading}
+                      className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-xs border border-slate-700/80 transition active:scale-95"
+                    >
+                      <span>Sang năm tiếp theo (+1 tuổi)</span>
+                    </button>
+                  </Tooltip>
                 )}
               </div>
 
-              <div className="text-[12px] text-slate-400 italic">
-                * Không cần click lẻ tẻ từng hành động em bé
-              </div>
+              <Tooltip content="Giai đoạn 0-5 tuổi được gia đình bảo bọc 100%. Bạn có thể tự do tua nhanh hoặc tương tác tùy thích theo ý mình.">
+                <div className="text-[12px] text-slate-400 italic cursor-help hover:text-slate-200 transition">
+                  * Không cần click lẻ tẻ từng hành động em bé
+                </div>
+              </Tooltip>
             </div>
           </div>
         )}
@@ -1359,6 +1498,7 @@ export default function ActionPointHub({
           </div>
         )}
       </div>
+      )}
 
       {/* TỐI ƯU HÓA: DOCK ĐIỀU KHIỂN NHANH (Sàn Tài Sản, Gia Tộc, Rèn Kỹ Năng & Bỏ Qua 3 Năm) */}
       <div className="pt-2.5 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2.5">

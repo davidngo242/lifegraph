@@ -24,27 +24,59 @@ export interface Dynamic3DAvatarProps {
 // Procedural Skin Tone Mapping based on Nationality
 function getSkinTone(nationality: string = 'Việt Nam'): string {
   const nat = nationality.toLowerCase();
-  if (nat.includes('ba lan') || nat.includes('poland') || nat.includes('mỹ') || nat.includes('usa') || nat.includes('anh') || nat.includes('đức') || nat.includes('pháp')) {
-    return '#fadcce'; // Fair / Caucasian
+  if (
+    nat.includes('ba lan') || nat.includes('poland') || nat.includes('mỹ') || nat.includes('usa') ||
+    nat.includes('anh') || nat.includes('đức') || nat.includes('pháp') || nat.includes('na uy') ||
+    nat.includes('norway') || nat.includes('thụy sĩ') || nat.includes('switzerland')
+  ) {
+    return '#fde2d2'; // Fair / Porcelain Rosy Caucasian (như ảnh mẫu Na Uy)
   }
   if (nat.includes('syria') || nat.includes('ấn độ') || nat.includes('india') || nat.includes('ai cập') || nat.includes('egypt')) {
     return '#b97f57'; // Olive / Middle East / South Asian
   }
-  if (nat.includes('kenya') || nat.includes('châu phi') || nat.includes('nigeria') || nat.includes('congo')) {
+  if (nat.includes('somalia') || nat.includes('kenya') || nat.includes('châu phi') || nat.includes('nigeria') || nat.includes('congo') || nat.includes('sudan') || nat.includes('ethiopia') || nat.includes('haiti')) {
     return '#563520'; // Deep Melanin / African
   }
   if (nat.includes('nhật') || nat.includes('japan') || nat.includes('hàn') || nat.includes('korea') || nat.includes('trung') || nat.includes('china') || nat.includes('thái')) {
-    return '#f8d9b8'; // East Asian warm
+    return '#fae1c7'; // East Asian warm porcelain
   }
-  return '#f2cca3'; // Vietnamese warm golden
+  return '#f6d2ad'; // Vietnamese warm golden
 }
 
-// Hair Color aging interpolation
-function getHairColor(age: number = 20, seed: number = 0): string {
+// Hair Color aging interpolation & cultural nuances
+function getHairColor(age: number = 20, seed: number = 0, nationality: string = ''): string {
   if (age > 65) return '#f1f5f9'; // Pure Silver/White
   if (age > 45) return '#64748b'; // Salt & Pepper Slate
-  const baseTones = ['#1e293b', '#261b18', '#3b2f2f', '#422006'];
+  const nat = nationality.toLowerCase();
+  if (nat.includes('na uy') || nat.includes('norway')) {
+    return '#784624'; // Warm Chestnut Auburn Brown hệt như ảnh mẫu
+  }
+  if (nat.includes('việt') || nat.includes('nhật') || nat.includes('hàn')) {
+    return '#1c1917'; // Silky Obsidian Black
+  }
+  if (nat.includes('syria') || nat.includes('ai cập')) {
+    return '#292524'; // Espresso Dark
+  }
+  const baseTones = ['#6c4427', '#261b18', '#3b2f2f', '#422006'];
   return baseTones[Math.abs(seed) % baseTones.length];
+}
+
+// Eye Iris Color according to Nationality & Ethnicity
+function getIrisColor(nationality: string = ''): string {
+  const nat = nationality.toLowerCase();
+  if (nat.includes('na uy') || nat.includes('norway') || nat.includes('thụy sĩ') || nat.includes('ba lan')) {
+    return '#0284c7'; // Vibrant Arctic Azure Blue / Teal
+  }
+  if (nat.includes('việt') || nat.includes('nhật') || nat.includes('hàn')) {
+    return '#b45309'; // Warm Amber Chestnut
+  }
+  if (nat.includes('syria') || nat.includes('ai cập')) {
+    return '#78350f'; // Golden Hazel
+  }
+  if (nat.includes('somalia') || nat.includes('châu phi')) {
+    return '#1c1917'; // Deep Obsidian
+  }
+  return '#92400e';
 }
 
 // Main 3D Rigged Model Component
@@ -72,14 +104,17 @@ function ProceduralCharacterMesh({
   const groupRef = useRef<THREE.Group>(null);
   const headRef = useRef<THREE.Group>(null);
   const haloRef = useRef<THREE.Group>(null);
-  const leftEyeRef = useRef<THREE.Mesh>(null);
-  const rightEyeRef = useRef<THREE.Mesh>(null);
+  const leftEyeRef = useRef<THREE.Group>(null);
+  const rightEyeRef = useRef<THREE.Group>(null);
   const mouthRef = useRef<THREE.Mesh>(null);
   const hairGroupRef = useRef<THREE.Group>(null);
+  const garlandRef = useRef<THREE.Group>(null);
+  const satchelRef = useRef<THREE.Group>(null);
 
   const isFemale = gender === 'female';
   const skinColor = useMemo(() => getSkinTone(nationality), [nationality]);
-  const hairColor = useMemo(() => getHairColor(age, nationality.charCodeAt(0)), [age, nationality]);
+  const hairColor = useMemo(() => getHairColor(age, nationality.charCodeAt(0), nationality), [age, nationality]);
+  const irisColor = useMemo(() => getIrisColor(nationality), [nationality]);
 
   // Age scaling characteristics
   const numericAge = Number(age ?? 0);
@@ -88,7 +123,8 @@ function ProceduralCharacterMesh({
   const isTeen = numericAge >= 12 && numericAge < 18;
   const isElderly = numericAge >= 65;
 
-  const headScale = isBaby ? 1.25 : isChild ? 1.12 : isTeen ? 1.05 : 1.0;
+  // Chibi Head Proportions (Đầu to tròn đáng yêu theo phong cách Anime Chibi)
+  const headScale = isBaby ? 1.32 : isChild ? 1.22 : isTeen ? 1.15 : 1.08;
   const spineHunch = isElderly ? 0.18 : 0;
 
   // Trait Visual Logic
@@ -114,36 +150,66 @@ function ProceduralCharacterMesh({
     );
   }, [traitList, netWorth, numericAge]);
 
+  // Should render Forest Garland Crown (Ảnh mẫu Na Uy / Yêu thiên nhiên / Tuổi thiếu niên)
+  const hasGarland = useMemo(() => {
+    const nat = nationality.toLowerCase();
+    return (
+      (nat.includes('na uy') || nat.includes('norway')) && numericAge <= 30
+    ) || traitList.some(t => ['thảo_mộc_tự_nhiên', 'dược_sĩ', 'lương_y_từ_mẫu', 'tâm_hồn_nghệ_sĩ'].includes(t));
+  }, [nationality, numericAge, traitList]);
+
+  // Should render Crossbody Satchel (Túi đeo chéo phiêu lưu như ảnh mẫu)
+  const hasSatchel = useMemo(() => {
+    return !isBaby && (numericAge < 45 || hasGarland);
+  }, [isBaby, numericAge, hasGarland]);
+
   // Materials with physical reactivity to stats & traits
   const skinMaterial = useMemo(() => {
     let effectiveSkin = skinColor;
     if (vitality < 30) {
-      // Sắc diện nhợt nhạt, tái mét khi sinh lực nguy kịch
       effectiveSkin = '#cbd5e1';
     }
     return new THREE.MeshStandardMaterial({
       color: effectiveSkin,
-      roughness: vitality < 30 ? 0.8 : 0.6,
+      roughness: vitality < 30 ? 0.8 : 0.55,
       metalness: 0.05,
     });
   }, [skinColor, vitality]);
 
   const hairMaterial = useMemo(() => new THREE.MeshStandardMaterial({
     color: hairColor,
-    roughness: 0.65,
-    metalness: 0.15,
+    roughness: 0.55,
+    metalness: 0.12,
   }), [hairColor]);
 
-  const eyeMaterial = useMemo(() => new THREE.MeshStandardMaterial({
-    color: '#0f172a',
+  const eyeScleraMaterial = useMemo(() => new THREE.MeshBasicMaterial({
+    color: '#ffffff'
+  }), []);
+
+  const eyeIrisMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: irisColor,
     roughness: 0.2,
-    metalness: 0.8
+    metalness: 0.3
+  }), [irisColor]);
+
+  const eyePupilMaterial = useMemo(() => new THREE.MeshBasicMaterial({
+    color: '#180a02'
+  }), []);
+
+  const eyelashMaterial = useMemo(() => new THREE.MeshBasicMaterial({
+    color: '#271206'
+  }), []);
+
+  const blushMaterial = useMemo(() => new THREE.MeshBasicMaterial({
+    color: '#fb7185',
+    transparent: true,
+    opacity: 0.45
   }), []);
 
   const lipMaterial = useMemo(() => {
     let lipColor = '#e29578';
     if (isBaby || isChild) {
-      lipColor = '#fca5a5'; // Soft natural kid lips
+      lipColor = '#fca5a5';
     } else if (isFemale) {
       lipColor = burnout > 75 ? '#be123c' : '#fb7185';
     } else {
@@ -160,6 +226,29 @@ function ProceduralCharacterMesh({
     color: '#fbbf24',
     roughness: 0.18,
     metalness: 0.92
+  }), []);
+
+  const rubyBerryMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#dc2626',
+    roughness: 0.25,
+    metalness: 0.4
+  }), []);
+
+  const leafMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#5c7832',
+    roughness: 0.6,
+    metalness: 0.05
+  }), []);
+
+  const vineMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#3d4c1e',
+    roughness: 0.8
+  }), []);
+
+  const satchelLeatherMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#8f562b',
+    roughness: 0.75,
+    metalness: 0.1
   }), []);
 
   const haloMaterial = useMemo(() => new THREE.MeshStandardMaterial({
@@ -189,27 +278,33 @@ function ProceduralCharacterMesh({
     roughness: 0.4
   }), [isBaby]);
 
+  // Cloth Material based on nationality & status
   const clothMaterial = useMemo(() => {
+    const nat = nationality.toLowerCase();
     let clothColor = isFemale ? '#be185d' : '#4f46e5';
+
     if (isBaby) {
-      clothColor = isFemale ? '#fbcfe8' : '#bae6fd'; // Vải cotton pastel sơ sinh
-    } else if (numericAge <= 5) {
-      clothColor = isFemale ? '#fce7f3' : '#e0f2fe';
+      clothColor = isFemale ? '#fbcfe8' : '#bae6fd';
+    } else if (hasGarland || nat.includes('na uy') || nat.includes('norway')) {
+      clothColor = '#6b7d47'; // Olive Moss Green hệt ảnh mẫu
+    } else if (nat.includes('việt')) {
+      clothColor = isFemale ? '#0284c7' : '#047857'; // Áo dài xanh lam / xanh ngọc
     } else if (isWealthy) {
-      clothColor = isFemale ? '#4c0519' : '#0f172a'; // Tuxedo / Quý tộc sang trọng
+      clothColor = isFemale ? '#4c0519' : '#0f172a';
     } else if (burnout > 75) {
       clothColor = '#334155';
     }
+
     return new THREE.MeshStandardMaterial({
       color: clothColor,
       roughness: isWealthy ? 0.45 : 0.75,
       metalness: isWealthy ? 0.2 : 0.05,
     });
-  }, [isBaby, numericAge, burnout, isFemale, isWealthy]);
+  }, [isBaby, burnout, isFemale, isWealthy, hasGarland, nationality]);
 
-  // Real-time Procedural Animation Loop with Mouse Cursor Tracking
-  useFrame((state, delta) => {
-    if (isFastForwarding) return; // Freeze to conserve frames
+  // Real-time Procedural Animation Loop with Natural Blinking & Mouse Head Tracking
+  useFrame((state) => {
+    if (isFastForwarding) return;
 
     const t = state.clock.getElapsedTime();
 
@@ -218,65 +313,38 @@ function ProceduralCharacterMesh({
       const breatheSpeed = vitality < 30 ? 1.0 : 2.2;
       const breatheAmp = vitality < 30 ? 0.012 : 0.02;
       const breathe = Math.sin(t * breatheSpeed) * breatheAmp;
-      
-      const BASE_Y = -0.76;
-      let targetPosY = BASE_Y + breathe;
+      groupRef.current.position.y = -0.82 + breathe;
 
-      // 2. Mouse Cursor Head Follow Tracking (Subtle, responsive, organic)
-      const mouseLookX = THREE.MathUtils.clamp(-state.pointer.y * 0.22, -0.22, 0.22);
-      const mouseLookY = THREE.MathUtils.clamp(state.pointer.x * 0.32, -0.32, 0.32);
+      // 2. Cursor Dõi Theo Tự Nhiên (Smooth Pointer Tracking)
+      const targetRotationY = state.pointer.x * 0.35;
+      const targetRotationX = -state.pointer.y * 0.25;
 
-      // 3. Action Reaction Dynamics
-      let targetRotX = spineHunch + (burnout > 75 ? 0.12 : 0) + mouseLookX;
-      let targetRotY = mouseLookY;
-      let targetRotZ = 0;
+      headRef.current.rotation.y = THREE.MathUtils.lerp(headRef.current.rotation.y, targetRotationY, 0.08);
+      headRef.current.rotation.x = THREE.MathUtils.lerp(headRef.current.rotation.x, targetRotationX + spineHunch, 0.08);
 
-      if (reaction === 'celebrate') {
-        targetRotX = Math.sin(t * 8) * 0.15 + mouseLookX * 0.5;
-        targetRotY = Math.sin(t * 4) * 0.2 + mouseLookY;
-        targetPosY += Math.abs(Math.sin(t * 6)) * 0.08;
-      } else if (reaction === 'exhausted') {
-        targetRotX = 0.35 + Math.sin(t * 1.2) * 0.04 + mouseLookX * 0.4;
-        targetRotZ = Math.sin(t * 0.8) * 0.05;
-      } else if (reaction === 'meditating') {
-        targetRotX = -0.12 + mouseLookX * 0.3;
-        targetPosY += Math.sin(t * 1.5) * 0.06;
-      } else if (reaction === 'shocked') {
-        targetRotX = -0.22 + mouseLookX * 0.3;
-        targetRotY = Math.sin(t * 14) * 0.08 + mouseLookY;
-      } else if (reaction === 'negotiating') {
-        targetRotZ = 0.12 + Math.sin(t * 2.5) * 0.05;
-        targetRotY = Math.sin(t * 1.8) * 0.15 + mouseLookY;
-      } else {
-        // Idle gentle sway
-        targetRotY += Math.sin(t * 0.8) * 0.06;
-        targetRotX += Math.sin(t * 1.4) * 0.03;
+      // 3. Natural Eye Blinking Cycle (Every ~3.8s, lasts ~0.14s)
+      const blinkCycle = t % 3.8;
+      const isBlinking = blinkCycle > 3.66;
+      const targetScaleY = isBlinking ? 0.08 : 1.0;
+
+      if (leftEyeRef.current) leftEyeRef.current.scale.y = THREE.MathUtils.lerp(leftEyeRef.current.scale.y, targetScaleY, 0.4);
+      if (rightEyeRef.current) rightEyeRef.current.scale.y = THREE.MathUtils.lerp(rightEyeRef.current.scale.y, targetScaleY, 0.4);
+
+      // 4. Hair & Garland Soft Sway
+      if (hairGroupRef.current) {
+        hairGroupRef.current.rotation.z = Math.sin(t * 1.5) * 0.025;
+      }
+      if (garlandRef.current) {
+        garlandRef.current.rotation.z = Math.sin(t * 1.5) * 0.015;
       }
 
-      groupRef.current.position.y = targetPosY;
-
-      // Smooth interpolation (lerp)
-      headRef.current.rotation.x = THREE.MathUtils.lerp(headRef.current.rotation.x, targetRotX, delta * 6);
-      headRef.current.rotation.y = THREE.MathUtils.lerp(headRef.current.rotation.y, targetRotY, delta * 6);
-      headRef.current.rotation.z = THREE.MathUtils.lerp(headRef.current.rotation.z, targetRotZ, delta * 6);
-
-      // 4. Ethereal Halo Orbital Animation
+      // 5. Halo gentle levitation & spin
       if (haloRef.current) {
-        haloRef.current.rotation.y = t * 0.8;
-        haloRef.current.position.y = 0.68 + Math.sin(t * 2) * 0.025;
+        haloRef.current.position.y = 0.68 + Math.sin(t * 2.0) * 0.04;
+        haloRef.current.rotation.z = t * 0.3;
       }
 
-      // 5. Periodic Eye Blink (every ~3.5 seconds)
-      const blinkCycle = Math.sin(t * 1.8);
-      const isBlinking = blinkCycle > 0.96;
-      const eyeScaleY = (isBlinking || reaction === 'meditating') ? 0.1 : 1;
-
-      if (leftEyeRef.current && rightEyeRef.current) {
-        leftEyeRef.current.scale.y = eyeScaleY;
-        rightEyeRef.current.scale.y = eyeScaleY;
-      }
-
-      // 6. Mouth Reaction Morph
+      // 6. Mouth animation based on reaction
       if (mouthRef.current) {
         if (reaction === 'celebrate') {
           mouthRef.current.scale.set(1.4, 1.4, 1.4);
@@ -305,23 +373,50 @@ function ProceduralCharacterMesh({
         </group>
       ) : (
         <>
-          {/* Upper Torso & Collar */}
+          {/* Upper Torso & Collar (Áo Tunic hoặc Trang phục truyền thống) */}
           <mesh position={[0, 0.1, 0]} material={clothMaterial}>
-            <cylinderGeometry args={[isFemale ? 0.38 : 0.42, isFemale ? 0.48 : 0.52, 0.65, 32]} />
+            <cylinderGeometry args={[isFemale ? 0.36 : 0.42, isFemale ? 0.46 : 0.52, 0.65, 32]} />
           </mesh>
 
           {/* Shoulders */}
-          <mesh position={[isFemale ? -0.40 : -0.45, 0.32, 0]} material={clothMaterial}>
-            <sphereGeometry args={[isFemale ? 0.16 : 0.18, 16, 16]} />
+          <mesh position={[isFemale ? -0.38 : -0.45, 0.32, 0]} material={clothMaterial}>
+            <sphereGeometry args={[isFemale ? 0.15 : 0.18, 16, 16]} />
           </mesh>
-          <mesh position={[isFemale ? 0.40 : 0.45, 0.32, 0]} material={clothMaterial}>
-            <sphereGeometry args={[isFemale ? 0.16 : 0.18, 16, 16]} />
+          <mesh position={[isFemale ? 0.38 : 0.45, 0.32, 0]} material={clothMaterial}>
+            <sphereGeometry args={[isFemale ? 0.15 : 0.18, 16, 16]} />
           </mesh>
 
           {/* Neck */}
           <mesh position={[0, 0.52, 0]} material={skinMaterial}>
             <cylinderGeometry args={[isFemale ? 0.14 : 0.16, isFemale ? 0.17 : 0.19, 0.28, 24]} />
           </mesh>
+
+          {/* Crossbody Adventure Satchel Strap (Dây đai da vắt chéo như ảnh mẫu) */}
+          {hasSatchel && (
+            <group ref={satchelRef} position={[0, 0.12, 0]}>
+              {/* Leather Strap across chest */}
+              <mesh position={[0, 0.15, 0.22]} rotation={[0, 0, 0.48]}>
+                <boxGeometry args={[0.065, 0.72, 0.02]} />
+                <primitive object={satchelLeatherMaterial} attach="material" />
+              </mesh>
+
+              {/* Satchel Bag on Hip */}
+              <mesh position={[0.32, -0.05, 0.15]} rotation={[0.1, 0, -0.15]}>
+                <boxGeometry args={[0.22, 0.24, 0.12]} />
+                <primitive object={satchelLeatherMaterial} attach="material" />
+              </mesh>
+              {/* Bag Flap */}
+              <mesh position={[0.32, 0.04, 0.18]} rotation={[0.2, 0, -0.15]}>
+                <boxGeometry args={[0.23, 0.12, 0.04]} />
+                <primitive object={satchelLeatherMaterial} attach="material" />
+              </mesh>
+              {/* Decorative Leaves on Satchel */}
+              <mesh position={[0.35, -0.02, 0.22]} rotation={[0, 0, 0.4]}>
+                <coneGeometry args={[0.045, 0.11, 8]} />
+                <primitive object={leafMaterial} attach="material" />
+              </mesh>
+            </group>
+          )}
 
           {/* Luxury Wealth Lapel Brooch / Gold Accessory */}
           {isWealthy && (
@@ -330,12 +425,10 @@ function ProceduralCharacterMesh({
                 <octahedronGeometry args={[0.042, 0]} />
               </mesh>
               {isFemale ? (
-                /* Pearl necklace collar for elite lady */
                 <mesh position={[0, 0.34, 0.08]} rotation={[1.1, 0, 0]} material={goldMaterial}>
                   <torusGeometry args={[0.19, 0.016, 12, 32]} />
                 </mesh>
               ) : (
-                /* Gold tie clip / luxury collar accent for gentleman */
                 <mesh position={[0, 0.04, 0.26]} material={goldMaterial}>
                   <boxGeometry args={[0.032, 0.16, 0.012]} />
                 </mesh>
@@ -345,124 +438,126 @@ function ProceduralCharacterMesh({
         </>
       )}
 
-      {/* Head Group (Rotatable) */}
+      {/* Head Group (Rotatable & Cursor Tracking) */}
       <group ref={headRef} position={[0, isBaby ? 0.74 : 0.88, 0]} scale={[headScale, headScale, headScale]}>
         {/* Head Cranium */}
         <mesh material={skinMaterial}>
-          <sphereGeometry args={[isFemale ? 0.45 : 0.46, 32, 32]} />
+          <sphereGeometry args={[isFemale ? 0.46 : 0.47, 32, 32]} />
         </mesh>
 
-        {/* Nose */}
+        {/* Small Cute Chibi Nose */}
         {isBaby ? (
-          <mesh position={[0, 0.01, 0.45]} material={skinMaterial}>
-            <sphereGeometry args={[0.038, 12, 12]} />
+          <mesh position={[0, 0.01, 0.46]} material={skinMaterial}>
+            <sphereGeometry args={[0.034, 12, 12]} />
           </mesh>
         ) : (
-          <mesh position={[0, 0.02, 0.44]} rotation={[0.4, 0, 0]} material={skinMaterial}>
-            <coneGeometry args={[isFemale ? 0.055 : 0.07, isFemale ? 0.14 : 0.16, 16]} />
+          <mesh position={[0, 0.02, 0.45]} rotation={[0.4, 0, 0]} material={skinMaterial}>
+            <coneGeometry args={[0.045, 0.12, 16]} />
           </mesh>
         )}
 
-        {/* Left Eye */}
-        <mesh ref={leftEyeRef} position={[-0.17, isBaby ? 0.08 : 0.1, 0.42]} material={eyeMaterial}>
-          <sphereGeometry args={[isBaby ? 0.068 : (isFemale ? 0.065 : 0.06), 16, 16]} />
-          <mesh position={[0.022, 0.022, 0.055]}>
-            <sphereGeometry args={[0.018, 8, 8]} />
+        {/* =========================================================================
+            DETAILED ANIME CHIBI EYES (Long lanh, đa lớp, có Catchlights kép)
+            ========================================================================= */}
+        {/* Left Eye Group */}
+        <group ref={leftEyeRef} position={[-0.175, isBaby ? 0.08 : 0.11, 0.42]}>
+          {/* Sclera (White base) */}
+          <mesh position={[0, 0, 0]} material={eyeScleraMaterial}>
+            <sphereGeometry args={[0.082, 24, 24]} />
+          </mesh>
+          {/* Iris (Colored Circle) */}
+          <mesh position={[0.01, 0, 0.042]} material={eyeIrisMaterial}>
+            <sphereGeometry args={[0.064, 20, 20]} />
+          </mesh>
+          {/* Pupil (Deep Dark Core) */}
+          <mesh position={[0.012, 0, 0.064]} material={eyePupilMaterial}>
+            <sphereGeometry args={[0.036, 16, 16]} />
+          </mesh>
+          {/* Primary Catchlight (Top-Left Specular Sparkle) */}
+          <mesh position={[-0.016, 0.026, 0.076]}>
+            <sphereGeometry args={[0.022, 12, 12]} />
             <meshBasicMaterial color="#ffffff" />
           </mesh>
-        </mesh>
-
-        {/* Right Eye */}
-        <mesh ref={rightEyeRef} position={[0.17, isBaby ? 0.08 : 0.1, 0.42]} material={eyeMaterial}>
-          <sphereGeometry args={[isBaby ? 0.068 : (isFemale ? 0.065 : 0.06), 16, 16]} />
-          <mesh position={[0.022, 0.022, 0.055]}>
-            <sphereGeometry args={[0.018, 8, 8]} />
+          {/* Secondary Catchlight (Bottom-Right Soft Sparkle) */}
+          <mesh position={[0.024, -0.024, 0.074]}>
+            <sphereGeometry args={[0.012, 10, 10]} />
             <meshBasicMaterial color="#ffffff" />
           </mesh>
-        </mesh>
+          {/* Upper Eyelash Arc */}
+          <mesh position={[0, 0.046, 0.062]} rotation={[0.2, 0, 0.15]} material={eyelashMaterial}>
+            <boxGeometry args={[0.13, 0.022, 0.02]} />
+          </mesh>
+        </group>
 
-        {/* Female Eyelash Accents */}
-        {isFemale && !isBaby && !isChild && (
-          <group>
-            <mesh position={[-0.22, 0.14, 0.42]} rotation={[0, 0, -0.28]} material={eyeMaterial}>
-              <boxGeometry args={[0.08, 0.016, 0.02]} />
-            </mesh>
-            <mesh position={[0.22, 0.14, 0.42]} rotation={[0, 0, 0.28]} material={eyeMaterial}>
-              <boxGeometry args={[0.08, 0.016, 0.02]} />
-            </mesh>
-          </group>
-        )}
+        {/* Right Eye Group */}
+        <group ref={rightEyeRef} position={[0.175, isBaby ? 0.08 : 0.11, 0.42]}>
+          {/* Sclera (White base) */}
+          <mesh position={[0, 0, 0]} material={eyeScleraMaterial}>
+            <sphereGeometry args={[0.082, 24, 24]} />
+          </mesh>
+          {/* Iris (Colored Circle) */}
+          <mesh position={[-0.01, 0, 0.042]} material={eyeIrisMaterial}>
+            <sphereGeometry args={[0.064, 20, 20]} />
+          </mesh>
+          {/* Pupil (Deep Dark Core) */}
+          <mesh position={[-0.012, 0, 0.064]} material={eyePupilMaterial}>
+            <sphereGeometry args={[0.036, 16, 16]} />
+          </mesh>
+          {/* Primary Catchlight (Top-Left Specular Sparkle) */}
+          <mesh position={[-0.024, 0.026, 0.076]}>
+            <sphereGeometry args={[0.022, 12, 12]} />
+            <meshBasicMaterial color="#ffffff" />
+          </mesh>
+          {/* Secondary Catchlight (Bottom-Right Soft Sparkle) */}
+          <mesh position={[0.016, -0.024, 0.074]}>
+            <sphereGeometry args={[0.012, 10, 10]} />
+            <meshBasicMaterial color="#ffffff" />
+          </mesh>
+          {/* Upper Eyelash Arc */}
+          <mesh position={[0, 0.046, 0.062]} rotation={[0.2, 0, -0.15]} material={eyelashMaterial}>
+            <boxGeometry args={[0.13, 0.022, 0.02]} />
+          </mesh>
+        </group>
+
+        {/* Peach Blush (Hai má hồng ửng đào dễ thương như ảnh mẫu) */}
+        <group position={[0, -0.06, 0.41]}>
+          <mesh position={[-0.24, 0, 0]} material={blushMaterial}>
+            <sphereGeometry args={[0.072, 16, 12]} />
+          </mesh>
+          <mesh position={[0.24, 0, 0]} material={blushMaterial}>
+            <sphereGeometry args={[0.072, 16, 12]} />
+          </mesh>
+        </group>
 
         {/* Eyebrows */}
         {!isBaby && (
           <group>
-            <mesh position={[-0.17, 0.21, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? -0.15 : 0.05]} material={hairMaterial}>
-              <boxGeometry args={[isChild ? 0.09 : (isFemale ? 0.13 : 0.14), isChild ? 0.012 : (isFemale ? 0.018 : 0.025), 0.03]} />
+            <mesh position={[-0.17, 0.22, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? -0.15 : 0.05]} material={hairMaterial}>
+              <boxGeometry args={[isChild ? 0.09 : (isFemale ? 0.13 : 0.14), 0.016, 0.03]} />
             </mesh>
-            <mesh position={[0.17, 0.21, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? 0.15 : -0.05]} material={hairMaterial}>
-              <boxGeometry args={[isChild ? 0.09 : (isFemale ? 0.13 : 0.14), isChild ? 0.012 : (isFemale ? 0.018 : 0.025), 0.03]} />
+            <mesh position={[0.17, 0.22, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? 0.15 : -0.05]} material={hairMaterial}>
+              <boxGeometry args={[isChild ? 0.09 : (isFemale ? 0.13 : 0.14), 0.016, 0.03]} />
             </mesh>
           </group>
         )}
 
-        {/* Procedural 3D Spectacles / Glasses (Cận thị bẩm sinh / Mọt sách / Code Whisperer) */}
+        {/* Spectacles / Glasses (Cận thị / Tri thức) */}
         {hasGlasses && (
-          <group position={[0, isBaby ? 0.08 : 0.1, 0.44]}>
-            {/* Left Rim */}
-            <mesh position={[-0.17, 0, 0]} material={glassesFrameMaterial}>
-              <torusGeometry args={[0.086, 0.011, 16, 32]} />
+          <group position={[0, isBaby ? 0.08 : 0.11, 0.44]}>
+            <mesh position={[-0.175, 0, 0]} material={glassesFrameMaterial}>
+              <torusGeometry args={[0.092, 0.011, 16, 32]} />
             </mesh>
-            {/* Left Lens */}
-            <mesh position={[-0.17, 0, 0]} material={glassesLensMaterial}>
-              <circleGeometry args={[0.08, 24]} />
+            <mesh position={[-0.175, 0, 0]} material={glassesLensMaterial}>
+              <circleGeometry args={[0.086, 24]} />
             </mesh>
-            {/* Right Rim */}
-            <mesh position={[0.17, 0, 0]} material={glassesFrameMaterial}>
-              <torusGeometry args={[0.086, 0.011, 16, 32]} />
+            <mesh position={[0.175, 0, 0]} material={glassesFrameMaterial}>
+              <torusGeometry args={[0.092, 0.011, 16, 32]} />
             </mesh>
-            {/* Right Lens */}
-            <mesh position={[0.17, 0, 0]} material={glassesLensMaterial}>
-              <circleGeometry args={[0.08, 24]} />
+            <mesh position={[0.175, 0, 0]} material={glassesLensMaterial}>
+              <circleGeometry args={[0.086, 24]} />
             </mesh>
-            {/* Nose Bridge */}
             <mesh position={[0, 0.02, 0]} rotation={[0, 0, Math.PI / 2]} material={glassesFrameMaterial}>
-              <cylinderGeometry args={[0.009, 0.009, 0.08, 8]} />
-            </mesh>
-            {/* Left Temple extending to ear */}
-            <mesh position={[-0.26, 0.01, -0.16]} rotation={[0, 0.22, 0]} material={glassesFrameMaterial}>
-              <boxGeometry args={[0.01, 0.009, 0.32]} />
-            </mesh>
-            {/* Right Temple extending to ear */}
-            <mesh position={[0.26, 0.01, -0.16]} rotation={[0, -0.22, 0]} material={glassesFrameMaterial}>
-              <boxGeometry args={[0.01, 0.009, 0.32]} />
-            </mesh>
-          </group>
-        )}
-
-        {/* 3D Dynamic State: Quầng thâm mắt do kiệt sức (Burnout > 75 & Người lớn) */}
-        {burnout > 75 && numericAge >= 16 && (
-          <group position={[0, -0.04, 0.42]}>
-            <mesh position={[-0.17, 0.05, 0]}>
-              <sphereGeometry args={[0.07, 16, 8]} />
-              <meshBasicMaterial color="#1e1b4b" opacity={0.65} transparent />
-            </mesh>
-            <mesh position={[0.17, 0.05, 0]}>
-              <sphereGeometry args={[0.07, 16, 8]} />
-              <meshBasicMaterial color="#1e1b4b" opacity={0.65} transparent />
-            </mesh>
-          </group>
-        )}
-
-        {/* 3D Dynamic State: Má hồng bầu bĩnh tuổi ấu thơ (0-5 tuổi) hoặc thiếu nữ */}
-        {(numericAge <= 5 || (isFemale && numericAge < 25)) && (
-          <group position={[0, -0.08, 0.4]}>
-            <mesh position={[-0.22, 0, 0]}>
-              <sphereGeometry args={[isBaby ? 0.09 : (numericAge <= 5 ? 0.075 : 0.05), 16, 8]} />
-              <meshBasicMaterial color="#fb7185" opacity={numericAge <= 5 ? 0.5 : 0.3} transparent />
-            </mesh>
-            <mesh position={[0.22, 0, 0]}>
-              <sphereGeometry args={[numericAge <= 5 ? 0.075 : 0.05, 16, 8]} />
-              <meshBasicMaterial color="#fb7185" opacity={numericAge <= 5 ? 0.5 : 0.3} transparent />
+              <cylinderGeometry args={[0.009, 0.009, 0.09, 8]} />
             </mesh>
           </group>
         )}
@@ -479,18 +574,20 @@ function ProceduralCharacterMesh({
           </group>
         ) : (
           <mesh ref={mouthRef} position={[0, isChild ? -0.15 : -0.18, 0.43]}>
-            <sphereGeometry args={[isChild ? 0.048 : (isFemale ? 0.065 : 0.06), 16, 8]} />
+            <sphereGeometry args={[isChild ? 0.042 : (isFemale ? 0.058 : 0.052), 16, 8]} />
             <primitive object={lipMaterial} attach="material" />
           </mesh>
         )}
 
-        {/* Hair Styles & Accessories */}
+        {/* =========================================================================
+            LAYERED VOLUMETRIC ANIME HAIR (Tóc uốn sóng bồng bềnh nhiều tầng như ảnh mẫu)
+            ========================================================================= */}
         <group ref={hairGroupRef} position={[0, 0.15, 0]}>
           {isBaby ? (
-            /* CUTE ADORABLE BABY BEANIE BONNET */
+            /* Adorable Baby Bonnet with Ribbon */
             <group position={[0, 0.06, 0]}>
               <mesh material={clothMaterial}>
-                <sphereGeometry args={[0.47, 24, 24]} />
+                <sphereGeometry args={[0.48, 24, 24]} />
               </mesh>
               <mesh position={[0, 0.1, 0.28]} rotation={[0.3, 0, 0]} material={clothMaterial}>
                 <torusGeometry args={[0.38, 0.045, 12, 24]} />
@@ -500,96 +597,123 @@ function ProceduralCharacterMesh({
               </mesh>
             </group>
           ) : isFemale ? (
-            /* FEMALE PROCEDURAL HAIRSTYLE */
+            /* WAVY LAYERED ANIME CHIBI FEMALE HAIRSTYLE (Như ảnh mẫu Na Uy) */
             <group>
-              <mesh position={[0, 0.24, -0.04]} material={hairMaterial}>
-                <sphereGeometry args={[0.49, 24, 24]} />
-              </mesh>
-              <mesh position={[0, 0.37, 0.33]} rotation={[0.26, 0, 0]} material={hairMaterial}>
-                <boxGeometry args={[0.44, 0.13, 0.16]} />
-              </mesh>
-              <mesh position={[-0.38, -0.26, 0.08]} rotation={[0.08, 0, -0.08]} material={hairMaterial}>
-                <cylinderGeometry args={[0.07, 0.09, 0.55, 16]} />
-              </mesh>
-              <mesh position={[0.38, -0.26, 0.08]} rotation={[0.08, 0, 0.08]} material={hairMaterial}>
-                <cylinderGeometry args={[0.07, 0.09, 0.55, 16]} />
-              </mesh>
-              <mesh position={[0, -0.22, -0.26]} rotation={[-0.08, 0, 0]} material={hairMaterial}>
-                <boxGeometry args={[0.46, 0.52, 0.15]} />
+              {/* Back Hair Volumetric Dome */}
+              <mesh position={[0, 0.18, -0.12]} material={hairMaterial}>
+                <sphereGeometry args={[0.52, 24, 24]} />
               </mesh>
 
-              {isChild && (
-                <group>
-                  <mesh position={[-0.36, 0.35, 0.12]} material={ribbonMaterial}>
-                    <sphereGeometry args={[0.065, 16, 16]} />
-                  </mesh>
-                  <mesh position={[0.36, 0.35, 0.12]} material={ribbonMaterial}>
-                    <sphereGeometry args={[0.065, 16, 16]} />
-                  </mesh>
-                </group>
-              )}
+              {/* Curved Bangs (Tóc mái uốn cong che trán) */}
+              <mesh position={[0, 0.32, 0.34]} rotation={[0.28, 0, 0]} material={hairMaterial}>
+                <boxGeometry args={[0.46, 0.14, 0.18]} />
+              </mesh>
+              {/* Center Bang Tufts */}
+              <mesh position={[0, 0.22, 0.41]} rotation={[0.35, 0, 0]} material={hairMaterial}>
+                <coneGeometry args={[0.085, 0.18, 12]} />
+              </mesh>
+              <mesh position={[-0.14, 0.24, 0.39]} rotation={[0.35, 0, -0.18]} material={hairMaterial}>
+                <coneGeometry args={[0.075, 0.16, 12]} />
+              </mesh>
+              <mesh position={[0.14, 0.24, 0.39]} rotation={[0.35, 0, 0.18]} material={hairMaterial}>
+                <coneGeometry args={[0.075, 0.16, 12]} />
+              </mesh>
 
-              {isElderly && (
-                <group>
-                  <mesh position={[0, 0.54, -0.12]} material={hairMaterial}>
-                    <sphereGeometry args={[0.18, 20, 20]} />
-                  </mesh>
-                  <mesh position={[0, 0.54, -0.12]} rotation={[0, 0, 0.4]} material={goldMaterial}>
-                    <cylinderGeometry args={[0.015, 0.015, 0.45, 12]} />
-                  </mesh>
-                </group>
-              )}
+              {/* Wavy Side Locks (Hai lọn tóc mai uốn lượn ôm má buông qua vai) */}
+              <group position={[-0.38, -0.16, 0.12]} rotation={[0.1, 0, -0.12]}>
+                <mesh material={hairMaterial}>
+                  <cylinderGeometry args={[0.09, 0.12, 0.52, 16]} />
+                </mesh>
+                <mesh position={[0.02, -0.28, 0.04]} rotation={[0.2, 0, 0.2]} material={hairMaterial}>
+                  <sphereGeometry args={[0.11, 16, 16]} />
+                </mesh>
+              </group>
+
+              <group position={[0.38, -0.16, 0.12]} rotation={[0.1, 0, 0.12]}>
+                <mesh material={hairMaterial}>
+                  <cylinderGeometry args={[0.09, 0.12, 0.52, 16]} />
+                </mesh>
+                <mesh position={[-0.02, -0.28, 0.04]} rotation={[0.2, 0, -0.2]} material={hairMaterial}>
+                  <sphereGeometry args={[0.11, 16, 16]} />
+                </mesh>
+              </group>
+
+              {/* Flowing Back Curls */}
+              <mesh position={[0, -0.22, -0.28]} rotation={[-0.12, 0, 0]} material={hairMaterial}>
+                <boxGeometry args={[0.54, 0.58, 0.18]} />
+              </mesh>
             </group>
           ) : (
-            /* MALE PROCEDURAL HAIRSTYLE */
+            /* STYLIZED MALE ANIME HAIRSTYLE */
             <group>
-              <mesh position={[0, 0.24, -0.05]} material={hairMaterial}>
-                <sphereGeometry args={[0.48, 24, 24]} />
+              <mesh position={[0, 0.22, -0.06]} material={hairMaterial}>
+                <sphereGeometry args={[0.5, 24, 24]} />
               </mesh>
-              <mesh position={[0, 0.38, 0.32]} rotation={[0.3, 0, 0]} material={hairMaterial}>
-                <boxGeometry args={[0.44, 0.12, 0.15]} />
+              <mesh position={[0, 0.36, 0.32]} rotation={[0.32, 0, 0]} material={hairMaterial}>
+                <boxGeometry args={[0.44, 0.13, 0.16]} />
               </mesh>
-              <mesh position={[-0.43, 0.02, 0.05]} material={hairMaterial}>
-                <boxGeometry args={[0.08, 0.35, 0.18]} />
+              <mesh position={[-0.42, 0.02, 0.05]} material={hairMaterial}>
+                <boxGeometry args={[0.09, 0.38, 0.18]} />
               </mesh>
-              <mesh position={[0.43, 0.02, 0.05]} material={hairMaterial}>
-                <boxGeometry args={[0.08, 0.35, 0.18]} />
+              <mesh position={[0.42, 0.02, 0.05]} material={hairMaterial}>
+                <boxGeometry args={[0.09, 0.38, 0.18]} />
               </mesh>
             </group>
           )}
         </group>
 
-        {/* Ears & Earrings */}
-        <mesh position={[-0.47, 0.02, 0]} rotation={[0, -0.3, 0]} material={skinMaterial}>
-          <sphereGeometry args={[0.09, 16, 16]} />
-        </mesh>
-        <mesh position={[0.47, 0.02, 0]} rotation={[0, 0.3, 0]} material={skinMaterial}>
-          <sphereGeometry args={[0.09, 16, 16]} />
-        </mesh>
+        {/* =========================================================================
+            FOREST BERRY GARLAND CROWN (Vòng hoa lá quả mọng đỏ như ảnh mẫu Sếp gửi)
+            ========================================================================= */}
+        {hasGarland && (
+          <group ref={garlandRef} position={[0, 0.36, 0.08]} rotation={[0.22, 0, 0]}>
+            {/* Vine Ring */}
+            <mesh material={vineMaterial}>
+              <torusGeometry args={[0.46, 0.016, 12, 36]} />
+            </mesh>
 
-        {isFemale && numericAge >= 12 && (
-          <group>
-            <mesh position={[-0.48, -0.07, 0]} material={goldMaterial}>
-              <sphereGeometry args={[0.035, 16, 16]} />
-            </mesh>
-            <mesh position={[0.48, -0.07, 0]} material={goldMaterial}>
-              <sphereGeometry args={[0.035, 16, 16]} />
-            </mesh>
+            {/* Ivy Leaves */}
+            {[-0.38, -0.22, 0, 0.22, 0.38].map((lx, i) => (
+              <mesh key={`leaf-${i}`} position={[lx, 0.04, 0.22 - Math.abs(lx) * 0.25]} rotation={[0.3, 0, lx * 0.8]} material={leafMaterial}>
+                <coneGeometry args={[0.045, 0.1, 8]} />
+              </mesh>
+            ))}
+
+            {/* Ruby Red Berries (Quả mọng đỏ rực rỡ) */}
+            {[
+              [-0.32, 0.06, 0.32],
+              [-0.14, 0.08, 0.42],
+              [0.14, 0.08, 0.42],
+              [0.32, 0.06, 0.32],
+              [-0.42, 0.02, 0.14],
+              [0.42, 0.02, 0.14],
+            ].map(([bx, by, bz], i) => (
+              <mesh key={`berry-${i}`} position={[bx, by, bz]} material={rubyBerryMaterial}>
+                <sphereGeometry args={[0.034, 12, 12]} />
+              </mesh>
+            ))}
           </group>
         )}
 
-        {/* Spiritual Halo (Giác ngộ tâm linh / Phúc đức vô lượng / Thiền định) */}
+        {/* Ears */}
+        <mesh position={[-0.48, 0.02, 0]} rotation={[0, -0.3, 0]} material={skinMaterial}>
+          <sphereGeometry args={[0.09, 16, 16]} />
+        </mesh>
+        <mesh position={[0.48, 0.02, 0]} rotation={[0, 0.3, 0]} material={skinMaterial}>
+          <sphereGeometry args={[0.09, 16, 16]} />
+        </mesh>
+
+        {/* Spiritual Halo */}
         {hasHalo && (
-          <group ref={haloRef} position={[0, 0.68, -0.05]} rotation={[0.22, 0, 0]}>
+          <group ref={haloRef} position={[0, 0.72, -0.05]} rotation={[0.22, 0, 0]}>
             <mesh material={haloMaterial}>
-              <torusGeometry args={[0.42, 0.022, 16, 48]} />
+              <torusGeometry args={[0.44, 0.022, 16, 48]} />
             </mesh>
-            {/* Celestial Motes */}
-            <mesh position={[0.42, 0, 0]}>
+            <mesh position={[0.44, 0, 0]}>
               <sphereGeometry args={[0.028, 8, 8]} />
               <meshBasicMaterial color="#fef08a" />
             </mesh>
-            <mesh position={[-0.42, 0, 0]}>
+            <mesh position={[-0.44, 0, 0]}>
               <sphereGeometry args={[0.028, 8, 8]} />
               <meshBasicMaterial color="#fef08a" />
             </mesh>
@@ -607,51 +731,25 @@ function MoodLighting({ burnout = 0, isMeditating = false }: { burnout: number; 
 
   return (
     <>
-      {/* Base Ambient Light */}
       <ambientLight
-        intensity={isHighBurnout ? 0.28 : isMeditating ? 0.95 : 0.85}
+        intensity={isHighBurnout ? 0.32 : isMeditating ? 0.95 : 0.88}
         color={isHighBurnout ? '#450a0a' : isMeditating ? '#fef3c7' : isModerateBurnout ? '#e2e8f0' : '#fffbeb'}
       />
-
-      {/* Main Studio Key Light (Warm Key) */}
       <directionalLight
         position={[2.8, 3.8, 3.2]}
-        intensity={isHighBurnout ? 0.35 : 1.35}
+        intensity={isHighBurnout ? 0.4 : 1.35}
         color={isHighBurnout ? '#991b1b' : '#fff7ed'}
       />
-
-      {/* Soft Fill Light (Cool Studio Fill) */}
       <directionalLight
         position={[-3, 1.8, 2]}
         intensity={isHighBurnout ? 0.2 : 0.6}
         color={isHighBurnout ? '#581c87' : '#93c5fd'}
       />
-
-      {/* Crisp Rim Light (Edge Glow) */}
       <directionalLight
         position={[0, 3.2, -3.2]}
         intensity={isHighBurnout ? 1.2 : 1.4}
         color={isHighBurnout ? '#ef4444' : isMeditating ? '#fbbf24' : '#38bdf8'}
       />
-
-      {/* Soft Chin Bounce Light (Prevents harsh neck shadow) */}
-      <pointLight
-        position={[0, -1.8, 1.4]}
-        intensity={0.3}
-        color={isHighBurnout ? '#7f1d1d' : '#fde68a'}
-      />
-
-      {/* CINEMATIC HORROR SPOTLIGHT FROM BELOW (Burnout > 75) */}
-      {isHighBurnout && (
-        <spotLight
-          position={[0, -2.2, 1.2]}
-          target-position={[0, 0.5, 0]}
-          intensity={3.2}
-          color="#ef4444"
-          angle={0.7}
-          penumbra={0.8}
-        />
-      )}
     </>
   );
 }
@@ -665,41 +763,23 @@ export default function Dynamic3DAvatar({
   reaction = 'idle',
   isFastForwarding = false,
   className = 'w-full h-full',
-  showControls = true,
+  showControls = false,
   traits = [],
   netWorth = 0
 }: Dynamic3DAvatarProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    // Elegant fallback during SSR hydration
-    return (
-      <div className={`flex items-center justify-center bg-slate-950/80 rounded-2xl ${className}`}>
-        <div className="w-8 h-8 rounded-full border-2 border-indigo-500/40 border-t-indigo-400 animate-spin" />
-      </div>
-    );
-  }
+  const isDead = vitality <= 0;
+  const isMeditating = reaction === 'meditating';
 
   return (
-    <div className={`relative overflow-hidden rounded-2xl select-none ${className}`}>
+    <div className={`relative flex items-center justify-center overflow-hidden ${className}`}>
       <Canvas
-        dpr={[1, 2]}
-        camera={{ position: [0, 0.12, 2.7], fov: 36 }}
-        frameloop={isFastForwarding ? 'demand' : 'always'}
+        camera={{ position: [0, 0.1, 2.3], fov: 42 }}
         className="w-full h-full cursor-grab active:cursor-grabbing"
         gl={{ antialias: true, alpha: true }}
       >
-        <MoodLighting burnout={burnout} isMeditating={reaction === 'meditating'} />
+        <MoodLighting burnout={burnout} isMeditating={isMeditating} />
 
-        <Float
-          speed={isFastForwarding ? 0 : reaction === 'meditating' ? 2.5 : 1.2}
-          rotationIntensity={reaction === 'meditating' ? 0.15 : 0.02}
-          floatIntensity={reaction === 'meditating' ? 0.2 : 0.03}
-        >
+        <Float speed={isFastForwarding ? 0 : 1.4} rotationIntensity={0.12} floatIntensity={0.25}>
           <ProceduralCharacterMesh
             nationality={nationality}
             gender={gender}
@@ -715,20 +795,21 @@ export default function Dynamic3DAvatar({
 
         {showControls && (
           <OrbitControls
-            enableZoom={false}
+            enableZoom={true}
             enablePan={false}
-            target={[0, 0.12, 0]}
-            minPolarAngle={Math.PI / 2.8}
-            maxPolarAngle={Math.PI / 1.8}
-            minAzimuthAngle={-Math.PI / 3}
-            maxAzimuthAngle={Math.PI / 3}
+            minDistance={1.2}
+            maxDistance={3.8}
+            maxPolarAngle={Math.PI / 1.7}
+            minPolarAngle={Math.PI / 3}
           />
         )}
       </Canvas>
 
-      {/* Burnout Horror Overlay Indicator */}
-      {burnout > 75 && (
-        <div className="absolute inset-0 pointer-events-none border border-rose-500/40 rounded-2xl bg-gradient-to-t from-rose-950/30 via-transparent to-transparent shadow-[inset_0_0_15px_rgba(239,68,68,0.25)]" />
+      {/* Post-mortem Halo / Ghost Filter */}
+      {isDead && (
+        <div className="absolute inset-0 bg-slate-950/75 backdrop-grayscale flex items-center justify-center pointer-events-none z-10 animate-fade-in">
+          <span className="text-3xl filter drop-shadow">🪦</span>
+        </div>
       )}
     </div>
   );

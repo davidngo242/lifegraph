@@ -831,7 +831,7 @@ export default function RebirthGachaModal({
                                 {trait.category === 'curse' ? 'Thách Thức' : trait.category === 'rare' ? 'Hiếm' : 'Thiên Phú'}
                               </span>
                             </div>
-                            <p className="text-[10.5px] opacity-80 leading-snug mt-0.5 line-clamp-2">
+                            <p className="text-[10.5px] opacity-80 leading-snug mt-0.5">
                               {trait.desc}
                             </p>
                           </div>

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
+import SpineCharacterAvatar from './SpineCharacterAvatar';
 import {
   Cpu,
   Maximize2,
@@ -225,6 +226,7 @@ export default function CharacterHeroBanner({
 
   // Dynamic Action Feedback Realtime Overlay
   const [activeFeedback, setActiveFeedback] = useState<BannerActionFeedback | null>(null);
+  const [bannerAvatarMode, setBannerAvatarMode] = useState<'3d' | 'spine'>('3d');
 
   useEffect(() => {
     if (actionFeedback && actionFeedback.timestamp) {
@@ -530,20 +532,46 @@ export default function CharacterHeroBanner({
             {/* Avatar 3D Stage with Dynamic State Indicators */}
             <div className={avatarContainerClasses}>
               <div className={avatarFilterClasses}>
-                <Dynamic3DAvatar
-                  nationality={character.nationality}
-                  gender={character.gender || 'male'}
-                  age={age}
-                  burnout={burnout}
-                  vitality={vitality}
-                  reaction={reaction}
-                  isFastForwarding={isFastForwarding}
-                  showControls={false}
-                  traits={traits}
-                  netWorth={netWorth}
-                  className="w-full h-full"
-                />
+                {bannerAvatarMode === '3d' ? (
+                  <Dynamic3DAvatar
+                    nationality={character.nationality}
+                    gender={character.gender || 'male'}
+                    age={age}
+                    burnout={burnout}
+                    vitality={vitality}
+                    reaction={reaction}
+                    isFastForwarding={isFastForwarding}
+                    showControls={false}
+                    traits={traits}
+                    netWorth={netWorth}
+                    className="w-full h-full"
+                  />
+                ) : (
+                  <SpineCharacterAvatar
+                    nationality={character.nationality}
+                    gender={character.gender || 'female'}
+                    age={age}
+                    burnout={burnout}
+                    vitality={vitality}
+                    animation={reaction === 'celebrate' ? 'Jump' : reaction === 'exhausted' ? 'Idle_2' : reaction === 'shocked' ? 'Idle_1' : 'Front_idle'}
+                    showBones={false}
+                    netWorth={netWorth}
+                    className="w-full h-full"
+                  />
+                )}
               </div>
+
+              {/* Mode Switcher Pill (3D Chibi / 2D Spine) */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setBannerAvatarMode(prev => prev === '3d' ? 'spine' : '3d');
+                }}
+                className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-black/85 hover:bg-black text-[9px] font-mono font-bold text-amber-300 border border-amber-500/40 backdrop-blur shadow transition active:scale-95 z-20"
+                title="Chuyển đổi kiểu hiển thị: 3D Chibi Studio hoặc Hoạt cảnh Spine 2D"
+              >
+                {bannerAvatarMode === '3d' ? '3D' : 'SPINE'}
+              </button>
 
               {/* DYNAMIC AVATAR STATE OVERLAYS */}
               {/* 2. Sinh lực nguy kịch (vitality < 30): Nhịp tim đập chậm cảnh báo */}
