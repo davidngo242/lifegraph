@@ -19,6 +19,7 @@ import {
   Hourglass
 } from 'lucide-react';
 import Tooltip from './Tooltip';
+import { formatTrait } from '../utils/traitUtils';
 
 const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
@@ -517,16 +518,21 @@ export default function CharacterHeroBanner({
           {/* Row B: Innate Traits & Stage Focus Narrative */}
           <div className="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-slate-800/40 text-[11px]">
             {character.innate_traits && character.innate_traits.length > 0 ? (
-              <div className="flex items-center gap-1 flex-wrap">
-                <span className="text-purple-300 font-semibold flex items-center gap-0.5">🧬 Gen:</span>
-                {character.innate_traits.map((t: string) => (
-                  <span
-                    key={t}
-                    className="font-medium px-2 py-0.2 rounded-full bg-purple-950/60 text-purple-200 border border-purple-500/30 text-[10.5px]"
-                  >
-                    ✨ {t.replace(/_/g, ' ')}
-                  </span>
-                ))}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-purple-300 font-semibold flex items-center gap-0.5 text-[10.5px]">🧬 Gen:</span>
+                {character.innate_traits.map((t: string) => {
+                  const ft = formatTrait(t);
+                  return (
+                    <span
+                      key={t}
+                      className={`font-medium px-2 py-0.5 rounded-full border text-[10.5px] flex items-center gap-1 transition ${ft.badgeStyle}`}
+                      title={ft.desc}
+                    >
+                      <span>{ft.icon}</span>
+                      <span>{ft.name}</span>
+                    </span>
+                  );
+                })}
               </div>
             ) : (
               <span className="text-slate-400 text-[10.5px]">Hạt giống số phận đang nảy mầm...</span>

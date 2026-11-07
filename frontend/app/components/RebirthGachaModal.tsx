@@ -20,6 +20,7 @@ import {
   Dice5,
   Compass
 } from 'lucide-react';
+import { formatTrait, getCountryFlag, getCountryTierBadge } from '../utils/traitUtils';
 
 interface RebirthGachaModalProps {
   karma: number;
@@ -218,13 +219,17 @@ export default function RebirthGachaModal({
         <div className="text-center mb-5">
           <div className="flex items-center justify-center gap-2 mb-2">
             <span className="text-[12px] font-sans font-semibold tracking-normal normal-case text-indigo-400 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 inline-block">
-              Phòng chờ tái sinh
+              {rollResult ? '✨ VẬN MỆNH ĐÃ AN BÀI' : 'Phòng chờ tái sinh'}
             </span>
           </div>
 
-          <h2 className="text-2xl md:text-3xl font-sans font-bold text-white">Vòng Quay Tái Sinh</h2>
+          <h2 className="text-2xl md:text-3xl font-sans font-bold text-white">
+            {rollResult ? 'Hồ Sơ Luân Hồi Sinh Mệnh' : 'Vòng Quay Tái Sinh'}
+          </h2>
           <p className="text-xs text-slate-400 font-sans italic mt-1">
-            {canEnterNirvana
+            {rollResult
+              ? 'Linh hồn đã giáng thế. Một kiếp nhân sinh mới chính thức bắt đầu.'
+              : canEnterNirvana
               ? '"Bạn không có quyền chọn nơi mình sinh ra, trừ khi bạn có đủ Karma từ kiếp trước."'
               : '"Khởi đầu kiếp sống đầu tiên trên dòng thời gian LifeGraph."'}
           </p>
@@ -494,46 +499,6 @@ export default function RebirthGachaModal({
           </div>
         )}
 
-        {/* Khi đã quay xong: Hiển thị tóm tắt đặc quyền đã kích hoạt bất biến (Không có nút Hủy, không chỉnh sửa) */}
-        {rollResult && (
-          <div className="mb-4 p-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs">
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-sans font-semibold text-slate-300 normal-case tracking-wide text-[12px] flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-amber-300" /> Đặc Quyền Nghiệp Quả Đã Kích Hoạt Kiếp Này:
-              </span>
-              <span className="text-[12px] font-sans tabular-nums text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold">
-                ✓ Đã An Bài
-              </span>
-            </div>
-            {(() => {
-              const applied = [
-                { key: 'longevity_root', label: 'Cốt Cách Trường Thọ (+15 Sinh Lực)', color: 'text-amber-300 bg-amber-950/40 border-amber-500/30' },
-                { key: 'lock_t1_t2', label: 'Tránh Đói Khổ (Quốc Gia T1/T2)', color: 'text-indigo-300 bg-indigo-950/40 border-indigo-500/30' },
-                { key: 'guarantee_middle_class', label: 'Trung Lưu+ (Gia Cảnh Khá Giả)', color: 'text-emerald-300 bg-emerald-950/40 border-emerald-500/30' },
-                { key: 'choose_trait', label: `Khóa Mã Gen (${chosenTrait.replace(/_/g, ' ')})`, color: 'text-purple-300 bg-purple-950/40 border-purple-500/30' }
-              ].filter(p => selectedPerks[p.key] || unlockedPerks.includes(p.key));
-
-              if (applied.length === 0) {
-                return (
-                  <div className="text-[12px] text-slate-400 italic">
-                    Sinh mệnh tự nhiên thuần khiết (Không sử dụng đặc quyền Karma).
-                  </div>
-                );
-              }
-
-              return (
-                <div className="flex flex-wrap gap-1.5">
-                  {applied.map(p => (
-                    <span key={p.key} className={`text-[12px] font-medium px-2 py-0.5 rounded-lg border ${p.color}`}>
-                      ✨ {p.label}
-                    </span>
-                  ))}
-                </div>
-              );
-            })()}
-          </div>
-        )}
-
         {/* Dynamic Spinning Roulette or Rolled Outcome */}
         {isSpinning ? (
           <div className="p-5 rounded-2xl bg-slate-900/90 border border-indigo-500/60 shadow-2xl flex flex-col items-center justify-center gap-3 my-2 animate-pulse">
@@ -554,70 +519,168 @@ export default function RebirthGachaModal({
               </div>
               <div className="p-2 rounded-xl bg-slate-950 border border-indigo-500/40 text-center">
                 <span className="text-[12px] text-slate-500 block">Mã gen</span>
-                <span className="font-sans tabular-nums text-xs font-bold text-purple-400 truncate block">{reelTrait}</span>
+                <span className="font-sans tabular-nums text-xs font-bold text-purple-400 truncate block">{formatTrait(reelTrait).name}</span>
               </div>
             </div>
           </div>
         ) : rollResult ? (
-          <div className="space-y-2.5 mb-5 animate-in fade-in slide-in-from-bottom-2 duration-300">
-            {/* Outcome Strip 1 */}
-            <div className="p-3 rounded-xl bg-slate-900 border border-indigo-500/40 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 text-slate-300">
-                <Globe className="w-4 h-4 text-sky-400" />
-                <span className="font-medium">Quốc gia & Đẳng cấp:</span>
-              </div>
-              <span className="font-bold text-white font-sans tabular-nums">
-                {rollResult.character.nationality} ({rollResult.character.country_tier})
-              </span>
-            </div>
+          <div className="space-y-3.5 mb-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            {/* The Unified Glassmorphic Dossier Card */}
+            <div className="rounded-3xl bg-slate-900/95 border border-indigo-500/30 p-5 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+              {/* Radial gradient accent */}
+              <div className="absolute -top-12 -right-12 w-36 h-36 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
 
-            {/* Outcome Strip 2 */}
-            <div className="p-3 rounded-xl bg-slate-900 border border-indigo-500/40 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 text-slate-300">
-                <Home className="w-4 h-4 text-emerald-400" />
-                <span className="font-medium">Vị thế gia tộc:</span>
-              </div>
-              <span className="font-bold text-white">
-                {rollResult.character.background}
-              </span>
-            </div>
+              {/* Section 1: Character Identity & Birthplace */}
+              <div className="flex items-start justify-between gap-3 pb-3.5 border-b border-slate-800/80">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-600/30 to-purple-600/30 border border-indigo-500/40 flex items-center justify-center text-xl shadow-inner shrink-0">
+                    {rollResult.character.gender === 'female' ? '👧' : '👦'}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="text-base md:text-lg font-bold text-white tracking-tight">
+                        {rollResult.character.name || 'Hài Nhi Sơ Sinh'}
+                      </h3>
+                      <span className={`text-[10px] font-bold px-2 py-0.2 rounded-full border flex items-center gap-0.5 ${
+                        rollResult.character.gender === 'female'
+                          ? 'bg-rose-950/60 text-rose-300 border-rose-500/40'
+                          : 'bg-indigo-950/60 text-indigo-300 border-indigo-500/40'
+                      }`}>
+                        {rollResult.character.gender === 'female' ? '♀ Nữ' : '♂ Nam'}
+                      </span>
+                    </div>
+                    <div className="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
+                      <span className="text-emerald-400 font-semibold">🌱 0 Tuổi (Sơ Sinh)</span>
+                      <span className="text-slate-600">•</span>
+                      <span className="text-slate-300 font-medium">Khởi Thủy Kiếp Mới</span>
+                    </div>
+                  </div>
+                </div>
 
-            {/* Outcome Strip 3 */}
-            <div className="p-3 rounded-xl bg-slate-900 border border-indigo-500/40 text-xs">
-              <div className="flex items-center gap-2 text-slate-300 mb-1.5">
-                <Dna className="w-4 h-4 text-purple-400" />
-                <span className="font-medium">Mã gen di truyền:</span>
+                {/* Country & Tier Badge */}
+                <div className="text-right shrink-0">
+                  <div className="flex items-center gap-1.5 justify-end">
+                    <span className="text-base">{getCountryFlag(rollResult.character.nationality)}</span>
+                    <span className="font-bold text-white text-xs md:text-sm">
+                      {rollResult.character.nationality}
+                    </span>
+                  </div>
+                  <div className="mt-0.5">
+                    {(() => {
+                      const tierBadge = getCountryTierBadge(rollResult.character.country_tier);
+                      return (
+                        <span className={`text-[10px] font-sans font-semibold px-2 py-0.2 rounded-full border ${tierBadge.style}`}>
+                          {tierBadge.label}
+                        </span>
+                      );
+                    })()}
+                  </div>
+                </div>
               </div>
-              <div className="flex gap-1.5 flex-wrap">
-                {(rollResult.character.innate_traits || []).map((t: string) => (
-                  <span key={t} className="px-2 py-0.5 rounded-lg bg-purple-500/15 border border-purple-500/30 text-purple-300 font-sans tabular-nums text-[12px]">
-                    ✨ {t}
+
+              {/* Section 2: Family Background */}
+              <div className="py-2.5 border-b border-slate-800/80 flex items-center justify-between gap-3 text-xs">
+                <span className="text-slate-400 font-medium flex items-center gap-1.5 shrink-0">
+                  <Home className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Vị thế gia tộc:</span>
+                </span>
+                <span className="font-semibold text-slate-200 text-right truncate">
+                  {rollResult.character.background}
+                </span>
+              </div>
+
+              {/* Section 3: Innate Traits (Formatted with Localized Names & Effects) */}
+              <div className="pt-2.5">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-slate-300 font-semibold flex items-center gap-1.5">
+                    <Dna className="w-3.5 h-3.5 text-purple-400" />
+                    <span>Mã Gen Di Truyền Tiên Thiên:</span>
                   </span>
-                ))}
+                  <span className="text-[10px] text-slate-500 font-mono">
+                    {(rollResult.character.innate_traits || []).length} Tố Chất
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {(rollResult.character.innate_traits || []).map((traitId: string) => {
+                    const trait = formatTrait(traitId);
+                    return (
+                      <div
+                        key={traitId}
+                        className={`p-2 rounded-xl border ${trait.badgeStyle} flex items-start gap-2 transition hover:scale-[1.01]`}
+                      >
+                        <span className="text-base shrink-0 mt-0.5">{trait.icon}</span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="font-bold text-xs truncate">
+                              {trait.name}
+                            </span>
+                            <span className={`text-[9px] px-1.5 py-0.2 rounded font-semibold uppercase tracking-wider shrink-0 ${
+                              trait.category === 'curse'
+                                ? 'bg-rose-500/20 text-rose-300'
+                                : trait.category === 'rare'
+                                ? 'bg-amber-500/20 text-amber-300'
+                                : 'bg-purple-500/20 text-purple-300'
+                            }`}>
+                              {trait.category === 'curse' ? 'Thách Thức' : trait.category === 'rare' ? 'Hiếm' : 'Thiên Phú'}
+                            </span>
+                          </div>
+                          <p className="text-[10.5px] opacity-80 leading-snug mt-0.5 truncate">
+                            {trait.desc}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Section 4: Karma Perks Summary (Clean & Subtle) */}
+              <div className="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400 flex-wrap gap-1.5">
+                <span className="flex items-center gap-1 text-slate-300">
+                  <Sparkles className="w-3 h-3 text-amber-400" />
+                  <span>Đặc quyền Karma:</span>
+                </span>
+                <div className="flex items-center gap-1 flex-wrap">
+                  {(() => {
+                    const applied = [
+                      { key: 'longevity_root', label: 'Cốt cách trường thọ (+15 HP)' },
+                      { key: 'lock_t1_t2', label: 'Quốc gia T1/T2' },
+                      { key: 'guarantee_middle_class', label: 'Trung lưu+' },
+                      { key: 'choose_trait', label: `Khóa gen (${formatTrait(chosenTrait).name})` }
+                    ].filter(p => selectedPerks[p.key] || unlockedPerks.includes(p.key));
+
+                    if (applied.length === 0) {
+                      return <span className="text-slate-500 italic text-[10.5px]">Sinh mệnh tự nhiên thuần khiết</span>;
+                    }
+                    return applied.map(p => (
+                      <span key={p.key} className="px-2 py-0.2 rounded-full bg-indigo-950/60 text-indigo-300 border border-indigo-500/30 font-medium text-[10px]">
+                        ✓ {p.label}
+                      </span>
+                    ));
+                  })()}
+                </div>
               </div>
             </div>
 
-            {/* Irrevocable Destiny Notice (Không cho phép Reroll) */}
-            <div className="p-3 rounded-xl bg-purple-950/40 border border-purple-500/30 text-[12px] text-purple-200 flex items-center gap-2.5 shadow-inner">
+            {/* Destiny Callout Note (Clean, single sentence) */}
+            <div className="p-2.5 rounded-xl bg-purple-950/30 border border-purple-500/20 text-xs text-purple-200 flex items-center gap-2">
               <span className="text-base shrink-0">⚖️</span>
-              <span className="leading-snug font-sans italic text-slate-300">
-                <strong className="text-amber-300 font-sans not-italic">Nhân Quả Tiền Định:</strong> Bánh xe luân hồi đã an bài theo phúc báo tiền kiếp, tuyệt đối không thể gieo quẻ lại. Hãy dũng cảm đón nhận và định đoạt kiếp người này!
+              <span className="leading-snug text-slate-300 text-[11.5px]">
+                <strong className="text-amber-300">Nhân Quả An Bài:</strong> Bánh xe luân hồi đã chốt hạ số mệnh. Hãy đón nhận và kiến tạo cuộc đời của riêng bạn!
               </span>
             </div>
 
-            {/* Single Unified Action Entry - ALWAYS START FROM AGE 0 */}
-            <div className="mt-3">
+            {/* Clean, Decisive Action Entry Button */}
+            <div className="pt-1">
               <button
                 onClick={() => onRebirthComplete(rollResult)}
-                className="w-full py-4 px-6 rounded-2xl text-white font-bold text-sm normal-case tracking-normal transition-all duration-300 flex items-center justify-center gap-2.5 shadow-xl active:scale-[0.98] bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:opacity-95 shadow-emerald-600/30 ring-1 ring-emerald-400/50"
+                className="w-full py-3.5 px-6 rounded-2xl text-white font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-xl active:scale-[0.98] bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:opacity-95 shadow-emerald-600/25 ring-1 ring-emerald-400/40"
               >
-                <span className="text-lg">🌱</span>
+                <span className="text-base">🌱</span>
                 <span>BƯỚC VÀO CUỘC ĐỜI (BẮT ĐẦU TỪ 0 TUỔI)</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
-              <p className="text-[12px] text-center text-slate-400 mt-2 font-sans italic">
-                Bắt đầu kiếp sống từ 0 tuổi, trải nghiệm trọn vẹn tuổi thơ, định hình nhân cách và gắn kết gia đình tại Cockpit chính.
-              </p>
             </div>
           </div>
         ) : (
