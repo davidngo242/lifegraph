@@ -515,21 +515,48 @@ function ProceduralCharacterMesh({
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
       {isBaby ? (
-        /* Cute Baby Swaddle Wrap with Little Kicking Booties (Grounded firmly on golden dais) */
+        /* Cute Baby Swaddle Wrap with Little Hands, Golden Amulet & Kicking Booties */
         <group position={[0, -0.58, 0]}>
+          {/* Swaddle Body Shell */}
           <mesh material={clothMaterial}>
-            <cylinderGeometry args={[0.28, 0.34, 0.56, 24]} />
+            <cylinderGeometry args={[0.29, 0.35, 0.58, 24]} />
           </mesh>
+          {/* Swaddle Soft Collar Ring */}
           <mesh position={[0, 0.25, 0.04]} rotation={[0.2, 0, 0]} material={clothMaterial}>
-            <torusGeometry args={[0.24, 0.045, 12, 24]} />
+            <torusGeometry args={[0.25, 0.045, 12, 24]} />
+          </mesh>
+          {/* Golden Amulet / Clasp on Chest */}
+          <mesh position={[0, 0.18, 0.26]} material={goldMaterial}>
+            <octahedronGeometry args={[0.032, 0]} />
+          </mesh>
+          {/* Decorative Swaddle Sash */}
+          <mesh position={[0, 0.02, 0.02]} rotation={[0.1, 0, 0]} material={ribbonMaterial}>
+            <torusGeometry args={[0.28, 0.018, 12, 24]} />
+          </mesh>
+          {/* Little Cute Baby Hands resting peacefully on chest */}
+          <mesh position={[-0.08, 0.11, 0.24]} material={skinMaterial}>
+            <sphereGeometry args={[0.048, 14, 14]} />
+          </mesh>
+          <mesh position={[0.08, 0.11, 0.24]} material={skinMaterial}>
+            <sphereGeometry args={[0.048, 14, 14]} />
           </mesh>
           {/* Little Cute Baby Feet Kicking right on dais */}
-          <mesh position={[-0.09, -0.32, 0.12]} material={shoeMaterial}>
-            <sphereGeometry args={[0.065, 14, 14]} />
-          </mesh>
-          <mesh position={[0.09, -0.30, 0.14]} material={shoeMaterial}>
-            <sphereGeometry args={[0.065, 14, 14]} />
-          </mesh>
+          <group position={[-0.09, -0.32, 0.12]}>
+            <mesh material={shoeMaterial}>
+              <sphereGeometry args={[0.065, 14, 14]} />
+            </mesh>
+            <mesh position={[0, 0.02, 0.03]} material={goldMaterial}>
+              <boxGeometry args={[0.03, 0.015, 0.01]} />
+            </mesh>
+          </group>
+          <group position={[0.09, -0.30, 0.14]}>
+            <mesh material={shoeMaterial}>
+              <sphereGeometry args={[0.065, 14, 14]} />
+            </mesh>
+            <mesh position={[0, 0.02, 0.03]} material={goldMaterial}>
+              <boxGeometry args={[0.03, 0.015, 0.01]} />
+            </mesh>
+          </group>
         </group>
       ) : (
         <>
@@ -919,20 +946,20 @@ function ProceduralCharacterMesh({
           </group>
         )}
 
-        {/* Mouth / Baby Pacifier */}
-        {isBaby ? (
+        {/* Mouth / Baby Pacifier vs Chibi Smile */}
+        {isBaby && age < 2 ? (
           <group position={[0, -0.12, 0.44]}>
-            <mesh material={ribbonMaterial}>
-              <torusGeometry args={[0.045, 0.015, 12, 24]} />
+            <mesh material={goldMaterial}>
+              <torusGeometry args={[0.042, 0.012, 12, 24]} />
             </mesh>
             <mesh position={[0, 0, 0.02]} material={clothMaterial}>
-              <sphereGeometry args={[0.035, 16, 16]} />
+              <sphereGeometry args={[0.034, 16, 16]} />
             </mesh>
           </group>
         ) : (
-          <group position={[0, isChild ? -0.15 : -0.18, 0.44]}>
+          <group position={[0, isBaby ? -0.12 : isChild ? -0.15 : -0.18, 0.44]}>
             <mesh ref={mouthRef} rotation={[0, 0, Math.PI]}>
-              <torusGeometry args={[isChild ? 0.034 : (isFemale ? 0.046 : 0.042), 0.009, 8, 16, Math.PI]} />
+              <torusGeometry args={[isBaby ? 0.032 : isChild ? 0.034 : (isFemale ? 0.046 : 0.042), 0.009, 8, 16, Math.PI]} />
               <primitive object={lipMaterial} attach="material" />
             </mesh>
           </group>
@@ -943,16 +970,41 @@ function ProceduralCharacterMesh({
             ========================================================================= */}
         <group ref={hairGroupRef} position={[0, 0.15, 0]}>
           {isBaby ? (
-            /* Adorable Baby Bonnet with Ribbon */
+            /* Adorable Baby Bonnet with Teddy Bear Ears & Golden Ribbon Trim */
             <group position={[0, 0.06, 0]}>
+              {/* Bonnet Dome */}
               <mesh material={clothMaterial}>
                 <sphereGeometry args={[0.48, 24, 24]} />
               </mesh>
+              {/* Soft Bonnet Front Brim */}
               <mesh position={[0, 0.1, 0.28]} rotation={[0.3, 0, 0]} material={clothMaterial}>
                 <torusGeometry args={[0.38, 0.045, 12, 24]} />
               </mesh>
+              {/* Golden Ribbon Brim Trim */}
+              <mesh position={[0, 0.1, 0.29]} rotation={[0.3, 0, 0]} material={goldMaterial}>
+                <torusGeometry args={[0.385, 0.012, 12, 24]} />
+              </mesh>
+              {/* Left Bear Ear */}
+              <group position={[-0.26, 0.44, 0.08]}>
+                <mesh material={clothMaterial}>
+                  <sphereGeometry args={[0.10, 16, 16]} />
+                </mesh>
+                <mesh position={[0, 0, 0.035]} material={ribbonMaterial}>
+                  <sphereGeometry args={[0.065, 14, 14]} />
+                </mesh>
+              </group>
+              {/* Right Bear Ear */}
+              <group position={[0.26, 0.44, 0.08]}>
+                <mesh material={clothMaterial}>
+                  <sphereGeometry args={[0.10, 16, 16]} />
+                </mesh>
+                <mesh position={[0, 0, 0.035]} material={ribbonMaterial}>
+                  <sphereGeometry args={[0.065, 14, 14]} />
+                </mesh>
+              </group>
+              {/* Soft Center Pom-pom Top */}
               <mesh position={[0, 0.54, 0]} material={ribbonMaterial}>
-                <sphereGeometry args={[0.085, 16, 16]} />
+                <sphereGeometry args={[0.075, 16, 16]} />
               </mesh>
             </group>
           ) : isFemale ? (

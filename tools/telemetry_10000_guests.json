@@ -1,0 +1,44 @@
+{
+  "totalGuests": 10000,
+  "completedLifetimes": 10000,
+  "averageAgeLived": 67.4,
+  "totalYearsSimulated": 673558,
+  "deathByAgeGroup": {
+    "infancy": 0,
+    "childhood": 0,
+    "youngAdult": 1009,
+    "middleAge": 991,
+    "elderly": 3692,
+    "centenarian": 4308
+  },
+  "macroShocksEncountered": {
+    "bubble": 16874,
+    "crash": 16900,
+    "inflation": 17118,
+    "layoff": 16846,
+    "total": 67738
+  },
+  "treeSatisfaction": {
+    "thrivingRounds": 462799,
+    "fatiguedRounds": 112732,
+    "witheredRounds": 98027
+  },
+  "decisionRoomAnalysis": {
+    "openedWhenNoCrisis": 97594,
+    "confusedBySeparation": 97594,
+    "preferredInSituModal": 397317,
+    "decisionRoomDropOff": 7903
+  },
+  "dynastyHallOfFameUnlocks": {
+    "longevity": 7960,
+    "wealth_tycoon": 52,
+    "wisdom_master": 0,
+    "dynasty_kin": 1000,
+    "macro_resilience": 9767,
+    "nirvana_karma": 10000,
+    "youth_prodigy": 10000,
+    "pillar_destiny": 10000
+  },
+  "totalActionsTaken": 2144183,
+  "unusedApConvertedToHealth": 0
+}

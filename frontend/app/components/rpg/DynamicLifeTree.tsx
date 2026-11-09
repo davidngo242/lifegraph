@@ -977,7 +977,7 @@ export default function DynamicLifeTree({
             treeViewMode === 'skill_tree' ? 'scale-105 ring-2 ring-amber-400 rounded-2xl shadow-amber-500/25 shadow-xl' : ''
           }`}
         >
-          <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-2xl bg-[var(--bg-card)]/90 hover:bg-[var(--bg-card)] border border-amber-500/40 hover:border-amber-400 shadow-lg backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95">
+          <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-2xl bg-[var(--bg-card)]/95 hover:bg-[var(--bg-card)] border border-amber-500/50 hover:border-amber-400 shadow-lg backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95">
             <span className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-sm shadow-inner group-hover:scale-110 transition-transform shrink-0">
               🔮
             </span>
@@ -1022,16 +1022,16 @@ export default function DynamicLifeTree({
             treeViewMode === 'social_links' ? 'scale-105 ring-2 ring-sky-400 rounded-2xl shadow-sky-500/50 shadow-xl' : ''
           }`}
         >
-          <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-2xl bg-[var(--bg-card)]/90 hover:bg-[var(--bg-card)] border border-sky-500/40 hover:border-sky-300 shadow-lg backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95">
+          <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-2xl bg-[var(--bg-card)]/95 hover:bg-[var(--bg-card)] border border-sky-500/50 hover:border-sky-300 shadow-lg backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95">
             <span className="w-8 h-8 rounded-xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sm shadow-inner group-hover:scale-110 transition-transform shrink-0">
               👥
             </span>
             <div className="text-left min-w-0">
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-[11px] font-bold text-sky-400 uppercase tracking-wider">
+                <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
                   Nhân Mạch Quý Nhân
                 </span>
-                <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/40 font-mono">
+                <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-700 dark:text-sky-300 border border-sky-500/40 font-mono">
                   {character?.social_links?.length || 4}
                 </span>
               </div>
@@ -1039,7 +1039,7 @@ export default function DynamicLifeTree({
                 {character?.social_links?.filter((n: any) => n.linkLevel >= 2).length || 0} Quý Nhân Thân Thiết
               </div>
             </div>
-            <ArrowUpRight className="w-3.5 h-3.5 text-sky-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition shrink-0" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition shrink-0" />
           </div>
         </div>
 
@@ -1048,90 +1048,21 @@ export default function DynamicLifeTree({
           onClick={onOpenAssets}
           className="absolute top-4 right-4 sm:right-6 z-25 group cursor-pointer"
         >
-          <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-2xl bg-[var(--bg-card)]/90 hover:bg-[var(--bg-card)] border border-amber-500/40 hover:border-amber-300 shadow-lg backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95">
+          <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-2xl bg-[var(--bg-card)]/95 hover:bg-[var(--bg-card)] border border-amber-500/50 hover:border-amber-300 shadow-lg backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95">
             <span className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-sm shadow-inner group-hover:scale-110 transition-transform shrink-0">
               🪙
             </span>
             <div className="text-left min-w-0">
-              <span className="text-[11px] font-bold text-amber-500 uppercase tracking-wider block">
+              <span className="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider block">
                 Cành Hoàng Kim
               </span>
               <div className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5 truncate max-w-[125px] sm:max-w-[155px]">
-                <span className="text-emerald-500 font-mono">{formattedCash.primary}</span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-mono font-bold">{formattedCash.primary}</span>
                 <span className="text-[var(--text-secondary)] text-[10px] font-sans">• {assets.length} TS</span>
               </div>
             </div>
-            <ArrowUpRight className="w-3.5 h-3.5 text-amber-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition shrink-0" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition shrink-0" />
           </div>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* SACRED ROOTS & CHIBI/SPINE AVATAR DAIS (NHÂN VẬT HỘ MỆNH DƯỚI CỘI RỄ) */}
-        {/* ========================================================================= */}
-        <div className="absolute bottom-5 left-4 sm:left-7 z-25 flex flex-col items-center pointer-events-auto">
-          <Tooltip
-            content={
-              <div className="space-y-1 text-xs">
-                <div className="font-bold text-amber-300 flex items-center gap-1.5">
-                  <span>🧙‍♂️</span>
-                  <span>Bản Thể Tu Luyện Dưới Cội Rễ Thần Mộc</span>
-                </div>
-                <div className="text-slate-200">
-                  Nhân vật ngồi thiền định tại cội rễ, đan điền kết nối trực tiếp với mạch nhựa Thần Mộc.
-                </div>
-                <div className="text-[10px] text-emerald-300 italic">
-                  Chạm vào nhân vật để thi triển võ thuật, vận khí và truyền sinh lực vào cây!
-                </div>
-              </div>
-            }
-          >
-            <div
-              onClick={handleAvatarPoke}
-              className="relative group cursor-pointer flex flex-col items-center"
-            >
-              {/* Energy Aura behind Avatar */}
-              <div
-                className={`absolute -inset-1.5 rounded-2xl blur-md transition-all ${
-                  treeHealthState === 'withered'
-                    ? 'bg-rose-500/30'
-                    : treeHealthState === 'fatigued'
-                    ? 'bg-amber-500/25'
-                    : 'bg-emerald-500/25 group-hover:bg-indigo-500/40'
-                }`}
-              />
-
-              {/* Speech Bubble */}
-              {avatarSpeech && (
-                <div className="absolute -top-10 whitespace-nowrap px-3 py-1 rounded-xl bg-slate-900 border border-amber-400/90 text-amber-300 text-[10.5px] font-bold shadow-2xl animate-bounce z-40">
-                  {avatarSpeech}
-                </div>
-              )}
-
-              {/* Avatar Frame Canvas with Dais Base */}
-              <div
-                className="w-20 h-28 sm:w-24 sm:h-32 rounded-2xl overflow-hidden border border-emerald-500/50 bg-gradient-to-t from-slate-950 via-slate-900 to-emerald-950/70 shadow-2xl relative transition-transform group-hover:scale-105 active:scale-95 shrink-0"
-                style={{ width: '88px', height: '116px' }}
-              >
-                <Dynamic3DAvatar
-                  nationality={character?.nationality || 'Việt Nam'}
-                  gender={character?.gender || 'male'}
-                  age={characterAge}
-                  burnout={burnout}
-                  vitality={vitalityVal}
-                  reaction={treeHealthState === 'withered' ? 'exhausted' : 'idle'}
-                  className="w-full h-full"
-                  traits={character?.traits || []}
-                  netWorth={character?.net_worth || 0}
-                />
-              </div>
-
-              {/* Sub-label */}
-              <div className="mt-1 px-2.5 py-0.5 rounded-full bg-slate-950/90 border border-emerald-500/40 text-[9.5px] font-bold text-emerald-300 flex items-center gap-1.5 shadow-md">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                <span>Bản Thể Tu Luyện</span>
-              </div>
-            </div>
-          </Tooltip>
         </div>
 
         {/* ========================================================================= */}
@@ -1321,24 +1252,6 @@ export default function DynamicLifeTree({
           {/* Sacred Ground Soil Mound */}
           <ellipse cx={centerX} cy={488} rx={280} ry={24} fill="#0b1120" stroke="#1e293b" strokeWidth="2" />
           <ellipse cx={centerX} cy={488} rx={250} ry={16} fill="rgba(15,23,42,0.95)" stroke="#334155" strokeWidth="1" />
-
-          {/* Glowing Meridian Threads: Avatar Dan-Tien (65, 470) to Root Base (360, 480) */}
-          <path
-            d="M 65 470 C 160 482, 260 488, 360 480"
-            fill="none"
-            stroke="url(#avatarToTreeMeridian)"
-            strokeWidth="3.5"
-            strokeDasharray="6 4"
-            className="animate-[dash_1.5s_linear_infinite]"
-          />
-          <path
-            d="M 65 470 C 165 492, 265 496, 360 485"
-            fill="none"
-            stroke="rgba(56, 189, 248, 0.4)"
-            strokeWidth="2"
-            strokeDasharray="4 6"
-            className="animate-[dash_2s_linear_infinite_reverse]"
-          />
 
           {/* PROCEDURAL TRUNK GEOMETRY FOR THE 5 GROWTH STAGES */}
           <g className="procedural-tree-trunk" id="proceduralTreeTrunk">
@@ -1811,6 +1724,8 @@ export default function DynamicLifeTree({
                 soundFx.playYearEndChime();
                 if (onOpenYearEndReflection) onOpenYearEndReflection();
                 else if (onTimeSkip) onTimeSkip();
+              } else {
+                handleAvatarPoke();
               }
             }}
             className={`absolute z-20 -translate-x-1/2 -translate-y-1/2 w-28 h-28 sm:w-32 sm:h-32 rounded-full flex flex-col items-center justify-center p-2 text-center select-none shadow-2xl transition-all duration-300 cursor-pointer group ${
@@ -1929,7 +1844,11 @@ export default function DynamicLifeTree({
                     <div className="text-xs font-bold text-white whitespace-normal leading-tight max-w-[125px] sm:max-w-[150px]">
                       {node.title}
                     </div>
-                    <div className="text-[9.5px] opacity-85 text-slate-300 font-mono mt-0.5 truncate max-w-[130px]">
+                    <div className={`text-[9.5px] font-mono mt-0.5 truncate max-w-[130px] ${
+                      node.isBreakthrough
+                        ? 'text-amber-300 font-black tracking-wider animate-pulse drop-shadow'
+                        : 'text-slate-200 opacity-90'
+                    }`}>
                       {node.gainText}
                     </div>
                   </div>
