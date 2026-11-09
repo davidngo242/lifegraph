@@ -247,13 +247,13 @@ export default function CharacterHeroBanner({
   };
   const socialStatus = getSocialStatus();
 
-  // Living Environment Atmosphere based on Life Stage, Burnout & Vibe (Softer warm & dark palette)
+  // Living Environment Atmosphere based on Life Stage, Burnout & Vibe (Adaptive light/dark game-like palette)
   const getBannerEnvironment = () => {
     if (burnout >= 75) {
       return {
-        bgGradient: 'from-rose-950/45 via-amber-950/30 to-transparent',
+        bgGradient: 'from-rose-500/10 via-amber-500/5 to-transparent dark:from-rose-950/45 dark:via-amber-950/30',
         borderColor: 'border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.15)]',
-        accentGlow: 'bg-rose-600/15',
+        accentGlow: 'bg-rose-500/15',
         skylineColor: 'text-rose-500/20',
         particleColor: 'bg-rose-400',
         celestialColor: '#f43f5e',
@@ -262,7 +262,7 @@ export default function CharacterHeroBanner({
     }
     if (age <= 5) {
       return {
-        bgGradient: 'from-sky-500/10 via-teal-500/5 to-transparent',
+        bgGradient: 'from-sky-500/15 via-teal-500/5 to-transparent dark:from-sky-950/30 dark:via-teal-950/20',
         borderColor: 'border-[var(--border-subtle)] shadow-none',
         accentGlow: 'bg-sky-400/15',
         skylineColor: 'text-sky-400/20',
@@ -273,7 +273,7 @@ export default function CharacterHeroBanner({
     }
     if (age <= 17) {
       return {
-        bgGradient: 'from-blue-950/35 via-teal-950/25 to-transparent',
+        bgGradient: 'from-blue-500/10 via-teal-500/5 to-transparent dark:from-blue-950/35 dark:via-teal-950/25',
         borderColor: 'border-[var(--border-subtle)] shadow-none',
         accentGlow: 'bg-teal-400/15',
         skylineColor: 'text-teal-400/15',
@@ -284,7 +284,7 @@ export default function CharacterHeroBanner({
     }
     if (age <= 34) {
       return {
-        bgGradient: 'from-slate-900/40 via-teal-950/20 to-transparent',
+        bgGradient: 'from-teal-500/10 via-sky-500/5 to-transparent dark:from-slate-900/40 dark:via-teal-950/20',
         borderColor: 'border-[var(--border-subtle)] shadow-none',
         accentGlow: 'bg-teal-500/15',
         skylineColor: 'text-teal-400/20',
@@ -295,7 +295,7 @@ export default function CharacterHeroBanner({
     }
     if (age <= 59) {
       return {
-        bgGradient: 'from-amber-950/40 via-amber-900/20 to-transparent',
+        bgGradient: 'from-amber-500/10 via-amber-400/5 to-transparent dark:from-amber-950/40 dark:via-amber-900/20',
         borderColor: 'border-[var(--border-subtle)] shadow-none',
         accentGlow: 'bg-amber-500/15',
         skylineColor: 'text-amber-400/20',
@@ -305,7 +305,7 @@ export default function CharacterHeroBanner({
       };
     }
     return {
-      bgGradient: 'from-amber-950/45 via-rose-950/25 to-transparent',
+      bgGradient: 'from-amber-500/12 via-rose-500/5 to-transparent dark:from-amber-950/45 dark:via-rose-950/25',
       borderColor: 'border-[var(--border-subtle)] shadow-none',
       accentGlow: 'bg-amber-400/15',
       skylineColor: 'text-amber-400/15',
@@ -502,7 +502,7 @@ export default function CharacterHeroBanner({
           {/* Avatar 3D Champion Showcase Stage (Khung Diễn Võ 3D Độc Bản - Không Tràn Viền, Không Đè Chữ) */}
           <div className="relative shrink-0 select-none group">
             {/* Diorama Pedestal Frame */}
-            <div className="w-36 h-52 sm:w-40 sm:h-56 md:w-44 md:h-60 rounded-2xl bg-gradient-to-b from-amber-500/10 via-slate-900/40 to-slate-950/80 border border-amber-500/30 backdrop-blur-md shadow-lg relative overflow-hidden flex items-center justify-center">
+            <div className="w-36 h-52 sm:w-40 sm:h-56 md:w-44 md:h-60 rounded-2xl bg-gradient-to-b from-amber-500/15 via-[var(--bg-card-subtle)] to-[var(--bg-card)] border border-amber-500/35 backdrop-blur-md shadow-lg relative overflow-hidden flex items-center justify-center">
               
               {/* Radial Golden Stage Light */}
               <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-amber-500/20 via-amber-500/5 to-transparent pointer-events-none z-0" />
@@ -541,7 +541,7 @@ export default function CharacterHeroBanner({
               {/* Top-Right: 360 Fullscreen Studio Trigger */}
               <button
                 onClick={onOpen3DInspector}
-                className="absolute top-2 right-2 p-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-amber-300 hover:text-white border border-amber-500/30 backdrop-blur-md transition shadow-md z-20 cursor-pointer opacity-80 group-hover:opacity-100"
+                className="absolute top-2 right-2 p-1.5 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] text-amber-600 dark:text-amber-300 border border-amber-500/30 backdrop-blur-md transition shadow-md z-20 cursor-pointer opacity-85 group-hover:opacity-100"
                 title="Mở phòng kiểm định 360°"
               >
                 <Maximize2 className="w-3.5 h-3.5" />
@@ -560,14 +560,14 @@ export default function CharacterHeroBanner({
                   netWorth={netWorth}
                   vitality={vitality}
                   burnout={burnout}
-                  className="w-10 h-10 sm:w-11 sm:h-11 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+                  className="w-10 h-10 sm:w-11 sm:h-11 drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]"
                 />
-                <div className="w-7 h-1 rounded-[100%] bg-slate-950/70 blur-[1px] -mt-0.5 pointer-events-none" />
+                <div className="w-7 h-1 rounded-[100%] bg-slate-950/40 dark:bg-slate-950/70 blur-[1px] -mt-0.5 pointer-events-none" />
               </div>
 
               {/* Bottom-Left: Subtle 3D Tag */}
               <div className="absolute bottom-1.5 left-2 z-20 pointer-events-none">
-                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-black/60 border border-amber-500/30 text-amber-300 backdrop-blur">
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-[var(--bg-card)]/90 border border-amber-500/40 text-amber-600 dark:text-amber-300 backdrop-blur shadow-sm">
                   STAGE 3D
                 </span>
               </div>
