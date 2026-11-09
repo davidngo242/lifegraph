@@ -160,11 +160,11 @@ export default function LivingRoomBackdropViewport({
           )}
 
           {tier === 'middle' && (
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-indigo-950/80 to-slate-950">
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950">
               {/* Large Skyline Glass Window */}
               <div 
                 onClick={() => triggerMonologue("Từ tầng 26 nhìn xuống thành phố đêm, ánh đèn đô thị nhắc nhở về vị thế đã vững vàng.")}
-                className="absolute top-0 right-0 left-0 h-32 bg-gradient-to-b from-indigo-950/40 via-purple-950/30 to-slate-950/90 border-b border-indigo-500/20 overflow-hidden cursor-pointer group"
+                className="absolute top-0 right-0 left-0 h-32 bg-gradient-to-b from-slate-900/40 via-sky-950/30 to-slate-950/90 border-b border-sky-500/20 overflow-hidden cursor-pointer group"
               >
                 {/* City skyline silhouettes & lights */}
                 <div className="absolute bottom-0 inset-x-0 flex items-end justify-around opacity-75">
@@ -212,8 +212,8 @@ export default function LivingRoomBackdropViewport({
                 onClick={() => triggerMonologue("Bảng điện tử hiển thị dòng tiền danh mục đầu tư đang tăng trưởng đều đặn.")}
                 className="absolute bottom-3 right-6 sm:right-10 p-2.5 rounded-2xl bg-slate-900/90 border border-slate-700 flex items-center gap-2.5 cursor-pointer group hover:border-indigo-400/60 transition shadow-lg"
               >
-                <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center group-hover:scale-110 transition">
-                  <Tv className="w-4 h-4 text-purple-300" />
+                <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center group-hover:scale-110 transition">
+                  <Tv className="w-4 h-4 text-indigo-300" />
                 </div>
                 <div>
                   <div className="text-[11px] font-bold text-white">Smart Financial Hub</div>
@@ -224,14 +224,14 @@ export default function LivingRoomBackdropViewport({
           )}
 
           {tier === 'luxury' && (
-            <div className="absolute inset-0 bg-gradient-to-b from-purple-950 via-slate-950 to-amber-950/60">
+            <div className="absolute inset-0 bg-gradient-to-b from-amber-950/80 via-slate-950 to-emerald-950/60">
               {/* Marble & Gold Accents */}
               <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:24px_24px]" />
 
               {/* Panorama Infinity Pool & Ocean/Bay View */}
               <div 
                 onClick={() => triggerMonologue("Mặt nước hồ bơi vô cực phản chiếu ánh trăng trên vịnh. Bạn đã đứng trên đỉnh cao của gia tộc và thịnh vượng.")}
-                className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-purple-900/40 via-indigo-950/40 to-slate-950 border-b border-amber-500/30 overflow-hidden cursor-pointer group"
+                className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-amber-900/40 via-slate-900/40 to-slate-950 border-b border-amber-500/30 overflow-hidden cursor-pointer group"
               >
                 {/* Water shimmer effect */}
                 <div className="absolute bottom-0 inset-x-0 h-10 bg-cyan-500/20 backdrop-blur-sm flex items-center justify-center">
@@ -262,11 +262,11 @@ export default function LivingRoomBackdropViewport({
                 onClick={() => triggerMonologue("Bàn làm việc gỗ mun quyền uy, nơi ký kết các quyết định vận mệnh triệu đô.")}
                 className="absolute bottom-3 right-6 sm:right-10 p-2.5 rounded-2xl bg-slate-900/90 border border-amber-500/40 flex items-center gap-2.5 cursor-pointer group hover:border-amber-400 transition shadow-xl shadow-amber-950/30"
               >
-                <div className="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center group-hover:scale-110 transition">
-                  <Cpu className="w-4 h-4 text-purple-300" />
+                <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center group-hover:scale-110 transition">
+                  <Cpu className="w-4 h-4 text-amber-300" />
                 </div>
                 <div>
-                  <div className="text-[11px] font-bold text-purple-200 flex items-center gap-1">
+                  <div className="text-[11px] font-bold text-amber-200 flex items-center gap-1">
                     <span>Executive Ebony Suite</span>
                     <Sparkles className="w-3 h-3 text-amber-400" />
                   </div>

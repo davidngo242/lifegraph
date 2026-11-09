@@ -106,12 +106,12 @@ export default function StatBar({
 
       {/* 5. Nghiệp lực (Karma) */}
       <div className="flex items-center gap-3 min-w-[120px]">
-        <div className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400">
+        <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500">
           <Sparkles className="w-5 h-5" />
         </div>
         <div>
           <div className="text-[12px] text-[var(--text-secondary)] font-semibold tracking-normal font-sans">NGHIỆP LỰC</div>
-          <div className="text-sm font-sans tabular-nums font-bold text-purple-300">
+          <div className="text-sm font-sans tabular-nums font-bold text-amber-600 dark:text-amber-400">
             {karma}
           </div>
         </div>

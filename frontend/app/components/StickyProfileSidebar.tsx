@@ -232,16 +232,16 @@ export default function StickyProfileSidebar({
             disabled={!canMentorship}
             className={`py-1.5 px-2 rounded-xl text-[11px] font-semibold flex items-center justify-between transition border ${
               canMentorship
-                ? 'bg-indigo-950/40 hover:bg-indigo-900/50 text-indigo-200 border-indigo-500/40 active:scale-98 shadow'
-                : 'bg-slate-900/50 text-slate-500 border-slate-800/80 cursor-not-allowed'
+                ? 'bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border-amber-500/40 active:scale-98 shadow'
+                : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border-[var(--border-subtle)] opacity-60 cursor-not-allowed'
             }`}
             title={canMentorship ? "-10 Burnout, +8 Karma" : "Đợi sang tuổi mới"}
           >
             <span className="flex items-center gap-1 truncate">
-              <MessageSquare className="w-3 h-3 text-indigo-400 shrink-0" />
+              <MessageSquare className="w-3 h-3 text-amber-500 shrink-0" />
               <span className="truncate">Lời Khuyên</span>
             </span>
-            <span className="text-[10px] text-indigo-300/80 font-mono shrink-0 ml-1">
+            <span className="text-[10px] text-amber-600 dark:text-amber-400 font-mono shrink-0 ml-1">
               {canMentorship ? "+8 Karma" : "Đã dùng"}
             </span>
           </button>
@@ -297,12 +297,12 @@ export default function StickyProfileSidebar({
   // CARD 5: CỘT MỐC GIAI ĐOẠN ĐỜI NGƯỜI (COMPACT, NO FONT BUG)
   // =========================================================================
   const StageCard = (
-    <div className="p-3 rounded-2xl bg-gradient-to-b from-indigo-950/40 via-slate-950 to-purple-950/30 border border-indigo-500/30 flex flex-col gap-2 shadow-sm">
+    <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex flex-col gap-2 shadow-sm transition-colors">
       <div className="flex items-center justify-between text-xs">
-        <span className="font-bold text-[12px] text-white flex items-center gap-1.5 truncate">
-          <Target className="w-3.5 h-3.5 text-indigo-400 shrink-0" /> {stageData.title}
+        <span className="font-bold text-[12px] text-[var(--text-primary)] flex items-center gap-1.5 truncate">
+          <Target className="w-3.5 h-3.5 text-amber-500 shrink-0" /> {stageData.title}
         </span>
-        <span className="font-sans tabular-nums text-indigo-300 text-[10px] font-semibold bg-indigo-950/80 px-2 py-0.5 rounded-full border border-indigo-500/30 shrink-0">
+        <span className="font-sans tabular-nums text-amber-700 dark:text-amber-300 text-[10px] font-semibold bg-amber-500/15 px-2 py-0.5 rounded-full border border-amber-500/30 shrink-0">
           Còn {Math.max(1, stageData.nextAge - age)} năm
         </span>
       </div>
@@ -310,16 +310,16 @@ export default function StickyProfileSidebar({
       {/* Compact Milestone Checklist */}
       <div className="space-y-1 text-[11px]">
         {stageData.milestones.map((m, idx) => (
-          <div key={idx} className="flex items-center justify-between text-slate-300 gap-2">
+          <div key={idx} className="flex items-center justify-between text-[var(--text-secondary)] gap-2">
             <span className="flex items-center gap-1.5 truncate">
-              <span className={`text-xs ${m.done ? "text-emerald-400 font-bold" : "text-slate-600"}`}>
+              <span className={`text-xs ${m.done ? "text-emerald-500 font-bold" : "text-slate-400"}`}>
                 {m.done ? "✓" : "○"}
               </span>
-              <span className={`truncate ${m.done ? "text-slate-400 line-through opacity-75" : "text-slate-200"}`}>
+              <span className={`truncate ${m.done ? "text-[var(--text-secondary)] line-through opacity-75" : "text-[var(--text-primary)]"}`}>
                 {m.name}
               </span>
             </span>
-            <span className={`text-[9.5px] font-mono shrink-0 ${m.done ? "text-emerald-400" : "text-amber-400/80"}`}>
+            <span className={`text-[9.5px] font-mono shrink-0 ${m.done ? "text-emerald-600 dark:text-emerald-400 font-bold" : "text-amber-600 dark:text-amber-400/80"}`}>
               {m.done ? "Đạt" : "Đang làm"}
             </span>
           </div>
@@ -327,9 +327,9 @@ export default function StickyProfileSidebar({
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
+      <div className="w-full bg-[var(--bg-card)] h-1.5 rounded-full overflow-hidden border border-[var(--border-subtle)]">
         <div
-          className="h-full bg-indigo-500 transition-all duration-500 rounded-full"
+          className="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-500 rounded-full"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
@@ -337,7 +337,7 @@ export default function StickyProfileSidebar({
   );
 
   return (
-    <div className="w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-3 md:p-3.5 shadow-2xl backdrop-blur-xl flex flex-col gap-2.5 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6.5rem)] overflow-y-auto custom-scrollbar">
+    <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-3xl p-3 md:p-3.5 shadow-xl backdrop-blur-xl flex flex-col gap-2.5 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6.5rem)] overflow-y-auto custom-scrollbar transition-colors">
       {HouseholdCard}
       {FinancialCard}
       {StageCard}

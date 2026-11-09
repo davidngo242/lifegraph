@@ -1042,7 +1042,7 @@ export default function Dynamic3DAvatar({
   return (
     <div className={`relative flex items-center justify-center overflow-visible ${className}`}>
       <Canvas
-        camera={{ position: [0, 0.05, 3.65], fov: 38 }}
+        camera={{ position: [0, 0.02, 4.35], fov: 38 }}
         className="w-full h-full cursor-grab active:cursor-grabbing overflow-visible"
         gl={{ antialias: true, alpha: true }}
       >

@@ -119,7 +119,7 @@ export default function EpitaphModal({
             </div>
             <div className="text-slate-400 pt-1 flex justify-between items-center">
               <span className="text-slate-500 font-sans font-medium">Nghiệp lực tích lũy (Karma):</span>
-              <span className="font-sans tabular-nums text-purple-400 font-bold">+{karma} Karma</span>
+              <span className="font-sans tabular-nums text-amber-400 font-bold">+{karma} Karma</span>
             </div>
           </div>
 
@@ -137,9 +137,9 @@ export default function EpitaphModal({
             {/* 15s Death Video Recap Button */}
             <button
               onClick={() => setShowRecapModal(true)}
-              className="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-600 hover:to-indigo-600 text-white font-bold text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-purple-900/30 active:scale-[0.98]"
+              className="w-full py-3 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-sm transition flex items-center justify-center gap-2 shadow-sm active:scale-[0.98]"
             >
-              <Film className="w-4 h-4" />
+              <Film className="w-4 h-4 text-amber-400" />
               <span>Xem Thước Phim Dĩ Vãng (15s Video Recap)</span>
             </button>
 
@@ -159,23 +159,23 @@ export default function EpitaphModal({
               <button
                 onClick={handleAscendNirvana}
                 disabled={isAscendingNirvana}
-                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 hover:from-purple-800 hover:to-indigo-800 border border-purple-500/40 text-purple-200 font-bold text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-purple-950/50 active:scale-[0.98]"
+                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 active:scale-[0.98]"
               >
                 <span>🕊️ {isAscendingNirvana ? "Đang Khai Quang Nhập Niết Bàn..." : "Đắc Đạo Niết Bàn (An Trụ Đại Điện Tiên Hiền)"}</span>
               </button>
             )}
 
             {nirvanaMessage && (
-              <div className="p-3.5 rounded-xl bg-purple-950/80 border border-purple-500/50 text-purple-200 text-xs text-center font-sans">
+              <div className="p-3.5 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs text-center font-sans">
                 ✨ {nirvanaMessage}
               </div>
             )}
 
             <button
               onClick={onEnterRebirthQueue}
-              className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-purple-800/80 to-indigo-800/80 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold text-sm transition flex items-center justify-center gap-2 shadow-md active:scale-[0.98]"
+              className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm transition flex items-center justify-center gap-2 shadow-md active:scale-[0.98]"
             >
-              <Sparkles className="w-4 h-4 text-purple-300" />
+              <Sparkles className="w-4 h-4 text-amber-200" />
               <span>Phòng Chờ Chuyển Kiếp (Xổ Số Nhân Phẩm Mới)</span>
             </button>
 

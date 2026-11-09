@@ -30,11 +30,11 @@ export default function AudioVolumeControl({ isPlaying, onTogglePlay, audioRef }
         align="right"
         content={
           <div className="p-0.5">
-            <div className="font-bold text-indigo-300 text-xs flex items-center justify-between gap-2 mb-0.5">
+            <div className="font-bold text-amber-600 dark:text-amber-300 text-xs flex items-center justify-between gap-2 mb-0.5">
               <span className="flex items-center gap-1">
                 <Music className="w-3.5 h-3.5" /> {isPlaying ? `Nhạc Nền Đang Phát (${volume}%)` : "Nhạc Nền Tắt"}
               </span>
-              <kbd className="px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-300 border border-indigo-500/40 text-[10px] font-mono font-bold">
+              <kbd className="px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/40 text-[10px] font-mono font-bold">
                 M
               </kbd>
             </div>

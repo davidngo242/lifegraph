@@ -149,7 +149,7 @@ export default function LifeGraphHomePortal({
 
       {/* 2. HERO HEADER: ĐẠI SẢNH VẬN MỆNH & BẢNG VÀNG THÀNH TÍCH */}
       <div className="p-6 md:p-8 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-xl relative overflow-hidden transition-colors duration-200">
-        <div className="absolute top-0 right-0 w-96 h-64 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 space-y-6">
           {/* Top Title & Inscription */}
@@ -249,7 +249,7 @@ export default function LifeGraphHomePortal({
             <div className="shrink-0 w-full md:w-auto flex flex-col sm:flex-row items-center gap-3">
               <button
                 onClick={onEnterGame}
-                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-black text-xs md:text-sm normal-case tracking-normal flex items-center justify-center gap-2 transition shadow-xl shadow-emerald-600/30 active:scale-95 whitespace-nowrap"
+                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs md:text-sm normal-case tracking-normal flex items-center justify-center gap-2 transition shadow-xl shadow-emerald-600/30 active:scale-95 whitespace-nowrap"
               >
                 <Play className="w-4 h-4 fill-white" />
                 <span>Tiếp Tục ({character.name}, {character.age ?? 0}t)</span>

@@ -253,7 +253,7 @@ export default function CharacterHeroBanner({
   const getBannerEnvironment = () => {
     if (burnout >= 75) {
       return {
-        bgGradient: 'from-rose-950/45 via-purple-950/40 to-transparent',
+        bgGradient: 'from-rose-950/45 via-amber-950/30 to-transparent',
         borderColor: 'border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.15)]',
         accentGlow: 'bg-rose-600/15',
         skylineColor: 'text-rose-500/20',
@@ -264,7 +264,7 @@ export default function CharacterHeroBanner({
     }
     if (age <= 5) {
       return {
-        bgGradient: 'from-sky-950/35 via-indigo-950/30 to-transparent',
+        bgGradient: 'from-sky-500/10 via-teal-500/5 to-transparent',
         borderColor: 'border-[var(--border-subtle)] shadow-none',
         accentGlow: 'bg-sky-400/15',
         skylineColor: 'text-sky-400/20',
@@ -286,18 +286,18 @@ export default function CharacterHeroBanner({
     }
     if (age <= 34) {
       return {
-        bgGradient: 'from-indigo-950/40 via-purple-950/30 to-transparent',
+        bgGradient: 'from-slate-900/40 via-teal-950/20 to-transparent',
         borderColor: 'border-[var(--border-subtle)] shadow-none',
-        accentGlow: 'bg-indigo-500/15',
-        skylineColor: 'text-indigo-400/20',
-        particleColor: 'bg-purple-300',
-        celestialColor: '#a855f7',
-        celestialGlow: 'bg-purple-500/20'
+        accentGlow: 'bg-teal-500/15',
+        skylineColor: 'text-teal-400/20',
+        particleColor: 'bg-teal-300',
+        celestialColor: '#14b8a6',
+        celestialGlow: 'bg-teal-500/20'
       };
     }
     if (age <= 59) {
       return {
-        bgGradient: 'from-amber-950/40 via-purple-950/25 to-transparent',
+        bgGradient: 'from-amber-950/40 via-amber-900/20 to-transparent',
         borderColor: 'border-[var(--border-subtle)] shadow-none',
         accentGlow: 'bg-amber-500/15',
         skylineColor: 'text-amber-400/20',
@@ -360,12 +360,12 @@ export default function CharacterHeroBanner({
         };
       case 'gamble':
         return {
-          glowGradient: 'from-fuchsia-600/35 via-purple-600/20 to-transparent',
-          borderRing: 'ring-2 ring-fuchsia-400 shadow-[0_0_35px_rgba(217,70,239,0.5)]',
-          badgeBg: 'bg-fuchsia-950/90 border-fuchsia-500/60 text-fuchsia-200 shadow-fuchsia-900/40',
-          badgeIconBg: 'bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/40',
-          badgeDelta: 'bg-fuchsia-500/25 text-fuchsia-300 border-fuchsia-500/40',
-          particlePulse: 'bg-fuchsia-300',
+          glowGradient: 'from-amber-500/35 via-rose-500/20 to-transparent',
+          borderRing: 'ring-2 ring-amber-400 shadow-[0_0_35px_rgba(245,158,11,0.5)]',
+          badgeBg: 'bg-amber-950/90 border-amber-500/60 text-amber-200 shadow-amber-900/40',
+          badgeIconBg: 'bg-amber-500/20 text-amber-400 border-amber-500/40',
+          badgeDelta: 'bg-amber-500/25 text-amber-300 border-amber-500/40',
+          particlePulse: 'bg-amber-300',
         };
       case 'network':
         return {
@@ -661,12 +661,12 @@ export default function CharacterHeroBanner({
               </span>
               <span className={`font-bold px-2 py-0.5 rounded-md border text-[10px] flex items-center gap-0.5 ${
                 character.gender === 'female'
-                  ? 'bg-rose-950/70 border-rose-500/50 text-rose-300 shadow-sm'
-                  : 'bg-indigo-950/70 border-indigo-500/50 text-indigo-300 shadow-sm'
+                  ? 'bg-rose-500/15 border-rose-500/30 text-rose-700 dark:text-rose-300 shadow-sm'
+                  : 'bg-sky-500/15 border-sky-500/30 text-sky-700 dark:text-sky-300 shadow-sm'
               }`}>
                 <span>{character.gender === 'female' ? '♀️ Nữ' : '♂️ Nam'}</span>
               </span>
-              <span className="text-indigo-300 font-medium text-[11px]">{nationality}</span>
+              <span className="text-[var(--text-secondary)] font-medium text-[11px]">{nationality}</span>
             </div>
 
             <div className="flex items-center gap-1 text-[11px] text-[var(--text-secondary)] truncate pt-0.5">
@@ -766,7 +766,7 @@ export default function CharacterHeroBanner({
           <div className="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-[var(--border-subtle)] text-[11px]">
             {character.innate_traits && character.innate_traits.length > 0 ? (
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-purple-400 font-semibold flex items-center gap-0.5 text-[10.5px]">🧬 Gen:</span>
+                <span className="text-teal-600 dark:text-teal-400 font-semibold flex items-center gap-0.5 text-[10.5px]">🧬 Gen:</span>
                 {character.innate_traits.map((t: string) => {
                   const ft = formatTrait(t);
                   return (
@@ -830,7 +830,7 @@ export default function CharacterHeroBanner({
               }`}
             >
               <div className="flex items-center gap-1.5 min-w-0">
-                <span className="w-5 h-5 rounded-md bg-purple-500/20 border border-purple-500/35 flex items-center justify-center text-xs shrink-0 shadow-inner">
+                <span className="w-5 h-5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 flex items-center justify-center text-xs shrink-0 shadow-sm">
                   {aspiration.icon || '🎯'}
                 </span>
                 <Tooltip content={aspiration.target_summary || aspiration.title}>
@@ -846,7 +846,7 @@ export default function CharacterHeroBanner({
                     className={`h-full rounded-full transition-all duration-500 ${
                       aspiration.progress >= 100
                         ? 'bg-gradient-to-r from-amber-400 to-emerald-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
-                        : 'bg-gradient-to-r from-purple-500 via-indigo-400 to-amber-300'
+                        : 'bg-gradient-to-r from-amber-400 via-amber-500 to-emerald-500'
                     }`}
                     style={{ width: `${Math.min(100, aspiration.progress)}%` }}
                   />
@@ -885,9 +885,9 @@ export default function CharacterHeroBanner({
           <div className="flex items-center justify-between gap-1.5 pb-1.5 border-b border-slate-800/60">
             {/* Life Stage Pill */}
             <Tooltip content={<div className="text-[12px] max-w-xs">{lifeStage.desc}</div>}>
-              <div className="flex items-center gap-1.5 px-2 py-1 rounded-xl bg-indigo-950/60 hover:bg-indigo-900/50 border border-indigo-500/30 cursor-help transition">
+              <div className="flex items-center gap-1.5 px-2 py-1 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] cursor-help transition">
                 <span className="text-xs">{lifeStage.icon}</span>
-                <span className="text-[11px] font-bold text-indigo-200 truncate">{lifeStage.stage}</span>
+                <span className="text-[11px] font-bold text-[var(--text-primary)] truncate">{lifeStage.stage}</span>
               </div>
             </Tooltip>
 
@@ -909,8 +909,8 @@ export default function CharacterHeroBanner({
             {/* Social Karma */}
             <Tooltip content={<div className="text-[12px]">Phước đức xã hội tích lũy ({karma} KP). Ảnh hưởng phúc khí và độ uy tín dòng họ.</div>}>
               <div className="flex items-center gap-1 px-2 py-1 rounded-xl bg-slate-900/80 border border-slate-800 cursor-help">
-                <ShieldCheck className="w-3 h-3 text-purple-400" />
-                <span className="text-[11px] font-sans tabular-nums font-bold text-purple-300">
+                <ShieldCheck className="w-3 h-3 text-amber-500" />
+                <span className="text-[11px] font-sans tabular-nums font-bold text-amber-400">
                   {karma} <span className="text-[9px] text-slate-500">KP</span>
                 </span>
               </div>
@@ -969,7 +969,7 @@ export default function CharacterHeroBanner({
             <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800/80">
               <div
                 className={`h-full transition-all duration-500 rounded-full ${
-                  burnout >= 75 ? 'bg-gradient-to-r from-orange-500 to-rose-500' : 'bg-gradient-to-r from-indigo-500 to-purple-500'
+                  burnout >= 75 ? 'bg-gradient-to-r from-orange-500 to-rose-500' : 'bg-gradient-to-r from-teal-500 to-emerald-500'
                 }`}
                 style={{ width: `${Math.min(100, burnout)}%` }}
               />

@@ -102,7 +102,7 @@ export default function AvatarInspectorModal({
               onClick={() => setActiveTab('3d')}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition ${
                 activeTab === '3d'
-                  ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-md shadow-indigo-500/30'
+                  ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 text-slate-950 font-black shadow-md shadow-amber-500/25'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -288,7 +288,7 @@ export default function AvatarInspectorModal({
                     🍃 Vòng Hoa & Túi Phiêu Lưu
                   </span>
                   {hasGlasses && (
-                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-indigo-950/80 text-indigo-300 border border-indigo-500/50 backdrop-blur">
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-500/40 backdrop-blur">
                       👓 Kính Tri Thức 3D
                     </span>
                   )}

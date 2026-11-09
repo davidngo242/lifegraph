@@ -154,7 +154,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
                         isCrit
                           ? 'bg-rose-950/50 border-rose-500/50 text-rose-200'
                           : isVen
-                          ? 'bg-purple-950/50 border-purple-500/50 text-purple-200'
+                          ? 'bg-teal-950/50 border-teal-500/50 text-teal-200'
                           : 'bg-amber-950/40 border-amber-500/40 text-amber-200'
                       }`}
                     >
@@ -163,7 +163,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
                           {isCrit ? (
                             <Skull className="w-4 h-4 text-rose-400 shrink-0" />
                           ) : isVen ? (
-                            <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
+                            <Sparkles className="w-4 h-4 text-teal-400 shrink-0" />
                           ) : (
                             <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
                           )}
@@ -209,7 +209,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
 
               <button
                 onClick={() => setIsOpen(false)}
-                className="px-5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-md shadow-indigo-600/30 active:scale-95"
+                className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-bold text-xs normal-case tracking-normal transition shadow-md shadow-amber-500/25 active:scale-95"
               >
                 Đóng Thông Báo
               </button>

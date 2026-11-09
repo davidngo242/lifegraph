@@ -40,19 +40,19 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShor
       key: 'D',
       description: 'Mở Phòng Quyết Định Điện Ảnh 21:9 (Cinema Decision Room)',
       category: 'Trải Nghiệm',
-      badgeColor: 'border-purple-500/40 text-purple-300 bg-purple-500/10'
+      badgeColor: 'border-amber-500/40 text-amber-700 dark:text-amber-300 bg-amber-500/10'
     },
     {
       key: 'M',
       description: 'Bật / tắt nhanh âm thanh nền (Mute toggle)',
       category: 'Âm Thanh',
-      badgeColor: 'border-cyan-500/40 text-cyan-300 bg-cyan-500/10'
+      badgeColor: 'border-cyan-500/40 text-cyan-700 dark:text-cyan-300 bg-cyan-500/10'
     },
     {
       key: '? hoặc /',
       description: 'Bật nhanh Sổ tay hướng dẫn sinh tồn (Game Guide Modal)',
       category: 'Trợ Giúp',
-      badgeColor: 'border-indigo-500/40 text-indigo-300 bg-indigo-500/10'
+      badgeColor: 'border-teal-500/40 text-teal-700 dark:text-teal-300 bg-teal-500/10'
     },
     {
       key: 'K',

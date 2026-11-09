@@ -192,24 +192,24 @@ export default function NarrativeFeed({
                 {/* Timeline node icon */}
                 <div className={`absolute left-0 top-1.5 w-4 h-4 rounded-full flex items-center justify-center border transition-all ${
                   isLatest
-                    ? 'bg-indigo-600 border-indigo-300 shadow-[0_0_10px_#6366f1]'
-                    : 'bg-slate-950 border-slate-700'
+                    ? 'bg-amber-500 border-amber-300 shadow-[0_0_10px_#f59e0b]'
+                    : 'bg-[var(--bg-card)] border-[var(--border-subtle)]'
                 }`}>
-                  <div className={`w-1.5 h-1.5 rounded-full ${isLatest ? 'bg-white animate-ping' : 'bg-indigo-400'}`} />
+                  <div className={`w-1.5 h-1.5 rounded-full ${isLatest ? 'bg-slate-950 dark:bg-white animate-ping' : 'bg-amber-400'}`} />
                 </div>
 
                 {/* Card Container */}
                 <div className={`p-3 rounded-2xl border transition-all ${
                   isLatest
-                    ? 'bg-gradient-to-r from-indigo-500/10 via-[var(--bg-card)] to-[var(--bg-card)] border-indigo-500/50 shadow-md ring-1 ring-indigo-500/20'
-                    : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] hover:border-indigo-400/40'
+                    ? 'bg-gradient-to-r from-amber-500/10 via-[var(--bg-card)] to-[var(--bg-card)] border-amber-500/50 shadow-md ring-1 ring-amber-500/20'
+                    : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] hover:border-amber-400/40'
                 }`}>
                   {/* Card Header: Age Badge & Event Category */}
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <div className="flex items-center gap-1.5">
                       <span className={`text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-md border font-bold ${
                         isLatest 
-                          ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-200 border-indigo-500/30' 
+                          ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30' 
                           : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-subtle)]'
                       }`}>
                         Tuổi {item.age}

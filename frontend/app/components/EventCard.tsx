@@ -185,7 +185,7 @@ export default function EventCard({
     }
     return {
       tag: '🎭 Khôn Khéo & Tùy Cơ',
-      color: 'text-purple-300 border-purple-500/40 bg-purple-500/15',
+      color: 'text-amber-700 dark:text-amber-300 border-amber-500/40 bg-amber-500/15',
       needsRoll: option.risk_percent >= 25
     };
   };
@@ -274,11 +274,11 @@ export default function EventCard({
             onClick={() => setActiveTab('custom')}
             className={`px-2.5 py-1 rounded-lg font-medium flex items-center gap-1 transition ${
               activeTab === 'custom'
-                ? 'bg-purple-600/30 text-purple-200 border border-purple-500/40 shadow-sm font-bold'
-                : 'text-purple-300/80 hover:text-purple-200'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-sm'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <Sparkles className="w-3 h-3 text-amber-300" />
+            <Sparkles className="w-3 h-3 text-amber-500" />
             <span>Tự Do Hành Động</span>
           </button>
         </div>
@@ -316,11 +316,11 @@ export default function EventCard({
                 onClick={() => setActiveVoice('logic')}
                 className={`py-1 px-1.5 rounded-lg flex items-center justify-center gap-1 border transition ${
                   activeVoice === 'logic'
-                    ? 'bg-indigo-950/80 border-indigo-400/60 text-indigo-200 font-bold'
+                    ? 'bg-teal-500/15 border-teal-500/40 text-teal-700 dark:text-teal-300 font-bold'
                     : 'bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
-                <Brain className="w-3 h-3 text-indigo-400" />
+                <Brain className="w-3 h-3 text-teal-500" />
                 <span className="truncate">Lý Trí</span>
               </button>
 
@@ -567,14 +567,14 @@ export default function EventCard({
 
       {/* TAB 2: Open-Text Freeform AI Dungeon Master Resolution */}
       {activeTab === 'custom' && (
-        <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-purple-500/40 flex flex-col gap-2.5 animate-in fade-in duration-200">
+        <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex flex-col gap-2.5 animate-in fade-in duration-200">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-bold text-purple-300 flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-amber-400" />
+            <span className="font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-amber-500" />
               Tự do nhập vai. Bạn sẽ xử lý tình huống này thế nào?
             </span>
-            <span className="text-[12px] font-sans tabular-nums text-amber-400 flex items-center gap-1 bg-slate-900 px-2 py-0.5 rounded-lg border border-slate-800">
-              <Zap className="w-3 h-3 fill-amber-400" /> Tiêu hao: 1 AP
+            <span className="text-[12px] font-sans tabular-nums text-amber-700 dark:text-amber-400 flex items-center gap-1 bg-[var(--bg-card)] px-2 py-0.5 rounded-lg border border-[var(--border-subtle)]">
+              <Zap className="w-3 h-3 fill-amber-500 text-amber-500" /> Tiêu hao: 1 AP
             </span>
           </div>
 
@@ -584,12 +584,12 @@ export default function EventCard({
             disabled={isResolving || !!customResult}
             rows={3}
             placeholder="Tự viết hành động của bạn... (Ví dụ: Tôi nhẹ nhàng ôm lấy cha mẹ, xin một năm nghỉ phép để tự mình lập nghiệp, đồng thời bảo đảm sẽ hoàn trả vốn...)"
-            className="w-full bg-slate-900/90 border border-slate-700 focus:border-purple-400 rounded-xl p-3 text-xs md:text-sm text-white placeholder-slate-500 focus:outline-none transition resize-none custom-scrollbar"
+            className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] focus:border-amber-400 rounded-xl p-3 text-xs md:text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)]/50 focus:outline-none transition resize-none custom-scrollbar"
           />
 
           {/* Inspirational Prompt Chips */}
           <div className="flex items-center gap-1.5 flex-wrap text-[12px]">
-            <span className="text-slate-500 font-sans tabular-nums">Gợi ý:</span>
+            <span className="text-[var(--text-secondary)] font-sans tabular-nums">Gợi ý:</span>
             {[
               "Đàm phán chia đôi lợi ích",
               "Khéo léo xin thêm thời gian",
@@ -600,7 +600,7 @@ export default function EventCard({
                 key={chip}
                 type="button"
                 onClick={() => setCustomActionText(chip)}
-                className="px-2 py-0.5 rounded-md bg-purple-950/50 hover:bg-purple-900/60 text-purple-300 border border-purple-500/30 transition truncate"
+                className="px-2 py-0.5 rounded-md bg-[var(--bg-card)] hover:bg-amber-500/10 text-[var(--text-secondary)] hover:text-amber-700 dark:hover:text-amber-300 border border-[var(--border-subtle)] hover:border-amber-400/50 transition truncate"
               >
                 {chip}
               </button>
@@ -608,7 +608,7 @@ export default function EventCard({
           </div>
 
           {resolveError && (
-            <div className="text-xs text-rose-400 bg-rose-950/40 border border-rose-500/30 p-2.5 rounded-xl flex items-center gap-2">
+            <div className="text-xs text-rose-600 dark:text-rose-400 bg-rose-500/10 border border-rose-500/30 p-2.5 rounded-xl flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 shrink-0" />
               <span>{resolveError}</span>
             </div>
@@ -616,19 +616,19 @@ export default function EventCard({
 
           {/* Custom Action Result Feedback */}
           {customResult && (
-            <div className="p-3 rounded-xl bg-purple-950/30 border border-purple-500/40 text-xs text-purple-200 animate-in fade-in duration-300">
-              <div className="font-bold text-amber-300 flex items-center gap-1 mb-1">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-[var(--text-primary)] animate-in fade-in duration-300">
+              <div className="font-bold text-amber-700 dark:text-amber-400 flex items-center gap-1 mb-1">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
                 Phán Quyết Định Mệnh
               </div>
-              <p className="font-sans italic leading-relaxed text-slate-300">
+              <p className="font-sans italic leading-relaxed text-[var(--text-secondary)]">
                 "{customResult.story_outcome || customResult.message || "Hành động độc bản của bạn đã được ghi nhận."}"
               </p>
             </div>
           )}
 
           <div className="flex items-center justify-between pt-1">
-            <span className="text-[12px] text-slate-400 font-sans italic">
+            <span className="text-[12px] text-[var(--text-secondary)] font-sans italic">
               AI Game Master sẽ phân giải xác suất dựa trên chỉ số nhân vật của bạn.
             </span>
             <button
@@ -636,8 +636,8 @@ export default function EventCard({
               disabled={isResolving || !customActionText.trim() || !!customResult}
               className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition ${
                 isResolving || !customActionText.trim() || !!customResult
-                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-md active:scale-95'
+                  ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-bold shadow-md shadow-amber-500/25 active:scale-95'
               }`}
             >
               <Send className="w-3.5 h-3.5" />

@@ -145,7 +145,7 @@ export default function AncestralFamilyTree({
                         <div className="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
                           <span>Hưởng thọ: <strong className="text-slate-200">{ancestor.age} tuổi</strong></span>
                           <span>•</span>
-                          <span>Phước đức: <strong className="text-purple-300">{ancestor.karma} KP</strong></span>
+                          <span>Phước đức: <strong className="text-amber-400">{ancestor.karma} KP</strong></span>
                         </div>
                       </div>
                     </div>
@@ -175,8 +175,8 @@ export default function AncestralFamilyTree({
 
                 {/* Connecting Branch Line */}
                 <div className="flex flex-col items-center">
-                  <div className="w-0.5 h-8 bg-gradient-to-b from-amber-500/60 to-indigo-500/60" />
-                  <ArrowDown className="w-4 h-4 text-indigo-400 -mt-1" />
+                  <div className="w-0.5 h-8 bg-gradient-to-b from-amber-500/60 to-emerald-500/60" />
+                  <ArrowDown className="w-4 h-4 text-emerald-500 -mt-1" />
                 </div>
               </React.Fragment>
             );
@@ -185,18 +185,18 @@ export default function AncestralFamilyTree({
 
         {/* Current Living Heir (Leaf Node) */}
         {currentCharacter && (
-          <div className="w-full max-w-xl p-4 rounded-2xl bg-gradient-to-r from-indigo-950/60 via-slate-900 to-purple-950/60 border-2 border-indigo-500/60 shadow-2xl shadow-indigo-950/50">
+          <div className="w-full max-w-xl p-4 rounded-2xl bg-[var(--bg-card)] border-2 border-amber-400/60 shadow-2xl text-[var(--text-primary)]">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-950 border border-indigo-400/50 flex items-center justify-center text-2xl shadow shrink-0 animate-bounce">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-2xl shadow shrink-0 animate-bounce">
                   ⚡
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-base font-black text-white">
+                    <span className="text-base font-black text-[var(--text-primary)]">
                       {currentCharacter.name}
                     </span>
-                    <span className="text-[11px] font-sans tabular-nums px-2 py-0.2 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/50 font-bold">
+                    <span className="text-[11px] font-sans tabular-nums px-2 py-0.2 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-400/50 font-bold">
                       Đời Hiện Tại · {currentCharacter.generation || (lineage.length + 1)}
                     </span>
                   </div>

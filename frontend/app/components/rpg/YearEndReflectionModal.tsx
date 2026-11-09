@@ -176,12 +176,12 @@ export default function YearEndReflectionModal({
 
             <div className="flex flex-col gap-2">
               {/* Unspent SP */}
-              <div className="p-2.5 rounded-xl bg-purple-950/30 border border-purple-500/30 text-xs flex items-center justify-between">
-                <span className="text-purple-300 text-[11px] flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" />
+              <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-xs flex items-center justify-between">
+                <span className="text-amber-700 dark:text-amber-300 text-[11px] flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                   <span>Điểm Kỹ Năng chưa khai phá:</span>
                 </span>
-                <span className="font-mono font-bold text-amber-300">
+                <span className="font-mono font-bold text-amber-600 dark:text-amber-300">
                   {unspentSkillPoints > 0 ? `+${unspentSkillPoints} SP` : 'Đã học trọn'}
                 </span>
               </div>

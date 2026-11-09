@@ -240,7 +240,7 @@ ${topMoments.map(m => `  • [Năm ${m.age}t]: ${m.text}`).join('\n')}
 
         {/* Ambient Tarot Holographic Glows */}
         <div className="absolute top-0 left-1/4 w-80 h-32 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-32 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-32 bg-teal-500/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* Card Frame Container */}
         <div ref={cardRef} className="overflow-y-auto pr-1 flex-1 space-y-4">
@@ -249,7 +249,7 @@ ${topMoments.map(m => `  • [Năm ${m.age}t]: ${m.text}`).join('\n')}
             <span className="text-[12px] font-sans tabular-nums tracking-wide normal-case px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold inline-block mb-2">
               🎴 THẺ BÀI VẬN MỆNH • TAROT CUỘC ĐỜI
             </span>
-            <div className="p-2 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-indigo-300 font-bold text-xs normal-case tracking-normal mb-2">
+            <div className="p-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold text-xs normal-case tracking-normal mb-2">
               👑 {epithet}
             </div>
             <h2 className="text-2xl md:text-3xl font-sans font-bold text-white tracking-tight">
@@ -273,7 +273,7 @@ ${topMoments.map(m => `  • [Năm ${m.age}t]: ${m.text}`).join('\n')}
             </div>
             <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
               <span className="text-[12px] text-slate-400 block normal-case tracking-normal">Nghiệp Lực</span>
-              <span className="text-sm md:text-base font-bold text-purple-400 font-sans tabular-nums">
+              <span className="text-sm md:text-base font-bold text-amber-500 font-sans tabular-nums">
                 +{karma} Karma
               </span>
             </div>

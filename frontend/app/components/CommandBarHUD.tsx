@@ -93,7 +93,7 @@ export default function CommandBarHUD({
             position="bottom"
             content={
               <div className="p-0.5">
-                <div className="font-bold text-purple-300 text-xs flex items-center gap-1">
+                <div className="font-bold text-amber-600 dark:text-amber-300 text-xs flex items-center gap-1">
                   <span>🎬 Phòng Quyết Định 21:9</span>
                   <kbd className="px-1 py-0.2 rounded bg-[var(--bg-card)] text-[10px] text-[var(--text-secondary)] border border-[var(--border-subtle)]">[D]</kbd>
                 </div>
@@ -108,9 +108,9 @@ export default function CommandBarHUD({
               disabled={isLoading}
               className="px-2.5 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-[var(--border-subtle)] bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] text-[var(--text-primary)] transition active:scale-95"
             >
-              <Film className="w-3.5 h-3.5 text-purple-300" />
+              <Film className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               <span className="hidden md:inline">Phòng Điện Ảnh</span>
-              <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-purple-300 font-bold">
+              <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-600 dark:text-amber-400 font-bold">
                 D
               </kbd>
             </button>
@@ -152,7 +152,7 @@ export default function CommandBarHUD({
               </span>
             </div>
 
-            <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-indigo-950 text-indigo-300 border border-indigo-500/30 ml-1">
+            <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 ml-1">
               ?
             </span>
           </button>

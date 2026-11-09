@@ -1459,7 +1459,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
   if (!mounted || isLoading) {
     return (
       <div className="w-full h-96 flex flex-col items-center justify-center bg-slate-950 rounded-3xl border border-slate-800 p-8 shadow-2xl">
-        <Compass className="w-9 h-9 animate-spin text-purple-400 mb-3" />
+        <Compass className="w-9 h-9 animate-spin text-amber-500 mb-3" />
         <p className="text-sm font-semibold text-slate-300">Đang khởi tạo không gian nhập vai 3D...</p>
         <span className="text-xs text-slate-500 mt-1">Đang tải kiến trúc phòng, ánh sáng và bối cảnh sống</span>
       </div>
@@ -1520,8 +1520,8 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
           )}
 
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-1 rounded-xl bg-purple-950/80 text-purple-300 border border-purple-500/40 text-xs font-mono font-bold backdrop-blur-md shadow-md flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+            <span className="px-2.5 py-1 rounded-xl bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-xs font-mono font-bold backdrop-blur-md shadow-md flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               <span>{scenario.title}</span>
             </span>
 
@@ -1541,7 +1541,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                   onClick={() => handleSwitchScene(s.id)}
                   className={`px-2 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition ${
                     s.id === currentSceneId
-                      ? 'bg-purple-600 text-white shadow'
+                      ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-950 font-bold shadow'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
@@ -1685,7 +1685,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                     className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 whitespace-nowrap backdrop-blur-md shadow-lg ${
                       isVisited
                         ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900'
-                        : 'bg-slate-900/85 border-slate-700/80 text-slate-200 hover:border-purple-400 hover:text-white'
+                        : 'bg-slate-900/85 border-slate-700/80 text-slate-200 hover:border-amber-400 hover:text-white'
                     }`}
                   >
                     <span>{h.npc_role === 'parent' ? '👨‍👩‍👧' : h.npc_role === 'partner' ? '👩‍💼' : h.npc_role === 'manager' ? '👨‍💼' : h.npc_role === 'friend' ? '🧑‍💻' : '📦'}</span>
@@ -1721,8 +1721,8 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                       : activeDialogue?.npc_role === 'manager'
                       ? 'bg-sky-950/80 border-sky-500 text-sky-300 shadow-[0_0_20px_rgba(56,189,248,0.35)] ring-2 ring-sky-500/25'
                       : activeDialogue?.npc_role === 'friend'
-                      ? 'bg-indigo-950/80 border-indigo-500 text-indigo-300 shadow-[0_0_20px_rgba(99,102,241,0.35)] ring-2 ring-indigo-500/25'
-                      : 'bg-purple-950/80 border-purple-500 text-purple-300 shadow-[0_0_20px_rgba(168,85,247,0.35)] ring-2 ring-purple-500/25'
+                      ? 'bg-teal-500/20 border-teal-500 text-teal-700 dark:text-teal-300 shadow-[0_0_20px_rgba(20,184,166,0.35)] ring-2 ring-teal-500/25'
+                      : 'bg-amber-500/15 border-amber-500 text-amber-700 dark:text-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.25)] ring-2 ring-amber-500/25'
                   }`}
                 >
                   {activeDialogue?.npc_role === 'parent'
@@ -1747,13 +1747,13 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                   </span>
                 </div>
 
-                <p className="text-xs md:text-sm text-slate-100 leading-relaxed font-sans font-medium drop-shadow-sm">
+                <p className="text-xs md:text-sm text-[var(--text-primary)] leading-relaxed font-sans font-medium drop-shadow-sm">
                   &ldquo;{cleanDialogueText(activeDialogue?.text || scenario.description)}&rdquo;
                 </p>
 
                 {activeDialogue?.hotspot_id && HOTSPOT_LIFE_IMPACTS[activeDialogue.hotspot_id] && (
-                  <div className="mt-1 inline-flex items-center gap-2 px-2.5 py-0.5 rounded-lg bg-indigo-950/80 border border-indigo-400/50 text-indigo-300 text-xs font-medium w-fit">
-                    <Compass className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                  <div className="mt-1 inline-flex items-center gap-2 px-2.5 py-0.5 rounded-lg bg-amber-500/15 border border-amber-400/40 text-amber-700 dark:text-amber-300 text-xs font-medium w-fit">
+                    <Compass className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                     <span>Định hướng tương lai: <strong>{HOTSPOT_LIFE_IMPACTS[activeDialogue.hotspot_id].perk}</strong></span>
                   </div>
                 )}
@@ -1774,8 +1774,8 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
           {/* Deck Header */}
           <div className="border-b border-slate-800/80 pb-3">
             <div className="flex items-center gap-2 mb-1">
-              <Brain className="w-4 h-4 text-purple-400" />
-              <span className="text-[10px] font-mono uppercase tracking-wider text-purple-400 font-bold">
+              <Brain className="w-4 h-4 text-amber-500" />
+              <span className="text-[10px] font-mono uppercase tracking-wider text-amber-500 font-bold">
                 Sân Khấu Tâm Trí · Ngã Rẽ Định Mệnh
               </span>
             </div>
@@ -1900,7 +1900,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
             <div className="space-y-2.5">
               <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
                 <span>Chọn Phương Án Đối Diện:</span>
-                <span className="text-[10.5px] font-mono text-purple-300 lowercase font-normal">
+                <span className="text-[10.5px] font-mono text-amber-500 lowercase font-normal">
                   (Phím 1, 2, 3)
                 </span>
               </div>
@@ -1918,7 +1918,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                       onClick={() => setSelectedChoiceId(choice.id)}
                       className={`p-3.5 rounded-2xl border transition-all duration-200 cursor-pointer backdrop-blur-xl relative ${
                         isSelected
-                          ? 'bg-gradient-to-br from-purple-950/80 via-indigo-950/70 to-slate-900/90 border-purple-400/90 shadow-[0_0_20px_rgba(168,85,247,0.3)] ring-1 ring-purple-400/50'
+                          ? 'bg-gradient-to-br from-amber-500/15 via-slate-900/90 to-slate-900 border-amber-400/90 shadow-[0_0_20px_rgba(245,158,11,0.2)] ring-1 ring-amber-400/50'
                           : isUnderUncertainty
                           ? 'bg-slate-900/70 border-amber-500/40 hover:border-amber-400/70 hover:bg-slate-900/85'
                           : 'bg-slate-900/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/90'
@@ -1949,7 +1949,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                           {/* DC Check & Stat requirements */}
                           {choice.check && (
                             <div className="flex items-center gap-2 pt-1 text-[11px] font-mono flex-wrap">
-                              <span className="text-purple-300 font-bold bg-purple-950/70 px-2 py-0.5 rounded-lg border border-purple-500/40">
+                              <span className="text-amber-700 dark:text-amber-300 font-bold bg-amber-500/15 px-2 py-0.5 rounded-lg border border-amber-500/40">
                                 Thử thách: {choice.check.stat?.toUpperCase()} (DC {choice.check.target_dc})
                               </span>
                               {choice.check.bonus_traits && choice.check.bonus_traits.length > 0 && (
@@ -1964,7 +1964,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
 
                       {/* Selected Choice: Safeguards + AP Investment + Roll Button */}
                       {isSelected && (
-                        <div className="mt-3.5 pt-3 border-t border-purple-500/30 space-y-3 animate-in fade-in">
+                        <div className="mt-3.5 pt-3 border-t border-[var(--border-subtle)] space-y-3 animate-in fade-in">
                           {/* Safeguard Options */}
                           <div className="space-y-1.5">
                             <label className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
@@ -1986,8 +1986,8 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                                   }}
                                   className={`p-2 rounded-xl border text-left text-xs transition duration-150 ${
                                     safeguardTerm === opt.id
-                                      ? 'bg-gradient-to-br from-indigo-950 to-purple-950/90 border-indigo-400 text-white shadow-[0_0_12px_rgba(99,102,241,0.3)] ring-1 ring-indigo-400/40'
-                                      : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                                      ? 'bg-amber-500/15 border-amber-500 text-amber-700 dark:text-amber-200 shadow-sm ring-1 ring-amber-400/40'
+                                      : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                                   }`}
                                 >
                                   <div className="font-bold text-[11px]">{opt.label}</div>
@@ -2035,7 +2035,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                                 handleConfirmChoice(choice.id);
                               }}
                               disabled={isResolving}
-                              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-500 hover:to-sky-500 text-white font-extrabold text-xs uppercase tracking-wider shadow-xl shadow-purple-600/30 transition-all active:scale-95 flex items-center justify-center gap-2 shrink-0"
+                              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black text-xs uppercase tracking-wider shadow-xl shadow-amber-500/25 transition-all active:scale-95 flex items-center justify-center gap-2 shrink-0"
                             >
                               {isResolving ? (
                                 <>

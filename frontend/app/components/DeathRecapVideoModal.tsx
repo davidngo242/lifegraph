@@ -287,10 +287,10 @@ export default function DeathRecapVideoModal({
           <button
             onClick={handleDownloadVideo}
             disabled={isRecording}
-            className={`py-2.5 px-4 rounded-xl text-white font-bold text-xs transition flex items-center gap-2 shadow-lg active:scale-95 ${
+            className={`py-2.5 px-4 rounded-xl text-slate-950 font-black text-xs transition flex items-center gap-2 shadow-lg active:scale-95 ${
               isRecording 
-                ? 'bg-rose-600 animate-pulse' 
-                : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-indigo-600/20'
+                ? 'bg-rose-600 text-white animate-pulse' 
+                : 'bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 shadow-amber-500/25'
             }`}
           >
             <Download className="w-4 h-4" />

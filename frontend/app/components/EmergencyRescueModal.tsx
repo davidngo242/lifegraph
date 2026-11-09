@@ -194,16 +194,16 @@ export default function EmergencyRescueModal({
               onClose();
               onOpenKarmaSanctum();
             }}
-            className="w-full p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] hover:border-purple-400 text-left transition flex items-center justify-between group"
+            className="w-full p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-amber-400 text-left transition flex items-center justify-between group shadow-sm"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-lg shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-lg shrink-0">
                 ✨
               </div>
               <div>
                 <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                   <span>Thỉnh Phước Bảo Mạng (Đền Thờ Nghiệp Quả)</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
                     0 AP · Dùng Karma
                   </span>
                 </div>
@@ -212,7 +212,7 @@ export default function EmergencyRescueModal({
                 </div>
               </div>
             </div>
-            <ChevronRight className="w-4 h-4 text-purple-400 group-hover:translate-x-1 transition-transform shrink-0" />
+            <ChevronRight className="w-4 h-4 text-amber-600 dark:text-amber-400 group-hover:translate-x-1 transition-transform shrink-0" />
           </button>
 
           {/* Rescue Option 3 & 4: Debt Restructuring if in debt */}

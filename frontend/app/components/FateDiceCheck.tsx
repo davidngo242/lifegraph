@@ -98,20 +98,20 @@ export default function FateDiceCheck({
   const actionText = option?.action_title || option?.label || "Quyết định cuộc đời";
 
   return (
-    <div className="relative p-5 md:p-6 rounded-3xl bg-slate-950/95 border border-indigo-500/50 shadow-[0_0_50px_rgba(99,102,241,0.25)] backdrop-blur-2xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-300">
+    <div className="relative p-5 md:p-6 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-2xl backdrop-blur-2xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-300 transition-colors">
       
       {/* Top Header */}
-      <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+      <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-3">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-400">
+          <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400">
             <Dices className="w-4 h-4 animate-bounce" />
           </div>
           <div>
-            <span className="text-[12px] normal-case font-sans tabular-nums font-bold tracking-normal text-indigo-300 block">
+            <span className="text-[12px] normal-case font-sans tabular-nums font-bold tracking-normal text-amber-700 dark:text-amber-300 block">
               Thử Thách Định Mệnh (Fate Skill Check)
             </span>
             <Tooltip content={dilemmaTitle || "Ngã rẽ số phận"}>
-              <span className="text-xs text-slate-400 truncate max-w-[240px] block cursor-help">
+              <span className="text-xs text-[var(--text-secondary)] truncate max-w-[240px] block cursor-help">
                 {dilemmaTitle || "Ngã rẽ số phận"}
               </span>
             </Tooltip>
@@ -121,7 +121,7 @@ export default function FateDiceCheck({
         {rollState === 'ready' && (
           <button
             onClick={onCancel}
-            className="p-1 rounded-lg text-slate-500 hover:text-white hover:bg-slate-800 transition"
+            className="p-1 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)] transition"
             title="Đổi ý"
           >
             <X className="w-4 h-4" />
@@ -130,26 +130,26 @@ export default function FateDiceCheck({
       </div>
 
       {/* Choice Context Card */}
-      <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between gap-3">
+      <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <span className="text-[12px] normal-case font-sans tabular-nums text-amber-400 font-bold block mb-0.5">
+          <span className="text-[12px] normal-case font-sans tabular-nums text-amber-600 dark:text-amber-400 font-bold block mb-0.5">
             Hành động đã chọn:
           </span>
           <Tooltip content={actionText}>
-            <span className="text-sm font-bold text-white block truncate cursor-help">
+            <span className="text-sm font-bold text-[var(--text-primary)] block truncate cursor-help">
               {actionText}
             </span>
           </Tooltip>
           <Tooltip content={option?.consequence_hint || option?.effects_hint || "Hệ quả sẽ được ghi vào biên niên sử"}>
-            <span className="text-[12px] text-slate-400 font-sans italic line-clamp-1 cursor-help">
+            <span className="text-[12px] text-[var(--text-secondary)] font-sans italic line-clamp-1 cursor-help">
               {option?.consequence_hint || option?.effects_hint || "Hệ quả sẽ được ghi vào biên niên sử"}
             </span>
           </Tooltip>
         </div>
 
         <div className="text-right shrink-0">
-          <span className="text-[12px] normal-case font-sans tabular-nums text-slate-400 block font-semibold">Ngưỡng Vượt (DC)</span>
-          <span className="text-base font-black font-sans tabular-nums text-amber-300">
+          <span className="text-[12px] normal-case font-sans tabular-nums text-[var(--text-secondary)] block font-semibold">Ngưỡng Vượt (DC)</span>
+          <span className="text-base font-black font-sans tabular-nums text-amber-600 dark:text-amber-300">
             {dc}+
           </span>
         </div>
@@ -165,20 +165,20 @@ export default function FateDiceCheck({
               : finalScore?.isSuccess
               ? 'bg-emerald-500/20 ring-4 ring-emerald-400/80 shadow-[0_0_40px_rgba(52,211,153,0.5)]'
               : 'bg-rose-500/20 ring-4 ring-rose-500/70 shadow-[0_0_40px_rgba(244,63,94,0.4)]'
-            : 'bg-indigo-950/40 ring-2 ring-indigo-500/40 shadow-[0_0_30px_rgba(99,102,241,0.3)] animate-pulse'
+            : 'bg-amber-500/10 ring-2 ring-amber-500/40 shadow-[0_0_30px_rgba(245,158,11,0.2)] animate-pulse'
         }`}>
           
           {/* Hexagon Dice Facet */}
           <div className={`w-20 h-20 md:w-24 md:h-24 rounded-2xl flex flex-col items-center justify-center border-2 transition-all duration-300 ${
             rollState === 'rolling'
-              ? 'border-indigo-400 bg-slate-900 rotate-12 scale-105'
+              ? 'border-amber-400 bg-[var(--bg-card)] rotate-12 scale-105 text-[var(--text-primary)]'
               : rollState === 'settled'
               ? finalScore?.isCritical
-                ? 'border-amber-400 bg-amber-950/80 text-amber-200'
+                ? 'border-amber-400 bg-amber-500/15 text-amber-700 dark:text-amber-200'
                 : finalScore?.isSuccess
-                ? 'border-emerald-400 bg-emerald-950/80 text-emerald-200'
-                : 'border-rose-400 bg-rose-950/80 text-rose-200'
-              : 'border-slate-700 bg-slate-900 text-white'
+                ? 'border-emerald-400 bg-emerald-500/15 text-emerald-700 dark:text-emerald-200'
+                : 'border-rose-400 bg-rose-500/15 text-rose-700 dark:text-rose-200'
+              : 'border-[var(--border-subtle)] bg-[var(--bg-card)] text-[var(--text-primary)]'
           }`}>
             <span className="text-3xl md:text-4xl font-black font-sans tabular-nums tracking-tight">
               {currentDice}
@@ -275,7 +275,7 @@ export default function FateDiceCheck({
           <button
             onClick={startRolling}
             disabled={isLoading}
-            className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs md:text-sm flex items-center gap-2 shadow-lg shadow-indigo-600/30 active:scale-95 transition"
+            className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black text-xs md:text-sm flex items-center gap-2 shadow-lg shadow-amber-500/25 active:scale-95 transition"
           >
             <Dices className="w-4 h-4" />
             <span>LẮC XÚC XẮC NGAY</span>

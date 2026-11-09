@@ -295,7 +295,7 @@ export default function SkillTreeTab({
       <div className="p-3 rounded-2xl bg-slate-950/60 border border-indigo-500/30 shadow-inner space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             <span className="text-xs font-bold text-slate-200 uppercase tracking-wide">
               Cộng Hưởng Tam Giác Sinh Mệnh (Resonance Synergies)
             </span>
@@ -317,7 +317,7 @@ export default function SkillTreeTab({
                 <div
                   className={`p-2 rounded-xl border transition flex items-center justify-between gap-2 cursor-help ${
                     res.isActive
-                      ? 'bg-gradient-to-r from-amber-950/60 to-purple-950/60 border-amber-500/60 text-amber-200 shadow-md shadow-amber-950/30'
+                      ? 'bg-amber-500/15 border-amber-500/50 text-amber-700 dark:text-amber-300 shadow-sm'
                       : 'bg-slate-900/40 border-slate-800/60 text-slate-500 opacity-60'
                   }`}
                 >
@@ -366,7 +366,7 @@ export default function SkillTreeTab({
               onClick={() => setSelectedBranch(b.id as any)}
               className={`p-3 rounded-2xl border text-left transition-all active:scale-98 flex flex-col gap-1.5 ${
                 isSelected
-                  ? 'bg-gradient-to-br from-indigo-950/80 via-purple-950/60 to-slate-950 border-indigo-500/70 shadow-lg shadow-indigo-950/50 ring-1 ring-indigo-500/40'
+                  ? 'bg-gradient-to-br from-amber-500/15 via-slate-900 to-slate-950 border-amber-500/60 shadow-lg shadow-amber-950/20 ring-1 ring-amber-500/40'
                   : 'bg-slate-950/60 hover:bg-slate-900 border-slate-800/80 text-slate-400 hover:text-white'
               }`}
             >

@@ -52,20 +52,20 @@ export default function SkillTreeModal({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 md:p-6 animate-in fade-in duration-200">
-      <div className="max-w-4xl w-full max-h-[92vh] bg-[var(--bg-card)] border border-indigo-500/40 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[var(--text-primary)]">
+      <div className="max-w-4xl w-full max-h-[92vh] bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[var(--text-primary)] transition-colors">
         
         {/* Modal Top Header Bar */}
         <div className="flex items-center justify-between p-3.5 md:p-4 border-b border-[var(--border-subtle)] bg-[var(--bg-card-subtle)] shrink-0">
           <div className="flex items-center gap-3">
-            <span className="w-10 h-10 rounded-2xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-300 shrink-0 text-xl shadow-inner">
+            <span className="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-700 dark:text-amber-300 shrink-0 text-xl shadow-inner">
               🌳
             </span>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-sm md:text-base font-extrabold text-white">
+                <h2 className="text-sm md:text-base font-extrabold text-[var(--text-primary)]">
                   Đại Thụ Kỹ Năng &amp; Hệ Sinh Thái Sinh Mệnh
                 </h2>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-950/80 text-indigo-300 border border-indigo-500/40 font-bold uppercase">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold uppercase">
                   Level {character?.life_level || 1} • {character?.title || "Kẻ Khởi Đầu"}
                 </span>
               </div>
@@ -77,7 +77,7 @@ export default function SkillTreeModal({
 
           <div className="flex items-center gap-2">
             {/* SP Badge */}
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-950/80 border border-amber-500/50 text-amber-300 text-xs font-bold">
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-bold">
               <Sparkles className="w-3.5 h-3.5 fill-current" />
               <span>{skillPoints} SP</span>
             </div>
@@ -86,7 +86,7 @@ export default function SkillTreeModal({
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
+              className="p-1.5 rounded-full bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)] transition cursor-pointer"
               aria-label="Đóng"
             >
               <X className="w-5 h-5" />
@@ -158,8 +158,8 @@ export default function SkillTreeModal({
                     onClick={() => setSelectedCertBranch(b.id)}
                     className={`p-3 rounded-2xl border text-left transition ${
                       selectedCertBranch === b.id
-                        ? 'bg-indigo-950/80 border-indigo-500/70 text-white shadow-md'
-                        : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-white'
+                        ? 'bg-amber-500/15 border-amber-500 text-amber-700 dark:text-amber-300 font-bold shadow-sm'
+                        : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
@@ -203,7 +203,7 @@ export default function SkillTreeModal({
                           onLaunchMiniGame(gameType);
                         }
                       }}
-                      className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shrink-0 shadow-md transition active:scale-95"
+                      className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shrink-0 shadow-md transition active:scale-95"
                     >
                       <Play className="w-3.5 h-3.5 fill-current" />
                       <span>Sát Hạch (${lvl.tuition.toLocaleString()})</span>
