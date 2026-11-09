@@ -606,14 +606,14 @@ export default function CharacterHeroBanner({
               </span>
             </div>
 
-            {/* Row 3: City & Housing */}
-            <div className="flex items-center gap-2 text-[11px] text-[var(--text-secondary)] truncate pt-0.5">
-              <span className="flex items-center gap-1 truncate max-w-[130px]">
+            {/* Row 3: City & Housing (Hiển thị đầy đủ, không bị cắt cụt text) */}
+            <div className="flex items-center gap-2 text-[11px] text-[var(--text-secondary)] flex-wrap pt-0.5">
+              <span className="flex items-center gap-1 max-w-[200px] sm:max-w-[260px] truncate" title={character.current_city || nationality}>
                 <MapPin className="w-3 h-3 text-rose-400 shrink-0" />
                 <span className="truncate">{character.current_city || nationality}</span>
               </span>
               <span className="opacity-30">•</span>
-              <span className="flex items-center gap-1 truncate max-w-[130px]">
+              <span className="flex items-center gap-1 max-w-[200px] sm:max-w-[260px] truncate" title={character.housing?.name || 'Phòng trọ'}>
                 <Home className="w-3 h-3 text-amber-400 shrink-0" />
                 <span className="truncate">{character.housing?.name || 'Phòng trọ'}</span>
               </span>
