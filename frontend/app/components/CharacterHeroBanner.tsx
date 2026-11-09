@@ -743,6 +743,23 @@ export default function CharacterHeroBanner({
                 </span>
               )}
             </div>
+
+            {/* Active Annual Pledge Indicator (Gieo Mầm Tâm Nguyện) */}
+            {character.active_pledge && (
+              <span className={`text-[10.5px] px-2 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-sm shrink-0 ${
+                character.active_pledge === 'pledge_wealth'
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                  : character.active_pledge === 'pledge_wellness'
+                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                  : 'bg-sky-500/20 text-sky-300 border-sky-500/40'
+              }`}>
+                <span>
+                  {character.active_pledge === 'pledge_wealth' ? '📈 Thịnh Vượng' :
+                   character.active_pledge === 'pledge_wellness' ? '🧘 An Yên' :
+                   '🤝 Nhân Mạch'}
+                </span>
+              </span>
+            )}
           </div>
 
           {/* Row B: Innate Traits & Stage Focus Narrative */}

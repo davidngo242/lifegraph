@@ -1483,7 +1483,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
               }}
               className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 text-xs font-black uppercase tracking-wider transition shadow-lg active:scale-95 flex items-center gap-1.5"
             >
-              <span>✨ Chốt Năm & Bước Sang Tuổi Mới (+1 Tuổi)</span>
+              <span>✨ Chiêm Nghiệm Cuối Năm & Gieo Mầm Tuổi Mới</span>
               <span>→</span>
             </button>
           )}
@@ -1890,7 +1890,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                   }}
                   className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-1.5 active:scale-95"
                 >
-                  <span>✨ Chốt Năm & Bước Sang Tuổi Mới (+1 Tuổi)</span>
+                  <span>✨ Chiêm Nghiệm Cuối Năm & Gieo Mầm Tuổi Mới</span>
                   <span>→</span>
                 </button>
               </div>
