@@ -1864,11 +1864,11 @@ export default function LifeGraphPage() {
           >
             <button
               onClick={() => setShowGuideModal(true)}
-              className="py-1 px-2 sm:px-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] hover:border-amber-400/60 text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95"
+              className="py-1 px-2 sm:px-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-amber-500/60 text-amber-700 dark:text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
             >
-              <BookOpen className="w-3.5 h-3.5 text-amber-300" />
+              <BookOpen className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               <span className="hidden sm:inline">Cẩm Nang</span>
-              <kbd className="text-[10px] font-mono px-1 py-0.2 rounded bg-slate-950/80 border border-amber-500/40 text-amber-300 font-bold">
+              <kbd className="text-[10px] font-mono px-1 py-0.2 rounded bg-[var(--bg-card)] border border-amber-500/40 text-amber-700 dark:text-amber-300 font-bold">
                 ?
               </kbd>
             </button>
@@ -1881,11 +1881,11 @@ export default function LifeGraphPage() {
           >
             <button
               onClick={() => setShowKarmaModal(true)}
-              className="py-1 px-2 sm:px-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] hover:border-purple-400 text-[var(--text-primary)] text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
+              className="py-1 px-2 sm:px-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-purple-400 text-[var(--text-primary)] text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300/30" />
+              <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-300 fill-amber-400/30" />
               <span className="hidden md:inline">Đền Thờ</span>
-              <span className="text-[11px] font-mono font-bold text-purple-300 px-1.5 py-0.2 rounded bg-purple-950/80 border border-purple-500/30">
+              <span className="text-[11px] font-mono font-bold text-purple-700 dark:text-purple-300 px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-950/80 border border-purple-300 dark:border-purple-500/30">
                 {playerAccount?.total_karma || 0}
               </span>
             </button>

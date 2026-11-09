@@ -68,11 +68,11 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
               ? 'bg-rose-950/80 hover:bg-rose-900 border-rose-500/70 text-rose-200 shadow-md shadow-rose-950/50 animate-pulse'
               : totalCount > 0
               ? 'bg-amber-950/70 hover:bg-amber-900 border-amber-500/60 text-amber-200'
-              : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-300'
+              : 'bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)]'
           }`}
         >
           <div className="relative flex items-center">
-            <Megaphone className={`w-3.5 h-3.5 ${criticalCount > 0 ? 'text-rose-400 animate-bounce' : totalCount > 0 ? 'text-amber-400' : 'text-slate-400'}`} />
+            <Megaphone className={`w-3.5 h-3.5 ${criticalCount > 0 ? 'text-rose-500 animate-bounce' : totalCount > 0 ? 'text-amber-500' : 'text-[var(--text-secondary)]'}`} />
             {criticalCount > 0 && (
               <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-rose-500 animate-ping" />
             )}

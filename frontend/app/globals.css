@@ -118,7 +118,7 @@
   color: var(--text-secondary);
 }
 
-/* Daylight mode surface and text adaptation for clean, gaming-grade contrast */
+/* Daylight mode surface adaptors */
 [data-theme="daylight"] .bg-slate-950,
 [data-theme="daylight"] .bg-slate-950\/90,
 [data-theme="daylight"] .bg-slate-950\/80,
@@ -155,20 +155,6 @@
 [data-theme="daylight"] .border-slate-700,
 [data-theme="daylight"] .border-slate-700\/60 {
   border-color: #e2e8f0;
-}
-
-[data-theme="daylight"] .text-white:not([class*="bg-indigo-"]):not([class*="bg-purple-"]):not([class*="bg-emerald-"]):not([class*="bg-rose-"]):not([class*="bg-amber-"]):not([class*="bg-cyan-"]):not([class*="bg-blue-"]):not([class*="bg-gradient-"]) {
-  color: #0f172a;
-}
-
-[data-theme="daylight"] .text-slate-200:not([class*="bg-indigo-"]):not([class*="bg-purple-"]):not([class*="bg-emerald-"]):not([class*="bg-rose-"]):not([class*="bg-amber-"]),
-[data-theme="daylight"] .text-slate-300:not([class*="bg-indigo-"]):not([class*="bg-purple-"]):not([class*="bg-emerald-"]):not([class*="bg-rose-"]):not([class*="bg-amber-"]) {
-  color: #1e293b;
-}
-
-[data-theme="daylight"] .text-slate-400,
-[data-theme="daylight"] .text-slate-500 {
-  color: #475569;
 }
 
 /* Zoom protection and text size locking */
