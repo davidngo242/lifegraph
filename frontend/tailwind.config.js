@@ -8,6 +8,8 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: [
+          '"Be Vietnam Pro"',
+          '"Plus Jakarta Sans"',
           '"Inter"',
           'system-ui',
           '-apple-system',

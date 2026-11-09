@@ -12,7 +12,7 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   viewportFit: 'cover',
-  themeColor: '#020617',
+  themeColor: '#f8fafc',
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap"
           rel="stylesheet"
         />
         <script
@@ -35,7 +35,7 @@ export default function RootLayout({
               (function() {
                 try {
                   if (typeof window !== 'undefined') {
-                    var savedTheme = localStorage.getItem('lifegraph_theme') || 'obsidian';
+                    var savedTheme = localStorage.getItem('lifegraph_theme') || 'daylight';
                     document.documentElement.setAttribute('data-theme', savedTheme);
                     var sid = localStorage.getItem('lifegraph_session_id');
                     if (!sid) {

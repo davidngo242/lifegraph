@@ -101,15 +101,20 @@ export default function CinematicBackground({
     };
   }, [isStarter, isMiddle, isLuxury, scene]);
 
-  // Ambient gradient tone reflecting the room tier
-  const ambientGradient = isLuxury
-    ? 'from-purple-950/40 via-slate-950/90 to-amber-950/30'
-    : isMiddle
-    ? 'from-indigo-950/40 via-slate-950/90 to-cyan-950/20'
-    : 'from-stone-950/50 via-slate-950/95 to-slate-950';
+  // Ambient gradient tone reflecting the room tier dynamically via CSS theme variables
+  const backgroundStyle = {
+    background: isLuxury
+      ? 'var(--bg-ambient-luxury)'
+      : isMiddle
+      ? 'var(--bg-ambient-middle)'
+      : 'var(--bg-ambient-starter)'
+  };
 
   return (
-    <div className={`fixed inset-0 pointer-events-none z-0 overflow-hidden bg-gradient-to-b ${ambientGradient} transition-colors duration-1000`}>
+    <div
+      style={backgroundStyle}
+      className="fixed inset-0 pointer-events-none z-0 overflow-hidden transition-colors duration-700"
+    >
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-65" />
     </div>
   );

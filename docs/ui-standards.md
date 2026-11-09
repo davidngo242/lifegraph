@@ -931,3 +931,40 @@ Nhằm đáp ứng yêu cầu của Sếp về việc mở rộng quy mô thị 
    * Hành động tài chính/làm việc (`Cày Cuốc Kiếm Tiền`, `Lướt Sóng`, `Đột Phá`) gắn liền với cành Hoàng Kim (Đông Bắc).
    * Hành động dưỡng sinh (`Dưỡng Sinh Hồi Phục`) nép mình bên thân cây và cội rễ (Đông Nam).
    * Dây dẫn năng lượng (Bezier Branches) phát sáng và luân chuyển hạt photon đúng theo hệ màu nguyên tố của từng cành nhánh.
+
+---
+
+## 25. Tiêu Chuẩn Thần Mộc Sống Động: Kinh Mạch, Nhân Vật 3D & Sức Khỏe Thần Mộc (Alive World Tree, Meridian Anatomy & Interactive Avatar v6.0)
+
+Nhằm đáp ứng yêu cầu đột phá từ Sếp về việc biến Đại Thụ Sinh Mệnh thành một thực thể sống có sinh khí, phản ứng trực tiếp với biến động cuộc đời của nhân vật, gắn kết kinh mạch huyệt đạo và đưa nhân vật hộ mệnh hiện diện tại cội rễ:
+
+### 25.1. Hệ Thống 3 Trạng Thái Sức Khỏe Thần Mộc (Tree Vitality Reaction System)
+Thần Mộc không phải là hình vẽ vô tri tĩnh lặng mà là bản thể phản chiếu sức khỏe, tinh thần và áp lực của người chơi:
+1. **✨ Trạng Thái Linh Khí Sung Mãn (Thriving / Radiant):**
+   * *Điều kiện:* Sinh lực $\ge 70$, Căng thẳng $< 40\%$, không lâm vào cảnh nợ nần.
+   * *Hiển thị:* Thân cây nâu trầm cơ bắp bừng sáng, tán lá ngọc bích xum xuê, kinh mạch xanh lam và vàng kim luân chuyển xiết bao. 7 đốm đom đóm sinh linh vây quanh, biểu tượng `✨ Linh Khí Sung Mãn (100%)`.
+2. **⚠️ Trạng Thái Tiêu Hao Sinh Khí (Fatigued / Strained):**
+   * *Điều kiện:* Căng thẳng $40\% - 69\%$ hoặc Sinh lực $35\% - 59\%$.
+   * *Hiển thị:* Tán lá ngả vàng chanh nhẹ, nhịp đập nhựa sống chậm rãi màu hổ phách, badge cảnh báo `⚠️ Tiêu Hao Sinh Khí`.
+3. **🥀 Trạng Thái Cây Bị Bệnh / Nhiễm Độc / Kiệt Sức (Withered / Toxic / Critical):**
+   * *Điều kiện:* Căng thẳng $\ge 70\%$ hoặc Sinh lực $< 35\%$ hoặc âm nợ nặng ($< -50.000$).
+   * *Hiển thị:* Thân cây khô xám, vết nứt nẻ sẫm màu, các đường kinh mạch chuyển sang màu tím thẫm và đỏ rực cảnh báo (`#ef4444`, `#9333ea`).
+   * *Banner báo động đỉnh vòm:* `🚨 Thần Mộc Đang Bị Bệnh! Kinh mạch tắc nghẽn do Căng Thẳng cao — Hãy chọn Dưỡng Sinh hoặc Bữa Cơm để hồi phục!`
+   * *Cơ chế dẫn dắt trực quan:* Tán lá `Dưỡng Sinh Hồi Phục` (hoặc `Bữa Cơm` / `Tắm Nắng Sớm`) tự động nhấp nháy phát quang viền ngọc lục bảo để người chơi bấm cứu cây tức thì.
+
+### 25.2. Hệ Thống Kinh Mạch Thần Mộc & Huyệt Đạo Tố Chất Trên Cành (Meridian Acupoints)
+1. **Trục Đốc Mạch Thần Mộc (Central Spine Meridian):**
+   * Đường dẫn năng lượng trung tâm nối từ gốc rễ (`y=480`) xuyên qua Đan Điền Lõi Cây (`y=350`) vươn tới Huyệt Bách Hội trên đỉnh vòm (`y=65`).
+2. **Kinh Lạc Tố Chất Cành Tây Bắc (Wisdom & Skill Branch):**
+   * Nở ra các điểm huyệt đạo tố chất trực quan (`Thiền Định Tỉnh Thức`, `Hiếu Đạo Gia Phong`, `Mắt Thần Định Giá`) ngay trên cành cây.
+   * Người chơi có thể hover để xem công dụng và bấm trực tiếp để đả thông kinh mạch (nâng cấp skill) với hiệu ứng sóng năng lượng truyền dẫn về đan điền.
+3. **Chòm Sao Quý Nhân Tán Thiên Đỉnh (Zenith Social Constellation):**
+   * Kết nối 4 vị trí quý nhân bằng tơ hồng nhân duyên, cho phép tương tác trực tiếp với quý nhân mà không làm đứt gãy không gian Thần Mộc.
+
+### 25.3. Nhân Vật Hộ Mệnh Dưới Cội Rễ (Root Dais Character Avatar)
+1. **Vị trí & Hiện diện:** Tọa lạc trên bệ đá rêu phong linh thiêng tại góc Tây Nam dưới cội rễ Thần Mộc (`left-4 sm:left-7 bottom-4`).
+2. **Avatar Spine/3D sống động:**
+   * Hiển thị nhân vật trong tư thế thiền định hấp thu linh khí (`Idle_2` / `Front_idle`) khi bình an, hoặc hoảng hốt mỏi mệt khi cây bị bệnh.
+   * Tơ hồng sinh mệnh (Glowing Meridian Thread) nối thẳng từ luân xa tâm thất của nhân vật vào gốc rễ Thần Mộc, khẳng định chân lý: *Nhân vật là linh hồn, Cây Sinh Mệnh là bản thể cuộc đời*.
+3. **Tương tác phản hồi (Avatar Poke Interaction):**
+   * Khi người chơi chạm vào nhân vật: Nhân vật lập tức đổi tư thế (bật nhảy `Jump`, nở nụ cười tự tin `Gotcha_Pose`), tung ra bong bóng thoại ngộ nghĩnh truyền cảm hứng sống và tỏa luồng sinh khí hồi phục.

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Tooltip from './Tooltip';
 
-export type GameTheme = 'obsidian' | 'sepia' | 'cyberpunk';
+export type GameTheme = 'daylight' | 'obsidian' | 'sepia' | 'cyberpunk';
 
 interface ThemeOption {
   id: GameTheme;
@@ -16,11 +16,19 @@ interface ThemeOption {
 
 const THEME_OPTIONS: ThemeOption[] = [
   {
+    id: 'daylight',
+    label: 'Ban Ngày',
+    icon: '☀️',
+    shortDesc: 'Sáng tươi sang trọng',
+    desc: 'Daylight Porcelain: Giao diện sáng thanh lịch phong cách Genshin & The Sims 4. Chữ rõ nét, êm mắt ban ngày (Mặc định)',
+    activeColor: 'bg-amber-500/20 text-amber-700 dark:text-amber-200 border-amber-400/60 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
+  },
+  {
     id: 'obsidian',
     label: 'Obsidian',
     icon: '🌙',
     shortDesc: 'Than chì dịu mắt',
-    desc: 'Obsidian Night: Nền than chì ấm êm dịu, triệt tiêu ánh sáng chói, chống mỏi mắt khi chơi lâu (Khuyên Dùng)',
+    desc: 'Obsidian Night: Nền than chì ấm êm dịu, triệt tiêu ánh sáng chói, chống mỏi mắt khi chơi lâu',
     activeColor: 'bg-amber-500/20 text-amber-200 border-amber-400/50 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
   },
   {
@@ -42,23 +50,23 @@ const THEME_OPTIONS: ThemeOption[] = [
 ];
 
 export default function ThemeSwitcher() {
-  const [theme, setTheme] = useState<GameTheme>('obsidian');
+  const [theme, setTheme] = useState<GameTheme>('daylight');
   const [mounted, setMounted] = useState<boolean>(false);
 
   useEffect(() => {
     setMounted(true);
     try {
-      const saved = (localStorage.getItem('lifegraph_theme') as GameTheme) || 'obsidian';
-      if (['obsidian', 'sepia', 'cyberpunk'].includes(saved)) {
+      const saved = (localStorage.getItem('lifegraph_theme') as GameTheme) || 'daylight';
+      if (['daylight', 'obsidian', 'sepia', 'cyberpunk'].includes(saved)) {
         setTheme(saved);
         document.documentElement.setAttribute('data-theme', saved);
       } else {
-        setTheme('obsidian');
-        document.documentElement.setAttribute('data-theme', 'obsidian');
+        setTheme('daylight');
+        document.documentElement.setAttribute('data-theme', 'daylight');
       }
     } catch {
-      setTheme('obsidian');
-      document.documentElement.setAttribute('data-theme', 'obsidian');
+      setTheme('daylight');
+      document.documentElement.setAttribute('data-theme', 'daylight');
     }
   }, []);
 

@@ -671,12 +671,12 @@ export default function CharacterHeroBanner({
 
             <div className="flex items-center gap-1 text-[11px] text-[var(--text-secondary)] truncate pt-0.5">
               <MapPin className="w-3 h-3 text-rose-400 shrink-0" />
-              <Tooltip content={`Thành phố cư ngụ: ${character.current_city || nationality}`}>
+              <Tooltip content={`Thành phố: ${character.current_city || nationality}`}>
                 <span className="truncate max-w-[120px] cursor-help">{character.current_city || nationality}</span>
               </Tooltip>
               <span className="opacity-40">•</span>
               <Home className="w-3 h-3 text-amber-400 shrink-0" />
-              <Tooltip content={`Chỗ ở hiện tại: ${character.housing?.name || 'Phòng trọ'}`}>
+              <Tooltip content={`Chỗ ở: ${character.housing?.name || 'Phòng trọ'}`}>
                 <span className="truncate text-[var(--text-secondary)] max-w-[120px] cursor-help">{character.housing?.name || 'Phòng trọ'}</span>
               </Tooltip>
             </div>
@@ -684,7 +684,7 @@ export default function CharacterHeroBanner({
         </div>
 
         {/* Zone 2: Life Status Hub & Destiny Focus (Cột Giữa - Lấp đầy hoàn toàn khoảng trống giữa) */}
-        <div className="flex-1 flex flex-col gap-2 px-3.5 py-2.5 rounded-2xl bg-slate-900/50 border border-slate-800/70 backdrop-blur-md min-w-0">
+        <div className="flex-1 flex flex-col gap-2 px-3.5 py-2.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] backdrop-blur-md min-w-0 shadow-sm">
           {/* Row A: Status Badges & RPG Level */}
           <div className="flex items-center gap-2 flex-wrap justify-between">
             <div className="flex items-center gap-1.5 flex-wrap">
@@ -709,29 +709,29 @@ export default function CharacterHeroBanner({
               {age >= 70 && (
                 <Tooltip content={
                   <div className="text-[12px] max-w-xs leading-relaxed">
-                    <strong className="text-amber-300">⏳ Đồng Hồ Cát Sinh Mệnh (Tuổi {age}):</strong> Bạn đã bước vào ngưỡng đại thọ 70+. Tỷ lệ vượt qua thử thách sinh tử năm nay ước tính: <span className="text-amber-300 font-bold">~{survivalRate}%</span>. Hãy duy trì Sinh Lực cao, dưỡng sinh an tịnh và lập di chúc sớm!
+                    <strong className="text-amber-300">⏳ Đồng Hồ Cát (Tuổi {age}):</strong> Tỷ lệ vượt qua thử thách sinh mệnh năm nay: <span className="text-amber-300 font-bold">~{survivalRate}%</span>. Hãy duy trì Sinh Lực và dưỡng sinh an tịnh.
                   </div>
                 }>
                   <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-amber-500/60 bg-amber-950/70 text-amber-300 font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.3)] animate-pulse cursor-help">
                     <Hourglass className="w-3 h-3 text-amber-400 animate-[spin_6s_linear_infinite]" />
-                    <span>Đồng Hồ Cát: ~{survivalRate}% Thọ</span>
+                    <span>~{survivalRate}% Thọ</span>
                   </span>
                 </Tooltip>
               )}
             </div>
 
             {/* RPG Life Level & Title Badge */}
-            <div className="flex items-center gap-1.5 bg-slate-950/80 px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-sm shrink-0">
-              <span className="text-[11px] font-sans tabular-nums font-black text-amber-400">
+            <div className="flex items-center gap-1.5 bg-[var(--bg-card)] px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-sm shrink-0">
+              <span className="text-[11px] font-sans tabular-nums font-black text-amber-500">
                 Lv.{character.life_level || 1}
               </span>
-              <span className="text-[10.5px] font-bold text-amber-200 hidden sm:inline">
-                {character.life_level >= 71 ? "Huyền Thoại Bất Tử" :
-                 character.life_level >= 46 ? "Tài Phiệt & Đầu Sỏ" :
-                 character.life_level >= 26 ? "Doanh Chủ & Trụ Cột" :
-                 character.life_level >= 11 ? "Chuyên Gia Thực Chiến" : "Kẻ Khởi Đầu"}
+              <span className="text-[10.5px] font-bold text-amber-700 dark:text-amber-200 hidden sm:inline">
+                {character.life_level >= 71 ? "Huyền Thoại" :
+                 character.life_level >= 46 ? "Tài Phiệt" :
+                 character.life_level >= 26 ? "Trụ Cột" :
+                 character.life_level >= 11 ? "Thực Chiến" : "Tân Thủ"}
               </span>
-              <div className="w-10 bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800 hidden md:block">
+              <div className="w-10 bg-[var(--bg-card-subtle)] h-1.5 rounded-full overflow-hidden border border-[var(--border-subtle)] hidden md:block">
                 <div
                   className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full"
                   style={{ width: `${Math.min(100, Math.round(((character.life_exp || 0) / (character.life_level >= 71 ? 4000 : character.life_level >= 46 ? 2000 : character.life_level >= 26 ? 1000 : character.life_level >= 11 ? 500 : 250)) * 100))}%` }}
@@ -763,10 +763,10 @@ export default function CharacterHeroBanner({
           </div>
 
           {/* Row B: Innate Traits & Stage Focus Narrative */}
-          <div className="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-slate-800/40 text-[11px]">
+          <div className="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-[var(--border-subtle)] text-[11px]">
             {character.innate_traits && character.innate_traits.length > 0 ? (
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-purple-300 font-semibold flex items-center gap-0.5 text-[10.5px]">🧬 Gen:</span>
+                <span className="text-purple-400 font-semibold flex items-center gap-0.5 text-[10.5px]">🧬 Gen:</span>
                 {character.innate_traits.map((t: string) => {
                   const ft = formatTrait(t);
                   return (
@@ -793,20 +793,20 @@ export default function CharacterHeroBanner({
                 })}
               </div>
             ) : (
-              <span className="text-slate-400 text-[10.5px]">Hạt giống số phận đang nảy mầm...</span>
+              <span className="text-[var(--text-secondary)] text-[10.5px]">Hạt giống số phận đang nảy mầm...</span>
             )}
 
             {(() => {
               const focusText =
-                age < 6 ? "Gắn kết phụ mẫu & bồi dưỡng thể chất" :
-                age < 18 ? "Học vấn đèn sách & rèn chí lập thân" :
-                age < 35 ? "Lập thân lập nghiệp & tích lũy tài sản" :
-                age < 60 ? "Trụ cột gia tộc & củng cố cơ đồ" : "Di sản hoàng hôn & truyền thừa";
+                age < 6 ? "Bồi dưỡng thể chất & tình thân" :
+                age < 18 ? "Học tập & rèn chí lập thân" :
+                age < 35 ? "Lập nghiệp & tích lũy" :
+                age < 60 ? "Trụ cột gia đình & cơ đồ" : "An hưởng & truyền thừa";
               return (
-                <Tooltip content={`Trọng tâm giai đoạn ${age} tuổi: ${focusText}`}>
-                  <div className="text-slate-400 flex items-center gap-1 text-[10.5px] truncate max-w-xs cursor-help">
+                <Tooltip content={`Trọng tâm ${age} tuổi: ${focusText}`}>
+                  <div className="text-[var(--text-secondary)] flex items-center gap-1 text-[10.5px] truncate max-w-xs cursor-help">
                     <span className="text-indigo-400 font-semibold">🎯 Trọng tâm:</span>
-                    <span className="text-slate-300 truncate font-medium">
+                    <span className="text-[var(--text-primary)] truncate font-medium">
                       {focusText}
                     </span>
                   </div>
@@ -823,7 +823,7 @@ export default function CharacterHeroBanner({
                   onOpenAspirationUpgrade?.();
                 }
               }}
-              className={`flex items-center justify-between gap-2.5 pt-1.5 mt-0.5 border-t border-slate-800/60 text-[11px] transition ${
+              className={`flex items-center justify-between gap-2.5 pt-1.5 mt-0.5 border-t border-[var(--border-subtle)] text-[11px] transition ${
                 aspiration.progress >= 100 || aspiration.is_completed
                   ? 'cursor-pointer hover:bg-amber-500/10 px-2 py-1 rounded-xl border-amber-500/40 bg-amber-500/5 animate-pulse'
                   : ''
@@ -833,18 +833,15 @@ export default function CharacterHeroBanner({
                 <span className="w-5 h-5 rounded-md bg-purple-500/20 border border-purple-500/35 flex items-center justify-center text-xs shrink-0 shadow-inner">
                   {aspiration.icon || '🎯'}
                 </span>
-                <span className="text-purple-300 font-bold uppercase tracking-wider text-[10px] hidden sm:inline">
-                  Khát Vọng:
-                </span>
                 <Tooltip content={aspiration.target_summary || aspiration.title}>
-                  <span className="font-bold text-white text-xs truncate max-w-[130px] sm:max-w-[200px]">
+                  <span className="font-bold text-[var(--text-primary)] text-xs truncate max-w-[150px] sm:max-w-[220px]">
                     {aspiration.title}
                   </span>
                 </Tooltip>
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
-                <div className="w-20 sm:w-28 h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                <div className="w-20 sm:w-28 h-2 bg-[var(--bg-card)] rounded-full overflow-hidden border border-[var(--border-subtle)] p-0.5">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${
                       aspiration.progress >= 100
@@ -854,7 +851,7 @@ export default function CharacterHeroBanner({
                     style={{ width: `${Math.min(100, aspiration.progress)}%` }}
                   />
                 </div>
-                <span className="font-sans tabular-nums font-bold text-xs text-amber-300">
+                <span className="font-sans tabular-nums font-bold text-xs text-amber-500">
                   {aspiration.progress}%
                 </span>
                 {aspiration.progress >= 100 && (
@@ -867,7 +864,7 @@ export default function CharacterHeroBanner({
           )}
         </div>
         {/* Right Zone (~30%): Integrated Mini Vitals & Psyche HUD with Life Stage */}
-        <div className="w-full lg:w-[350px] xl:w-[380px] shrink-0 p-3 rounded-2xl bg-slate-950/75 border border-slate-800/80 backdrop-blur-xl shadow-xl flex flex-col gap-2">
+        <div className="w-full lg:w-[350px] xl:w-[380px] shrink-0 p-3 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] backdrop-blur-xl shadow-md flex flex-col gap-2">
           
           {/* Active Action Feedback Flash Notice */}
           {activeFeedback && (
