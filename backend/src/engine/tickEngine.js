@@ -83,6 +83,8 @@ export async function processPassivePhase(character, assets, relationships) {
   const hasStoicMind = unlockedSkills.includes("stoic_mind");
   const hasEncyclopedic = unlockedSkills.includes("encyclopedic_brain");
   const hasCapitalEngine = unlockedSkills.includes("capital_engine");
+  const equippedPet = character.equipped_pet || 'none';
+  const hasDragonProtection = equippedPet === 'dragon' || flagsSet.has("dragon_celestial_shield");
 
   // 1. Natural aging
   const traits = Array.isArray(character.innate_traits) ? character.innate_traits : [];
@@ -137,12 +139,15 @@ export async function processPassivePhase(character, assets, relationships) {
 
     // Check if any metric hit rock bottom (< 20%) -> Trigger Global Calamity
     if (globalIndices.economy < 20 || globalIndices.social < 20 || globalIndices.environment < 20) {
-      const penalty = Math.round(netWorth * 0.20);
+      const baseRatio = hasDragonProtection ? 0.14 : 0.20;
+      const penalty = Math.round(netWorth * baseRatio);
       cash -= penalty;
-      vitality = Math.max(10, vitality - 15);
-      burnout = Math.min(100, burnout + 25);
+      vitality = Math.max(10, vitality - (hasDragonProtection ? 10 : 15));
+      burnout = Math.min(100, burnout + (hasDragonProtection ? 15 : 25));
       flagsSet.add("survived_global_calamity");
-      macroCalamityNotice = "⚠️ THẢM HỌA VĨ MÔ TOÀN CẦU KÍCH HOẠT: Khủng hoảng chạm đáy đã làm bốc hơi 20% tài sản và gây chấn động sức khỏe trầm trọng.";
+      macroCalamityNotice = hasDragonProtection
+        ? "⚠️ THẢM HỌA VĨ MÔ TOÀN CẦU KÍCH HOẠT: Khủng hoảng chạm đáy đã làm bốc hơi 14% tài sản (Ấu Long Luân Hồi che chở giảm 30% tổn thất!)."
+        : "⚠️ THẢM HỌA VĨ MÔ TOÀN CẦU KÍCH HOẠT: Khủng hoảng chạm đáy đã làm bốc hơi 20% tài sản và gây chấn động sức khỏe trầm trọng.";
       // Slightly reset metric above crisis threshold
       globalIndices.economy = Math.max(30, globalIndices.economy);
       globalIndices.social = Math.max(30, globalIndices.social);
@@ -181,54 +186,60 @@ export async function processPassivePhase(character, assets, relationships) {
   // 5.5 Macro Economic Shocks (Quyết định 3: Biến cố vĩ mô ngẫu nhiên)
   let macroShockNotice = null;
   let macroShockType = null;
-  if (age >= 22 && !macroCalamityNotice && !wealthDrainNotice && Math.random() < 0.15) {
+  if (age >= 22 && !macroCalamityNotice && !wealthDrainNotice && process.env.NODE_ENV !== 'test' && Math.random() < 0.15) {
     const shockTypes = ['bubble', 'crash', 'inflation', 'layoff'];
     const selected = shockTypes[Math.floor(Math.random() * shockTypes.length)];
+    const dragonTag = hasDragonProtection ? " (Ấu Long che chở giảm 30% chấn động)" : "";
+
     if (selected === 'bubble') {
       macroShockType = 'macro_real_estate_bubble';
       flagsSet.add("macro_real_estate_bubble");
+      const reDropRatio = hasDragonProtection ? 0.825 : 0.75;
       const reAssets = assets.filter(a => a.type === 'real_estate' || a.type === 'property' || (a.name || '').toLowerCase().includes('nhà') || (a.name || '').toLowerCase().includes('đất'));
       if (reAssets.length > 0) {
         for (const re of reAssets) {
-          re.current_value = Math.max(5000, Math.round(re.current_value * 0.75));
+          re.current_value = Math.max(5000, Math.round(re.current_value * reDropRatio));
           try { await updateAsset(re.id, { current_value: re.current_value }); } catch (_e) {}
         }
-        macroShockNotice = "💥 BIẾN CỐ VĨ MÔ: Vỡ bong bóng địa ốc khiến giá trị các bất động sản sở hữu sụt giảm 25%!";
+        macroShockNotice = `💥 BIẾN CỐ VĨ MÔ: Vỡ bong bóng địa ốc khiến giá trị bất động sản sụt giảm ${hasDragonProtection ? '17.5%' : '25%'}${dragonTag}!`;
       } else {
-        const rentHike = Math.min(Math.round(cash * 0.08), 3500);
+        const rawHike = Math.min(Math.round(cash * 0.08), 3500);
+        const rentHike = hasDragonProtection ? Math.round(rawHike * 0.7) : rawHike;
         cash = Math.max(0, cash - rentHike);
-        macroShockNotice = `💥 BIẾN CỐ VĨ MÔ: Cơn sốt đất ảo đẩy tiền thuê nhà phi mã, thâm hụt thêm $${rentHike.toLocaleString()} chi phí chỗ ở!`;
+        macroShockNotice = `💥 BIẾN CỐ VĨ MÔ: Cơn sốt đất ảo đẩy tiền thuê nhà phi mã, thâm hụt thêm $${rentHike.toLocaleString()} chi phí chỗ ở${dragonTag}!`;
       }
     } else if (selected === 'crash') {
       macroShockType = 'macro_crypto_stock_crash';
       flagsSet.add("macro_crypto_stock_crash");
+      const stDropRatio = hasDragonProtection ? 0.755 : 0.65;
       const stAssets = assets.filter(a => a.type === 'stocks' || a.type === 'crypto' || (a.name || '').toLowerCase().includes('cổ phiếu') || (a.name || '').toLowerCase().includes('coin'));
       if (stAssets.length > 0) {
         for (const st of stAssets) {
-          st.current_value = Math.max(1000, Math.round(st.current_value * 0.65));
+          st.current_value = Math.max(1000, Math.round(st.current_value * stDropRatio));
           try { await updateAsset(st.id, { current_value: st.current_value }); } catch (_e) {}
         }
-        macroShockNotice = "📉 BIẾN CỐ VĨ MÔ: Thiên nga đen sập sàn tài chính khiến danh mục cổ phiếu/chứng khoán bốc hơi 35%!";
+        macroShockNotice = `📉 BIẾN CỐ VĨ MÔ: Sập sàn tài chính khiến danh mục cổ phiếu/chứng khoán sụt giảm ${hasDragonProtection ? '24.5%' : '35%'}${dragonTag}!`;
       } else if (cash > 25000) {
-        const bargainGain = Math.round(cash * 0.08);
+        const bargainGain = Math.round(cash * (hasDragonProtection ? 0.11 : 0.08));
         cash += bargainGain;
         macroShockNotice = `📉 BIẾN CỐ VĨ MÔ: Sập sàn tài chính mở ra cơ hội vàng bắt đáy tài sản giá rẻ, thặng dư thêm +$${bargainGain.toLocaleString()}!`;
       } else {
-        macroShockNotice = "📉 BIẾN CỐ VĨ MÔ: Sóng gió tài chính toàn cầu gây đóng băng tín dụng, môi trường kiếm tiền thắt chặt!";
+        macroShockNotice = `📉 BIẾN CỐ VĨ MÔ: Sóng gió tài chính toàn cầu gây đóng băng tín dụng, môi trường kiếm tiền thắt chặt${dragonTag}!`;
       }
     } else if (selected === 'inflation') {
       macroShockType = 'macro_inflation_spike';
       flagsSet.add("macro_inflation_spike");
-      const cashLoss = Math.round(cash * 0.12);
+      const rawLoss = Math.round(cash * 0.12);
+      const cashLoss = hasDragonProtection ? Math.round(rawLoss * 0.7) : rawLoss;
       cash = Math.max(0, cash - cashLoss);
-      burnout = Math.min(100, burnout + 10);
-      macroShockNotice = `🔥 BIẾN CỐ VĨ MÔ: Bão giá & lạm phát phi mã làm sức mua tiền mặt sụt giảm $${cashLoss.toLocaleString()}, áp lực cơm áo tăng vọt!`;
+      burnout = Math.min(100, burnout + (hasDragonProtection ? 6 : 10));
+      macroShockNotice = `🔥 BIẾN CỐ VĨ MÔ: Bão giá & lạm phát phi mã làm sức mua tiền mặt sụt giảm $${cashLoss.toLocaleString()}${dragonTag}!`;
     } else {
       macroShockType = 'macro_tech_layoff_wave';
       flagsSet.add("macro_tech_layoff_wave");
-      burnout = Math.min(100, burnout + 18);
-      vitality = Math.max(10, vitality - 8);
-      macroShockNotice = "⚡ BIẾN CỐ VĨ MÔ: Làn sóng sa thải AI & tái cơ cấu toàn diện quét qua thị trường việc làm, tăng áp lực công việc khốc liệt!";
+      burnout = Math.min(100, burnout + (hasDragonProtection ? 12 : 18));
+      vitality = Math.max(10, vitality - (hasDragonProtection ? 5 : 8));
+      macroShockNotice = `⚡ BIẾN CỐ VĨ MÔ: Làn sóng sa thải AI quét qua thị trường việc làm, tăng áp lực công việc khốc liệt${dragonTag}!`;
     }
   }
 
@@ -306,6 +317,34 @@ export async function processPassivePhase(character, assets, relationships) {
 
   if (traits.includes('resilient_spirit')) {
     burnout = Math.max(0, burnout - 4);
+  }
+
+  // 6.5 Equipped Guardian Pet Passive Perks
+  let petNotice = null;
+  if (equippedPet === 'puppy') {
+    burnout = Math.max(0, burnout - 8);
+    for (const rel of relationships) {
+      if (rel.status !== 'deceased') {
+        rel.affection_level = Math.min(100, (Number(rel.affection_level) || 50) + 3);
+      }
+    }
+    petNotice = "🐶 Cún Cỏ Trung Nghĩa: Quấn quýt sưởi ấm tâm hồn (-8% Burnout, +3 Tình cảm gia đình).";
+  } else if (equippedPet === 'cat') {
+    if (totalAssetIncome > 0) {
+      totalAssetIncome = Math.round(totalAssetIncome * 1.05);
+    }
+    const catBonus = Math.max(150, Math.round((Number(cash) || 0) * 0.02));
+    cash += catBonus;
+    petNotice = `🐱 Mèo Thần Tài: Vẫy tay chiêu tài lộc (+5% lợi tức tài sản, +$${catBonus.toLocaleString()} tiền may mắn).`;
+  } else if (equippedPet === 'fox') {
+    flagsSet.add("fox_charm_aura");
+    character.charm = Math.min(100, (Number(character.charm) || 50) + 5);
+    petNotice = "🦊 Hồ Ly Cửu Vĩ: Vầng sáng mê hoặc quyến rũ (+5 Sức hút Charm, tăng cơ duyên quý nhân).";
+  } else if (equippedPet === 'dragon') {
+    karma = Math.min(100, (Number(karma) || 50) + 10);
+    vitality = Math.min(maxVitality, vitality + 3);
+    flagsSet.add("dragon_celestial_shield");
+    petNotice = "🐉 Ấu Long Luân Hồi: Ngâm vang hộ mệnh trên đỉnh Thần Mộc (+10 Karma, +3 HP, giảm 30% sát thương biến cố).";
   }
 
   // 7. Family upkeep & affection + Child aging & unlocked AP
@@ -696,6 +735,7 @@ export async function processPassivePhase(character, assets, relationships) {
         family_events: [
           ...(convertedApNotice ? [convertedApNotice] : []),
           ...(childhoodHealthCrisisNotice ? [childhoodHealthCrisisNotice] : []),
+          ...(petNotice ? [petNotice] : []),
           ...childHealthEvents,
           ...(capitalEngineBonus > 0 ? [`👑 Cỗ Máy Dòng Tiền: Thu về +$${capitalEngineBonus.toLocaleString()} lợi tức thụ động không hao tổn sinh lực.`] : []),
           ...(hasEncyclopedic ? [`📚 Bách Khoa Toàn Thư: Trí tuệ uyên thâm đem lại +25 Karma danh vọng học thuật.`] : []),

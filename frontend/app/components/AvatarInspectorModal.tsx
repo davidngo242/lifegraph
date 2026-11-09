@@ -109,6 +109,7 @@ export default function AvatarInspectorModal({
             traits={traits}
             netWorth={netWorth}
             equippedPet={character?.equipped_pet || 'none'}
+            level={character?.life_level || 1}
             className="w-full h-full"
           />
 

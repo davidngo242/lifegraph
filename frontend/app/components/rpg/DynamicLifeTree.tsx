@@ -39,15 +39,6 @@ import SkillTreeTab from './SkillTreeTab';
 import SocialLinksTab from './SocialLinksTab';
 import { soundFx } from '../../utils/soundEffects';
 
-const Dynamic3DAvatar = dynamic(() => import('../Safe3DAvatar'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-slate-950">
-      <div className="w-5 h-5 rounded-full border-2 border-emerald-500/40 border-t-emerald-400 animate-spin" />
-    </div>
-  )
-});
-
 export interface LifeTreeNode {
   id: string;
   title: string;
@@ -101,6 +92,7 @@ export interface DynamicLifeTreeProps {
   onFamilyMeal?: () => void;
   onFamilyMentorship?: () => void;
   onRpgActivePerk?: (type: string) => void;
+  onOpenPetSanctuary?: () => void;
   isLoading?: boolean;
 }
 
@@ -129,6 +121,7 @@ export default function DynamicLifeTree({
   onFamilyMeal,
   onFamilyMentorship,
   onRpgActivePerk,
+  onOpenPetSanctuary,
   isLoading = false
 }: DynamicLifeTreeProps) {
   const [treeViewMode, setTreeViewMode] = useState<'life_actions' | 'skill_tree' | 'social_links'>('life_actions');
@@ -173,6 +166,100 @@ export default function DynamicLifeTree({
   const spouse = character?.spouse || relationships.find((r: any) => r.type === 'spouse' || r.type === 'partner' || r.relation === 'spouse');
   const hasSpouse = Boolean(spouse);
   const childrenList: any[] = character?.children || relationships.filter((r: any) => r.type === 'child' || r.relation === 'child') || [];
+
+  // 4 Seasons & Climate Cycle System (Quyết định 2)
+  const SEASONS: Array<{
+    id: 'spring' | 'summer' | 'autumn' | 'winter';
+    name: string;
+    icon: string;
+    color: string;
+    bgBadge: string;
+    borderBadge: string;
+    textBadge: string;
+    tropicalClimate: { title: string; desc: string };
+    temperateClimate: { title: string; desc: string };
+  }> = [
+    {
+      id: 'spring',
+      name: 'Xuân Sang',
+      icon: '🌸',
+      color: '#f472b6',
+      bgBadge: 'bg-pink-950/70',
+      borderBadge: 'border-pink-500/40',
+      textBadge: 'text-pink-300',
+      tropicalClimate: { title: 'Xuân Sang Đâm Chồi', desc: 'Hoa Mai & Đào khoe sắc, vạn vật hồi sinh, khởi sắc đại vận' },
+      temperateClimate: { title: 'Băng Tan Chồi Biếc', desc: 'Tuyết tan trên sườn đồi, mầm non đội đất đón nắng ấm đầu mùa' }
+    },
+    {
+      id: 'summer',
+      name: 'Hạ Rực Rỡ',
+      icon: '☀️',
+      color: '#f59e0b',
+      bgBadge: 'bg-amber-950/70',
+      borderBadge: 'border-amber-500/40',
+      textBadge: 'text-amber-300',
+      tropicalClimate: { title: 'Hạ Chí Nắng Vàng', desc: 'Trời quang mây tạnh, sinh lực căng tràn, nhiệt huyết thăng hoa' },
+      temperateClimate: { title: 'Nắng Hè Chói Lọi', desc: 'Ngày dài đêm ngắn, biển trời xanh ngắt, dồi dào sinh khí' }
+    },
+    {
+      id: 'autumn',
+      name: 'Thu Hoan Ca',
+      icon: '🍁',
+      color: '#ea580c',
+      bgBadge: 'bg-orange-950/70',
+      borderBadge: 'border-orange-500/40',
+      textBadge: 'text-orange-300',
+      tropicalClimate: { title: 'Gió Heo May Về', desc: 'Lúa vàng trĩu hạt, gió heo may se lạnh, kết tinh quả ngọt' },
+      temperateClimate: { title: 'Rừng Phong Đỏ Thắm', desc: 'Lá phong nhuộm đỏ đại ngàn, thu hoạch mùa màng no ấm' }
+    },
+    {
+      id: 'winter',
+      name: 'Đông Tĩnh Lặng',
+      icon: '❄️',
+      color: '#38bdf8',
+      bgBadge: 'bg-sky-950/70',
+      borderBadge: 'border-sky-500/40',
+      textBadge: 'text-sky-300',
+      tropicalClimate: { title: 'Mưa Phùn Se Lạnh', desc: 'Mưa xuân lất phất, không khí trầm lắng, tích lũy nội lực' },
+      temperateClimate: { title: 'Tuyết Phủ Tinh Khôi', desc: 'Bông tuyết trắng ngần phủ kín cành cây, ngủ đông dưỡng khí' }
+    }
+  ];
+
+  const seasonIndex = (characterAge >= 0 ? characterAge : 0) % 4;
+  const currentSeason = SEASONS[seasonIndex];
+
+  // Country climate check (Việt Nam & Đông Nam Á vs Ôn đới phương Tây)
+  const isTropicalCountry = ['Việt Nam', 'Vietnam', 'Thailand', 'Thái Lan', 'Indonesia', 'Philippines', 'Singapore', 'Malaysia', 'Ấn Độ', 'India', 'Brazil'].some(c => 
+    nationality.toLowerCase().includes(c.toLowerCase())
+  );
+  const seasonClimate = isTropicalCountry ? currentSeason.tropicalClimate : currentSeason.temperateClimate;
+
+  // Equipped Spirit Guardian Pet (Quyết định 4)
+  const equippedPet = character?.equipped_pet || 'none';
+  const [petHeartAnim, setPetHeartAnim] = useState<boolean>(false);
+  const [petFeedbackText, setPetFeedbackText] = useState<string | null>(null);
+
+  const handlePetInteraction = () => {
+    if (equippedPet === 'puppy') {
+      soundFx.playPetBark();
+      setPetFeedbackText('Gâu gâu! Cún Lucky ve vẩy đuôi ôm chân bạn (-8% Burnout, +3 Tình cảm)!');
+    } else if (equippedPet === 'cat') {
+      soundFx.playPetMeow();
+      setPetFeedbackText('Meo meo~ Mèo Mochi ôm đồng tiền vàng vẫy tay chiêu tài lộc (+5% Lợi tức)!');
+    } else if (equippedPet === 'fox') {
+      soundFx.playFoxChirp();
+      setPetFeedbackText('Hồ Ly Cửu Vĩ xòe 9 đuôi phát quang tím mê hoặc (+5 Charm, Quý Nhân)!');
+    } else if (equippedPet === 'dragon') {
+      soundFx.playDragonRoar();
+      setPetFeedbackText('Ấu Long Luân Hồi ngâm vang chấn động Thần Mộc (+10 Karma, -30% Shock)!');
+    } else {
+      if (onOpenPetSanctuary) onOpenPetSanctuary();
+      return;
+    }
+    setPetHeartAnim(true);
+    setTimeout(() => setPetHeartAnim(false), 1200);
+    setTimeout(() => setPetFeedbackText(null), 3500);
+  };
 
   // Interactive Avatar Poke / Voice
   const handleAvatarPoke = () => {
@@ -1015,6 +1102,107 @@ export default function DynamicLifeTree({
           </div>
         </div>
 
+        {/* ========================================================================= */}
+        {/* SEASON & CLIMATE BADGE (CHU KỲ 4 MÙA & THỜI TIẾT THEO QUỐC GIA - ĐỀ XUẤT 2) */}
+        {/* ========================================================================= */}
+        <div className="absolute top-[70px] sm:top-[74px] left-4 sm:left-6 z-25 pointer-events-auto">
+          <Tooltip
+            content={
+              <div className="space-y-1 text-xs max-w-xs">
+                <div className="flex items-center gap-1.5 font-bold text-amber-300">
+                  <span>{currentSeason.icon}</span>
+                  <span>{currentSeason.name} • {seasonClimate.title}</span>
+                </div>
+                <div className="text-slate-200">{seasonClimate.desc}</div>
+                <div className="text-[10px] text-slate-400 font-mono">
+                  Quốc gia: {nationality} ({isTropicalCountry ? 'Nhiệt đới / Á nhiệt đới' : 'Ôn đới / Hàn đới'})
+                </div>
+                <div className="text-[10px] text-emerald-300">Nhấp để lắng nghe phong linh bốn mùa</div>
+              </div>
+            }
+          >
+            <button
+              type="button"
+              onClick={() => soundFx.playSeasonBreeze()}
+              className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full ${currentSeason.bgBadge} border ${currentSeason.borderBadge} shadow-lg backdrop-blur-md flex items-center gap-1.5 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer text-xs`}
+            >
+              <span className="text-sm">{currentSeason.icon}</span>
+              <span className={`font-bold ${currentSeason.textBadge}`}>{currentSeason.name}</span>
+              <span className="text-slate-500 hidden sm:inline">•</span>
+              <span className="text-[10px] text-slate-300 hidden sm:inline truncate max-w-[130px] font-sans">
+                {seasonClimate.title}
+              </span>
+            </button>
+          </Tooltip>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* SPIRIT GUARDIAN PET CONTROLS (THÚ CƯNG HỘ MỆNH TINH THẦN - ĐỀ XUẤT 4) */}
+        {/* ========================================================================= */}
+        <div className="absolute top-[70px] sm:top-[74px] right-4 sm:right-6 z-25 pointer-events-auto flex items-center gap-1.5">
+          {equippedPet !== 'none' ? (
+            <Tooltip
+              content={
+                <div className="space-y-1 text-xs max-w-xs">
+                  <div className="flex items-center gap-1.5 font-bold text-amber-300">
+                    <span>{equippedPet === 'puppy' ? '🐶' : equippedPet === 'cat' ? '🐱' : equippedPet === 'fox' ? '🦊' : '🐉'}</span>
+                    <span>Linh Thú: {equippedPet === 'puppy' ? 'Cún Cỏ Trung Nghĩa' : equippedPet === 'cat' ? 'Mèo Thần Tài' : equippedPet === 'fox' ? 'Hồ Ly Cửu Vĩ' : 'Ấu Long Luân Hồi'}</span>
+                  </div>
+                  <div className="text-slate-200">
+                    {equippedPet === 'puppy' ? 'Giảm 8% Burnout thụ động, +3 Tình cảm người thân hàng năm' :
+                     equippedPet === 'cat' ? '+5% Lợi tức tài sản, chiêu tài đón lộc thặng dư' :
+                     equippedPet === 'fox' ? '+5 Sức hút Charm, tăng cơ duyên gặp gỡ quý nhân' :
+                     '+10 Karma, +3 HP, giảm 30% tổn thất từ biến cố vĩ mô'}
+                  </div>
+                  <div className="text-[10px] text-amber-400 font-mono">Nhấp để vuốt ve & nghe tiếng kêu!</div>
+                </div>
+              }
+            >
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handlePetInteraction}
+                  className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-indigo-950/80 hover:bg-indigo-900/80 border border-indigo-400/50 shadow-lg backdrop-blur-md flex items-center gap-1.5 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer text-xs"
+                >
+                  <span className="text-base animate-bounce">{equippedPet === 'puppy' ? '🐶' : equippedPet === 'cat' ? '🐱' : equippedPet === 'fox' ? '🦊' : '🐉'}</span>
+                  <span className="font-bold text-indigo-200 text-xs">
+                    {equippedPet === 'puppy' ? 'Cún Lucky' : equippedPet === 'cat' ? 'Mèo Mochi' : equippedPet === 'fox' ? 'Cửu Vĩ' : 'Ấu Long'}
+                  </span>
+                  {petHeartAnim && <span className="animate-ping text-rose-400 text-xs">❤️</span>}
+                </button>
+                {onOpenPetSanctuary && (
+                  <button
+                    type="button"
+                    onClick={onOpenPetSanctuary}
+                    className="p-1.5 rounded-full bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition shadow text-xs"
+                    title="Đổi hoặc Mở Chuồng Linh Thú"
+                  >
+                    🐾
+                  </button>
+                )}
+              </div>
+            </Tooltip>
+          ) : (
+            onOpenPetSanctuary && (
+              <button
+                type="button"
+                onClick={onOpenPetSanctuary}
+                className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-800/90 border border-amber-500/40 hover:border-amber-400 text-amber-300 hover:text-amber-200 text-xs font-semibold shadow-lg backdrop-blur flex items-center gap-1.5 transition active:scale-95 cursor-pointer"
+              >
+                <span>🐾</span>
+                <span>Đón Linh Thú</span>
+              </button>
+            )
+          )}
+        </div>
+
+        {/* Pet Floating Speech Balloon Notification */}
+        {petFeedbackText && (
+          <div className="absolute top-[112px] right-4 sm:right-6 z-30 px-3 py-1.5 rounded-2xl bg-indigo-950/95 border border-indigo-400 text-indigo-100 text-xs font-semibold shadow-2xl backdrop-blur animate-in fade-in zoom-in-95 duration-200 max-w-xs pointer-events-none">
+            {petFeedbackText}
+          </div>
+        )}
+
         {/* BOUGH 2: NHÂN MẠCH QUÝ NHÂN (THIÊN ĐỈNH - VƯƠNG MIỆN TÁN CÂY) */}
         <div
           onClick={() => setTreeViewMode('social_links')}
@@ -1064,6 +1252,107 @@ export default function DynamicLifeTree({
             <ArrowUpRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition shrink-0" />
           </div>
         </div>
+
+        {/* ========================================================================= */}
+        {/* SEASON & CLIMATE BADGE (CHU KỲ 4 MÙA & THỜI TIẾT THEO QUỐC GIA - ĐỀ XUẤT 2) */}
+        {/* ========================================================================= */}
+        <div className="absolute top-[70px] sm:top-[74px] left-4 sm:left-6 z-25 pointer-events-auto">
+          <Tooltip
+            content={
+              <div className="space-y-1 text-xs max-w-xs">
+                <div className="flex items-center gap-1.5 font-bold text-amber-300">
+                  <span>{currentSeason.icon}</span>
+                  <span>{currentSeason.name} • {seasonClimate.title}</span>
+                </div>
+                <div className="text-slate-200">{seasonClimate.desc}</div>
+                <div className="text-[10px] text-slate-400 font-mono">
+                  Quốc gia: {nationality} ({isTropicalCountry ? 'Nhiệt đới / Á nhiệt đới' : 'Ôn đới / Hàn đới'})
+                </div>
+                <div className="text-[10px] text-emerald-300">Nhấp để lắng nghe phong linh bốn mùa</div>
+              </div>
+            }
+          >
+            <button
+              type="button"
+              onClick={() => soundFx.playSeasonBreeze()}
+              className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full ${currentSeason.bgBadge} border ${currentSeason.borderBadge} shadow-lg backdrop-blur-md flex items-center gap-1.5 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer text-xs`}
+            >
+              <span className="text-sm">{currentSeason.icon}</span>
+              <span className={`font-bold ${currentSeason.textBadge}`}>{currentSeason.name}</span>
+              <span className="text-slate-500 hidden sm:inline">•</span>
+              <span className="text-[10px] text-slate-300 hidden sm:inline truncate max-w-[130px] font-sans">
+                {seasonClimate.title}
+              </span>
+            </button>
+          </Tooltip>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* SPIRIT GUARDIAN PET CONTROLS (THÚ CƯNG HỘ MỆNH TINH THẦN - ĐỀ XUẤT 4) */}
+        {/* ========================================================================= */}
+        <div className="absolute top-[70px] sm:top-[74px] right-4 sm:right-6 z-25 pointer-events-auto flex items-center gap-1.5">
+          {equippedPet !== 'none' ? (
+            <Tooltip
+              content={
+                <div className="space-y-1 text-xs max-w-xs">
+                  <div className="flex items-center gap-1.5 font-bold text-amber-300">
+                    <span>{equippedPet === 'puppy' ? '🐶' : equippedPet === 'cat' ? '🐱' : equippedPet === 'fox' ? '🦊' : '🐉'}</span>
+                    <span>Linh Thú: {equippedPet === 'puppy' ? 'Cún Cỏ Trung Nghĩa' : equippedPet === 'cat' ? 'Mèo Thần Tài' : equippedPet === 'fox' ? 'Hồ Ly Cửu Vĩ' : 'Ấu Long Luân Hồi'}</span>
+                  </div>
+                  <div className="text-slate-200">
+                    {equippedPet === 'puppy' ? 'Giảm 8% Burnout thụ động, +3 Tình cảm người thân hàng năm' :
+                     equippedPet === 'cat' ? '+5% Lợi tức tài sản, chiêu tài đón lộc thặng dư' :
+                     equippedPet === 'fox' ? '+5 Sức hút Charm, tăng cơ duyên gặp gỡ quý nhân' :
+                     '+10 Karma, +3 HP, giảm 30% tổn thất từ biến cố vĩ mô'}
+                  </div>
+                  <div className="text-[10px] text-amber-400 font-mono">Nhấp để vuốt ve & nghe tiếng kêu!</div>
+                </div>
+              }
+            >
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handlePetInteraction}
+                  className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-indigo-950/80 hover:bg-indigo-900/80 border border-indigo-400/50 shadow-lg backdrop-blur-md flex items-center gap-1.5 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer text-xs"
+                >
+                  <span className="text-base animate-bounce">{equippedPet === 'puppy' ? '🐶' : equippedPet === 'cat' ? '🐱' : equippedPet === 'fox' ? '🦊' : '🐉'}</span>
+                  <span className="font-bold text-indigo-200 text-xs">
+                    {equippedPet === 'puppy' ? 'Cún Lucky' : equippedPet === 'cat' ? 'Mèo Mochi' : equippedPet === 'fox' ? 'Cửu Vĩ' : 'Ấu Long'}
+                  </span>
+                  {petHeartAnim && <span className="animate-ping text-rose-400 text-xs">❤️</span>}
+                </button>
+                {onOpenPetSanctuary && (
+                  <button
+                    type="button"
+                    onClick={onOpenPetSanctuary}
+                    className="p-1.5 rounded-full bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition shadow text-xs"
+                    title="Đổi hoặc Mở Chuồng Linh Thú"
+                  >
+                    🐾
+                  </button>
+                )}
+              </div>
+            </Tooltip>
+          ) : (
+            onOpenPetSanctuary && (
+              <button
+                type="button"
+                onClick={onOpenPetSanctuary}
+                className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-800/90 border border-amber-500/40 hover:border-amber-400 text-amber-300 hover:text-amber-200 text-xs font-semibold shadow-lg backdrop-blur flex items-center gap-1.5 transition active:scale-95 cursor-pointer"
+              >
+                <span>🐾</span>
+                <span>Đón Linh Thú</span>
+              </button>
+            )
+          )}
+        </div>
+
+        {/* Pet Floating Speech Balloon Notification */}
+        {petFeedbackText && (
+          <div className="absolute top-[112px] right-4 sm:right-6 z-30 px-3 py-1.5 rounded-2xl bg-indigo-950/95 border border-indigo-400 text-indigo-100 text-xs font-semibold shadow-2xl backdrop-blur animate-in fade-in zoom-in-95 duration-200 max-w-xs pointer-events-none">
+            {petFeedbackText}
+          </div>
+        )}
 
         {/* ========================================================================= */}
         {/* SVG SCENIC CANVAS: PROCEDURAL 3D TRUNK, SHADING, MERIDIANS & FOLIAGE */}

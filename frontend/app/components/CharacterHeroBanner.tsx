@@ -522,6 +522,7 @@ export default function CharacterHeroBanner({
                   traits={traits}
                   netWorth={netWorth}
                   equippedPet={character.equipped_pet || 'none'}
+                  level={character.life_level || 1}
                   className="w-full h-full overflow-visible pointer-events-auto"
                 />
               </div>

@@ -18,6 +18,7 @@ type Props = {
   traits?: string[];
   netWorth?: number;
   equippedPet?: string;
+  level?: number;
 };
 
 function Portrait({ age = 20 }: { age?: number }) {

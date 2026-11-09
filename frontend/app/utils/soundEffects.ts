@@ -304,6 +304,179 @@ class SoundEngine {
       // Ignore
     }
   }
+
+  /**
+   * Tiếng cún con sủa vui mừng "gâu gâu" khi được vuốt ve
+   */
+  public playPetBark() {
+    if (this.isMuted) return;
+    const ctx = this.getContext();
+    if (!ctx) return;
+
+    try {
+      const now = ctx.currentTime;
+      [0, 0.16].forEach((offset) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(450, now + offset);
+        osc.frequency.exponentialRampToValueAtTime(220, now + offset + 0.12);
+
+        gain.gain.setValueAtTime(0.01, now + offset);
+        gain.gain.linearRampToValueAtTime(0.25, now + offset + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.12);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now + offset);
+        osc.stop(now + offset + 0.12);
+      });
+    } catch {
+      // Ignore
+    }
+  }
+
+  /**
+   * Tiếng mèo kêu "meo meo~" ngọt ngào lướt tần số sine
+   */
+  public playPetMeow() {
+    if (this.isMuted) return;
+    const ctx = this.getContext();
+    if (!ctx) return;
+
+    try {
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(620, now);
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.15);
+      osc.frequency.exponentialRampToValueAtTime(520, now + 0.45);
+
+      gain.gain.setValueAtTime(0.01, now);
+      gain.gain.linearRampToValueAtTime(0.2, now + 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.45);
+    } catch {
+      // Ignore
+    }
+  }
+
+  /**
+   * Tiếng hồ ly linh khí huyền bí ma mị
+   */
+  public playFoxChirp() {
+    if (this.isMuted) return;
+    const ctx = this.getContext();
+    if (!ctx) return;
+
+    try {
+      const now = ctx.currentTime;
+      const freqs = [880, 1174.66, 1396.91, 1760];
+      freqs.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.25, now + idx * 0.06 + 0.18);
+
+        gain.gain.setValueAtTime(0.01, now + idx * 0.06);
+        gain.gain.linearRampToValueAtTime(0.15, now + idx * 0.06 + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.22);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now + idx * 0.06);
+        osc.stop(now + idx * 0.06 + 0.22);
+      });
+    } catch {
+      // Ignore
+    }
+  }
+
+  /**
+   * Tiếng rồng ngâm trầm ấm quyền uy chấn động Thần Mộc
+   */
+  public playDragonRoar() {
+    if (this.isMuted) return;
+    const ctx = this.getContext();
+    if (!ctx) return;
+
+    try {
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const oscSub = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(90, now);
+      osc.frequency.exponentialRampToValueAtTime(160, now + 0.3);
+      osc.frequency.exponentialRampToValueAtTime(55, now + 0.85);
+
+      oscSub.type = 'sine';
+      oscSub.frequency.setValueAtTime(45, now);
+      oscSub.frequency.exponentialRampToValueAtTime(80, now + 0.3);
+      oscSub.frequency.exponentialRampToValueAtTime(30, now + 0.85);
+
+      gain.gain.setValueAtTime(0.01, now);
+      gain.gain.linearRampToValueAtTime(0.22, now + 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+
+      osc.connect(gain);
+      oscSub.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      oscSub.start(now);
+      osc.stop(now + 0.85);
+      oscSub.stop(now + 0.85);
+    } catch {
+      // Ignore
+    }
+  }
+
+  /**
+   * Tiếng chuông gió mùa phong linh ngân nga khi chuyển mùa
+   */
+  public playSeasonBreeze() {
+    if (this.isMuted) return;
+    const ctx = this.getContext();
+    if (!ctx) return;
+
+    try {
+      const now = ctx.currentTime;
+      const pentatonic = [587.33, 659.25, 783.99, 880, 1046.5]; // D5, E5, G5, A5, C6
+      pentatonic.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+        gain.gain.setValueAtTime(0.01, now + idx * 0.08);
+        gain.gain.linearRampToValueAtTime(0.12, now + idx * 0.08 + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.5);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now + idx * 0.08);
+        osc.stop(now + idx * 0.08 + 0.5);
+      });
+    } catch {
+      // Ignore
+    }
+  }
 }
 
 export const soundFx = new SoundEngine();
