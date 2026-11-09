@@ -872,7 +872,7 @@ export default function DynamicLifeTree({
                 <div className="text-left min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="text-[11px] font-bold text-purple-400 uppercase tracking-wider">
-                      Kỹ Năng
+                      Nhánh Kỹ Năng
                     </span>
                     {(character?.skill_points || 0) > 0 && (
                       <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 font-black animate-pulse">
@@ -915,7 +915,7 @@ export default function DynamicLifeTree({
                 <div className="text-left min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="text-[11px] font-bold text-sky-400 uppercase tracking-wider">
-                      Nhân Mạch
+                      Nhân Mạch Quý Nhân
                     </span>
                     <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/40 font-mono">
                       {character?.social_links?.length || 4}
@@ -940,7 +940,7 @@ export default function DynamicLifeTree({
                 </span>
                 <div className="text-left min-w-0">
                   <span className="text-[11px] font-bold text-amber-500 uppercase tracking-wider block">
-                    Tài Sản
+                    Cành Hoàng Kim
                   </span>
                   <div className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5 truncate max-w-[125px] sm:max-w-[155px]">
                     <span className="text-emerald-500 font-mono">{formattedCash.primary}</span>
