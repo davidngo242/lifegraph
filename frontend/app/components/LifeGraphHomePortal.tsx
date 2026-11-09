@@ -77,7 +77,7 @@ export default function LifeGraphHomePortal({
       return { title: "Thiên Cổ Hào Môn", icon: "👑", color: "text-amber-700 dark:text-amber-300 border-amber-400/40 bg-amber-500/10" };
     }
     if (totalGenerations >= 3 || maxNetWorthEver >= 2000000) {
-      return { title: "Đại Tộc Danh Gia", icon: "💎", color: "text-purple-700 dark:text-purple-300 border-purple-400/40 bg-purple-500/10" };
+      return { title: "Đại Tộc Danh Gia", icon: "💎", color: "text-amber-700 dark:text-amber-300 border-amber-400/40 bg-amber-500/10" };
     }
     if (totalGenerations >= 2 || maxNetWorthEver >= 300000) {
       return { title: "Thế Gia Thịnh Vượng", icon: "🏙️", color: "text-teal-700 dark:text-teal-300 border-teal-400/40 bg-teal-500/10" };
@@ -155,14 +155,14 @@ export default function LifeGraphHomePortal({
           {/* Top Title & Inscription */}
           <div className="space-y-3">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-amber-500 p-0.5 flex items-center justify-center shadow-lg shadow-indigo-600/25 shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-amber-600 to-emerald-600 p-0.5 flex items-center justify-center shadow-lg shadow-amber-500/25 shrink-0">
                 <div className="w-full h-full bg-[var(--bg-card)] rounded-[14px] flex items-center justify-center text-2xl">
                   🏛️
                 </div>
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 font-bold">
+                  <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
                     LifeGraph 2.0 • Điện Thần Luân Hồi
                   </span>
                   <span className={`text-[12px] font-semibold px-2.5 py-0.5 rounded-full border ${dynastyTier.color}`}>
@@ -191,9 +191,9 @@ export default function LifeGraphHomePortal({
                 <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">{lineage.length} tiền nhân lưu danh</div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-purple-400/30 hover:border-purple-400/50 transition shadow-sm">
-                <div className="text-[12px] text-purple-700 dark:text-purple-300 normal-case tracking-normal font-semibold">Đắc Đạo Niết Bàn</div>
-                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-purple-600 dark:text-purple-300 mt-1">
+              <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-amber-400/30 hover:border-amber-400/50 transition shadow-sm">
+                <div className="text-[12px] text-amber-700 dark:text-amber-300 normal-case tracking-normal font-semibold">Đắc Đạo Niết Bàn</div>
+                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-amber-600 dark:text-amber-300 mt-1">
                   {nirvanaCount} Tiền Nhân
                 </div>
                 <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">Thoát khỏi trầm luân</div>
@@ -222,9 +222,9 @@ export default function LifeGraphHomePortal({
       </div>
 
       {/* 3. REBIRTH GATE - CỔNG LUÂN HỒI (HERO CTA CARD) */}
-      <div className="p-7 md:p-10 rounded-3xl bg-[var(--bg-card)] border-2 border-purple-400/40 shadow-xl relative overflow-hidden backdrop-blur-xl transition-colors duration-200">
-        {/* Atmospheric Cosmic Void Background */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-48 bg-gradient-to-r from-purple-500/10 via-amber-500/10 to-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="p-7 md:p-10 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-xl relative overflow-hidden backdrop-blur-xl transition-colors duration-200">
+        {/* Atmospheric Ambient Glow Background */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-48 bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {isCharacterAlive ? (
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -258,9 +258,9 @@ export default function LifeGraphHomePortal({
 
               <button
                 onClick={onOpenRebirth}
-                className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-purple-400 text-purple-700 dark:text-purple-300 font-bold text-xs normal-case tracking-normal flex items-center justify-center gap-2 transition active:scale-95 shadow-sm whitespace-nowrap"
+                className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-amber-400 text-amber-700 dark:text-amber-300 font-bold text-xs normal-case tracking-normal flex items-center justify-center gap-2 transition active:scale-95 shadow-sm whitespace-nowrap"
               >
-                <RotateCcw className="w-4 h-4 text-purple-500" />
+                <RotateCcw className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                 <span>Bắt Đầu Kiếp Mới</span>
               </button>
             </div>
@@ -268,7 +268,7 @@ export default function LifeGraphHomePortal({
         ) : (
           <div className="relative z-10 flex flex-col items-center justify-center text-center space-y-5 py-2">
             <div className="flex items-center justify-center gap-2 flex-wrap">
-              <span className="text-[12px] font-sans tabular-nums normal-case px-3 py-1 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30 font-bold tracking-wide">
+              <span className="text-[12px] font-sans tabular-nums normal-case px-3 py-1 rounded-full bg-slate-500/15 text-slate-700 dark:text-slate-300 border border-slate-500/30 font-bold tracking-wide">
                 Không Còn Kiếp Nào Đang Sống
               </span>
               <span className="text-xs font-sans tabular-nums font-bold text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30">
@@ -290,9 +290,9 @@ export default function LifeGraphHomePortal({
             <div className="flex flex-col items-center gap-2.5 w-full max-w-xl pt-1">
               <button
                 onClick={onOpenRebirth}
-                className="w-full px-6 sm:px-10 py-4 md:py-5 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-amber-600 hover:from-purple-500 hover:to-amber-500 text-white font-black text-sm md:text-base normal-case tracking-normal flex items-center justify-center gap-3 transition-all duration-300 shadow-xl shadow-purple-600/30 hover:scale-[1.01] active:scale-95 border border-amber-400/40 group whitespace-nowrap"
+                className="w-full px-6 sm:px-10 py-4 md:py-5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black text-sm md:text-base normal-case tracking-normal flex items-center justify-center gap-3 transition-all duration-300 shadow-xl shadow-amber-500/25 hover:scale-[1.01] active:scale-95 border border-amber-300 group whitespace-nowrap"
               >
-                <Sparkles className="w-5 h-5 text-amber-200 fill-amber-300 group-hover:rotate-12 transition shrink-0" />
+                <Sparkles className="w-5 h-5 text-slate-950 fill-slate-950 group-hover:rotate-12 transition shrink-0" />
                 <span>Bắt Đầu Kiếp Mới</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition shrink-0" />
               </button>
@@ -336,7 +336,7 @@ export default function LifeGraphHomePortal({
               onClick={() => setFilter('all')}
               className={`px-3 py-1 rounded-xl text-xs font-semibold transition ${
                 filter === 'all'
-                  ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
+                  ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-950 font-bold shadow-md shadow-slate-900/20'
                   : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)]'
               }`}
             >
@@ -379,7 +379,7 @@ export default function LifeGraphHomePortal({
               </p>
               <button
                 onClick={() => setIncenseMessage(null)}
-                className="w-full py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold transition"
+                className="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold transition shadow-md"
               >
                 Tiếp Tục
               </button>
@@ -446,7 +446,7 @@ export default function LifeGraphHomePortal({
                           {item.aspiration_title && (
                             <>
                               <span>•</span>
-                              <span className="text-purple-600 dark:text-purple-300 font-medium">Khát vọng: {item.aspiration_title}</span>
+                              <span className="text-teal-600 dark:text-teal-300 font-medium">Khát vọng: {item.aspiration_title}</span>
                             </>
                           )}
                         </div>

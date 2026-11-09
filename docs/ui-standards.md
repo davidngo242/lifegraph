@@ -999,3 +999,37 @@ Tham khảo quy chuẩn giao diện ban ngày của các tựa game mô phỏng/
   * ❌ *"Thành phố cư ngụ: ...", "Chỗ ở hiện tại: ..."* ➔ Rút gọn thành `Thành phố: ...`, `Chỗ ở: ...`.
 * **Loại Bỏ Nhãn Tiếng Anh Đóng Ngoặc Đơn:** Không sử dụng nhãn dạng `Bản Ngã Tranh Luận (Internal Voices)`, `MMO Vĩ Mô`. Thay thế bằng từ thuần Việt giàu chất game: `Trực Giác Nội Tâm`, `Thị Trường`.
 * **Chống Xếp Chồng Khung Đúp (Zero Double-Nesting):** Không lồng ghép 2 cấp card có cùng tiêu đề, cùng padding và cùng thanh công cụ cuộn (như việc bọc `NarrativeFeed` bên trong `MultiTabSidebar`).
+
+
+---
+
+## 27. Chuẩn Mực Thần Mộc 3.0 & Hệ Sinh Thái Sống (World Tree 3.0 Living Ecosystem - UI/UX Pro Max)
+
+Áp dụng bộ tiêu chuẩn `/ui-ux-pro-max` để nâng cấp toàn diện Đại Thụ Sinh Mệnh thành một thực thể sống động, giải quyết triệt để vấn đề "tab rời rạc, chữ nhiều, thiếu tương tác với cây":
+
+### 27.1. Kiến Trúc Thần Mộc Không Bao Giờ Bị Ẩn (Zero-Detached Living Canvas)
+1. **Thần Mộc Là Trọng Tâm Bất Biến:** Dù ở chế độ Hành Động (`life_actions`), Cây Kỹ Năng (`skill_tree`) hay Nhân Mạch (`social_links`), Thần Mộc VẪN HIỂN THỊ 100% TRÊN MÀN HÌNH. Tuyệt đối không unmount cây để thay bằng một trang web danh sách chữ khô khan.
+2. **Khay Kính Mờ Lấy Nét (In-Tree Sliding Glassmorphic Drawer):**
+   * Khi chọn *Nhánh Kỹ Năng*: Cành Tây Bắc bừng sáng rực rỡ, mở khay kính mờ `SkillTreeTab` trượt êm ái từ bên phải với nền kính mờ `bg-slate-950/95 backdrop-blur-2xl border-purple-500/40`, người chơi có thể nâng cấp kỹ năng và vẫn nhìn thấy Thần Mộc uy nghi ở bên cạnh.
+   * Khi chọn *Nhân Mạch Quý Nhân*: Tán Thiên Đỉnh bừng sáng, mở khay kính mờ `SocialLinksTab` tương tác tặng quà, thắt chặt mối quan hệ.
+   * Nút đóng nhanh `X` hoặc click tab `Vòng Đời & Hành Động` để thu hồi khay trượt trong 200ms.
+
+### 27.2. Tán Lá Hành Động Hữu Cơ (Organic Foliage Leaflets)
+1. **Xóa Bỏ Các Khối Hộp Chữ Nhật:** Toàn bộ các node hành động thường niên được thiết kế thành **Phiến Lá Sinh Mệnh Thần Thoại**:
+   * Bo cong mềm mại theo dáng phiến lá tự nhiên (`rounded-tl-[26px] rounded-br-[26px] rounded-tr-[10px] rounded-bl-[10px]`).
+   * Cuống lá và gân lá uốn lượn nối mượt mà từ cành cây vào thẳng phiến lá.
+   * Icon hành động đặt trong vòng hào quang tròn (halo orb), đính giọt sương mai điểm AP (`bg-black/60 text-amber-300 font-mono text-[10px] px-1.5 py-0.5 rounded-full border border-amber-400/30`).
+2. **Micro-Interactions Tự Nhiên:** Khi hover, phiến lá khẽ rung rinh trong gió (`hover:-rotate-2 hover:scale-110`), hào quang lá bừng sáng toả phấn hoa sinh khí.
+
+### 27.3. Thân Cây 3D Bề Thế & Phản Ứng Thể Trạng Sống Động (Visceral Health Reactions)
+1. **Procedural 3D Trunk:** Thân cây có độ dày và đường cong sinh học với 3D cylindrical lighting (`woodOakGradient`), rãnh vỏ sồi nổi khối và ánh sáng chiếu từ trên xuống (God Rays).
+2. **Phản Ứng Khi Bị Bệnh (Withered State):**
+   * Khi Burnout $\ge 70\%$ hoặc Sinh lực $< 35\%$ hoặc âm nợ: Vỏ cây nứt nẻ chuyển sang màu xám thẫm/tím độc, mạch nhựa chuyển sang màu đỏ rực dồn dập, phiến lá rũ xuống.
+   * Banner cảnh báo giật gân ở đỉnh vòm cây.
+   * Phiến lá *Dưỡng Sinh Hồi Phục* (hoặc *Bú Mẹ*, *Tắm Nắng*) phát sáng ngọc lục bảo rực rỡ, nhấp nháy `animate-bounce` kêu gọi giải cứu bản thể.
+3. **Phản Ứng Dưỡng Sinh (Healing Pulse Shockwave):** Khi chọn dưỡng sinh/hồi phục, sóng chấn động ngọc bích `healingPulse` quét từ cội rễ lên ngọn cây, hồi sinh sắc xanh tươi mướt cho toàn bộ Thần Mộc.
+
+### 27.4. Nhân Vật Hộ Mệnh Dưới Cội Rễ & Luồng Kinh Mạch Đan Điền
+1. **Bệ Sen Thiền Định (Roots Dais):** Nhân vật Spine Chibi ngự trên bệ đá rêu phong tại góc Tây Nam dưới cội rễ.
+2. **Chùm Kinh Mạch Nối Đan Điền:** 2 luồng tơ hồng phát quang nối từ đan điền nhân vật cắm sâu vào rễ cái của Thần Mộc, các hạt photon năng lượng di chuyển liên tục từ nhân vật sang cây (`animate-[dash_1.5s_linear_infinite]`).
+3. **Tương Tác Võ Thuật (Avatar Poke):** Bấm vào nhân vật để thi triển võ thuật/vận khí (`Gotcha_Pose`, `Jump`, `Vibing`), phóng sóng năng lượng lên thân cây kèm thoại triết lý nhân sinh.

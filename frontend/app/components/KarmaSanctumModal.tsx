@@ -55,19 +55,19 @@ export default function KarmaSanctumModal({
         </button>
 
         {/* Ambient Top Glow */}
-        <div className="absolute top-0 right-1/4 w-80 h-28 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-1/4 w-80 h-28 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Header */}
         <div className="flex items-center gap-3.5 mb-4">
-          <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-2xl shadow-lg shadow-purple-500/20 shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl shadow-lg shadow-amber-500/20 shrink-0">
             ✨
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+              <h2 className="text-xl md:text-2xl font-bold text-[var(--text-primary)] tracking-tight">
                 Đền Thờ Nghiệp Quả (Karma Sanctum)
               </h2>
-              <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+              <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
                 Luân Hồi Đời {reincarnationCount}
               </span>
             </div>
@@ -81,20 +81,20 @@ export default function KarmaSanctumModal({
         <div className="grid grid-cols-3 gap-3 p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] mb-4 text-xs">
           <div>
             <div className="text-[12px] text-[var(--text-secondary)] normal-case font-sans tabular-nums">Nghiệp Lực Vĩnh Cửu</div>
-            <div className="text-xl font-sans tabular-nums font-bold text-amber-300 mt-0.5 flex items-center gap-1">
-              <Sparkles className="w-4 h-4 text-purple-400" />
+            <div className="text-xl font-sans tabular-nums font-bold text-amber-600 dark:text-amber-400 mt-0.5 flex items-center gap-1">
+              <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <span>{karma} Karma</span>
             </div>
           </div>
           <div>
             <div className="text-[12px] text-[var(--text-secondary)] normal-case font-sans tabular-nums">Tổng Số Năm Đã Sống</div>
-            <div className="text-xl font-sans tabular-nums font-bold text-white mt-0.5">
+            <div className="text-xl font-sans tabular-nums font-bold text-[var(--text-primary)] mt-0.5">
               {lifetimeStats.total_years_lived || 0} năm
             </div>
           </div>
           <div>
             <div className="text-[12px] text-[var(--text-secondary)] normal-case font-sans tabular-nums">Tài sản cao nhất</div>
-            <div className="text-xl font-sans tabular-nums font-bold text-emerald-400 mt-0.5">
+            <div className="text-xl font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
               ${(lifetimeStats.max_net_worth || 0).toLocaleString()}
             </div>
           </div>
@@ -119,9 +119,9 @@ export default function KarmaSanctumModal({
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto space-y-4 pr-1">
           {/* Section 1: Ancestral Blessings (Dùng Karma Cứu Nguy) */}
-          <div className="p-4 rounded-2xl bg-slate-900/70 border border-purple-500/20">
-            <h3 className="text-xs font-bold text-purple-300 normal-case tracking-normal mb-2 flex items-center gap-1.5">
-              <HeartPulse className="w-4 h-4 text-rose-400" /> Thỉnh Cầu Phước Lành Tiền Kiếp
+          <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+            <h3 className="text-xs font-bold text-amber-700 dark:text-amber-300 normal-case tracking-normal mb-2 flex items-center gap-1.5">
+              <HeartPulse className="w-4 h-4 text-rose-500" /> Thỉnh Cầu Phước Lành Tiền Kiếp
             </h3>
             <p className="text-[12px] text-[var(--text-secondary)] mb-3 leading-relaxed">
               Dùng Nghiệp Lực tích lũy qua các đời để giải cứu bản thân khi lâm nguy hoặc bế tắc tại thế.
@@ -132,14 +132,14 @@ export default function KarmaSanctumModal({
               <button
                 disabled={loadingType !== null || karma < 15}
                 onClick={() => handleBlessing('vitality_shield')}
-                className="p-3.5 rounded-2xl bg-[var(--bg-card)]/80 hover:bg-rose-950/30 border border-[var(--border-subtle)] hover:border-rose-500/40 text-left transition active:scale-95 disabled:opacity-40 group"
+                className="p-3.5 rounded-2xl bg-[var(--bg-card)] hover:bg-rose-500/10 border border-[var(--border-subtle)] hover:border-rose-400 text-left transition active:scale-95 disabled:opacity-40 group shadow-sm"
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <div className="font-bold text-white group-hover:text-rose-300 text-xs flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-rose-400" />
+                  <div className="font-bold text-[var(--text-primary)] group-hover:text-rose-600 dark:group-hover:text-rose-400 text-xs flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-rose-500" />
                     <span>Hộ Thể Kim Thân</span>
                   </div>
-                  <span className="text-[12px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
                     15 Karma
                   </span>
                 </div>
@@ -152,14 +152,14 @@ export default function KarmaSanctumModal({
               <button
                 disabled={loadingType !== null || karma < 25}
                 onClick={() => handleBlessing('benefactor_grace')}
-                className="p-3.5 rounded-2xl bg-[var(--bg-card)]/80 hover:bg-emerald-950/30 border border-[var(--border-subtle)] hover:border-emerald-500/40 text-left transition active:scale-95 disabled:opacity-40 group"
+                className="p-3.5 rounded-2xl bg-[var(--bg-card)] hover:bg-emerald-500/10 border border-[var(--border-subtle)] hover:border-emerald-400 text-left transition active:scale-95 disabled:opacity-40 group shadow-sm"
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <div className="font-bold text-white group-hover:text-emerald-300 text-xs flex items-center gap-1.5">
-                    <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <div className="font-bold text-[var(--text-primary)] group-hover:text-emerald-600 dark:group-hover:text-emerald-400 text-xs flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-emerald-500" />
                     <span>Quý Nhân Phù Trợ</span>
                   </div>
-                  <span className="text-[12px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                  <span className="text-[12px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
                     25 Karma
                   </span>
                 </div>
@@ -171,18 +171,18 @@ export default function KarmaSanctumModal({
           </div>
 
           {/* Section 2: Unlocked Perks Portfolio */}
-          <div className="p-4 rounded-2xl bg-slate-900/70 border border-[var(--border-subtle)]">
+          <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
             <h3 className="text-xs font-bold text-[var(--text-secondary)] normal-case tracking-normal mb-2 flex items-center gap-1.5">
-              <Award className="w-4 h-4 text-amber-400" /> Kho Tàng Đặc Quyền Vĩnh Cửu
+              <Award className="w-4 h-4 text-amber-500" /> Kho Tàng Đặc Quyền Vĩnh Cửu
             </h3>
             {unlockedPerks.length === 0 ? (
-              <p className="text-[12px] text-slate-500">
+              <p className="text-[12px] text-[var(--text-secondary)]">
                 Chưa mở khóa đặc quyền nào. Khi qua đời, bạn có thể dùng Karma tại Vòng Quay Luân Hồi để mua Perk vĩnh cửu.
               </p>
             ) : (
               <div className="flex flex-wrap gap-2">
                 {unlockedPerks.map((p: string, idx: number) => (
-                  <span key={idx} className="text-[12px] font-sans tabular-nums px-2.5 py-1 rounded-xl bg-purple-950/80 text-purple-300 border border-purple-500/30">
+                  <span key={idx} className="text-[12px] font-sans tabular-nums px-2.5 py-1 rounded-xl bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
                     ✓ {p}
                   </span>
                 ))}

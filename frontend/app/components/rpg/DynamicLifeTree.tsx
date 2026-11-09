@@ -27,7 +27,10 @@ import {
   CheckCircle2,
   Lock,
   Activity,
-  AlertTriangle
+  AlertTriangle,
+  X,
+  Layers,
+  Leaf
 } from 'lucide-react';
 import Tooltip from '../Tooltip';
 import { formatCurrency } from '../../utils/currencyUtils';
@@ -169,6 +172,8 @@ export default function DynamicLifeTree({
     const nextAnim = anims[Math.floor(Math.random() * anims.length)];
     setAvatarSpeech(nextSpeech);
     setAvatarAnim(nextAnim);
+    setHealingPulse(true);
+    setTimeout(() => setHealingPulse(false), 900);
     setTimeout(() => {
       setAvatarSpeech(null);
       setAvatarAnim('Front_idle');
@@ -652,24 +657,24 @@ export default function DynamicLifeTree({
   const baseRadius = 185;
 
   return (
-    <div className="w-full rounded-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] p-3 sm:p-5 shadow-xl relative overflow-hidden flex flex-col gap-3.5 backdrop-blur-xl transition-colors duration-200">
-      {/* Background Starfield Aura */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[520px] bg-gradient-to-br from-indigo-900/10 via-purple-900/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+    <div className="w-full rounded-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] p-3 sm:p-5 shadow-2xl relative overflow-hidden flex flex-col gap-3.5 backdrop-blur-2xl transition-colors duration-200">
+      {/* Background Starfield Aura & Cosmic Mist */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[560px] bg-gradient-to-br from-indigo-950/20 via-purple-950/20 to-emerald-950/15 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Top Header Bar */}
-      <div className="flex items-center justify-between gap-3 flex-wrap relative z-10 pb-2 border-b border-[var(--border-subtle)]">
+      {/* TOP HEADER: THẦN MỘC STATUS & LENS BAR */}
+      <div className="flex items-center justify-between gap-3 flex-wrap relative z-20 pb-2 border-b border-[var(--border-subtle)]">
         <div className="flex items-center gap-2.5">
           <span className="p-1.5 rounded-xl bg-amber-500/20 text-amber-500 border border-amber-500/30">
             <Sparkles className="w-4 h-4 animate-spin" style={{ animationDuration: '8s' }} />
           </span>
           <div>
             <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] tracking-wide flex items-center gap-2">
-              <span>Đại Thụ Sinh Mệnh</span>
+              <span>Đại Thụ Sinh Mệnh Toàn Năng</span>
               <span className="text-[10px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-500 dark:text-indigo-300 border border-indigo-500/30">
                 Tuổi {characterAge}
               </span>
               <span
-                className="text-[10px] font-sans px-2 py-0.5 rounded-full border flex items-center gap-1 font-bold"
+                className="text-[10px] font-sans px-2 py-0.5 rounded-full border flex items-center gap-1 font-bold shadow-sm"
                 style={{
                   backgroundColor: `${STAGE_META[growthStage].themeColor}15`,
                   color: STAGE_META[growthStage].themeColor,
@@ -680,6 +685,9 @@ export default function DynamicLifeTree({
                 <span>{STAGE_META[growthStage].label}</span>
               </span>
             </h3>
+            <div className="text-[10.5px] text-[var(--text-secondary)] hidden sm:block mt-0.5">
+              Hệ sinh thái cuộc đời: Gốc Rễ Gia Đình · Nhánh Kỹ Năng · Cành Tài Sản · Tán Lá Hành Động.
+            </div>
           </div>
         </div>
 
@@ -797,7 +805,7 @@ export default function DynamicLifeTree({
       {/* ========================================================================= */}
       {/* SACRED TREE LENS SELECTOR (BỘ ĐIỀU KHIỂN LĂNG KÍNH THẦN MỘC ĐỒNG BỘ) */}
       {/* ========================================================================= */}
-      <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] shadow-inner w-full sm:w-fit self-start shrink-0 relative z-10 flex-wrap">
+      <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] shadow-inner w-full sm:w-fit self-start shrink-0 relative z-20 flex-wrap">
         <button
           type="button"
           onClick={() => setTreeViewMode('life_actions')}
@@ -807,7 +815,8 @@ export default function DynamicLifeTree({
               : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
           }`}
         >
-          <span>🌿 Hành Động</span>
+          <Leaf className="w-3.5 h-3.5" />
+          <span>Vòng Đời &amp; Hành Động</span>
         </button>
 
         <button
@@ -819,7 +828,7 @@ export default function DynamicLifeTree({
               : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
           }`}
         >
-          <span>🔮 Kỹ Năng</span>
+          <span>🔮 Cây Kỹ Năng</span>
           {(character?.skill_points || 0) > 0 && (
             <span className="px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 text-[10px] font-mono font-black animate-pulse">
               +{character.skill_points} SP
@@ -836,1015 +845,1027 @@ export default function DynamicLifeTree({
               : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
           }`}
         >
-          <span>👥 Nhân Mạch</span>
+          <span>👥 Nhân Mạch Quý Nhân</span>
           <span className="px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/40 text-[10px] font-mono font-bold">
             {character?.social_links?.length || 4}
           </span>
         </button>
       </div>
 
-      {treeViewMode === 'life_actions' && (
-        <>
-          {/* ========================================================================= */}
-          {/* SVG CANVAS: TRỤC THẦN MỘC HÙNG VĨ & 3 ĐÀI TINH TÚ TRÊN CÀNH */}
-          {/* ========================================================================= */}
-          <div className="relative w-full h-[520px] sm:h-[560px] overflow-hidden flex items-center justify-center rounded-3xl bg-[var(--bg-canvas)] border border-[var(--border-subtle)] shadow-xl transition-colors duration-200">
-            {/* Sickness Alarm Banner (Khi Cây Bị Bệnh) */}
-            {treeHealthState === 'withered' && (
-              <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30 px-3 py-1 rounded-full bg-rose-950/90 border border-rose-500/60 text-rose-200 text-[11px] font-bold flex items-center gap-2 shadow-xl shadow-rose-950/80 animate-pulse pointer-events-none whitespace-nowrap">
-                <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
-                <span>Thần Mộc Đang Bị Bệnh! Kinh mạch tắc nghẽn — Hãy chọn Dưỡng Sinh hoặc Bữa Cơm để hồi phục!</span>
-              </div>
-            )}
-
-            {/* ========================================================================= */}
-            {/* 3 SACRED CANOPY PILLAR SHRINES (GẮN TRỰC TIẾP LÊN 3 CÀNH CỦA ĐẠI THỤ) */}
-            {/* ========================================================================= */}
-            {/* PILLAR 1: KỸ NĂNG & TRÍ TUỆ (TÂY BẮC - TERM OF LEFT BOUGH) */}
-            <div
-              onClick={() => setTreeViewMode('skill_tree')}
-              className="absolute top-3 left-3 sm:left-5 z-20 group cursor-pointer"
-            >
-              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-2xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-purple-500/30 hover:border-purple-400 shadow-md backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95">
-                <span className="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-sm shadow-inner group-hover:scale-110 transition-transform shrink-0">
-                  🔮
-                </span>
-                <div className="text-left min-w-0">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-[11px] font-bold text-purple-400 uppercase tracking-wider">
-                      Nhánh Kỹ Năng
-                    </span>
-                    {(character?.skill_points || 0) > 0 && (
-                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 font-black animate-pulse">
-                        +{character.skill_points} SP
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-xs font-bold text-[var(--text-primary)] truncate max-w-[125px] sm:max-w-[155px]">
-                    Lv.{character?.life_level || 1} · {character?.unlocked_skills?.length || 0} Tố Chất
-                  </div>
-                </div>
-                {onRpgActivePerk && character?.unlocked_skills?.includes('stock_trading') && (
-                  <Tooltip content="Lướt sóng cổ phiếu (1 AP): Chớp cơ hội thị trường sinh lời">
-                    <button
-                      type="button"
-                      disabled={isLoading || actionPoints < 1}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRpgActivePerk('stock_trading');
-                      }}
-                      className="p-1 rounded-md bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/40 text-emerald-300 text-xs transition shrink-0 ml-0.5"
-                    >
-                      📈
-                    </button>
-                  </Tooltip>
-                )}
-                <ArrowUpRight className="w-3.5 h-3.5 text-purple-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition shrink-0" />
-              </div>
-            </div>
-
-            {/* PILLAR 2: NHÂN MẠCH QUÝ NHÂN (THIÊN ĐỈNH - ZENITH OF CENTER CROWN) */}
-            <div
-              onClick={() => setTreeViewMode('social_links')}
-              className="absolute top-2 left-1/2 -translate-x-1/2 z-20 group cursor-pointer"
-            >
-              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-2xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-sky-500/30 hover:border-sky-400 shadow-md backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95">
-                <span className="w-8 h-8 rounded-xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sm shadow-inner group-hover:scale-110 transition-transform shrink-0">
-                  👥
-                </span>
-                <div className="text-left min-w-0">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-[11px] font-bold text-sky-400 uppercase tracking-wider">
-                      Nhân Mạch Quý Nhân
-                    </span>
-                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/40 font-mono">
-                      {character?.social_links?.length || 4}
-                    </span>
-                  </div>
-                  <div className="text-xs font-bold text-[var(--text-primary)] truncate max-w-[125px] sm:max-w-[155px]">
-                    {character?.social_links?.filter((n: any) => n.linkLevel >= 2).length || 0} Quý Nhân Thân Thiết
-                  </div>
-                </div>
-                <ArrowUpRight className="w-3.5 h-3.5 text-sky-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition shrink-0" />
-              </div>
-            </div>
-
-            {/* PILLAR 3: CÀNH HOÀNG KIM TÀI SẢN (ĐÔNG BẮC - TERM OF RIGHT BOUGH) */}
-            <div
-              onClick={onOpenAssets}
-              className="absolute top-3 right-3 sm:right-5 z-20 group cursor-pointer"
-            >
-              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-2xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-amber-500/30 hover:border-amber-400 shadow-md backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95">
-                <span className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-sm shadow-inner group-hover:scale-110 transition-transform shrink-0">
-                  🪙
-                </span>
-                <div className="text-left min-w-0">
-                  <span className="text-[11px] font-bold text-amber-500 uppercase tracking-wider block">
-                    Cành Hoàng Kim
-                  </span>
-                  <div className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5 truncate max-w-[125px] sm:max-w-[155px]">
-                    <span className="text-emerald-500 font-mono">{formattedCash.primary}</span>
-                    <span className="text-[var(--text-secondary)] text-[10px] font-sans">• {assets.length} TS</span>
-                  </div>
-                </div>
-                <ArrowUpRight className="w-3.5 h-3.5 text-amber-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition shrink-0" />
-              </div>
-            </div>
-
-            {/* ========================================================================= */}
-            {/* SACRED ROOTS & CHIBI/SPINE AVATAR DAIS (NHÂN VẬT HỘ MỆNH DƯỚI CỘI RỄ) */}
-            {/* ========================================================================= */}
-            <div className="absolute bottom-4 left-4 sm:left-7 z-25 flex flex-col items-center pointer-events-auto">
-              <Tooltip
-                content={
-                  <div className="space-y-1 text-xs">
-                    <div className="font-bold text-amber-300 flex items-center gap-1.5">
-                      <span>🧙‍♂️</span>
-                      <span>Bản Thể Tu Luyện Dưới Cội Rễ Thần Mộc</span>
-                    </div>
-                    <div className="text-slate-200">
-                      Nhân vật ngồi thiền định tại cội rễ, hấp thụ linh khí đất trời qua các đường kinh mạch.
-                    </div>
-                    <div className="text-[10px] text-emerald-300 italic">
-                      Chạm vào nhân vật để tương tác và cảm nhận dòng chảy sinh mệnh!
-                    </div>
-                  </div>
-                }
-              >
-                <div
-                  onClick={handleAvatarPoke}
-                  className="relative group cursor-pointer flex flex-col items-center"
-                >
-                  {/* Energy Aura behind Avatar */}
-                  <div
-                    className={`absolute -inset-1 rounded-2xl blur-md transition-all ${
-                      treeHealthState === 'withered'
-                        ? 'bg-rose-500/30'
-                        : treeHealthState === 'fatigued'
-                        ? 'bg-amber-500/25'
-                        : 'bg-emerald-500/25 group-hover:bg-indigo-500/40'
-                    }`}
-                  />
-
-                  {/* Speech Bubble */}
-                  {avatarSpeech && (
-                    <div className="absolute -top-9 whitespace-nowrap px-2.5 py-1 rounded-xl bg-slate-900 border border-amber-400/80 text-amber-300 text-[10px] font-bold shadow-2xl animate-bounce z-40">
-                      {avatarSpeech}
-                    </div>
-                  )}
-
-                  {/* Avatar Frame Canvas */}
-                  <div className="w-16 h-22 sm:w-20 sm:h-26 rounded-2xl overflow-hidden border border-slate-700/80 bg-slate-950/80 shadow-2xl relative transition-transform group-hover:scale-105 active:scale-95">
-                    <SpineCharacterAvatar
-                      nationality={character?.nationality || 'Việt Nam'}
-                      gender={character?.gender || 'male'}
-                      age={characterAge}
-                      burnout={burnout}
-                      vitality={vitalityVal}
-                      animation={treeHealthState === 'withered' ? 'Front_idle' : (avatarAnim as any)}
-                      className="w-full h-full"
-                      showSidekick={false}
-                      traits={character?.traits || []}
-                    />
-                  </div>
-
-                  {/* Sub-label */}
-                  <div className="mt-1 px-2 py-0.5 rounded-full bg-slate-900/90 border border-slate-700/80 text-[9.5px] font-bold text-slate-300 flex items-center gap-1 shadow">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                    <span>Bản Thể Tu Luyện</span>
-                  </div>
-                </div>
-              </Tooltip>
-            </div>
-
-            {/* SVG SCENIC CANVAS WITH 3D SHADING, MERIDIANS, & PROCEDURAL TRUNK */}
-            <svg
-              viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
-              className="absolute inset-0 w-full h-full pointer-events-none"
-            >
-              <defs>
-                <linearGradient id="treePulseGradient" x1="0%" y1="100%" x2="0%" y2="0%">
-                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
-                  <stop offset="50%" stopColor="#818cf8" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#fbbf24" stopOpacity="1" />
-                </linearGradient>
-
-                <linearGradient id="godRayGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#fef08a" stopOpacity="0.28" />
-                  <stop offset="35%" stopColor="#a7f3d0" stopOpacity="0.12" />
-                  <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
-                </linearGradient>
-
-                {/* 3D Wood Oak Gradient (Cylindrical Lighting) */}
-                <linearGradient id="woodOakGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#1e0b04" />
-                  <stop offset="25%" stopColor="#451a03" />
-                  <stop offset="45%" stopColor="#b45309" />
-                  <stop offset="65%" stopColor="#78350f" />
-                  <stop offset="100%" stopColor="#240c03" />
-                </linearGradient>
-
-                {/* Withered / Toxic Bark Gradient */}
-                <linearGradient id="witheredBarkGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#18181b" />
-                  <stop offset="30%" stopColor="#3f3f46" />
-                  <stop offset="60%" stopColor="#581c87" />
-                  <stop offset="100%" stopColor="#1c1917" />
-                </linearGradient>
-
-                {/* Dynamic Mana Sap Meridian Gradient */}
-                <linearGradient id="manaSapGradient" x1="0%" y1="100%" x2="0%" y2="0%">
-                  {treeHealthState === 'withered' ? (
-                    <>
-                      <stop offset="0%" stopColor="#dc2626" stopOpacity="0.4" />
-                      <stop offset="50%" stopColor="#9333ea" stopOpacity="0.9" />
-                      <stop offset="100%" stopColor="#ef4444" stopOpacity="1" />
-                    </>
-                  ) : treeHealthState === 'fatigued' ? (
-                    <>
-                      <stop offset="0%" stopColor="#d97706" stopOpacity="0.3" />
-                      <stop offset="50%" stopColor="#f59e0b" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#eab308" stopOpacity="0.9" />
-                    </>
-                  ) : (
-                    <>
-                      <stop offset="0%" stopColor="#059669" stopOpacity="0.3" />
-                      <stop offset="40%" stopColor="#38bdf8" stopOpacity="0.85" />
-                      <stop offset="70%" stopColor="#a855f7" stopOpacity="0.9" />
-                      <stop offset="100%" stopColor="#fbbf24" stopOpacity="1" />
-                    </>
-                  )}
-                </linearGradient>
-
-                {/* Avatar to Roots Meridian Conduit */}
-                <linearGradient id="avatarToTreeMeridian" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.8" />
-                  <stop offset="50%" stopColor="#10b981" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.8" />
-                </linearGradient>
-
-                <linearGradient id="ancientWorldTreeGold" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#fef08a" />
-                  <stop offset="30%" stopColor="#fbbf24" />
-                  <stop offset="70%" stopColor="#f59e0b" />
-                  <stop offset="100%" stopColor="#78350f" />
-                </linearGradient>
-
-                <linearGradient id="sproutGradient" x1="0%" y1="100%" x2="0%" y2="0%">
-                  <stop offset="0%" stopColor="#047857" />
-                  <stop offset="60%" stopColor="#10b981" />
-                  <stop offset="100%" stopColor="#6ee7b7" />
-                </linearGradient>
-
-                <radialGradient id="wisdomFoliageGlow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor={treeHealthState === 'withered' ? '#4c1d95' : '#818cf8'} stopOpacity="0.45" />
-                  <stop offset="60%" stopColor={treeHealthState === 'withered' ? '#311042' : '#4338ca'} stopOpacity="0.2" />
-                  <stop offset="100%" stopColor="#0f172a" stopOpacity="0" />
-                </radialGradient>
-
-                <radialGradient id="socialFoliageGlow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor={treeHealthState === 'withered' ? '#581c87' : '#38bdf8'} stopOpacity="0.45" />
-                  <stop offset="60%" stopColor="#0284c7" stopOpacity="0.2" />
-                  <stop offset="100%" stopColor="#0369a1" stopOpacity="0" />
-                </radialGradient>
-
-                <radialGradient id="wealthFoliageGlow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor={treeHealthState === 'withered' ? '#78350f' : '#fbbf24'} stopOpacity="0.45" />
-                  <stop offset="60%" stopColor="#d97706" stopOpacity="0.2" />
-                  <stop offset="100%" stopColor="#78350f" stopOpacity="0" />
-                </radialGradient>
-
-                <filter id="coreGlow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="7" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-
-                <filter id="foliageBlur" x="-30%" y="-30%" width="160%" height="160%">
-                  <feGaussianBlur stdDeviation="14" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-
-              {/* God Rays (Thiên Khải Chi Quang) */}
-              <g className="god-rays pointer-events-none opacity-40">
-                <polygon points="260,0 330,0 240,460 140,460" fill="url(#godRayGradient)" />
-                <polygon points="340,0 400,0 440,480 340,480" fill="url(#godRayGradient)" />
-                <polygon points="420,0 490,0 600,460 500,460" fill="url(#godRayGradient)" />
-              </g>
-
-              {/* Ambient Celestial Starlight Circles */}
-              <circle
-                cx={centerX}
-                cy={centerY}
-                r={80}
-                fill="none"
-                stroke={treeHealthState === 'withered' ? '#9333ea' : '#6366f1'}
-                strokeWidth="1.5"
-                strokeDasharray="5 5"
-                className="opacity-25 animate-[spin_40s_linear_infinite]"
-                style={{ transformOrigin: `${centerX}px ${centerY}px` }}
-              />
-              <circle
-                cx={centerX}
-                cy={centerY}
-                r={baseRadius * 0.9}
-                fill="none"
-                stroke={treeHealthState === 'withered' ? '#dc2626' : '#38bdf8'}
-                strokeWidth="1"
-                strokeDasharray="8 8"
-                className="opacity-20 animate-[spin_60s_linear_infinite_reverse]"
-                style={{ transformOrigin: `${centerX}px ${centerY}px` }}
-              />
-
-              {/* Floating Spirit Fireflies */}
-              <g className="spirit-fireflies pointer-events-none">
-                {treeHealthState !== 'withered' ? (
-                  <>
-                    <circle cx="280" cy="220" r="3" fill="#6ee7b7" className="animate-pulse" style={{ animationDuration: '2.4s' }} filter="url(#coreGlow)" />
-                    <circle cx="440" cy="240" r="3.5" fill="#fef08a" className="animate-pulse" style={{ animationDuration: '3.1s', animationDelay: '0.7s' }} filter="url(#coreGlow)" />
-                    <circle cx="360" cy="140" r="3" fill="#c084fc" className="animate-pulse" style={{ animationDuration: '2.7s', animationDelay: '1.2s' }} filter="url(#coreGlow)" />
-                    <circle cx="200" cy="130" r="3.5" fill="#818cf8" className="animate-pulse" style={{ animationDuration: '3.4s', animationDelay: '0.3s' }} filter="url(#coreGlow)" />
-                    <circle cx="530" cy="150" r="3.5" fill="#fbbf24" className="animate-pulse" style={{ animationDuration: '2.9s', animationDelay: '1s' }} filter="url(#coreGlow)" />
-                    <circle cx="320" cy="420" r="2.5" fill="#34d399" className="animate-pulse" style={{ animationDuration: '3.8s', animationDelay: '1.8s' }} filter="url(#coreGlow)" />
-                    <circle cx="410" cy="400" r="3" fill="#fde047" className="animate-pulse" style={{ animationDuration: '2.8s', animationDelay: '1.5s' }} filter="url(#coreGlow)" />
-                  </>
-                ) : (
-                  <>
-                    <circle cx="360" cy="240" r="2.5" fill="#dc2626" className="animate-ping" style={{ animationDuration: '1.8s' }} filter="url(#coreGlow)" />
-                    <circle cx="310" cy="330" r="2" fill="#9333ea" className="animate-pulse" style={{ animationDuration: '2.2s' }} filter="url(#coreGlow)" />
-                  </>
-                )}
-              </g>
-
-              {/* Sacred Ground Soil Mound */}
-              <ellipse cx={centerX} cy={488} rx={270} ry={22} fill="#0b1120" stroke="#1e293b" strokeWidth="2" />
-              <ellipse cx={centerX} cy={488} rx={250} ry={16} fill="rgba(15,23,42,0.95)" stroke="#334155" strokeWidth="1" />
-
-              {/* Glowing Meridian Thread: Avatar (left) to Root Base (360, 480) */}
-              <path
-                d="M 100 460 C 180 475, 270 482, 360 480"
-                fill="none"
-                stroke="url(#avatarToTreeMeridian)"
-                strokeWidth="3.5"
-                strokeDasharray="6 4"
-                className="animate-[dash_1.5s_linear_infinite]"
-              />
-
-              {/* PROCEDURAL TRUNK GEOMETRY FOR THE 5 GROWTH STAGES */}
-              <g className="procedural-tree-trunk" id="proceduralTreeTrunk">
-                {growthStage === 'sprout' && (
-                  <g className="stage-sprout">
-                    {/* Curved delicate seedling stem */}
-                    <path
-                      d="M 360 480 C 350 390, 370 320, 360 270"
-                      stroke={treeHealthState === 'withered' ? '#78350f' : 'url(#sproutGradient)'}
-                      strokeWidth="12"
-                      strokeLinecap="round"
-                      fill="none"
-                    />
-                    {/* Cotyledon baby leaves */}
-                    <path
-                      d="M 360 340 C 310 310, 275 330, 270 355 C 295 370, 335 355, 360 340 Z"
-                      fill={treeHealthState === 'withered' ? '#713f12' : '#10b981'}
-                      filter="url(#coreGlow)"
-                    />
-                    <path
-                      d="M 360 330 C 410 300, 445 320, 450 345 C 425 360, 385 345, 360 330 Z"
-                      fill={treeHealthState === 'withered' ? '#854d0e' : '#34d399'}
-                      filter="url(#coreGlow)"
-                    />
-                    {/* Root threads */}
-                    <path d="M 360 480 Q 320 495, 270 505" stroke="#059669" strokeWidth="3" strokeDasharray="4 4" fill="none" />
-                    <path d="M 360 480 Q 400 495, 450 505" stroke="#059669" strokeWidth="3" strokeDasharray="4 4" fill="none" />
-                    <path d="M 360 480 Q 350 500, 340 512" stroke="#059669" strokeWidth="2.5" strokeDasharray="3 3" fill="none" />
-                  </g>
-                )}
-
-                {growthStage === 'sapling' && (
-                  <g className="stage-sapling">
-                    {/* Straight slender youthful trunk */}
-                    <path
-                      d="M 360 480 C 354 380, 366 290, 360 190"
-                      stroke={treeHealthState === 'withered' ? 'url(#witheredBarkGradient)' : '#059669'}
-                      strokeWidth="20"
-                      strokeLinecap="round"
-                      fill="none"
-                    />
-                    {/* Pulsing Mana Meridian Sap */}
-                    <path
-                      d="M 360 475 C 356 385, 364 290, 360 195"
-                      stroke="url(#manaSapGradient)"
-                      strokeWidth="4"
-                      strokeDasharray="8 6"
-                      fill="none"
-                      className="animate-pulse"
-                    />
-                    {/* Branches reaching for sunlight */}
-                    <path d="M 360 320 Q 280 260, 220 210" stroke={treeHealthState === 'withered' ? '#581c87' : '#10b981'} strokeWidth="8" strokeLinecap="round" fill="none" />
-                    <path d="M 360 270 Q 440 210, 500 170" stroke={treeHealthState === 'withered' ? '#581c87' : '#10b981'} strokeWidth="8" strokeLinecap="round" fill="none" />
-                    {/* Foliage soft clouds */}
-                    <circle cx="220" cy="210" r="34" fill={treeHealthState === 'withered' ? '#3b0764' : '#10b981'} opacity="0.35" filter="url(#foliageBlur)" />
-                    <circle cx="500" cy="170" r="38" fill={treeHealthState === 'withered' ? '#3b0764' : '#10b981'} opacity="0.35" filter="url(#foliageBlur)" />
-                    <circle cx="360" cy="190" r="42" fill={treeHealthState === 'withered' ? '#2e1065' : '#34d399'} opacity="0.3" filter="url(#foliageBlur)" />
-                  </g>
-                )}
-
-                {growthStage === 'flourishing_oak' && (
-                  <g className="stage-flourishing-oak">
-                    {/* Sturdy muscular oak trunk with 3D gradient */}
-                    <path
-                      d="M 330 480 C 342 380, 350 310, 360 265 C 370 310, 378 380, 390 480 Z"
-                      fill={treeHealthState === 'withered' ? 'url(#witheredBarkGradient)' : 'url(#woodOakGradient)'}
-                      stroke={treeHealthState === 'withered' ? '#450a0a' : '#5c2409'}
-                      strokeWidth="3.5"
-                    />
-                    {/* Buttress root anchors */}
-                    <path d="M 330 480 Q 275 496, 220 508" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="12" strokeLinecap="round" fill="none" />
-                    <path d="M 390 480 Q 445 496, 500 508" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="12" strokeLinecap="round" fill="none" />
-
-                    {/* Central Meridian (Đốc Mạch Thần Mộc) */}
-                    <path d="M 360 475 Q 365 370, 360 265" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="10 8" fill="none" className="animate-pulse" />
-
-                    {/* Major Acupuncture Meridian Conduits along 3 Boughs */}
-                    <path d="M 350 295 C 310 230, 230 160, 140 85" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="18" strokeLinecap="round" fill="none" />
-                    <path d="M 350 295 C 310 230, 230 160, 140 85" stroke="url(#manaSapGradient)" strokeWidth="4.5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
-
-                    <path d="M 360 275 Q 360 160, 360 65" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="18" strokeLinecap="round" fill="none" />
-                    <path d="M 360 275 Q 360 160, 360 65" stroke="url(#manaSapGradient)" strokeWidth="4.5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
-
-                    <path d="M 370 295 C 410 230, 490 160, 580 85" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="18" strokeLinecap="round" fill="none" />
-                    <path d="M 370 295 C 410 230, 490 160, 580 85" stroke="url(#manaSapGradient)" strokeWidth="4.5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
-
-                    {/* Acupoint Nodes (Huyệt Vị Kinh Mạch) */}
-                    <circle cx="360" cy="460" r="5" fill="#38bdf8" filter="url(#coreGlow)" className="animate-pulse" />
-                    <circle cx="360" cy="350" r="5.5" fill="#fbbf24" filter="url(#coreGlow)" className="animate-pulse" />
-                    <circle cx="270" cy="215" r="4.5" fill="#c084fc" filter="url(#coreGlow)" />
-                    <circle cx="450" cy="215" r="4.5" fill="#fde047" filter="url(#coreGlow)" />
-
-                    {/* Layered Foliage Canopy Clusters */}
-                    <circle cx="140" cy="85" r="60" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" />
-                    <circle cx="170" cy="105" r="38" fill={treeHealthState === 'withered' ? '#4c1d95' : '#6366f1'} opacity="0.3" filter="url(#coreGlow)" />
-                    <circle cx="360" cy="65" r="70" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" />
-                    <circle cx="360" cy="85" r="48" fill={treeHealthState === 'withered' ? '#581c87' : '#0284c7'} opacity="0.35" filter="url(#coreGlow)" />
-                    <circle cx="580" cy="85" r="60" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" />
-                    <circle cx="550" cy="105" r="38" fill={treeHealthState === 'withered' ? '#78350f' : '#f59e0b'} opacity="0.3" filter="url(#coreGlow)" />
-                  </g>
-                )}
-
-                {growthStage === 'grand_pillar' && (
-                  <g className="stage-grand-pillar">
-                    {/* Massive weathered ancient pillar trunk */}
-                    <path
-                      d="M 315 480 C 330 380, 345 300, 360 250 C 375 300, 390 380, 405 480 Z"
-                      fill={treeHealthState === 'withered' ? 'url(#witheredBarkGradient)' : 'url(#woodOakGradient)'}
-                      stroke={treeHealthState === 'withered' ? '#450a0a' : '#451a03'}
-                      strokeWidth="4"
-                    />
-                    {/* Buttress root anchors */}
-                    <path d="M 315 480 Q 260 495, 200 508" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#5c2409'} strokeWidth="16" strokeLinecap="round" fill="none" />
-                    <path d="M 405 480 Q 460 495, 520 508" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#5c2409'} strokeWidth="16" strokeLinecap="round" fill="none" />
-
-                    {/* Dual Meridian Sap Channels */}
-                    <path d="M 355 475 Q 361 360, 355 250" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="12 8" fill="none" className="animate-pulse" />
-                    <path d="M 365 475 Q 371 360, 365 250" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="12 8" fill="none" className="animate-pulse" />
-
-                    {/* Broad sheltering canopy arches */}
-                    <path d="M 345 280 C 290 220, 210 160, 130 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
-                    <path d="M 360 260 Q 360 150, 360 65" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
-                    <path d="M 375 280 C 430 220, 510 160, 590 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
-
-                    {/* Colossal canopy foliage */}
-                    <circle cx="130" cy="95" r="68" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" />
-                    <circle cx="360" cy="65" r="75" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" />
-                    <circle cx="590" cy="95" r="68" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" />
-                  </g>
-                )}
-
-                {growthStage === 'ancient_world_tree' && (
-                  <g className="stage-ancient-world-tree">
-                    {/* Radiant Golden Amber World Tree trunk */}
-                    <path
-                      d="M 310 480 C 330 370, 345 290, 360 240 C 375 290, 390 370, 410 480 Z"
-                      fill={treeHealthState === 'withered' ? 'url(#witheredBarkGradient)' : 'url(#ancientWorldTreeGold)'}
-                      stroke={treeHealthState === 'withered' ? '#7f1d1d' : '#d97706'}
-                      strokeWidth="4"
-                    />
-                    {/* Transcendent spiral runes on trunk */}
-                    <path d="M 360 450 Q 370 380, 360 320 Q 350 260, 360 200" stroke="#fef08a" strokeWidth="4" strokeDasharray="8 6" fill="none" className="animate-pulse" />
-
-                    {/* Deep ancient root foundation */}
-                    <path d="M 310 480 Q 255 496, 190 510" stroke="#d97706" strokeWidth="16" strokeLinecap="round" fill="none" />
-                    <path d="M 410 480 Q 465 496, 530 510" stroke="#d97706" strokeWidth="16" strokeLinecap="round" fill="none" />
-
-                    {/* Grand radiant canopy arches */}
-                    <path d="M 345 270 C 285 210, 205 150, 120 90" stroke="#f59e0b" strokeWidth="22" strokeLinecap="round" fill="none" />
-                    <path d="M 360 250 Q 360 140, 360 55" stroke="#f59e0b" strokeWidth="22" strokeLinecap="round" fill="none" />
-                    <path d="M 375 270 C 435 210, 515 150, 600 90" stroke="#f59e0b" strokeWidth="22" strokeLinecap="round" fill="none" />
-
-                    {/* Golden heritage fruits (legacy orbs) */}
-                    <circle cx="120" cy="90" r="14" fill="#fef08a" stroke="#f59e0b" strokeWidth="3" className="animate-bounce" />
-                    <circle cx="600" cy="90" r="14" fill="#fef08a" stroke="#f59e0b" strokeWidth="3" className="animate-bounce" style={{ animationDelay: '0.4s' }} />
-                    <circle cx="360" cy="55" r="16" fill="#fef08a" stroke="#eab308" strokeWidth="3" className="animate-pulse" />
-                  </g>
-                )}
-              </g>
-
-              {/* Annual Tree Growth Rings (Vòng Vân Gỗ Đời Người) */}
-              <g className="annual-growth-rings" id="annualGrowthRings">
-                <ellipse cx={centerX} cy={485} rx={65} ry={15} fill="#381404" stroke="#78350f" strokeWidth="2" />
-                {Array.from({ length: Math.min(characterAge, 45) }).map((_, i) => {
-                  const rx = 5 + (i * 1.3);
-                  const ry = 1.6 + (i * 0.28);
-                  const isMilestone = [6, 18, 30, 42, 60].includes(i + 1);
-                  return (
-                    <ellipse
-                      key={`wood-ring-${i}`}
-                      cx={centerX}
-                      cy={485}
-                      rx={rx}
-                      ry={ry}
-                      fill="none"
-                      stroke={isMilestone ? '#fbbf24' : '#92400e'}
-                      strokeWidth={isMilestone ? '1.8' : '0.7'}
-                      strokeOpacity={isMilestone ? '0.95' : '0.4'}
-                    />
-                  );
-                })}
-              </g>
-
-              {/* Healing Pulse Shockwave when Vitality Restored */}
-              {healingPulse && (
-                <circle
-                  cx={centerX}
-                  cy={centerY}
-                  r="240"
-                  fill="none"
-                  stroke="#10b981"
-                  strokeWidth="8"
-                  className="animate-ping opacity-60"
-                  style={{ animationDuration: '1.2s' }}
-                />
-              )}
-
-              {/* Draw Bezier Branch Lines from Center to each Node (Tán Lá Hành Động) */}
-              {nodes.map(node => {
-                const rad = (node.angleDeg * Math.PI) / 180;
-                const targetX = centerX + Math.cos(rad) * (baseRadius * node.distanceRatio * 1.25);
-                const targetY = centerY + Math.sin(rad) * (baseRadius * node.distanceRatio * 1.05);
-
-                const midX = (centerX + targetX) / 2;
-                const midY = (centerY + targetY) / 2 - 20;
-                const pathD = `M ${centerX} ${centerY} Q ${midX} ${midY} ${targetX} ${targetY}`;
-
-                const isHovered = hoveredNodeId === node.id;
-                const canAfford = actionPoints >= node.apCost;
-
-                return (
-                  <g key={`branch-${node.id}`}>
-                    <path
-                      d={pathD}
-                      fill="none"
-                      stroke={node.color.line}
-                      strokeWidth={isHovered ? '4' : '2.5'}
-                      strokeOpacity={isHovered ? '0.95' : canAfford ? '0.5' : '0.2'}
-                      className="transition-all duration-300"
-                    />
-
-                    {canAfford && (
-                      <path
-                        d={pathD}
-                        fill="none"
-                        stroke={isHovered ? '#fbbf24' : '#a5b4fc'}
-                        strokeWidth={isHovered ? '3' : '1.8'}
-                        strokeDasharray="6 14"
-                        className="animate-[dash_1.5s_linear_infinite]"
-                      />
-                    )}
-                  </g>
-                );
-              })}
-            </svg>
-
-            {/* ========================================================================= */}
-            {/* IN-TREE MERIDIAN ACUPOINTS (HUYỆT ĐẠO KỸ NĂNG NGAY TRÊN CÀNH TÂY BẮC) */}
-            {/* ========================================================================= */}
-            {characterAge >= 6 && MERIDIAN_ACUPOINTS.map(acupoint => {
-              const isUnlocked = character?.unlocked_skills?.includes(acupoint.id);
-              const canUnlock = (character?.skill_points || 0) >= acupoint.costSp && !isUnlocked;
-
-              return (
-                <div
-                  key={`acupoint-${acupoint.id}`}
-                  className="absolute z-25 -translate-x-1/2 -translate-y-1/2"
-                  style={{
-                    left: `${(acupoint.x / canvasWidth) * 100}%`,
-                    top: `${(acupoint.y / canvasHeight) * 100}%`
-                  }}
-                >
-                  <Tooltip
-                    content={
-                      <div className="space-y-1 text-xs max-w-xs">
-                        <div className="flex items-center gap-1.5 font-bold text-purple-300">
-                          <span>{acupoint.icon}</span>
-                          <span>Huyệt Đạo: {acupoint.name}</span>
-                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300">
-                            {acupoint.branch}
-                          </span>
-                        </div>
-                        <div className="text-slate-200">{acupoint.desc}</div>
-                        <div className="text-[11px] font-mono">
-                          {isUnlocked ? (
-                            <span className="text-emerald-400 font-bold">✓ Đã đả thông kinh mạch</span>
-                          ) : canUnlock ? (
-                            <span className="text-amber-300 font-bold">✨ Nhấn để khai mở ({acupoint.costSp} SP)</span>
-                          ) : (
-                            <span className="text-slate-400">Cần {acupoint.costSp} SP để khai thông</span>
-                          )}
-                        </div>
-                      </div>
-                    }
-                  >
-                    <button
-                      type="button"
-                      disabled={isLoading || isUnlocked || !canUnlock}
-                      onClick={() => {
-                        if (canUnlock && onUnlockSkill) {
-                          onUnlockSkill(acupoint.id);
-                        }
-                      }}
-                      className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs transition-all duration-300 shadow-xl border ${
-                        isUnlocked
-                          ? 'bg-emerald-950/90 border-emerald-400 text-emerald-200 ring-2 ring-emerald-400/50 shadow-emerald-500/40'
-                          : canUnlock
-                          ? 'bg-purple-900/90 border-amber-400 text-amber-200 ring-2 ring-amber-400/60 animate-pulse hover:scale-125 cursor-pointer'
-                          : 'bg-slate-900/70 border-slate-700 text-slate-500 cursor-not-allowed opacity-60'
-                      }`}
-                    >
-                      {acupoint.icon}
-                    </button>
-                  </Tooltip>
-                </div>
-              );
-            })}
-
-            {/* ========================================================================= */}
-            {/* CENTER CORE: CỘI NGUỒN SINH MỆNH (CENTRAL ORB) */}
-            {/* ========================================================================= */}
-            <Tooltip
-              content={
-                <div className="space-y-1 text-xs">
-                  <div className="font-bold text-amber-300">
-                    {actionPoints === 0 ? '✨ Đón Giao Thừa & Chiêm Nghiệm Cuối Năm' : 'Lõi Sinh Mệnh Cội Nguồn'}
-                  </div>
-                  <div>
-                    {actionPoints === 0
-                      ? 'Chạm vào lõi để khép lại một năm, đúc kết hành trình và gieo mầm tâm nguyện cho năm mới!'
-                      : 'Bản thể hội tụ năng lượng sống, định hình các lựa chọn thường niên.'}
-                  </div>
-                  <div className="text-[11px] text-purple-300 font-mono">
-                    {actionPoints > 0 ? `Khả dụng: ${actionPoints}/${totalAp} AP` : 'Đã tiêu hao hết năng lượng năm nay'}
-                  </div>
-                </div>
-              }
-            >
-              <div
-                onClick={() => {
-                  if (actionPoints === 0) {
-                    if (onOpenYearEndReflection) onOpenYearEndReflection();
-                    else if (onTimeSkip) onTimeSkip();
-                  }
-                }}
-                className={`absolute z-20 w-28 h-28 sm:w-32 sm:h-32 rounded-full flex flex-col items-center justify-center p-2 text-center select-none shadow-2xl transition-all duration-300 cursor-pointer group ${
-                  actionPoints === 0 ? 'hover:scale-110 active:scale-95 animate-pulse' : ''
-                }`}
-                style={{
-                  background: actionPoints === 0
-                    ? 'radial-gradient(circle, rgba(245,158,11,0.6) 0%, rgba(180,83,9,0.4) 50%, rgba(15,23,42,0.95) 85%)'
-                    : 'radial-gradient(circle, rgba(99,102,241,0.38) 0%, rgba(15,23,42,0.95) 75%)',
-                  boxShadow: actionPoints === 0
-                    ? '0 0 50px rgba(245,158,11,0.65), inset 0 0 25px rgba(251,191,36,0.35)'
-                    : '0 0 40px rgba(99,102,241,0.45)',
-                  border: actionPoints === 0
-                    ? '2.5px solid rgba(251,191,36,0.95)'
-                    : '2px solid rgba(129,140,248,0.65)'
-                }}
-              >
-                <div className={`absolute inset-0 rounded-full border pointer-events-none ${
-                  actionPoints === 0 ? 'border-amber-400 animate-ping opacity-35' : 'border-indigo-400/40 animate-ping opacity-25'
-                }`} />
-
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center text-base shadow-inner group-hover:scale-110 transition-transform ${
-                  actionPoints === 0
-                    ? 'bg-amber-500/30 border border-amber-400 text-amber-200'
-                    : 'bg-indigo-500/20 border border-indigo-400/40 text-white'
-                }`}>
-                  {actionPoints === 0 ? '✨' : STAGE_META[growthStage].icon}
-                </div>
-
-                <div className={`text-xs font-sans font-bold mt-1 leading-none tracking-tight ${
-                  actionPoints === 0 ? 'text-amber-300 font-black' : 'text-white'
-                }`}>
-                  {actionPoints > 0 ? `${actionPoints} AP` : '✨ Giao Thừa'}
-                </div>
-                <div className={`text-[9.5px] font-mono mt-0.5 opacity-90 truncate max-w-[92px] ${
-                  actionPoints === 0 ? 'text-amber-200 font-bold' : 'text-emerald-300'
-                }`}>
-                  {actionPoints === 0 ? 'Gieo Mầm →' : STAGE_META[growthStage].label}
-                </div>
-              </div>
-            </Tooltip>
-
-            {/* ========================================================================= */}
-            {/* SATELLITE ACTION NODES (TÁN LÁ HÀNH ĐỘNG HỮU CƠ CỦA THẦN MỘC) */}
-            {/* ========================================================================= */}
-            {nodes.map(node => {
-              const rad = (node.angleDeg * Math.PI) / 180;
-              const leftPercent = 50 + (Math.cos(rad) * (baseRadius * node.distanceRatio * 1.25) / canvasWidth) * 100;
-              const topPercent = (centerY / canvasHeight) * 100 + (Math.sin(rad) * (baseRadius * node.distanceRatio * 1.05) / canvasHeight) * 100;
-
-              const isHovered = hoveredNodeId === node.id;
-              const isPulsing = pulseActiveId === node.id;
-              const canAfford = actionPoints >= node.apCost;
-              const isHealingAction = node.id === 'restore_vitality' || node.id === 'sunbath' || node.id === 'eat_grow';
-
-              return (
-                <div
-                  key={node.id}
-                  className="absolute z-30 -translate-x-1/2 -translate-y-1/2"
-                  style={{
-                    left: `${leftPercent}%`,
-                    top: `${topPercent}%`
-                  }}
-                  onMouseEnter={() => setHoveredNodeId(node.id)}
-                  onMouseLeave={() => setHoveredNodeId(null)}
-                >
-                  <Tooltip
-                    content={
-                      <div className="space-y-1 text-xs max-w-xs">
-                        <div className="flex items-center gap-1.5 font-bold text-amber-300">
-                          <span>{node.icon}</span>
-                          <span>{node.title}</span>
-                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">
-                            {node.apCost} AP
-                          </span>
-                        </div>
-                        <div className="text-slate-200">{node.gainText}</div>
-                        <div className="text-[11px] text-slate-400 italic">{node.flavor}</div>
-                      </div>
-                    }
-                  >
-                    <button
-                      type="button"
-                      disabled={isLoading || !canAfford}
-                      onClick={() => handleNodeClick(node)}
-                      className={`relative p-2 sm:p-2.5 rounded-2xl sm:rounded-[22px] rounded-tr-sm border text-left transition-all duration-300 flex items-center gap-2 select-none active:scale-95 shadow-xl ${
-                        node.isBreakthrough
-                          ? 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950 border-amber-400 text-amber-200 ring-2 ring-amber-400/60 shadow-amber-900/40 animate-pulse'
-                          : isHealingAction && treeHealthState === 'withered'
-                          ? 'bg-emerald-950/90 border-emerald-400 text-emerald-200 ring-2 ring-emerald-400 shadow-emerald-500/50 animate-bounce'
-                          : node.color.bg + ' ' + node.color.border + ' ' + node.color.text
-                      } ${
-                        isHovered ? 'scale-110 z-40 shadow-2xl ring-2 ring-white/50' : ''
-                      } ${
-                        isPulsing ? 'scale-95 ring-4 ring-emerald-400' : ''
-                      } ${
-                        !canAfford ? 'opacity-40 cursor-not-allowed grayscale-[0.4]' : 'cursor-pointer hover:border-white'
-                      }`}
-                      style={{
-                        boxShadow: isHovered ? `0 0 24px ${node.color.glow}` : undefined
-                      }}
-                    >
-                      <span className="text-lg sm:text-xl shrink-0 group-hover:scale-125 transition-transform">
-                        {node.icon}
-                      </span>
-                      <div className="min-w-0 pr-1 hidden sm:block text-left">
-                        <div className="text-xs font-bold text-white whitespace-normal leading-tight max-w-[130px] sm:max-w-[155px]">
-                          {node.title}
-                        </div>
-                        <div className="text-[10px] opacity-80 text-slate-300 font-mono mt-0.5 truncate max-w-[140px]">
-                          {node.gainText}
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-black/40 text-amber-300 border border-white/10 shrink-0 font-bold">
-                        {node.apCost} AP
-                      </span>
-                    </button>
-                  </Tooltip>
-                </div>
-              );
-            })}
-
-            {/* Annual Growth Rings Interactive Pill Badge */}
-            <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
-              <Tooltip
-                content={
-                  <div className="space-y-1 text-xs">
-                    <div className="font-bold text-amber-300">
-                      {characterAge === 0 ? '🌱 Mầm Sống Khởi Nguyên' : `🪵 Vòng Vân Gỗ Đời Người (${characterAge} Năm Tuổi)`}:
-                    </div>
-                    <div>Gốc rễ đời người tích lũy từng vòng vân gỗ theo năm tháng.</div>
-                    <div className="text-[11px] text-emerald-300">Giai đoạn hiện tại: <span className="font-bold">{STAGE_META[growthStage].label}</span> ({STAGE_META[growthStage].ageSpan})</div>
-                    <div className="text-[10px] text-slate-400 italic">{STAGE_META[growthStage].desc}</div>
-                  </div>
-                }
-              >
-                <div className="px-3 py-1 rounded-full bg-slate-950/90 hover:bg-slate-900 border border-amber-500/40 text-[10.5px] font-sans text-amber-300 font-bold flex items-center gap-1.5 shadow-lg backdrop-blur cursor-help transition">
-                  <span>{characterAge === 0 ? '🌱' : '🪵'}</span>
-                  <span>
-                    {characterAge === 0
-                      ? 'Mầm Sống Khởi Nguyên • Gốc Rễ Đời Người'
-                      : `${characterAge} Vòng Vân Gỗ Đời Người`}
-                  </span>
-                  <span className="text-slate-500">•</span>
-                  <span className="text-emerald-400">{STAGE_META[growthStage].label}</span>
-                </div>
-              </Tooltip>
-            </div>
+      {/* ========================================================================= */}
+      {/* MAIN LIVING STAGE: THẦN MỘC 3D VĨ ĐẠI (ZERO-DETACHED LIVING CANVAS) */}
+      {/* ========================================================================= */}
+      <div className="relative w-full h-[540px] sm:h-[580px] overflow-hidden flex items-center justify-center rounded-3xl bg-[var(--bg-canvas)] border border-[var(--border-subtle)] shadow-2xl transition-colors duration-200">
+        
+        {/* Sickness Alarm Banner (Khi Cây Bị Bệnh / Kiệt Sức) */}
+        {treeHealthState === 'withered' && (
+          <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30 px-3.5 py-1 rounded-full bg-rose-950/90 border border-rose-500/70 text-rose-200 text-[11px] font-bold flex items-center gap-2 shadow-2xl shadow-rose-950/90 animate-pulse pointer-events-none whitespace-nowrap">
+            <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+            <span>Thần Mộc Đang Bị Kiệt Sức! Kinh mạch tắc nghẽn — Hãy chọn Dưỡng Sinh hoặc Bầu Sữa Mẹ để hồi sinh!</span>
           </div>
+        )}
 
-          {/* ========================================================================= */}
-          {/* 3RD PILLAR: GỐC RỄ GIA ĐÌNH & CỘI NGUỒN (CHÂN CÂY / PHÍA NAM) */}
-          {/* ========================================================================= */}
-          <div className="p-3 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-950 border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md relative z-10">
-            <div className="flex items-center gap-2.5 min-w-0 w-full sm:w-auto">
-              <span className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-sm shrink-0">
-                🌿
-              </span>
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-wider">
-                    Gốc Rễ Gia Đình & Cội Nguồn
+        {/* ========================================================================= */}
+        {/* 3 SACRED CELESTIAL BOUGH SHRINES (GẮN TRỰC TIẾP TRÊN 3 ĐẠI NHÁNH CỦA CÂY) */}
+        {/* ========================================================================= */}
+        {/* BOUGH 1: KỸ NĂNG & TRÍ TUỆ (TÂY BẮC - ĐẦU CÀNH TRÁI) */}
+        <div
+          onClick={() => setTreeViewMode('skill_tree')}
+          className={`absolute top-4 left-4 sm:left-6 z-25 group cursor-pointer transition-all duration-300 ${
+            treeViewMode === 'skill_tree' ? 'scale-105 ring-2 ring-purple-400 rounded-2xl shadow-purple-500/50 shadow-xl' : ''
+          }`}
+        >
+          <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-2xl bg-[var(--bg-card)]/90 hover:bg-[var(--bg-card)] border border-purple-500/40 hover:border-purple-300 shadow-lg backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95">
+            <span className="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-sm shadow-inner group-hover:scale-110 transition-transform shrink-0">
+              🔮
+            </span>
+            <div className="text-left min-w-0">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] font-bold text-purple-400 uppercase tracking-wider">
+                  Nhánh Kỹ Năng
+                </span>
+                {(character?.skill_points || 0) > 0 && (
+                  <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 font-black animate-pulse">
+                    +{character.skill_points} SP
                   </span>
-                  {household?.family_buff && (
-                    <span className="text-[10px] font-semibold text-amber-300 px-2 py-0.2 rounded-full bg-amber-500/10 border border-amber-500/20">
-                      ⭐ {household.family_buff.name}
-                    </span>
-                  )}
-                </div>
-                <div className="text-xs text-slate-300 truncate">
-                  {household?.father_name ? `Bố: ${household.father_name}` : 'Mồ côi'}
-                  {household?.mother_name ? ` • Mẹ: ${household.mother_name}` : ''}
-                  <span className={`ml-2 text-[10px] px-1.5 py-0.2 rounded font-semibold ${isParentsDeceased ? 'text-rose-400 bg-rose-950/60' : 'text-emerald-400 bg-emerald-950/60'}`}>
-                    {isParentsDeceased ? 'Đã khuất' : 'Bình an'}
-                  </span>
-                </div>
+                )}
+              </div>
+              <div className="text-xs font-bold text-[var(--text-primary)] truncate max-w-[125px] sm:max-w-[155px]">
+                Lv.{character?.life_level || 1} · {character?.unlocked_skills?.length || 0} Tố Chất
               </div>
             </div>
-
-            {/* 1-Click Family Interactions & Phả Hệ Button */}
-            <div className="flex items-center gap-2 flex-wrap justify-end shrink-0 w-full sm:w-auto">
-              {onFamilyMeal && !isParentsDeceased && (
-                <Tooltip content={canEatMeal ? "Bữa cơm đầm ấm: Tăng 10 HP và giảm 15 Burnout" : "Đã dùng bữa cơm trong năm nay"}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setHealingPulse(true);
-                      setTimeout(() => setHealingPulse(false), 1400);
-                      onFamilyMeal();
-                    }}
-                    disabled={!canEatMeal || isLoading}
-                    className={`py-1.5 px-3 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition border ${
-                      canEatMeal
-                        ? 'bg-amber-950/60 hover:bg-amber-900/60 text-amber-200 border-amber-500/40 active:scale-95 shadow'
-                        : 'bg-slate-900/40 text-slate-500 border-slate-800 cursor-not-allowed opacity-60'
-                    }`}
-                  >
-                    <Utensils className="w-3.5 h-3.5 text-amber-400" />
-                    <span>{characterAge < 6 ? 'Bầu Sữa Mẹ' : 'Bữa Cơm'}</span>
-                    <span className="text-[10px] font-mono text-amber-300/80 ml-1">
-                      {canEatMeal ? '+10 HP' : 'Đã dùng'}
-                    </span>
-                  </button>
-                </Tooltip>
-              )}
-
-              {onFamilyMentorship && !isParentsDeceased && (
-                <Tooltip content={canMentor ? "Lời khuyên phụ mẫu: Tiếp thu kinh nghiệm cha mẹ, +8 Karma" : "Đã nhận lời khuyên trong năm nay"}>
-                  <button
-                    type="button"
-                    onClick={onFamilyMentorship}
-                    disabled={!canMentor || isLoading}
-                    className={`py-1.5 px-3 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition border ${
-                      canMentor
-                        ? 'bg-indigo-950/60 hover:bg-indigo-900/60 text-indigo-200 border-indigo-500/40 active:scale-95 shadow'
-                        : 'bg-slate-900/40 text-slate-500 border-slate-800 cursor-not-allowed opacity-60'
-                    }`}
-                  >
-                    <MessageSquare className="w-3.5 h-3.5 text-indigo-400" />
-                    <span>Lời Khuyên</span>
-                    <span className="text-[10px] font-mono text-indigo-300/80 ml-1">
-                      {canMentor ? '+8 Karma' : 'Đã dùng'}
-                    </span>
-                  </button>
-                </Tooltip>
-              )}
-
-              {onOpenFamily && (
+            {onRpgActivePerk && character?.unlocked_skills?.includes('stock_trading') && (
+              <Tooltip content="Lướt sóng cổ phiếu (1 AP): Chớp cơ hội thị trường sinh lời">
                 <button
                   type="button"
-                  onClick={onOpenFamily}
-                  className="px-3 py-1.5 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-200 text-xs font-bold transition flex items-center gap-1 active:scale-95"
+                  disabled={isLoading || actionPoints < 1}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRpgActivePerk('stock_trading');
+                  }}
+                  className="p-1 rounded-md bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/40 text-emerald-300 text-xs transition shrink-0 ml-0.5"
                 >
-                  <span>Phả Hệ Dòng Tộc</span>
-                  <ArrowUpRight className="w-3 h-3" />
+                  📈
                 </button>
+              </Tooltip>
+            )}
+            <ArrowUpRight className="w-3.5 h-3.5 text-purple-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition shrink-0" />
+          </div>
+        </div>
+
+        {/* BOUGH 2: NHÂN MẠCH QUÝ NHÂN (THIÊN ĐỈNH - VƯƠNG MIỆN TÁN CÂY) */}
+        <div
+          onClick={() => setTreeViewMode('social_links')}
+          className={`absolute top-3 left-1/2 -translate-x-1/2 z-25 group cursor-pointer transition-all duration-300 ${
+            treeViewMode === 'social_links' ? 'scale-105 ring-2 ring-sky-400 rounded-2xl shadow-sky-500/50 shadow-xl' : ''
+          }`}
+        >
+          <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-2xl bg-[var(--bg-card)]/90 hover:bg-[var(--bg-card)] border border-sky-500/40 hover:border-sky-300 shadow-lg backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95">
+            <span className="w-8 h-8 rounded-xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sm shadow-inner group-hover:scale-110 transition-transform shrink-0">
+              👥
+            </span>
+            <div className="text-left min-w-0">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] font-bold text-sky-400 uppercase tracking-wider">
+                  Nhân Mạch Quý Nhân
+                </span>
+                <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/40 font-mono">
+                  {character?.social_links?.length || 4}
+                </span>
+              </div>
+              <div className="text-xs font-bold text-[var(--text-primary)] truncate max-w-[125px] sm:max-w-[155px]">
+                {character?.social_links?.filter((n: any) => n.linkLevel >= 2).length || 0} Quý Nhân Thân Thiết
+              </div>
+            </div>
+            <ArrowUpRight className="w-3.5 h-3.5 text-sky-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition shrink-0" />
+          </div>
+        </div>
+
+        {/* BOUGH 3: CÀNH HOÀNG KIM TÀI SẢN (ĐÔNG BẮC - ĐẦU CÀNH PHẢI) */}
+        <div
+          onClick={onOpenAssets}
+          className="absolute top-4 right-4 sm:right-6 z-25 group cursor-pointer"
+        >
+          <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-2xl bg-[var(--bg-card)]/90 hover:bg-[var(--bg-card)] border border-amber-500/40 hover:border-amber-300 shadow-lg backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95">
+            <span className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-sm shadow-inner group-hover:scale-110 transition-transform shrink-0">
+              🪙
+            </span>
+            <div className="text-left min-w-0">
+              <span className="text-[11px] font-bold text-amber-500 uppercase tracking-wider block">
+                Cành Hoàng Kim
+              </span>
+              <div className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5 truncate max-w-[125px] sm:max-w-[155px]">
+                <span className="text-emerald-500 font-mono">{formattedCash.primary}</span>
+                <span className="text-[var(--text-secondary)] text-[10px] font-sans">• {assets.length} TS</span>
+              </div>
+            </div>
+            <ArrowUpRight className="w-3.5 h-3.5 text-amber-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition shrink-0" />
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* SACRED ROOTS & CHIBI/SPINE AVATAR DAIS (NHÂN VẬT HỘ MỆNH DƯỚI CỘI RỄ) */}
+        {/* ========================================================================= */}
+        <div className="absolute bottom-5 left-4 sm:left-7 z-25 flex flex-col items-center pointer-events-auto">
+          <Tooltip
+            content={
+              <div className="space-y-1 text-xs">
+                <div className="font-bold text-amber-300 flex items-center gap-1.5">
+                  <span>🧙‍♂️</span>
+                  <span>Bản Thể Tu Luyện Dưới Cội Rễ Thần Mộc</span>
+                </div>
+                <div className="text-slate-200">
+                  Nhân vật ngồi thiền định tại cội rễ, đan điền kết nối trực tiếp với mạch nhựa Thần Mộc.
+                </div>
+                <div className="text-[10px] text-emerald-300 italic">
+                  Chạm vào nhân vật để thi triển võ thuật, vận khí và truyền sinh lực vào cây!
+                </div>
+              </div>
+            }
+          >
+            <div
+              onClick={handleAvatarPoke}
+              className="relative group cursor-pointer flex flex-col items-center"
+            >
+              {/* Energy Aura behind Avatar */}
+              <div
+                className={`absolute -inset-1.5 rounded-2xl blur-md transition-all ${
+                  treeHealthState === 'withered'
+                    ? 'bg-rose-500/30'
+                    : treeHealthState === 'fatigued'
+                    ? 'bg-amber-500/25'
+                    : 'bg-emerald-500/25 group-hover:bg-indigo-500/40'
+                }`}
+              />
+
+              {/* Speech Bubble */}
+              {avatarSpeech && (
+                <div className="absolute -top-10 whitespace-nowrap px-3 py-1 rounded-xl bg-slate-900 border border-amber-400/90 text-amber-300 text-[10.5px] font-bold shadow-2xl animate-bounce z-40">
+                  {avatarSpeech}
+                </div>
+              )}
+
+              {/* Avatar Frame Canvas with Dais Base */}
+              <div className="w-18 h-24 sm:w-22 sm:h-28 rounded-2xl overflow-hidden border border-emerald-500/40 bg-gradient-to-t from-slate-950 via-slate-900 to-emerald-950/60 shadow-2xl relative transition-transform group-hover:scale-105 active:scale-95">
+                <SpineCharacterAvatar
+                  nationality={character?.nationality || 'Việt Nam'}
+                  gender={character?.gender || 'male'}
+                  age={characterAge}
+                  burnout={burnout}
+                  vitality={vitalityVal}
+                  animation={treeHealthState === 'withered' ? 'Front_idle' : (avatarAnim as any)}
+                  className="w-full h-full"
+                  showSidekick={false}
+                  traits={character?.traits || []}
+                />
+              </div>
+
+              {/* Sub-label */}
+              <div className="mt-1 px-2.5 py-0.5 rounded-full bg-slate-950/90 border border-emerald-500/40 text-[9.5px] font-bold text-emerald-300 flex items-center gap-1.5 shadow-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                <span>Bản Thể Tu Luyện</span>
+              </div>
+            </div>
+          </Tooltip>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* SVG SCENIC CANVAS: PROCEDURAL 3D TRUNK, SHADING, MERIDIANS & FOLIAGE */}
+        {/* ========================================================================= */}
+        <svg
+          viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
+          className="absolute inset-0 w-full h-full pointer-events-none"
+        >
+          <defs>
+            <linearGradient id="treePulseGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+              <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
+              <stop offset="50%" stopColor="#818cf8" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#fbbf24" stopOpacity="1" />
+            </linearGradient>
+
+            <linearGradient id="godRayGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#fef08a" stopOpacity="0.28" />
+              <stop offset="35%" stopColor="#a7f3d0" stopOpacity="0.12" />
+              <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+            </linearGradient>
+
+            {/* 3D Wood Oak Gradient (Cylindrical Lighting) */}
+            <linearGradient id="woodOakGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#1e0b04" />
+              <stop offset="25%" stopColor="#451a03" />
+              <stop offset="45%" stopColor="#b45309" />
+              <stop offset="65%" stopColor="#78350f" />
+              <stop offset="100%" stopColor="#240c03" />
+            </linearGradient>
+
+            {/* Withered / Toxic Bark Gradient */}
+            <linearGradient id="witheredBarkGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#18181b" />
+              <stop offset="30%" stopColor="#3f3f46" />
+              <stop offset="60%" stopColor="#581c87" />
+              <stop offset="100%" stopColor="#1c1917" />
+            </linearGradient>
+
+            {/* Dynamic Mana Sap Meridian Gradient */}
+            <linearGradient id="manaSapGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+              {treeHealthState === 'withered' ? (
+                <>
+                  <stop offset="0%" stopColor="#dc2626" stopOpacity="0.4" />
+                  <stop offset="50%" stopColor="#9333ea" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="#ef4444" stopOpacity="1" />
+                </>
+              ) : treeHealthState === 'fatigued' ? (
+                <>
+                  <stop offset="0%" stopColor="#d97706" stopOpacity="0.3" />
+                  <stop offset="50%" stopColor="#f59e0b" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#eab308" stopOpacity="0.9" />
+                </>
+              ) : (
+                <>
+                  <stop offset="0%" stopColor="#059669" stopOpacity="0.3" />
+                  <stop offset="40%" stopColor="#38bdf8" stopOpacity="0.85" />
+                  <stop offset="70%" stopColor="#a855f7" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="#fbbf24" stopOpacity="1" />
+                </>
+              )}
+            </linearGradient>
+
+            {/* Avatar Dan-Tien to Roots Meridian Conduit */}
+            <linearGradient id="avatarToTreeMeridian" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.9" />
+              <stop offset="50%" stopColor="#10b981" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.8" />
+            </linearGradient>
+
+            <linearGradient id="ancientWorldTreeGold" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#fef08a" />
+              <stop offset="30%" stopColor="#fbbf24" />
+              <stop offset="70%" stopColor="#f59e0b" />
+              <stop offset="100%" stopColor="#78350f" />
+            </linearGradient>
+
+            <linearGradient id="sproutGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+              <stop offset="0%" stopColor="#047857" />
+              <stop offset="60%" stopColor="#10b981" />
+              <stop offset="100%" stopColor="#6ee7b7" />
+            </linearGradient>
+
+            <radialGradient id="wisdomFoliageGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor={treeHealthState === 'withered' ? '#4c1d95' : '#818cf8'} stopOpacity="0.45" />
+              <stop offset="60%" stopColor={treeHealthState === 'withered' ? '#311042' : '#4338ca'} stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#0f172a" stopOpacity="0" />
+            </radialGradient>
+
+            <radialGradient id="socialFoliageGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor={treeHealthState === 'withered' ? '#581c87' : '#38bdf8'} stopOpacity="0.45" />
+              <stop offset="60%" stopColor="#0284c7" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#0369a1" stopOpacity="0" />
+            </radialGradient>
+
+            <radialGradient id="wealthFoliageGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor={treeHealthState === 'withered' ? '#78350f' : '#fbbf24'} stopOpacity="0.45" />
+              <stop offset="60%" stopColor="#d97706" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#78350f" stopOpacity="0" />
+            </radialGradient>
+
+            <filter id="coreGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="7" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+
+            <filter id="foliageBlur" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="14" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          {/* God Rays (Thiên Khải Chi Quang) */}
+          <g className="god-rays pointer-events-none opacity-40">
+            <polygon points="260,0 330,0 240,460 140,460" fill="url(#godRayGradient)" />
+            <polygon points="340,0 400,0 440,480 340,480" fill="url(#godRayGradient)" />
+            <polygon points="420,0 490,0 600,460 500,460" fill="url(#godRayGradient)" />
+          </g>
+
+          {/* Ambient Celestial Starlight Circles */}
+          <circle
+            cx={centerX}
+            cy={centerY}
+            r={80}
+            fill="none"
+            stroke={treeHealthState === 'withered' ? '#9333ea' : '#6366f1'}
+            strokeWidth="1.5"
+            strokeDasharray="5 5"
+            className="opacity-25 animate-[spin_40s_linear_infinite]"
+            style={{ transformOrigin: `${centerX}px ${centerY}px` }}
+          />
+          <circle
+            cx={centerX}
+            cy={centerY}
+            r={baseRadius * 0.9}
+            fill="none"
+            stroke={treeHealthState === 'withered' ? '#dc2626' : '#38bdf8'}
+            strokeWidth="1"
+            strokeDasharray="8 8"
+            className="opacity-20 animate-[spin_60s_linear_infinite_reverse]"
+            style={{ transformOrigin: `${centerX}px ${centerY}px` }}
+          />
+
+          {/* Floating Spirit Fireflies */}
+          <g className="spirit-fireflies pointer-events-none">
+            {treeHealthState !== 'withered' ? (
+              <>
+                <circle cx="280" cy="220" r="3" fill="#6ee7b7" className="animate-pulse" style={{ animationDuration: '2.4s' }} filter="url(#coreGlow)" />
+                <circle cx="440" cy="240" r="3.5" fill="#fef08a" className="animate-pulse" style={{ animationDuration: '3.1s', animationDelay: '0.7s' }} filter="url(#coreGlow)" />
+                <circle cx="360" cy="140" r="3" fill="#c084fc" className="animate-pulse" style={{ animationDuration: '2.7s', animationDelay: '1.2s' }} filter="url(#coreGlow)" />
+                <circle cx="200" cy="130" r="3.5" fill="#818cf8" className="animate-pulse" style={{ animationDuration: '3.4s', animationDelay: '0.3s' }} filter="url(#coreGlow)" />
+                <circle cx="530" cy="150" r="3.5" fill="#fbbf24" className="animate-pulse" style={{ animationDuration: '2.9s', animationDelay: '1s' }} filter="url(#coreGlow)" />
+                <circle cx="320" cy="420" r="2.5" fill="#34d399" className="animate-pulse" style={{ animationDuration: '3.8s', animationDelay: '1.8s' }} filter="url(#coreGlow)" />
+                <circle cx="410" cy="400" r="3" fill="#fde047" className="animate-pulse" style={{ animationDuration: '2.8s', animationDelay: '1.5s' }} filter="url(#coreGlow)" />
+              </>
+            ) : (
+              <>
+                <circle cx="360" cy="240" r="2.5" fill="#dc2626" className="animate-ping" style={{ animationDuration: '1.8s' }} filter="url(#coreGlow)" />
+                <circle cx="310" cy="330" r="2" fill="#9333ea" className="animate-pulse" style={{ animationDuration: '2.2s' }} filter="url(#coreGlow)" />
+              </>
+            )}
+          </g>
+
+          {/* Sacred Ground Soil Mound */}
+          <ellipse cx={centerX} cy={488} rx={280} ry={24} fill="#0b1120" stroke="#1e293b" strokeWidth="2" />
+          <ellipse cx={centerX} cy={488} rx={250} ry={16} fill="rgba(15,23,42,0.95)" stroke="#334155" strokeWidth="1" />
+
+          {/* Glowing Meridian Threads: Avatar Dan-Tien (105, 450) to Root Base (360, 480) */}
+          <path
+            d="M 105 450 C 185 470, 270 482, 360 480"
+            fill="none"
+            stroke="url(#avatarToTreeMeridian)"
+            strokeWidth="3.5"
+            strokeDasharray="6 4"
+            className="animate-[dash_1.5s_linear_infinite]"
+          />
+          <path
+            d="M 105 450 C 190 485, 280 495, 360 485"
+            fill="none"
+            stroke="rgba(56, 189, 248, 0.4)"
+            strokeWidth="2"
+            strokeDasharray="4 6"
+            className="animate-[dash_2s_linear_infinite_reverse]"
+          />
+
+          {/* PROCEDURAL TRUNK GEOMETRY FOR THE 5 GROWTH STAGES */}
+          <g className="procedural-tree-trunk" id="proceduralTreeTrunk">
+            {growthStage === 'sprout' && (
+              <g className="stage-sprout">
+                {/* Curved delicate seedling stem */}
+                <path
+                  d="M 360 480 C 350 390, 370 320, 360 270"
+                  stroke={treeHealthState === 'withered' ? '#78350f' : 'url(#sproutGradient)'}
+                  strokeWidth="16"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+                {/* Cotyledon baby leaves */}
+                <path
+                  d="M 360 340 C 310 310, 275 330, 270 355 C 295 370, 335 355, 360 340 Z"
+                  fill={treeHealthState === 'withered' ? '#713f12' : '#10b981'}
+                  filter="url(#coreGlow)"
+                />
+                <path
+                  d="M 360 330 C 410 300, 445 320, 450 345 C 425 360, 385 345, 360 330 Z"
+                  fill={treeHealthState === 'withered' ? '#854d0e' : '#34d399'}
+                  filter="url(#coreGlow)"
+                />
+                {/* Root threads */}
+                <path d="M 360 480 Q 320 495, 270 505" stroke="#059669" strokeWidth="3" strokeDasharray="4 4" fill="none" />
+                <path d="M 360 480 Q 400 495, 450 505" stroke="#059669" strokeWidth="3" strokeDasharray="4 4" fill="none" />
+                <path d="M 360 480 Q 350 500, 340 512" stroke="#059669" strokeWidth="2.5" strokeDasharray="3 3" fill="none" />
+              </g>
+            )}
+
+            {growthStage === 'sapling' && (
+              <g className="stage-sapling">
+                {/* Straight slender youthful trunk */}
+                <path
+                  d="M 360 480 C 354 380, 366 290, 360 190"
+                  stroke={treeHealthState === 'withered' ? 'url(#witheredBarkGradient)' : '#059669'}
+                  strokeWidth="24"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+                {/* Pulsing Mana Meridian Sap */}
+                <path
+                  d="M 360 475 C 356 385, 364 290, 360 195"
+                  stroke="url(#manaSapGradient)"
+                  strokeWidth="5"
+                  strokeDasharray="8 6"
+                  fill="none"
+                  className="animate-pulse"
+                />
+                {/* Branches reaching for sunlight */}
+                <path d="M 360 320 Q 280 260, 220 210" stroke={treeHealthState === 'withered' ? '#581c87' : '#10b981'} strokeWidth="10" strokeLinecap="round" fill="none" />
+                <path d="M 360 270 Q 440 210, 500 170" stroke={treeHealthState === 'withered' ? '#581c87' : '#10b981'} strokeWidth="10" strokeLinecap="round" fill="none" />
+                {/* Foliage soft clouds */}
+                <circle cx="220" cy="210" r="38" fill={treeHealthState === 'withered' ? '#3b0764' : '#10b981'} opacity="0.35" filter="url(#foliageBlur)" />
+                <circle cx="500" cy="170" r="42" fill={treeHealthState === 'withered' ? '#3b0764' : '#10b981'} opacity="0.35" filter="url(#foliageBlur)" />
+                <circle cx="360" cy="190" r="46" fill={treeHealthState === 'withered' ? '#2e1065' : '#34d399'} opacity="0.3" filter="url(#foliageBlur)" />
+              </g>
+            )}
+
+            {growthStage === 'flourishing_oak' && (
+              <g className="stage-flourishing-oak">
+                {/* Sturdy muscular oak trunk with 3D cylindrical gradient */}
+                <path
+                  d="M 326 480 C 340 380, 348 310, 360 265 C 372 310, 380 380, 394 480 Z"
+                  fill={treeHealthState === 'withered' ? 'url(#witheredBarkGradient)' : 'url(#woodOakGradient)'}
+                  stroke={treeHealthState === 'withered' ? '#450a0a' : '#5c2409'}
+                  strokeWidth="3.5"
+                />
+                {/* Buttress root anchors */}
+                <path d="M 326 480 Q 270 496, 215 508" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="14" strokeLinecap="round" fill="none" />
+                <path d="M 394 480 Q 450 496, 505 508" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="14" strokeLinecap="round" fill="none" />
+
+                {/* Central Meridian (Đốc Mạch Thần Mộc) */}
+                <path d="M 360 475 Q 365 370, 360 265" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="10 8" fill="none" className="animate-pulse" />
+
+                {/* Major Acupuncture Meridian Conduits along 3 Boughs */}
+                <path d="M 350 295 C 310 230, 230 160, 140 85" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
+                <path d="M 350 295 C 310 230, 230 160, 140 85" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+
+                <path d="M 360 275 Q 360 160, 360 65" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
+                <path d="M 360 275 Q 360 160, 360 65" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+
+                <path d="M 370 295 C 410 230, 490 160, 580 85" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
+                <path d="M 370 295 C 410 230, 490 160, 580 85" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+
+                {/* Acupoint Nodes (Huyệt Vị Kinh Mạch) */}
+                <circle cx="360" cy="460" r="5.5" fill="#38bdf8" filter="url(#coreGlow)" className="animate-pulse" />
+                <circle cx="360" cy="350" r="6" fill="#fbbf24" filter="url(#coreGlow)" className="animate-pulse" />
+                <circle cx="270" cy="215" r="5" fill="#c084fc" filter="url(#coreGlow)" />
+                <circle cx="450" cy="215" r="5" fill="#fde047" filter="url(#coreGlow)" />
+
+                {/* Layered Foliage Canopy Clusters */}
+                <circle cx="140" cy="85" r="65" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="170" cy="105" r="42" fill={treeHealthState === 'withered' ? '#4c1d95' : '#6366f1'} opacity="0.3" filter="url(#coreGlow)" />
+                <circle cx="360" cy="65" r="75" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="360" cy="85" r="52" fill={treeHealthState === 'withered' ? '#581c87' : '#0284c7'} opacity="0.35" filter="url(#coreGlow)" />
+                <circle cx="580" cy="85" r="65" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="550" cy="105" r="42" fill={treeHealthState === 'withered' ? '#78350f' : '#f59e0b'} opacity="0.3" filter="url(#coreGlow)" />
+              </g>
+            )}
+
+            {growthStage === 'grand_pillar' && (
+              <g className="stage-grand-pillar">
+                {/* Massive weathered ancient pillar trunk */}
+                <path
+                  d="M 315 480 C 330 380, 345 300, 360 250 C 375 300, 390 380, 405 480 Z"
+                  fill={treeHealthState === 'withered' ? 'url(#witheredBarkGradient)' : 'url(#woodOakGradient)'}
+                  stroke={treeHealthState === 'withered' ? '#450a0a' : '#451a03'}
+                  strokeWidth="4"
+                />
+                {/* Buttress root anchors */}
+                <path d="M 315 480 Q 260 495, 200 508" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#5c2409'} strokeWidth="16" strokeLinecap="round" fill="none" />
+                <path d="M 405 480 Q 460 495, 520 508" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#5c2409'} strokeWidth="16" strokeLinecap="round" fill="none" />
+
+                {/* Dual Meridian Sap Channels */}
+                <path d="M 355 475 Q 361 360, 355 250" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="12 8" fill="none" className="animate-pulse" />
+                <path d="M 365 475 Q 371 360, 365 250" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="12 8" fill="none" className="animate-pulse" />
+
+                {/* Broad sheltering canopy arches */}
+                <path d="M 345 280 C 290 220, 210 160, 130 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="22" strokeLinecap="round" fill="none" />
+                <path d="M 360 260 Q 360 150, 360 65" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="22" strokeLinecap="round" fill="none" />
+                <path d="M 375 280 C 430 220, 510 160, 590 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="22" strokeLinecap="round" fill="none" />
+
+                {/* Colossal canopy foliage */}
+                <circle cx="130" cy="95" r="72" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="360" cy="65" r="80" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="590" cy="95" r="72" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" />
+              </g>
+            )}
+
+            {growthStage === 'ancient_world_tree' && (
+              <g className="stage-ancient-world-tree">
+                {/* Radiant Golden Amber World Tree trunk */}
+                <path
+                  d="M 310 480 C 330 370, 345 290, 360 240 C 375 290, 390 370, 410 480 Z"
+                  fill={treeHealthState === 'withered' ? 'url(#witheredBarkGradient)' : 'url(#ancientWorldTreeGold)'}
+                  stroke={treeHealthState === 'withered' ? '#7f1d1d' : '#d97706'}
+                  strokeWidth="4"
+                />
+                {/* Transcendent spiral runes on trunk */}
+                <path d="M 360 450 Q 370 380, 360 320 Q 350 260, 360 200" stroke="#fef08a" strokeWidth="4" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+
+                {/* Deep ancient root foundation */}
+                <path d="M 310 480 Q 255 496, 190 510" stroke="#d97706" strokeWidth="18" strokeLinecap="round" fill="none" />
+                <path d="M 410 480 Q 465 496, 530 510" stroke="#d97706" strokeWidth="18" strokeLinecap="round" fill="none" />
+
+                {/* Grand radiant canopy arches */}
+                <path d="M 345 270 C 285 210, 205 150, 120 90" stroke="#f59e0b" strokeWidth="24" strokeLinecap="round" fill="none" />
+                <path d="M 360 250 Q 360 140, 360 55" stroke="#f59e0b" strokeWidth="24" strokeLinecap="round" fill="none" />
+                <path d="M 375 270 C 435 210, 515 150, 600 90" stroke="#f59e0b" strokeWidth="24" strokeLinecap="round" fill="none" />
+
+                {/* Golden heritage fruits (legacy orbs) */}
+                <circle cx="120" cy="90" r="14" fill="#fef08a" stroke="#f59e0b" strokeWidth="3" className="animate-bounce" />
+                <circle cx="600" cy="90" r="14" fill="#fef08a" stroke="#f59e0b" strokeWidth="3" className="animate-bounce" style={{ animationDelay: '0.4s' }} />
+                <circle cx="360" cy="55" r="16" fill="#fef08a" stroke="#eab308" strokeWidth="3" className="animate-pulse" />
+              </g>
+            )}
+          </g>
+
+          {/* Annual Tree Growth Rings (Vòng Vân Gỗ Đời Người) */}
+          <g className="annual-growth-rings" id="annualGrowthRings">
+            <ellipse cx={centerX} cy={485} rx={65} ry={15} fill="#381404" stroke="#78350f" strokeWidth="2" />
+            {Array.from({ length: Math.min(characterAge, 45) }).map((_, i) => {
+              const rx = 5 + (i * 1.3);
+              const ry = 1.6 + (i * 0.28);
+              const isMilestone = [6, 18, 30, 42, 60].includes(i + 1);
+              return (
+                <ellipse
+                  key={`wood-ring-${i}`}
+                  cx={centerX}
+                  cy={485}
+                  rx={rx}
+                  ry={ry}
+                  fill="none"
+                  stroke={isMilestone ? '#fbbf24' : '#92400e'}
+                  strokeWidth={isMilestone ? '1.8' : '0.7'}
+                  strokeOpacity={isMilestone ? '0.95' : '0.4'}
+                />
+              );
+            })}
+          </g>
+
+          {/* Healing Pulse Shockwave when Vitality Restored */}
+          {healingPulse && (
+            <circle
+              cx={centerX}
+              cy={centerY}
+              r="240"
+              fill="none"
+              stroke="#10b981"
+              strokeWidth="8"
+              className="animate-ping opacity-60"
+              style={{ animationDuration: '1.2s' }}
+            />
+          )}
+
+          {/* Draw Leaf Petiole Vines from Center Trunk to each Foliage Leaflet */}
+          {nodes.map(node => {
+            const rad = (node.angleDeg * Math.PI) / 180;
+            const targetX = centerX + Math.cos(rad) * (baseRadius * node.distanceRatio * 1.25);
+            const targetY = centerY + Math.sin(rad) * (baseRadius * node.distanceRatio * 1.05);
+
+            const midX = (centerX + targetX) / 2;
+            const midY = (centerY + targetY) / 2 - 20;
+            const pathD = `M ${centerX} ${centerY} Q ${midX} ${midY} ${targetX} ${targetY}`;
+
+            const isHovered = hoveredNodeId === node.id;
+            const canAfford = actionPoints >= node.apCost;
+
+            return (
+              <g key={`branch-${node.id}`}>
+                <path
+                  d={pathD}
+                  fill="none"
+                  stroke={node.color.line}
+                  strokeWidth={isHovered ? '4.5' : '2.5'}
+                  strokeOpacity={isHovered ? '0.95' : canAfford ? '0.55' : '0.2'}
+                  className="transition-all duration-300"
+                />
+
+                {canAfford && (
+                  <path
+                    d={pathD}
+                    fill="none"
+                    stroke={isHovered ? '#fbbf24' : '#a5b4fc'}
+                    strokeWidth={isHovered ? '3.5' : '2'}
+                    strokeDasharray="6 14"
+                    className="animate-[dash_1.5s_linear_infinite]"
+                  />
+                )}
+              </g>
+            );
+          })}
+        </svg>
+
+        {/* ========================================================================= */}
+        {/* IN-TREE MERIDIAN ACUPOINTS (HUYỆT ĐẠO KỸ NĂNG NGAY TRÊN CÀNH TÂY BẮC) */}
+        {/* ========================================================================= */}
+        {characterAge >= 6 && MERIDIAN_ACUPOINTS.map(acupoint => {
+          const isUnlocked = character?.unlocked_skills?.includes(acupoint.id);
+          const canUnlock = (character?.skill_points || 0) >= acupoint.costSp && !isUnlocked;
+
+          return (
+            <div
+              key={`acupoint-${acupoint.id}`}
+              className="absolute z-25 -translate-x-1/2 -translate-y-1/2"
+              style={{
+                left: `${(acupoint.x / canvasWidth) * 100}%`,
+                top: `${(acupoint.y / canvasHeight) * 100}%`
+              }}
+            >
+              <Tooltip
+                content={
+                  <div className="space-y-1 text-xs max-w-xs">
+                    <div className="flex items-center gap-1.5 font-bold text-purple-300">
+                      <span>{acupoint.icon}</span>
+                      <span>Huyệt Đạo: {acupoint.name}</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300">
+                        {acupoint.branch}
+                      </span>
+                    </div>
+                    <div className="text-slate-200">{acupoint.desc}</div>
+                    <div className="text-[11px] font-mono">
+                      {isUnlocked ? (
+                        <span className="text-emerald-400 font-bold">✓ Đã đả thông kinh mạch</span>
+                      ) : canUnlock ? (
+                        <span className="text-amber-300 font-bold">✨ Nhấn để khai mở ({acupoint.costSp} SP)</span>
+                      ) : (
+                        <span className="text-slate-400">Cần {acupoint.costSp} SP để khai thông</span>
+                      )}
+                    </div>
+                  </div>
+                }
+              >
+                <button
+                  type="button"
+                  disabled={isLoading || isUnlocked || !canUnlock}
+                  onClick={() => {
+                    if (canUnlock && onUnlockSkill) {
+                      onUnlockSkill(acupoint.id);
+                    }
+                  }}
+                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs transition-all duration-300 shadow-xl border ${
+                    isUnlocked
+                      ? 'bg-emerald-950/90 border-emerald-400 text-emerald-200 ring-2 ring-emerald-400/50 shadow-emerald-500/40'
+                      : canUnlock
+                      ? 'bg-purple-900/90 border-amber-400 text-amber-200 ring-2 ring-amber-400/60 animate-pulse hover:scale-125 cursor-pointer'
+                      : 'bg-slate-900/70 border-slate-700 text-slate-500 cursor-not-allowed opacity-60'
+                  }`}
+                >
+                  {acupoint.icon}
+                </button>
+              </Tooltip>
+            </div>
+          );
+        })}
+
+        {/* ========================================================================= */}
+        {/* CENTER CORE: CỘI NGUỒN SINH MỆNH (CENTRAL ORB) */}
+        {/* ========================================================================= */}
+        <Tooltip
+          content={
+            <div className="space-y-1 text-xs">
+              <div className="font-bold text-amber-300">
+                {actionPoints === 0 ? '✨ Đón Giao Thừa & Chiêm Nghiệm Cuối Năm' : 'Lõi Sinh Mệnh Cội Nguồn'}
+              </div>
+              <div>
+                {actionPoints === 0
+                  ? 'Chạm vào lõi để khép lại một năm, đúc kết hành trình và gieo mầm tâm nguyện cho năm mới!'
+                  : 'Bản thể hội tụ năng lượng sống, định hình các lựa chọn thường niên.'}
+              </div>
+              <div className="text-[11px] text-purple-300 font-mono">
+                {actionPoints > 0 ? `Khả dụng: ${actionPoints}/${totalAp} AP` : 'Đã tiêu hao hết năng lượng năm nay'}
+              </div>
+            </div>
+          }
+        >
+          <div
+            onClick={() => {
+              if (actionPoints === 0) {
+                if (onOpenYearEndReflection) onOpenYearEndReflection();
+                else if (onTimeSkip) onTimeSkip();
+              }
+            }}
+            className={`absolute z-20 w-28 h-28 sm:w-32 sm:h-32 rounded-full flex flex-col items-center justify-center p-2 text-center select-none shadow-2xl transition-all duration-300 cursor-pointer group ${
+              actionPoints === 0 ? 'hover:scale-110 active:scale-95 animate-pulse' : ''
+            }`}
+            style={{
+              background: actionPoints === 0
+                ? 'radial-gradient(circle, rgba(245,158,11,0.6) 0%, rgba(180,83,9,0.4) 50%, rgba(15,23,42,0.95) 85%)'
+                : 'radial-gradient(circle, rgba(99,102,241,0.38) 0%, rgba(15,23,42,0.95) 75%)',
+              boxShadow: actionPoints === 0
+                ? '0 0 50px rgba(245,158,11,0.65), inset 0 0 25px rgba(251,191,36,0.35)'
+                : '0 0 40px rgba(99,102,241,0.45)',
+              border: actionPoints === 0
+                ? '2.5px solid rgba(251,191,36,0.95)'
+                : '2px solid rgba(129,140,248,0.65)'
+            }}
+          >
+            <div className={`absolute inset-0 rounded-full border pointer-events-none ${
+              actionPoints === 0 ? 'border-amber-400 animate-ping opacity-35' : 'border-indigo-400/40 animate-ping opacity-25'
+            }`} />
+
+            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-base shadow-inner group-hover:scale-110 transition-transform ${
+              actionPoints === 0
+                ? 'bg-amber-500/30 border border-amber-400 text-amber-200'
+                : 'bg-indigo-500/20 border border-indigo-400/40 text-white'
+            }`}>
+              {actionPoints === 0 ? '✨' : STAGE_META[growthStage].icon}
+            </div>
+
+            <div className={`text-xs font-sans font-bold mt-1 leading-none tracking-tight ${
+              actionPoints === 0 ? 'text-amber-300 font-black' : 'text-white'
+            }`}>
+              {actionPoints > 0 ? `${actionPoints} AP` : '✨ Giao Thừa'}
+            </div>
+            <div className={`text-[9.5px] font-mono mt-0.5 opacity-90 truncate max-w-[92px] ${
+              actionPoints === 0 ? 'text-amber-200 font-bold' : 'text-emerald-300'
+            }`}>
+              {actionPoints === 0 ? 'Gieo Mầm →' : STAGE_META[growthStage].label}
+            </div>
+          </div>
+        </Tooltip>
+
+        {/* ========================================================================= */}
+        {/* ORGANIC FOLIAGE LEAFLET NODES (TÁN LÁ HÀNH ĐỘNG HỮU CƠ CỦA THẦN MỘC) */}
+        {/* ========================================================================= */}
+        {nodes.map(node => {
+          const rad = (node.angleDeg * Math.PI) / 180;
+          const leftPercent = 50 + (Math.cos(rad) * (baseRadius * node.distanceRatio * 1.25) / canvasWidth) * 100;
+          const topPercent = (centerY / canvasHeight) * 100 + (Math.sin(rad) * (baseRadius * node.distanceRatio * 1.05) / canvasHeight) * 100;
+
+          const isHovered = hoveredNodeId === node.id;
+          const isPulsing = pulseActiveId === node.id;
+          const canAfford = actionPoints >= node.apCost;
+          const isHealingAction = node.id === 'restore_vitality' || node.id === 'sunbath' || node.id === 'eat_grow';
+
+          return (
+            <div
+              key={node.id}
+              className="absolute z-20 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+              style={{
+                left: `${leftPercent}%`,
+                top: `${topPercent}%`
+              }}
+              onMouseEnter={() => setHoveredNodeId(node.id)}
+              onMouseLeave={() => setHoveredNodeId(null)}
+            >
+              <Tooltip
+                content={
+                  <div className="space-y-1 text-xs max-w-xs">
+                    <div className="flex items-center gap-1.5 font-bold text-amber-300">
+                      <span>{node.icon}</span>
+                      <span>{node.title}</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">
+                        {node.apCost} AP
+                      </span>
+                    </div>
+                    <div className="text-slate-200">{node.gainText}</div>
+                    <div className="text-[11px] text-slate-400 italic">{node.flavor}</div>
+                  </div>
+                }
+              >
+                {/* Organic Leaflet Sprig Button */}
+                <button
+                  type="button"
+                  disabled={isLoading || !canAfford}
+                  onClick={() => handleNodeClick(node)}
+                  className={`relative px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-tl-[26px] rounded-br-[26px] rounded-tr-[10px] rounded-bl-[10px] border text-left transition-all duration-300 flex items-center gap-2 select-none active:scale-95 shadow-xl backdrop-blur-md ${
+                    node.isBreakthrough
+                      ? 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950 border-amber-400 text-amber-200 ring-2 ring-amber-400/60 shadow-amber-900/50 animate-pulse'
+                      : isHealingAction && treeHealthState === 'withered'
+                      ? 'bg-emerald-950/90 border-emerald-400 text-emerald-200 ring-2 ring-emerald-400 shadow-emerald-500/60 animate-bounce'
+                      : node.color.bg + ' ' + node.color.border + ' ' + node.color.text
+                  } ${
+                    isHovered ? 'scale-110 -rotate-2 z-30 shadow-2xl ring-2 ring-white/60' : ''
+                  } ${
+                    isPulsing ? 'scale-95 ring-4 ring-emerald-400' : ''
+                  } ${
+                    !canAfford ? 'opacity-40 cursor-not-allowed grayscale-[0.3]' : 'cursor-pointer hover:border-white'
+                  }`}
+                  style={{
+                    boxShadow: isHovered ? `0 0 24px ${node.color.glow}` : undefined
+                  }}
+                >
+                  {/* Organic leaf vein highlight line */}
+                  <div className="absolute top-1/2 left-2 right-2 h-[1px] bg-white/10 pointer-events-none -translate-y-1/2" />
+
+                  {/* Leaflet Icon Orb */}
+                  <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black/40 border border-white/20 flex items-center justify-center text-base sm:text-lg shrink-0 group-hover:scale-125 transition-transform">
+                    {node.icon}
+                  </span>
+
+                  {/* Leaflet Titles & Benefits */}
+                  <div className="min-w-0 pr-1 text-left">
+                    <div className="text-xs font-bold text-white whitespace-normal leading-tight max-w-[125px] sm:max-w-[150px]">
+                      {node.title}
+                    </div>
+                    <div className="text-[9.5px] opacity-85 text-slate-300 font-mono mt-0.5 truncate max-w-[130px]">
+                      {node.gainText}
+                    </div>
+                  </div>
+
+                  {/* Dewdrop AP Cost Badge */}
+                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-black/60 text-amber-300 border border-amber-400/30 shrink-0 font-bold shadow-inner">
+                    {node.apCost} AP
+                  </span>
+                </button>
+              </Tooltip>
+            </div>
+          );
+        })}
+
+        {/* Annual Growth Rings Interactive Pill Badge */}
+        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
+          <Tooltip
+            content={
+              <div className="space-y-1 text-xs">
+                <div className="font-bold text-amber-300">
+                  {characterAge === 0 ? '🌱 Mầm Sống Khởi Nguyên' : `🪵 Vòng Vân Gỗ Đời Người (${characterAge} Năm Tuổi)`}:
+                </div>
+                <div>Gốc rễ đời người tích lũy từng vòng vân gỗ theo năm tháng.</div>
+                <div className="text-[11px] text-emerald-300">Giai đoạn hiện tại: <span className="font-bold">{STAGE_META[growthStage].label}</span> ({STAGE_META[growthStage].ageSpan})</div>
+                <div className="text-[10px] text-slate-400 italic">{STAGE_META[growthStage].desc}</div>
+              </div>
+            }
+          >
+            <div className="px-3 py-1 rounded-full bg-slate-950/90 hover:bg-slate-900 border border-amber-500/40 text-[10.5px] font-sans text-amber-300 font-bold flex items-center gap-1.5 shadow-lg backdrop-blur cursor-help transition">
+              <span>{characterAge === 0 ? '🌱' : '🪵'}</span>
+              <span>
+                {characterAge === 0
+                  ? 'Mầm Sống Khởi Nguyên • Gốc Rễ Đời Người'
+                  : `${characterAge} Vòng Vân Gỗ Đời Người`}
+              </span>
+              <span className="text-slate-500">•</span>
+              <span className="text-emerald-400">{STAGE_META[growthStage].label}</span>
+            </div>
+          </Tooltip>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* IN-TREE SLIDING GLASSMORPHIC DRAWER: SKILL TREE & SOCIAL LINKS LENS */}
+        {/* ========================================================================= */}
+        {treeViewMode === 'skill_tree' && (
+          <div className="absolute inset-y-0 right-0 w-full md:w-[480px] z-40 bg-slate-950/95 border-l border-purple-500/40 shadow-2xl backdrop-blur-2xl p-4 overflow-y-auto animate-in slide-in-from-right duration-300 flex flex-col gap-3">
+            <div className="flex items-center justify-between pb-3 border-b border-purple-500/30">
+              <div className="flex items-center gap-2">
+                <span className="p-2 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/40 text-base">
+                  🔮
+                </span>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                    <span>Nhánh Kỹ Năng Cuộc Đời</span>
+                    <span className="px-2 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-mono font-bold">
+                      {character?.skill_points || 0} SP
+                    </span>
+                  </h4>
+                  <p className="text-[10.5px] text-slate-400">
+                    Tri-Branch RPG Build: Thương Trường, Uy Quyền, Tâm Thức
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setTreeViewMode('life_actions')}
+                className="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-700 transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto pr-1">
+              <SkillTreeTab
+                skillPoints={character?.skill_points || 0}
+                unlockedSkills={character?.unlocked_skills || []}
+                characterAge={characterAge}
+                onUnlockSkill={async (id) => {
+                  if (onUnlockSkill) await onUnlockSkill(id);
+                }}
+                isLoading={isLoading}
+              />
+            </div>
+          </div>
+        )}
+
+        {treeViewMode === 'social_links' && (
+          <div className="absolute inset-y-0 right-0 w-full md:w-[480px] z-40 bg-slate-950/95 border-l border-sky-500/40 shadow-2xl backdrop-blur-2xl p-4 overflow-y-auto animate-in slide-in-from-right duration-300 flex flex-col gap-3">
+            <div className="flex items-center justify-between pb-3 border-b border-sky-500/30">
+              <div className="flex items-center gap-2">
+                <span className="p-2 rounded-xl bg-sky-500/20 text-sky-300 border border-sky-500/40 text-base">
+                  👥
+                </span>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                    <span>Nhân Mạch Quý Nhân (Social Links)</span>
+                    <span className="px-2 py-0.2 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40 text-[11px] font-mono font-bold">
+                      {character?.social_links?.length || 4} Quý Nhân
+                    </span>
+                  </h4>
+                  <p className="text-[10.5px] text-slate-400">
+                    4 Archetypes: Quý Nhân Bảo Trợ, Chiến Hữu, Kình Địch, Hậu Bối
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setTreeViewMode('life_actions')}
+                className="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-700 transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto pr-1">
+              <SocialLinksTab
+                socialLinks={character?.social_links || []}
+                actionPoints={actionPoints}
+                cash={cash}
+                onInteract={async (npcId, actionType) => {
+                  if (onNpcInteract) await onNpcInteract(npcId, actionType);
+                }}
+                isLoading={isLoading}
+              />
+            </div>
+          </div>
+        )}
+
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 3RD PILLAR: GỐC RỄ GIA ĐÌNH & CỘI NGUỒN (CHÂN CÂY / PHÍA NAM) */}
+      {/* ========================================================================= */}
+      <div className="p-3 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-950 border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md relative z-10">
+        <div className="flex items-center gap-2.5 min-w-0 w-full sm:w-auto">
+          <span className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-sm shrink-0">
+            🌿
+          </span>
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-wider">
+                Gốc Rễ Gia Đình &amp; Cội Nguồn
+              </span>
+              {household?.family_buff && (
+                <span className="text-[10px] font-semibold text-amber-300 px-2 py-0.2 rounded-full bg-amber-500/10 border border-amber-500/20">
+                  ⭐ {household.family_buff.name}
+                </span>
               )}
             </div>
-          </div>
-        </>
-      )}
-
-      {/* ========================================================================= */}
-      {/* 4. VIEW MODE 2: CÂY KỸ NĂNG TRI-BRANCH RPG BUILD */}
-      {/* ========================================================================= */}
-      {treeViewMode === 'skill_tree' && (
-        <div className="relative z-10 space-y-3 animate-in fade-in duration-200">
-          <div className="flex items-center justify-between p-3 rounded-2xl bg-purple-950/40 border border-purple-500/30 flex-wrap gap-2">
-            <div className="flex items-center gap-2.5">
-              <span className="p-2 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/40 text-lg">
-                🌟
+            <div className="text-xs text-slate-300 truncate">
+              {household?.father_name ? `Bố: ${household.father_name}` : 'Mồ côi'}
+              {household?.mother_name ? ` • Mẹ: ${household.mother_name}` : ''}
+              <span className={`ml-2 text-[10px] px-1.5 py-0.2 rounded font-semibold ${isParentsDeceased ? 'text-rose-400 bg-rose-950/60' : 'text-emerald-400 bg-emerald-950/60'}`}>
+                {isParentsDeceased ? 'Đã khuất' : 'Bình an'}
               </span>
-              <div>
-                <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                  <span>Cây Kỹ Năng Cuộc Đời (Tri-Branch RPG Build)</span>
-                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-mono font-bold">
-                    {character?.skill_points || 0} Điểm SP Khả Dụng
-                  </span>
-                </h4>
-                <p className="text-[11px] text-slate-400">
-                  Rèn luyện tố chất: Thương Trường &amp; Tài Phiệt, Uy Quyền &amp; Nhân Mạch, Tâm Thức &amp; Chân Nhân.
-                </p>
-              </div>
             </div>
+          </div>
+        </div>
+
+        {/* 1-Click Family Interactions & Phả Hệ Button */}
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-wrap">
+          {canEatMeal && onFamilyMeal && (
+            <Tooltip content="Ăn cơm cùng gia đình: +10 HP, hồi phục sinh lực và bồi đắp tình thân ấm êm.">
+              <button
+                type="button"
+                onClick={onFamilyMeal}
+                disabled={isLoading}
+                className="py-1.5 px-3 rounded-xl bg-amber-950/60 hover:bg-amber-900/60 text-amber-200 border border-amber-500/40 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow"
+              >
+                <Utensils className="w-3.5 h-3.5 text-amber-400" />
+                <span>{characterAge <= 5 ? 'Bầu Sữa Mẹ' : 'Bữa Cơm'}</span>
+                <span className="text-[10px] font-mono text-amber-300/80 ml-1">+10 HP</span>
+              </button>
+            </Tooltip>
+          )}
+
+          {household && !isParentsDeceased && onFamilyMentorship && (
+            <Tooltip content={canMentor ? "Lắng nghe lời chỉ dẫn của cha mẹ để nhận +8 Karma và sáng suốt hướng đi." : "Năm nay bạn đã nhận lời khuyên từ cha mẹ rồi."}>
+              <button
+                type="button"
+                onClick={onFamilyMentorship}
+                disabled={!canMentor || isLoading}
+                className={`py-1.5 px-3 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition border ${
+                  canMentor
+                    ? 'bg-indigo-950/60 hover:bg-indigo-900/60 text-indigo-200 border-indigo-500/40 active:scale-95 shadow'
+                    : 'bg-slate-900/40 text-slate-500 border-slate-800 cursor-not-allowed opacity-60'
+                }`}
+              >
+                <MessageSquare className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Lời Khuyên</span>
+                <span className="text-[10px] font-mono text-indigo-300/80 ml-1">
+                  {canMentor ? '+8 Karma' : 'Đã dùng'}
+                </span>
+              </button>
+            </Tooltip>
+          )}
+
+          {onOpenFamily && (
             <button
               type="button"
-              onClick={() => setTreeViewMode('life_actions')}
-              className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold border border-slate-700 transition active:scale-95"
+              onClick={onOpenFamily}
+              className="px-3 py-1.5 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-200 text-xs font-bold transition flex items-center gap-1 active:scale-95"
             >
-              ← Trở Về Vòng Đời
+              <span>Phả Hệ Dòng Tộc</span>
+              <ArrowUpRight className="w-3 h-3" />
             </button>
-          </div>
-
-          <SkillTreeTab
-            skillPoints={character?.skill_points || 0}
-            unlockedSkills={character?.unlocked_skills || []}
-            characterAge={characterAge}
-            onUnlockSkill={async (id) => {
-              if (onUnlockSkill) await onUnlockSkill(id);
-            }}
-            isLoading={isLoading}
-          />
+          )}
         </div>
-      )}
-
-      {/* ========================================================================= */}
-      {/* 5. VIEW MODE 3: MẠNG LƯỚI NHÂN MẠCH QUÝ NHÂN (SOCIAL LINKS) */}
-      {/* ========================================================================= */}
-      {treeViewMode === 'social_links' && (
-        <div className="relative z-10 space-y-3 animate-in fade-in duration-200">
-          <div className="flex items-center justify-between p-3 rounded-2xl bg-sky-950/40 border border-sky-500/30 flex-wrap gap-2">
-            <div className="flex items-center gap-2.5">
-              <span className="p-2 rounded-xl bg-sky-500/20 text-sky-300 border border-sky-500/40 text-lg">
-                👥
-              </span>
-              <div>
-                <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                  <span>Mạng Lưới Nhân Mạch Quý Nhân (Social Links)</span>
-                  <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40 text-xs font-mono font-bold">
-                    {character?.social_links?.length || 4} Quý Nhân
-                  </span>
-                </h4>
-                <p className="text-[11px] text-slate-400">
-                  Gắn kết 4 Archetypes: Quý Nhân Bảo Trợ, Chiến Hữu Tri Kỷ, Kình Địch, Hậu Bối Kế Thừa.
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setTreeViewMode('life_actions')}
-              className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold border border-slate-700 transition active:scale-95"
-            >
-              ← Trở Về Vòng Đời
-            </button>
-          </div>
-
-          <SocialLinksTab
-            socialLinks={character?.social_links || []}
-            actionPoints={actionPoints}
-            cash={cash}
-            onInteract={async (npcId, actionType) => {
-              if (onNpcInteract) await onNpcInteract(npcId, actionType);
-            }}
-            isLoading={isLoading}
-          />
-        </div>
-      )}
+      </div>
     </div>
   );
 }

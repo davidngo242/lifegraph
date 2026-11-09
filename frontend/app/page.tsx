@@ -1750,7 +1750,7 @@ export default function LifeGraphPage() {
         {/* 1. Left Zone: Brand Logo & View Switcher Tabs (Đẩy sát sang trái) */}
         <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-wrap">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-amber-500 flex items-center justify-center font-black text-white text-xs shadow-md shadow-indigo-600/30 shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 via-amber-600 to-emerald-600 flex items-center justify-center font-black text-slate-950 text-xs shadow-md shadow-amber-500/25 shrink-0">
               LG
             </div>
             <span className="font-extrabold text-[var(--text-primary)] text-sm md:text-base tracking-tight hidden sm:inline">
@@ -1768,7 +1768,7 @@ export default function LifeGraphPage() {
                 onClick={() => setActiveView('home')}
                 className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                   activeView === 'home'
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                    ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-950 font-bold shadow-md shadow-slate-900/20'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
@@ -1786,7 +1786,7 @@ export default function LifeGraphPage() {
                   onClick={() => setActiveView('game')}
                   className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                     activeView === 'game'
-                      ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
+                      ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-950 font-bold shadow-md shadow-slate-900/20'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
                 >
@@ -1803,11 +1803,11 @@ export default function LifeGraphPage() {
                   onClick={() => setShowRebirthModal(true)}
                   className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                     activeView === 'home'
-                      ? 'text-[var(--text-secondary)] hover:text-purple-400 hover:bg-[rgba(255,255,255,0.04)]'
-                      : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-600/30 hover:opacity-90'
+                      ? 'text-[var(--text-secondary)] hover:text-amber-500 hover:bg-[rgba(255,255,255,0.04)]'
+                      : 'bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 text-slate-950 font-black shadow-md shadow-amber-500/25 hover:opacity-95'
                   }`}
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <Sparkles className="w-3.5 h-3.5 text-slate-950" />
                   <span className="hidden md:inline">Tái Sinh</span>
                 </button>
               </Tooltip>
@@ -1881,11 +1881,11 @@ export default function LifeGraphPage() {
           >
             <button
               onClick={() => setShowKarmaModal(true)}
-              className="py-1 px-2 sm:px-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-purple-400 text-[var(--text-primary)] text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
+              className="py-1 px-2 sm:px-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-amber-400 text-[var(--text-primary)] text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-300 fill-amber-400/30" />
               <span className="hidden md:inline">Đền Thờ</span>
-              <span className="text-[11px] font-mono font-bold text-purple-700 dark:text-purple-300 px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-950/80 border border-purple-300 dark:border-purple-500/30">
+              <span className="text-[11px] font-mono font-bold text-amber-700 dark:text-amber-300 px-1.5 py-0.2 rounded bg-amber-500/15 border border-amber-500/30">
                 {playerAccount?.total_karma || 0}
               </span>
             </button>
@@ -1971,17 +1971,17 @@ export default function LifeGraphPage() {
 
             {/* Transhumanism Surgery Banner (Unlocked when Age > 60 and Net Worth > $15M) */}
             {canTranshuman && (
-              <div className="p-3.5 rounded-2xl bg-gradient-to-r from-cyan-950/60 to-purple-950/60 border border-cyan-500/50 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
+              <div className="p-3.5 rounded-2xl bg-[var(--bg-card)] border border-cyan-500/40 text-[var(--text-primary)] shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
                 <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                  <div className="p-2 rounded-xl bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30">
                     <Cpu className="w-5 h-5 animate-pulse" />
                   </div>
                   <div>
-                    <div className="text-xs md:text-sm font-bold text-white flex items-center gap-2">
+                    <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                       <span>Cấy Ghép Y Tế Ngầm (Transhumanism Surgery)</span>
-                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">VIP Black-market</span>
+                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 border border-cyan-500/30 font-bold">VIP Black-market</span>
                     </div>
-                    <div className="text-[12px] text-slate-300 mt-0.5">
+                    <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
                       Đánh đổi $8.000.000 lấy công nghệ đóng băng suy thoái sinh học 10 năm. Rủi ro 50% tử vong ngay tại bàn mổ.
                     </div>
                   </div>
@@ -2064,7 +2064,7 @@ export default function LifeGraphPage() {
                   )}
 
                 {/* Footer: Cánh Cửa Chuyển Tiếp Ngã Rẽ Năm Nay (Turning Point Gateway) */}
-                  <div className="p-4 bg-gradient-to-r from-purple-950/50 via-slate-900/90 to-amber-950/40 border-t border-[var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="p-4 bg-[var(--bg-card-subtle)] border-t border-[var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="space-y-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10.5px] font-mono font-bold border border-amber-500/30 uppercase tracking-wider flex items-center gap-1.5">
