@@ -783,3 +783,68 @@ Nhằm xóa bỏ hoàn toàn cảm giác "bị nhốt trong ô thẻ vuông" và
 * **Kích thước phóng to:** Mở rộng từ 96px/128px lên **144px–208px** (`w-36 h-40 md:w-44 md:h-48 lg:w-48 lg:h-52`).
 * **Tràn Banner (`overflow-visible`):** Đỉnh đầu nhân vật, cành nguyệt quế Na Uy, vòng hào quang kim quang và cánh tay vươn tràn ra ngoài khung, hòa vào bầu trời sao của Hero Banner.
 * **Bệ phóng Holographic Disc:** Bệ phát quang laser neon cyan/amber (`w-36 md:w-44 lg:w-48 h-8`) được mở rộng trực tiếp dưới chân nhân vật, tạo cảm giác nhân vật đứng sừng sững trên sân khấu số mệnh.
+
+---
+
+## 21. Tiêu Chuẩn Đại Thụ Sinh Mệnh Tiến Hóa & Dòng Chảy Thời Gian Xuyên Suốt (The 3-Phase Seamless Evolution Standard v4.0)
+
+Nhằm hiện thực hóa chỉ đạo chiến lược của Sếp về việc biến Đại Thụ Sinh Mệnh thành "gốc rễ cuộc đời", xóa bỏ cảm giác bấm nút tăng tuổi khô khan và tạo dòng chảy thời gian tự nhiên:
+
+### 21.1. Lộ Trình Triển Khai 3 Phase Bắt Buộc (The 3-Phase Execution Standard)
+
+```mermaid
+flowchart TD
+    subgraph P1 ["PHASE 1: NGHI THỨC GIAO THỪA & TÂM NGUYỆN NĂM MỚI"]
+        P1_1["Hết AP hoặc chọn Dưỡng Sinh"] --> P1_2["Mở YearEndReflectionModal"]
+        P1_2 --> P1_3["Thống kê việc đã làm & Việc còn dang dở"]
+        P1_3 --> P1_4["Gieo Mầm 1 trong 3 Tâm Nguyện Năm Mới"]
+        P1_4 --> P1_5["TỰ ĐỘNG Chuyển Giao Lên Tuổi Mới"]
+    end
+
+    subgraph P2 ["PHASE 2: ĐẠI THỤ TIẾN HÓA 5 CHẶNG TUỔI & VÒNG VÂN GỖ"]
+        P2_1["0-5t: Mầm Non Búp Măng (Sprout)"] --> P2_2["6-17t: Cây Non Vươn Cành (Sapling)"]
+        P2_2 --> P2_3["18-35t: Thần Mộc Bùng Nở (Flourishing Oak)"]
+        P2_3 --> P2_4["36-55t: Đại Thụ Vững Chãi (Grand Pillar)"]
+        P2_4 --> P2_5["56+t: Cổ Thụ Hoàng Kim (Ancient World Tree)"]
+        P2_5 --> P2_6["Gốc cây hiển thị Vòng Vân Gỗ tích lũy hàng năm"]
+    end
+
+    subgraph P3 ["PHASE 3: TÁI CẤU TRÚC SÂN KHẤU TÂM THỨC & DÒNG CHẢY XUYÊN SUỐT"]
+        P3_1["Chỉ mở khi có Biến Cố Ngã Rẽ Thật Sự (Milestones)"]
+        P3_2["Sân Khấu Tâm Thức Trong Gốc Cây (3 Lăng Kính Bản Ngã)"]
+        P3_3["Gieo xúc xắc D20 giải quyết xong --> Tự động nối vào Nghi Thức Giao Thừa"]
+        P3_4["Đồng bộ nhịp thở 100% giữa Banner, Cây, Feed và Quyết Định"]
+    end
+
+    P1 --> P2 --> P3
+```
+
+### 21.2. Đặc Tả Chi Tiết Từng Phase
+
+#### 🌟 Phase 1: Nghi Thức Chiêm Nghiệm Cuối Năm & Gieo Mầm Tâm Nguyện Năm Mới
+1. **Khắc phục triệt để lỗi tâm lý:** Không bao giờ để màn hình đứng im khi AP = 0.
+2. **Component hiển thị:** `YearEndReflectionModal.tsx` với thiết kế trang trọng, ánh sáng hổ phách ấm cúng.
+3. **Hai cột lắng đọng:**
+   - *Cột 1: Dấu Ấn Năm Qua:* Các hành động đã thực hiện, tiền bạc tích lũy, các mối quan hệ được thắt chặt.
+   - *Cột 2: Hạt Mầm Dang Dở:* Những việc chưa kịp làm trong năm để người chơi ghi nhớ và tiếp tục phấn đấu.
+4. **3 Lựa chọn Tâm Nguyện Năm Mới (1-Click Pledges):**
+   - 📈 *Tâm Nguyện Thịnh Vượng (`pledge_wealth`):* +15% thu nhập cày việc & +10% lợi nhuận đầu tư năm sau.
+   - 🧘 *Tâm Nguyện An Yên (`pledge_wellness`):* Kháng 30% Burnout & x2 tốc độ hồi phục HP dưỡng sinh.
+   - 🤝 *Tâm Nguyện Nhân Mạch (`pledge_social`):* x2 EXP Social Links & giảm 50% chi phí quà tặng/mời cơm.
+5. **Chuyển giao mượt mà:** Bấm chọn tâm nguyện xong $\rightarrow$ Pháo hoa giao thừa phát nổ nhẹ nhàng $\rightarrow$ Tự động chuyển tuổi mới (`character.age += 1`), xóa bỏ hoàn toàn nút "+1 Tuổi" cưỡng ép.
+
+#### 🌳 Phase 2: Đại Thụ Tiến Hóa Thủ Tục Theo 5 Chặng Tuổi & Vòng Vân Gỗ
+1. **Biến đổi hình thái SVG vector thủ tục (`DynamicLifeTree.tsx`):**
+   - *Tuổi 0-5 (Mầm Non):* Thân non xanh nõn, rễ ôm đất mẹ, 3 chồi non sữa mẹ/tập đi.
+   - *Tuổi 6-17 (Cây Non):* Thân thẳng vươn cao, cành lá học hành và bạn bè trang lứa.
+   - *Tuổi 18-35 (Thần Mộc):* Tán rộng, tỏa 3 nhánh Kỹ Năng, Nhân Mạch, Tài Sản.
+   - *Tuổi 36-55 (Đại Thụ):* Tán rợp bóng mát gia đình, thân to lớn, rễ cọc đâm sâu.
+   - *Tuổi 56+ (Cổ Thụ):* Sắc vàng kim, hoa quả di sản truyền thừa kiếp sau.
+2. **Vòng Vân Gỗ Đời Người (Tree Growth Rings):**
+   - Gốc cây có mặt cắt vân gỗ đồng tâm tăng dần theo tuổi (`ringsCount = characterAge`).
+   - Hover chuột xem lại dấu ấn kỷ niệm từng năm.
+
+#### 🎬 Phase 3: Tái Cấu Trúc Sân Khấu Tâm Thức & Dòng Chảy Xuyên Suốt Liền Mạch
+1. **Lược bỏ phòng quyết định trong năm bình yên:** Không ép người chơi vào nếu không có bước ngoặt lớn.
+2. **Sân Khấu Tâm Thức:** 3 lăng kính bản ngã (Lý Trí, Trái Tim, Bản Năng) là 3 đốm sáng linh hồn phát quang trên cành cây.
+3. **Dòng chảy thời gian 100% liền mạch:** Giải quyết biến cố xong $\rightarrow$ Tự động chuyển tiếp vào Nghi Thức Chiêm Nghiệm $\rightarrow$ Bước sang tuổi mới, không còn cảm giác bị phân mảnh hay ngắt mạch cảm xúc.

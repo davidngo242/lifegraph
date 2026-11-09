@@ -142,3 +142,39 @@ flowchart TD
 * **Bỏ hoàn toàn viền vuông hộp chữ nhật:** Xóa bỏ khung ảnh thẻ `rounded-2xl border bg-slate-900 overflow-hidden`.
 * **Phóng to kích thước & Tràn Banner:** Kích thước mở rộng lên `w-36 h-40 md:w-44 md:h-48 lg:w-48 lg:h-52` với cơ chế `overflow-visible`, cho phép đỉnh đầu, vòng hoa nguyệt quế và hào quang kim quang tràn tự nhiên ra mặt nền Banner.
 * **Bệ phóng ba chiều (Holographic Reticle Pedestal):** Mở rộng dưới chân nhân vật (`w-36 md:w-44 lg:w-48 h-8`) với các vòng laser neon cyan/amber xoay đồng tâm, neo giữ nhân vật vững chãi trên sàn tàu không gian/sân khấu số mệnh.
+
+### 4.9. Đặc Tả Toàn Diện Lộ Trình 3 Phase: Dòng Chảy Thời Gian & Đại Thụ Sinh Mệnh Tiến Hóa (Mandatory 3-Phase Seamless Evolution Standard)
+> [!IMPORTANT]
+> **KỶ LUẬT THI CÔNG BẮT BUỘC THEO LỆNH CỦA SẾP:** Toàn bộ bộ máy phát triển (PM, BA, Coder, Tester, Doc Writer) phải tuân thủ nghiêm ngặt và thi công tuần tự trọn vẹn cả 3 Phase dưới đây. Tuyệt đối không được dừng lại ở Phase 1 hay làm sai lệch kiến trúc tổng thể.
+
+#### 🌟 PHASE 1: Nghi Thức Chiêm Nghiệm Cuối Năm & Gieo Mầm Tâm Nguyện Năm Mới (New Year's Eve Ritual & Annual Pledges)
+* **Mục tiêu cốt lõi:** Khai tử cảm giác "tự đi bấm nút già đi khô khan". Tạo khoảng lặng cảm xúc cô đọng sau 1 năm làm việc và truyền cảm hứng chuẩn bị cho năm tiếp theo.
+* **Cơ chế kích hoạt:** Tự động kích hoạt khi tiêu thụ hết AP trong năm hoặc khi người chơi chủ động bấm `"🌿 Dưỡng Sinh & Khép Lại Năm Cũ"`.
+* **Cấu trúc Nghi Thức Giao Thừa (`YearEndReflectionModal.tsx`):**
+  1. *Lắng Đọng Thành Tựu Trong Năm:* Thống kê các node hành động đã hoàn thành, tài chính tích lũy, người thân/quý nhân đã kết giao và AP dư quy đổi thành Dưỡng Sinh (+2 HP/AP, -5% Burnout/AP).
+  2. *Nhận Diện Việc Còn Dang Dở:* Ghi lại các node AP chưa chạm tới, cơ hội nghề nghiệp bỏ lỡ hoặc mục tiêu tài chính chưa đạt thành dạng "Hạt Mầm Dở Dang".
+  3. *Gieo Mầm Tâm Nguyện Năm Mới (1-Click Annual Pledge):* Người chơi chọn 1 trong 3 định hướng chiến lược nhận buff năm kế tiếp:
+     - 📈 **Tâm Nguyện Thịnh Vượng (`pledge_wealth`):** +15% thu nhập cày việc & +10% lợi nhuận đầu tư năm sau.
+     - 🧘 **Tâm Nguyện An Yên (`pledge_wellness`):** Kháng 30% Burnout & gấp đôi tốc độ hồi phục HP dưỡng sinh năm sau.
+     - 🤝 **Tâm Nguyện Nhân Mạch (`pledge_social`):** Gấp đôi EXP Social Links & giảm 50% chi phí quà tặng/mời cơm năm sau.
+* **Dòng chảy chuyển giao:** Sau khi xác nhận tâm nguyện, hệ thống bắn pháo hoa nhẹ nhàng và **tự động bước sang tuổi mới (`character.age += 1`)**, cập nhật giao diện Cockpit mà không cần ấn thêm nút nào khác.
+
+#### 🌳 PHASE 2: Đại Thụ Tiến Hóa Thủ Tục Theo 5 Chặng Tuổi & Vòng Vân Gỗ Đời Người (Morphing Procedural Tree & Annual Growth Rings)
+* **Mục tiêu cốt lõi:** Đại Thụ Sinh Mệnh (`DynamicLifeTree.tsx`) không còn là sơ đồ tròn tĩnh, mà thực sự lớn lên từ đất mẹ theo từng chặng đời và ghi dấu năm tháng qua vân gỗ.
+* **5 Giai Đoạn Hình Thái Thủ Tục SVG (`growthStage`):**
+  1. `sprout` (0 – 5 tuổi / Ấu thơ): Thân mầm non búp măng vươn từ đất mẹ, rễ gắn chặt với phụ mẫu, tán lá chỉ có 3 chồi sữa/tập đi.
+  2. `sapling` (6 – 17 tuổi / Học trò): Thân non vươn cành thẳng tắp, đâm chồi nhánh Trí Tuệ học hành và Bạn Bè trang lứa.
+  3. `flourishing_oak` (18 – 35 tuổi / Lập nghiệp): Thần mộc bùng nở, cành nhánh to khỏe, phân định 3 Trụ Cột Quang Minh (Kỹ Năng, Nhân Mạch, Tài Sản).
+  4. `grand_pillar` (36 – 55 tuổi / Trụ cột đỉnh cao): Đại thụ vững chãi, tán lá sum suê che chở gia đình con cái, rễ đâm sâu vào lòng đất.
+  5. `ancient_world_tree` (56+ tuổi / Hoàng hôn di sản): Cổ thụ hoàng kim, thân ánh vàng hổ phách, trổ Quả Ngọt Di Sản truyền thừa kiếp sau.
+* **Vòng Vân Gỗ Đời Người (Annual Tree Growth Rings):**
+  - Mặt cắt thân gỗ ở gốc cây hiển thị các vòng vân đồng tâm tăng dần theo tuổi (`ringsCount = characterAge`).
+  - Hover vào từng vân gỗ hiển thị tooltip ký ức: "Năm {X} tuổi: {Dấu ấn quan trọng nhất}".
+
+#### 🎬 PHASE 3: Tái Cấu Trúc Sân Khấu Tâm Thức & Dòng Chảy Xuyên Suốt Toàn Diện (Crucible of Destiny & End-to-End Pacing)
+* **Mục tiêu cốt lõi:** Tinh gọn Phòng Quyết Định 3D, chỉ kích hoạt khi có Biến Cố Ngã Rẽ Thật Sự; kết nối dòng chảy thời gian xuyên suốt giữa Banner Chibi $\leftrightarrow$ Đại Thụ $\leftrightarrow$ Nhật Ký $\leftrightarrow$ Quyết Định.
+* **Quy tắc kích hoạt phòng quyết định:**
+  - Năm bình yên (Peaceful Year): Không ép vào phòng quyết định. Chơi trên Đại Thụ $\rightarrow$ Nghi Thức Giao Thừa $\rightarrow$ Lên tuổi mới.
+  - Năm có Biến Cố Ngã Rẽ Lớn (Threshold Milestones: 6t vào lớp 1, 18t đại học/khởi nghiệp, 28t hôn nhân/nhà cửa, 42t bước ngoặt nghề, 65t di chúc/sinh tử): Mở **Sân Khấu Tâm Thức Trong Gốc Cây** với 3 lăng kính bản ngã (Lý Trí, Trái Tim, Bản Năng).
+* **Chuỗi chuyển tiếp tự nhiên:** Giải quyết xong biến cố bằng xúc xắc D20 $\rightarrow$ Tự động chuyển tiếp vào Nghi Thức Chiêm Nghiệm Giao Thừa $\rightarrow$ Bước sang tuổi mới liền mạch.
+* **Sự liên kết chỉ số toàn diện:** Ngoại hình Chibi 3D & Linh thú MOBA, độ lớn của Đại Thụ, các sự kiện trên Narrative Feed đều đồng bộ 100% về mặt nhịp thở và câu chuyện.

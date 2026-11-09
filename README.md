@@ -228,6 +228,22 @@ Nhằm tối ưu hóa trải nghiệm điều khiển liên tục và nhập vai
 
 ---
 
+## 🌟 Lộ Trình 3 Phase: Dòng Chảy Thời Gian & Đại Thụ Sinh Mệnh Tiến Hóa (v4.0)
+
+1. **Phase 1: Nghi Thức Chiêm Nghiệm Cuối Năm & Gieo Mầm Tâm Nguyện Năm Mới (`YearEndReflectionModal`)**:
+   - Thống kê cô đọng các dấu ấn đã hoàn thành trong năm và việc còn dang dở.
+   - Gieo mầm 1 trong 3 Tâm Nguyện Năm Mới (*Thịnh Vượng, An Yên, Nhân Mạch*) nhận buff chiến lược.
+   - Tự động chuyển giao êm ái sang tuổi mới khi hoàn thành, xóa bỏ hoàn toàn nút bấm qua tuổi cưỡng ép.
+2. **Phase 2: Đại Thụ Tiến Hóa Thủ Tục Theo 5 Chặng Tuổi & Vòng Vân Gỗ Đời Người (`DynamicLifeTree`)**:
+   - Biến đổi SVG 5 hình thái: *Mầm Non (0-5t) ➔ Cây Non (6-17t) ➔ Thần Mộc Bùng Nở (18-35t) ➔ Đại Thụ Vững Chãi (36-55t) ➔ Cổ Thụ Hoàng Kim (56+t)*.
+   - Vòng Vân Gỗ Đời Người hằn sâu theo từng năm tuổi trên thân cây.
+3. **Phase 3: Tái Cấu Trúc Sân Khấu Tâm Thức & Dòng Chảy Xuyên Suốt Liền Mạch**:
+   - Chỉ mở Sân Khấu Tâm Thức khi có Biến Cố Ngã Rẽ Thật Sự (Milestone Dilemmas).
+   - Giải quyết biến cố bằng D20 tự động nối vào Nghi Thức Giao Thừa ➔ Sang tuổi mới liền mạch.
+   - Đồng bộ nhịp thở 100% giữa Banner Chibi 3D + Linh thú MOBA, Đại Thụ, Bảng Tin và Quyết Định.
+
+---
+
 ## 📂 Cấu Trúc Dự Án Monorepo
 
 ```text
