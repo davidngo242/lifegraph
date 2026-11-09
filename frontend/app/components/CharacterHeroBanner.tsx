@@ -407,7 +407,7 @@ export default function CharacterHeroBanner({
   const isInfant = age <= 5;
 
   // Borderless, Full-Body 3D Avatar (Tỉ lệ toàn thân thanh thoát: thấy rõ cả đầu, thân, tay chân)
-  const avatarContainerClasses = `w-32 h-44 sm:w-36 sm:h-52 md:w-40 md:h-56 lg:w-44 lg:h-60 shrink-0 relative overflow-visible group transition-all duration-500 flex items-center justify-center select-none pointer-events-auto ${
+  const avatarContainerClasses = `w-32 h-48 sm:w-36 sm:h-52 md:w-40 md:h-56 lg:w-44 lg:h-60 shrink-0 relative overflow-visible group transition-all duration-500 flex items-center justify-center select-none pointer-events-auto ${
     feedbackAtmo
       ? 'scale-[1.03]'
       : isSevereBurnout
@@ -528,7 +528,7 @@ export default function CharacterHeroBanner({
                 }`}
               />
               <div className="absolute inset-0 rounded-[100%] border border-cyan-400/40 border-dashed animate-[spin_24s_linear_infinite]" />
-              <div className="absolute inset-1 rounded-[100%] border border-indigo-400/30" />
+              <div className="absolute inset-1 rounded-[100%] border border-amber-400/30" />
             </div>
 
             {/* Borderless 3D Avatar (Tràn Banner Không Viền Vuông) */}
@@ -585,17 +585,17 @@ export default function CharacterHeroBanner({
               {(hasGlasses || hasHalo || isWealthy) && (
                 <div className="absolute -bottom-2.5 left-0 right-0 flex items-center justify-center gap-1.5 pointer-events-none z-20">
                   {hasGlasses && (
-                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-slate-950/90 border border-indigo-500/60 text-indigo-300 font-sans backdrop-blur-md shadow-lg" title="3D Kính Cận Tri Thức">
+                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-slate-950/90 border border-cyan-500/60 text-cyan-300 font-sans backdrop-blur-md shadow-lg" title="3D Kính Cận Tri Thức">
                       👓 Kính
                     </span>
                   )}
                   {hasHalo && (
-                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-950/90 border border-amber-500/60 text-amber-300 font-sans backdrop-blur-md shadow-lg" title="3D Kim Quang Hào Quang">
+                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/60 text-amber-700 dark:text-amber-300 font-sans backdrop-blur-md shadow-lg font-bold" title="3D Kim Quang Hào Quang">
                       🪷 Hào quang
                     </span>
                   )}
                   {isWealthy && (
-                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-yellow-950/90 border border-yellow-500/60 text-yellow-300 font-sans backdrop-blur-md shadow-lg" title="3D Trâm Quý Tộc / Tuxedo">
+                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/60 text-amber-700 dark:text-amber-300 font-sans backdrop-blur-md shadow-lg font-bold" title="3D Trâm Quý Tộc / Tuxedo">
                       💎 Quý tộc
                     </span>
                   )}

@@ -127,8 +127,8 @@ function ProceduralCharacterMesh({
   const isTeen = numericAge >= 12 && numericAge < 18;
   const isElderly = numericAge >= 65;
 
-  // Chibi Head Proportions (Đầu to tròn đáng yêu theo phong cách Anime Chibi)
-  const headScale = isBaby ? 1.32 : isChild ? 1.22 : isTeen ? 1.15 : 1.08;
+  // Chibi Head Proportions (Cân đối tỉ lệ Anime Chibi hài hòa theo từng giai đoạn tuổi)
+  const headScale = isBaby ? 1.04 : isChild ? 1.05 : isTeen ? 1.02 : 1.0;
   const spineHunch = isElderly ? 0.18 : 0;
 
   // Trait Visual Logic
@@ -393,7 +393,8 @@ function ProceduralCharacterMesh({
 
       // 5. Halo gentle levitation & spin
       if (haloRef.current) {
-        haloRef.current.position.y = 0.68 + Math.sin(t * 2.0) * 0.04;
+        const baseHaloY = isBaby ? 0.38 : 0.46;
+        haloRef.current.position.y = baseHaloY + Math.sin(t * 2.0) * 0.02;
         haloRef.current.rotation.z = t * 0.3;
       }
 
@@ -485,19 +486,19 @@ function ProceduralCharacterMesh({
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
       {isBaby ? (
-        /* Cute Baby Swaddle Wrap with Little Kicking Booties */
-        <group position={[0, -0.1, 0]}>
+        /* Cute Baby Swaddle Wrap with Little Kicking Booties (Grounded near dais) */
+        <group position={[0, -0.42, 0]}>
           <mesh material={clothMaterial}>
-            <cylinderGeometry args={[0.26, 0.34, 0.62, 24]} />
+            <cylinderGeometry args={[0.28, 0.34, 0.56, 24]} />
           </mesh>
-          <mesh position={[0, 0.28, 0.04]} rotation={[0.2, 0, 0]} material={clothMaterial}>
-            <torusGeometry args={[0.22, 0.045, 12, 24]} />
+          <mesh position={[0, 0.25, 0.04]} rotation={[0.2, 0, 0]} material={clothMaterial}>
+            <torusGeometry args={[0.24, 0.045, 12, 24]} />
           </mesh>
-          {/* Little Cute Baby Feet Kicking */}
-          <mesh position={[-0.1, -0.36, 0.1]} material={shoeMaterial}>
+          {/* Little Cute Baby Feet Kicking just above dais */}
+          <mesh position={[-0.09, -0.32, 0.12]} material={shoeMaterial}>
             <sphereGeometry args={[0.065, 14, 14]} />
           </mesh>
-          <mesh position={[0.1, -0.34, 0.12]} material={shoeMaterial}>
+          <mesh position={[0.09, -0.30, 0.14]} material={shoeMaterial}>
             <sphereGeometry args={[0.065, 14, 14]} />
           </mesh>
         </group>
@@ -708,7 +709,7 @@ function ProceduralCharacterMesh({
       )}
 
       {/* Head Group (Rotatable & Cursor Tracking) */}
-      <group ref={headRef} position={[0, isBaby ? 0.58 : 0.68, 0]} scale={[headScale, headScale, headScale]}>
+      <group ref={headRef} position={[0, isBaby ? 0.08 : isChild ? 0.42 : 0.62, 0]} scale={[headScale, headScale, headScale]}>
         {/* Head Cranium */}
         <mesh material={skinMaterial}>
           <sphereGeometry args={[isFemale ? 0.46 : 0.47, 32, 32]} />
@@ -974,16 +975,16 @@ function ProceduralCharacterMesh({
 
         {/* Spiritual Halo */}
         {hasHalo && (
-          <group ref={haloRef} position={[0, 0.72, -0.05]} rotation={[0.22, 0, 0]}>
+          <group ref={haloRef} position={[0, isBaby ? 0.38 : 0.46, -0.05]} rotation={[0.22, 0, 0]}>
             <mesh material={haloMaterial}>
-              <torusGeometry args={[0.44, 0.022, 16, 48]} />
+              <torusGeometry args={[isBaby ? 0.30 : 0.36, 0.018, 16, 48]} />
             </mesh>
-            <mesh position={[0.44, 0, 0]}>
-              <sphereGeometry args={[0.028, 8, 8]} />
+            <mesh position={[isBaby ? 0.30 : 0.36, 0, 0]}>
+              <sphereGeometry args={[0.024, 8, 8]} />
               <meshBasicMaterial color="#fef08a" />
             </mesh>
-            <mesh position={[-0.44, 0, 0]}>
-              <sphereGeometry args={[0.028, 8, 8]} />
+            <mesh position={[isBaby ? -0.30 : -0.36, 0, 0]}>
+              <sphereGeometry args={[0.024, 8, 8]} />
               <meshBasicMaterial color="#fef08a" />
             </mesh>
           </group>
@@ -1042,13 +1043,13 @@ export default function Dynamic3DAvatar({
   return (
     <div className={`relative flex items-center justify-center overflow-visible ${className}`}>
       <Canvas
-        camera={{ position: [0, 0.02, 4.35], fov: 38 }}
+        camera={{ position: [0, 0.08, 4.75], fov: 36 }}
         className="w-full h-full cursor-grab active:cursor-grabbing overflow-visible"
         gl={{ antialias: true, alpha: true }}
       >
         <MoodLighting burnout={burnout} isMeditating={isMeditating} />
 
-        <Float speed={isFastForwarding ? 0 : 1.4} rotationIntensity={0.06} floatIntensity={0.10}>
+        <Float speed={isFastForwarding ? 0 : 1.2} rotationIntensity={0.04} floatIntensity={0.03}>
           <ProceduralCharacterMesh
             nationality={nationality}
             gender={gender}
