@@ -895,3 +895,39 @@ Nhằm chấm dứt tình trạng giao diện bị rối mắt, xếp lớp hìn
    * Tăng độ rộng viên thuốc hành động lên `min-w-[125px] max-w-[155px]`, cho phép text xuống dòng tự nhiên (`whitespace-normal leading-tight`), bảo toàn 100% tên gọi hành động nguyên vẹn.
 5. **Cơ Chế Phê Duyệt UI/UX Độc Lập:**
    * Mọi màn hình trước khi trình Sếp bắt buộc phải vượt qua bước thẩm định trực quan của **Senior UI/UX & Interaction Art Director** theo danh mục tiêu chí tại `.agents/skills/full-dev-workflow/SKILL.md`.
+
+---
+
+## 24. Tiêu Chuẩn Thần Mộc Hùng Vĩ & Cấu Trúc Nhánh Tích Hợp (Majestic World Tree & Integrated Bough Architecture v5.0)
+
+Nhằm đáp ứng yêu cầu của Sếp về việc mở rộng quy mô thị giác cây sinh mệnh, tạo hiệu ứng hình ảnh sống động và xóa bỏ hoàn toàn sự rời rạc giữa các tab chức năng:
+
+### 24.1. Nâng Tầm Quy Mô Thị Giác (Canvas 520px & Tỷ Lệ Vàng Thần Mộc)
+1. **Kích thước mở rộng:** Canvas SVG được mở rộng từ 380px lên **520px chiều cao** (container `h-[500px] sm:h-[550px]`), bán kính tỏa nhánh tăng lên `baseRadius = 185`, tạo dáng đứng sừng sững uy nghi cho Đại Thụ.
+2. **Thân cây cổ thụ vạm vỡ & Rễ bành bám đất:**
+   * Thân cây có độ dày cơ bắp, đổ bóng đa tầng (`#woodOakGradient`), vỏ cây gồ ghề vân thớ.
+   * Rễ bành (buttress roots) xòe rộng sang hai bên bám chặt vào đụn đất linh thiêng, rễ tơ đan cài vào tầng Gốc Rễ Gia Đình.
+   * Mạch nhựa sống (Mana Sap Veins) phát quang sinh học chạy dọc sống thân cây, nhịp đập sinh khí truyền dẫn từ rễ lên từng ngọn cành.
+
+### 24.2. Bộ Hiệu Ứng Hình Ảnh Điện Ảnh (Cinematic Visual Effects)
+1. **Tia Sáng Thiên Khải (God Rays):** Các luồng ánh sáng mềm (`#godRayGradient`) chiếu rọi góc nghiêng từ tầng trời cao xuống xuyên qua kẽ lá, tạo chiều sâu thánh thiện.
+2. **Đom Đóm Linh Khí (Floating Spirit Fireflies):** 7 đốm sáng tinh linh ngọc bích, vàng hổ phách và tím tử la bay lơ lửng, nhấp nháy đa nhịp (`animate-pulse`) xung quanh thân cây và các chùm lá.
+3. **Tán Lá Phát Quang Đa Tầng (Layered Bioluminescent Canopy):**
+   * Tán lá không phải hình vẽ tĩnh đơn điệu mà gồm các lớp mây lá phát quang bán trong suốt kết hợp bộ lọc phát quang `feGaussianBlur`.
+   * Tán Tây Bắc: Hào quang tím ngọc trí tuệ (`#wisdomFoliageGlow`).
+   * Tán Thiên Đỉnh: Hào quang xanh lam thiên hà kết nối nhân mạch (`#socialFoliageGlow`).
+   * Tán Đông Bắc: Hào quang vàng hổ phách tài lộc (`#wealthFoliageGlow`).
+
+### 24.3. Xóa Bỏ Sự Rời Rạc Của Các Tab: Tích Hợp Trực Tiếp 3 Đài Thần Mộc Lên Cành Cây
+1. **Khắc phục lỗi tách rời:** Tuyệt đối không để các tab nằm rời rạc như nút bấm web thông thường nằm tách biệt khỏi cây.
+2. **3 Đài Thần Mộc Ngự Trực Tiếp Trên Tán (3 Sacred Canopy Pillar Shrines):**
+   * **Đài Kỹ Năng & Trí Tuệ:** Ngự tại ngọn cành Tây Bắc (`top-3 left-3 sm:left-5`). Hiển thị `🔮 Nhánh Kỹ Năng: Lv.{level} · {skills} Tố Chất` và huy hiệu `+{sp} SP`. Bấm trực tiếp vào đài để nở bung ra giao diện `Cây Kỹ Năng`!
+   * **Vương Miện Nhân Mạch:** Ngự tại ngọn tán Thiên Đỉnh (`top-2 left-1/2 -translate-x-1/2`). Hiển thị `👥 Nhân Mạch Quý Nhân: {close}/{total} Quý Nhân Thân Thiết`. Bấm trực tiếp để mở `Nhân Mạch Quý Nhân`!
+   * **Đài Hoàng Kim Tài Sản:** Ngự tại ngọn cành Đông Bắc (`top-3 right-3 sm:right-5`). Hiển thị `🪙 Cành Hoàng Kim: {formattedCash}`. Bấm trực tiếp để mở `Sàn Tài Sản`!
+   * **Gốc Rễ Gia Đình:** Tọa lạc vững chãi ở chân gốc cây phía Nam, kết nối máu mủ phả hệ và bữa cơm gia đình.
+3. **Định Vị Không Gian Hành Động Hợp Lý (Logical Spatial Anchoring):**
+   * Hành động học tập (`Đèn Sách Tri Thức`) gắn liền với cành Trí Tuệ (Tây Bắc).
+   * Hành động xã hội (`Mở Rộng Nhân Mạch`) gắn liền với đỉnh Tán Nhân Mạch (Thiên Đỉnh).
+   * Hành động tài chính/làm việc (`Cày Cuốc Kiếm Tiền`, `Lướt Sóng`, `Đột Phá`) gắn liền với cành Hoàng Kim (Đông Bắc).
+   * Hành động dưỡng sinh (`Dưỡng Sinh Hồi Phục`) nép mình bên thân cây và cội rễ (Đông Nam).
+   * Dây dẫn năng lượng (Bezier Branches) phát sáng và luân chuyển hạt photon đúng theo hệ màu nguyên tố của từng cành nhánh.
