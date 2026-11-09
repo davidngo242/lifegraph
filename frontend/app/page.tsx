@@ -1762,7 +1762,7 @@ export default function LifeGraphPage() {
           <div className="flex items-center gap-1 bg-[var(--bg-card-subtle)] p-1 rounded-2xl border border-[var(--border-subtle)]">
             <Tooltip
               position="bottom"
-              content="Đại sảnh vận mệnh & gia phả các kiếp sống tiền nhân"
+              content="Đại sảnh gia phả tiền nhân"
             >
               <button
                 onClick={() => setActiveView('home')}
@@ -1773,14 +1773,14 @@ export default function LifeGraphPage() {
                 }`}
               >
                 <Home className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">Trang Chủ Gia Phả</span>
+                <span className="hidden md:inline">Trang Chủ</span>
               </button>
             </Tooltip>
 
             {character && !character.is_deceased ? (
               <Tooltip
                 position="bottom"
-                content="Bảng điều khiển cockpit kiếp sống hiện tại"
+                content="Bảng điều khiển kiếp sống hiện tại"
               >
                 <button
                   onClick={() => setActiveView('game')}
@@ -1791,24 +1791,24 @@ export default function LifeGraphPage() {
                   }`}
                 >
                   <Play className="w-3.5 h-3.5 fill-current" />
-                  <span className="hidden md:inline">Kiếp Đang Sống</span>
+                  <span className="hidden md:inline">Hành Trình</span>
                 </button>
               </Tooltip>
             ) : (
               <Tooltip
                 position="bottom"
-                content="Gieo quẻ nhân phẩm khởi sinh kiếp sống mới"
+                content="Khởi tạo kiếp sống mới"
               >
                 <button
                   onClick={() => setShowRebirthModal(true)}
                   className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                     activeView === 'home'
-                      ? 'text-[var(--text-secondary)] hover:text-purple-300 hover:bg-[rgba(255,255,255,0.04)]'
+                      ? 'text-[var(--text-secondary)] hover:text-purple-400 hover:bg-[rgba(255,255,255,0.04)]'
                       : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-600/30 hover:opacity-90'
                   }`}
                 >
                   <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                  <span className="hidden md:inline">Gieo Quẻ Tái Sinh</span>
+                  <span className="hidden md:inline">Tái Sinh</span>
                 </button>
               </Tooltip>
             )}
@@ -1817,7 +1817,7 @@ export default function LifeGraphPage() {
             {character && !character.is_deceased && (
               <Tooltip
                 position="bottom"
-                content="Phòng quyết định 3D & không gian đối thoại vận mệnh 21:9 (Phím tắt: D)"
+                content="Phòng đối thoại & quyết định then chốt [D]"
               >
                 <button
                   onClick={() => setActiveView('decision')}
@@ -1828,7 +1828,7 @@ export default function LifeGraphPage() {
                   }`}
                 >
                   <Clapperboard className="w-3.5 h-3.5" />
-                  <span className="hidden md:inline">Phòng Quyết Định</span>
+                  <span className="hidden md:inline">Quyết Định</span>
                   {activeScenario && (
                     <span className="flex h-2 w-2 relative">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>

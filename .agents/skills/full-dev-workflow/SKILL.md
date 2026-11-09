@@ -233,3 +233,15 @@ flowchart TD
   2. *Đoạn văn này có chứa chi tiết cụ thể về giác quan (mùi, vị, âm thanh, xúc giác) hoặc số tiền cụ thể không?*
   3. *Có bị dính từ nào trong Blacklist sáo rỗng không?*
 * Nếu phát hiện vi phạm, Reviewer có quyền từ chối nghiệm thu và yêu cầu viết lại 100%.
+
+### 5.4. Quy Chuẩn Giao Diện Sáng Ban Ngày (Daylight Theme) & Tối Ưu Bố Cục Thẩm Mỹ Game Hiện Đại
+
+* **Chế độ Ban Ngày Mặc Định (Daylight Mode by Default):**
+  - Nền sứ Ivory dịu mắt `#f6f8fb`, bề mặt card trắng tinh khiết `#ffffff`, viền mềm hairline `#e2e8f0` và đổ bóng cao cấp (`box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06)`).
+  - Người chơi vẫn có thể chuyển đổi linh hoạt qua các theme `Obsidian`, `Sepia`, `Cyberpunk` tại `ThemeSwitcher`.
+* **Hệ Thống Font Chữ Gaming Đẳng Cấp:**
+  - `Be Vietnam Pro` (chuẩn âm sắc tiếng Việt, không lỗi dấu) + `Plus Jakarta Sans` (bo tròn hiện đại phong cách life sim) + `Inter`.
+* **Cắt Gọt Chữ Thừa & Chống Lặp Thẻ (De-cluttering & Zero Double-Nesting):**
+  - Loại bỏ hoàn toàn các câu phụ đề mang tính giải thích hiển nhiên ("Sự kiện mới nhất luôn hiển thị trên cùng", "Hệ sinh thái cuộc đời...").
+  - Chuyển toàn bộ nhãn tiếng Anh đóng ngoặc đơn (`Internal Voices`, `Real-world Macro`) sang từ thuần Việt ngắn gọn (`Trực Giác Nội Tâm`, `Thị Trường`).
+  - Không lồng ghép 2 cấp container có chung tiêu đề và padding (giải phóng không gian để tập trung vào gameplay).

@@ -523,8 +523,20 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
     else countryTier = "T3";
   }
 
-  const countryList = COUNTRIES[countryTier] || COUNTRIES.T3;
-  const chosenCountry = countryList[Math.floor(Math.random() * countryList.length)];
+  let chosenCountry = null;
+  if (karmaPerks.target_nationality) {
+    const allCountries = [...(COUNTRIES.T1 || []), ...(COUNTRIES.T2 || []), ...(COUNTRIES.T3 || [])];
+    const match = allCountries.find(c => c.name.toLowerCase() === karmaPerks.target_nationality.toLowerCase() || c.id?.toLowerCase() === karmaPerks.target_nationality.toLowerCase());
+    if (match) {
+      chosenCountry = match;
+      countryTier = match.tier || countryTier;
+    }
+  }
+
+  if (!chosenCountry) {
+    const countryList = COUNTRIES[countryTier] || COUNTRIES.T3;
+    chosenCountry = countryList[Math.floor(Math.random() * countryList.length)];
+  }
   const cities = chosenCountry.cities || [`Thủ đô ${chosenCountry.name}`];
   const chosenCity = cities[Math.floor(Math.random() * cities.length)];
 

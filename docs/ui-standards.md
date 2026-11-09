@@ -968,3 +968,34 @@ Thần Mộc không phải là hình vẽ vô tri tĩnh lặng mà là bản th�
    * Tơ hồng sinh mệnh (Glowing Meridian Thread) nối thẳng từ luân xa tâm thất của nhân vật vào gốc rễ Thần Mộc, khẳng định chân lý: *Nhân vật là linh hồn, Cây Sinh Mệnh là bản thể cuộc đời*.
 3. **Tương tác phản hồi (Avatar Poke Interaction):**
    * Khi người chơi chạm vào nhân vật: Nhân vật lập tức đổi tư thế (bật nhảy `Jump`, nở nụ cười tự tin `Gotcha_Pose`), tung ra bong bóng thoại ngộ nghĩnh truyền cảm hứng sống và tỏa luồng sinh khí hồi phục.
+
+---
+
+## 26. Chuẩn Mực Giao Diện Sáng Ban Ngày, Font Chữ Gaming & Cắt Gọt Chữ (Daylight Theme, Typography & Anti-AI De-cluttering v2.1)
+
+Nhằm đáp ứng yêu cầu của Sếp về một không gian trải nghiệm sáng sủa, thanh lịch, chấm dứt cảm giác u tối và loại bỏ triệt để văn phong lý thuyết/AI rườm rà:
+
+### 26.1. Bảng Màu Sáng Tươi Sang Trọng (Daylight Porcelain Aesthetics)
+Tham khảo quy chuẩn giao diện ban ngày của các tựa game mô phỏng/RPG nổi tiếng (*Genshin Impact, Honkai Star Rail Day UI, The Sims 4, Animal Crossing, Duolingo*):
+* **Nền Canvas Toàn Cảnh (`--bg-canvas`):** Đá ngà sứ thanh nhã `#f6f8fb` / `#f8fafc`. Không dùng nền trắng tuyết chói mắt (`#ffffff`) để tránh gây mỏi mắt trong các phiên chơi kéo dài.
+* **Bề Mặt Thẻ & Khung Bảng Điều Khiển (`--bg-card`):** Trắng tinh khiết `#ffffff` viền mỏng hairline `#e2e8f0` kèm đổ bóng mềm cao cấp (`box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06)`).
+* **Vùng Lõm / Hộp Chứa Phụ (`--bg-card-subtle`):** Xám lam nhạt `#f1f5f9`.
+* **Chữ Chính (`--text-primary`):** Than thẫm `#0f172a` (Slate-900) với độ tương phản WCAG AAA vượt trội trên nền sáng.
+* **Chữ Phụ (`--text-secondary`):** Xám chì `#475569` (Slate-600).
+* **4 Trụ Cột Điểm Nhấn Sắc Nét:**
+  * Vàng Hổ Phách (AP / Karma): `#d97706`
+  * Ngọc Lục Bảo (Tiền mặt / Thặng dư): `#059669`
+  * Hồng Ngọc (Sinh mệnh / Trái tim): `#e11d48`
+  * Tím Hoàng Gia (Kỹ năng / Trí tuệ): `#6366f1` / `#7c3aed`
+
+### 26.2. Hệ Thống Font Chữ Gaming Đẳng Cấp (Typography Hierarchy)
+* **Font Chính Thức:** Ưu tiên số 1 là `Be Vietnam Pro` (bộ font sans-serif được thiết kế chuẩn xác cho hệ thống dấu thanh tiếng Việt, không bị lệch baseline hay gãy nét dấu) kết hợp `Plus Jakarta Sans` (bo tròn hiện đại, mang lại cảm xúc thân thiện của game casual/RPG) và `Inter`.
+* **Cấu hình Tailwind:** `fontFamily.sans: ['"Be Vietnam Pro"', '"Plus Jakarta Sans"', '"Inter"', 'sans-serif']`.
+
+### 26.3. Quy Chuẩn Cắt Gọt Chữ & Chống Văn Phong AI (De-cluttering & Anti-AI Copywriting)
+* **Quy tắc "Zero Redundant Subtitles":** Tuyệt đối nghiêm cấm các dòng chú thích thừa thãi, hiển nhiên như:
+  * ❌ *"Sự kiện mới nhất luôn hiển thị trên cùng"* ➔ Đã lược bỏ, chỉ giữ lại tiêu đề sạch sẽ: `Nhật Ký Hành Trình ({N})`.
+  * ❌ *"Hệ sinh thái cuộc đời: Gốc Rễ Gia Đình · Nhánh Kỹ Năng · Cành Tài Sản · Tán Lá Hành Động."* ➔ Đã lược bỏ, chỉ giữ lại cụm chip giai đoạn tinh gọn.
+  * ❌ *"Thành phố cư ngụ: ...", "Chỗ ở hiện tại: ..."* ➔ Rút gọn thành `Thành phố: ...`, `Chỗ ở: ...`.
+* **Loại Bỏ Nhãn Tiếng Anh Đóng Ngoặc Đơn:** Không sử dụng nhãn dạng `Bản Ngã Tranh Luận (Internal Voices)`, `MMO Vĩ Mô`. Thay thế bằng từ thuần Việt giàu chất game: `Trực Giác Nội Tâm`, `Thị Trường`.
+* **Chống Xếp Chồng Khung Đúp (Zero Double-Nesting):** Không lồng ghép 2 cấp card có cùng tiêu đề, cùng padding và cùng thanh công cụ cuộn (như việc bọc `NarrativeFeed` bên trong `MultiTabSidebar`).

@@ -298,7 +298,7 @@ export default function EventCard({
       <div className="rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] p-2.5 transition">
         <div className="flex items-center justify-between mb-1.5">
           <span className="text-[12px] normal-case font-sans tabular-nums font-bold text-[var(--text-secondary)] flex items-center gap-1">
-            <Brain className="w-3 h-3 text-amber-400" /> Bản Ngã Tranh Luận (Internal Voices)
+            <Brain className="w-3 h-3 text-amber-500" /> Trực Giác Nội Tâm
           </span>
           <button
             onClick={() => setShowMindVoices(!showMindVoices)}

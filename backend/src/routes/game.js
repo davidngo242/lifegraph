@@ -525,11 +525,15 @@ router.post('/childhood-fastforward', async (req, res) => {
 // POST /api/game/rebirth - Direct Rebirth Execution & State Synchronization
 router.post('/rebirth', async (req, res) => {
   try {
-    const { karma_perks = {}, lineage_parent_id = null, character: directChar, preferred_gender = null, gender = null } = req.body;
+    const { karma_perks = {}, lineage_parent_id = null, character: directChar, preferred_gender = null, gender = null, target_nationality = null, nationality = null } = req.body;
     const chosenGender = preferred_gender || gender || karma_perks.preferred_gender || karma_perks.gender;
     if (chosenGender) {
       karma_perks.preferred_gender = chosenGender;
       karma_perks.gender = chosenGender;
+    }
+    const chosenNat = target_nationality || nationality || karma_perks.target_nationality || karma_perks.nationality;
+    if (chosenNat) {
+      karma_perks.target_nationality = chosenNat;
     }
     
     if (directChar) return res.status(400).json({ error: 'Nhân vật phải được tạo và cập nhật bởi máy chủ.' });
@@ -1333,7 +1337,7 @@ router.post('/action/upgrade-housing', async (req, res) => {
 });
 
 // POST /api/game/action/childhood - Tác vụ tuổi thơ & thiếu niên (0 - 17 tuổi)
-router.post('/action/childhood', async (req, res) => {
+router.post(['/action/childhood', '/child-action'], async (req, res) => {
   try {
     const { action_id } = req.body;
     let character = await getLivingCharacter(res);

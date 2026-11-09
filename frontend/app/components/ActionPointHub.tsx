@@ -183,11 +183,14 @@ export default function ActionPointHub({
         assets={assets}
         onChildAction={handleChildActionTrigger}
         onAdultAction={(actionKey, ap, reqCash) => {
-          if (actionKey === 'work') handleAction('work', onOvertime, ap, reqCash);
-          else if (actionKey === 'study') handleAction('study', onStudy, ap, reqCash);
-          else if (actionKey === 'wellness') handleAction('wellness', onWellness, ap, reqCash);
-          else if (actionKey === 'network' && onNetwork) handleAction('network', onNetwork, ap, reqCash);
-          else if (actionKey === 'gamble' && onGamble) handleAction('gamble', onGamble, ap, reqCash);
+          if (actionKey === 'work' || actionKey === 'work_ot') handleAction('work', onOvertime, ap, reqCash);
+          else if (actionKey === 'study' || actionKey === 'study_specialty' || actionKey === 'school_study') handleAction('study', onStudy, ap, reqCash);
+          else if (actionKey === 'wellness' || actionKey === 'restore_vitality' || actionKey === 'play_sports') handleAction('wellness', onWellness, ap, reqCash);
+          else if ((actionKey === 'network' || actionKey === 'expand_network') && onNetwork) handleAction('network', onNetwork, ap, reqCash);
+          else if ((actionKey === 'gamble' || actionKey === 'stock_trading') && onGamble) handleAction('gamble', onGamble, ap, reqCash);
+          else if (onChildhoodAction && ['help_chores', 'explore_nature', 'talk_parents'].includes(actionKey)) {
+            handleAction(actionKey, () => onChildhoodAction(actionKey), ap, reqCash);
+          }
         }}
         breakthroughAction={breakthroughAction}
         onBreakthrough={onBreakthrough ? () => handleAction('breakthrough', onBreakthrough, breakthroughAction?.costAp || 2, breakthroughAction?.costCash || 0) : undefined}

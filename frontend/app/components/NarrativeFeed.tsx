@@ -83,7 +83,7 @@ export default function NarrativeFeed({
   };
 
   return (
-    <div className="w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-4 md:p-5 shadow-2xl backdrop-blur-xl flex flex-col h-auto max-h-[520px] lg:max-h-none lg:h-[calc(100vh-6.5rem)] lg:sticky top-20 overflow-hidden">
+    <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-4 md:p-5 shadow-xl backdrop-blur-xl flex flex-col h-auto max-h-[520px] lg:max-h-none lg:h-[calc(100vh-6.5rem)] lg:sticky top-20 overflow-hidden transition-colors duration-200">
       {/* Header: Replaced redundant age badge with Timeline Progress and Filters */}
       <div className="flex flex-col gap-2.5 pb-3 border-b border-slate-800/80 mb-2.5 shrink-0">
         <div className="flex items-center justify-between">
@@ -92,15 +92,12 @@ export default function NarrativeFeed({
               <BookOpen className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-bold text-white tracking-wide text-xs md:text-sm flex items-center gap-2">
+              <h3 className="font-bold text-[var(--text-primary)] tracking-wide text-xs md:text-sm flex items-center gap-2">
                 <span>Nhật Ký Hành Trình</span>
-                <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-normal">
+                <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] font-normal border border-[var(--border-subtle)]">
                   {history.length} sự kiện
                 </span>
               </h3>
-              <p className="text-[12px] text-slate-400">
-                Sự kiện mới nhất luôn hiển thị trên cùng
-              </p>
             </div>
           </div>
 
@@ -118,7 +115,7 @@ export default function NarrativeFeed({
             className={`px-2.5 py-1 rounded-xl transition font-medium ${
               filter === 'all'
                 ? 'bg-indigo-600 text-white font-bold shadow-md shadow-indigo-600/30'
-                : 'text-slate-400 hover:text-white bg-slate-950/60 border border-slate-800/80'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]'
             }`}
           >
             Tất Cả
@@ -127,8 +124,8 @@ export default function NarrativeFeed({
             onClick={() => setFilter('milestones')}
             className={`px-2.5 py-1 rounded-xl transition font-medium ${
               filter === 'milestones'
-                ? 'bg-amber-600/30 text-amber-300 border border-amber-500/50'
-                : 'text-slate-400 hover:text-white bg-slate-950/60 border border-slate-800/80'
+                ? 'bg-amber-600/30 text-amber-700 dark:text-amber-300 border border-amber-500/50'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]'
             }`}
           >
             Cột Mốc
@@ -137,8 +134,8 @@ export default function NarrativeFeed({
             onClick={() => setFilter('career')}
             className={`px-2.5 py-1 rounded-xl transition font-medium ${
               filter === 'career'
-                ? 'bg-sky-600/30 text-sky-300 border border-sky-500/50'
-                : 'text-slate-400 hover:text-white bg-slate-950/60 border border-slate-800/80'
+                ? 'bg-sky-600/30 text-sky-700 dark:text-sky-300 border border-sky-500/50'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]'
             }`}
           >
             Sự Nghiệp
@@ -147,8 +144,8 @@ export default function NarrativeFeed({
             onClick={() => setFilter('family')}
             className={`px-2.5 py-1 rounded-xl transition font-medium ${
               filter === 'family'
-                ? 'bg-pink-600/30 text-pink-300 border border-pink-500/50'
-                : 'text-slate-400 hover:text-white bg-slate-950/60 border border-slate-800/80'
+                ? 'bg-pink-600/30 text-pink-700 dark:text-pink-300 border border-pink-500/50'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]'
             }`}
           >
             Gia Tộc
@@ -204,40 +201,40 @@ export default function NarrativeFeed({
                 {/* Card Container */}
                 <div className={`p-3 rounded-2xl border transition-all ${
                   isLatest
-                    ? 'bg-gradient-to-r from-indigo-950/90 via-slate-900 to-slate-900/90 border-indigo-500/60 shadow-lg shadow-indigo-950/50 ring-1 ring-indigo-500/30'
-                    : 'bg-slate-950/60 border-slate-800/80 hover:border-slate-700'
+                    ? 'bg-gradient-to-r from-indigo-500/10 via-[var(--bg-card)] to-[var(--bg-card)] border-indigo-500/50 shadow-md ring-1 ring-indigo-500/20'
+                    : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] hover:border-indigo-400/40'
                 }`}>
                   {/* Card Header: Age Badge & Event Category */}
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <div className="flex items-center gap-1.5">
                       <span className={`text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-md border font-bold ${
                         isLatest 
-                          ? 'bg-indigo-500/20 text-indigo-200 border-indigo-500/40' 
-                          : 'bg-slate-900 text-slate-300 border-slate-700'
+                          ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-200 border-indigo-500/30' 
+                          : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-subtle)]'
                       }`}>
                         Tuổi {item.age}
                       </span>
-                      <span className="p-1 rounded-md bg-slate-900 border border-slate-800">
+                      <span className="p-1 rounded-md bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                         {getCategoryIcon(item)}
                       </span>
                     </div>
 
                     {isLatest && (
-                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold animate-pulse flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> Vừa xong
+                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 font-bold animate-pulse flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" /> Vừa xong
                       </span>
                     )}
                   </div>
 
                   {/* Event Title */}
-                  <div className={`text-xs font-bold leading-snug mb-1 ${isLatest ? 'text-white' : 'text-slate-200'}`}>
+                  <div className={`text-xs font-bold leading-snug mb-1 ${isLatest ? 'text-[var(--text-primary)] font-extrabold' : 'text-[var(--text-primary)]'}`}>
                     {item.event}
                   </div>
 
                   {/* Choice & Consequence */}
                   {item.choice && (
-                    <div className="text-[12px] text-slate-300 bg-slate-900/80 rounded-xl p-2 border border-slate-800/60 font-sans leading-relaxed">
-                      <span className="text-indigo-400 font-sans font-semibold mr-1">
+                    <div className="text-[12px] text-[var(--text-secondary)] bg-[var(--bg-card)] rounded-xl p-2 border border-[var(--border-subtle)] font-sans leading-relaxed">
+                      <span className="text-indigo-500 dark:text-indigo-400 font-sans font-semibold mr-1">
                         {item.age === 0 ? '↳ Ký ức đầu đời:' : '↳ Lựa chọn:'}
                       </span>
                       <span>{item.choice}</span>
