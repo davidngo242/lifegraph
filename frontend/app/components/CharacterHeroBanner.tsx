@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
-import SidekickPetCompanion from './SidekickPetCompanion';
 import {
   Cpu,
   Maximize2,
@@ -146,6 +145,7 @@ interface CharacterHeroBannerProps {
   reaction?: AvatarReactionType;
   isFastForwarding?: boolean;
   onOpen3DInspector: () => void;
+  onOpenPetSanctuary?: () => void;
   actionFeedback?: BannerActionFeedback | null;
 }
 
@@ -159,6 +159,7 @@ export default function CharacterHeroBanner({
   reaction = 'idle',
   isFastForwarding = false,
   onOpen3DInspector,
+  onOpenPetSanctuary,
   actionFeedback = null
 }: CharacterHeroBannerProps) {
   if (!character) return null;
@@ -520,6 +521,7 @@ export default function CharacterHeroBanner({
                   showControls={false}
                   traits={traits}
                   netWorth={netWorth}
+                  equippedPet={character.equipped_pet || 'none'}
                   className="w-full h-full overflow-visible pointer-events-auto"
                 />
               </div>
@@ -547,23 +549,29 @@ export default function CharacterHeroBanner({
                 <Maximize2 className="w-3.5 h-3.5" />
               </button>
 
-              {/* Bottom-Right: Grounded Sidekick Pet on Stage */}
-              <div
-                className="absolute bottom-1 right-1 z-20 cursor-pointer pointer-events-auto transition-transform hover:scale-110 active:scale-95 flex flex-col items-center"
+              {/* Bottom-Right: 3D Pet Sanctuary Trigger Button */}
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  onOpen3DInspector();
+                  onOpenPetSanctuary?.();
                 }}
-                title="Linh thú đồng hành - Nhấp để xem Studio chi tiết"
+                className="absolute bottom-1.5 right-1.5 z-20 px-2 py-0.5 rounded-lg bg-[var(--bg-card)]/90 hover:bg-[var(--bg-card)] border border-amber-500/40 text-amber-700 dark:text-amber-300 font-bold text-[10px] backdrop-blur-md shadow-sm transition active:scale-95 flex items-center gap-1 cursor-pointer pointer-events-auto"
+                title="Linh Thú Các - Mở cửa tiệm nhận nuôi thú cưng 3D"
               >
-                <SidekickPetCompanion
-                  netWorth={netWorth}
-                  vitality={vitality}
-                  burnout={burnout}
-                  className="w-10 h-10 sm:w-11 sm:h-11 drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]"
-                />
-                <div className="w-7 h-1 rounded-[100%] bg-slate-950/40 dark:bg-slate-950/70 blur-[1px] -mt-0.5 pointer-events-none" />
-              </div>
+                <span>
+                  {character.equipped_pet === 'dragon' ? '🐉' :
+                   character.equipped_pet === 'cat' ? '🐱' :
+                   character.equipped_pet === 'puppy' ? '🐶' :
+                   character.equipped_pet === 'fox' ? '🦊' : '🐾'}
+                </span>
+                <span className="truncate max-w-[65px]">
+                  {character.equipped_pet && character.equipped_pet !== 'none'
+                    ? (character.equipped_pet === 'dragon' ? 'Ấu Long' :
+                       character.equipped_pet === 'cat' ? 'Mèo Vàng' :
+                       character.equipped_pet === 'puppy' ? 'Cún Cỏ' : 'Hồ Ly')
+                    : 'Nuôi Pet'}
+                </span>
+              </button>
 
               {/* Bottom-Left: Subtle 3D Tag */}
               <div className="absolute bottom-1.5 left-2 z-20 pointer-events-none">

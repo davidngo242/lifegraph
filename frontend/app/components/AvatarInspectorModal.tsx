@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
-import SidekickPetCompanion from './SidekickPetCompanion';
 import { X, Sparkles, Eye, Sliders, Layers, RotateCcw, Activity, ShieldCheck, Heart } from 'lucide-react';
 
 const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
@@ -109,6 +108,7 @@ export default function AvatarInspectorModal({
             showControls={true}
             traits={traits}
             netWorth={netWorth}
+            equippedPet={character?.equipped_pet || 'none'}
             className="w-full h-full"
           />
 
@@ -158,18 +158,21 @@ export default function AvatarInspectorModal({
             </span>
           </div>
 
-          {/* Sidekick Pet Companion on 3D Stage */}
-          <div className="absolute bottom-3 right-3 z-10 flex flex-col items-center p-2 rounded-2xl bg-black/70 border border-slate-700/60 backdrop-blur shadow-2xl">
-            <SidekickPetCompanion
-              netWorth={netWorth}
-              vitality={vitality}
-              burnout={burnout}
-              className="w-14 h-14 sm:w-16 sm:h-16"
-            />
-            <span className="text-[10px] font-bold text-amber-300 font-mono mt-0.5">
-              {netWorth >= 5000000 ? '🐲 Deenoh Dragon' : netWorth >= 500000 ? '🦊 Kitsune Spirit' : netWorth >= 25000 ? '🐱 Mochi Cat' : '🐶 Lucky Pup'}
-            </span>
-          </div>
+          {/* Active 3D Pet Indicator on Stage */}
+          {character?.equipped_pet && character.equipped_pet !== 'none' && (
+            <div className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/70 border border-amber-500/40 backdrop-blur shadow-2xl">
+              <span className="text-base">
+                {character.equipped_pet === 'dragon' ? '🐉' :
+                 character.equipped_pet === 'cat' ? '🐱' :
+                 character.equipped_pet === 'puppy' ? '🐶' : '🦊'}
+              </span>
+              <span className="text-[11px] font-bold text-amber-300 font-mono">
+                {character.equipped_pet === 'dragon' ? 'Ấu Long Luân Hồi 3D' :
+                 character.equipped_pet === 'cat' ? 'Mèo Thần Tài 3D' :
+                 character.equipped_pet === 'puppy' ? 'Cún Trung Nghĩa 3D' : 'Hồ Ly Cửu Vĩ 3D'}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Emotion & Reaction Trigger Toolbar */}

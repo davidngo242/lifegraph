@@ -19,6 +19,7 @@ export interface Dynamic3DAvatarProps {
   showControls?: boolean;
   traits?: string[];
   netWorth?: number;
+  equippedPet?: string;
 }
 
 // Procedural Skin Tone Mapping based on Nationality
@@ -100,6 +101,7 @@ function ProceduralCharacterMesh({
   isFastForwarding: boolean;
   traits?: string[];
   netWorth?: number;
+  equippedPet?: string;
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const headRef = useRef<THREE.Group>(null);
@@ -1309,6 +1311,326 @@ function MoodLighting({ burnout = 0, isMeditating = false }: { burnout: number; 
   );
 }
 
+// =========================================================================
+// PROCEDURAL 3D PET COMPANION (Linh Thú 3D Đồng Hành - Rồng Bay Lượn / Mèo / Chó / Hồ Ly)
+// =========================================================================
+function Procedural3DPetCompanion({ petType = 'none' }: { petType?: string }) {
+  const dragonRef = useRef<THREE.Group>(null);
+  const leftWingRef = useRef<THREE.Mesh>(null);
+  const rightWingRef = useRef<THREE.Mesh>(null);
+  const dragonTailRef = useRef<THREE.Group>(null);
+
+  const catRef = useRef<THREE.Group>(null);
+  const catPawRef = useRef<THREE.Group>(null);
+  const catTailRef = useRef<THREE.Mesh>(null);
+
+  const pupRef = useRef<THREE.Group>(null);
+  const pupTailRef = useRef<THREE.Mesh>(null);
+
+  const foxRef = useRef<THREE.Group>(null);
+  const foxTailsRef = useRef<THREE.Group>(null);
+
+  // Materials for 3D Pets
+  const dragonGreen = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#10b981',
+    roughness: 0.35,
+    metalness: 0.25,
+    emissive: '#047857',
+    emissiveIntensity: 0.25
+  }), []);
+  const dragonBelly = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#fef08a',
+    roughness: 0.4
+  }), []);
+  const dragonGold = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#f59e0b',
+    roughness: 0.2,
+    metalness: 0.8,
+    emissive: '#b45309',
+    emissiveIntensity: 0.4
+  }), []);
+  const dragonEye = useMemo(() => new THREE.MeshBasicMaterial({ color: '#ffffff' }), []);
+  const dragonPupil = useMemo(() => new THREE.MeshBasicMaterial({ color: '#0f172a' }), []);
+  const dragonWing = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#34d399',
+    transparent: true,
+    opacity: 0.88,
+    roughness: 0.3
+  }), []);
+
+  const catFur = useMemo(() => new THREE.MeshStandardMaterial({ color: '#f8fafc', roughness: 0.6 }), []);
+  const catPink = useMemo(() => new THREE.MeshStandardMaterial({ color: '#f472b6', roughness: 0.5 }), []);
+  const catGoldCoin = useMemo(() => new THREE.MeshStandardMaterial({ color: '#fbbf24', roughness: 0.2, metalness: 0.85 }), []);
+
+  const pupFur = useMemo(() => new THREE.MeshStandardMaterial({ color: '#d97706', roughness: 0.7 }), []);
+  const pupCollar = useMemo(() => new THREE.MeshStandardMaterial({ color: '#ef4444', roughness: 0.4 }), []);
+
+  const foxFur = useMemo(() => new THREE.MeshStandardMaterial({ color: '#ea580c', roughness: 0.55 }), []);
+  const foxWhite = useMemo(() => new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.6 }), []);
+  const foxSpiritGlow = useMemo(() => new THREE.MeshBasicMaterial({ color: '#fb923c', transparent: true, opacity: 0.7 }), []);
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+
+    // 1. CELESTIAL DRAGON: 3D Orbital Flight Path around Character
+    if (dragonRef.current && petType === 'dragon') {
+      const flightSpeed = 1.35;
+      const angle = t * flightSpeed;
+      const radiusX = 0.76;
+      const radiusZ = 0.52;
+
+      const posX = Math.cos(angle) * radiusX;
+      const posZ = Math.sin(angle) * radiusZ;
+      const posY = 0.22 + Math.sin(t * 3.0) * 0.14;
+
+      dragonRef.current.position.set(posX, posY, posZ);
+
+      // Tangent flight heading
+      const nextAngle = angle + 0.05;
+      const nextX = Math.cos(nextAngle) * radiusX;
+      const nextZ = Math.sin(nextAngle) * radiusZ;
+      const dirX = nextX - posX;
+      const dirZ = nextZ - posZ;
+      const heading = Math.atan2(dirX, dirZ);
+
+      dragonRef.current.rotation.y = heading;
+      dragonRef.current.rotation.z = -Math.sin(angle) * 0.22;
+      dragonRef.current.rotation.x = Math.cos(t * 3.0) * 0.12;
+
+      // Wing flap animation
+      const flap = Math.sin(t * 12) * 0.42;
+      if (leftWingRef.current) leftWingRef.current.rotation.z = 0.3 + flap;
+      if (rightWingRef.current) rightWingRef.current.rotation.z = -0.3 - flap;
+
+      // Serpentine tail sway
+      if (dragonTailRef.current) {
+        dragonTailRef.current.rotation.y = Math.sin(t * 6) * 0.35;
+      }
+    }
+
+    // 2. CAT: Sitting on dais with beckoning paw & swaying tail
+    if (catRef.current && petType === 'cat') {
+      if (catPawRef.current) {
+        catPawRef.current.rotation.x = -0.4 + Math.sin(t * 4.5) * 0.35;
+      }
+      if (catTailRef.current) {
+        catTailRef.current.rotation.z = Math.sin(t * 2.8) * 0.28;
+      }
+    }
+
+    // 3. PUPPY: Sitting on dais wagging tail excitedly
+    if (pupRef.current && petType === 'puppy') {
+      if (pupTailRef.current) {
+        pupTailRef.current.rotation.y = Math.sin(t * 14) * 0.55;
+      }
+      pupRef.current.position.y = -0.88 + Math.abs(Math.sin(t * 3.5)) * 0.02;
+    }
+
+    // 4. FOX: Mystical swaying tails
+    if (foxRef.current && petType === 'fox') {
+      if (foxTailsRef.current) {
+        foxTailsRef.current.rotation.y = Math.sin(t * 2) * 0.22;
+      }
+    }
+  });
+
+  if (!petType || petType === 'none') return null;
+
+  return (
+    <group>
+      {/* 1. CELESTIAL DRAGON (Ấu Long Luân Hồi - Bay uốn lượn 3D quanh người) */}
+      {petType === 'dragon' && (
+        <group ref={dragonRef}>
+          {/* Dragon Head */}
+          <group position={[0, 0, 0.12]}>
+            <mesh material={dragonGreen}>
+              <sphereGeometry args={[0.075, 16, 16]} />
+            </mesh>
+            <mesh position={[0, -0.015, 0.065]} material={dragonGreen}>
+              <boxGeometry args={[0.065, 0.045, 0.08]} />
+            </mesh>
+            <mesh position={[-0.038, 0.07, -0.02]} rotation={[-0.3, 0, -0.3]} material={dragonGold}>
+              <coneGeometry args={[0.016, 0.08, 8]} />
+            </mesh>
+            <mesh position={[0.038, 0.07, -0.02]} rotation={[-0.3, 0, 0.3]} material={dragonGold}>
+              <coneGeometry args={[0.016, 0.08, 8]} />
+            </mesh>
+            <mesh position={[-0.042, 0.02, 0.045]} material={dragonEye}>
+              <sphereGeometry args={[0.022, 10, 10]} />
+            </mesh>
+            <mesh position={[-0.044, 0.02, 0.062]} material={dragonPupil}>
+              <sphereGeometry args={[0.012, 8, 8]} />
+            </mesh>
+            <mesh position={[0.042, 0.02, 0.045]} material={dragonEye}>
+              <sphereGeometry args={[0.022, 10, 10]} />
+            </mesh>
+            <mesh position={[0.044, 0.02, 0.062]} material={dragonPupil}>
+              <sphereGeometry args={[0.012, 8, 8]} />
+            </mesh>
+          </group>
+
+          {/* Dragon Body */}
+          <mesh position={[0, 0, 0]} material={dragonGreen}>
+            <cylinderGeometry args={[0.052, 0.062, 0.14, 14]} />
+          </mesh>
+          <mesh position={[0, -0.03, 0.025]} material={dragonBelly}>
+            <cylinderGeometry args={[0.038, 0.045, 0.12, 12]} />
+          </mesh>
+
+          {/* Dragon Wings */}
+          <mesh ref={leftWingRef} position={[-0.055, 0.03, 0]} rotation={[0.2, 0.3, 0.3]} material={dragonWing}>
+            <planeGeometry args={[0.16, 0.10]} />
+          </mesh>
+          <mesh ref={rightWingRef} position={[0.055, 0.03, 0]} rotation={[0.2, -0.3, -0.3]} material={dragonWing}>
+            <planeGeometry args={[0.16, 0.10]} />
+          </mesh>
+
+          {/* Serpentine Tail */}
+          <group ref={dragonTailRef} position={[0, 0.02, -0.08]}>
+            <mesh position={[0, 0.02, -0.06]} rotation={[-0.4, 0, 0]} material={dragonGreen}>
+              <cylinderGeometry args={[0.042, 0.024, 0.12, 10]} />
+            </mesh>
+            <mesh position={[0, 0.05, -0.13]} material={dragonGold}>
+              <coneGeometry args={[0.025, 0.06, 8]} />
+            </mesh>
+          </group>
+
+          {/* Dragon Spirit Sparkle Aura */}
+          <mesh position={[0, 0.02, -0.14]}>
+            <sphereGeometry args={[0.02, 8, 8]} />
+            <meshBasicMaterial color="#fde047" transparent opacity={0.8} />
+          </mesh>
+        </group>
+      )}
+
+      {/* 2. MOCHI CAT (Mèo Thần Tài - Ngồi trên bục ôm tiền vẫy tay) */}
+      {petType === 'cat' && (
+        <group ref={catRef} position={[0.34, -0.88, 0.22]}>
+          <mesh position={[0, 0.08, 0]} material={catFur}>
+            <sphereGeometry args={[0.09, 16, 16]} />
+          </mesh>
+          <mesh position={[0, 0.20, 0.02]} material={catFur}>
+            <sphereGeometry args={[0.08, 16, 16]} />
+          </mesh>
+          <mesh position={[-0.05, 0.28, 0.02]} rotation={[0, 0, -0.2]} material={catFur}>
+            <coneGeometry args={[0.028, 0.06, 6]} />
+          </mesh>
+          <mesh position={[-0.05, 0.28, 0.032]} rotation={[0, 0, -0.2]} material={catPink}>
+            <coneGeometry args={[0.016, 0.04, 6]} />
+          </mesh>
+          <mesh position={[0.05, 0.28, 0.02]} rotation={[0, 0, 0.2]} material={catFur}>
+            <coneGeometry args={[0.028, 0.06, 6]} />
+          </mesh>
+          <mesh position={[0.05, 0.28, 0.032]} rotation={[0, 0, 0.2]} material={catPink}>
+            <coneGeometry args={[0.016, 0.04, 6]} />
+          </mesh>
+          <mesh position={[-0.03, 0.21, 0.085]} material={dragonPupil}>
+            <sphereGeometry args={[0.01, 8, 8]} />
+          </mesh>
+          <mesh position={[0.03, 0.21, 0.085]} material={dragonPupil}>
+            <sphereGeometry args={[0.01, 8, 8]} />
+          </mesh>
+          <mesh position={[-0.04, 0.08, 0.09]} rotation={[0.4, 0.2, 0]} material={catGoldCoin}>
+            <cylinderGeometry args={[0.045, 0.045, 0.01, 16]} />
+          </mesh>
+          <group ref={catPawRef} position={[0.06, 0.12, 0.06]}>
+            <mesh material={catFur}>
+              <sphereGeometry args={[0.028, 10, 10]} />
+            </mesh>
+            <mesh position={[0, 0.02, 0.01]} material={catPink}>
+              <sphereGeometry args={[0.014, 8, 8]} />
+            </mesh>
+          </group>
+          <mesh ref={catTailRef} position={[0, 0.05, -0.08]} rotation={[-0.5, 0, 0]} material={catFur}>
+            <cylinderGeometry args={[0.015, 0.018, 0.14, 8]} />
+          </mesh>
+        </group>
+      )}
+
+      {/* 3. LUCKY PUPPY (Cún Cỏ Trung Nghĩa - Ngồi vẫy đuôi mừng) */}
+      {petType === 'puppy' && (
+        <group ref={pupRef} position={[-0.32, -0.88, 0.22]}>
+          <mesh position={[0, 0.08, 0]} material={pupFur}>
+            <sphereGeometry args={[0.085, 16, 16]} />
+          </mesh>
+          <mesh position={[0, 0.19, 0.03]} material={pupFur}>
+            <sphereGeometry args={[0.078, 16, 16]} />
+          </mesh>
+          <mesh position={[0, 0.14, 0.02]} rotation={[0.2, 0, 0]} material={pupCollar}>
+            <torusGeometry args={[0.068, 0.014, 8, 20]} />
+          </mesh>
+          <mesh position={[-0.065, 0.20, 0.02]} rotation={[0, 0, 0.4]} material={pupFur}>
+            <boxGeometry args={[0.032, 0.07, 0.02]} />
+          </mesh>
+          <mesh position={[0.065, 0.20, 0.02]} rotation={[0, 0, -0.4]} material={pupFur}>
+            <boxGeometry args={[0.032, 0.07, 0.02]} />
+          </mesh>
+          <mesh position={[0, 0.18, 0.09]} material={pupFur}>
+            <sphereGeometry args={[0.032, 10, 10]} />
+          </mesh>
+          <mesh position={[0, 0.20, 0.118]} material={dragonPupil}>
+            <sphereGeometry args={[0.012, 8, 8]} />
+          </mesh>
+          <mesh position={[-0.03, 0.22, 0.085]} material={dragonPupil}>
+            <sphereGeometry args={[0.01, 8, 8]} />
+          </mesh>
+          <mesh position={[0.03, 0.22, 0.085]} material={dragonPupil}>
+            <sphereGeometry args={[0.01, 8, 8]} />
+          </mesh>
+          <mesh ref={pupTailRef} position={[0, 0.08, -0.08]} rotation={[-0.6, 0, 0]} material={pupFur}>
+            <cylinderGeometry args={[0.012, 0.018, 0.12, 8]} />
+          </mesh>
+        </group>
+      )}
+
+      {/* 4. KITSUNE FOX (Hồ Ly Cửu Vĩ - Ngồi đĩnh đạc đuôi xòe linh khí) */}
+      {petType === 'fox' && (
+        <group ref={foxRef} position={[0.34, -0.88, 0.22]}>
+          <mesh position={[0, 0.09, 0]} material={foxFur}>
+            <cylinderGeometry args={[0.065, 0.085, 0.16, 14]} />
+          </mesh>
+          <mesh position={[0, 0.08, 0.04]} material={foxWhite}>
+            <boxGeometry args={[0.05, 0.12, 0.04]} />
+          </mesh>
+          <mesh position={[0, 0.22, 0.02]} material={foxFur}>
+            <sphereGeometry args={[0.075, 16, 16]} />
+          </mesh>
+          <mesh position={[0, 0.19, 0.09]} rotation={[0.3, 0, 0]} material={foxWhite}>
+            <coneGeometry args={[0.03, 0.08, 8]} />
+          </mesh>
+          <mesh position={[-0.045, 0.31, 0.02]} rotation={[0, 0, -0.2]} material={foxFur}>
+            <coneGeometry args={[0.03, 0.09, 6]} />
+          </mesh>
+          <mesh position={[-0.045, 0.31, 0.028]} rotation={[0, 0, -0.2]} material={foxWhite}>
+            <coneGeometry args={[0.018, 0.06, 6]} />
+          </mesh>
+          <mesh position={[0.045, 0.31, 0.02]} rotation={[0, 0, 0.2]} material={foxFur}>
+            <coneGeometry args={[0.03, 0.09, 6]} />
+          </mesh>
+          <mesh position={[0.045, 0.31, 0.028]} rotation={[0, 0, 0.2]} material={foxWhite}>
+            <coneGeometry args={[0.018, 0.06, 6]} />
+          </mesh>
+          <mesh position={[0, 0.27, 0.08]} material={dragonGold}>
+            <octahedronGeometry args={[0.016, 0]} />
+          </mesh>
+          <group ref={foxTailsRef} position={[0, 0.06, -0.06]}>
+            {[-0.25, 0, 0.25].map((angle, idx) => (
+              <group key={`tail-${idx}`} rotation={[-0.4, angle, angle * 0.5]}>
+                <mesh position={[0, 0.08, -0.06]} material={foxFur}>
+                  <cylinderGeometry args={[0.038, 0.018, 0.18, 10]} />
+                </mesh>
+                <mesh position={[0, 0.18, -0.06]} material={foxSpiritGlow}>
+                  <coneGeometry args={[0.036, 0.08, 10]} />
+                </mesh>
+              </group>
+            ))}
+          </group>
+        </group>
+      )}
+    </group>
+  );
+}
+
 export default function Dynamic3DAvatar({
   nationality = 'Việt Nam',
   gender = 'male',
@@ -1320,7 +1642,8 @@ export default function Dynamic3DAvatar({
   className = 'w-full h-full',
   showControls = false,
   traits = [],
-  netWorth = 0
+  netWorth = 0,
+  equippedPet = 'none'
 }: Dynamic3DAvatarProps) {
   const isDead = vitality <= 0;
   const isMeditating = reaction === 'meditating';
@@ -1349,6 +1672,9 @@ export default function Dynamic3DAvatar({
           traits={traits}
           netWorth={netWorth}
         />
+
+        {/* Linh Thú 3D Đồng Hành (Bé Rồng bay lượn / Mèo Thần Tài / Cún Cỏ / Hồ Ly) */}
+        <Procedural3DPetCompanion petType={equippedPet} />
 
         {showControls && (
           <OrbitControls

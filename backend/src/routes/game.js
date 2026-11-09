@@ -1263,6 +1263,188 @@ router.post('/action/buy-asset', async (req, res) => {
   }
 });
 
+// =========================================================================
+// LINH THÚ CÁC (PET SANCTUARY & SHOP / THUẬN HÓA THÚ CƯNG 3D)
+// =========================================================================
+const PET_CATALOG = [
+  {
+    id: 'puppy',
+    name: 'Cún Cỏ Trung Nghĩa',
+    title: 'Lucky Pup',
+    rarity: 'common',
+    rarityLabel: 'Thường',
+    cost: 500,
+    costKarma: 0,
+    icon: '🐶',
+    buff: 'Giảm 5% Stress mỗi năm, +3 Tình cảm',
+    description: 'Chú cún cỏ trung thành quấn quýt dưới chân bục, xua tan căng thẳng và mang lại niềm vui giản dị.',
+    animationType: 'grounded'
+  },
+  {
+    id: 'cat',
+    name: 'Mèo Thần Tài',
+    title: 'Mochi Maneki-Neko',
+    rarity: 'rare',
+    rarityLabel: 'Hiếm',
+    cost: 5000,
+    costKarma: 0,
+    icon: '🐱',
+    buff: '+3% Lợi nhuận đầu tư & lương hàng năm',
+    description: 'Bé mèo vẫy tay chiêu tài ôm đồng tiền vàng, thu hút vượng khí và may mắn tài lộc cho gia chủ.',
+    animationType: 'grounded'
+  },
+  {
+    id: 'fox',
+    name: 'Hồ Ly Cửu Vĩ',
+    title: 'Kitsune Spirit',
+    rarity: 'epic',
+    rarityLabel: 'Quý Hiếm',
+    cost: 50000,
+    costKarma: 20,
+    icon: '🦊',
+    buff: '+15 Sức hút xã hội (Charm), tăng cơ hội gặp Quý Nhân',
+    description: 'Linh thú cáo chín đuôi huyền ảo tỏa vầng sáng hộ mệnh, kết nối nhân duyên đại phú đại quý.',
+    animationType: 'grounded'
+  },
+  {
+    id: 'dragon',
+    name: 'Ấu Long Luân Hồi',
+    title: 'Celestial Dragon',
+    rarity: 'mythic',
+    rarityLabel: 'Thần Thoại',
+    cost: 500000,
+    costKarma: 200,
+    icon: '🐉',
+    buff: '+20% Thọ mệnh, +10 Karma vĩnh cửu mỗi năm',
+    description: 'Thần thú rồng huyền thoại bay lượn uốn lượn 3D quanh người với hào quang sao lấp lánh.',
+    animationType: 'flying_orbital'
+  }
+];
+
+// GET /api/game/pets/catalog - Lấy danh mục thú cưng & trạng thái sở hữu
+router.get('/pets/catalog', async (req, res) => {
+  try {
+    const character = await getLatestCharacter();
+    res.json({
+      success: true,
+      catalog: PET_CATALOG,
+      equipped_pet: character?.equipped_pet || 'none',
+      owned_pets: character?.owned_pets || []
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch pet catalog', message: err.message });
+  }
+});
+
+// POST /api/game/pets/buy - Mua / Nhận nuôi thú cưng
+router.post('/pets/buy', async (req, res) => {
+  try {
+    const { petId, paymentMethod = 'cash' } = req.body;
+    const character = await getLatestCharacter();
+    if (!character || character.is_deceased) {
+      return res.status(400).json({ error: 'Không tìm thấy kiếp sống đang hoạt động.' });
+    }
+
+    const pet = PET_CATALOG.find(p => p.id === petId);
+    if (!pet) {
+      return res.status(404).json({ error: 'Loài linh thú không tồn tại trong danh mục.' });
+    }
+
+    character.owned_pets = character.owned_pets || [];
+    if (character.owned_pets.includes(petId)) {
+      character.equipped_pet = petId;
+      await updateCharacter(character.id, character);
+      return res.json({
+        success: true,
+        message: `Đã xuất trận đồng hành cùng ${pet.name}!`,
+        character,
+        equipped_pet: petId,
+        owned_pets: character.owned_pets
+      });
+    }
+
+    if (paymentMethod === 'karma' && pet.costKarma > 0) {
+      const playerAccount = await getPlayerAccount();
+      if (!playerAccount || (playerAccount.eternal_karma || 0) < pet.costKarma) {
+        return res.status(400).json({ error: `Không đủ Karma linh hồn (cần ${pet.costKarma} Karma).` });
+      }
+      playerAccount.eternal_karma -= pet.costKarma;
+      await updatePlayerAccount(playerAccount);
+    } else {
+      if ((character.cash || 0) < pet.cost) {
+        return res.status(400).json({ error: `Không đủ tiền mặt để nhận nuôi ${pet.name} (cần $${pet.cost.toLocaleString()}).` });
+      }
+      character.cash -= pet.cost;
+    }
+
+    character.owned_pets.push(petId);
+    character.equipped_pet = petId;
+
+    const history = character.history_log || [];
+    history.push({
+      age: character.age,
+      event: `Thuần hóa linh thú: ${pet.name}`,
+      choice: `Chi tiêu ${paymentMethod === 'karma' ? `${pet.costKarma} Karma` : `$${pet.cost.toLocaleString()}`} để đón ${pet.name} về đồng hành (${pet.buff})`
+    });
+    character.history_log = history;
+
+    await updateCharacter(character.id, character);
+
+    res.json({
+      success: true,
+      message: `Chúc mừng bạn đã đón ${pet.name} về đồng hành thành công!`,
+      character,
+      equipped_pet: petId,
+      owned_pets: character.owned_pets
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Thao tác mua linh thú thất bại', message: err.message });
+  }
+});
+
+// POST /api/game/pets/equip - Xuất trận hoặc Thu hồi thú cưng
+router.post('/pets/equip', async (req, res) => {
+  try {
+    const { petId } = req.body;
+    const character = await getLatestCharacter();
+    if (!character || character.is_deceased) {
+      return res.status(400).json({ error: 'Không tìm thấy kiếp sống đang hoạt động.' });
+    }
+
+    character.owned_pets = character.owned_pets || [];
+
+    if (petId === 'none') {
+      character.equipped_pet = 'none';
+      await updateCharacter(character.id, character);
+      return res.json({
+        success: true,
+        message: 'Linh thú đã trở về chuồng nghỉ ngơi.',
+        character,
+        equipped_pet: 'none',
+        owned_pets: character.owned_pets
+      });
+    }
+
+    if (!character.owned_pets.includes(petId)) {
+      return res.status(400).json({ error: 'Bạn chưa sở hữu linh thú này. Hãy nhận nuôi trước!' });
+    }
+
+    character.equipped_pet = petId;
+    await updateCharacter(character.id, character);
+
+    const pet = PET_CATALOG.find(p => p.id === petId);
+    res.json({
+      success: true,
+      message: `Đã xuất trận đồng hành cùng ${pet?.name || 'linh thú'}!`,
+      character,
+      equipped_pet: petId,
+      owned_pets: character.owned_pets
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Thao tác trang bị linh thú thất bại', message: err.message });
+  }
+});
+
 // GET /api/game/market/assets - Lấy danh mục BigData tài sản theo quốc gia & thành phố
 router.get('/market/assets', async (req, res) => {
   try {

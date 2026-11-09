@@ -17,6 +17,7 @@ type Props = {
   showControls?: boolean;
   traits?: string[];
   netWorth?: number;
+  equippedPet?: string;
 };
 
 function Portrait({ age = 20 }: { age?: number }) {
