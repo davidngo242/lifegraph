@@ -289,6 +289,24 @@ export default function DynamicLifeTree({
     if (characterAge <= 5) {
       const nodes: LifeTreeNode[] = [
         {
+          id: 'cuddle_parents',
+          title: 'Làm Nũng Phụ Mẫu',
+          category: 'family',
+          icon: '💖',
+          apCost: 1,
+          gainText: '+15 Tình cảm, -10 Stress',
+          flavor: 'Dụi đầu vào cổ mẹ nũng nịu đòi bế, nghe tiếng cha cười vang gian nhà',
+          angleDeg: -165, // Cánh Tây xa
+          distanceRatio: 0.78,
+          color: {
+            border: 'border-pink-500/50',
+            bg: 'bg-pink-950/70',
+            glow: '#f43f5e',
+            text: 'text-pink-300',
+            line: '#e11d48'
+          }
+        },
+        {
           id: 'toy_brain',
           title: 'Đồ Chơi Trí Não',
           category: 'wisdom',
@@ -296,7 +314,7 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+10 Trí tuệ, +5 Karma',
           flavor: 'Lắc chiếc lục lạc leng keng, tò mò gặm thử mẩu gỗ vuông cha đẽo',
-          angleDeg: -145, // Cánh Tây Bắc thoáng đãng
+          angleDeg: -125, // Cánh Tây Bắc Trí Tuệ
           distanceRatio: 0.76,
           color: {
             border: 'border-sky-500/50',
@@ -314,7 +332,7 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+10 Đề kháng, -5 Stress',
           flavor: 'Nằm phơi nắng sớm ngoài hiên, gió phe phẩy làm khô lớp mồ hôi trộm',
-          angleDeg: -35, // Cánh Đông Bắc thoáng đãng
+          angleDeg: -45, // Cánh Đông Bắc
           distanceRatio: 0.76,
           color: {
             border: 'border-amber-500/50',
@@ -332,32 +350,14 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+3 Max HP, +8 Thể lực',
           flavor: 'Bám thành giường lò dò từng bước, ngã dập mông lại lồm cồm bò dậy',
-          angleDeg: -5, // Cánh Đông (trên lá mầm phải)
-          distanceRatio: 0.75,
+          angleDeg: -10, // Cánh Đông
+          distanceRatio: 0.76,
           color: {
             border: 'border-teal-500/50',
             bg: 'bg-teal-950/70',
             glow: '#14b8a6',
             text: 'text-teal-300',
             line: '#0d9488'
-          }
-        },
-        {
-          id: 'cuddle_parents',
-          title: 'Làm Nũng Phụ Mẫu',
-          category: 'family',
-          icon: '💖',
-          apCost: 1,
-          gainText: '+15 Tình cảm, -10 Stress',
-          flavor: 'Dụi đầu vào cổ mẹ nũng nịu đòi bế, nghe tiếng cha cười vang gian nhà',
-          angleDeg: -175, // Cánh Tây (trên lá mầm trái)
-          distanceRatio: 0.75,
-          color: {
-            border: 'border-pink-500/50',
-            bg: 'bg-pink-950/70',
-            glow: '#f43f5e',
-            text: 'text-pink-300',
-            line: '#e11d48'
           }
         },
         {
@@ -368,7 +368,7 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+15 Thể chất, +5 HP',
           flavor: 'Ngậm bầu sữa ấm của mẹ, no bụng rồi chìm vào giấc ngủ thật say',
-          angleDeg: 140, // Tây Nam cội rễ (không đè thân mầm và avatar)
+          angleDeg: 145, // Tây Nam cội rễ (không đè thân mầm và avatar)
           distanceRatio: 0.65,
           color: {
             border: 'border-emerald-500/50',
@@ -390,8 +390,8 @@ export default function DynamicLifeTree({
           gainText: 'ĐỘT PHÁ SỐ MỆNH',
           flavor: breakthroughAction.description,
           isBreakthrough: true,
-          angleDeg: -90, // Vươn thẳng lên đỉnh trời (không đè card Quý Nhân)
-          distanceRatio: 0.58,
+          angleDeg: -90, // Vươn cao Thiên Đỉnh (Zenith)
+          distanceRatio: 0.85,
           color: {
             border: 'border-amber-400',
             bg: 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950',
@@ -511,7 +511,7 @@ export default function DynamicLifeTree({
           flavor: breakthroughAction.description,
           isBreakthrough: true,
           angleDeg: -90,
-          distanceRatio: 0.58,
+          distanceRatio: 0.85,
           color: {
             border: 'border-amber-400',
             bg: 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950',
@@ -539,8 +539,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+$3.5k Thặng dư, +15 Karma',
         flavor: 'Tập trung cao độ trong phòng mổ, giật lại sự sống cho bệnh nhân từ tay tử thần',
-        angleDeg: -145,
-        distanceRatio: 0.76,
+        angleDeg: -160,
+        distanceRatio: 0.78,
         color: {
           border: 'border-emerald-500/50',
           bg: 'bg-emerald-950/70',
@@ -558,8 +558,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+$3.2k Thặng dư, +10 Trí tuệ',
         flavor: 'Tối ưu thuật toán chịu tải hàng triệu người dùng, hoàn thành bản phát hành quan trọng',
-        angleDeg: -145,
-        distanceRatio: 0.76,
+        angleDeg: -160,
+        distanceRatio: 0.78,
         color: {
           border: 'border-cyan-500/50',
           bg: 'bg-cyan-950/70',
@@ -577,8 +577,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+$4.5k Thặng dư, +Uy quyền',
         flavor: 'Bảo vệ kế hoạch kinh doanh trước các quỹ mạo hiểm, ký kết hợp đồng thương mại lớn',
-        angleDeg: -145,
-        distanceRatio: 0.76,
+        angleDeg: -160,
+        distanceRatio: 0.78,
         color: {
           border: 'border-amber-500/50',
           bg: 'bg-amber-950/70',
@@ -596,8 +596,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+$2.8k, +Danh vọng vang xa',
         flavor: 'Đốt cháy đam mê trên từng nét vẽ trang sách, tạo nên tác phẩm để đời cho công chúng',
-        angleDeg: -145,
-        distanceRatio: 0.76,
+        angleDeg: -160,
+        distanceRatio: 0.78,
         color: {
           border: 'border-purple-500/50',
           bg: 'bg-purple-950/70',
@@ -615,8 +615,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+$1.5k~$3k Thặng dư',
         flavor: 'Tăng ca mỏi mắt bên bàn làm việc, đổi mồ hôi lấy từng đồng tiền nuôi sống bản thân',
-        angleDeg: -145, // Cành Hoàng Kim Tài Sản
-        distanceRatio: 0.76,
+        angleDeg: -160, // Cành Hoàng Kim Tài Sản
+        distanceRatio: 0.78,
         color: {
           border: 'border-emerald-500/50',
           bg: 'bg-emerald-950/70',
@@ -637,8 +637,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+8 Karma, Nâng trình chuyên môn',
         flavor: 'Thức trắng đêm nghiên cứu tài liệu chuyên ngành, mở rộng tầm nhìn học thuật',
-        angleDeg: -90, // Đỉnh ngọn Thần Mộc (dưới card Quý Nhân)
-        distanceRatio: 0.58,
+        angleDeg: -125, // Cành Tây Bắc Trí Tuệ (cách biệt 35 deg với Đột Phá)
+        distanceRatio: 0.76,
         color: {
           border: 'border-sky-500/50',
           bg: 'bg-sky-950/70',
@@ -655,7 +655,7 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: 'Gặp gỡ tri kỷ, Mở lối làm ăn',
         flavor: 'Mời ly cà phê vỉa hè hay bữa tối thân tình, kết nối những mối quan hệ vàng ngọc',
-        angleDeg: -35, // Cành Nhân Mạch Quý Nhân
+        angleDeg: -45, // Cành Đông Bắc Nhân Mạch
         distanceRatio: 0.76,
         color: {
           border: 'border-amber-500/40',
@@ -673,8 +673,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: 'Cơ hội x2 vốn hoặc rút củi',
         flavor: 'Đặt lệnh mua mã cổ phiếu tiềm năng, tim đập thình thịch theo từng nhịp bảng điện tử',
-        angleDeg: -5, // Cánh Đông
-        distanceRatio: 0.75,
+        angleDeg: -10, // Cánh Đông Tài Sản
+        distanceRatio: 0.78,
         color: {
           border: 'border-pink-500/50',
           bg: 'bg-pink-950/70',
@@ -691,7 +691,7 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+15 Sinh lực, -25 Stress',
         flavor: 'Tắm nước nóng xua tan cơn đau nhức xương khớp, ngủ một giấc sâu không mộng mị',
-        angleDeg: 140, // Cội Rễ Sinh Mệnh Tây Nam
+        angleDeg: 145, // Cội Rễ Sinh Mệnh Tây Nam
         distanceRatio: 0.65,
         color: {
           border: 'border-teal-500/50',
@@ -713,8 +713,8 @@ export default function DynamicLifeTree({
         gainText: 'ĐỘT PHÁ SỐ MỆNH',
         flavor: breakthroughAction.description,
         isBreakthrough: true,
-        angleDeg: -65, // Vươn cao Đông Bắc
-        distanceRatio: 0.75,
+        angleDeg: -90, // Vươn cao Thiên Đỉnh (Zenith) - không đè nút Đèn Sách (-125)
+        distanceRatio: 0.85,
         color: {
           border: 'border-amber-400',
           bg: 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950',
@@ -804,16 +804,26 @@ export default function DynamicLifeTree({
     }
   };
 
-  // In-Tree Meridian Acupoints (Huyệt Đạo Kỹ Năng Ngay Trên Tán Cây)
+  // In-Tree Meridian Acupoints (Huyệt Đạo Kỹ Năng Ngay Trên Tán Cây - Chỉ Đạo Của Sếp)
   const MERIDIAN_ACUPOINTS = [
+    {
+      id: 'stoic_mind',
+      name: 'Khắc Kỷ Tịnh Tâm',
+      icon: '🔮',
+      branch: 'Trí Tuệ',
+      costSp: 1,
+      x: 120,
+      y: 95,
+      desc: 'Kháng 30% kiệt sức, bảo tồn nguyên khí.'
+    },
     {
       id: 'mindfulness_zen',
       name: 'Thiền Định Tỉnh Thức',
       icon: '🧘',
       branch: 'Trí Tuệ',
       costSp: 1,
-      x: 185,
-      y: 135,
+      x: 200,
+      y: 155,
       desc: '-20% Căng thẳng tích tụ mỗi năm.'
     },
     {
@@ -822,19 +832,29 @@ export default function DynamicLifeTree({
       icon: '✨',
       branch: 'Gia Phong',
       costSp: 1,
-      x: 275,
-      y: 185,
+      x: 300,
+      y: 110,
       desc: 'Gấp đôi tốc độ hảo cảm Social Links.'
     },
     {
       id: 'market_sense_1',
       name: 'Mắt Thần Định Giá',
-      icon: '👁️',
+      icon: '🪙',
       branch: 'Tư Bản',
       costSp: 1,
-      x: 460,
-      y: 180,
+      x: 505,
+      y: 150,
       desc: 'Giảm 10% giá BĐS & +15% lướt sóng.'
+    },
+    {
+      id: 'capital_engine',
+      name: 'Cỗ Máy Dòng Tiền',
+      icon: '⚙️',
+      branch: 'Tư Bản',
+      costSp: 2,
+      x: 590,
+      y: 95,
+      desc: 'Tự động sinh lãi thặng dư hàng năm.'
     }
   ];
 
@@ -844,6 +864,9 @@ export default function DynamicLifeTree({
   const centerX = canvasWidth / 2; // 360
   const centerY = 270;
   const baseRadius = 185;
+
+  // Sacred Dais Level Progression (Tier 1 to 5 - Đồng bộ với Avatar GoldenMagicDais theo chỉ đạo của Sếp)
+  const daisTier = characterAge >= 56 ? 5 : characterAge >= 36 ? 4 : characterAge >= 18 ? 3 : characterAge >= 6 ? 2 : 1;
 
   return (
     <div className="w-full rounded-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] p-3 sm:p-5 shadow-2xl relative overflow-hidden flex flex-col gap-3.5 backdrop-blur-2xl transition-colors duration-200">
@@ -1369,6 +1392,53 @@ export default function DynamicLifeTree({
               <stop offset="100%" stopColor="#ea580c" />
             </radialGradient>
 
+            {/* Sacred Dais Gradients (Kế thừa từ GoldenMagicDais Avatar) */}
+            <linearGradient id="daisGoldPlateGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#78350f" />
+              <stop offset="20%" stopColor="#b45309" />
+              <stop offset="50%" stopColor="#fef08a" />
+              <stop offset="80%" stopColor="#f59e0b" />
+              <stop offset="100%" stopColor="#78350f" />
+            </linearGradient>
+
+            <linearGradient id="daisObsidianGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#020617" />
+              <stop offset="50%" stopColor="#1e293b" />
+              <stop offset="100%" stopColor="#020617" />
+            </linearGradient>
+
+            <linearGradient id="verticalBeamGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+              <stop offset="0%" stopColor="#fef08a" stopOpacity="0.75" />
+              <stop offset="40%" stopColor="#67e8f9" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
+            </linearGradient>
+
+            {/* Seasonal Ambient Gradients */}
+            <radialGradient id="springDawnGlow" cx="50%" cy="25%" r="70%">
+              <stop offset="0%" stopColor="#f472b6" stopOpacity="0.22" />
+              <stop offset="45%" stopColor="#34d399" stopOpacity="0.08" />
+              <stop offset="100%" stopColor="#0f172a" stopOpacity="0" />
+            </radialGradient>
+
+            <linearGradient id="summerGodRayGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#fef08a" stopOpacity="0.28" />
+              <stop offset="50%" stopColor="#fbbf24" stopOpacity="0.10" />
+              <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+            </linearGradient>
+
+            <radialGradient id="autumnTwilightGlow" cx="50%" cy="30%" r="70%">
+              <stop offset="0%" stopColor="#ea580c" stopOpacity="0.22" />
+              <stop offset="50%" stopColor="#b45309" stopOpacity="0.10" />
+              <stop offset="100%" stopColor="#0f172a" stopOpacity="0" />
+            </radialGradient>
+
+            <linearGradient id="winterAuroraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.38" />
+              <stop offset="40%" stopColor="#10b981" stopOpacity="0.32" />
+              <stop offset="75%" stopColor="#8b5cf6" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.28" />
+            </linearGradient>
+
             <filter id="coreGlow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="7" result="blur" />
               <feMerge>
@@ -1386,123 +1456,168 @@ export default function DynamicLifeTree({
             </filter>
           </defs>
 
-          {/* God Rays (Thiên Khải Chi Quang) */}
-          <g className="god-rays pointer-events-none opacity-40">
-            <polygon points="260,0 330,0 240,460 140,460" fill="url(#godRayGradient)" />
-            <polygon points="340,0 400,0 440,480 340,480" fill="url(#godRayGradient)" />
-            <polygon points="420,0 490,0 600,460 500,460" fill="url(#godRayGradient)" />
-          </g>
+          {/* ========================================================================= */}
+          {/* 1. DYNAMIC SEASONAL ATMOSPHERE & WEATHER AMBIENCE (CHỈ ĐẠO CỦA SẾP) */}
+          {/* ========================================================================= */}
+          <g className="seasonal-atmosphere-layer pointer-events-none">
+            {currentSeason.id === 'spring' && (
+              <g className="spring-atmosphere">
+                <ellipse cx={centerX} cy={200} rx={340} ry={200} fill="url(#springDawnGlow)" />
+                {/* 14 Falling Sakura/Peach Blossom Petals */}
+                {[
+                  { x: 120, y: 40, rx: 7, ry: 4, rot: 25, dur: '7s', delay: '0s' },
+                  { x: 190, y: 70, rx: 6, ry: 3.5, rot: -30, dur: '8.5s', delay: '1.2s' },
+                  { x: 270, y: 30, rx: 7.5, ry: 4.2, rot: 45, dur: '6.8s', delay: '2.5s' },
+                  { x: 340, y: 60, rx: 6.5, ry: 3.8, rot: -15, dur: '9s', delay: '0.8s' },
+                  { x: 420, y: 35, rx: 7, ry: 4, rot: 35, dur: '7.5s', delay: '3.1s' },
+                  { x: 490, y: 75, rx: 6, ry: 3.5, rot: -40, dur: '8s', delay: '1.9s' },
+                  { x: 580, y: 45, rx: 8, ry: 4.5, rot: 50, dur: '9.5s', delay: '2.8s' },
+                  { x: 150, y: 160, rx: 6.5, ry: 3.8, rot: 15, dur: '7.2s', delay: '4s' },
+                  { x: 230, y: 220, rx: 7, ry: 4, rot: -25, dur: '8.2s', delay: '3.5s' },
+                  { x: 310, y: 290, rx: 6, ry: 3.5, rot: 30, dur: '7.8s', delay: '2.2s' },
+                  { x: 450, y: 240, rx: 7.5, ry: 4.2, rot: -35, dur: '8.8s', delay: '4.5s' },
+                  { x: 530, y: 280, rx: 6.5, ry: 3.8, rot: 20, dur: '7.6s', delay: '1.5s' },
+                  { x: 380, y: 360, rx: 7, ry: 4, rot: -10, dur: '9.2s', delay: '3.8s' },
+                  { x: 480, y: 380, rx: 6, ry: 3.5, rot: 40, dur: '8.4s', delay: '0.5s' }
+                ].map((petal, i) => (
+                  <ellipse
+                    key={`spring-petal-${i}`}
+                    cx={petal.x}
+                    cy={petal.y}
+                    rx={petal.rx}
+                    ry={petal.ry}
+                    fill="url(#roseFlowerGrad)"
+                    transform={`rotate(${petal.rot} ${petal.x} ${petal.y})`}
+                    className="animate-pulse"
+                    style={{
+                      animationDuration: petal.dur,
+                      animationDelay: petal.delay,
+                      opacity: 0.85
+                    }}
+                  />
+                ))}
+                {/* Luminous Golden Pollen Spores */}
+                {[
+                  { cx: 220, cy: 380, r: 2.5, dur: '3.2s' },
+                  { cx: 290, cy: 340, r: 3, dur: '2.6s' },
+                  { cx: 360, cy: 390, r: 2.8, dur: '3.8s' },
+                  { cx: 430, cy: 330, r: 3.2, dur: '2.9s' },
+                  { cx: 500, cy: 370, r: 2.6, dur: '3.5s' }
+                ].map((spore, i) => (
+                  <circle
+                    key={`spring-spore-${i}`}
+                    cx={spore.cx}
+                    cy={spore.cy}
+                    r={spore.r}
+                    fill="#fef08a"
+                    filter="url(#coreGlow)"
+                    className="animate-pulse"
+                    style={{ animationDuration: spore.dur }}
+                  />
+                ))}
+              </g>
+            )}
 
-          {/* Ambient Celestial Starlight Circles */}
-          <circle
-            cx={centerX}
-            cy={centerY}
-            r={80}
-            fill="none"
-            stroke={treeHealthState === 'withered' ? '#9333ea' : '#6366f1'}
-            strokeWidth="1.5"
-            strokeDasharray="5 5"
-            className="opacity-25 animate-[spin_40s_linear_infinite]"
-            style={{ transformOrigin: `${centerX}px ${centerY}px` }}
-          />
-          <circle
-            cx={centerX}
-            cy={centerY}
-            r={baseRadius * 0.9}
-            fill="none"
-            stroke={treeHealthState === 'withered' ? '#dc2626' : '#38bdf8'}
-            strokeWidth="1"
-            strokeDasharray="8 8"
-            className="opacity-20 animate-[spin_60s_linear_infinite_reverse]"
-            style={{ transformOrigin: `${centerX}px ${centerY}px` }}
-          />
+            {currentSeason.id === 'summer' && (
+              <g className="summer-atmosphere">
+                {/* 4 Golden God Rays streaming from zenith down to earth */}
+                <g className="god-rays opacity-50">
+                  <polygon points="360,0 230,520 290,520" fill="url(#summerGodRayGrad)" className="animate-tree-godray" />
+                  <polygon points="360,0 430,520 490,520" fill="url(#summerGodRayGrad)" className="animate-tree-godray" style={{ animationDelay: '2s' }} />
+                  <polygon points="360,0 130,480 180,480" fill="url(#summerGodRayGrad)" className="animate-tree-godray" style={{ animationDelay: '1.2s' }} />
+                  <polygon points="360,0 540,480 590,480" fill="url(#summerGodRayGrad)" className="animate-tree-godray" style={{ animationDelay: '3.1s' }} />
+                </g>
+                {/* Glowing Solar Core at Zenith */}
+                <circle cx={centerX} cy={35} r={48} fill="#fef08a" opacity="0.3" filter="url(#foliageBlur)" />
+                <circle cx={centerX} cy={35} r={18} fill="#fbbf24" opacity="0.6" filter="url(#coreGlow)" className="animate-pulse" />
+                {/* Golden Fireflies */}
+                {[
+                  { cx: 210, cy: 150, r: 3.5, delay: '0.4s' },
+                  { cx: 280, cy: 230, r: 3, delay: '1.2s' },
+                  { cx: 340, cy: 180, r: 4, delay: '2.1s' },
+                  { cx: 420, cy: 190, r: 3.5, delay: '0.9s' },
+                  { cx: 500, cy: 140, r: 4, delay: '1.7s' },
+                  { cx: 460, cy: 260, r: 3, delay: '2.5s' }
+                ].map((fly, i) => (
+                  <circle
+                    key={`summer-fly-${i}`}
+                    cx={fly.cx}
+                    cy={fly.cy}
+                    r={fly.r}
+                    fill="#fef08a"
+                    filter="url(#coreGlow)"
+                    className="animate-pulse"
+                    style={{ animationDuration: '2.2s', animationDelay: fly.delay }}
+                  />
+                ))}
+              </g>
+            )}
 
-          {/* Floating Spirit Fireflies */}
-          <g className="spirit-fireflies pointer-events-none">
-            {treeHealthState !== 'withered' ? (
-              <>
-                <circle cx="280" cy="220" r="3" fill="#6ee7b7" className="animate-pulse" style={{ animationDuration: '2.4s' }} filter="url(#coreGlow)" />
-                <circle cx="440" cy="240" r="3.5" fill="#fef08a" className="animate-pulse" style={{ animationDuration: '3.1s', animationDelay: '0.7s' }} filter="url(#coreGlow)" />
-                <circle cx="360" cy="140" r="3" fill="#c084fc" className="animate-pulse" style={{ animationDuration: '2.7s', animationDelay: '1.2s' }} filter="url(#coreGlow)" />
-                <circle cx="200" cy="130" r="3.5" fill="#818cf8" className="animate-pulse" style={{ animationDuration: '3.4s', animationDelay: '0.3s' }} filter="url(#coreGlow)" />
-                <circle cx="530" cy="150" r="3.5" fill="#fbbf24" className="animate-pulse" style={{ animationDuration: '2.9s', animationDelay: '1s' }} filter="url(#coreGlow)" />
-                <circle cx="320" cy="420" r="2.5" fill="#34d399" className="animate-pulse" style={{ animationDuration: '3.8s', animationDelay: '1.8s' }} filter="url(#coreGlow)" />
-                <circle cx="410" cy="400" r="3" fill="#fde047" className="animate-pulse" style={{ animationDuration: '2.8s', animationDelay: '1.5s' }} filter="url(#coreGlow)" />
-              </>
-            ) : (
-              <>
-                <circle cx="360" cy="240" r="2.5" fill="#dc2626" className="animate-ping" style={{ animationDuration: '1.8s' }} filter="url(#coreGlow)" />
-                <circle cx="310" cy="330" r="2" fill="#9333ea" className="animate-pulse" style={{ animationDuration: '2.2s' }} filter="url(#coreGlow)" />
-              </>
+            {currentSeason.id === 'autumn' && (
+              <g className="autumn-atmosphere">
+                <ellipse cx={centerX} cy={220} rx={350} ry={220} fill="url(#autumnTwilightGlow)" />
+                {/* 10 Swirling Autumn Leaves */}
+                {[
+                  { d: 'M 0 -8 C 6 -12 12 -4 8 4 C 4 10 -4 10 -8 4 C -12 -4 -6 -12 0 -8 Z', x: 140, y: 60, scale: 0.9, fill: '#dc2626', rot: 25, dur: '7.5s', delay: '0s' },
+                  { d: 'M 0 -8 C 6 -12 12 -4 8 4 C 4 10 -4 10 -8 4 C -12 -4 -6 -12 0 -8 Z', x: 230, y: 110, scale: 0.8, fill: '#ea580c', rot: -40, dur: '8.8s', delay: '1.4s' },
+                  { d: 'M 0 -8 C 6 -12 12 -4 8 4 C 4 10 -4 10 -8 4 C -12 -4 -6 -12 0 -8 Z', x: 320, y: 40, scale: 1.0, fill: '#f59e0b', rot: 30, dur: '6.9s', delay: '2.8s' },
+                  { d: 'M 0 -8 C 6 -12 12 -4 8 4 C 4 10 -4 10 -8 4 C -12 -4 -6 -12 0 -8 Z', x: 410, y: 80, scale: 0.85, fill: '#b45309', rot: -20, dur: '9.1s', delay: '0.6s' },
+                  { d: 'M 0 -8 C 6 -12 12 -4 8 4 C 4 10 -4 10 -8 4 C -12 -4 -6 -12 0 -8 Z', x: 500, y: 50, scale: 0.95, fill: '#dc2626', rot: 45, dur: '7.8s', delay: '3.2s' },
+                  { d: 'M 0 -8 C 6 -12 12 -4 8 4 C 4 10 -4 10 -8 4 C -12 -4 -6 -12 0 -8 Z', x: 590, y: 95, scale: 0.75, fill: '#ea580c', rot: -35, dur: '8.4s', delay: '2.1s' },
+                  { d: 'M 0 -8 C 6 -12 12 -4 8 4 C 4 10 -4 10 -8 4 C -12 -4 -6 -12 0 -8 Z', x: 180, y: 220, scale: 0.85, fill: '#f59e0b', rot: 15, dur: '7.4s', delay: '4.2s' },
+                  { d: 'M 0 -8 C 6 -12 12 -4 8 4 C 4 10 -4 10 -8 4 C -12 -4 -6 -12 0 -8 Z', x: 270, y: 290, scale: 0.9, fill: '#dc2626', rot: -50, dur: '8.6s', delay: '1.8s' }
+                ].map((leaf, i) => (
+                  <path
+                    key={`autumn-leaf-${i}`}
+                    d={leaf.d}
+                    fill={leaf.fill}
+                    transform={`translate(${leaf.x}, ${leaf.y}) scale(${leaf.scale}) rotate(${leaf.rot})`}
+                    className="animate-pulse"
+                    style={{ animationDuration: leaf.dur, animationDelay: leaf.delay, opacity: 0.88 }}
+                  />
+                ))}
+              </g>
+            )}
+
+            {currentSeason.id === 'winter' && (
+              <g className="winter-atmosphere">
+                {/* Aurora Borealis Shimmering Wave Curtain */}
+                <path
+                  d="M 0 75 Q 180 20, 360 85 T 720 40 L 720 0 L 0 0 Z"
+                  fill="url(#winterAuroraGrad)"
+                  className="animate-tree-aurora"
+                  filter="url(#foliageBlur)"
+                  opacity="0.65"
+                />
+                {/* 16 Falling Snowflakes */}
+                {[
+                  { cx: 90, cy: 45, r: 3.5, dur: '5.5s', delay: '0s', op: 0.9 },
+                  { cx: 160, cy: 90, r: 2.2, dur: '8s', delay: '1.5s', op: 0.7 },
+                  { cx: 230, cy: 35, r: 4, dur: '5s', delay: '2.8s', op: 0.95 },
+                  { cx: 290, cy: 80, r: 2, dur: '8.5s', delay: '0.8s', op: 0.65 },
+                  { cx: 350, cy: 30, r: 3.5, dur: '6s', delay: '3.2s', op: 0.9 },
+                  { cx: 410, cy: 85, r: 2.5, dur: '7.5s', delay: '1.9s', op: 0.75 },
+                  { cx: 480, cy: 40, r: 4.2, dur: '5.2s', delay: '2.4s', op: 0.95 },
+                  { cx: 550, cy: 75, r: 2, dur: '9s', delay: '0.4s', op: 0.6 },
+                  { cx: 620, cy: 50, r: 3.8, dur: '5.8s', delay: '3.5s', op: 0.9 },
+                  { cx: 210, cy: 260, r: 3.5, dur: '6.2s', delay: '2.1s', op: 0.9 },
+                  { cx: 440, cy: 250, r: 3.8, dur: '5.6s', delay: '1.2s', op: 0.95 },
+                  { cx: 600, cy: 270, r: 3.2, dur: '6.5s', delay: '0.9s', op: 0.85 }
+                ].map((snow, i) => (
+                  <circle
+                    key={`winter-snow-${i}`}
+                    cx={snow.cx}
+                    cy={snow.cy}
+                    r={snow.r}
+                    fill="#e0f2fe"
+                    opacity={snow.op}
+                    className="animate-pulse"
+                    style={{ animationDuration: snow.dur, animationDelay: snow.delay }}
+                  />
+                ))}
+              </g>
             )}
           </g>
-
-          {/* ========================================================================= */}
-          {/* SEASONAL WEATHER PARTICLES (HIỆU ỨNG THỜI TIẾT 4 MÙA TRÊN SVG THẦN MỘC) */}
-          {/* ========================================================================= */}
-          {currentSeason.id === 'spring' && (
-            <g className="season-spring-petals pointer-events-none opacity-80">
-              <ellipse cx="140" cy="90" rx="6" ry="3.5" fill="#fda4af" transform="rotate(25 140 90)" className="animate-pulse" />
-              <ellipse cx="230" cy="140" rx="5" ry="3" fill="#f472b6" transform="rotate(-30 230 140)" opacity="0.85" />
-              <ellipse cx="480" cy="110" rx="5.5" ry="3" fill="#fda4af" transform="rotate(35 480 110)" opacity="0.9" />
-              <ellipse cx="580" cy="220" rx="6" ry="3.5" fill="#f43f5e" transform="rotate(45 580 220)" opacity="0.75" />
-              <ellipse cx="320" cy="260" rx="5" ry="3" fill="#fbcfe8" transform="rotate(15 320 260)" opacity="0.8" />
-              <ellipse cx="450" cy="360" rx="5" ry="2.8" fill="#fda4af" transform="rotate(-20 450 360)" opacity="0.85" />
-              <circle cx="210" cy="380" r="3.5" fill="#fde047" opacity="0.75" />
-              <circle cx="500" cy="320" r="3" fill="#fef08a" opacity="0.7" />
-            </g>
-          )}
-
-          {currentSeason.id === 'summer' && (
-            <g className="season-summer-gleams pointer-events-none opacity-90">
-              <circle cx="360" cy="70" r="6" fill="#fef08a" filter="url(#coreGlow)" className="animate-ping" style={{ animationDuration: '3s' }} />
-              <circle cx="210" cy="160" r="4" fill="#fbbf24" filter="url(#coreGlow)" className="animate-pulse" />
-              <circle cx="510" cy="150" r="4.5" fill="#f59e0b" filter="url(#coreGlow)" className="animate-pulse" style={{ animationDelay: '1s' }} />
-              <circle cx="320" cy="220" r="3.5" fill="#fde047" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
-              <circle cx="430" cy="250" r="4" fill="#fbbf24" className="animate-pulse" style={{ animationDelay: '1.5s' }} />
-              <line x1="170" y1="40" x2="250" y2="180" stroke="#fef08a" strokeWidth="1.5" strokeDasharray="6 8" opacity="0.35" />
-              <line x1="470" y1="30" x2="550" y2="170" stroke="#fef08a" strokeWidth="1.5" strokeDasharray="6 8" opacity="0.35" />
-            </g>
-          )}
-
-          {currentSeason.id === 'autumn' && (
-            <g className="season-autumn-leaves pointer-events-none opacity-85">
-              <path d="M 160 120 Q 170 110 180 120 Q 175 135 160 120 Z" fill="#ea580c" transform="rotate(20 170 120)" />
-              <path d="M 280 180 Q 292 170 300 182 Q 292 195 280 180 Z" fill="#c2410c" transform="rotate(-35 290 180)" />
-              <path d="M 520 230 Q 532 218 542 232 Q 532 245 520 230 Z" fill="#f97316" transform="rotate(40 530 230)" />
-              <path d="M 440 330 Q 450 320 460 332 Q 452 344 440 330 Z" fill="#dc2626" transform="rotate(-15 450 330)" />
-              <path d="M 220 390 Q 230 380 240 392 Q 232 404 220 390 Z" fill="#d97706" transform="rotate(10 230 390)" />
-              <path d="M 360 310 Q 370 300 378 312 Q 370 324 360 310 Z" fill="#b45309" transform="rotate(-25 369 312)" />
-            </g>
-          )}
-
-          {currentSeason.id === 'winter' && (
-            <g className="season-winter-snowflakes pointer-events-none opacity-90">
-              {[
-                { cx: 140, cy: 90, r: 3 },
-                { cx: 220, cy: 170, r: 2.5 },
-                { cx: 310, cy: 110, r: 3.5 },
-                { cx: 420, cy: 140, r: 3 },
-                { cx: 530, cy: 95, r: 2.5 },
-                { cx: 590, cy: 210, r: 3 },
-                { cx: 260, cy: 300, r: 3.5 },
-                { cx: 470, cy: 290, r: 2.5 },
-                { cx: 370, cy: 400, r: 3 },
-                { cx: 180, cy: 430, r: 2.5 }
-              ].map((flake, i) => (
-                <circle
-                  key={`flake-${i}`}
-                  cx={flake.cx}
-                  cy={flake.cy}
-                  r={flake.r}
-                  fill="#e0f2fe"
-                  filter="url(#coreGlow)"
-                  className="animate-pulse"
-                  style={{ animationDuration: `${2 + (i % 3)}s`, animationDelay: `${(i * 0.4) % 2}s` }}
-                />
-              ))}
-            </g>
-          )}
 
           {/* Sacred Ground Soil Mound */}
           <ellipse cx={centerX} cy={488} rx={280} ry={24} fill="#0b1120" stroke="#1e293b" strokeWidth="2" />
@@ -1608,29 +1723,28 @@ export default function DynamicLifeTree({
                 {/* Central Meridian (Đốc Mạch Thần Mộc) */}
                 <path d="M 360 475 Q 365 370, 360 265" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="10 8" fill="none" className="animate-pulse" />
 
-                {/* Major Acupuncture Meridian Conduits along 3 Boughs */}
-                <path d="M 350 295 C 310 230, 230 160, 140 85" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
-                <path d="M 350 295 C 310 230, 230 160, 140 85" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                {/* BOUGH 1: Wisdom & Mastery (West / North-West - Organic Bezier Tapered Curve) */}
+                <path d="M 350 290 C 300 245, 225 180, 140 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="18" strokeLinecap="round" fill="none" />
+                <path d="M 350 290 C 300 245, 225 180, 140 95" stroke="url(#manaSapGradient)" strokeWidth="4.5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                <path d="M 240 195 C 195 205, 150 225, 115 240" stroke="#78350f" strokeWidth="8" strokeLinecap="round" fill="none" />
 
-                <path d="M 360 275 Q 360 160, 360 65" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
-                <path d="M 360 275 Q 360 160, 360 65" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                {/* BOUGH 2: Crown of Social Fellowship (Zenith Crown - Sheltering Arch) */}
+                <path d="M 360 265 C 352 195, 368 135, 360 65" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="19" strokeLinecap="round" fill="none" />
+                <path d="M 360 265 C 352 195, 368 135, 360 65" stroke="url(#manaSapGradient)" strokeWidth="4.5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                <path d="M 360 135 C 335 105, 305 90, 280 80" stroke="#78350f" strokeWidth="8" strokeLinecap="round" fill="none" />
+                <path d="M 360 135 C 385 105, 415 90, 440 80" stroke="#78350f" strokeWidth="8" strokeLinecap="round" fill="none" />
 
-                <path d="M 370 295 C 410 230, 490 160, 580 85" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
-                <path d="M 370 295 C 410 230, 490 160, 580 85" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
-
-                {/* Acupoint Nodes (Huyệt Vị Kinh Mạch) */}
-                <circle cx="360" cy="460" r="5.5" fill="#38bdf8" filter="url(#coreGlow)" className="animate-pulse" />
-                <circle cx="360" cy="350" r="6" fill="#fbbf24" filter="url(#coreGlow)" className="animate-pulse" />
-                <circle cx="270" cy="215" r="5" fill="#c084fc" filter="url(#coreGlow)" />
-                <circle cx="450" cy="215" r="5" fill="#fde047" filter="url(#coreGlow)" />
+                {/* BOUGH 3: Wealth & Abundance (East / North-East - Organic Tapered Bough) */}
+                <path d="M 370 290 C 420 245, 495 180, 580 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="18" strokeLinecap="round" fill="none" />
+                <path d="M 370 290 C 420 245, 495 180, 580 95" stroke="url(#manaSapGradient)" strokeWidth="4.5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                <path d="M 480 195 C 525 205, 570 225, 605 240" stroke="#78350f" strokeWidth="8" strokeLinecap="round" fill="none" />
 
                 {/* Layered Foliage Canopy Clusters */}
-                <circle cx="140" cy="85" r="65" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="170" cy="105" r="42" fill={treeHealthState === 'withered' ? '#4c1d95' : '#6366f1'} opacity="0.3" filter="url(#coreGlow)" />
-                <circle cx="360" cy="65" r="75" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="360" cy="85" r="52" fill={treeHealthState === 'withered' ? '#581c87' : '#0284c7'} opacity="0.35" filter="url(#coreGlow)" />
-                <circle cx="580" cy="85" r="65" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="550" cy="105" r="42" fill={treeHealthState === 'withered' ? '#78350f' : '#f59e0b'} opacity="0.3" filter="url(#coreGlow)" />
+                <circle cx="140" cy="95" r="68" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="115" cy="235" r="38" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" />
+                <circle cx="360" cy="65" r="78" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="580" cy="95" r="68" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="605" cy="235" r="38" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" />
               </g>
             )}
 
@@ -1651,38 +1765,72 @@ export default function DynamicLifeTree({
                 <path d="M 355 475 Q 361 360, 355 250" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="12 8" fill="none" className="animate-pulse" />
                 <path d="M 365 475 Q 371 360, 365 250" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="12 8" fill="none" className="animate-pulse" />
 
-                {/* Broad sheltering canopy arches */}
-                <path d="M 345 280 C 290 220, 210 160, 130 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="22" strokeLinecap="round" fill="none" />
-                <path d="M 360 260 Q 360 150, 360 65" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="22" strokeLinecap="round" fill="none" />
-                <path d="M 375 280 C 430 220, 510 160, 590 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="22" strokeLinecap="round" fill="none" />
+                {/* Broad Sheltering Fractal Boughs */}
+                <path d="M 345 275 C 290 230, 215 170, 130 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
+                <path d="M 345 275 C 290 230, 215 170, 130 95" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="10 8" fill="none" className="animate-pulse" />
+                <path d="M 230 190 C 185 200, 140 220, 105 238" stroke="#5c2409" strokeWidth="8" strokeLinecap="round" fill="none" />
+
+                <path d="M 360 250 C 352 185, 368 125, 360 60" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
+                <path d="M 360 250 C 352 185, 368 125, 360 60" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="10 8" fill="none" className="animate-pulse" />
+                <path d="M 360 120 C 330 90, 300 75, 270 65" stroke="#5c2409" strokeWidth="9" strokeLinecap="round" fill="none" />
+                <path d="M 360 120 C 390 90, 420 75, 450 65" stroke="#5c2409" strokeWidth="9" strokeLinecap="round" fill="none" />
+
+                <path d="M 375 275 C 430 230, 505 170, 590 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
+                <path d="M 375 275 C 430 230, 505 170, 590 95" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="10 8" fill="none" className="animate-pulse" />
+                <path d="M 490 190 C 535 200, 580 220, 615 238" stroke="#5c2409" strokeWidth="8" strokeLinecap="round" fill="none" />
 
                 {/* Colossal canopy foliage */}
-                <circle cx="130" cy="95" r="72" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="360" cy="65" r="80" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="590" cy="95" r="72" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="130" cy="95" r="74" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="105" cy="235" r="42" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" />
+                <circle cx="360" cy="60" r="82" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="590" cy="95" r="74" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="615" cy="235" r="42" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" />
               </g>
             )}
 
             {growthStage === 'ancient_world_tree' && (
               <g className="stage-ancient-world-tree">
-                {/* Radiant Golden Amber World Tree trunk */}
+                {/* Grand Sculpted Golden Bark Trunk */}
                 <path
-                  d="M 310 480 C 330 370, 345 290, 360 240 C 375 290, 390 370, 410 480 Z"
+                  d="M 315 486 C 330 380, 342 305, 360 250 C 378 305, 390 380, 405 486 Q 360 492, 315 486 Z"
                   fill={treeHealthState === 'withered' ? 'url(#witheredBarkGradient)' : 'url(#ancientWorldTreeGold)'}
                   stroke={treeHealthState === 'withered' ? '#7f1d1d' : '#d97706'}
-                  strokeWidth="4"
+                  strokeWidth="3.5"
                 />
                 {/* Transcendent spiral runes on trunk */}
                 <path d="M 360 450 Q 370 380, 360 320 Q 350 260, 360 200" stroke="#fef08a" strokeWidth="4" strokeDasharray="8 6" fill="none" className="animate-pulse" />
 
-                {/* Deep ancient root foundation */}
-                <path d="M 310 480 Q 255 496, 190 510" stroke="#d97706" strokeWidth="18" strokeLinecap="round" fill="none" />
-                <path d="M 410 480 Q 465 496, 530 510" stroke="#d97706" strokeWidth="18" strokeLinecap="round" fill="none" />
+                {/* Buttress Root Anchors gripping the Sacred Dais */}
+                <path d="M 320 482 Q 260 490, 210 496" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#d97706'} strokeWidth="14" strokeLinecap="round" fill="none" />
+                <path d="M 400 482 Q 460 490, 510 496" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#d97706'} strokeWidth="14" strokeLinecap="round" fill="none" />
 
-                {/* Grand radiant canopy arches */}
-                <path d="M 345 270 C 285 210, 205 150, 120 90" stroke="#f59e0b" strokeWidth="24" strokeLinecap="round" fill="none" />
-                <path d="M 360 250 Q 360 140, 360 55" stroke="#f59e0b" strokeWidth="24" strokeLinecap="round" fill="none" />
-                <path d="M 375 270 C 435 210, 515 150, 600 90" stroke="#f59e0b" strokeWidth="24" strokeLinecap="round" fill="none" />
+                {/* BOUGH 1: Wisdom & Skills (West / North-West - Organic Bezier Tapered Branch) */}
+                <path d="M 346 270 C 285 235, 215 170, 135 95" stroke="url(#ancientWorldTreeGold)" strokeWidth="18" strokeLinecap="round" fill="none" />
+                <path d="M 346 270 C 285 235, 215 170, 135 95" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                {/* Secondary fractal twigs on Wisdom Bough */}
+                <path d="M 235 185 C 190 195, 145 220, 110 240" stroke="#d97706" strokeWidth="8" strokeLinecap="round" fill="none" />
+                <path d="M 185 135 C 160 115, 140 100, 120 70" stroke="#f59e0b" strokeWidth="6" strokeLinecap="round" fill="none" />
+
+                {/* BOUGH 2: Crown of Social Links (Center / Zenith - Soaring Canopy Arch) */}
+                <path d="M 360 250 C 352 195, 368 135, 360 55" stroke="url(#ancientWorldTreeGold)" strokeWidth="19" strokeLinecap="round" fill="none" />
+                <path d="M 360 250 C 352 195, 368 135, 360 55" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                {/* Crown arch bifurcation */}
+                <path d="M 360 125 C 335 95, 305 80, 275 70" stroke="#d97706" strokeWidth="9" strokeLinecap="round" fill="none" />
+                <path d="M 360 125 C 385 95, 415 80, 445 70" stroke="#d97706" strokeWidth="9" strokeLinecap="round" fill="none" />
+
+                {/* BOUGH 3: Wealth & Abundance (East / North-East - Organic Golden Branch) */}
+                <path d="M 374 270 C 435 235, 505 170, 585 95" stroke="url(#ancientWorldTreeGold)" strokeWidth="18" strokeLinecap="round" fill="none" />
+                <path d="M 374 270 C 435 235, 505 170, 585 95" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                {/* Secondary fractal twigs on Wealth Bough */}
+                <path d="M 485 185 C 530 195, 575 220, 610 240" stroke="#d97706" strokeWidth="8" strokeLinecap="round" fill="none" />
+                <path d="M 535 135 C 560 115, 580 100, 600 70" stroke="#f59e0b" strokeWidth="6" strokeLinecap="round" fill="none" />
+
+                {/* Layered Foliage Clusters */}
+                <circle cx="135" cy="95" r="75" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="105" cy="235" r="42" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" />
+                <circle cx="360" cy="55" r="85" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="585" cy="95" r="75" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" />
+                <circle cx="615" cy="235" r="42" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" />
 
                 {/* Golden heritage fruits (legacy orbs) */}
                 <circle cx="120" cy="90" r="14" fill="#fef08a" stroke="#f59e0b" strokeWidth="3" className="animate-bounce" />
@@ -1814,27 +1962,131 @@ export default function DynamicLifeTree({
             </g>
           )}
 
-          {/* Annual Tree Growth Rings (Vòng Vân Gỗ Đời Người) */}
-          <g className="annual-growth-rings" id="annualGrowthRings">
-            <ellipse cx={centerX} cy={485} rx={65} ry={15} fill="#381404" stroke="#78350f" strokeWidth="2" />
-            {Array.from({ length: Math.min(characterAge, 45) }).map((_, i) => {
-              const rx = 5 + (i * 1.3);
-              const ry = 1.6 + (i * 0.28);
-              const isMilestone = [6, 18, 30, 42, 60].includes(i + 1);
-              return (
-                <ellipse
-                  key={`wood-ring-${i}`}
-                  cx={centerX}
-                  cy={485}
-                  rx={rx}
-                  ry={ry}
-                  fill="none"
-                  stroke={isMilestone ? '#fbbf24' : '#92400e'}
-                  strokeWidth={isMilestone ? '1.8' : '0.7'}
-                  strokeOpacity={isMilestone ? '0.95' : '0.4'}
-                />
-              );
-            })}
+          {/* ========================================================================= */}
+          {/* 4. SACRED TREE ROOT DAIS PROGRESSION (BỆ GỐC CÂY THĂNG HOA THEO LEVEL) */}
+          {/* ========================================================================= */}
+          <g className="sacred-root-dais" id="sacredRootDais">
+            {/* Ground Contact Shadow */}
+            <ellipse cx={centerX} cy={502} rx={daisTier >= 4 ? 135 : 105} ry={daisTier >= 4 ? 26 : 20} fill="#020617" opacity="0.75" />
+
+            {/* Stepped Base Plinth */}
+            {daisTier === 1 && (
+              <g className="dais-tier-1-sprout">
+                <ellipse cx={centerX} cy={496} rx={85} ry={18} fill="#064e3b" stroke="#10b981" strokeWidth="1.5" />
+                <ellipse cx={centerX} cy={490} rx={75} ry={15} fill="#022c22" stroke="#34d399" strokeWidth="1" />
+                {/* Soft fertile moss spores */}
+                <circle cx={325} cy={494} r="2.5" fill="#6ee7b7" opacity="0.8" />
+                <circle cx={395} cy={493} r="2" fill="#a7f3d0" opacity="0.85" />
+                <circle cx={360} cy={498} r="2" fill="#34d399" opacity="0.7" />
+              </g>
+            )}
+
+            {daisTier === 2 && (
+              <g className="dais-tier-2-sapling">
+                <ellipse cx={centerX} cy={498} rx={98} ry={20} fill="#0f172a" stroke="#334155" strokeWidth="2" />
+                <ellipse cx={centerX} cy={492} rx={88} ry={17} fill="url(#daisObsidianGrad)" stroke="#10b981" strokeWidth="1.5" />
+                <ellipse cx={centerX} cy={487} rx={76} ry={14} fill="none" stroke="#6ee7b7" strokeWidth="1" strokeDasharray="4 4" className="animate-tree-rune-cw" />
+              </g>
+            )}
+
+            {daisTier >= 3 && (
+              <g className="dais-tier-advanced">
+                {/* Stepped Obsidian Core Base */}
+                <ellipse cx={centerX} cy={500} rx={daisTier >= 5 ? 130 : 115} ry={daisTier >= 5 ? 26 : 22} fill="url(#daisObsidianGrad)" stroke={daisTier >= 4 ? '#b45309' : '#475569'} strokeWidth="2.5" />
+                
+                {/* Lustrous Gold Plinth Ring */}
+                <ellipse cx={centerX} cy={493} rx={daisTier >= 5 ? 120 : 105} ry={daisTier >= 5 ? 23 : 19} fill="url(#daisGoldPlateGrad)" stroke="#fde047" strokeWidth={daisTier >= 5 ? 2.5 : 1.5} filter="url(#coreGlow)" opacity="0.95" />
+                
+                <ellipse cx={centerX} cy={488} rx={daisTier >= 5 ? 108 : 95} ry={daisTier >= 5 ? 20 : 16} fill="#0f172a" stroke="#f59e0b" strokeWidth="1" />
+
+                {/* Outer Golden Magic Rune Ring (Clockwise Rotation) */}
+                <g className="animate-tree-rune-cw origin-center" style={{ transformOrigin: `${centerX}px 488px` }}>
+                  <ellipse cx={centerX} cy={488} rx={daisTier >= 5 ? 100 : 88} ry={daisTier >= 5 ? 18 : 15} fill="none" stroke="#fbbf24" strokeWidth="2" strokeDasharray="12 10" />
+                  {/* Perimeter 12 Ancient Rune Markers */}
+                  {Array.from({ length: daisTier >= 4 ? 12 : 8 }).map((_, i) => {
+                    const count = daisTier >= 4 ? 12 : 8;
+                    const rad = (i * (360 / count) * Math.PI) / 180;
+                    const rxRune = centerX + Math.cos(rad) * (daisTier >= 5 ? 100 : 88);
+                    const ryRune = 488 + Math.sin(rad) * (daisTier >= 5 ? 18 : 15);
+                    return (
+                      <circle key={`dais-rune-marker-${i}`} cx={rxRune} cy={ryRune} r={daisTier >= 5 ? 2.5 : 2} fill="#fef08a" stroke="#d97706" strokeWidth="1" />
+                    );
+                  })}
+                </g>
+
+                {/* Inner Cyan Geometric Star Lines (Counter-Clockwise Rotation, Tier 4 & 5) */}
+                {daisTier >= 4 && (
+                  <g className="animate-tree-rune-ccw origin-center" style={{ transformOrigin: `${centerX}px 488px` }}>
+                    <ellipse cx={centerX} cy={488} rx={daisTier >= 5 ? 74 : 64} ry={daisTier >= 5 ? 13 : 11} fill="none" stroke="#38bdf8" strokeWidth="1.8" strokeDasharray="8 6" opacity="0.9" />
+                    {Array.from({ length: 6 }).map((_, i) => {
+                      const rad = (i * 60 * Math.PI) / 180;
+                      const rxCyan = centerX + Math.cos(rad) * (daisTier >= 5 ? 74 : 64);
+                      const ryCyan = 488 + Math.sin(rad) * (daisTier >= 5 ? 13 : 11);
+                      return (
+                        <rect key={`dais-cyan-star-${i}`} x={rxCyan - 2} y={ryCyan - 2} width="4" height="4" fill="#38bdf8" transform={`rotate(45 ${rxCyan} ${ryCyan})`} />
+                      );
+                    })}
+                  </g>
+                )}
+
+                {/* Vertical Shimmering Light Beams Ascending from Dais into Trunk (Tier 4 & 5) */}
+                {daisTier >= 4 && (
+                  <g className="dais-vertical-light-beams pointer-events-none">
+                    <polygon points="325,488 335,360 345,488" fill="url(#verticalBeamGrad)" className="animate-tree-beam" opacity="0.5" />
+                    <polygon points="352,488 360,300 368,488" fill="url(#verticalBeamGrad)" className="animate-tree-beam" style={{ animationDelay: '1.2s' }} opacity="0.75" />
+                    <polygon points="375,488 385,360 395,488" fill="url(#verticalBeamGrad)" className="animate-tree-beam" style={{ animationDelay: '2.4s' }} opacity="0.5" />
+                  </g>
+                )}
+
+                {/* Floating Mystic Crystals Orbiting Root Base (Tier 5 - Cổ Thụ Hoàng Kim 56+ Tuổi) */}
+                {daisTier >= 5 && (
+                  <g className="dais-floating-crystals pointer-events-none">
+                    {/* Astral Diamond Crystal 1 (West) */}
+                    <g className="animate-float-slow" style={{ transformOrigin: '240px 478px' }}>
+                      <polygon points="240,466 248,478 240,490 232,478" fill="#fef08a" stroke="#eab308" strokeWidth="1.5" filter="url(#coreGlow)" />
+                      <polygon points="240,470 245,478 240,486 235,478" fill="#ffffff" opacity="0.7" />
+                    </g>
+                    {/* Astral Diamond Crystal 2 (East) */}
+                    <g className="animate-float-fast" style={{ transformOrigin: '480px 478px' }}>
+                      <polygon points="480,466 488,478 480,490 472,478" fill="#fef08a" stroke="#eab308" strokeWidth="1.5" filter="url(#coreGlow)" />
+                      <polygon points="480,470 485,478 480,486 475,478" fill="#ffffff" opacity="0.7" />
+                    </g>
+                    {/* Amethyst Crystal 1 (South-West) */}
+                    <g className="animate-float-fast" style={{ transformOrigin: '285px 508px', animationDelay: '1s' }}>
+                      <polygon points="285,498 292,508 285,518 278,508" fill="#c084fc" stroke="#9333ea" strokeWidth="1.5" filter="url(#coreGlow)" />
+                      <polygon points="285,502 290,508 285,514 280,508" fill="#f3e8ff" opacity="0.6" />
+                    </g>
+                    {/* Amethyst Crystal 2 (South-East) */}
+                    <g className="animate-float-slow" style={{ transformOrigin: '435px 508px', animationDelay: '1.8s' }}>
+                      <polygon points="435,498 442,508 435,518 428,508" fill="#c084fc" stroke="#9333ea" strokeWidth="1.5" filter="url(#coreGlow)" />
+                      <polygon points="435,502 440,508 435,514 430,508" fill="#f3e8ff" opacity="0.6" />
+                    </g>
+                  </g>
+                )}
+              </g>
+            )}
+
+            {/* Concentric Annual Wood Growth Rings embedded inside the dais top */}
+            <g className="annual-growth-rings" id="annualGrowthRings">
+              {Array.from({ length: Math.min(characterAge, 45) }).map((_, i) => {
+                const rx = 6 + (i * 1.4);
+                const ry = 1.6 + (i * 0.28);
+                const isMilestone = [6, 18, 30, 42, 60].includes(i + 1);
+                return (
+                  <ellipse
+                    key={`wood-ring-${i}`}
+                    cx={centerX}
+                    cy={486}
+                    rx={rx}
+                    ry={ry}
+                    fill="none"
+                    stroke={isMilestone ? '#fbbf24' : '#92400e'}
+                    strokeWidth={isMilestone ? '1.8' : '0.6'}
+                    strokeOpacity={isMilestone ? '0.95' : '0.35'}
+                  />
+                );
+              })}
+            </g>
           </g>
 
           {/* Healing Pulse Shockwave when Vitality Restored */}
@@ -2133,6 +2385,68 @@ export default function DynamicLifeTree({
         })}
 
         {/* ========================================================================= */}
+        {/* IN-TREE CELESTIAL NPC CONSTELLATION (QUÝ NHÂN ĐẬU TRÊN TÁN CÂY - CHỈ ĐẠO CỦA SẾP) */}
+        {/* ========================================================================= */}
+        {characterAge >= 6 && (character?.social_links || []).slice(0, 4).map((npc: any, idx: number) => {
+          const npcPositions = [
+            { x: 260, y: 70, branchName: 'Quý Nhân Bảo Trợ' },
+            { x: 360, y: 32, branchName: 'Chiến Hữu Tri Kỷ' },
+            { x: 445, y: 70, branchName: 'Kình Địch Thương Trường' },
+            { x: 525, y: 115, branchName: 'Hậu Bối Kế Thừa' }
+          ];
+          const pos = npcPositions[idx] || npcPositions[0];
+          const linkLvl = npc.linkLevel || 1;
+          const isHighAffinity = linkLvl >= 3;
+
+          return (
+            <div
+              key={`tree-npc-${npc.id || idx}`}
+              className="absolute z-25 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+              style={{
+                left: `${(pos.x / canvasWidth) * 100}%`,
+                top: `${(pos.y / canvasHeight) * 100}%`
+              }}
+            >
+              <Tooltip
+                content={
+                  <div className="space-y-1 text-xs max-w-xs">
+                    <div className="flex items-center gap-1.5 font-bold text-sky-300">
+                      <span>{npc.avatar || '🕊️'}</span>
+                      <span>{npc.name}</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-200 border border-sky-400/30">
+                        Link Lv.{linkLvl}
+                      </span>
+                    </div>
+                    <div className="text-slate-300 text-[11px]">{npc.role || pos.branchName}</div>
+                    <div className="text-[10px] text-amber-300 font-mono">
+                      Hảo cảm: {npc.affinity || 50}/100 • {isHighAffinity ? 'Đặc quyền Mượn Lực khả dụng!' : 'Cần bồi đắp thêm'}
+                    </div>
+                    <div className="text-[10px] text-emerald-300">Nhấp để mở tương tác quý nhân</div>
+                  </div>
+                }
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    soundFx.playBirdChirp();
+                    setTreeViewMode('social_links');
+                  }}
+                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs transition-all duration-300 shadow-xl border cursor-pointer hover:scale-125 ${
+                    linkLvl >= 4
+                      ? 'bg-gradient-to-br from-amber-500/30 to-yellow-600/40 border-amber-400 text-amber-200 ring-2 ring-amber-400/70 shadow-amber-500/50 animate-pulse'
+                      : linkLvl >= 2
+                      ? 'bg-sky-950/80 border-sky-400 text-sky-200 ring-1 ring-sky-400/50 shadow-sky-500/40'
+                      : 'bg-slate-900/80 border-slate-700 text-slate-300 hover:border-sky-400'
+                  }`}
+                >
+                  {npc.avatar || (idx === 0 ? '🦉' : idx === 1 ? '🦅' : idx === 2 ? '🐺' : '🕊️')}
+                </button>
+              </Tooltip>
+            </div>
+          );
+        })}
+
+        {/* ========================================================================= */}
         {/* CENTER CORE: CỘI NGUỒN SINH MỆNH (CENTRAL ORB) */}
         {/* ========================================================================= */}
         <Tooltip
@@ -2273,12 +2587,12 @@ export default function DynamicLifeTree({
                     {node.icon}
                   </span>
 
-                  {/* Leaflet Titles & Benefits */}
+                  {/* Leaflet Titles & Benefits (Zero-Truncation Design Standard) */}
                   <div className="min-w-0 pr-1 text-left">
-                    <div className="text-xs font-bold text-white whitespace-normal leading-tight max-w-[125px] sm:max-w-[150px]">
+                    <div className="text-xs font-bold text-white whitespace-normal leading-tight max-w-[155px] sm:max-w-[185px]">
                       {node.title}
                     </div>
-                    <div className={`text-[9.5px] font-mono mt-0.5 truncate max-w-[130px] ${
+                    <div className={`text-[9.5px] font-mono mt-0.5 whitespace-normal leading-tight max-w-[155px] sm:max-w-[185px] ${
                       node.isBreakthrough
                         ? 'text-amber-300 font-black tracking-wider animate-pulse drop-shadow'
                         : 'text-slate-200 opacity-90'

@@ -245,3 +245,27 @@ flowchart TD
   - Loại bỏ hoàn toàn các câu phụ đề mang tính giải thích hiển nhiên ("Sự kiện mới nhất luôn hiển thị trên cùng", "Hệ sinh thái cuộc đời...").
   - Chuyển toàn bộ nhãn tiếng Anh đóng ngoặc đơn (`Internal Voices`, `Real-world Macro`) sang từ thuần Việt ngắn gọn (`Trực Giác Nội Tâm`, `Thị Trường`).
   - Không lồng ghép 2 cấp container có chung tiêu đề và padding (giải phóng không gian để tập trung vào gameplay).
+
+### 5.5. Quy Chuẩn Đồ Họa Đại Thụ Sinh Mệnh v7.0 (Life Tree Grand Visual Overhaul)
+
+* **Bầu Khí Quyển 4 Mùa Động (Dynamic 4-Season Atmosphere):**
+  - Xuân (Spring): 14 cánh hoa đào/anh đào rơi đa tầng (`@keyframes tree-petal-fall`), 5 bào tử phấn hoa vàng kim lơ lửng.
+  - Hạ (Summer): 4 luồng tia sáng mặt trời God-Rays cực quang (`@keyframes tree-godray-pulse`), vầng hào quang Thái Dương và 6 đom đóm dạ quang.
+  - Thu (Autumn): Bầu trời hoàng hôn hổ phách, 8 lá phong/lá sồi xoáy trôi lãng mạn trong gió thu (`@keyframes tree-leaf-swirl`).
+  - Đông (Winter): Bức rèm cực quang phương Bắc lung linh (`@keyframes tree-aurora-wave`), 12 hoa tuyết rơi lả tả theo chiều sâu (`@keyframes tree-snow-drift`).
+* **Kiến Trúc Nhánh Cây Hữu Cơ Phân Nhánh Fractal (Organic Curved Boughs):**
+  - Xóa bỏ triệt để các thanh trụ vàng thẳng đơ, thô cứng (`strokeWidth="24"`).
+  - Thay bằng đường cong Bezier hữu cơ, vân vỏ cây bóng mờ, ống dẫn nhựa linh lực phát sáng, chồi non và tán lá phân tầng.
+  - 3 đại nhánh chuyên biệt: Nhánh Trí Tuệ (Tây Bắc - Ngọc lục bảo), Nhánh Nhân Mạch (Đỉnh Vòm - Lam ngọc), Nhánh Phú Quý (Đông Bắc - Hổ phách hoàng kim).
+* **Tích Hợp Trực Tiếp Cây Kỹ Năng & Nhân Mạch Lên Đại Thụ:**
+  - 5 Huyệt Đạo / Nụ Hoa Kỹ Năng (Wisdom Blossoms) mọc ngay trên cành cây, đập nhịp khi có SP thừa.
+  - 4 Linh Điểu Thủ Hộ (Cú Mèo Tri Kỷ, Đại Bàng Đồng Minh, Sói Cô Độc/Đối Thủ, Bồ Câu Đệ Tử) đậu trên vòm lá kèm vòng hào quang Link Level và tooltip tương tác.
+  - Bố trí quạt nút hành động (-160° đến 145°) khoảng cách so le, triệt tiêu 100% va chạm chồng lấn giữa "Đèn Sách Tri Thức" và "Ấn Đột Phá/Thành Lập Quỹ", không cắt cụt chữ (`...`).
+* **Bệ Khởi Nguyên Thần Mộc 5 Tầng Cấp (Sacred Root Dais Progression):**
+  - Đồng bộ ngôn ngữ thị giác với Đài Pháp Cực Phẩm của Avatar 3D (`Dynamic3DAvatar.tsx`).
+  - Tier 1 (Mầm Non): Đất ẩm phì nhiêu và giọt sương mai.
+  - Tier 2 (Thiếu Niên): Bệ đá Hắc Diệu Thạch Obsidian bóng mờ viền đồng.
+  - Tier 3 (Thanh Niên): Vòng Cổ Ngữ Hoàng Kim xoay thuận kim đồng hồ (`tree-rune-rotate-cw`).
+  - Tier 4 (Trung Niên): Vòng Ngôi Sao Lam Ngọc xoay nghịch chiều (`tree-rune-rotate-ccw`) + 3 trụ ánh sáng thấu thiên (`tree-beam-ascend`).
+  - Tier 5 (Cổ Thụ / Thần Mộc): Bệ Vàng Thần Thoại 12 cổ ngữ, dải Cực Quang ngút ngàn, tinh thể Kim Cương & Thạch Anh lơ lửng bay quanh quỹ đạo (`tree-crystal-orbit`).
+

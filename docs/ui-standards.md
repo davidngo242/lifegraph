@@ -1033,3 +1033,55 @@ Tham khảo quy chuẩn giao diện ban ngày của các tựa game mô phỏng/
 1. **Bệ Sen Thiền Định (Roots Dais):** Nhân vật Spine Chibi ngự trên bệ đá rêu phong tại góc Tây Nam dưới cội rễ.
 2. **Chùm Kinh Mạch Nối Đan Điền:** 2 luồng tơ hồng phát quang nối từ đan điền nhân vật cắm sâu vào rễ cái của Thần Mộc, các hạt photon năng lượng di chuyển liên tục từ nhân vật sang cây (`animate-[dash_1.5s_linear_infinite]`).
 3. **Tương Tác Võ Thuật (Avatar Poke):** Bấm vào nhân vật để thi triển võ thuật/vận khí (`Gotcha_Pose`, `Jump`, `Vibing`), phóng sóng năng lượng lên thân cây kèm thoại triết lý nhân sinh.
+
+---
+
+## 27. Tiêu Chuẩn Nâng Cấp Đồ Họa Đại Thụ Sinh Mệnh: Khí Quyển 4 Mùa, Cành Nhánh Hữu Cơ, Tích Hợp Kỹ Năng / Quý Nhân & Bệ Gốc Cây Thần Thoại (Life Tree v7.0 Grand Overhaul)
+
+Theo chỉ đạo chiến lược tối cao của **Sếp**, Thần Mộc Sinh Mệnh (`DynamicLifeTree.tsx`) được tái thiết kế đồ họa toàn diện, xóa bỏ triệt để các thanh que thô cứng, va đập chữ và nền tĩnh để đạt chuẩn Game RPG thương mại đẳng cấp quốc tế:
+
+### 27.1. Nền Khí Quyển Động 4 Mùa & Thổ Nhưỡng (Seasonal Atmospheric Canvas)
+1. **🌸 Mùa Xuân**:
+   - Ánh bình minh ngọc bích hồng pastel (`springDawnGlow`).
+   - 14 cánh hoa đào/mai rơi chao liệng chầm chậm (`animate-tree-petal`).
+   - 5 hạt phấn hoa phát quang vàng kim (`#fef08a`) bập bùng bay lên từ gốc rễ.
+2. **☀️ Mùa Hạ**:
+   - 4 vạt nắng vàng mặt trời (**God Rays**) chiếu chéo 45 độ từ đỉnh trời xuống tán lá (`animate-tree-godray`).
+   - Vầng hào quang thái dương rực rỡ tại thiên đỉnh.
+   - 6 đom đóm dạ quang vàng kim lấp lánh trong vòm lá.
+3. **🍁 Mùa Thu**:
+   - Hoàng hôn hổ phách ấm áp (`autumnTwilightGlow`).
+   - 8 phiến lá phong đỏ và lá sồi vàng xoáy tròn lượn theo gió heo may (`animate-tree-leaf`).
+4. **❄️ Mùa Đông**:
+   - Dải **Cực Quang (Aurora Borealis)** phát quang xanh ngọc bích - tím huyền ảo trên bầu trời (`animate-tree-aurora`).
+   - 12 bông tuyết trắng đa tầng rơi bồng bềnh với độ sâu trường ảnh xa gần.
+
+### 27.2. Cành Nhánh Hữu Cơ Đa Tầng (Organic Fractal Boughs)
+1. **Khai tử thanh thẳng `strokeWidth="24"`**: 100% cành nhánh được vẽ bằng đường cong Bezier tự nhiên, có thân mẹ to khỏe uốn lượn và phân nhánh fractal thanh thoát.
+2. **Nhánh Trí Tuệ (Tây Bắc - Hướng 10h)**:
+   - Uốn lượn mềm mại phủ rêu xanh cổ kính và tinh thể tím thạch anh.
+   - Nhựa sống Mana Sap phát quang tím/chàm dọc kinh mạch.
+3. **Nhánh Vương Miện Nhân Mạch (Thiên Đỉnh - Hướng 12h)**:
+   - Vươn cao kiêu hãnh rồi chẽ đôi thành vòm vương miện che chở, tán lá ngọc bích sum suê.
+4. **Nhánh Hoàng Kim Sản Nghiệp (Đông Bắc - Hướng 2h)**:
+   - Cành lực lưỡng ánh đồng hổ phách với các chồi lộc kim tiền và quả non tài lộc.
+
+### 27.3. Hợp Nhất Kỹ Năng & Nhân Mạch Ngay Trên Cây
+1. **Huyệt Đạo Kỹ Năng (In-Tree Meridian Blossoms)**:
+   - 5 huyệt đạo (`stoic_mind`, `mindfulness_zen`, `charisma_magnet`, `market_sense_1`, `capital_engine`) mọc trực tiếp trên cành.
+   - Hiệu ứng nụ hoa sen bừng nở khi đả thông, nhấp 1-click kích hoạt nâng cấp ngay trên cây.
+2. **Linh Điểu Quý Nhân (In-Tree Celestial NPC Constellation)**:
+   - 4 Archetype NPC đậu như linh điểu trên vòm lá (Cú mèo bảo trợ, Đại bàng tri kỷ, Sói kình địch, Bồ câu hậu bối).
+   - Vòng hào quang sáng theo Link Level 1-5, nhấp trực tiếp để tương tác.
+3. **Tái Phân Phối Tọa Độ Không Va Đập (Zero-Collision Fan Distribution)**:
+   - Cày cuốc (-160°) · Đèn sách (-125°) · Đột phá (-90°) · Nhân mạch (-45°) · Lướt sóng (-10°) · Dưỡng sinh (145°).
+   - Triệt tiêu 100% tình trạng nút đè nút.
+   - Loại bỏ `truncate`, mở rộng container capsule đảm bảo hiển thị trọn vẹn văn bản không ba chấm.
+
+### 27.4. Bệ Gốc Cây Thăng Hoa Theo Level (Sacred Tree Root Dais Progression)
+Đồng bộ 100% với ngôn ngữ thiết kế của `GoldenMagicDais` trên Avatar 3D:
+1. **Tier 1 (0-5t / Sprout)**: Bệ đất mẹ màu mỡ, rêu xanh, giọt sương mai.
+2. **Tier 2 (6-17t / Sapling)**: Bệ đá cẩm thạch obsidian, viền ngọc bích, vòng laser tơ non.
+3. **Tier 3 (18-35t / Flourishing Oak)**: Bệ đá cẩm thạch hai tầng, Vòng cổ tự ma pháp kim quang xoay chiều kim đồng hồ (`animate-tree-rune-cw`), 8 rune runes viền ngoài, bóng tiếp đất vững chắc.
+4. **Tier 4 (36-55t / Grand Pillar)**: Thêm Vòng tinh thể xanh lam xoay ngược chiều (`animate-tree-rune-ccw`) + 3 Trụ tia sáng thẳng đứng (`animate-tree-beam`) bốc từ bục lên thân cây.
+5. **Tier 5 (56+t / Ancient World Tree)**: Bệ Hoàng Kim Thần Thánh 3 tầng, 12 cổ tự runes xoay 2 chiều, 3 cột ánh sáng cực quang, 4 khối tinh thể lơ lửng xoay vần (2 Kim Cương Vàng + 2 Thạch Anh Tím).
