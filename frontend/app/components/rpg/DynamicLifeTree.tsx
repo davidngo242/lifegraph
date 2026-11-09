@@ -1102,107 +1102,6 @@ export default function DynamicLifeTree({
           </div>
         </div>
 
-        {/* ========================================================================= */}
-        {/* SEASON & CLIMATE BADGE (CHU KỲ 4 MÙA & THỜI TIẾT THEO QUỐC GIA - ĐỀ XUẤT 2) */}
-        {/* ========================================================================= */}
-        <div className="absolute top-[70px] sm:top-[74px] left-4 sm:left-6 z-25 pointer-events-auto">
-          <Tooltip
-            content={
-              <div className="space-y-1 text-xs max-w-xs">
-                <div className="flex items-center gap-1.5 font-bold text-amber-300">
-                  <span>{currentSeason.icon}</span>
-                  <span>{currentSeason.name} • {seasonClimate.title}</span>
-                </div>
-                <div className="text-slate-200">{seasonClimate.desc}</div>
-                <div className="text-[10px] text-slate-400 font-mono">
-                  Quốc gia: {nationality} ({isTropicalCountry ? 'Nhiệt đới / Á nhiệt đới' : 'Ôn đới / Hàn đới'})
-                </div>
-                <div className="text-[10px] text-emerald-300">Nhấp để lắng nghe phong linh bốn mùa</div>
-              </div>
-            }
-          >
-            <button
-              type="button"
-              onClick={() => soundFx.playSeasonBreeze()}
-              className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full ${currentSeason.bgBadge} border ${currentSeason.borderBadge} shadow-lg backdrop-blur-md flex items-center gap-1.5 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer text-xs`}
-            >
-              <span className="text-sm">{currentSeason.icon}</span>
-              <span className={`font-bold ${currentSeason.textBadge}`}>{currentSeason.name}</span>
-              <span className="text-slate-500 hidden sm:inline">•</span>
-              <span className="text-[10px] text-slate-300 hidden sm:inline truncate max-w-[130px] font-sans">
-                {seasonClimate.title}
-              </span>
-            </button>
-          </Tooltip>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* SPIRIT GUARDIAN PET CONTROLS (THÚ CƯNG HỘ MỆNH TINH THẦN - ĐỀ XUẤT 4) */}
-        {/* ========================================================================= */}
-        <div className="absolute top-[70px] sm:top-[74px] right-4 sm:right-6 z-25 pointer-events-auto flex items-center gap-1.5">
-          {equippedPet !== 'none' ? (
-            <Tooltip
-              content={
-                <div className="space-y-1 text-xs max-w-xs">
-                  <div className="flex items-center gap-1.5 font-bold text-amber-300">
-                    <span>{equippedPet === 'puppy' ? '🐶' : equippedPet === 'cat' ? '🐱' : equippedPet === 'fox' ? '🦊' : '🐉'}</span>
-                    <span>Linh Thú: {equippedPet === 'puppy' ? 'Cún Cỏ Trung Nghĩa' : equippedPet === 'cat' ? 'Mèo Thần Tài' : equippedPet === 'fox' ? 'Hồ Ly Cửu Vĩ' : 'Ấu Long Luân Hồi'}</span>
-                  </div>
-                  <div className="text-slate-200">
-                    {equippedPet === 'puppy' ? 'Giảm 8% Burnout thụ động, +3 Tình cảm người thân hàng năm' :
-                     equippedPet === 'cat' ? '+5% Lợi tức tài sản, chiêu tài đón lộc thặng dư' :
-                     equippedPet === 'fox' ? '+5 Sức hút Charm, tăng cơ duyên gặp gỡ quý nhân' :
-                     '+10 Karma, +3 HP, giảm 30% tổn thất từ biến cố vĩ mô'}
-                  </div>
-                  <div className="text-[10px] text-amber-400 font-mono">Nhấp để vuốt ve & nghe tiếng kêu!</div>
-                </div>
-              }
-            >
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={handlePetInteraction}
-                  className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-indigo-950/80 hover:bg-indigo-900/80 border border-indigo-400/50 shadow-lg backdrop-blur-md flex items-center gap-1.5 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer text-xs"
-                >
-                  <span className="text-base animate-bounce">{equippedPet === 'puppy' ? '🐶' : equippedPet === 'cat' ? '🐱' : equippedPet === 'fox' ? '🦊' : '🐉'}</span>
-                  <span className="font-bold text-indigo-200 text-xs">
-                    {equippedPet === 'puppy' ? 'Cún Lucky' : equippedPet === 'cat' ? 'Mèo Mochi' : equippedPet === 'fox' ? 'Cửu Vĩ' : 'Ấu Long'}
-                  </span>
-                  {petHeartAnim && <span className="animate-ping text-rose-400 text-xs">❤️</span>}
-                </button>
-                {onOpenPetSanctuary && (
-                  <button
-                    type="button"
-                    onClick={onOpenPetSanctuary}
-                    className="p-1.5 rounded-full bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition shadow text-xs"
-                    title="Đổi hoặc Mở Chuồng Linh Thú"
-                  >
-                    🐾
-                  </button>
-                )}
-              </div>
-            </Tooltip>
-          ) : (
-            onOpenPetSanctuary && (
-              <button
-                type="button"
-                onClick={onOpenPetSanctuary}
-                className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-800/90 border border-amber-500/40 hover:border-amber-400 text-amber-300 hover:text-amber-200 text-xs font-semibold shadow-lg backdrop-blur flex items-center gap-1.5 transition active:scale-95 cursor-pointer"
-              >
-                <span>🐾</span>
-                <span>Đón Linh Thú</span>
-              </button>
-            )
-          )}
-        </div>
-
-        {/* Pet Floating Speech Balloon Notification */}
-        {petFeedbackText && (
-          <div className="absolute top-[112px] right-4 sm:right-6 z-30 px-3 py-1.5 rounded-2xl bg-indigo-950/95 border border-indigo-400 text-indigo-100 text-xs font-semibold shadow-2xl backdrop-blur animate-in fade-in zoom-in-95 duration-200 max-w-xs pointer-events-none">
-            {petFeedbackText}
-          </div>
-        )}
-
         {/* BOUGH 2: NHÂN MẠCH QUÝ NHÂN (THIÊN ĐỈNH - VƯƠNG MIỆN TÁN CÂY) */}
         <div
           onClick={() => setTreeViewMode('social_links')}
@@ -1537,6 +1436,73 @@ export default function DynamicLifeTree({
               </>
             )}
           </g>
+
+          {/* ========================================================================= */}
+          {/* SEASONAL WEATHER PARTICLES (HIỆU ỨNG THỜI TIẾT 4 MÙA TRÊN SVG THẦN MỘC) */}
+          {/* ========================================================================= */}
+          {currentSeason.id === 'spring' && (
+            <g className="season-spring-petals pointer-events-none opacity-80">
+              <ellipse cx="140" cy="90" rx="6" ry="3.5" fill="#fda4af" transform="rotate(25 140 90)" className="animate-pulse" />
+              <ellipse cx="230" cy="140" rx="5" ry="3" fill="#f472b6" transform="rotate(-30 230 140)" opacity="0.85" />
+              <ellipse cx="480" cy="110" rx="5.5" ry="3" fill="#fda4af" transform="rotate(35 480 110)" opacity="0.9" />
+              <ellipse cx="580" cy="220" rx="6" ry="3.5" fill="#f43f5e" transform="rotate(45 580 220)" opacity="0.75" />
+              <ellipse cx="320" cy="260" rx="5" ry="3" fill="#fbcfe8" transform="rotate(15 320 260)" opacity="0.8" />
+              <ellipse cx="450" cy="360" rx="5" ry="2.8" fill="#fda4af" transform="rotate(-20 450 360)" opacity="0.85" />
+              <circle cx="210" cy="380" r="3.5" fill="#fde047" opacity="0.75" />
+              <circle cx="500" cy="320" r="3" fill="#fef08a" opacity="0.7" />
+            </g>
+          )}
+
+          {currentSeason.id === 'summer' && (
+            <g className="season-summer-gleams pointer-events-none opacity-90">
+              <circle cx="360" cy="70" r="6" fill="#fef08a" filter="url(#coreGlow)" className="animate-ping" style={{ animationDuration: '3s' }} />
+              <circle cx="210" cy="160" r="4" fill="#fbbf24" filter="url(#coreGlow)" className="animate-pulse" />
+              <circle cx="510" cy="150" r="4.5" fill="#f59e0b" filter="url(#coreGlow)" className="animate-pulse" style={{ animationDelay: '1s' }} />
+              <circle cx="320" cy="220" r="3.5" fill="#fde047" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
+              <circle cx="430" cy="250" r="4" fill="#fbbf24" className="animate-pulse" style={{ animationDelay: '1.5s' }} />
+              <line x1="170" y1="40" x2="250" y2="180" stroke="#fef08a" strokeWidth="1.5" strokeDasharray="6 8" opacity="0.35" />
+              <line x1="470" y1="30" x2="550" y2="170" stroke="#fef08a" strokeWidth="1.5" strokeDasharray="6 8" opacity="0.35" />
+            </g>
+          )}
+
+          {currentSeason.id === 'autumn' && (
+            <g className="season-autumn-leaves pointer-events-none opacity-85">
+              <path d="M 160 120 Q 170 110 180 120 Q 175 135 160 120 Z" fill="#ea580c" transform="rotate(20 170 120)" />
+              <path d="M 280 180 Q 292 170 300 182 Q 292 195 280 180 Z" fill="#c2410c" transform="rotate(-35 290 180)" />
+              <path d="M 520 230 Q 532 218 542 232 Q 532 245 520 230 Z" fill="#f97316" transform="rotate(40 530 230)" />
+              <path d="M 440 330 Q 450 320 460 332 Q 452 344 440 330 Z" fill="#dc2626" transform="rotate(-15 450 330)" />
+              <path d="M 220 390 Q 230 380 240 392 Q 232 404 220 390 Z" fill="#d97706" transform="rotate(10 230 390)" />
+              <path d="M 360 310 Q 370 300 378 312 Q 370 324 360 310 Z" fill="#b45309" transform="rotate(-25 369 312)" />
+            </g>
+          )}
+
+          {currentSeason.id === 'winter' && (
+            <g className="season-winter-snowflakes pointer-events-none opacity-90">
+              {[
+                { cx: 140, cy: 90, r: 3 },
+                { cx: 220, cy: 170, r: 2.5 },
+                { cx: 310, cy: 110, r: 3.5 },
+                { cx: 420, cy: 140, r: 3 },
+                { cx: 530, cy: 95, r: 2.5 },
+                { cx: 590, cy: 210, r: 3 },
+                { cx: 260, cy: 300, r: 3.5 },
+                { cx: 470, cy: 290, r: 2.5 },
+                { cx: 370, cy: 400, r: 3 },
+                { cx: 180, cy: 430, r: 2.5 }
+              ].map((flake, i) => (
+                <circle
+                  key={`flake-${i}`}
+                  cx={flake.cx}
+                  cy={flake.cy}
+                  r={flake.r}
+                  fill="#e0f2fe"
+                  filter="url(#coreGlow)"
+                  className="animate-pulse"
+                  style={{ animationDuration: `${2 + (i % 3)}s`, animationDelay: `${(i * 0.4) % 2}s` }}
+                />
+              ))}
+            </g>
+          )}
 
           {/* Sacred Ground Soil Mound */}
           <ellipse cx={centerX} cy={488} rx={280} ry={24} fill="#0b1120" stroke="#1e293b" strokeWidth="2" />
@@ -1922,6 +1888,185 @@ export default function DynamicLifeTree({
               </g>
             );
           })}
+
+          {/* ========================================================================= */}
+          {/* GUARDIAN SPIRIT PET ON TREE STAGE (THÚ CƯNG HỘ MỆNH TRÊN THẦN MỘC - ĐỀ XUẤT 4) */}
+          {/* ========================================================================= */}
+          {equippedPet === 'puppy' && (
+            <g
+              className="cursor-pointer pointer-events-auto group transition-transform hover:scale-125"
+              onClick={handlePetInteraction}
+              transform="translate(260, 465)"
+            >
+              <title>🐶 Cún Cỏ Trung Nghĩa (Nhấp để vuốt ve & nghe sủa -8% Burnout)</title>
+              {/* Pet Shadow */}
+              <ellipse cx="20" cy="24" rx="16" ry="6" fill="#020617" opacity="0.6" />
+              {/* Wagging Tail */}
+              <path
+                d="M 6 16 Q 0 8 4 4"
+                stroke="#d97706"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                fill="none"
+                className="animate-[spin_0.4s_ease-in-out_infinite_alternate] origin-[6px_16px]"
+              />
+              {/* Dog Body */}
+              <ellipse cx="18" cy="16" rx="12" ry="9" fill="#f59e0b" stroke="#b45309" strokeWidth="1.5" />
+              {/* Dog Head */}
+              <circle cx="26" cy="11" r="8" fill="#fbbf24" stroke="#b45309" strokeWidth="1.5" />
+              {/* Floppy Ears */}
+              <ellipse cx="22" cy="7" rx="3.5" ry="6" fill="#b45309" transform="rotate(-20 22 7)" />
+              <ellipse cx="30" cy="7" rx="3.5" ry="6" fill="#b45309" transform="rotate(20 30 7)" />
+              {/* Snout & Nose */}
+              <ellipse cx="29" cy="13" rx="3" ry="2" fill="#fef3c7" />
+              <circle cx="30" cy="12.5" r="1.2" fill="#1e1b4b" />
+              {/* Cute Eyes */}
+              <circle cx="25" cy="10" r="1.2" fill="#1e1b4b" />
+              <circle cx="28" cy="10" r="1.2" fill="#1e1b4b" />
+              {/* Red Collar & Bell */}
+              <path d="M 22 17 Q 26 19 28 17" stroke="#ef4444" strokeWidth="2" fill="none" />
+              <circle cx="26" cy="18.5" r="1.5" fill="#fde047" />
+              {/* Paws */}
+              <ellipse cx="14" cy="23" rx="3.5" ry="2" fill="#d97706" />
+              <ellipse cx="24" cy="23" rx="3.5" ry="2" fill="#d97706" />
+              {/* Heart popup when touched */}
+              {petHeartAnim && (
+                <text x="32" y="0" fontSize="14" className="animate-bounce">❤️</text>
+              )}
+            </g>
+          )}
+
+          {equippedPet === 'cat' && (
+            <g
+              className="cursor-pointer pointer-events-auto group transition-transform hover:scale-125"
+              onClick={handlePetInteraction}
+              transform="translate(515, 155)"
+            >
+              <title>🐱 Mèo Thần Tài (Nhấp để vuốt ve & chiêu tài lộc +5% Yield)</title>
+              {/* Cat Shadow */}
+              <ellipse cx="16" cy="28" rx="14" ry="5" fill="#020617" opacity="0.5" />
+              {/* Cat Body */}
+              <ellipse cx="16" cy="18" rx="11" ry="10" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1.5" />
+              {/* Calico spot */}
+              <path d="M 10 12 Q 15 10 16 16 Z" fill="#f97316" />
+              {/* Cat Head */}
+              <circle cx="16" cy="10" r="8" fill="#ffffff" stroke="#e2e8f0" strokeWidth="1.5" />
+              {/* Pointy Ears */}
+              <polygon points="10,6 12,1 15,5" fill="#f43f5e" />
+              <polygon points="17,5 20,1 22,6" fill="#f97316" />
+              {/* Eyes & Whiskers */}
+              <circle cx="13" cy="9.5" r="1.2" fill="#0f172a" />
+              <circle cx="19" cy="9.5" r="1.2" fill="#0f172a" />
+              <path d="M 16 12 L 16 13" stroke="#f43f5e" strokeWidth="1" />
+              <line x1="8" y1="11" x2="4" y2="10" stroke="#94a3b8" strokeWidth="0.8" />
+              <line x1="8" y1="13" x2="4" y2="14" stroke="#94a3b8" strokeWidth="0.8" />
+              <line x1="24" y1="11" x2="28" y2="10" stroke="#94a3b8" strokeWidth="0.8" />
+              <line x1="24" y1="13" x2="28" y2="14" stroke="#94a3b8" strokeWidth="0.8" />
+              {/* Golden Koban Coin in chest */}
+              <ellipse cx="16" cy="20" rx="4.5" ry="6" fill="#fbbf24" stroke="#d97706" strokeWidth="1" />
+              <text x="16" y="22" fontSize="6" textAnchor="middle" fill="#78350f" fontWeight="bold">萬</text>
+              {/* Waving Right Paw (Maneki-Neko) */}
+              <path
+                d="M 23 16 Q 28 10 27 6"
+                stroke="#ffffff"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                fill="none"
+                className="animate-[wiggle_0.6s_ease-in-out_infinite_alternate]"
+              />
+              <circle cx="27" cy="6" r="2.5" fill="#f43f5e" />
+              {/* Coin Sparkle when touched */}
+              {petHeartAnim && (
+                <text x="24" y="0" fontSize="14" className="animate-bounce">🪙</text>
+              )}
+            </g>
+          )}
+
+          {equippedPet === 'fox' && (
+            <g
+              className="cursor-pointer pointer-events-auto group transition-transform hover:scale-125"
+              onClick={handlePetInteraction}
+              transform="translate(195, 275)"
+            >
+              <title>🦊 Hồ Ly Cửu Vĩ (Nhấp để kích hoạt hào quang mị lực +5 Charm)</title>
+              {/* 9 Ethereal Glowing Tails radiating */}
+              <g className="opacity-70 animate-pulse" style={{ animationDuration: '2s' }}>
+                {[-50, -35, -20, -10, 0, 10, 20, 35, 50].map((deg, i) => (
+                  <path
+                    key={`tail-${i}`}
+                    d="M 8 18 Q -10 12 -22 6 Q -12 24 8 20"
+                    fill="url(#coreGlow)"
+                    stroke="#c084fc"
+                    strokeWidth="1.5"
+                    transform={`rotate(${deg} 8 18)`}
+                    opacity="0.6"
+                  />
+                ))}
+              </g>
+              {/* Fox Body */}
+              <ellipse cx="16" cy="18" rx="10" ry="8" fill="#ea580c" stroke="#c2410c" strokeWidth="1.5" />
+              <ellipse cx="16" cy="20" rx="6" ry="5" fill="#ffffff" />
+              {/* Fox Head & Mask */}
+              <polygon points="16,8 24,14 8,14" fill="#ea580c" stroke="#c2410c" strokeWidth="1" />
+              <polygon points="16,11 22,14 10,14" fill="#ffffff" />
+              {/* Tall Ears */}
+              <polygon points="10,9 8,1 13,7" fill="#1e1b4b" />
+              <polygon points="19,7 24,1 22,9" fill="#1e1b4b" />
+              {/* Mysterious Fox Eyes */}
+              <path d="M 12 11 Q 14 12 15 11" stroke="#581c87" strokeWidth="1.2" fill="none" />
+              <path d="M 17 11 Q 18 12 20 11" stroke="#581c87" strokeWidth="1.2" fill="none" />
+              <circle cx="16" cy="14" r="1" fill="#0f172a" />
+              {/* Spirit Aura */}
+              <circle cx="16" cy="14" r="18" fill="none" stroke="#a855f7" strokeWidth="1" strokeDasharray="3 3" className="animate-[spin_10s_linear_infinite]" />
+              {petHeartAnim && (
+                <text x="24" y="0" fontSize="14" className="animate-bounce">✨</text>
+              )}
+            </g>
+          )}
+
+          {equippedPet === 'dragon' && (
+            <g
+              className="cursor-pointer pointer-events-auto group transition-transform hover:scale-125"
+              onClick={handlePetInteraction}
+              transform="translate(330, 20)"
+            >
+              <title>🐉 Ấu Long Luân Hồi (Nhấp để rồng ngâm hộ mệnh +10 Karma, -30% Shock)</title>
+              {/* Serpentine Dragon Body (Curved loop) */}
+              <path
+                d="M 10 32 C 0 20, 20 5, 35 15 C 45 22, 55 35, 42 42 C 30 48, 15 42, 28 30"
+                stroke="url(#ancientWorldTreeGold)"
+                strokeWidth="7"
+                strokeLinecap="round"
+                fill="none"
+                filter="url(#coreGlow)"
+                className="animate-pulse"
+                style={{ animationDuration: '1.8s' }}
+              />
+              <path
+                d="M 10 32 C 0 20, 20 5, 35 15 C 45 22, 55 35, 42 42 C 30 48, 15 42, 28 30"
+                stroke="#fef08a"
+                strokeWidth="2.5"
+                strokeDasharray="4 4"
+                fill="none"
+              />
+              {/* Dragon Head */}
+              <ellipse cx="32" cy="14" rx="8" ry="6" fill="#fbbf24" stroke="#d97706" strokeWidth="1.5" />
+              {/* Antler Horns */}
+              <path d="M 33 10 Q 36 3 40 2" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" fill="none" />
+              <path d="M 29 10 Q 28 4 25 3" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" fill="none" />
+              {/* Whiskers */}
+              <path d="M 36 16 Q 44 18 48 14" stroke="#fef08a" strokeWidth="1.2" strokeLinecap="round" fill="none" />
+              <path d="M 34 18 Q 42 22 46 25" stroke="#fef08a" strokeWidth="1.2" strokeLinecap="round" fill="none" />
+              {/* Blazing Eyes */}
+              <circle cx="34" cy="13" r="1.5" fill="#dc2626" />
+              <circle cx="30" cy="13" r="1.5" fill="#dc2626" />
+              {/* Dragon Pearl Orb */}
+              <circle cx="48" cy="20" r="4.5" fill="#38bdf8" stroke="#fef08a" strokeWidth="1.5" filter="url(#coreGlow)" className="animate-ping" style={{ animationDuration: '2.5s' }} />
+              {petHeartAnim && (
+                <text x="40" y="-4" fontSize="14" className="animate-bounce">🌟</text>
+              )}
+            </g>
+          )}
         </svg>
 
         {/* ========================================================================= */}

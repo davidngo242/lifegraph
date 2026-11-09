@@ -40,6 +40,7 @@ import CommandBarHUD from './components/CommandBarHUD';
 import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 import EmergencyRescueModal from './components/EmergencyRescueModal';
 import ThemeSwitcher from './components/ThemeSwitcher';
+import { soundFx } from './utils/soundEffects';
 
 // Non-binary Interaction Components (V5 & V6)
 import SpectrumSlider from './components/interactions/SpectrumSlider';
@@ -343,6 +344,34 @@ export default function LifeGraphPage() {
     }
   };
 
+  // Smart Life Transition: Milestone Ages (6, 18, 30, 50, 70) require Sacred Reflection & Decade Pledge,
+  // while everyday transitions glide seamlessly in ~0.3s without blocking popups! (Đề xuất 2)
+  const isNextAgeMilestone = [6, 18, 30, 50, 70].includes((character?.age || 0) + 1);
+
+  const handleQuickYearAdvance = async () => {
+    soundFx.playYearEndChime();
+    setIsPledging(true);
+    try {
+      await submitInteraction({
+        advance_only: true,
+        pledge_id: character?.active_pledge || 'pledge_wellness'
+      });
+    } catch (err) {
+      console.error("Bước sang năm mới thất bại:", err);
+    } finally {
+      setIsPledging(false);
+    }
+  };
+
+  const handleSmartYearAdvance = async () => {
+    if (isNextAgeMilestone) {
+      soundFx.playYearEndChime();
+      setIsYearEndModalOpen(true);
+    } else {
+      await handleQuickYearAdvance();
+    }
+  };
+
   // Global Keyboard Shortcuts (Hotkeys)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -465,7 +494,7 @@ export default function LifeGraphPage() {
         if (dilemma?.interaction_type === 'TIME_SKIP') {
           handleTimeSkipContinue('accumulate');
         } else {
-          setIsYearEndModalOpen(true);
+          handleSmartYearAdvance();
         }
         return;
       }
@@ -2062,8 +2091,9 @@ export default function LifeGraphPage() {
                         onWellness={handleWellness}
                         onGamble={handleGamble}
                         onNetwork={handleNetworkAction}
-                        onTimeSkip={() => setIsYearEndModalOpen(true)}
+                        onTimeSkip={handleSmartYearAdvance}
                         onOpenYearEndReflection={() => setIsYearEndModalOpen(true)}
+                        onOpenPetSanctuary={() => setShowPetSanctuaryModal(true)}
                         onOpenSkillHub={() => setShowSkillSelector(true)}
                         onLaunchMiniGame={(type) => launchMiniGame(type)}
                         onUnlockSkill={handleUnlockSkill}
@@ -2131,14 +2161,31 @@ export default function LifeGraphPage() {
                         ) : null}
 
                         <button
-                          onClick={() => setIsYearEndModalOpen(true)}
-                          className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 transition active:scale-95 group"
-                          title="Chiêm nghiệm việc đã làm, hạt mầm dang dở và gieo mầm tâm nguyện đón năm mới (Phím tắt: Space)"
+                          onClick={handleSmartYearAdvance}
+                          disabled={isPledging || loading}
+                          className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 transition active:scale-95 group disabled:opacity-50"
+                          title={isNextAgeMilestone 
+                            ? `Cột mốc cuộc đời Tuổi ${(character?.age || 0) + 1}: Mở Chiêm Nghiệm & Gieo Mầm Tâm Nguyện Thập Kỷ (Space)` 
+                            : `Bước sang Tuổi ${(character?.age || 0) + 1} mượt mà trong nháy mắt (Space)`}
                         >
                           <Sparkles className="w-4 h-4 text-slate-950 group-hover:rotate-12 transition-transform" />
-                          <span>🌿 Chiêm Nghiệm & Giao Thừa</span>
+                          <span>
+                            {isNextAgeMilestone 
+                              ? `🌿 Cột Mốc Tuổi ${(character?.age || 0) + 1} & Chiêm Nghiệm`
+                              : `🌿 Bước Sang Tuổi ${(character?.age || 0) + 1}`}
+                          </span>
                           <kbd className="font-mono text-[10px] bg-black/20 text-slate-950 px-1.5 py-0.5 rounded font-bold">Space</kbd>
                         </button>
+
+                        {!isNextAgeMilestone && (
+                          <button
+                            onClick={() => setIsYearEndModalOpen(true)}
+                            className="px-3 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 hover:text-amber-200 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition active:scale-95"
+                            title="Chủ động gieo mầm tâm nguyện & đúc kết chiêm nghiệm bất cứ lúc nào"
+                          >
+                            <span>✨ Gieo Mầm</span>
+                          </button>
+                        )}
                       </div>
                       <span className="text-[10px] font-mono text-slate-400 hidden sm:inline">
                         {(character?.action_points || 0) > 0 ? "AP chưa dùng sẽ tự chuyển thành Dưỡng Sinh (+2 HP / -5% Stress)" : "Đã sẵn sàng mở khóa tuổi mới"}

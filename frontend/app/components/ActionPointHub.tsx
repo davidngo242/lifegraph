@@ -70,6 +70,7 @@ export interface ActionPointHubProps {
   onRpgActivePerk?: (type: string) => Promise<string | void>;
   onSeniorAction?: (actionType: 'write_memoir' | 'grandchild_mentorship' | 'early_estate_will') => Promise<string | void>;
   onDebtRelief?: (reliefType: 'family_soft_loan' | 'liquidate_personal_items') => Promise<string | void>;
+  onOpenPetSanctuary?: () => void;
   hiddenFlags?: string[];
   isLoading: boolean;
 }
@@ -111,6 +112,7 @@ export default function ActionPointHub({
   onRpgActivePerk,
   onSeniorAction,
   onDebtRelief,
+  onOpenPetSanctuary,
   hiddenFlags = [],
   isLoading
 }: ActionPointHubProps) {
@@ -207,6 +209,7 @@ export default function ActionPointHub({
         onFamilyMeal={onFamilyMeal}
         onFamilyMentorship={onFamilyMentorship}
         onRpgActivePerk={onRpgActivePerk ? (type) => handleAction(`perk_${type}`, () => onRpgActivePerk(type), 1, type === 'vip_networking' ? 1500 : 0) : undefined}
+        onOpenPetSanctuary={onOpenPetSanctuary}
         isLoading={isLoading || activeButton !== null}
       />
     </div>
