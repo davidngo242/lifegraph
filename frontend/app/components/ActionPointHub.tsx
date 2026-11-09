@@ -147,9 +147,11 @@ export default function ActionPointHub({
     }
   };
 
-  const handleChildActionTrigger = (actionId: string, costCash: number = 0) => {
+  const handleChildActionTrigger = (actionId: string, apCost: number = 1, costCash: number = 0) => {
     if (!onChildhoodAction) return;
-    handleAction(actionId, () => onChildhoodAction(actionId), 1, costCash);
+    const actualAp = typeof apCost === 'number' ? apCost : 1;
+    const actualCash = characterAge <= 5 ? 0 : (typeof costCash === 'number' ? costCash : 0);
+    handleAction(actionId, () => onChildhoodAction(actionId), actualAp, actualCash);
   };
 
   return (

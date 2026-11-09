@@ -193,8 +193,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+10 Trí tuệ, +5 Karma',
           flavor: 'Lắc chiếc lục lạc leng keng, tò mò gặm thử mẩu gỗ vuông cha đẽo',
-          angleDeg: -140, // Chồi trí tuệ bên trái
-          distanceRatio: 0.72,
+          angleDeg: -145, // Cánh Tây Bắc thoáng đãng
+          distanceRatio: 0.76,
           color: {
             border: 'border-sky-500/50',
             bg: 'bg-sky-950/70',
@@ -211,8 +211,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+10 Đề kháng, -5 Stress',
           flavor: 'Nằm phơi nắng sớm ngoài hiên, gió phe phẩy làm khô lớp mồ hôi trộm',
-          angleDeg: -40, // Chồi quang hợp bên phải
-          distanceRatio: 0.74,
+          angleDeg: -35, // Cánh Đông Bắc thoáng đãng
+          distanceRatio: 0.76,
           color: {
             border: 'border-amber-500/50',
             bg: 'bg-amber-950/70',
@@ -229,7 +229,7 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+3 Max HP, +8 Thể lực',
           flavor: 'Bám thành giường lò dò từng bước, ngã dập mông lại lồm cồm bò dậy',
-          angleDeg: 45, // Vươn rễ phía đông nam
+          angleDeg: -5, // Cánh Đông (trên lá mầm phải)
           distanceRatio: 0.75,
           color: {
             border: 'border-teal-500/50',
@@ -247,8 +247,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+15 Tình cảm, -10 Stress',
           flavor: 'Dụi đầu vào cổ mẹ nũng nịu đòi bế, nghe tiếng cha cười vang gian nhà',
-          angleDeg: 145, // Ấm êm phía tây nam
-          distanceRatio: 0.74,
+          angleDeg: -175, // Cánh Tây (trên lá mầm trái)
+          distanceRatio: 0.75,
           color: {
             border: 'border-pink-500/50',
             bg: 'bg-pink-950/70',
@@ -265,8 +265,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+15 Thể chất, +5 HP',
           flavor: 'Ngậm bầu sữa ấm của mẹ, no bụng rồi chìm vào giấc ngủ thật say',
-          angleDeg: 90, // Gốc rễ nuôi dưỡng phía dưới
-          distanceRatio: 0.72,
+          angleDeg: 140, // Tây Nam cội rễ (không đè thân mầm và avatar)
+          distanceRatio: 0.65,
           color: {
             border: 'border-emerald-500/50',
             bg: 'bg-emerald-950/70',
@@ -287,8 +287,8 @@ export default function DynamicLifeTree({
           gainText: 'ĐỘT PHÁ SỐ MỆNH',
           flavor: breakthroughAction.description,
           isBreakthrough: true,
-          angleDeg: -90, // Vươn thẳng lên đỉnh trời
-          distanceRatio: 0.88,
+          angleDeg: -90, // Vươn thẳng lên đỉnh trời (không đè card Quý Nhân)
+          distanceRatio: 0.58,
           color: {
             border: 'border-amber-400',
             bg: 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950',
@@ -313,8 +313,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+12 Karma học vấn',
           flavor: 'Nắn nót từng dòng mực tím, quyết tâm giải bằng được bài toán đố hóc búa',
-          angleDeg: -120,
-          distanceRatio: 0.75,
+          angleDeg: -145,
+          distanceRatio: 0.76,
           color: {
             border: 'border-sky-500/50',
             bg: 'bg-sky-950/70',
@@ -331,8 +331,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+$25 tiền tiêu vặt, +Gia đạo',
           flavor: 'Quét sạch hiên nhà, rửa xong chồng bát đũa mỡ màng để mẹ về đỡ nhọc',
-          angleDeg: -60,
-          distanceRatio: 0.72,
+          angleDeg: -35,
+          distanceRatio: 0.76,
           color: {
             border: 'border-emerald-500/50',
             bg: 'bg-emerald-950/70',
@@ -349,7 +349,7 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+10 HP, -20 Stress',
           flavor: 'Tranh bóng trên sân đất nứt nẻ, mồ hôi ướt đẫm lưng áo mà vui hết nấc',
-          angleDeg: 10,
+          angleDeg: -5,
           distanceRatio: 0.75,
           color: {
             border: 'border-amber-500/50',
@@ -367,8 +367,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+Khám phá, Nuôi dưỡng tâm hồn',
           flavor: 'Trèo cây hái quả dại, lội mương bắt ốc cùng đám bạn xóm dưới',
-          angleDeg: 80,
-          distanceRatio: 0.74,
+          angleDeg: 35,
+          distanceRatio: 0.68,
           color: {
             border: 'border-teal-500/50',
             bg: 'bg-teal-950/70',
@@ -385,8 +385,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+Hảo cảm, Gia đạo thuận hòa',
           flavor: 'Ngồi bên mâm cơm tối kể chuyện trường lớp, nghe cha thở dài chuyện tiền nong',
-          angleDeg: 145,
-          distanceRatio: 0.75,
+          angleDeg: 140,
+          distanceRatio: 0.65,
           color: {
             border: 'border-amber-500/40',
             bg: 'bg-amber-500/10',
@@ -407,8 +407,8 @@ export default function DynamicLifeTree({
           gainText: 'ĐỘT PHÁ SỐ MỆNH',
           flavor: breakthroughAction.description,
           isBreakthrough: true,
-          angleDeg: -160,
-          distanceRatio: 0.88,
+          angleDeg: -90,
+          distanceRatio: 0.58,
           color: {
             border: 'border-amber-400',
             bg: 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950',
@@ -432,8 +432,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+$1.5k~$3k Thặng dư',
         flavor: 'Tăng ca mỏi mắt bên bàn làm việc, đổi mồ hôi lấy từng đồng tiền nuôi sống bản thân',
-        angleDeg: -150, // Cành Hoàng Kim Tài Sản
-        distanceRatio: 0.74,
+        angleDeg: -145, // Cành Hoàng Kim Tài Sản
+        distanceRatio: 0.76,
         color: {
           border: 'border-emerald-500/50',
           bg: 'bg-emerald-950/70',
@@ -450,8 +450,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+8 Karma, Nâng trình chuyên môn',
         flavor: 'Thức trắng đêm nghiên cứu tài liệu chuyên ngành, mở rộng tầm nhìn học thuật',
-        angleDeg: -105, // Cành Trí Tuệ & Tố Chất
-        distanceRatio: 0.76,
+        angleDeg: -90, // Đỉnh ngọn Thần Mộc (dưới card Quý Nhân)
+        distanceRatio: 0.58,
         color: {
           border: 'border-sky-500/50',
           bg: 'bg-sky-950/70',
@@ -469,7 +469,7 @@ export default function DynamicLifeTree({
         gainText: 'Gặp gỡ tri kỷ, Mở lối làm ăn',
         flavor: 'Mời ly cà phê vỉa hè hay bữa tối thân tình, kết nối những mối quan hệ vàng ngọc',
         angleDeg: -35, // Cành Nhân Mạch Quý Nhân
-        distanceRatio: 0.75,
+        distanceRatio: 0.76,
         color: {
           border: 'border-amber-500/40',
           bg: 'bg-amber-500/10',
@@ -486,7 +486,7 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: 'Cơ hội x2 vốn hoặc rút củi',
         flavor: 'Đặt lệnh mua mã cổ phiếu tiềm năng, tim đập thình thịch theo từng nhịp bảng điện tử',
-        angleDeg: 155, // Nhánh Kinh Doanh & Đầu Cơ
+        angleDeg: -5, // Cánh Đông
         distanceRatio: 0.75,
         color: {
           border: 'border-pink-500/50',
@@ -504,8 +504,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+15 Sinh lực, -25 Stress',
         flavor: 'Tắm nước nóng xua tan cơn đau nhức xương khớp, ngủ một giấc sâu không mộng mị',
-        angleDeg: 70, // Gắn với Thân Cây & Cội Rễ Sinh Mệnh
-        distanceRatio: 0.74,
+        angleDeg: 140, // Cội Rễ Sinh Mệnh Tây Nam
+        distanceRatio: 0.65,
         color: {
           border: 'border-teal-500/50',
           bg: 'bg-teal-950/70',
@@ -526,8 +526,8 @@ export default function DynamicLifeTree({
         gainText: 'ĐỘT PHÁ SỐ MỆNH',
         flavor: breakthroughAction.description,
         isBreakthrough: true,
-        angleDeg: -15, // Quả cầu vận mệnh bừng sáng trên cành hoàng kim
-        distanceRatio: 0.88,
+        angleDeg: -65, // Vươn cao Đông Bắc
+        distanceRatio: 0.75,
         color: {
           border: 'border-amber-400',
           bg: 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950',
@@ -1006,7 +1006,10 @@ export default function DynamicLifeTree({
               )}
 
               {/* Avatar Frame Canvas with Dais Base */}
-              <div className="w-18 h-24 sm:w-22 sm:h-28 rounded-2xl overflow-hidden border border-emerald-500/40 bg-gradient-to-t from-slate-950 via-slate-900 to-emerald-950/60 shadow-2xl relative transition-transform group-hover:scale-105 active:scale-95">
+              <div
+                className="w-20 h-28 sm:w-24 sm:h-32 rounded-2xl overflow-hidden border border-emerald-500/50 bg-gradient-to-t from-slate-950 via-slate-900 to-emerald-950/70 shadow-2xl relative transition-transform group-hover:scale-105 active:scale-95 shrink-0"
+                style={{ width: '88px', height: '116px' }}
+              >
                 <SpineCharacterAvatar
                   nationality={character?.nationality || 'Việt Nam'}
                   gender={character?.gender || 'male'}
@@ -1200,9 +1203,9 @@ export default function DynamicLifeTree({
           <ellipse cx={centerX} cy={488} rx={280} ry={24} fill="#0b1120" stroke="#1e293b" strokeWidth="2" />
           <ellipse cx={centerX} cy={488} rx={250} ry={16} fill="rgba(15,23,42,0.95)" stroke="#334155" strokeWidth="1" />
 
-          {/* Glowing Meridian Threads: Avatar Dan-Tien (105, 450) to Root Base (360, 480) */}
+          {/* Glowing Meridian Threads: Avatar Dan-Tien (65, 470) to Root Base (360, 480) */}
           <path
-            d="M 105 450 C 185 470, 270 482, 360 480"
+            d="M 65 470 C 160 482, 260 488, 360 480"
             fill="none"
             stroke="url(#avatarToTreeMeridian)"
             strokeWidth="3.5"
@@ -1210,7 +1213,7 @@ export default function DynamicLifeTree({
             className="animate-[dash_1.5s_linear_infinite]"
           />
           <path
-            d="M 105 450 C 190 485, 280 495, 360 485"
+            d="M 65 470 C 165 492, 265 496, 360 485"
             fill="none"
             stroke="rgba(56, 189, 248, 0.4)"
             strokeWidth="2"
@@ -1222,29 +1225,54 @@ export default function DynamicLifeTree({
           <g className="procedural-tree-trunk" id="proceduralTreeTrunk">
             {growthStage === 'sprout' && (
               <g className="stage-sprout">
-                {/* Curved delicate seedling stem */}
+                {/* Sacred Seed (Hạt Giống Thần Thoại Khởi Nguyên) */}
+                <ellipse cx="360" cy="480" rx="22" ry="14" fill="#064e3b" stroke="#10b981" strokeWidth="2.5" filter="url(#coreGlow)" />
+                <ellipse cx="360" cy="478" rx="16" ry="9" fill="#10b981" opacity="0.4" />
+
+                {/* 3D Curved Seedling Trunk (Thân Mầm Ngọc Bích Khối Trụ) */}
                 <path
-                  d="M 360 480 C 350 390, 370 320, 360 270"
-                  stroke={treeHealthState === 'withered' ? '#78350f' : 'url(#sproutGradient)'}
-                  strokeWidth="16"
-                  strokeLinecap="round"
+                  d="M 351 480 C 344 380, 354 310, 360 270 C 366 310, 376 380, 369 480 Z"
+                  fill={treeHealthState === 'withered' ? 'url(#witheredBarkGradient)' : 'url(#sproutGradient)'}
+                  stroke={treeHealthState === 'withered' ? '#450a0a' : '#047857'}
+                  strokeWidth="2.5"
+                />
+
+                {/* Internal Mana Sap Meridian in Sprout */}
+                <path
+                  d="M 360 475 C 356 385, 362 310, 360 270"
+                  stroke="url(#manaSapGradient)"
+                  strokeWidth="4"
+                  strokeDasharray="6 4"
                   fill="none"
+                  className="animate-pulse"
                 />
-                {/* Cotyledon baby leaves */}
+
+                {/* Left Cotyledon Baby Leaf (Lá Mầm Ngọc Bích Trái) */}
                 <path
-                  d="M 360 340 C 310 310, 275 330, 270 355 C 295 370, 335 355, 360 340 Z"
+                  d="M 358 340 C 295 295, 240 320, 235 350 C 270 375, 325 355, 358 340 Z"
                   fill={treeHealthState === 'withered' ? '#713f12' : '#10b981'}
+                  stroke={treeHealthState === 'withered' ? '#451a03' : '#34d399'}
+                  strokeWidth="2"
                   filter="url(#coreGlow)"
                 />
+                {/* Left leaf internal glowing vein */}
+                <path d="M 358 340 Q 300 330, 245 348" stroke="#a7f3d0" strokeWidth="2" strokeDasharray="3 3" fill="none" opacity="0.8" />
+
+                {/* Right Cotyledon Baby Leaf (Lá Mầm Ngọc Bích Phải) */}
                 <path
-                  d="M 360 330 C 410 300, 445 320, 450 345 C 425 360, 385 345, 360 330 Z"
+                  d="M 362 335 C 425 290, 480 315, 485 345 C 450 370, 395 350, 362 335 Z"
                   fill={treeHealthState === 'withered' ? '#854d0e' : '#34d399'}
+                  stroke={treeHealthState === 'withered' ? '#451a03' : '#6ee7b7'}
+                  strokeWidth="2"
                   filter="url(#coreGlow)"
                 />
-                {/* Root threads */}
-                <path d="M 360 480 Q 320 495, 270 505" stroke="#059669" strokeWidth="3" strokeDasharray="4 4" fill="none" />
-                <path d="M 360 480 Q 400 495, 450 505" stroke="#059669" strokeWidth="3" strokeDasharray="4 4" fill="none" />
-                <path d="M 360 480 Q 350 500, 340 512" stroke="#059669" strokeWidth="2.5" strokeDasharray="3 3" fill="none" />
+                {/* Right leaf internal glowing vein */}
+                <path d="M 362 335 Q 420 325, 475 343" stroke="#d1fae5" strokeWidth="2" strokeDasharray="3 3" fill="none" opacity="0.8" />
+
+                {/* Root capillary threads */}
+                <path d="M 360 485 Q 315 500, 260 508" stroke="#059669" strokeWidth="3" strokeDasharray="4 4" fill="none" />
+                <path d="M 360 485 Q 405 500, 460 508" stroke="#059669" strokeWidth="3" strokeDasharray="4 4" fill="none" />
+                <path d="M 360 485 Q 350 504, 340 514" stroke="#059669" strokeWidth="2.5" strokeDasharray="3 3" fill="none" />
               </g>
             )}
 
@@ -1542,10 +1570,12 @@ export default function DynamicLifeTree({
                 else if (onTimeSkip) onTimeSkip();
               }
             }}
-            className={`absolute z-20 w-28 h-28 sm:w-32 sm:h-32 rounded-full flex flex-col items-center justify-center p-2 text-center select-none shadow-2xl transition-all duration-300 cursor-pointer group ${
+            className={`absolute z-20 -translate-x-1/2 -translate-y-1/2 w-28 h-28 sm:w-32 sm:h-32 rounded-full flex flex-col items-center justify-center p-2 text-center select-none shadow-2xl transition-all duration-300 cursor-pointer group ${
               actionPoints === 0 ? 'hover:scale-110 active:scale-95 animate-pulse' : ''
             }`}
             style={{
+              left: '50%',
+              top: `${(centerY / canvasHeight) * 100}%`,
               background: actionPoints === 0
                 ? 'radial-gradient(circle, rgba(245,158,11,0.6) 0%, rgba(180,83,9,0.4) 50%, rgba(15,23,42,0.95) 85%)'
                 : 'radial-gradient(circle, rgba(99,102,241,0.38) 0%, rgba(15,23,42,0.95) 75%)',
