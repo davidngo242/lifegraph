@@ -869,3 +869,29 @@ Nhằm đảm bảo trải nghiệm chơi game sâu sắc, lôi cuốn và chân
 ### 22.3. Quy Định Về Tooltip & Microcopy Trên Giao Diện
 * **Tooltip chức năng:** Ngắn gọn dưới 20 từ, chỉ rõ lợi ích và cái giá phải trả (Trade-off). Không viết văn hoa.
 * **Badge & Nhãn trạng thái:** Dùng ngôn ngữ bình dị, dễ hiểu: `Đói lả`, `Nợ ngập đầu`, `Lưng đau nhức`, `Ấm no`, `Thảnh thơi`.
+
+---
+
+## 23. Tiêu Chuẩn Thẩm Định UI/UX & Khắc Phục Bệnh Nhồi Nhét Box (Decluttering & Organic Tree Standard v4.5)
+
+Nhằm chấm dứt tình trạng giao diện bị rối mắt, xếp lớp hình hộp chữ nhật vô tội vạ ("boxes inside boxes") và thiếu linh hồn nghệ thuật:
+
+### 23.1. Bệnh Lý Giao Diện "Kỹ Sư Thiết Kế" (Engineer-Designed UI Syndrome)
+1. **Lồng ghép hộp vô tận (Box Stacking):** Đặt thẻ card bên trong một thẻ card khác, mỗi thẻ lại có đường viền đậm (border), góc bo và thanh tiêu đề lặp lại.
+2. **Trùng lặp chỉ số (Metric Redundancy):** Hiển thị số AP khả dụng tại 3 vị trí khác nhau trong phạm vi chưa đầy 500px (thanh ngoài, header thẻ con, tâm lõi cây).
+3. **Cắt cụt nhãn hành động (Ellipsis Truncation):** Áp dụng `truncate max-w-[110px]` cơ học khiến các tên hành động giàu cảm xúc bị xén cụt thành `Tập Nói & Khám ...`, `Làm Nũng Phụ ...`.
+4. **Nút bấm thừa thãi ("Qua Năm (+1t)"):** Nút bấm cưỡng ép xuất hiện trơ trọi, phá vỡ logic dòng chảy tự nhiên và khiến người chơi cảm thấy bị "kẹt cứng" khi AP = 0.
+
+### 23.2. Tiêu Chuẩn "Đại Thụ Hít Thở" (Breathing Canopy & Spatial Hierarchy)
+1. **Thanh Chân Trời Tối Giản (Slim Sacred Canopy Horizon Bar):**
+   * Thay thế hoàn toàn 3 khối hộp chữ nhật đồ sộ (`Nhánh Kỹ Năng`, `Nhân Mạch Quý Nhân`, `Cành Hoàng Kim`) bằng **1 thanh ngang duy nhất (cao 36px)** sử dụng hiệu ứng kính mờ (glassmorphism) và các pill badge gọn gàng.
+   * Giải phóng hơn **120px không gian dọc**, đưa Cây Sinh Mệnh trở thành tâm điểm thị giác khoáng đạt của toàn bộ màn hình.
+2. **Cội Nguồn Sinh Mệnh Chuyển Trạng Thái Linh Hoạt (Interactive Soul Core):**
+   * *Khi còn AP:* Tâm lõi hiển thị số AP thanh nhã kèm nhịp rung năng lượng nhẹ.
+   * *Khi hết AP (AP = 0):* Tâm lõi tự động bừng sáng thành **Cổng Chuyển Tiếp Giao Thừa (Golden Amber Ritual Portal)** với nhãn `✨ Giao Thừa • Gieo Mầm →`, bao phủ bởi vầng hào quang hổ phách ấm áp. Người chơi chạm nhẹ vào lõi cây để mở ngay `YearEndReflectionModal` đúc kết năm cũ và gieo mầm tâm nguyện năm mới.
+3. **Mầm Cây Ấu Thơ Uốn Lượn Hữu Cơ (Organic Seedling Stem at Age 0):**
+   * Thân mầm non tại Tuổi 0 được tạo hình đường cong vector S-curve mềm mại đâm chồi từ lòng đất mẹ, hai lá mầm ôm lấy lõi sinh mệnh cùng mạng lưới rễ tơ đâm sâu vào tầng Gốc Rễ Gia Đình.
+4. **Quy Tắc Không Cắt Cụt Tên Hành Động (Zero Truncation Rule):**
+   * Tăng độ rộng viên thuốc hành động lên `min-w-[125px] max-w-[155px]`, cho phép text xuống dòng tự nhiên (`whitespace-normal leading-tight`), bảo toàn 100% tên gọi hành động nguyên vẹn.
+5. **Cơ Chế Phê Duyệt UI/UX Độc Lập:**
+   * Mọi màn hình trước khi trình Sếp bắt buộc phải vượt qua bước thẩm định trực quan của **Senior UI/UX & Interaction Art Director** theo danh mục tiêu chí tại `.agents/skills/full-dev-workflow/SKILL.md`.

@@ -2017,31 +2017,9 @@ export default function LifeGraphPage() {
               <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-4 min-w-0 w-full">
                 {/* 1. Khoang Hoạt Động & Nguồn Lực Sinh Tồn (Annual Activity & Resource Hub) */}
                 <div className="w-full rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-card)] backdrop-blur-2xl shadow-2xl overflow-hidden flex flex-col transition-colors duration-200">
-                  {/* Header: Hiển thị Vòng đời năm nay, số AP khả dụng */}
-                  <div className="px-4 py-3 bg-[var(--bg-card-subtle)] border-b border-[var(--border-subtle)] flex items-center justify-between gap-3 flex-wrap">
-                    <div className="flex items-center gap-2">
-                      <span className="text-base">⚡</span>
-                      <span className="text-xs md:text-sm font-bold text-[var(--text-primary)] tracking-wide">
-                        Hoạt Động Thường Niên (Tuổi {character?.age ?? 0})
-                      </span>
-                      <span className="text-[11px] font-sans text-[var(--text-secondary)] italic hidden sm:inline">
-                        — Dùng AP để phát triển bản thân, gia tăng thu nhập &amp; gìn giữ sức khỏe
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-semibold text-amber-300">
-                        <Zap className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                        <span className="font-mono font-bold">{character?.action_points ?? 0}</span>
-                        <span className="text-[var(--text-secondary)] text-[11px]">/ {character?.total_ap ?? 3} AP</span>
-                      </div>
-                      
-                    </div>
-                  </div>
-
-                  {/* Body: ActionPointHub isEmbedded={true} đưa lên vị trí trọng tâm */}
+                  {/* Body: Đại Thụ Sinh Mệnh Toàn Năng (Dynamic Unified Life Tree) */}
                   {character && (
-                    <div className="p-3 md:p-4 pt-2">
+                    <div className="p-2 sm:p-3">
                       <ActionPointHub
                         isEmbedded={true}
                         actionPoints={character.action_points || 0}
@@ -2068,7 +2046,8 @@ export default function LifeGraphPage() {
                         onWellness={handleWellness}
                         onGamble={handleGamble}
                         onNetwork={handleNetworkAction}
-                        onTimeSkip={handleTimeSkipContinue}
+                        onTimeSkip={() => setIsYearEndModalOpen(true)}
+                        onOpenYearEndReflection={() => setIsYearEndModalOpen(true)}
                         onOpenSkillHub={() => setShowSkillSelector(true)}
                         onLaunchMiniGame={(type) => launchMiniGame(type)}
                         onUnlockSkill={handleUnlockSkill}

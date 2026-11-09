@@ -33,11 +33,12 @@ Skill này quy định phương thức quản trị dự án, thiết kế sản
 
 | Nhân sự Sub-Agent | Chức danh chuyên môn | Trọng tâm công việc |
 | :--- | :--- | :--- |
-| **1. BA Expert** | Senior Business Analyst & Product Design Specialist | Thẩm định trải nghiệm người dùng (UX/UI), phát hiện bẫy tâm lý / dark pattern, xóa bỏ dư thừa thông tin, chuẩn hóa User Journey và lập User Stories + Acceptance Criteria. |
-| **2. Coder** | Feature Developer & Systems Engineer | Thiết kế giải pháp kỹ thuật, viết mã nguồn sạch (Clean Code), refactor và tự xác thực biên dịch build không lỗi. |
-| **3. Reviewer** | Senior Code Reviewer & Security Auditor | Rà soát `git diff`, logic nghiệp vụ, bảo mật, hiệu năng, edge cases và đối chiếu nghiệm thu so với đặc tả của BA. |
-| **4. Tester** | QA & Test Automation Engineer | Thiết kế test matrix, viết unit/integration tests, chạy bộ test tự động (`npm test`, stress-test suites) đảm bảo không có hồi quy (regression). |
-| **5. Doc Writer** | Technical Writer & Knowledge Custodian | **Chịu trách nhiệm sống còn về lưu vết tài liệu:** Tự động đồng bộ các cập nhật kiến trúc mới nhất vào `SKILL.md`, `docs/ui-standards.md`, API specs và changelog ngay sau khi test pass. |
+| **1. BA Expert** | Senior Business Analyst & Product Specialist | Thẩm định logic sản phẩm, bẫy tâm lý / dark pattern, chuẩn hóa User Journey, giải thuật nghiệp vụ và lập User Stories + Acceptance Criteria. |
+| **2. UI/UX Specialist** | Senior UI/UX & Interaction Art Director | **Chuyên trách tối thượng về thẩm mỹ và trải nghiệm:** Triệt tiêu rác thị giác (Decluttering), phân tầng thị giác (Visual Hierarchy), đảm bảo khoảng thở (Breathing Space), chống nhồi nhét box-in-box, thiết kế đồ họa hữu cơ nghệ thuật và cảm xúc người dùng (Emotional UI). |
+| **3. Coder** | Feature Developer & Systems Engineer | Thiết kế giải pháp kỹ thuật, viết mã nguồn sạch (Clean Code), refactor và tự xác thực biên dịch build không lỗi. |
+| **4. Reviewer** | Senior Code Reviewer & Security Auditor | Rà soát `git diff`, logic nghiệp vụ, bảo mật, hiệu năng, edge cases và đối chiếu nghiệm thu so với đặc tả của BA & UI/UX. |
+| **5. Tester** | QA & Test Automation Engineer | Thiết kế test matrix, viết unit/integration tests, chạy bộ test tự động (`npm test`, stress-test suites) đảm bảo không có hồi quy (regression). |
+| **6. Doc Writer** | Technical Writer & Knowledge Custodian | **Chịu trách nhiệm sống còn về lưu vết tài liệu:** Tự động đồng bộ các cập nhật kiến trúc mới nhất vào `SKILL.md`, `docs/ui-standards.md`, API specs và changelog ngay sau khi test pass. |
 
 ---
 
@@ -48,13 +49,14 @@ flowchart TD
     Boss["1. Sếp Giao Chỉ Đạo & Mục Tiêu"] --> PM["2. PM Phân Loại Độ Phức Tạp"]
     
     PM -- "Việc Đơn Giản / Hotfix" --> DirectExec["PM Tự Xử Lý Trực Tiếp"]
-    PM -- "Việc Lớn / Cần Đánh Giá Sâu" --> BAPhase["Subagent BA Expert: UX & Requirements Audit"]
+    PM -- "Việc Lớn / Cần Đánh Giá Sâu" --> BAPhase["Subagent BA: Logic & Requirements"]
+    BAPhase --> UIUXPhase["Subagent UI/UX: Decluttering & Visual Hierarchy"]
     
-    BAPhase --> DevPhase["PM / Coder: Thiết kế Kiến trúc & Triển khai Code"]
+    UIUXPhase --> DevPhase["PM / Coder: Triển khai Code & Refactor"]
     DirectExec --> QualityGate
-    DevPhase --> QualityGate{"3. Quality Gate: Reviewer + Tester"}
+    DevPhase --> QualityGate{"3. Quality Gate: UI/UX + Reviewer + Tester"}
     
-    QualityGate -- "Có Lỗi / Chưa Đạt" --> FixLoop["Sửa Lỗi & Tối Ưu Ngay Lập Tức"]
+    QualityGate -- "Có Lỗi / Rối Mắt" --> FixLoop["Sửa Lỗi & Tinh Giản Giao Diện"]
     FixLoop --> QualityGate
     
     QualityGate -- "Pass 100%" --> DocPhase["4. BẮT BUỘC: Cập nhật Specs vào SKILL.md & docs/"]
@@ -178,6 +180,23 @@ flowchart TD
   - Năm có Biến Cố Ngã Rẽ Lớn (Threshold Milestones: 6t vào lớp 1, 18t đại học/khởi nghiệp, 28t hôn nhân/nhà cửa, 42t bước ngoặt nghề, 65t di chúc/sinh tử): Mở **Sân Khấu Tâm Thức Trong Gốc Cây** với 3 lăng kính bản ngã (Lý Trí, Trái Tim, Bản Năng).
 * **Chuỗi chuyển tiếp tự nhiên:** Giải quyết xong biến cố bằng xúc xắc D20 $\rightarrow$ Tự động chuyển tiếp vào Nghi Thức Chiêm Nghiệm Giao Thừa $\rightarrow$ Bước sang tuổi mới liền mạch.
 * **Sự liên kết chỉ số toàn diện:** Ngoại hình Chibi 3D & Linh thú MOBA, độ lớn của Đại Thụ, các sự kiện trên Narrative Feed đều đồng bộ 100% về mặt nhịp thở và câu chuyện.
+
+### 4.10. Quy Chuẩn Thẩm Định UI/UX & Khắc Phục Bệnh "Nhồi Nhét Box" (Mandatory UI/UX Decluttering Standard)
+> [!IMPORTANT]
+> **CHỈ THỊ CỦA SẾP VỀ THẨM ĐỊNH UI/UX:** Tuyệt đối không để sản phẩm rơi vào tình trạng "kỹ sư làm giao diện" — nhồi nhét quá nhiều box lồng box, lặp lại chỉ số AP nhiều lần, chữ bị cắt ba chấm (`...`), các nút tăng tuổi cơ học tồn dư và cây sinh mệnh cụt lủn thiếu tính nghệ thuật.
+
+1. **Nguyên Tắc "Không Quá 3 Tầng Box" (Max 3-Tier Nesting):**
+   - Loại bỏ các card bao bọc thừa thãi (như hàng 3 box to tướng dưới Tabs).
+   - Dành tối thiểu 45% diện tích màn hình làm "khoảng thở" cho cây sinh mệnh vươn cành hữu cơ.
+2. **Quy Chuẩn Node Hành Động (Zero-Truncation Action Capsules):**
+   - Tên hành động và chỉ số tác động phải hiển thị trọn vẹn, không bao giờ dùng `text-truncate` với dấu ba chấm trên các nút chính.
+   - Thiết kế dạng viên nang ánh sáng (Floating Capsule Glassmorphism) với icon to rõ, viền neon tinh tế.
+3. **Mầm Non & Thần Mộc Hữu Cơ (Living Organic Flora):**
+   - Mầm non (0-5t) phải là chồi búp măng mập mạp, cong chữ S tự nhiên ôm lấy lõi sinh mệnh, không phải một que cắm bóng.
+   - Vòng vân gỗ tích hợp trang trọng dưới bệ phong thủy chân cây.
+4. **Luồng Giao Thừa Tự Động Khi Hết AP (Auto Year-End Ritual Flow):**
+   - Xóa bỏ 100% các nút cơ học `⏩ Qua Năm (+1t)`.
+   - Khi AP = 0, lõi sinh mệnh chuyển sang hào quang hổ phách `"✨ Chiêm Nghiệm Cuối Năm"`, dẫn dắt người chơi vào `YearEndReflectionModal` mượt mà không độ trễ.
 
 ---
 

@@ -60,6 +60,7 @@ export interface ActionPointHubProps {
   onFastForwardToSchool?: () => void;
   onAnnualFocus?: (focusType: 'hustle' | 'study' | 'wellness') => Promise<string | void>;
   onTimeSkip?: () => void;
+  onOpenYearEndReflection?: () => void;
   onLaunchMiniGame: (gameType: MiniGameType) => void;
   onOpenSkillHub?: () => void;
   onUnlockSkill?: (skillId: string) => Promise<void>;
@@ -100,6 +101,7 @@ export default function ActionPointHub({
   onFastForwardToSchool,
   onAnnualFocus,
   onTimeSkip,
+  onOpenYearEndReflection,
   onLaunchMiniGame,
   onOpenSkillHub,
   onUnlockSkill,
@@ -191,6 +193,7 @@ export default function ActionPointHub({
         onBreakthrough={onBreakthrough ? () => handleAction('breakthrough', onBreakthrough, breakthroughAction?.costAp || 2, breakthroughAction?.costCash || 0) : undefined}
         onFastForwardToSchool={onFastForwardToSchool}
         onTimeSkip={onTimeSkip}
+        onOpenYearEndReflection={onOpenYearEndReflection}
         onOpenAssets={onOpenAssets}
         onOpenFamily={onOpenFamily}
         onOpenSkillHub={onOpenSkillHub}
