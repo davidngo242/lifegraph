@@ -282,27 +282,54 @@ function ProceduralCharacterMesh({
     roughness: 0.4
   }), [isBaby]);
 
+  const holoScreenMaterial = useMemo(() => new THREE.MeshBasicMaterial({
+    color: '#38bdf8',
+    transparent: true,
+    opacity: 0.35,
+    side: THREE.DoubleSide
+  }), []);
+
+  const holoScreenAmberMaterial = useMemo(() => new THREE.MeshBasicMaterial({
+    color: '#fbbf24',
+    transparent: true,
+    opacity: 0.35,
+    side: THREE.DoubleSide
+  }), []);
+
+  const holoGlowCyan = useMemo(() => new THREE.MeshBasicMaterial({
+    color: '#38bdf8',
+    transparent: true,
+    opacity: 0.75
+  }), []);
+
+  const holoGlowAmber = useMemo(() => new THREE.MeshBasicMaterial({
+    color: '#fbbf24',
+    transparent: true,
+    opacity: 0.75
+  }), []);
+
   // Cloth Material based on nationality & status
   const clothMaterial = useMemo(() => {
     const nat = nationality.toLowerCase();
-    let clothColor = isFemale ? '#be185d' : '#4f46e5';
+    // Default: Regal Midnight Slate Anime Outfit (tránh màu xanh tím lòe loẹt AI)
+    let clothColor = isFemale ? '#be185d' : '#1e293b';
 
     if (isBaby) {
       clothColor = isFemale ? '#fbcfe8' : '#bae6fd';
     } else if (hasGarland || nat.includes('na uy') || nat.includes('norway')) {
-      clothColor = '#6b7d47'; // Olive Moss Green hệt ảnh mẫu
+      clothColor = '#556b2f'; // Olive Moss Green hệt ảnh mẫu
     } else if (nat.includes('việt')) {
       clothColor = isFemale ? '#0284c7' : '#047857'; // Áo dài xanh lam / xanh ngọc
     } else if (isWealthy) {
-      clothColor = isFemale ? '#4c0519' : '#0f172a';
+      clothColor = isFemale ? '#4c0519' : '#09090b'; // Luxury obsidian tuxedo
     } else if (burnout > 75) {
       clothColor = '#334155';
     }
 
     return new THREE.MeshStandardMaterial({
       color: clothColor,
-      roughness: isWealthy ? 0.45 : 0.75,
-      metalness: isWealthy ? 0.2 : 0.05,
+      roughness: isWealthy ? 0.35 : 0.65,
+      metalness: isWealthy ? 0.25 : 0.1,
     });
   }, [isBaby, burnout, isFemale, isWealthy, hasGarland, nationality]);
 
@@ -399,13 +426,17 @@ function ProceduralCharacterMesh({
       // 6. Mouth animation based on reaction
       if (mouthRef.current) {
         if (reaction === 'celebrate') {
-          mouthRef.current.scale.set(1.4, 1.4, 1.4);
+          mouthRef.current.scale.set(1.3, 1.3, 1.3);
+          mouthRef.current.rotation.z = Math.PI;
         } else if (reaction === 'shocked') {
-          mouthRef.current.scale.set(0.8, 1.8, 0.8);
+          mouthRef.current.scale.set(0.9, 1.4, 0.9);
+          mouthRef.current.rotation.z = Math.PI;
         } else if (reaction === 'exhausted') {
-          mouthRef.current.scale.set(1.1, 0.5, 1);
+          mouthRef.current.scale.set(1, 0.8, 1);
+          mouthRef.current.rotation.z = 0;
         } else {
           mouthRef.current.scale.set(1, 1, 1);
+          mouthRef.current.rotation.z = Math.PI;
         }
       }
 
@@ -606,12 +637,27 @@ function ProceduralCharacterMesh({
             <cylinderGeometry args={[isFemale ? 0.32 : 0.36, isFemale ? 0.28 : 0.32, 0.26, 32]} />
           </mesh>
 
-          {/* Shoulders */}
+          {/* Golden Royal Collar & Chest Medallion */}
+          <mesh position={[0, 0.27, 0.04]} rotation={[1.15, 0, 0]} material={goldMaterial}>
+            <torusGeometry args={[0.16, 0.015, 12, 32]} />
+          </mesh>
+          <mesh position={[0, 0.18, 0.21]} material={goldMaterial}>
+            <octahedronGeometry args={[0.038, 0]} />
+          </mesh>
+
+          {/* Shoulders & Golden Pauldrons (Cầu vai hoàng kim anime) */}
           <mesh position={[isFemale ? -0.34 : -0.38, 0.26, 0]} material={clothMaterial}>
             <sphereGeometry args={[isFemale ? 0.13 : 0.15, 16, 16]} />
           </mesh>
+          <mesh position={[isFemale ? -0.37 : -0.41, 0.32, 0]} rotation={[0, 0, 0.22]} material={goldMaterial}>
+            <boxGeometry args={[0.13, 0.035, 0.16]} />
+          </mesh>
+
           <mesh position={[isFemale ? 0.34 : 0.38, 0.26, 0]} material={clothMaterial}>
             <sphereGeometry args={[isFemale ? 0.13 : 0.15, 16, 16]} />
+          </mesh>
+          <mesh position={[isFemale ? 0.37 : 0.41, 0.32, 0]} rotation={[0, 0, -0.22]} material={goldMaterial}>
+            <boxGeometry args={[0.13, 0.035, 0.16]} />
           </mesh>
 
           {/* Left Arm & Hand (Skeletal Gotcha Pose Rigging) */}
@@ -624,6 +670,10 @@ function ProceduralCharacterMesh({
             </mesh>
             <mesh position={[0, -0.38, 0.04]} material={skinMaterial}>
               <cylinderGeometry args={[0.062, 0.054, 0.20, 16]} />
+            </mesh>
+            {/* Golden Wrist Bracer */}
+            <mesh position={[0, -0.42, 0.05]} material={goldMaterial}>
+              <cylinderGeometry args={[0.066, 0.060, 0.06, 16]} />
             </mesh>
             {/* Hand & Fingers */}
             <mesh position={[0, -0.50, 0.07]} material={skinMaterial}>
@@ -645,12 +695,51 @@ function ProceduralCharacterMesh({
             <mesh position={[0, -0.38, 0.04]} material={skinMaterial}>
               <cylinderGeometry args={[0.062, 0.054, 0.20, 16]} />
             </mesh>
+            {/* Golden Wrist Bracer */}
+            <mesh position={[0, -0.42, 0.05]} material={goldMaterial}>
+              <cylinderGeometry args={[0.066, 0.060, 0.06, 16]} />
+            </mesh>
             {/* Hand & Fingers */}
             <mesh position={[0, -0.50, 0.07]} material={skinMaterial}>
               <sphereGeometry args={[0.068, 16, 16]} />
             </mesh>
             <mesh position={[0.02, -0.48, 0.11]} rotation={[0.4, 0, 0]} material={skinMaterial}>
               <sphereGeometry args={[0.028, 10, 10]} />
+            </mesh>
+          </group>
+
+          {/* =========================================================================
+              3D IN-CANVAS HOLOGRAPHIC INTERFACE WINGS (Cánh Màn Hình Ma Pháp 3D Tinh Tế)
+              ========================================================================= */}
+          {/* Cánh Trái (Cyan Hologram Lens) */}
+          <group position={[-0.38, 0.04, 0.24]} rotation={[0.12, 0.44, -0.06]}>
+            <mesh material={holoScreenMaterial}>
+              <planeGeometry args={[0.34, 0.24]} />
+            </mesh>
+            <mesh material={holoGlowCyan}>
+              <ringGeometry args={[0.045, 0.055, 16]} />
+            </mesh>
+            <mesh position={[0, -0.05, 0.002]} material={holoGlowCyan}>
+              <planeGeometry args={[0.22, 0.012]} />
+            </mesh>
+            <mesh position={[0, -0.08, 0.002]} material={holoGlowCyan}>
+              <planeGeometry args={[0.16, 0.008]} />
+            </mesh>
+          </group>
+
+          {/* Cánh Phải (Amber / Gold Hologram Lens) */}
+          <group position={[0.38, 0.04, 0.24]} rotation={[0.12, -0.44, 0.06]}>
+            <mesh material={holoScreenAmberMaterial}>
+              <planeGeometry args={[0.34, 0.24]} />
+            </mesh>
+            <mesh material={holoGlowAmber}>
+              <ringGeometry args={[0.045, 0.055, 16]} />
+            </mesh>
+            <mesh position={[0, -0.05, 0.002]} material={holoGlowAmber}>
+              <planeGeometry args={[0.22, 0.012]} />
+            </mesh>
+            <mesh position={[0, -0.08, 0.002]} material={holoGlowAmber}>
+              <planeGeometry args={[0.16, 0.008]} />
             </mesh>
           </group>
 
@@ -841,10 +930,12 @@ function ProceduralCharacterMesh({
             </mesh>
           </group>
         ) : (
-          <mesh ref={mouthRef} position={[0, isChild ? -0.15 : -0.18, 0.43]}>
-            <sphereGeometry args={[isChild ? 0.042 : (isFemale ? 0.058 : 0.052), 16, 8]} />
-            <primitive object={lipMaterial} attach="material" />
-          </mesh>
+          <group position={[0, isChild ? -0.15 : -0.18, 0.44]}>
+            <mesh ref={mouthRef} rotation={[0, 0, Math.PI]}>
+              <torusGeometry args={[isChild ? 0.034 : (isFemale ? 0.046 : 0.042), 0.009, 8, 16, Math.PI]} />
+              <primitive object={lipMaterial} attach="material" />
+            </mesh>
+          </group>
         )}
 
         {/* =========================================================================
@@ -914,17 +1005,30 @@ function ProceduralCharacterMesh({
           ) : (
             /* STYLIZED MALE ANIME HAIRSTYLE */
             <group>
+              {/* Back & Dome Hair Volume */}
               <mesh position={[0, 0.22, -0.06]} material={hairMaterial}>
                 <sphereGeometry args={[0.5, 24, 24]} />
               </mesh>
-              <mesh position={[0, 0.36, 0.32]} rotation={[0.32, 0, 0]} material={hairMaterial}>
-                <boxGeometry args={[0.44, 0.13, 0.16]} />
+              {/* Front Swept Bangs (Tóc mái chéo anime tự nhiên) */}
+              <mesh position={[-0.12, 0.32, 0.34]} rotation={[0.25, 0.1, -0.15]} material={hairMaterial}>
+                <boxGeometry args={[0.28, 0.18, 0.16]} />
               </mesh>
-              <mesh position={[-0.42, 0.02, 0.05]} material={hairMaterial}>
-                <boxGeometry args={[0.09, 0.38, 0.18]} />
+              <mesh position={[0.15, 0.34, 0.33]} rotation={[0.22, -0.15, 0.18]} material={hairMaterial}>
+                <boxGeometry args={[0.26, 0.16, 0.15]} />
               </mesh>
-              <mesh position={[0.42, 0.02, 0.05]} material={hairMaterial}>
-                <boxGeometry args={[0.09, 0.38, 0.18]} />
+              {/* Side Locks (Tóc mai ôm hai má) */}
+              <mesh position={[-0.42, 0.04, 0.10]} rotation={[0, 0, -0.1]} material={hairMaterial}>
+                <boxGeometry args={[0.09, 0.36, 0.20]} />
+              </mesh>
+              <mesh position={[0.42, 0.04, 0.10]} rotation={[0, 0, 0.1]} material={hairMaterial}>
+                <boxGeometry args={[0.09, 0.36, 0.20]} />
+              </mesh>
+              {/* Top Hair Tufts / Spikes (Lọn tóc bồng bềnh đỉnh đầu) */}
+              <mesh position={[0, 0.52, 0.05]} rotation={[-0.15, 0, 0]} material={hairMaterial}>
+                <coneGeometry args={[0.12, 0.18, 8]} />
+              </mesh>
+              <mesh position={[-0.14, 0.48, -0.02]} rotation={[-0.1, 0, 0.2]} material={hairMaterial}>
+                <coneGeometry args={[0.10, 0.15, 8]} />
               </mesh>
             </group>
           )}

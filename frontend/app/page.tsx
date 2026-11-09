@@ -1891,18 +1891,19 @@ export default function LifeGraphPage() {
             </button>
           </Tooltip>
 
-          {/* Sharable Life Tarot Card Button */}
+          {/* Sharable Life Tarot Card & Dynasty Hall of Fame Button */}
           {character && (
             <Tooltip
               position="bottom"
-              content="Xuất thẻ bài vận mệnh Cyber-Tarot"
+              content="🏆 Sổ Vàng Thành Tựu & Thẻ Vận Mệnh Cyber-Tarot"
             >
               <button
                 onClick={() => setShowTarotCardModal(true)}
-                className="py-1 px-2 sm:px-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] hover:border-amber-500/50 text-[var(--text-secondary)] hover:text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95"
+                className="py-1 px-2.5 sm:px-3 rounded-xl bg-gradient-to-r from-amber-950/40 via-purple-950/40 to-slate-900/60 hover:from-amber-900/60 hover:to-purple-900/60 border border-amber-500/40 hover:border-amber-400 text-amber-200 hover:text-amber-100 text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-amber-950/30 transition-all active:scale-95 group"
               >
-                <span>🎴</span>
-                <span className="hidden xl:inline">Thẻ Bài</span>
+                <span className="text-amber-400 group-hover:scale-110 transition-transform">🏆</span>
+                <span className="hidden sm:inline font-medium">Sổ Vàng & Thẻ Bài</span>
+                <span className="sm:hidden font-medium">Sổ Vàng</span>
               </button>
             </Tooltip>
           )}

@@ -378,6 +378,138 @@ export const SCENARIO_MATRIX = [
     }
   },
   {
+    id: "tri_macro_real_estate_bubble",
+    interaction_type: "TRILEMMA",
+    tag: "macro_catastrophe",
+    min_age: 26,
+    max_age: 65,
+    target_vector: [0.35, 0.65, 0.10, 0.60, 0.40, 0.4],
+    title: "Cơn Sốt Đất Ảo & Vỡ Bong Bóng Bất Động Sản",
+    narrative: "Thị trường bất động sản đóng băng thanh khoản sau những đợt đầu cơ điên cuồng. Các ngân hàng siết chặt tín dụng, giá đất giảm không phanh. Những người ôm tài sản ngập trong nợ lãi, trong khi tiền mặt trở thành vua.",
+    trilemma_options: [
+      {
+        id: "RE_BUBBLE_A",
+        action_title: "Bán Tháo Cắt Lỗ (Bảo toàn vốn lưu động)",
+        consequence_hint: "Chấp nhận lỗ 20% định giá nhưng thu về lượng tiền mặt dồi dào, giải phóng nợ vay (-$15.000, -10 Stress).",
+        sacrifice_type: "cash",
+        effects: { cash_delta: -15000, burnout_delta: -10, karma_delta: 5 }
+      },
+      {
+        id: "RE_BUBBLE_B",
+        action_title: "Tử Thủ Gồng Lãi (Thắt lưng buộc bụng)",
+        consequence_hint: "Cắn răng trả lãi ngân hàng chờ chu kỳ mới hồi phục, bào mòn sức khỏe trầm trọng (-$30.000, HP -15, Burnout +25).",
+        sacrifice_type: "vitality",
+        effects: { cash_delta: -30000, vitality_delta: -15, burnout_delta: 25 }
+      },
+      {
+        id: "RE_BUBBLE_C",
+        action_title: "Ngược Dòng Bắt Đáy (Liều ăn nhiều)",
+        consequence_hint: "Dốc hết tài lực gom các mảnh đất vị trí vàng bị siết nợ với giá 50%, cược vận mệnh vào tương lai (-$45.000, Karma +15).",
+        sacrifice_type: "cash",
+        effects: { cash_delta: -45000, burnout_delta: 15, karma_delta: 15 }
+      }
+    ]
+  },
+  {
+    id: "tri_macro_crypto_stock_crash",
+    interaction_type: "TRILEMMA",
+    tag: "macro_catastrophe",
+    min_age: 24,
+    max_age: 60,
+    target_vector: [0.45, 0.55, 0.15, 0.55, 0.45, 0.4],
+    title: "Thiên Nga Đen: Sập Sàn Chứng Khoán & Khủng Hoảng Thanh Khoản",
+    narrative: "Một tập đoàn tài chính xuyên quốc gia sụp đổ domino, bảng điện tử ngập trong sắc đỏ lau sàn nhiều tuần liền. Các quỹ đầu tư đồng loạt kích hoạt lệnh bán giải chấp tự động, cuốn phăng tài sản của hàng triệu người chơi.",
+    trilemma_options: [
+      {
+        id: "CRASH_A",
+        action_title: "Đóng Bảng Điện Tử (Không nhìn không đau)",
+        consequence_hint: "Bảo toàn tâm lý bình an, coi như học phí trường đời, tập trung chuyên môn công việc chính (+10 Karma, -15 Stress).",
+        sacrifice_type: "vitality",
+        effects: { burnout_delta: -15, karma_delta: 10 }
+      },
+      {
+        id: "CRASH_B",
+        action_title: "Bơm Tiền Bắt Đáy Kỷ Lục (Gom cổ phiếu giá rẻ)",
+        consequence_hint: "Dùng lượng tiền mặt dự phòng gom tài sản chia 3 chia 4, đối mặt rủi ro kẹp vốn dài hạn (-$20.000, +20 Karma).",
+        sacrifice_type: "cash",
+        effects: { cash_delta: -20000, burnout_delta: 10, karma_delta: 20 }
+      },
+      {
+        id: "CRASH_C",
+        action_title: "Cắt Toàn Bộ Danh Mục (Rút về tiền mặt trú ẩn)",
+        consequence_hint: "Chấp nhận mất mát hiện tại để có giấc ngủ trọn vẹn, không còn nỗi lo thị trường (-$10.000, Vitality +10).",
+        sacrifice_type: "cash",
+        effects: { cash_delta: -10000, vitality_delta: 10, burnout_delta: -20 }
+      }
+    ]
+  },
+  {
+    id: "tri_macro_tech_layoff_wave",
+    interaction_type: "TRILEMMA",
+    tag: "macro_catastrophe",
+    min_age: 22,
+    max_age: 55,
+    target_vector: [0.50, 0.50, 0.20, 0.60, 0.40, 0.3],
+    title: "Làn Sóng Sa Thải Công Nghệ & Trí Tuệ Nhân Tạo Quét Qua",
+    narrative: "Các mô hình AI thế hệ mới tự động hóa hàng loạt quy trình phức tạp. Doanh nghiệp cắt giảm một nửa nhân sự để tối ưu biên lợi nhuận. Bạn và đồng nghiệp đứng trước nguy cơ mất việc hoặc phải làm gấp đôi công việc cũ.",
+    trilemma_options: [
+      {
+        id: "LAYOFF_A",
+        action_title: "Học Cấp Tốc Công Nghệ Mới (Làm chủ AI)",
+        consequence_hint: "Thức trắng nhiều đêm nâng cấp kỹ năng, biến công cụ thành đòn bẩy (+15 Trí tuệ, -10 HP, Burnout +20).",
+        sacrifice_type: "vitality",
+        effects: { vitality_delta: -10, burnout_delta: 20, karma_delta: 15 }
+      },
+      {
+        id: "LAYOFF_B",
+        action_title: "Tự Do Khởi Nghiệp Độc Lập (Solo Builder)",
+        consequence_hint: "Rời bỏ môi trường công sở, dùng kỹ năng xây dựng sản phẩm riêng kiếm thu nhập tự do (-$12.000, +25 Tự chủ).",
+        sacrifice_type: "cash",
+        effects: { cash_delta: -12000, burnout_delta: 5, karma_delta: 20 }
+      },
+      {
+        id: "LAYOFF_C",
+        action_title: "Chấp Nhận Giảm Lương Giữ Ghế (Ẩn mình an toàn)",
+        consequence_hint: "Nhún nhường chia sẻ khó khăn với công ty, giữ nguồn thu nhập ổn định qua cơn bão kinh tế (-$8.000).",
+        sacrifice_type: "cash",
+        effects: { cash_delta: -8000, burnout_delta: -5, karma_delta: 5 }
+      }
+    ]
+  },
+  {
+    id: "tri_macro_inflation_spike",
+    interaction_type: "TRILEMMA",
+    tag: "macro_catastrophe",
+    min_age: 20,
+    max_age: 70,
+    target_vector: [0.40, 0.60, 0.10, 0.50, 0.50, 0.3],
+    title: "Bão Giá Năng Lượng & Siêu Lạm Phát Phi Mã",
+    narrative: "Chi phí xăng dầu, điện nước và thực phẩm tăng chóng mặt từng ngày. Tiền lương không đuổi kịp giá cả ngoài chợ. Chiếc bánh mỳ hay bát phở quen thuộc đều tăng giá gấp đôi khiến ngân sách gia đình đảo lộn.",
+    trilemma_options: [
+      {
+        id: "INFLATION_A",
+        action_title: "Cắt Giảm Tiêu Dùng Tối Đa (Lối sống khắc kỷ)",
+        consequence_hint: "Tự nấu ăn tại nhà, hủy toàn bộ dịch vụ giải trí xa xỉ, bảo toàn tiền tiết kiệm (-10 Hạnh phúc, +10 Ý chí).",
+        sacrifice_type: "vitality",
+        effects: { burnout_delta: 5, karma_delta: 10 }
+      },
+      {
+        id: "INFLATION_B",
+        action_title: "Mua Vàng & Tài Sản Hiện Vật Trú Ẩn",
+        consequence_hint: "Đổi tiền mặt lấy vàng tích lũy chống trượt giá, bảo toàn sức mua đường dài (-$15.000 vốn lưu động, +15 Điềm tĩnh).",
+        sacrifice_type: "cash",
+        effects: { cash_delta: -15000, burnout_delta: -10, karma_delta: 15 }
+      },
+      {
+        id: "INFLATION_C",
+        action_title: "Gia Tăng Làm Thêm Nghề Tay Trái",
+        consequence_hint: "Chạy xe ôm công nghệ hoặc nhận thêm việc buổi tối để bù đắp thâm hụt (+ $6.000 tiền mặt, HP -12, Burnout +22).",
+        sacrifice_type: "vitality",
+        effects: { cash_delta: 6000, vitality_delta: -12, burnout_delta: 22 }
+      }
+    ]
+  },
+  {
     id: "tri_existential_crossroad",
     interaction_type: "TRILEMMA",
     tag: "impossible_triangle",

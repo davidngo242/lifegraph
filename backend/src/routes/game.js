@@ -3381,6 +3381,17 @@ router.post('/tick', async (req, res) => {
       character.history_log = history;
     }
 
+    // Tự động ghi nhật ký biến cố vĩ mô ngẫu nhiên (Quyết định 3)
+    if (passiveSummary?.macroShockNotice) {
+      const history = character.history_log || [];
+      history.push({
+        age: character.age,
+        event: "Biến Cố Vĩ Mô Thời Cuộc",
+        choice: passiveSummary.macroShockNotice
+      });
+      character.history_log = history;
+    }
+
     // Check if character died during passive phase or Reaper roll
     if (character.is_deceased) {
       await updateCharacter(character.id, character);

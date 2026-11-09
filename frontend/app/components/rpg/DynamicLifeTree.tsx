@@ -37,6 +37,7 @@ import { formatCurrency } from '../../utils/currencyUtils';
 import dynamic from 'next/dynamic';
 import SkillTreeTab from './SkillTreeTab';
 import SocialLinksTab from './SocialLinksTab';
+import { soundFx } from '../../utils/soundEffects';
 
 const Dynamic3DAvatar = dynamic(() => import('../Safe3DAvatar'), {
   ssr: false,
@@ -168,8 +169,14 @@ export default function DynamicLifeTree({
   const canEatMeal = household && !isParentsDeceased && (household.family_meals_available ?? 1) > 0;
   const canMentor = household && !isParentsDeceased && (household.family_mentorship_used !== characterAge);
 
+  // Spouse & Children (F2 Generation - Quyết định 2: Phương Án A)
+  const spouse = character?.spouse || relationships.find((r: any) => r.type === 'spouse' || r.type === 'partner' || r.relation === 'spouse');
+  const hasSpouse = Boolean(spouse);
+  const childrenList: any[] = character?.children || relationships.filter((r: any) => r.type === 'child' || r.relation === 'child') || [];
+
   // Interactive Avatar Poke / Voice
   const handleAvatarPoke = () => {
+    soundFx.playBirdChirp();
     const speeches = [
       'Linh khí đang cuồn cuộn chảy qua kinh mạch!',
       'Gốc rễ vững chãi, cành lá sinh sôi!',
@@ -431,9 +438,89 @@ export default function DynamicLifeTree({
       return nodes;
     }
 
-    // Stage 3 & Trưởng thành (18+ Tuổi)
-    const adultNodes: LifeTreeNode[] = [
-      {
+    // Stage 3 & Trưởng thành (18+ Tuổi): Dynamic Career Foliage (Quyết định 1)
+    const careerCategory = String(character?.career_category || character?.occupation_field || '').toLowerCase();
+    const jobTitle = String(character?.job || character?.career || character?.profession || '').toLowerCase();
+
+    let workNode: LifeTreeNode;
+    if (careerCategory.includes('health') || jobTitle.includes('bác sĩ') || jobTitle.includes('y tế') || jobTitle.includes('dược')) {
+      workNode = {
+        id: 'work_ot',
+        title: 'Ca Mổ Cấp Cứu',
+        category: 'career',
+        icon: '🩺',
+        apCost: 1,
+        gainText: '+$3.5k Thặng dư, +15 Karma',
+        flavor: 'Tập trung cao độ trong phòng mổ, giật lại sự sống cho bệnh nhân từ tay tử thần',
+        angleDeg: -145,
+        distanceRatio: 0.76,
+        color: {
+          border: 'border-emerald-500/50',
+          bg: 'bg-emerald-950/70',
+          glow: '#10b981',
+          text: 'text-emerald-300',
+          line: '#059669'
+        }
+      };
+    } else if (careerCategory.includes('tech') || jobTitle.includes('coder') || jobTitle.includes('kỹ sư') || jobTitle.includes('phần mềm') || jobTitle.includes('dev')) {
+      workNode = {
+        id: 'work_ot',
+        title: 'Kiến Trúc & Fix Bug Đêm',
+        category: 'career',
+        icon: '💻',
+        apCost: 1,
+        gainText: '+$3.2k Thặng dư, +10 Trí tuệ',
+        flavor: 'Tối ưu thuật toán chịu tải hàng triệu người dùng, hoàn thành bản phát hành quan trọng',
+        angleDeg: -145,
+        distanceRatio: 0.76,
+        color: {
+          border: 'border-cyan-500/50',
+          bg: 'bg-cyan-950/70',
+          glow: '#06b6d4',
+          text: 'text-cyan-300',
+          line: '#0891b2'
+        }
+      };
+    } else if (careerCategory.includes('finance') || careerCategory.includes('business') || jobTitle.includes('doanh') || jobTitle.includes('giám đốc') || jobTitle.includes('ceo')) {
+      workNode = {
+        id: 'work_ot',
+        title: 'Đàm Phán & Gọi Vốn',
+        category: 'career',
+        icon: '📊',
+        apCost: 1,
+        gainText: '+$4.5k Thặng dư, +Uy quyền',
+        flavor: 'Bảo vệ kế hoạch kinh doanh trước các quỹ mạo hiểm, ký kết hợp đồng thương mại lớn',
+        angleDeg: -145,
+        distanceRatio: 0.76,
+        color: {
+          border: 'border-amber-500/50',
+          bg: 'bg-amber-950/70',
+          glow: '#f59e0b',
+          text: 'text-amber-300',
+          line: '#d97706'
+        }
+      };
+    } else if (careerCategory.includes('art') || jobTitle.includes('nghệ sĩ') || jobTitle.includes('nhà văn') || jobTitle.includes('họa sĩ') || jobTitle.includes('thiết kế')) {
+      workNode = {
+        id: 'work_ot',
+        title: 'Sáng Tác Tuyệt Phẩm',
+        category: 'career',
+        icon: '🎨',
+        apCost: 1,
+        gainText: '+$2.8k, +Danh vọng vang xa',
+        flavor: 'Đốt cháy đam mê trên từng nét vẽ trang sách, tạo nên tác phẩm để đời cho công chúng',
+        angleDeg: -145,
+        distanceRatio: 0.76,
+        color: {
+          border: 'border-purple-500/50',
+          bg: 'bg-purple-950/70',
+          glow: '#a855f7',
+          text: 'text-purple-300',
+          line: '#9333ea'
+        }
+      };
+    } else {
+      workNode = {
         id: 'work_ot',
         title: 'Cày Cuốc Kiếm Tiền',
         category: 'career',
@@ -450,7 +537,11 @@ export default function DynamicLifeTree({
           text: 'text-emerald-300',
           line: '#059669'
         }
-      },
+      };
+    }
+
+    const adultNodes: LifeTreeNode[] = [
+      workNode,
       {
         id: 'study_specialty',
         title: 'Đèn Sách Tri Thức',
@@ -555,11 +646,13 @@ export default function DynamicLifeTree({
   const handleNodeClick = (node: LifeTreeNode) => {
     if (isLoading || actionPoints < node.apCost) return;
 
+    soundFx.playLeafRustle();
     setPulseActiveId(node.id);
     setTimeout(() => setPulseActiveId(null), 600);
 
-    // If healing action was selected, trigger radiant healing ripple
+    // If healing action was selected, trigger radiant healing ripple & sound
     if (node.id === 'restore_vitality' || node.id === 'sunbath' || node.id === 'eat_grow') {
+      soundFx.playHealingPulse();
       setHealingPulse(true);
       setTimeout(() => setHealingPulse(false), 1400);
     }
@@ -1140,6 +1233,23 @@ export default function DynamicLifeTree({
               <stop offset="100%" stopColor="#78350f" stopOpacity="0" />
             </radialGradient>
 
+            {/* Rose & Children Gradients (Quyết định 2: Phương Án A) */}
+            <linearGradient id="roseStemGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+              <stop offset="0%" stopColor="#047857" />
+              <stop offset="50%" stopColor="#10b981" />
+              <stop offset="100%" stopColor="#34d399" />
+            </linearGradient>
+            <radialGradient id="roseFlowerGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#ffe4e6" />
+              <stop offset="40%" stopColor="#f43f5e" />
+              <stop offset="100%" stopColor="#9f1239" />
+            </radialGradient>
+            <radialGradient id="childFruitGrad" cx="35%" cy="35%" r="65%">
+              <stop offset="0%" stopColor="#fed7aa" />
+              <stop offset="45%" stopColor="#fb923c" />
+              <stop offset="100%" stopColor="#ea580c" />
+            </radialGradient>
+
             <filter id="coreGlow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="7" result="blur" />
               <feMerge>
@@ -1414,6 +1524,128 @@ export default function DynamicLifeTree({
             )}
           </g>
 
+          {/* Spouse Ivy of Love (Quyết định 2: Phương Án A) */}
+          {hasSpouse && growthStage !== 'sprout' && (
+            <g className="spouse-ivy-of-love cursor-pointer" onClick={() => soundFx.playBirdChirp()}>
+              <title>{`🌹 Dây Leo Tình Duyên: ${spouse?.name || 'Bạn Đời'} (Độ Thấu Cảm: ${spouse?.affection_level || 90}%)`}</title>
+              {/* Helical Spiral Stem wrapped around trunk */}
+              <path
+                d="M 338 465 C 380 420, 332 375, 368 320 C 392 280, 342 245, 362 205"
+                stroke="url(#roseStemGradient)"
+                strokeWidth="4"
+                strokeLinecap="round"
+                fill="none"
+                filter="url(#coreGlow)"
+              />
+              <path
+                d="M 338 465 C 380 420, 332 375, 368 320 C 392 280, 342 245, 362 205"
+                stroke="#6ee7b7"
+                strokeWidth="1.5"
+                strokeDasharray="3 3"
+                fill="none"
+              />
+
+              {/* Blooming Ruby Rose Blossoms */}
+              {[
+                { cx: 356, cy: 425, r: 7 },
+                { cx: 342, cy: 350, r: 8.5 },
+                { cx: 374, cy: 285, r: 8 },
+                { cx: 358, cy: 215, r: 6.5 }
+              ].map((rose, idx) => (
+                <g key={`rose-${idx}`} className="transition-transform hover:scale-125 origin-center">
+                  <circle cx={rose.cx} cy={rose.cy} r={rose.r} fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                  <circle cx={rose.cx} cy={rose.cy} r={rose.r * 0.4} fill="#fef08a" />
+                </g>
+              ))}
+
+              {/* Floating Romance Heart Tag */}
+              <g transform="translate(378, 335)">
+                <rect x="0" y="0" width="84" height="20" rx="10" fill="#4c0519" stroke="#f43f5e" strokeWidth="1" opacity="0.9" />
+                <text x="8" y="14" fontSize="10" fill="#fecdd3" fontWeight="bold">🌹 {spouse?.name?.split(' ')[0] || 'Ý Trung Nhân'}</text>
+              </g>
+            </g>
+          )}
+
+          {/* Children Budding Orbs (Quyết định 2: Phương Án A - Búp Mầm Quả Non F2) */}
+          {childrenList.length > 0 && growthStage !== 'sprout' && (
+            <g className="children-budding-orbs">
+              {/* Family bough branching toward South-West */}
+              <path
+                d="M 345 365 C 290 395, 240 425, 175 440"
+                stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'}
+                strokeWidth="10"
+                strokeLinecap="round"
+                fill="none"
+              />
+              <path
+                d="M 345 365 C 290 395, 240 425, 175 440"
+                stroke="#10b981"
+                strokeWidth="2.5"
+                strokeDasharray="4 4"
+                fill="none"
+              />
+
+              {/* Dangling Golden Child Orbs */}
+              {childrenList.slice(0, 3).map((child: any, idx: number) => {
+                const childPos = [
+                  { stemX: 285, stemY: 395, fruitX: 285, fruitY: 422 },
+                  { stemX: 235, stemY: 418, fruitX: 235, fruitY: 448 },
+                  { stemX: 185, stemY: 438, fruitX: 185, fruitY: 468 }
+                ][idx] || { stemX: 285, stemY: 395, fruitX: 285, fruitY: 422 };
+
+                return (
+                  <g
+                    key={`child-orb-${child.id || idx}`}
+                    className="cursor-pointer group"
+                    onClick={() => {
+                      soundFx.playBabyChuckle();
+                      if (onNpcInteract) onNpcInteract(child.id, 'socialize');
+                    }}
+                  >
+                    <title>{`👶 Con Cái F2: ${child.name || 'Hài Nhi'} (${child.age ?? 0} tuổi)`}</title>
+                    {/* Hanging stalk */}
+                    <line
+                      x1={childPos.stemX}
+                      y1={childPos.stemY}
+                      x2={childPos.fruitX}
+                      y2={childPos.fruitY}
+                      stroke="#10b981"
+                      strokeWidth="2"
+                    />
+                    {/* Glowing Fruit Orb */}
+                    <circle
+                      cx={childPos.fruitX}
+                      cy={childPos.fruitY}
+                      r="13"
+                      fill="url(#childFruitGrad)"
+                      stroke="#fed7aa"
+                      strokeWidth="1.5"
+                      filter="url(#coreGlow)"
+                      className="animate-pulse"
+                      style={{ animationDuration: `${2.5 + idx * 0.5}s` }}
+                    />
+                    {/* Baby Emoji / Icon */}
+                    <text
+                      x={childPos.fruitX}
+                      y={childPos.fruitY + 4}
+                      textAnchor="middle"
+                      fontSize="11"
+                    >
+                      👶
+                    </text>
+                    {/* Child Name & Age Badge */}
+                    <g transform={`translate(${childPos.fruitX - 35}, ${childPos.fruitY + 16})`}>
+                      <rect x="0" y="0" width="70" height="16" rx="8" fill="#1e1b4b" stroke="#818cf8" strokeWidth="0.8" opacity="0.95" />
+                      <text x="35" y="11.5" textAnchor="middle" fontSize="9" fill="#e0e7ff" fontWeight="bold">
+                        {child.name?.split(' ').slice(-1)[0] || 'Con'} ({child.age ?? 0}t)
+                      </text>
+                    </g>
+                  </g>
+                );
+              })}
+            </g>
+          )}
+
           {/* Annual Tree Growth Rings (Vòng Vân Gỗ Đời Người) */}
           <g className="annual-growth-rings" id="annualGrowthRings">
             <ellipse cx={centerX} cy={485} rx={65} ry={15} fill="#381404" stroke="#78350f" strokeWidth="2" />
@@ -1534,6 +1766,7 @@ export default function DynamicLifeTree({
                   disabled={isLoading || isUnlocked || !canUnlock}
                   onClick={() => {
                     if (canUnlock && onUnlockSkill) {
+                      soundFx.playLevelUp();
                       onUnlockSkill(acupoint.id);
                     }
                   }}
@@ -1575,6 +1808,7 @@ export default function DynamicLifeTree({
           <div
             onClick={() => {
               if (actionPoints === 0) {
+                soundFx.playYearEndChime();
                 if (onOpenYearEndReflection) onOpenYearEndReflection();
                 else if (onTimeSkip) onTimeSkip();
               }

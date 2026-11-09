@@ -178,6 +178,60 @@ export async function processPassivePhase(character, assets, relationships) {
     }
   }
 
+  // 5.5 Macro Economic Shocks (Quyết định 3: Biến cố vĩ mô ngẫu nhiên)
+  let macroShockNotice = null;
+  let macroShockType = null;
+  if (age >= 22 && !macroCalamityNotice && !wealthDrainNotice && Math.random() < 0.15) {
+    const shockTypes = ['bubble', 'crash', 'inflation', 'layoff'];
+    const selected = shockTypes[Math.floor(Math.random() * shockTypes.length)];
+    if (selected === 'bubble') {
+      macroShockType = 'macro_real_estate_bubble';
+      flagsSet.add("macro_real_estate_bubble");
+      const reAssets = assets.filter(a => a.type === 'real_estate' || a.type === 'property' || (a.name || '').toLowerCase().includes('nhà') || (a.name || '').toLowerCase().includes('đất'));
+      if (reAssets.length > 0) {
+        for (const re of reAssets) {
+          re.current_value = Math.max(5000, Math.round(re.current_value * 0.75));
+          try { await updateAsset(re.id, { current_value: re.current_value }); } catch (_e) {}
+        }
+        macroShockNotice = "💥 BIẾN CỐ VĨ MÔ: Vỡ bong bóng địa ốc khiến giá trị các bất động sản sở hữu sụt giảm 25%!";
+      } else {
+        const rentHike = Math.min(Math.round(cash * 0.08), 3500);
+        cash = Math.max(0, cash - rentHike);
+        macroShockNotice = `💥 BIẾN CỐ VĨ MÔ: Cơn sốt đất ảo đẩy tiền thuê nhà phi mã, thâm hụt thêm $${rentHike.toLocaleString()} chi phí chỗ ở!`;
+      }
+    } else if (selected === 'crash') {
+      macroShockType = 'macro_crypto_stock_crash';
+      flagsSet.add("macro_crypto_stock_crash");
+      const stAssets = assets.filter(a => a.type === 'stocks' || a.type === 'crypto' || (a.name || '').toLowerCase().includes('cổ phiếu') || (a.name || '').toLowerCase().includes('coin'));
+      if (stAssets.length > 0) {
+        for (const st of stAssets) {
+          st.current_value = Math.max(1000, Math.round(st.current_value * 0.65));
+          try { await updateAsset(st.id, { current_value: st.current_value }); } catch (_e) {}
+        }
+        macroShockNotice = "📉 BIẾN CỐ VĨ MÔ: Thiên nga đen sập sàn tài chính khiến danh mục cổ phiếu/chứng khoán bốc hơi 35%!";
+      } else if (cash > 25000) {
+        const bargainGain = Math.round(cash * 0.08);
+        cash += bargainGain;
+        macroShockNotice = `📉 BIẾN CỐ VĨ MÔ: Sập sàn tài chính mở ra cơ hội vàng bắt đáy tài sản giá rẻ, thặng dư thêm +$${bargainGain.toLocaleString()}!`;
+      } else {
+        macroShockNotice = "📉 BIẾN CỐ VĨ MÔ: Sóng gió tài chính toàn cầu gây đóng băng tín dụng, môi trường kiếm tiền thắt chặt!";
+      }
+    } else if (selected === 'inflation') {
+      macroShockType = 'macro_inflation_spike';
+      flagsSet.add("macro_inflation_spike");
+      const cashLoss = Math.round(cash * 0.12);
+      cash = Math.max(0, cash - cashLoss);
+      burnout = Math.min(100, burnout + 10);
+      macroShockNotice = `🔥 BIẾN CỐ VĨ MÔ: Bão giá & lạm phát phi mã làm sức mua tiền mặt sụt giảm $${cashLoss.toLocaleString()}, áp lực cơm áo tăng vọt!`;
+    } else {
+      macroShockType = 'macro_tech_layoff_wave';
+      flagsSet.add("macro_tech_layoff_wave");
+      burnout = Math.min(100, burnout + 18);
+      vitality = Math.max(10, vitality - 8);
+      macroShockNotice = "⚡ BIẾN CỐ VĨ MÔ: Làn sóng sa thải AI & tái cơ cấu toàn diện quét qua thị trường việc làm, tăng áp lực công việc khốc liệt!";
+    }
+  }
+
   // 6. Asset maintenance & macro fluctuation with passive cash flow yield
   let totalAssetIncome = 0;
   let totalAssetMaintenance = 0;
@@ -485,13 +539,13 @@ export async function processPassivePhase(character, assets, relationships) {
 
   // 11. Append Timeline Snapshot for 15s Death Recap Video
   const timelineSnapshots = Array.isArray(character.timeline_snapshots) ? [...character.timeline_snapshots] : [];
-  if (age % 5 === 0 || wealthDrainNotice || macroCalamityNotice) {
+  if (age % 5 === 0 || wealthDrainNotice || macroCalamityNotice || macroShockNotice) {
     timelineSnapshots.push({
       age,
       net_worth: netWorth,
       vitality,
       burnout,
-      event: macroCalamityNotice || wealthDrainNotice || `Năm ${age} tuổi`
+      event: macroShockNotice || macroCalamityNotice || wealthDrainNotice || `Năm ${age} tuổi`
     });
   }
 
@@ -600,6 +654,8 @@ export async function processPassivePhase(character, assets, relationships) {
       ageReached: age,
       wealthDrainNotice,
       macroCalamityNotice,
+      macroShockNotice,
+      macroShockType,
       maxVitality,
       globalIndices,
       unused_ap_converted: unusedAP,

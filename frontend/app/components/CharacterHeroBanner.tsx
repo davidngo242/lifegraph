@@ -404,17 +404,6 @@ export default function CharacterHeroBanner({
   const isSevereBurnout = age >= 18 && burnout > 80;
   const isInfant = age <= 5;
 
-  // Borderless, Full-Body 3D Avatar (Tỉ lệ toàn thân thanh thoát: thấy rõ cả đầu, thân, tay chân)
-  const avatarContainerClasses = `w-32 h-48 sm:w-36 sm:h-52 md:w-40 md:h-56 lg:w-44 lg:h-60 shrink-0 relative overflow-visible group transition-all duration-500 flex items-center justify-center select-none pointer-events-auto ${
-    feedbackAtmo
-      ? 'scale-[1.03]'
-      : isSevereBurnout
-      ? 'animate-pulse'
-      : isCriticalVitality
-      ? 'opacity-85'
-      : ''
-  }`;
-
   const avatarFilterClasses = `w-full h-full overflow-visible transition-all duration-500 ${
     isCriticalVitality ? 'grayscale-[0.65] opacity-80 contrast-90' : ''
   }`;
@@ -508,113 +497,18 @@ export default function CharacterHeroBanner({
       <div className="relative z-10 p-3.5 md:p-4 lg:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         
         {/* Left: 3D Avatar (ĐỘC BẢN 3D - BỎ HOÀN TOÀN 2D) + Core Identity */}
-        <div className="flex items-center gap-6 md:gap-7 min-w-0 flex-1">
+        <div className="flex items-center gap-4 sm:gap-5 min-w-0 flex-1">
           
-          {/* Avatar 3D Holographic Stage with Dynamic Ground Reticle */}
-          <div className="relative shrink-0 flex flex-col items-center select-none">
-            {/* Prestige Crests Vertical Stack (Huân Chương Thế Gia như ảnh mẫu Sếp gửi) */}
-            <div className="hidden xl:flex flex-col gap-1 absolute -left-7 top-4 z-20 pointer-events-none select-none">
-              <div className="p-1 rounded-lg bg-amber-500/15 border border-amber-400/40 backdrop-blur shadow-md flex items-center justify-center text-xs" title={`Đời thứ ${character.generation || 1}`}>
-                🛡️
-              </div>
-              <div className="p-1 rounded-lg bg-amber-500/15 border border-amber-400/40 backdrop-blur shadow-md flex items-center justify-center text-xs" title="Huyết Thống Thế Gia">
-                👑
-              </div>
-              <div className="p-1 rounded-lg bg-cyan-500/15 border border-cyan-400/40 backdrop-blur shadow-md flex items-center justify-center text-xs" title="Căn Cơ Sinh Mệnh">
-                💎
-              </div>
-            </div>
+          {/* Avatar 3D Champion Showcase Stage (Khung Diễn Võ 3D Độc Bản - Không Tràn Viền, Không Đè Chữ) */}
+          <div className="relative shrink-0 select-none group">
+            {/* Diorama Pedestal Frame */}
+            <div className="w-36 h-52 sm:w-40 sm:h-56 md:w-44 md:h-60 rounded-2xl bg-gradient-to-b from-amber-500/10 via-slate-900/40 to-slate-950/80 border border-amber-500/30 backdrop-blur-md shadow-lg relative overflow-hidden flex items-center justify-center">
+              
+              {/* Radial Golden Stage Light */}
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-amber-500/20 via-amber-500/5 to-transparent pointer-events-none z-0" />
 
-            {/* Left Hologram HUD (Cánh Màn Hình Ma Pháp Trái: Sinh Lực & Căn Cơ) */}
-            <div
-              className="hidden sm:flex flex-col gap-1 px-2 py-1.5 rounded-xl bg-cyan-950/60 border border-cyan-400/40 backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.25)] text-cyan-200 absolute -left-16 md:-left-20 top-1/2 -translate-y-1/2 z-20 pointer-events-auto transition-transform hover:scale-105"
-              style={{
-                transform: 'perspective(600px) rotateY(16deg) rotateZ(-2deg)',
-                transformStyle: 'preserve-3d'
-              }}
-            >
-              <div className="flex items-center justify-between gap-1.5 border-b border-cyan-400/25 pb-0.5">
-                <span className="text-[9px] font-mono font-bold tracking-wider text-cyan-300 flex items-center gap-1">
-                  <Activity className="w-2.5 h-2.5 text-cyan-400 animate-pulse" />
-                  SINH LỰC
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-              </div>
-              <div className="flex flex-col text-[9.5px] font-sans font-medium text-cyan-100 gap-0.5 pt-0.5">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-cyan-300/70">Khí huyết:</span>
-                  <span className="font-bold tabular-nums text-white">{vitality}%</span>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-cyan-300/70">Tâm trí:</span>
-                  <span className={`font-bold tabular-nums ${burnout > 75 ? 'text-rose-400' : 'text-cyan-200'}`}>
-                    {Math.max(0, 100 - burnout)}%
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-cyan-300/70">Năng lượng:</span>
-                  <span className="font-bold tabular-nums text-amber-300">{character.action_points ?? 6} AP</span>
-                </div>
-              </div>
-              <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent rounded-full" />
-            </div>
-
-            {/* Right Hologram HUD (Cánh Màn Hình Ma Pháp Phải: Vận Mệnh & Gia Sản) */}
-            <div
-              className="hidden md:flex flex-col gap-1 px-2 py-1.5 rounded-xl bg-amber-950/60 border border-amber-400/40 backdrop-blur-md shadow-[0_0_15px_rgba(245,158,11,0.25)] text-amber-200 absolute -right-16 md:-right-20 top-1/2 -translate-y-1/2 z-20 pointer-events-auto transition-transform hover:scale-105"
-              style={{
-                transform: 'perspective(600px) rotateY(-16deg) rotateZ(2deg)',
-                transformStyle: 'preserve-3d'
-              }}
-            >
-              <div className="flex items-center justify-between gap-1.5 border-b border-amber-400/25 pb-0.5">
-                <span className="text-[9px] font-mono font-bold tracking-wider text-amber-300 flex items-center gap-1">
-                  <Sparkles className="w-2.5 h-2.5 text-amber-400" />
-                  VẬN MỆNH
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
-              </div>
-              <div className="flex flex-col text-[9.5px] font-sans font-medium text-amber-100 gap-0.5 pt-0.5">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-amber-300/70">Gia sản:</span>
-                  <span className="font-bold tabular-nums text-amber-200 truncate max-w-[56px]">
-                    {Number(netWorth) > 0 ? `$${(netWorth >= 1000000 ? (netWorth/1000000).toFixed(1) + 'M' : (netWorth/1000).toFixed(0) + 'k')}` : '$0'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-amber-300/70">Nghiệp:</span>
-                  <span className="font-bold tabular-nums text-emerald-300">{character.karma ?? 0}</span>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-amber-300/70">Vị thế:</span>
-                  <span className="font-bold text-amber-300 truncate max-w-[56px]">
-                    {character.career?.title || (age < 6 ? 'Ấu thơ' : age < 18 ? 'Học sinh' : 'Tự do')}
-                  </span>
-                </div>
-              </div>
-              <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-amber-400/60 to-transparent rounded-full" />
-            </div>
-
-            {/* Holographic Projection Disc under Avatar */}
-            <div className="absolute -bottom-2 w-32 sm:w-36 md:w-40 lg:w-44 h-7 pointer-events-none select-none z-0">
-              <div
-                className={`w-full h-full rounded-[100%] blur-sm animate-pulse ${
-                  isCriticalVitality
-                    ? 'bg-gradient-to-r from-transparent via-rose-500/40 to-transparent'
-                    : isSevereBurnout
-                    ? 'bg-gradient-to-r from-transparent via-amber-500/35 to-transparent'
-                    : hasHalo
-                    ? 'bg-gradient-to-r from-transparent via-amber-400/50 to-transparent'
-                    : 'bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent'
-                }`}
-              />
-              <div className="absolute inset-0 rounded-[100%] border border-cyan-400/40 border-dashed animate-[spin_24s_linear_infinite]" />
-              <div className="absolute inset-1 rounded-[100%] border border-amber-400/30" />
-            </div>
-
-            {/* Borderless 3D Avatar (Tràn Banner Không Viền Vuông) */}
-            <div className={avatarContainerClasses}>
-              <div className={avatarFilterClasses}>
+              {/* 3D Canvas Viewport */}
+              <div className={`w-full h-full relative z-10 ${avatarFilterClasses}`}>
                 <Dynamic3DAvatar
                   nationality={character.nationality}
                   gender={character.gender || 'male'}
@@ -630,114 +524,121 @@ export default function CharacterHeroBanner({
                 />
               </div>
 
-              {/* DYNAMIC AVATAR STATE OVERLAYS */}
-              {/* 2. Sinh lực nguy kịch (vitality < 30): Nhịp tim đập chậm cảnh báo */}
+              {/* Critical State Warning Pills (Top-Left of Stage) */}
               {isCriticalVitality && (
-                <div className="absolute -top-1 left-0 px-2 py-0.5 rounded-full bg-rose-950/90 border border-rose-500/60 text-[11px] font-sans tabular-nums text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
+                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-950/90 border border-rose-500/60 text-[10px] font-sans text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
                   <span>💔 Yếu ớt</span>
                 </div>
               )}
-
-              {/* 3. Kiệt sức tâm trí tột cùng (burnout > 80 & tuổi >= 18) */}
               {isSevereBurnout && (
-                <div className="absolute -top-1 left-0 px-2 py-0.5 rounded-full bg-rose-950/90 border border-rose-500/70 text-[11px] font-sans tabular-nums text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
+                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-950/90 border border-rose-500/70 text-[10px] font-sans text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping" />
                   <span>⚡ Kiệt sức</span>
                 </div>
               )}
 
-              {/* 3D Visual Trait Badges on Avatar Stage */}
-              {(hasGlasses || hasHalo || isWealthy) && (
-                <div className="absolute -bottom-2.5 left-0 right-0 flex items-center justify-center gap-1.5 pointer-events-none z-20">
-                  {hasGlasses && (
-                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-slate-950/90 border border-cyan-500/60 text-cyan-300 font-sans backdrop-blur-md shadow-lg" title="3D Kính Cận Tri Thức">
-                      👓 Kính
-                    </span>
-                  )}
-                  {hasHalo && (
-                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/60 text-amber-700 dark:text-amber-300 font-sans backdrop-blur-md shadow-lg font-bold" title="3D Kim Quang Hào Quang">
-                      🪷 Hào quang
-                    </span>
-                  )}
-                  {isWealthy && (
-                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/60 text-amber-700 dark:text-amber-300 font-sans backdrop-blur-md shadow-lg font-bold" title="3D Trâm Quý Tộc / Tuxedo">
-                      💎 Quý tộc
-                    </span>
-                  )}
-                </div>
-              )}
-
-              {/* 360 Fullscreen Trigger */}
+              {/* Top-Right: 360 Fullscreen Studio Trigger */}
               <button
                 onClick={onOpen3DInspector}
-                className="absolute top-0 right-0 p-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/60 backdrop-blur-md opacity-0 group-hover:opacity-100 transition shadow-lg z-20 cursor-pointer"
+                className="absolute top-2 right-2 p-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-amber-300 hover:text-white border border-amber-500/30 backdrop-blur-md transition shadow-md z-20 cursor-pointer opacity-80 group-hover:opacity-100"
                 title="Mở phòng kiểm định 360°"
               >
                 <Maximize2 className="w-3.5 h-3.5" />
               </button>
-            </div>
 
-            {/* MOBA Sidekick Pet Companion Grounded on the Dais */}
-            <div
-              className="absolute -bottom-1 -right-2 md:right-0 z-20 cursor-pointer pointer-events-auto transition-transform hover:scale-110 active:scale-95 flex flex-col items-center"
-              onClick={(e) => {
-                e.stopPropagation();
-                onOpen3DInspector();
-              }}
-              title="Linh thú đồng hành trên bục - Nhấp để xem Studio chi tiết"
-            >
-              <SidekickPetCompanion
-                netWorth={netWorth}
-                vitality={vitality}
-                burnout={burnout}
-                className="w-11 h-11 md:w-13 md:h-13 drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
-              />
-              {/* Pet Contact Shadow on Dais */}
-              <div className="w-8 h-1.5 rounded-[100%] bg-slate-950/70 blur-[1px] -mt-1 pointer-events-none" />
+              {/* Bottom-Right: Grounded Sidekick Pet on Stage */}
+              <div
+                className="absolute bottom-1 right-1 z-20 cursor-pointer pointer-events-auto transition-transform hover:scale-110 active:scale-95 flex flex-col items-center"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpen3DInspector();
+                }}
+                title="Linh thú đồng hành - Nhấp để xem Studio chi tiết"
+              >
+                <SidekickPetCompanion
+                  netWorth={netWorth}
+                  vitality={vitality}
+                  burnout={burnout}
+                  className="w-10 h-10 sm:w-11 sm:h-11 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+                />
+                <div className="w-7 h-1 rounded-[100%] bg-slate-950/70 blur-[1px] -mt-0.5 pointer-events-none" />
+              </div>
+
+              {/* Bottom-Left: Subtle 3D Tag */}
+              <div className="absolute bottom-1.5 left-2 z-20 pointer-events-none">
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-black/60 border border-amber-500/30 text-amber-300 backdrop-blur">
+                  STAGE 3D
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Clean Core Identity Typography */}
-          <div className="flex flex-col gap-1 min-w-0">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <h1 className="text-lg md:text-xl font-black text-[var(--text-primary)] tracking-tight truncate">
+          {/* Clean Core Identity Typography (Bố cục thông tin thông thoáng, rõ ràng, không bị đè che) */}
+          <div className="flex flex-col gap-1.5 min-w-0">
+            {/* Row 1: Name & Generation Badge */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-xl md:text-2xl font-black text-[var(--text-primary)] tracking-tight truncate">
                 {character.name || "LifeGraph"}
               </h1>
 
               {character.generation && character.generation > 1 && (
-                <span className="text-[11px] font-sans tabular-nums px-2 py-0.2 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
-                  Đời {character.generation}
+                <span className="text-[11px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold shadow-sm">
+                  👑 Đời {character.generation}
                 </span>
               )}
             </div>
 
-            {/* 1 Dòng Tuổi & Nơi Chốn Tinh Gọn */}
-            <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] flex-wrap">
-              <span className="font-bold text-[var(--text-primary)] bg-[var(--bg-card-subtle)] px-2 py-0.5 rounded-md border border-[var(--border-subtle)] text-[11px]">
-                {age} Tuổi
+            {/* Row 2: Age, Gender & Nationality Pills */}
+            <div className="flex items-center gap-1.5 text-xs flex-wrap">
+              <span className="font-bold text-[var(--text-primary)] bg-[var(--bg-card-subtle)] px-2.5 py-0.5 rounded-lg border border-[var(--border-subtle)] text-[11px] shadow-sm">
+                ⏳ {age} Tuổi
               </span>
-              <span className={`font-bold px-2 py-0.5 rounded-md border text-[10px] flex items-center gap-0.5 ${
+              <span className={`font-bold px-2 py-0.5 rounded-lg border text-[11px] flex items-center gap-1 shadow-sm ${
                 character.gender === 'female'
-                  ? 'bg-rose-500/15 border-rose-500/30 text-rose-700 dark:text-rose-300 shadow-sm'
-                  : 'bg-sky-500/15 border-sky-500/30 text-sky-700 dark:text-sky-300 shadow-sm'
+                  ? 'bg-rose-500/15 border-rose-500/30 text-rose-700 dark:text-rose-300'
+                  : 'bg-sky-500/15 border-sky-500/30 text-sky-700 dark:text-sky-300'
               }`}>
                 <span>{character.gender === 'female' ? '♀️ Nữ' : '♂️ Nam'}</span>
               </span>
-              <span className="text-[var(--text-secondary)] font-medium text-[11px]">{nationality}</span>
+              <span className="text-[var(--text-secondary)] font-medium text-[11px] px-2 py-0.5 rounded-lg bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+                🌍 {nationality}
+              </span>
             </div>
 
-            <div className="flex items-center gap-1 text-[11px] text-[var(--text-secondary)] truncate pt-0.5">
-              <MapPin className="w-3 h-3 text-rose-400 shrink-0" />
-              <Tooltip content={`Thành phố: ${character.current_city || nationality}`}>
-                <span className="truncate max-w-[120px] cursor-help">{character.current_city || nationality}</span>
-              </Tooltip>
-              <span className="opacity-40">•</span>
-              <Home className="w-3 h-3 text-amber-400 shrink-0" />
-              <Tooltip content={`Chỗ ở: ${character.housing?.name || 'Phòng trọ'}`}>
-                <span className="truncate text-[var(--text-secondary)] max-w-[120px] cursor-help">{character.housing?.name || 'Phòng trọ'}</span>
-              </Tooltip>
+            {/* Row 3: City & Housing */}
+            <div className="flex items-center gap-2 text-[11px] text-[var(--text-secondary)] truncate pt-0.5">
+              <span className="flex items-center gap-1 truncate max-w-[130px]">
+                <MapPin className="w-3 h-3 text-rose-400 shrink-0" />
+                <span className="truncate">{character.current_city || nationality}</span>
+              </span>
+              <span className="opacity-30">•</span>
+              <span className="flex items-center gap-1 truncate max-w-[130px]">
+                <Home className="w-3 h-3 text-amber-400 shrink-0" />
+                <span className="truncate">{character.housing?.name || 'Phòng trọ'}</span>
+              </span>
             </div>
+
+            {/* Row 4: 3D Trait Badges (Kính Cận, Kim Quang, Đại Gia) */}
+            {(hasGlasses || hasHalo || isWealthy) && (
+              <div className="flex items-center gap-1.5 pt-0.5 flex-wrap">
+                {hasGlasses && (
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-700 dark:text-cyan-300 font-medium">
+                    👓 Kính Cận
+                  </span>
+                )}
+                {hasHalo && (
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold">
+                    🪷 Kim Quang
+                  </span>
+                )}
+                {isWealthy && (
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-700 dark:text-amber-300 font-bold">
+                    💎 Đại Gia
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -940,7 +841,7 @@ export default function CharacterHeroBanner({
           )}
 
           {/* Row 1: Giai Đoạn, Động Lực Sống & Karma */}
-          <div className="flex items-center justify-between gap-1.5 pb-1.5 border-b border-slate-800/60">
+          <div className="flex items-center justify-between gap-1.5 pb-1.5 border-b border-[var(--border-subtle)]">
             {/* Life Stage Pill */}
             <Tooltip content={<div className="text-[12px] max-w-xs">{lifeStage.desc}</div>}>
               <div className="flex items-center gap-1.5 px-2 py-1 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] cursor-help transition">
@@ -951,13 +852,13 @@ export default function CharacterHeroBanner({
 
             {/* Motivation / Happiness */}
             <Tooltip content={<div className="text-[12px]">Động lực sống & Tinh thần lạc quan ({happiness}%). Trên 75% kích hoạt buff thăng hoa +15%.</div>}>
-              <div className="flex items-center gap-1 px-2 py-1 rounded-xl bg-slate-900/80 border border-slate-800 cursor-help">
-                <Smile className="w-3 h-3 text-amber-400" />
-                <span className={`text-[11px] font-sans tabular-nums font-bold ${happiness >= 70 ? 'text-amber-300' : 'text-slate-300'}`}>
+              <div className="flex items-center gap-1 px-2 py-1 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] cursor-help">
+                <Smile className="w-3 h-3 text-amber-500" />
+                <span className={`text-[11px] font-sans tabular-nums font-bold ${happiness >= 70 ? 'text-amber-500' : 'text-[var(--text-secondary)]'}`}>
                   {happiness}%
                 </span>
                 {isHappyBuffActive && (
-                  <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold">
+                  <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30 font-semibold">
                     Buff
                   </span>
                 )}
@@ -966,33 +867,33 @@ export default function CharacterHeroBanner({
 
             {/* Social Karma */}
             <Tooltip content={<div className="text-[12px]">Phước đức xã hội tích lũy ({karma} KP). Ảnh hưởng phúc khí và độ uy tín dòng họ.</div>}>
-              <div className="flex items-center gap-1 px-2 py-1 rounded-xl bg-slate-900/80 border border-slate-800 cursor-help">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] cursor-help">
                 <ShieldCheck className="w-3 h-3 text-amber-500" />
-                <span className="text-[11px] font-sans tabular-nums font-bold text-amber-400">
-                  {karma} <span className="text-[9px] text-slate-500">KP</span>
+                <span className="text-[11px] font-sans tabular-nums font-bold text-amber-500">
+                  {karma} <span className="text-[9px] text-[var(--text-muted)]">KP</span>
                 </span>
               </div>
             </Tooltip>
           </div>
 
           {/* Row 2: Card Thể Lực (Sinh Lực & Sức Bền) */}
-          <div className="flex flex-col gap-1 bg-slate-900/60 p-2 rounded-xl border border-slate-800/60">
+          <div className="flex flex-col gap-1 bg-[var(--bg-card-subtle)] p-2 rounded-xl border border-[var(--border-subtle)]">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-[11.5px] font-bold text-slate-200 flex items-center gap-1">
-                <Heart className="w-3 h-3 text-rose-400" /> Sinh Lực
+              <span className="text-[11.5px] font-bold text-[var(--text-primary)] flex items-center gap-1">
+                <Heart className="w-3 h-3 text-rose-500" /> Sinh Lực
               </span>
               <div className="flex items-center gap-1.5">
                 <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${healthStatus.color}`}>
                   {healthStatus.label}
                 </span>
-                <span className="text-[11px] font-sans tabular-nums font-extrabold text-white">
-                  {vitality}<span className="text-slate-500 font-normal">/{maxVitality}</span>
+                <span className="text-[11px] font-sans tabular-nums font-extrabold text-[var(--text-primary)]">
+                  {vitality}<span className="text-[var(--text-muted)] font-normal">/{maxVitality}</span>
                 </span>
               </div>
             </div>
 
             {/* Vitality Bar */}
-            <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800/80">
+            <div className="w-full bg-[var(--bg-card)] h-1.5 rounded-full overflow-hidden border border-[var(--border-subtle)]">
               <div
                 className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500 rounded-full"
                 style={{ width: `${Math.min(100, (vitality / maxVitality) * 100)}%` }}
@@ -1000,31 +901,31 @@ export default function CharacterHeroBanner({
             </div>
 
             {/* Quick Metrics Inline */}
-            <div className="flex items-center justify-between text-[10px] text-slate-400 font-sans tabular-nums pt-0.5">
-              <span>Lão hóa: <strong className="text-slate-300">{character.aging_speed ? character.aging_speed.toFixed(1) + 'x' : '1.0x'}</strong></span>
-              <span>Đột quỵ: <strong className="text-emerald-400">&lt;2%</strong></span>
-              <span>Hồi phục: <strong className="text-amber-400">+{apGainPerYear} AP</strong></span>
+            <div className="flex items-center justify-between text-[10px] text-[var(--text-secondary)] font-sans tabular-nums pt-0.5">
+              <span>Lão hóa: <strong className="text-[var(--text-primary)]">{character.aging_speed ? character.aging_speed.toFixed(1) + 'x' : '1.0x'}</strong></span>
+              <span>Đột quỵ: <strong className="text-emerald-500 font-bold">&lt;2%</strong></span>
+              <span>Hồi phục: <strong className="text-amber-500 font-bold">+{apGainPerYear} AP</strong></span>
             </div>
           </div>
 
           {/* Row 3: Card Tâm Lý (Căng Thẳng & Áp Lực) */}
-          <div className="flex flex-col gap-1 bg-slate-900/60 p-2 rounded-xl border border-slate-800/60">
+          <div className="flex flex-col gap-1 bg-[var(--bg-card-subtle)] p-2 rounded-xl border border-[var(--border-subtle)]">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-[11.5px] font-bold text-slate-200 flex items-center gap-1">
-                <AlertTriangle className={`w-3 h-3 ${burnout >= 75 ? 'text-rose-400' : 'text-indigo-400'}`} /> Căng Thẳng
+              <span className="text-[11.5px] font-bold text-[var(--text-primary)] flex items-center gap-1">
+                <AlertTriangle className={`w-3 h-3 ${burnout >= 75 ? 'text-rose-500' : 'text-sky-500'}`} /> Căng Thẳng
               </span>
               <div className="flex items-center gap-1.5">
                 <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${stress.color}`}>
                   {stress.label}
                 </span>
-                <span className="text-[11px] font-sans tabular-nums font-bold text-slate-300">
+                <span className="text-[11px] font-sans tabular-nums font-bold text-[var(--text-primary)]">
                   {burnout}%
                 </span>
               </div>
             </div>
 
             {/* Burnout Bar */}
-            <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800/80">
+            <div className="w-full bg-[var(--bg-card)] h-1.5 rounded-full overflow-hidden border border-[var(--border-subtle)]">
               <div
                 className={`h-full transition-all duration-500 rounded-full ${
                   burnout >= 75 ? 'bg-gradient-to-r from-orange-500 to-rose-500' : 'bg-gradient-to-r from-teal-500 to-emerald-500'
