@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
-import SpineCharacterAvatar from './SpineCharacterAvatar';
 import SidekickPetCompanion from './SidekickPetCompanion';
 import {
   Cpu,
@@ -27,7 +26,7 @@ const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full flex items-center justify-center bg-slate-950 rounded-2xl">
-      <div className="w-7 h-7 rounded-full border-2 border-indigo-500/40 border-t-indigo-400 animate-spin" />
+      <div className="w-7 h-7 rounded-full border-2 border-amber-500/40 border-t-amber-400 animate-spin" />
     </div>
   )
 });
@@ -227,7 +226,6 @@ export default function CharacterHeroBanner({
 
   // Dynamic Action Feedback Realtime Overlay
   const [activeFeedback, setActiveFeedback] = useState<BannerActionFeedback | null>(null);
-  const [bannerAvatarMode, setBannerAvatarMode] = useState<'3d' | 'spine'>('3d');
 
   useEffect(() => {
     if (actionFeedback && actionFeedback.timestamp) {
@@ -510,10 +508,93 @@ export default function CharacterHeroBanner({
       <div className="relative z-10 p-3.5 md:p-4 lg:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         
         {/* Left: 3D Avatar (ĐỘC BẢN 3D - BỎ HOÀN TOÀN 2D) + Core Identity */}
-        <div className="flex items-center gap-4 md:gap-5 min-w-0 flex-1">
+        <div className="flex items-center gap-6 md:gap-7 min-w-0 flex-1">
           
           {/* Avatar 3D Holographic Stage with Dynamic Ground Reticle */}
-          <div className="relative shrink-0 flex flex-col items-center">
+          <div className="relative shrink-0 flex flex-col items-center select-none">
+            {/* Prestige Crests Vertical Stack (Huân Chương Thế Gia như ảnh mẫu Sếp gửi) */}
+            <div className="hidden xl:flex flex-col gap-1 absolute -left-7 top-4 z-20 pointer-events-none select-none">
+              <div className="p-1 rounded-lg bg-amber-500/15 border border-amber-400/40 backdrop-blur shadow-md flex items-center justify-center text-xs" title={`Đời thứ ${character.generation || 1}`}>
+                🛡️
+              </div>
+              <div className="p-1 rounded-lg bg-amber-500/15 border border-amber-400/40 backdrop-blur shadow-md flex items-center justify-center text-xs" title="Huyết Thống Thế Gia">
+                👑
+              </div>
+              <div className="p-1 rounded-lg bg-cyan-500/15 border border-cyan-400/40 backdrop-blur shadow-md flex items-center justify-center text-xs" title="Căn Cơ Sinh Mệnh">
+                💎
+              </div>
+            </div>
+
+            {/* Left Hologram HUD (Cánh Màn Hình Ma Pháp Trái: Sinh Lực & Căn Cơ) */}
+            <div
+              className="hidden sm:flex flex-col gap-1 px-2 py-1.5 rounded-xl bg-cyan-950/60 border border-cyan-400/40 backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.25)] text-cyan-200 absolute -left-16 md:-left-20 top-1/2 -translate-y-1/2 z-20 pointer-events-auto transition-transform hover:scale-105"
+              style={{
+                transform: 'perspective(600px) rotateY(16deg) rotateZ(-2deg)',
+                transformStyle: 'preserve-3d'
+              }}
+            >
+              <div className="flex items-center justify-between gap-1.5 border-b border-cyan-400/25 pb-0.5">
+                <span className="text-[9px] font-mono font-bold tracking-wider text-cyan-300 flex items-center gap-1">
+                  <Activity className="w-2.5 h-2.5 text-cyan-400 animate-pulse" />
+                  SINH LỰC
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+              </div>
+              <div className="flex flex-col text-[9.5px] font-sans font-medium text-cyan-100 gap-0.5 pt-0.5">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-cyan-300/70">Khí huyết:</span>
+                  <span className="font-bold tabular-nums text-white">{vitality}%</span>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-cyan-300/70">Tâm trí:</span>
+                  <span className={`font-bold tabular-nums ${burnout > 75 ? 'text-rose-400' : 'text-cyan-200'}`}>
+                    {Math.max(0, 100 - burnout)}%
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-cyan-300/70">Năng lượng:</span>
+                  <span className="font-bold tabular-nums text-amber-300">{character.action_points ?? 6} AP</span>
+                </div>
+              </div>
+              <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent rounded-full" />
+            </div>
+
+            {/* Right Hologram HUD (Cánh Màn Hình Ma Pháp Phải: Vận Mệnh & Gia Sản) */}
+            <div
+              className="hidden md:flex flex-col gap-1 px-2 py-1.5 rounded-xl bg-amber-950/60 border border-amber-400/40 backdrop-blur-md shadow-[0_0_15px_rgba(245,158,11,0.25)] text-amber-200 absolute -right-16 md:-right-20 top-1/2 -translate-y-1/2 z-20 pointer-events-auto transition-transform hover:scale-105"
+              style={{
+                transform: 'perspective(600px) rotateY(-16deg) rotateZ(2deg)',
+                transformStyle: 'preserve-3d'
+              }}
+            >
+              <div className="flex items-center justify-between gap-1.5 border-b border-amber-400/25 pb-0.5">
+                <span className="text-[9px] font-mono font-bold tracking-wider text-amber-300 flex items-center gap-1">
+                  <Sparkles className="w-2.5 h-2.5 text-amber-400" />
+                  VẬN MỆNH
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+              </div>
+              <div className="flex flex-col text-[9.5px] font-sans font-medium text-amber-100 gap-0.5 pt-0.5">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-amber-300/70">Gia sản:</span>
+                  <span className="font-bold tabular-nums text-amber-200 truncate max-w-[56px]">
+                    {Number(netWorth) > 0 ? `$${(netWorth >= 1000000 ? (netWorth/1000000).toFixed(1) + 'M' : (netWorth/1000).toFixed(0) + 'k')}` : '$0'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-amber-300/70">Nghiệp:</span>
+                  <span className="font-bold tabular-nums text-emerald-300">{character.karma ?? 0}</span>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-amber-300/70">Vị thế:</span>
+                  <span className="font-bold text-amber-300 truncate max-w-[56px]">
+                    {character.career?.title || (age < 6 ? 'Ấu thơ' : age < 18 ? 'Học sinh' : 'Tự do')}
+                  </span>
+                </div>
+              </div>
+              <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-amber-400/60 to-transparent rounded-full" />
+            </div>
+
             {/* Holographic Projection Disc under Avatar */}
             <div className="absolute -bottom-2 w-32 sm:w-36 md:w-40 lg:w-44 h-7 pointer-events-none select-none z-0">
               <div
@@ -534,34 +615,19 @@ export default function CharacterHeroBanner({
             {/* Borderless 3D Avatar (Tràn Banner Không Viền Vuông) */}
             <div className={avatarContainerClasses}>
               <div className={avatarFilterClasses}>
-                {bannerAvatarMode === '3d' ? (
-                  <Dynamic3DAvatar
-                    nationality={character.nationality}
-                    gender={character.gender || 'male'}
-                    age={age}
-                    burnout={burnout}
-                    vitality={vitality}
-                    reaction={reaction}
-                    isFastForwarding={isFastForwarding}
-                    showControls={false}
-                    traits={traits}
-                    netWorth={netWorth}
-                    className="w-full h-full overflow-visible pointer-events-auto"
-                  />
-                ) : (
-                  <SpineCharacterAvatar
-                    nationality={character.nationality}
-                    gender={character.gender || 'male'}
-                    age={age}
-                    burnout={burnout}
-                    vitality={vitality}
-                    animation={reaction === 'celebrate' ? 'Jump' : reaction === 'exhausted' ? 'Idle_2' : reaction === 'shocked' ? 'Idle_1' : 'Front_idle'}
-                    showBones={false}
-                    netWorth={netWorth}
-                    traits={traits}
-                    className="w-full h-full overflow-visible pointer-events-auto"
-                  />
-                )}
+                <Dynamic3DAvatar
+                  nationality={character.nationality}
+                  gender={character.gender || 'male'}
+                  age={age}
+                  burnout={burnout}
+                  vitality={vitality}
+                  reaction={reaction}
+                  isFastForwarding={isFastForwarding}
+                  showControls={false}
+                  traits={traits}
+                  netWorth={netWorth}
+                  className="w-full h-full overflow-visible pointer-events-auto"
+                />
               </div>
 
               {/* DYNAMIC AVATAR STATE OVERLAYS */}
@@ -602,16 +668,6 @@ export default function CharacterHeroBanner({
                 </div>
               )}
 
-              {/* Mode Switcher Pill (3D <-> SPINE) */}
-              <button
-                type="button"
-                onClick={() => setBannerAvatarMode(prev => prev === '3d' ? 'spine' : '3d')}
-                className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-md bg-slate-900/80 hover:bg-slate-800 text-[10px] font-sans font-bold border border-cyan-500/40 text-cyan-300 backdrop-blur-md opacity-0 group-hover:opacity-100 transition shadow z-20 cursor-pointer"
-                title="Chuyển chế độ hiển thị 3D / SPINE"
-              >
-                {bannerAvatarMode === '3d' ? '3D' : 'SPINE'}
-              </button>
-
               {/* 360 Fullscreen Trigger */}
               <button
                 onClick={onOpen3DInspector}
@@ -622,21 +678,23 @@ export default function CharacterHeroBanner({
               </button>
             </div>
 
-            {/* MOBA Sidekick Pet Companion (Deenoh dragon / Kitsune / Cat / Pup) */}
+            {/* MOBA Sidekick Pet Companion Grounded on the Dais */}
             <div
-              className="absolute -bottom-2 -right-3 md:-right-4 z-20 cursor-pointer pointer-events-auto transition-transform hover:scale-110 active:scale-95"
+              className="absolute -bottom-1 -right-2 md:right-0 z-20 cursor-pointer pointer-events-auto transition-transform hover:scale-110 active:scale-95 flex flex-col items-center"
               onClick={(e) => {
                 e.stopPropagation();
                 onOpen3DInspector();
               }}
-              title="Linh thú MOBA đồng hành (Sidekick Pet) - Nhấp để xem Studio chi tiết"
+              title="Linh thú đồng hành trên bục - Nhấp để xem Studio chi tiết"
             >
               <SidekickPetCompanion
                 netWorth={netWorth}
                 vitality={vitality}
                 burnout={burnout}
-                className="w-12 h-12 md:w-14 md:h-14 drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
+                className="w-11 h-11 md:w-13 md:h-13 drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
               />
+              {/* Pet Contact Shadow on Dais */}
+              <div className="w-8 h-1.5 rounded-[100%] bg-slate-950/70 blur-[1px] -mt-1 pointer-events-none" />
             </div>
           </div>
 

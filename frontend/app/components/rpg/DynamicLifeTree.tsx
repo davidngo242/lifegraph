@@ -34,9 +34,18 @@ import {
 } from 'lucide-react';
 import Tooltip from '../Tooltip';
 import { formatCurrency } from '../../utils/currencyUtils';
+import dynamic from 'next/dynamic';
 import SkillTreeTab from './SkillTreeTab';
 import SocialLinksTab from './SocialLinksTab';
-import SpineCharacterAvatar from '../SpineCharacterAvatar';
+
+const Dynamic3DAvatar = dynamic(() => import('../Safe3DAvatar'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-slate-950">
+      <div className="w-5 h-5 rounded-full border-2 border-emerald-500/40 border-t-emerald-400 animate-spin" />
+    </div>
+  )
+});
 
 export interface LifeTreeNode {
   id: string;
@@ -1010,16 +1019,16 @@ export default function DynamicLifeTree({
                 className="w-20 h-28 sm:w-24 sm:h-32 rounded-2xl overflow-hidden border border-emerald-500/50 bg-gradient-to-t from-slate-950 via-slate-900 to-emerald-950/70 shadow-2xl relative transition-transform group-hover:scale-105 active:scale-95 shrink-0"
                 style={{ width: '88px', height: '116px' }}
               >
-                <SpineCharacterAvatar
+                <Dynamic3DAvatar
                   nationality={character?.nationality || 'Việt Nam'}
                   gender={character?.gender || 'male'}
                   age={characterAge}
                   burnout={burnout}
                   vitality={vitalityVal}
-                  animation={treeHealthState === 'withered' ? 'Front_idle' : (avatarAnim as any)}
+                  reaction={treeHealthState === 'withered' ? 'exhausted' : 'idle'}
                   className="w-full h-full"
-                  showSidekick={false}
                   traits={character?.traits || []}
+                  netWorth={character?.net_worth || 0}
                 />
               </div>
 

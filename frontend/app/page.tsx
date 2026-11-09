@@ -1989,7 +1989,7 @@ export default function LifeGraphPage() {
                 <button
                   onClick={handleTranshumanismSurgery}
                   disabled={loading}
-                  className="py-2 px-4 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-cyan-600/25 active:scale-95 shrink-0"
+                  className="py-2 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black text-xs normal-case tracking-normal transition shadow-lg shadow-amber-500/25 active:scale-95 shrink-0"
                 >
                   Tiến Hành ($8M)
                 </button>

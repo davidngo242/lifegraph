@@ -179,7 +179,7 @@ export default function LogicCircuitMiniGame({
                 setIsPowered(false);
                 setStage('playing');
               }}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-sky-500/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-cyan-600 hover:from-sky-400 hover:to-cyan-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-sky-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <Play className="w-4 h-4 fill-current" />
               <span>Bắt Đầu Đấu Mạch ({initialTime} Giây)</span>
@@ -293,7 +293,7 @@ export default function LogicCircuitMiniGame({
 
             <button
               onClick={handleReturnToLife}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-sky-500/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-cyan-600 hover:from-sky-400 hover:to-cyan-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-sky-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <span>Xác Nhận & Tiếp Tục Cuộc Đời</span>
               <ArrowRight className="w-4 h-4" />

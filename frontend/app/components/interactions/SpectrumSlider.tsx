@@ -108,7 +108,7 @@ export default function SpectrumSlider({ dilemma, onSubmit, isLoading }: Spectru
       <button
         disabled={isLoading}
         onClick={() => onSubmit(sliderVal)}
-        className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-sm tracking-wide normal-case transition shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 active:scale-[0.99] border border-indigo-400/40"
+        className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black text-sm tracking-wide normal-case transition shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2 active:scale-[0.99] border border-amber-300/40"
       >
         <span>Xác Nhận Quyết Định ({leftPct}% / {rightPct}%)</span>
         <ArrowRight className="w-4 h-4" />

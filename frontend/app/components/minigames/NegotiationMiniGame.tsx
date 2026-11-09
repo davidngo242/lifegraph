@@ -292,11 +292,11 @@ export default function NegotiationMiniGame({
                   <span className="text-indigo-300 font-bold flex items-center gap-1">
                     <Scale className="w-3.5 h-3.5" /> Uy Thế Của Bạn
                   </span>
-                  <span className="font-sans tabular-nums font-bold text-indigo-400">{myLeverage}%</span>
+                  <span className="font-sans tabular-nums font-bold text-cyan-400">{myLeverage}%</span>
                 </div>
-                <div className="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden border border-indigo-500/30">
+                <div className="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden border border-cyan-500/30">
                   <div
-                    className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-sky-500 to-cyan-400 transition-all duration-500"
                     style={{ width: `${myLeverage}%` }}
                   />
                 </div>

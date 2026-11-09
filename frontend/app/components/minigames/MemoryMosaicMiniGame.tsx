@@ -156,7 +156,7 @@ export default function MemoryMosaicMiniGame({ onComplete, onClose }: MemoryMosa
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-xl bg-slate-900 border border-purple-500/40 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col items-center overflow-hidden">
+      <div className="relative w-full max-w-xl bg-slate-900 border border-amber-500/40 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col items-center overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -166,19 +166,19 @@ export default function MemoryMosaicMiniGame({ onComplete, onClose }: MemoryMosa
         </button>
 
         {/* Ambient Top Glow */}
-        <div className="absolute top-0 right-1/3 w-80 h-28 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-1/3 w-80 h-28 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* ================================================================ */}
         {/* PHASE 1: BRIEFING & TUTORIAL SCREEN */}
         {/* ================================================================ */}
         {stage === 'briefing' && (
           <div className="flex flex-col items-center text-center">
-            <div className="w-16 h-16 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-3xl mb-3 shadow-lg shadow-purple-500/20">
+            <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl mb-3 shadow-lg shadow-amber-500/20 text-amber-300">
               🧠
             </div>
 
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/30">
+              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30">
                 Minh Mẫn Hoàng Hôn (69+ Tuổi)
               </span>
             </div>
@@ -190,7 +190,7 @@ export default function MemoryMosaicMiniGame({ onComplete, onClose }: MemoryMosa
 
             {/* How to play card */}
             <div className="w-full bg-slate-950/80 border border-slate-800 rounded-2xl p-4 mb-4 text-left space-y-2.5 text-xs">
-              <div className="font-bold text-purple-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
+              <div className="font-bold text-amber-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
                 <Sparkles className="w-4 h-4" /> Hướng Dẫn & Thao Tác:
               </div>
               <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">
@@ -218,7 +218,7 @@ export default function MemoryMosaicMiniGame({ onComplete, onClose }: MemoryMosa
             {/* Ready Button */}
             <button
               onClick={startNewGame}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-purple-600/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black text-xs normal-case tracking-normal transition shadow-lg shadow-amber-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <Play className="w-4 h-4 fill-current" />
               <span>Bắt Đầu Ghép Ký Ức (28 Giây)</span>
@@ -233,7 +233,7 @@ export default function MemoryMosaicMiniGame({ onComplete, onClose }: MemoryMosa
           <div className="w-full flex flex-col items-center">
             {/* Header */}
             <div className="w-full flex items-center justify-between pb-3 border-b border-slate-800 mb-3 text-xs">
-              <span className="px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-300 font-medium border border-purple-500/20 flex items-center gap-1.5">
+              <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 font-medium border border-cyan-500/20 flex items-center gap-1.5">
                 <Brain className="w-3.5 h-3.5" /> Mảnh Ghép Trí Nhớ ({matchedPairs}/6 Cặp)
               </span>
               <div className="flex items-center gap-2 font-sans tabular-nums">
@@ -260,8 +260,8 @@ export default function MemoryMosaicMiniGame({ onComplete, onClose }: MemoryMosa
                       card.isMatched
                         ? 'bg-emerald-950/40 border-emerald-500/60 opacity-80 scale-95'
                         : showFace
-                        ? 'bg-slate-800 border-purple-500/60 shadow-lg shadow-purple-950/40 scale-100'
-                        : 'bg-slate-950/90 border-slate-800 hover:border-purple-500/40 hover:scale-105 cursor-pointer'
+                        ? 'bg-slate-800 border-cyan-500/60 shadow-lg shadow-cyan-950/40 scale-100'
+                        : 'bg-slate-950/90 border-slate-800 hover:border-cyan-500/40 hover:scale-105 cursor-pointer'
                     }`}
                   >
                     {showFace ? (
@@ -291,7 +291,7 @@ export default function MemoryMosaicMiniGame({ onComplete, onClose }: MemoryMosa
                 status === 'success'
                   ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 shadow-emerald-500/20'
                   : status === 'fair'
-                  ? 'bg-purple-500/20 border border-purple-500/40 text-purple-400 shadow-purple-500/20'
+                  ? 'bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 shadow-cyan-500/20'
                   : 'bg-rose-500/20 border border-rose-500/40 text-rose-400 shadow-rose-500/20'
               }`}
             >
@@ -320,7 +320,7 @@ export default function MemoryMosaicMiniGame({ onComplete, onClose }: MemoryMosa
 
             <button
               onClick={handleReturnToLife}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs normal-case tracking-normal transition shadow-lg shadow-purple-600/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black text-xs normal-case tracking-normal transition shadow-lg shadow-amber-500/25 active:scale-95 flex items-center justify-center gap-2"
             >
               <span>Tiếp Tục Cuộc Đời</span>
               <ArrowRight className="w-4 h-4" />

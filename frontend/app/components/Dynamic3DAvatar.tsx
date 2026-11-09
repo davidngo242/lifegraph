@@ -2,7 +2,7 @@
 
 import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Float } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
 export type AvatarReactionType = 'idle' | 'celebrate' | 'exhausted' | 'meditating' | 'shocked' | 'negotiating';
@@ -360,13 +360,11 @@ function ProceduralCharacterMesh({
     if (isFastForwarding) return;
 
     const t = state.clock.getElapsedTime();
+    const breatheSpeed = 2.4;
 
     if (headRef.current && groupRef.current) {
-      // 1. Natural Breathing Cycle
-      const breatheSpeed = vitality < 30 ? 1.0 : 2.2;
-      const breatheAmp = vitality < 30 ? 0.012 : 0.02;
-      const breathe = Math.sin(t * breatheSpeed) * breatheAmp;
-      groupRef.current.position.y = 0.0 + breathe;
+      // 1. Natural Breathing Cycle (Chân cắm vững chắc trên bục trận pháp, không bị bay bay)
+      groupRef.current.position.y = 0.0;
 
       // 2. Cursor Dõi Theo Tự Nhiên (Smooth Pointer Tracking)
       const targetRotationY = state.pointer.x * 0.35;
@@ -486,15 +484,15 @@ function ProceduralCharacterMesh({
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
       {isBaby ? (
-        /* Cute Baby Swaddle Wrap with Little Kicking Booties (Grounded near dais) */
-        <group position={[0, -0.42, 0]}>
+        /* Cute Baby Swaddle Wrap with Little Kicking Booties (Grounded firmly on golden dais) */
+        <group position={[0, -0.58, 0]}>
           <mesh material={clothMaterial}>
             <cylinderGeometry args={[0.28, 0.34, 0.56, 24]} />
           </mesh>
           <mesh position={[0, 0.25, 0.04]} rotation={[0.2, 0, 0]} material={clothMaterial}>
             <torusGeometry args={[0.24, 0.045, 12, 24]} />
           </mesh>
-          {/* Little Cute Baby Feet Kicking just above dais */}
+          {/* Little Cute Baby Feet Kicking right on dais */}
           <mesh position={[-0.09, -0.32, 0.12]} material={shoeMaterial}>
             <sphereGeometry args={[0.065, 14, 14]} />
           </mesh>
@@ -709,7 +707,7 @@ function ProceduralCharacterMesh({
       )}
 
       {/* Head Group (Rotatable & Cursor Tracking) */}
-      <group ref={headRef} position={[0, isBaby ? 0.08 : isChild ? 0.42 : 0.62, 0]} scale={[headScale, headScale, headScale]}>
+      <group ref={headRef} position={[0, isBaby ? -0.06 : isChild ? 0.42 : 0.62, 0]} scale={[headScale, headScale, headScale]}>
         {/* Head Cranium */}
         <mesh material={skinMaterial}>
           <sphereGeometry args={[isFemale ? 0.46 : 0.47, 32, 32]} />
@@ -994,6 +992,137 @@ function ProceduralCharacterMesh({
   );
 }
 
+// 3D Golden Magic Dais (Bục Ma Pháp Hoàng Kim - Tiếp đất tuyệt đối, chân đạp vững vàng, không còn bay bay)
+function GoldenMagicDais({ isMeditating = false }: { isMeditating?: boolean }) {
+  const outerRuneRef = useRef<THREE.Group>(null);
+  const innerRuneRef = useRef<THREE.Group>(null);
+  const lightBeamsRef = useRef<THREE.Group>(null);
+
+  const daisGoldPlate = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#d97706',
+    roughness: 0.25,
+    metalness: 0.85,
+    emissive: '#78350f',
+    emissiveIntensity: 0.35,
+  }), []);
+
+  const daisCoreMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#0f172a',
+    roughness: 0.7,
+    metalness: 0.2,
+  }), []);
+
+  const goldGlowMaterial = useMemo(() => new THREE.MeshBasicMaterial({
+    color: '#fbbf24',
+    transparent: true,
+    opacity: 0.88,
+  }), []);
+
+  const cyanRuneMaterial = useMemo(() => new THREE.MeshBasicMaterial({
+    color: '#38bdf8',
+    transparent: true,
+    opacity: 0.8,
+  }), []);
+
+  const contactShadowMaterial = useMemo(() => new THREE.MeshBasicMaterial({
+    color: '#020617',
+    transparent: true,
+    opacity: 0.65,
+  }), []);
+
+  const verticalBeamMaterial = useMemo(() => new THREE.MeshBasicMaterial({
+    color: '#fef08a',
+    transparent: true,
+    opacity: 0.18,
+    side: THREE.DoubleSide,
+  }), []);
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    if (outerRuneRef.current) {
+      outerRuneRef.current.rotation.y = t * 0.16;
+    }
+    if (innerRuneRef.current) {
+      innerRuneRef.current.rotation.y = -t * 0.26;
+    }
+    if (lightBeamsRef.current) {
+      lightBeamsRef.current.position.y = -0.98 + (Math.sin(t * 2) * 0.02);
+    }
+  });
+
+  return (
+    <group position={[0, -0.98, 0]}>
+      {/* 1. Realistic Contact Shadow directly under feet (bóng đổ tiếp xúc thực tế) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 0]} material={contactShadowMaterial}>
+        <ringGeometry args={[0, 0.46, 32]} />
+      </mesh>
+
+      {/* 2. Dais Stepped Plinth Base (Đế Bục Vàng Rơm Kim Loại Chắc Chắn) */}
+      <mesh position={[0, -0.04, 0]} material={daisCoreMaterial}>
+        <cylinderGeometry args={[0.92, 1.05, 0.06, 36]} />
+      </mesh>
+      <mesh position={[0, -0.015, 0]} material={daisGoldPlate}>
+        <cylinderGeometry args={[0.94, 0.96, 0.025, 36]} />
+      </mesh>
+
+      {/* 3. Outer Golden Magic Rune Ring (Vòng Trận Pháp Hoàng Kim Quay Thuận Chiều) */}
+      <group ref={outerRuneRef} position={[0, 0.01, 0]}>
+        <mesh rotation={[-Math.PI / 2, 0, 0]} material={goldGlowMaterial}>
+          <ringGeometry args={[0.82, 0.88, 36]} />
+        </mesh>
+        {/* 8 Golden Rune Marks around perimeter */}
+        {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
+          const rad = (angle * Math.PI) / 180;
+          const rx = Math.cos(rad) * 0.85;
+          const rz = Math.sin(rad) * 0.85;
+          return (
+            <mesh key={`outer-rune-${i}`} position={[rx, 0.012, rz]} rotation={[0, -rad, 0]} material={goldGlowMaterial}>
+              <boxGeometry args={[0.04, 0.005, 0.015]} />
+            </mesh>
+          );
+        })}
+      </group>
+
+      {/* 4. Inner Cyan / Amber Geometric Star Lines (Vòng Tinh Thể Xanh Lam Ngược Chiều) */}
+      <group ref={innerRuneRef} position={[0, 0.015, 0]}>
+        <mesh rotation={[-Math.PI / 2, 0, 0]} material={cyanRuneMaterial}>
+          <ringGeometry args={[0.56, 0.59, 32]} />
+        </mesh>
+        {[0, 60, 120].map((rotDeg, idx) => {
+          const rad = (rotDeg * Math.PI) / 180;
+          return (
+            <mesh key={`spoke-${idx}`} rotation={[-Math.PI / 2, 0, rad]} material={goldGlowMaterial}>
+              <planeGeometry args={[1.1, 0.012]} />
+            </mesh>
+          );
+        })}
+      </group>
+
+      {/* 5. Center Golden Core Disc */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.008, 0]} material={goldGlowMaterial}>
+        <ringGeometry args={[0.18, 0.22, 24]} />
+      </mesh>
+
+      {/* 6. Vertical Light Shroud & Rising Energy Beams (Tia sáng ma pháp vươn lên từ bục) */}
+      <group ref={lightBeamsRef}>
+        <mesh position={[0, 0.35, 0]} material={verticalBeamMaterial}>
+          <cylinderGeometry args={[0.82, 0.90, 0.7, 24, 1, true]} />
+        </mesh>
+        {[
+          [-0.45, 0.25, 0.3],
+          [0.45, 0.25, 0.3],
+          [-0.35, 0.35, -0.4],
+          [0.35, 0.35, -0.4],
+        ].map(([bx, by, bz], i) => (
+          <mesh key={`beam-${i}`} position={[bx, by, bz]} material={goldGlowMaterial}>
+            <cylinderGeometry args={[0.01, 0.02, 0.5, 8]} />
+          </mesh>
+        ))}
+      </group>
+    </group>
+  );
+}
+
 // Mood Lighting Controller (Burnout & Meditation-Reactive with 3-Point Studio Setup)
 function MoodLighting({ burnout = 0, isMeditating = false }: { burnout: number; isMeditating?: boolean }) {
   const isHighBurnout = burnout > 75;
@@ -1013,7 +1142,7 @@ function MoodLighting({ burnout = 0, isMeditating = false }: { burnout: number; 
       <directionalLight
         position={[-3, 1.8, 2]}
         intensity={isHighBurnout ? 0.2 : 0.6}
-        color={isHighBurnout ? '#581c87' : '#93c5fd'}
+        color={isHighBurnout ? '#7f1d1d' : '#93c5fd'}
       />
       <directionalLight
         position={[0, 3.2, -3.2]}
@@ -1043,25 +1172,27 @@ export default function Dynamic3DAvatar({
   return (
     <div className={`relative flex items-center justify-center overflow-visible ${className}`}>
       <Canvas
-        camera={{ position: [0, 0.08, 4.75], fov: 36 }}
+        camera={{ position: [0, 0.05, 4.75], fov: 36 }}
         className="w-full h-full cursor-grab active:cursor-grabbing overflow-visible"
         gl={{ antialias: true, alpha: true }}
       >
         <MoodLighting burnout={burnout} isMeditating={isMeditating} />
 
-        <Float speed={isFastForwarding ? 0 : 1.2} rotationIntensity={0.04} floatIntensity={0.03}>
-          <ProceduralCharacterMesh
-            nationality={nationality}
-            gender={gender}
-            age={age}
-            burnout={burnout}
-            vitality={vitality}
-            reaction={reaction}
-            isFastForwarding={isFastForwarding}
-            traits={traits}
-            netWorth={netWorth}
-          />
-        </Float>
+        {/* Bục Ma Pháp Hoàng Kim (Golden Magic Dais - Tiếp Đất Vững Vàng) */}
+        <GoldenMagicDais isMeditating={isMeditating} />
+
+        {/* Nhân vật 3D đứng vững trên bục - Tuyệt đối không bay lơ lửng */}
+        <ProceduralCharacterMesh
+          nationality={nationality}
+          gender={gender}
+          age={age}
+          burnout={burnout}
+          vitality={vitality}
+          reaction={reaction}
+          isFastForwarding={isFastForwarding}
+          traits={traits}
+          netWorth={netWorth}
+        />
 
         {showControls && (
           <OrbitControls

@@ -20,7 +20,7 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
   const getSacrificeBadge = (type: string) => {
     if (type === "cash") return { icon: <DollarSign className="w-3.5 h-3.5 text-rose-400" />, label: "Tổn Thất Tiền Bạc", color: "border-rose-500/40 text-rose-300 bg-rose-500/10" };
     if (type === "vitality") return { icon: <Heart className="w-3.5 h-3.5 text-rose-400" />, label: "Tổn Thất Thể Lực", color: "border-amber-500/40 text-amber-300 bg-amber-500/10" };
-    return { icon: <Users className="w-3.5 h-3.5 text-rose-400" />, label: "Tổn Thất Nghĩa Tình", color: "border-purple-500/40 text-purple-300 bg-purple-500/10" };
+    return { icon: <Users className="w-3.5 h-3.5 text-rose-400" />, label: "Tổn Thất Nghĩa Tình", color: "border-sky-500/40 text-sky-300 bg-sky-500/10" };
   };
 
   // Sync Age accurately
