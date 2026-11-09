@@ -237,7 +237,9 @@ export default function NarrativeFeed({
                   {/* Choice & Consequence */}
                   {item.choice && (
                     <div className="text-[12px] text-slate-300 bg-slate-900/80 rounded-xl p-2 border border-slate-800/60 font-sans leading-relaxed">
-                      <span className="text-indigo-400 font-sans font-semibold mr-1">↳ Quyết định:</span>
+                      <span className="text-indigo-400 font-sans font-semibold mr-1">
+                        {item.age === 0 ? '↳ Ký ức đầu đời:' : '↳ Lựa chọn:'}
+                      </span>
                       <span>{item.choice}</span>
                     </div>
                   )}

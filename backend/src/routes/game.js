@@ -454,18 +454,18 @@ router.post('/childhood-fastforward', async (req, res) => {
     if ((!milestone_choices || milestone_choices.length === 0) && (Number(target_age) || 6) <= 6) {
       history.push({
         age: 1,
-        event: "Lễ Thôi Nôi & Bước Đi Chập Chững",
-        choice: "Cất tiếng gọi cha mẹ đầu đời và chập chững những bước đi vững chãi đầu tiên trong tình yêu thương gia đình."
+        event: "Thôi Nôi Bập Bẹ & Đôi Bước Chập Chững",
+        choice: "Bập bẹ tiếng gọi mẹ bên bếp lửa ấm; chập chững bám ống quần ba ngã dập môi rồi nín khóc khi được dỗ kẹo."
       });
       history.push({
         age: 3,
-        event: "Những Năm Tháng Nhà Trẻ Rộn Rã",
-        choice: "Làm quen với bạn bè trang lứa, học hát đồng dao và khám phá thế giới xung quanh qua từng trang sách ảnh."
+        event: "Nhà Trẻ Phố Cũ & Bụi Bặm Tuổi Thơ",
+        choice: "Tranh nhau món đồ chơi gỗ cũ với bạn cùng bàn, bị phạt đứng góc lớp rồi làm lành bằng mẩu bánh quy vụn."
       });
       history.push({
         age: 5,
-        event: "Tốt Nghiệp Mầm Non & Cắp Sách Vào Lớp 1",
-        choice: "Được cha mẹ mua cho bộ đồng phục và chiếc cặp sách mới tinh, háo hức sẵn sàng bước vào ngưỡng cửa trường tiểu học."
+        event: "Rời Lớp Mầm Non & Ngóng Trông Bàn Gỗ",
+        choice: "Mẹ dắt tay lội mưa dầm mua cho đôi ủng cao su và cặp sách mới; đêm trước ngày tựu trường thao thức chờ trời sáng."
       });
       character.vitality = Math.min(100, (character.vitality || 80) + 15);
       character.karma = Math.min(100, (character.karma || 100) + 15);

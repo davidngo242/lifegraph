@@ -30,25 +30,25 @@
           "hotspots": [
             {
               "id": "hs_crib_toys",
-              "label": "Đồ chơi phát triển trí tuệ",
+              "label": "Mẩu gỗ đồ chơi của cha",
               "icon": "star",
               "position_x": 250,
               "dialogue": {
-                "speaker": "Góc đồ chơi",
-                "text": "Những khối hình màu sắc giúp bạn nhận diện không gian và kích thích trí tò mò từ thuở lọt lòng.",
+                "speaker": "Mẩu gỗ mài nhẵn",
+                "text": "Mấy mẩu gỗ mài tròn góc nhẵn thín cha tự tay đẽo lúc đêm muộn, mùi gỗ thông còn phảng phất khói bếp.",
                 "granted_knowledge": "infant_curiosity",
                 "cost_ap": 0
               }
             },
             {
               "id": "hs_parents_cradle",
-              "label": "Vòng tay phụ mẫu",
+              "label": "Hơi ấm của mẹ",
               "icon": "heart",
               "position_x": 550,
               "npc_role": "parent",
               "dialogue": {
                 "speaker": "Cha Mẹ",
-                "text": "Ngoan nào con yêu. Ba mẹ sẽ luôn là điểm tựa bình yên nhất che chở cho con khôn lớn.",
+                "text": "Nín nào con, nép vào ngực mẹ nghe nhịp tim này... Bàn tay mẹ ráp sạn vì giặt giũ thuê nhưng ôm con chặt như ôm báu vật.",
                 "granted_knowledge": "parental_unconditional_love",
                 "affinity_delta": 20,
                 "cost_ap": 0
@@ -59,23 +59,23 @@
       ],
       "mind_stage": {
         "whispers": {
-          "dilemma_prompt": "Trước những bước chập chững đầu đời, cơ thể bé bỏng của bạn muốn hướng về điều gì?",
-          "rational": "Khám phá các khối đồ chơi và lắng nghe ngôn ngữ của người lớn để phát triển trí tuệ sớm.",
-          "empathy": "Cảm nhận trọn vẹn tình yêu thương ấm áp từ ánh mắt và bàn tay vỗ về của cha mẹ.",
-          "instinct": "Dũng cảm buông tay vịn để bước đi những bước đầu tiên trên đôi chân của chính mình."
+          "dilemma_prompt": "Sàn nhà lành lạnh dưới chân trần, mẹ đang quỳ gối dang tay ở góc chiếu: bạn sẽ làm gì?",
+          "rational": "Bò lại góc bàn với chiếc thìa nhôm kêu lẻng xẻng, tò mò nghe người lớn nói chuyện.",
+          "empathy": "Dụi đầu vào cổ mẹ hít hà mùi sữa và mồ hôi, bập bẹ cất tiếng gọi mẹ đầu đời.",
+          "instinct": "Buông ngón tay đang bám chặt mép giường, dồn hết sức bước tới dù chân run rẩy."
         }
       },
       "choices": [
         {
           "id": "CHOICE_FIRST_STEPS",
-          "title": "Dũng Cảm Bước Đi Những Bước Đầu Tiên",
+          "title": "Buông Mép Giường, Tự Bước Đi",
           "stance": "BẢN NĂNG",
-          "description": "Chập chững bước về phía vòng tay của cha mẹ trong tiếng vỗ tay khích lệ.",
+          "description": "Bước liêu xiêu ba bước rồi ngã nhào vào vòng tay mẹ đang chờ sẵn.",
           "knowledge_requirements": [],
           "cost_ap": 0,
           "outcomes": {
             "success": {
-              "narration": "Bạn đã tự mình bước được 5 bước vững vàng! Cha mẹ rơi nước mắt vì hạnh phúc.",
+              "narration": "Đôi chân non nớt tự đứng vững trên sàn; cha vỗ đùi đánh đét mừng rỡ, mẹ vội gạt giọt nước mắt lăn trên gò má.",
               "commitments": [
                 "Vững bước đầu đời"
               ],
@@ -88,16 +88,16 @@
         },
         {
           "id": "CHOICE_EARLY_LANGUAGE",
-          "title": "Bi Bô Tập Nói & Lắng Nghe Lời Ru",
+          "title": "Bập Bẹ Gọi Tên Cha Mẹ",
           "stance": "TRÁI TIM",
-          "description": "Gọi tiếng 'Ba', 'Mẹ' đầu tiên và hòa mình vào tình yêu thương gia đình.",
+          "description": "Cất tiếng gọi đầu đời giữa gian phòng trọ sực mùi cơm sôi.",
           "knowledge_requirements": [
             "parental_unconditional_love"
           ],
           "cost_ap": 0,
           "outcomes": {
             "success": {
-              "narration": "Tiếng gọi đầu đời vang lên trong trẻo, gắn kết sợi dây tình thân ruột thịt thiêng liêng.",
+              "narration": "Tiếng gọi 'Mẹ' bập bẹ bật ra giữa bữa cơm đạm bạc; mẹ sững sờ đánh rơi cả đôi đũa rồi ôm chầm lấy bạn vào lòng.",
               "commitments": [
                 "Tình thân gia đình bền chặt"
               ],
@@ -112,12 +112,12 @@
       "completion_flag": "infancy_resolved",
       "knowledge_labels": {
         "infant_curiosity": {
-          "label": "Đồ chơi phát triển trí tuệ",
-          "desc": "Những khối hình màu sắc giúp bạn nhận diện không gian và kích thích trí tò mò từ thuở lọt lòng."
+          "label": "Mẩu gỗ đồ chơi của cha",
+          "desc": "Mấy mẩu gỗ mài tròn góc nhẵn thín cha tự tay đẽo lúc đêm muộn, mùi gỗ thông còn phảng phất khói bếp."
         },
         "parental_unconditional_love": {
-          "label": "Vòng tay phụ mẫu",
-          "desc": "Ngoan nào con yêu. Ba mẹ sẽ luôn là điểm tựa bình yên nhất che chở cho con khôn lớn."
+          "label": "Hơi ấm của mẹ",
+          "desc": "Nín nào con, nép vào ngực mẹ nghe nhịp tim này... Bàn tay mẹ ráp sạn vì giặt giũ thuê nhưng ôm con chặt như ôm báu vật."
         }
       }
     },

@@ -32,12 +32,12 @@
           "hotspots": [
             {
               "id": "hs_desk_study",
-              "label": "Bàn học & Cặp sách",
+              "label": "Tập vở gạch xóa mực tím",
               "icon": "book",
               "position_x": 220,
               "dialogue": {
-                "speaker": "Bàn học chăm ngoan",
-                "text": "Sách vở được sắp xếp ngăn nắp. Ôn tập kỹ các bài toán và chính tả giúp bạn tự tin trước kỳ thi kiểm tra chất lượng.",
+                "speaker": "Bàn học gỗ cũ",
+                "text": "Mép vở ô ly quăn góc vì lật giở nhiều lần, bài toán đố hóc búa chép bằng mực tím còn mấy chỗ gạch xóa lem luốc.",
                 "granted_knowledge": "knowledge_school_curriculum",
                 "cost_ap": 0
               }
@@ -50,7 +50,7 @@
               "npc_role": "classmate",
               "dialogue": {
                 "speaker": "Bạn cùng bàn",
-                "text": "Cậu có muốn cùng tớ giải câu đố vui này không? Cùng học cùng chơi bao giờ cũng vui hơn một mình!",
+                "text": "Này, tớ có viên bi ve trong vắt vừa nhặt được dưới gốc bàng, cho mượn cục gôm thì tí tớ chỉ cho câu toán số 4!",
                 "granted_knowledge": "peer_trust_friendship",
                 "affinity_delta": 10,
                 "trust_delta": 10,
@@ -65,7 +65,7 @@
               "npc_role": "teacher",
               "dialogue": {
                 "speaker": "Cô giáo chủ nhiệm",
-                "text": "Kiến thức như mầm non cần được tưới tắm mỗi ngày. Sự trung thực và kiên trì mới là điểm số quý giá nhất.",
+                "text": "Học cho bản thân mình chứ đừng học đối phó lấy điểm khoe họ hàng. Chỗ nào chưa thông tan học ở lại hỏi cô.",
                 "granted_knowledge": "teacher_academic_guidance",
                 "affinity_delta": 5,
                 "trust_delta": 15,
@@ -81,13 +81,13 @@
           "hotspots": [
             {
               "id": "hs_parent_support",
-              "label": "Bàn trà cùng cha mẹ",
+              "label": "Bàn ăn đạm bạc cùng cha mẹ",
               "icon": "coffee",
               "position_x": 400,
               "npc_role": "parent",
               "dialogue": {
                 "speaker": "Cha Mẹ",
-                "text": "Con cứ cố gắng hết sức là ba mẹ tự hào rồi. Nhớ giữ gìn sức khỏe, đừng thức quá khuya con nhé.",
+                "text": "Ăn thêm nửa bát cơm cho có sức mà học. Thi cử gì thì thi, thức khuya quầng cả mắt mai lại gật gù trên lớp.",
                 "granted_knowledge": "family_encouragement",
                 "affinity_delta": 15,
                 "cost_ap": 0
@@ -98,10 +98,10 @@
       ],
       "mind_stage": {
         "whispers": {
-          "dilemma_prompt": "Trước kỳ thi học kỳ và các hoạt động của trường, bạn sẽ định hướng bản thân tập trung vào điều gì?",
-          "rational": "Chăm chỉ rèn luyện kỷ luật và kiến thức nền tảng sẽ tạo bệ phóng vững chắc nhất cho tương lai.",
-          "empathy": "Tình bạn trong sáng và sự hiếu thảo với cha mẹ là hành trang tinh thần vô giá không con số nào đo được.",
-          "instinct": "Hãy tự tin thể hiện năng khiếu riêng và khám phá thế giới xung quanh bằng sự tò mò trong trẻo."
+          "dilemma_prompt": "Tiếng trống trường giục giã, kỳ thi cuối năm cận kề và đám bạn rủ rê sau giờ học: bạn chọn con đường nào?",
+          "rational": "Cắm đầu giải hết tập đề cương, quyết tâm giành điểm 10 để cha mẹ nở mày nở mặt với bà con lối xóm.",
+          "empathy": "Tan trường chạy ào về nhà bưng mâm cơm, rửa chồng bát giúp mẹ rồi mới ngồi vào bàn học bài.",
+          "instinct": "Rủ đám bạn trốn nắng sau sân bóng, đá quả bóng nhựa móp méo đến khi mồ hôi ướt sũng lưng áo."
         }
       },
       "choices": [

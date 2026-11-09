@@ -199,7 +199,7 @@ export default function YearEndReflectionModal({
             </div>
 
             <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-200/90 leading-relaxed italic mt-auto">
-              &ldquo;Cuộc đời không có điều gì là lãng phí. Những dự định chưa kịp làm hôm nay sẽ là hạt mầm nuôi dưỡng khát vọng cho năm tới.&rdquo;
+              &ldquo;Một năm vất vả qua đi rồi. Đêm nay thở phào nhẹ nhõm, ăn bát cơm nóng với gia đình rồi ngày mai lại tiếp tục bước tiếp.&rdquo;
             </div>
           </div>
         </div>

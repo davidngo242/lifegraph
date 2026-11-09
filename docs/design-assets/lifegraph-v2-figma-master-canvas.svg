@@ -1,0 +1,336 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2500 1600" width="2500" height="1600" style="background:#070b14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgCanvasGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#070b14"/>
+      <stop offset="100%" stop-color="#0d1527"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="amberPillarGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="rosePillarGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="100%" stop-color="#e11d48"/>
+    </linearGradient>
+    <linearGradient id="emeraldPillarGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="laserDiscGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="treePillarSage" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#6b21a8"/>
+    </linearGradient>
+    <linearGradient id="treePillarWealth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#854d0e"/>
+    </linearGradient>
+    <linearGradient id="treePillarSocial" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#065f46"/>
+    </linearGradient>
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base Canvas -->
+  <rect width="2500" height="1600" fill="url(#bgCanvasGrad)"/>
+
+  <!-- ========================================== -->
+  <!-- 1. ARTBOARD 1: HERO COCKPIT BANNER        -->
+  <!-- ========================================== -->
+  <g id="Frame-Hero-Cockpit-Banner" transform="translate(60, 60)">
+    <!-- Canvas Frame Box -->
+    <rect width="1680" height="280" rx="24" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+    <rect width="1680" height="280" rx="24" fill="url(#cardGrad)"/>
+
+    <!-- Reticle Grid & Cyber Ambient -->
+    <line x1="40" y1="40" x2="1640" y2="40" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 4"/>
+    
+    <!-- 3D Living Avatar Hero (Borderless & Laser Disc) -->
+    <g id="Group-3D-Avatar-Hero" transform="translate(40, 20)">
+      <!-- Laser Reticle Pedestal -->
+      <ellipse cx="90" cy="220" rx="80" ry="22" fill="url(#laserDiscGrad)" filter="url(#neonGlow)"/>
+      <ellipse cx="90" cy="220" rx="60" ry="14" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 3"/>
+      <ellipse cx="90" cy="220" rx="35" ry="8" fill="#0284c7" fill-opacity="0.6"/>
+
+      <!-- Chibi 3D Mesh Representation -->
+      <!-- Body & Clothes -->
+      <path d="M 60 170 Q 90 150 120 170 L 130 215 Q 90 225 50 215 Z" fill="#e11d48"/>
+      <rect x="75" y="175" width="30" height="38" rx="4" fill="#be123c"/>
+      <!-- Hands in Gotcha Pose (Arms Akimbo) -->
+      <path d="M 58 175 Q 38 190 52 205" stroke="#fecdd3" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <path d="M 122 175 Q 142 190 128 205" stroke="#fecdd3" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <!-- Head & Face -->
+      <circle cx="90" cy="120" r="42" fill="#ffe4e6"/>
+      <!-- Hair Bob -->
+      <path d="M 45 125 C 45 75 135 75 135 125 C 135 140 125 145 125 125 C 125 90 55 90 55 125 Z" fill="#1e1b4b"/>
+      <path d="M 46 115 Q 90 135 134 115" fill="#1e1b4b"/>
+      <!-- Eyes & Cheeks -->
+      <circle cx="78" cy="125" r="5" fill="#0f172a"/>
+      <circle cx="102" cy="125" r="5" fill="#0f172a"/>
+      <circle cx="80" cy="123" r="2" fill="#ffffff"/>
+      <circle cx="104" cy="123" r="2" fill="#ffffff"/>
+      <ellipse cx="72" cy="133" rx="5" ry="3" fill="#fda4af"/>
+      <ellipse cx="108" cy="133" rx="5" ry="3" fill="#fda4af"/>
+      <path d="M 85 136 Q 90 142 95 136" stroke="#991b1b" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <!-- Laurel Halo / Golden Wreath -->
+      <path d="M 50 78 Q 90 60 130 78" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" filter="url(#neonGlow)"/>
+      <circle cx="90" cy="65" r="4" fill="#fef08a"/>
+    </g>
+
+    <!-- Character Info Metadata -->
+    <g id="Group-Character-Metadata" transform="translate(230, 45)">
+      <!-- Name & Nationality -->
+      <text x="0" y="32" font-size="28" font-weight="700" fill="#f8fafc">Frida Karlsen</text>
+      <rect x="180" y="10" width="75" height="26" rx="6" fill="#be123c" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1"/>
+      <text x="195" y="27" font-size="12" font-weight="600" fill="#fda4af">♀ Nữ</text>
+      <rect x="265" y="10" width="85" height="26" rx="6" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+      <text x="277" y="27" font-size="12" font-weight="600" fill="#bae6fd">🇳🇴 Na Uy</text>
+      <text x="365" y="28" font-size="14" fill="#94a3b8">6 Tuổi • Cư ngụ: Bergen (Khu phố cổ Bryggen)</text>
+
+      <!-- Status Chips & Aspirations -->
+      <g transform="translate(0, 55)">
+        <rect x="0" y="0" width="130" height="26" rx="13" fill="#78350f" stroke="#f59e0b" stroke-width="1"/>
+        <text x="14" y="17" font-size="12" font-weight="600" fill="#fef3c7">⚡ Khởi Đầu Bi Cực</text>
+
+        <rect x="140" y="0" width="145" height="26" rx="13" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+        <text x="154" y="17" font-size="12" font-weight="600" fill="#cbd5e1">🎒 Học Sinh Tiểu Học</text>
+
+        <rect x="295" y="0" width="150" height="26" rx="13" fill="#1e1b4b" stroke="#6366f1" stroke-width="1"/>
+        <text x="309" y="17" font-size="12" font-weight="600" fill="#c7d2fe">⭐ Lv.1 Kẻ Khởi Đầu</text>
+      </g>
+
+      <!-- Aspiration Progress Bar -->
+      <g transform="translate(0, 105)">
+        <text x="0" y="16" font-size="13" font-weight="600" fill="#a855f7">🎯 KHÁT VỌNG: Trí Tuệ &amp; Chuyên Môn</text>
+        <rect x="270" y="4" width="300" height="14" rx="7" fill="#1e1b4b" stroke="#4338ca" stroke-width="1"/>
+        <rect x="270" y="4" width="90" height="14" rx="7" fill="#818cf8"/>
+        <text x="585" y="16" font-size="13" font-weight="700" fill="#818cf8">30%</text>
+      </g>
+    </g>
+
+    <!-- 4 Life Pillars Status Cards -->
+    <g id="Group-4-Life-Pillars" transform="translate(1080, 40)">
+      <!-- AP Card -->
+      <rect x="0" y="0" width="260" height="90" rx="16" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+      <circle cx="35" cy="45" r="18" fill="#78350f"/>
+      <text x="28" y="52" font-size="20">⚡</text>
+      <text x="65" y="34" font-size="13" fill="#fcd34d" font-weight="600">NĂNG LƯỢNG (AP)</text>
+      <text x="65" y="65" font-size="24" fill="#ffffff" font-weight="800">3 / 3 <tspan font-size="14" fill="#f59e0b" font-weight="500">AP/năm</tspan></text>
+
+      <!-- HP Card -->
+      <rect x="280" y="0" width="280" height="90" rx="16" fill="#1e293b" stroke="#f43f5e" stroke-width="1.5"/>
+      <circle cx="315" cy="45" r="18" fill="#881337"/>
+      <text x="307" y="52" font-size="20">❤️</text>
+      <text x="345" y="34" font-size="13" fill="#fda4af" font-weight="600">SINH LỰC (HP)</text>
+      <text x="345" y="65" font-size="24" fill="#ffffff" font-weight="800">100% <tspan font-size="14" fill="#10b981" font-weight="500">Sung Mãn</tspan></text>
+
+      <!-- Burnout Card -->
+      <rect x="0" y="105" width="260" height="90" rx="16" fill="#1e293b" stroke="#fb923c" stroke-width="1.5"/>
+      <circle cx="35" cy="150" r="18" fill="#7c2d12"/>
+      <text x="27" y="157" font-size="20">🔥</text>
+      <text x="65" y="139" font-size="13" fill="#fdba74" font-weight="600">CĂNG THẲNG</text>
+      <text x="65" y="170" font-size="24" fill="#ffffff" font-weight="800">0% <tspan font-size="14" fill="#10b981" font-weight="500">Ổn Định</tspan></text>
+
+      <!-- Cash Card -->
+      <rect x="280" y="105" width="280" height="90" rx="16" fill="#1e293b" stroke="#10b981" stroke-width="1.5"/>
+      <circle cx="315" cy="150" r="18" fill="#064e3b"/>
+      <text x="306" y="157" font-size="20">💰</text>
+      <text x="345" y="139" font-size="13" fill="#6ee7b7" font-weight="600">TÀI CHÍNH TÍCH LŨY</text>
+      <text x="345" y="170" font-size="24" fill="#ffffff" font-weight="800">28.000 <tspan font-size="14" fill="#34d399" font-weight="500">kr (NOK)</tspan></text>
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 2. ARTBOARD 2: ĐẠI THỤ SINH MỆNH TAM TRỤ  -->
+  <!-- ========================================== -->
+  <g id="Frame-Trinity-Life-Tree" transform="translate(60, 380)">
+    <!-- Canvas Frame Box -->
+    <rect width="1680" height="1160" rx="24" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+    <rect width="1680" height="1160" rx="24" fill="url(#cardGrad)"/>
+
+    <!-- Header Toolbar -->
+    <g transform="translate(40, 40)">
+      <text x="0" y="28" font-size="24" font-weight="800" fill="#f8fafc">🌳 ĐẠI THỤ SINH MỆNH TOÀN NĂNG</text>
+      <text x="0" y="55" font-size="14" fill="#94a3b8">Hệ Sinh Thái Cuộc Đời: Gốc Rễ Gia Phong • Nhánh Hoàng Kim Tư Bản • Tán Lá Trí Tuệ Thân Tâm</text>
+
+      <!-- 3 Pillar Shortcut Badges -->
+      <rect x="950" y="8" width="200" height="42" rx="12" fill="#14532d" stroke="#22c55e" stroke-width="1"/>
+      <text x="975" y="34" font-size="13" font-weight="700" fill="#86efac">🌱 Gia Phong &amp; Huyết Thống</text>
+
+      <rect x="1170" y="8" width="200" height="42" rx="12" fill="#713f12" stroke="#eab308" stroke-width="1"/>
+      <text x="1195" y="34" font-size="13" font-weight="700" fill="#fde047">🏛️ Tư Bản &amp; Sản Nghiệp</text>
+
+      <rect x="1390" y="8" width="200" height="42" rx="12" fill="#581c87" stroke="#a855f7" stroke-width="1"/>
+      <text x="1415" y="34" font-size="13" font-weight="700" fill="#d8b4fe">🔮 Thân Tâm &amp; Trí Tuệ</text>
+    </g>
+
+    <!-- Tree SVG Procedural Branches & Connectors -->
+    <g id="Tree-Procedural-Trunk" transform="translate(840, 680)">
+      <!-- Root Growth Rings (Annual Tree Rings) -->
+      <circle cx="0" cy="300" r="160" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="8 6"/>
+      <circle cx="0" cy="300" r="120" fill="none" stroke="#475569" stroke-width="2"/>
+      <circle cx="0" cy="300" r="80" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="4 4"/>
+      <circle cx="0" cy="300" r="40" fill="#1e293b" stroke="#94a3b8" stroke-width="2"/>
+      <text x="-48" y="306" font-size="14" font-weight="700" fill="#f8fafc">6 NĂM TUỔI</text>
+
+      <!-- Main Energy Branches -->
+      <!-- Left Branch: Social / Family -->
+      <path d="M 0 0 C -150 -100 -400 -50 -500 -180" fill="none" stroke="#10b981" stroke-width="6" stroke-linecap="round" filter="url(#neonGlow)"/>
+      <path d="M -500 -180 C -550 -250 -600 -320 -600 -400" fill="none" stroke="#059669" stroke-width="4" stroke-dasharray="6 4"/>
+
+      <!-- Center-Up Branch: Wealth / Capital -->
+      <path d="M 0 0 C 0 -150 0 -300 0 -420" fill="none" stroke="#eab308" stroke-width="7" stroke-linecap="round" filter="url(#neonGlow)"/>
+      <path d="M 0 -420 C -50 -500 50 -540 0 -600" fill="none" stroke="#ca8a04" stroke-width="4" stroke-dasharray="6 4"/>
+
+      <!-- Right Branch: Sage / Stoic Mind -->
+      <path d="M 0 0 C 150 -100 400 -50 500 -180" fill="none" stroke="#a855f7" stroke-width="6" stroke-linecap="round" filter="url(#neonGlow)"/>
+      <path d="M 500 -180 C 550 -250 600 -320 600 -400" fill="none" stroke="#7e22ce" stroke-width="4" stroke-dasharray="6 4"/>
+
+      <!-- Central Core Orb (Lõi Sinh Mệnh) -->
+      <circle cx="0" cy="0" r="65" fill="#0f172a" stroke="#38bdf8" stroke-width="4" filter="url(#neonGlow)"/>
+      <circle cx="0" cy="0" r="48" fill="#0284c7" fill-opacity="0.4"/>
+      <text x="-25" y="-5" font-size="28" font-weight="900" fill="#ffffff">3 AP</text>
+      <text x="-38" y="22" font-size="12" font-weight="700" fill="#7dd3fc">LÕI SINH MỆNH</text>
+
+      <!-- Action Nodes on Branches -->
+      <!-- Node: Hoc Bai O Truong -->
+      <g transform="translate(-320, -140)">
+        <rect x="-110" y="-35" width="220" height="70" rx="16" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+        <text x="-90" y="-5" font-size="15" font-weight="700" fill="#f8fafc">🎒 Học Bài Ở Trường</text>
+        <text x="-90" y="18" font-size="12" fill="#6ee7b7">+12 Karma Học Vấn • 1 AP</text>
+      </g>
+
+      <!-- Node: Viec Nha Phu Me -->
+      <g transform="translate(-520, -250)">
+        <rect x="-110" y="-35" width="220" height="70" rx="16" fill="#0f172a" stroke="#059669" stroke-width="2"/>
+        <text x="-90" y="-5" font-size="15" font-weight="700" fill="#f8fafc">🧹 Việc Nhà Phụ Mẹ</text>
+        <text x="-90" y="18" font-size="12" fill="#34d399">+$25 Tiền Tiêu Vặt • 1 AP</text>
+      </g>
+
+      <!-- Node: Đột Phá Khám Phá -->
+      <g transform="translate(0, -320)">
+        <rect x="-130" y="-40" width="260" height="80" rx="20" fill="#78350f" stroke="#fbbf24" stroke-width="3" filter="url(#neonGlow)"/>
+        <text x="-105" y="-8" font-size="16" font-weight="800" fill="#ffffff">🚀 ĐỘT PHÁ SỐ MỆNH</text>
+        <text x="-105" y="16" font-size="13" fill="#fde68a">Đăng Ký Thi Học Sinh Giỏi (2 AP)</text>
+      </g>
+
+      <!-- Node: Da Bong Cung Ban -->
+      <g transform="translate(320, -140)">
+        <rect x="-110" y="-35" width="220" height="70" rx="16" fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
+        <text x="-90" y="-5" font-size="15" font-weight="700" fill="#f8fafc">⚽ Đá Bóng Cùng Bạn</text>
+        <text x="-90" y="18" font-size="12" fill="#c084fc">+10 HP • -20 Stress • 1 AP</text>
+      </g>
+
+      <!-- Node: Kham Pha Thien Nhien -->
+      <g transform="translate(520, -250)">
+        <rect x="-110" y="-35" width="220" height="70" rx="16" fill="#0f172a" stroke="#7e22ce" stroke-width="2"/>
+        <text x="-90" y="-5" font-size="15" font-weight="700" fill="#f8fafc">🌲 Khám Phá Rừng Thông</text>
+        <text x="-90" y="18" font-size="12" fill="#d8b4fe">Nuôi Dưỡng Sinh Thái • 1 AP</text>
+      </g>
+    </g>
+
+    <!-- Bottom Action Ribbon: Giao Thừa & Ngã Rẽ -->
+    <g transform="translate(40, 1040)">
+      <rect width="1600" height="80" rx="20" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+      <text x="40" y="46" font-size="18" font-weight="700" fill="#f8fafc">🎆 Kết Thúc Tuổi 6: Còn 0 AP Dư Thừa</text>
+      <text x="420" y="46" font-size="14" fill="#94a3b8">• Tự động chuyển đổi thành +2 HP &amp; -5% Kiệt Sức khi Giao Thừa</text>
+      
+      <!-- Button Year-End Reflection -->
+      <rect x="1220" y="16" width="340" height="48" rx="14" fill="#f59e0b" filter="url(#neonGlow)"/>
+      <text x="1260" y="46" font-size="15" font-weight="800" fill="#0f172a">🌿 CHIÊM NGHIỆM GIAO THỪA ➔</text>
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 3. ARTBOARD 3: NARRATIVE CHRONICLE SIDEBAR-->
+  <!-- ========================================== -->
+  <g id="Frame-Narrative-Chronicle-Stream" transform="translate(1780, 60)">
+    <!-- Canvas Frame Box -->
+    <rect width="660" height="1480" rx="24" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+    <rect width="660" height="1480" rx="24" fill="url(#cardGrad)"/>
+
+    <!-- Header -->
+    <g transform="translate(40, 45)">
+      <text x="0" y="24" font-size="22" font-weight="800" fill="#f8fafc">📖 NHẬT KÝ HÀNH TRÌNH</text>
+      <text x="0" y="48" font-size="13" fill="#94a3b8">Dòng thời gian sự kiện cuộc đời (Dedicated Chronicle)</text>
+
+      <!-- Category Filter Chips -->
+      <g transform="translate(0, 70)">
+        <rect x="0" y="0" width="80" height="30" rx="15" fill="#3b82f6"/>
+        <text x="18" y="20" font-size="12" font-weight="700" fill="#ffffff">Tất Cả</text>
+
+        <rect x="90" y="0" width="85" height="30" rx="15" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+        <text x="105" y="20" font-size="12" font-weight="600" fill="#94a3b8">Cột Mốc</text>
+
+        <rect x="185" y="0" width="95" height="30" rx="15" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+        <text x="198" y="20" font-size="12" font-weight="600" fill="#94a3b8">Sự Nghiệp</text>
+
+        <rect x="290" y="0" width="85" height="30" rx="15" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+        <text x="306" y="20" font-size="12" font-weight="600" fill="#94a3b8">Gia Tộc</text>
+      </g>
+    </g>
+
+    <!-- Narrative Event Cards Stream -->
+    <g transform="translate(40, 180)">
+      <!-- Timeline Stem Line -->
+      <line x1="20" y1="20" x2="20" y2="1200" stroke="#334155" stroke-width="2"/>
+
+      <!-- Event 1 (Tuổi 6 - Đang diễn ra) -->
+      <g transform="translate(0, 0)">
+        <circle cx="20" cy="20" r="10" fill="#f59e0b" filter="url(#neonGlow)"/>
+        <rect x="50" y="0" width="530" height="150" rx="16" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="75" y="32" font-size="14" font-weight="800" fill="#fcd34d">TUỔI 6 • BƯỚC NGOẶT ĐẦU ĐỜI</text>
+        <rect x="430" y="16" width="125" height="24" rx="12" fill="#78350f"/>
+        <text x="445" y="32" font-size="11" font-weight="700" fill="#fef08a">⚡ ĐANG DIỄN RA</text>
+        
+        <text x="75" y="65" font-size="16" font-weight="700" fill="#ffffff">Ngã Rẽ Học Trò: Lớp Học &amp; Bạn Mới</text>
+        <text x="75" y="92" font-size="13" fill="#cbd5e1">Bước vào trường tiểu học tại Bergen. Mùi gỗ thông mới</text>
+        <text x="75" y="112" font-size="13" fill="#cbd5e1">và bảng đen mở ra chương mới trong trang đời của bạn.</text>
+        <text x="75" y="132" font-size="12" fill="#10b981" font-weight="600">↳ Lựa chọn: Chăm chỉ nghe giảng • +12 Karma Học Vấn</text>
+      </g>
+
+      <!-- Event 2 (Tuổi 5) -->
+      <g transform="translate(0, 180)">
+        <circle cx="20" cy="20" r="8" fill="#3b82f6"/>
+        <rect x="50" y="0" width="530" height="135" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+        <text x="75" y="30" font-size="13" font-weight="700" fill="#93c5fd">TUỔI 5 • CỘT MỐC</text>
+        <text x="75" y="60" font-size="15" font-weight="700" fill="#ffffff">Tốt Nghiệp Mầm Non &amp; Cắp Sách</text>
+        <text x="75" y="85" font-size="13" fill="#94a3b8">Được cha mẹ mua cho bộ đồng phục và chiếc cặp sách mới tinh,</text>
+        <text x="75" y="105" font-size="13" fill="#94a3b8">háo hức chuẩn bị vào ngưỡng cửa trường tiểu học.</text>
+      </g>
+
+      <!-- Event 3 (Tuổi 3) -->
+      <g transform="translate(0, 340)">
+        <circle cx="20" cy="20" r="8" fill="#64748b"/>
+        <rect x="50" y="0" width="530" height="120" rx="16" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+        <text x="75" y="28" font-size="13" font-weight="700" fill="#64748b">TUỔI 3</text>
+        <text x="75" y="55" font-size="15" font-weight="700" fill="#e2e8f0">Những Năm Tháng Nhà Trẻ Rộn Rã</text>
+        <text x="75" y="80" font-size="13" fill="#94a3b8">Làm quen với bạn bè trang lứa, học hát đồng dao và khám phá</text>
+        <text x="75" y="100" font-size="13" fill="#94a3b8">thế giới muôn màu xung quanh.</text>
+      </g>
+
+      <!-- Event 4 (Tuổi 0 - Sinh ra) -->
+      <g transform="translate(0, 485)">
+        <circle cx="20" cy="20" r="8" fill="#10b981"/>
+        <rect x="50" y="0" width="530" height="120" rx="16" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+        <text x="75" y="28" font-size="13" font-weight="700" fill="#34d399">TUỔI 0 • KHỞI ĐẦU SỐ MỆNH</text>
+        <text x="75" y="55" font-size="15" font-weight="700" fill="#e2e8f0">Cất Tiếng Khóc Chào Đời Tại Bergen</text>
+        <text x="75" y="80" font-size="13" fill="#94a3b8">Sinh ra trong một gia đình bình dân tại thành phố cảng Bergen</text>
+        <text x="75" y="100" font-size="13" fill="#94a3b8">với niềm hân hoan vô bờ của cha mẹ.</text>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -141,7 +141,7 @@ export default function DynamicLifeTree({
           icon: '🍼',
           apCost: 1,
           gainText: '+15 Thể chất, +5 HP',
-          flavor: 'Hấp thu nguồn sữa ngọt lành và vi chất nuôi lớn cơ thể non nớt',
+          flavor: 'Ngậm bầu sữa ấm của mẹ, no bụng rồi chìm vào giấc ngủ thật say',
           angleDeg: -135,
           distanceRatio: 0.72,
           color: {
@@ -159,7 +159,7 @@ export default function DynamicLifeTree({
           icon: '☀️',
           apCost: 1,
           gainText: '+10 Đề kháng, -5 Stress',
-          flavor: 'Phơi nắng sớm ban mai hấp thu Vitamin D tự nhiên làm chắc xương',
+          flavor: 'Nằm phơi nắng sớm ngoài hiên, gió phe phẩy làm khô lớp mồ hôi trộm',
           angleDeg: -75,
           distanceRatio: 0.76,
           color: {
@@ -177,7 +177,7 @@ export default function DynamicLifeTree({
           icon: '🧸',
           apCost: 1,
           gainText: '+10 Trí tuệ, +5 Karma',
-          flavor: 'Chơi xếp hình khối và lục lạc kích thích liên kết tế bào thần kinh',
+          flavor: 'Lắc chiếc lục lạc leng keng, tò mò gặm thử mẩu gỗ vuông cha đẽo',
           angleDeg: -15,
           distanceRatio: 0.74,
           color: {
@@ -195,7 +195,7 @@ export default function DynamicLifeTree({
           icon: '👶',
           apCost: 1,
           gainText: '+3 Max HP, +8 Thể lực',
-          flavor: 'Chập chững những bước chân đầu đời khám phá thế giới xung quanh',
+          flavor: 'Bám thành giường lò dò từng bước, ngã dập mông lại lồm cồm bò dậy',
           angleDeg: 45,
           distanceRatio: 0.75,
           color: {
@@ -213,7 +213,7 @@ export default function DynamicLifeTree({
           icon: '💖',
           apCost: 1,
           gainText: '+15 Tình cảm, -10 Stress',
-          flavor: 'Sà vào lòng cha mẹ cảm nhận tình yêu thương vô điều kiện',
+          flavor: 'Dụi đầu vào cổ mẹ nũng nịu đòi bế, nghe tiếng cha cười vang gian nhà',
           angleDeg: 120,
           distanceRatio: 0.72,
           color: {
@@ -261,7 +261,7 @@ export default function DynamicLifeTree({
           icon: '🎒',
           apCost: 1,
           gainText: '+12 Karma học vấn',
-          flavor: 'Chăm chỉ nghe giảng, giành danh hiệu học sinh xuất sắc',
+          flavor: 'Nắn nót từng dòng mực tím, quyết tâm giải bằng được bài toán đố hóc búa',
           angleDeg: -120,
           distanceRatio: 0.75,
           color: {
@@ -279,7 +279,7 @@ export default function DynamicLifeTree({
           icon: '🧹',
           apCost: 1,
           gainText: '+$25 tiền tiêu vặt, +Gia đạo',
-          flavor: 'Quét nhà rửa chén, đỡ đần cha mẹ và học tính tự lập',
+          flavor: 'Quét sạch hiên nhà, rửa xong chồng bát đũa mỡ màng để mẹ về đỡ nhọc',
           angleDeg: -60,
           distanceRatio: 0.72,
           color: {
@@ -297,7 +297,7 @@ export default function DynamicLifeTree({
           icon: '⚽',
           apCost: 1,
           gainText: '+10 HP, -20 Stress',
-          flavor: 'Rèn luyện thể lực dẻo dai và gắn kết tình bạn thanh xuân',
+          flavor: 'Tranh bóng trên sân đất nứt nẻ, mồ hôi ướt đẫm lưng áo mà vui hết nấc',
           angleDeg: 10,
           distanceRatio: 0.75,
           color: {
@@ -315,7 +315,7 @@ export default function DynamicLifeTree({
           icon: '🌲',
           apCost: 1,
           gainText: '+Khám phá, Nuôi dưỡng tâm hồn',
-          flavor: 'Dạo chơi đồng nội, quan sát vạn vật sinh sôi',
+          flavor: 'Trèo cây hái quả dại, lội mương bắt ốc cùng đám bạn xóm dưới',
           angleDeg: 80,
           distanceRatio: 0.74,
           color: {
@@ -333,7 +333,7 @@ export default function DynamicLifeTree({
           icon: '👨‍👩‍👧',
           apCost: 1,
           gainText: '+Hảo cảm, Gia đạo thuận hòa',
-          flavor: 'Lắng nghe lời khuyên răn dạy dỗ của đấng sinh thành',
+          flavor: 'Ngồi bên mâm cơm tối kể chuyện trường lớp, nghe cha thở dài chuyện tiền nong',
           angleDeg: 145,
           distanceRatio: 0.75,
           color: {
@@ -380,7 +380,7 @@ export default function DynamicLifeTree({
         icon: '💼',
         apCost: 1,
         gainText: '+$1.5k~$7k Thặng dư',
-        flavor: 'Làm việc chăm chỉ, tạo dựng nền tảng tài chính tự do',
+        flavor: 'Tăng ca cày cuốc đến đêm muộn, chắt bóp từng đồng tiền công gửi về cho gia đình',
         angleDeg: -130,
         distanceRatio: 0.76,
         color: {
@@ -398,7 +398,7 @@ export default function DynamicLifeTree({
         icon: '📚',
         apCost: 1,
         gainText: '+8 Karma, Nâng trình chuyên môn',
-        flavor: 'Đầu tư học thêm kỹ năng và tích lũy học vấn cao cấp',
+        flavor: 'Gặm bánh mì khô đọc tài liệu chuyên ngành, thức trắng đêm rèn giũa tay nghề',
         angleDeg: -60,
         distanceRatio: 0.72,
         color: {
@@ -416,7 +416,7 @@ export default function DynamicLifeTree({
         icon: '🌿',
         apCost: 1,
         gainText: '+15 Sinh lực, -25 Stress',
-        flavor: 'Tập yoga, thiền định và chữa lành sau những ngày cày việc',
+        flavor: 'Tắm nước nóng xua tan cơn đau nhức xương khớp, ngủ một giấc sâu không mộng mị',
         angleDeg: 20,
         distanceRatio: 0.74,
         color: {
@@ -434,7 +434,7 @@ export default function DynamicLifeTree({
         icon: '🤝',
         apCost: 1,
         gainText: 'Gặp gỡ tri kỷ, Mở lối làm ăn',
-        flavor: 'Tham gia hội thảo, mở rộng các mối quan hệ chất lượng',
+        flavor: 'Ghé quán cóc làm chén trà ấm, kết thân với anh em bằng hữu cùng chí hướng',
         angleDeg: 90,
         distanceRatio: 0.76,
         color: {
@@ -452,7 +452,7 @@ export default function DynamicLifeTree({
         icon: '🎲',
         apCost: 1,
         gainText: 'Cơ hội x2 vốn hoặc rủi ro',
-        flavor: 'Đầu tư mạo hiểm nắm bắt các chu kỳ tài sản chớp nhoáng',
+        flavor: 'Đánh cược vào cơ hội chớp nhoáng: được ăn cả, ngã về không giữa thương trường',
         angleDeg: 150,
         distanceRatio: 0.72,
         color: {

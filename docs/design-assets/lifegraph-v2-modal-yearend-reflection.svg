@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 800" width="900" height="800" style="background:#070b14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <linearGradient id="modalBgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="goldButton" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="neonGlowModal" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Modal Outer Frame with Amber Border -->
+  <rect x="30" y="30" width="840" height="740" rx="28" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5" filter="url(#neonGlowModal)"/>
+  <rect x="30" y="30" width="840" height="740" rx="28" fill="url(#modalBgGrad)"/>
+
+  <!-- Modal Header Ribbon -->
+  <g transform="translate(60, 60)">
+    <circle cx="28" cy="28" r="24" fill="#78350f"/>
+    <text x="16" y="37" font-size="24">🌿</text>
+    <text x="70" y="26" font-size="24" font-weight="900" fill="#f8fafc">NGHI THỨC CHIÊM NGHIỆM GIAO THỪA</text>
+    <text x="70" y="52" font-size="14" fill="#fcd34d">Lắng đọng thành tựu tuổi 6 • Gieo mầm định hướng tương lai cho tuổi 7</text>
+  </g>
+
+  <!-- Two Columns: Accomplishments & Unfinished Seeds -->
+  <g transform="translate(60, 140)">
+    <!-- Left Column: Dấu Ấn Năm Qua -->
+    <rect x="0" y="0" width="370" height="230" rx="18" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <rect x="0" y="0" width="370" height="42" rx="18" fill="#14532d" fill-opacity="0.4"/>
+    <text x="20" y="27" font-size="14" font-weight="800" fill="#86efac">✨ DẤU ẤN ĐẠT ĐƯỢC NĂM QUA</text>
+    
+    <text x="20" y="70" font-size="13" fill="#cbd5e1">✓ Đã dùng hết 3 AP vào học tập và kết giao</text>
+    <text x="20" y="100" font-size="13" fill="#cbd5e1">✓ Tích lũy +12 Karma học vấn tại trường tiểu học</text>
+    <text x="20" y="130" font-size="13" fill="#cbd5e1">✓ Thắt chặt tình cảm với Mẹ: +$25 tiền tiêu vặt</text>
+    <text x="20" y="160" font-size="13" fill="#cbd5e1">✓ Duy trì Sinh lực 100% &amp; Kháng hoàn toàn Burnout</text>
+    <text x="20" y="195" font-size="12" font-weight="700" fill="#34d399">⚡ 0 AP Dư ➔ Tự Động Quy Đổi Thành Dưỡng Sinh</text>
+
+    <!-- Right Column: Hạt Mầm Dang Dở -->
+    <rect x="410" y="0" width="370" height="230" rx="18" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <rect x="410" y="0" width="370" height="42" rx="18" fill="#78350f" fill-opacity="0.4"/>
+    <text x="430" y="27" font-size="14" font-weight="800" fill="#fde68a">🌱 HẠT MẦM CÒN DANG DỞ</text>
+
+    <text x="430" y="70" font-size="13" fill="#94a3b8">• Chưa tham gia cuộc thi Học Sinh Giỏi Toàn Thành Phố</text>
+    <text x="430" y="100" font-size="13" fill="#94a3b8">• Chưa mua được bộ cờ vây gỗ thông mơ ước</text>
+    <text x="430" y="130" font-size="13" fill="#94a3b8">• Cha mẹ vẫn phải tăng ca muộn tại bến cảng</text>
+    <text x="430" y="160" font-size="13" fill="#94a3b8">• Quỹ tiết kiệm cá nhân mới đạt 28.000 kr</text>
+    <text x="430" y="195" font-size="12" font-weight="700" fill="#f59e0b">⏳ Sẽ lưu lại làm mục tiêu phấn đấu cho năm sau</text>
+  </g>
+
+  <!-- 3 Annual Pledges Cards (1-Click Pledges) -->
+  <g transform="translate(60, 395)">
+    <text x="0" y="20" font-size="15" font-weight="800" fill="#f8fafc">🎯 GIEO MẦM TÂM NGUYỆN NĂM MỚI (CHỌN 1 HƯỚNG PHÁT TRIỂN TUỔI 7):</text>
+
+    <!-- Pledge 1: Thịnh Vượng -->
+    <g transform="translate(0, 35)">
+      <rect x="0" y="0" width="245" height="180" rx="16" fill="#1e293b" stroke="#eab308" stroke-width="2"/>
+      <circle cx="35" cy="35" r="18" fill="#713f12"/>
+      <text x="26" y="42" font-size="20">📈</text>
+      <text x="65" y="32" font-size="14" font-weight="800" fill="#fef08a">THỊNH VƯỢNG</text>
+      <text x="65" y="48" font-size="11" fill="#94a3b8">Kinh Tế &amp; Tích Lũy</text>
+      <text x="16" y="85" font-size="12" fill="#cbd5e1">• +15% thu nhập cày việc</text>
+      <text x="16" y="105" font-size="12" fill="#cbd5e1">• +10% lợi nhuận đầu tư</text>
+      <text x="16" y="125" font-size="12" fill="#cbd5e1">• Tặng quà Tết cho cha mẹ</text>
+      <rect x="16" y="140" width="213" height="28" rx="8" fill="#eab308" fill-opacity="0.2"/>
+      <text x="75" y="158" font-size="11" font-weight="700" fill="#fde047">Chọn Hướng Này</text>
+    </g>
+
+    <!-- Pledge 2: An Yên (Recommended Active) -->
+    <g transform="translate(265, 35)">
+      <rect x="0" y="0" width="245" height="180" rx="16" fill="#0f172a" stroke="#10b981" stroke-width="2.5" filter="url(#neonGlowModal)"/>
+      <circle cx="35" cy="35" r="18" fill="#064e3b"/>
+      <text x="25" y="42" font-size="20">🧘</text>
+      <text x="65" y="32" font-size="14" font-weight="800" fill="#a7f3d0">AN YÊN THÂN TÂM</text>
+      <text x="65" y="48" font-size="11" fill="#6ee7b7">Sức Khỏe &amp; Tịnh Trí</text>
+      <text x="16" y="85" font-size="12" fill="#ffffff">• Kháng 30% Burnout</text>
+      <text x="16" y="105" font-size="12" fill="#ffffff">• Gấp đôi tốc độ hồi HP</text>
+      <text x="16" y="125" font-size="12" fill="#ffffff">• Thêm 1 lần thiền định</text>
+      <rect x="16" y="140" width="213" height="28" rx="8" fill="#10b981"/>
+      <text x="65" y="158" font-size="12" font-weight="800" fill="#022c22">✓ ĐANG CHỌN</text>
+    </g>
+
+    <!-- Pledge 3: Nhân Mạch -->
+    <g transform="translate(530, 35)">
+      <rect x="0" y="0" width="250" height="180" rx="16" fill="#1e293b" stroke="#a855f7" stroke-width="2"/>
+      <circle cx="35" cy="35" r="18" fill="#581c87"/>
+      <text x="25" y="42" font-size="20">🤝</text>
+      <text x="65" y="32" font-size="14" font-weight="800" fill="#f3e8ff">NHÂN MẠCH</text>
+      <text x="65" y="48" font-size="11" fill="#c084fc">Gia Tộc &amp; Bạn Bè</text>
+      <text x="16" y="85" font-size="12" fill="#cbd5e1">• Gấp đôi EXP Social Links</text>
+      <text x="16" y="105" font-size="12" fill="#cbd5e1">• -50% Chi phí quà tặng</text>
+      <text x="16" y="125" font-size="12" fill="#cbd5e1">• Tăng tỉ lệ gặp Quý nhân</text>
+      <rect x="16" y="140" width="218" height="28" rx="8" fill="#a855f7" fill-opacity="0.2"/>
+      <text x="80" y="158" font-size="11" font-weight="700" fill="#e9d5ff">Chọn Hướng Này</text>
+    </g>
+  </g>
+
+  <!-- Big Final Action Button: Bước Sang Tuổi Mới -->
+  <g transform="translate(60, 640)">
+    <rect width="780" height="60" rx="18" fill="url(#goldButton)" filter="url(#neonGlowModal)"/>
+    <text x="195" y="38" font-size="18" font-weight="900" fill="#0f172a">🎆 KHÉP LẠI NĂM CŨ • BƯỚC SANG TUỔI 7 LIỀN MẠCH ➔</text>
+  </g>
+</svg>

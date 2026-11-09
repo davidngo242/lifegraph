@@ -825,8 +825,8 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
     history_log: [
       {
         age: 0,
-        event: `Chào đời tại ${chosenCountry.name} ${chosenCountry.flag} trong một ${chosenBackground.name.toLowerCase()}.`,
-        choice: "Cất tiếng khóc chào đời"
+        event: `Sinh ra tại ${chosenCountry.name} ${chosenCountry.flag} • Xuất thân: ${chosenBackground.name}.`,
+        choice: "Tiếng khóc chào đời lọt vào gian phòng trọ sực mùi dầu gió; mẹ ghì chặt con vào lòng sau cơn đau chuyển dạ."
       }
     ],
     is_deceased: false,
