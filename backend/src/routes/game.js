@@ -2177,6 +2177,10 @@ router.post('/action/wellness', async (req, res) => {
     const bonusVit = healthLevel >= 2 ? (healthLevel === 2 ? 10 : 15) : 0;
     const bonusBurnoutRelief = healthLevel >= 1 ? (healthLevel === 1 ? 5 : healthLevel === 2 ? 15 : 25) : 0;
 
+    const isWellnessPledge = character.active_pledge === 'pledge_wellness';
+    const wellnessMult = isWellnessPledge ? 1.5 : 1.0;
+    const wellnessBurnoutMult = isWellnessPledge ? 1.3 : 1.0;
+
     if (action_type === 'medical_checkup') {
       const costAP = 1;
       const costCash = 3000;
@@ -2187,17 +2191,18 @@ router.post('/action/wellness', async (req, res) => {
       character.action_points -= costAP;
       character.cash -= costCash;
       const maxV = character.max_vitality || 100;
-      const vitGained = 20 + bonusVit;
-      const burnoutRelief = 25 + bonusBurnoutRelief;
+      const vitGained = Math.round((20 + bonusVit) * wellnessMult);
+      const burnoutRelief = Math.round((25 + bonusBurnoutRelief) * wellnessBurnoutMult);
       character.vitality = Math.min(maxV, character.vitality + vitGained);
       character.burnout = Math.max(0, character.burnout - burnoutRelief);
       awardLifeExp(character, 30, "Trị liệu y tế phục hồi thể trạng");
 
       const healthPerkMsg = healthLevel > 0 ? ` (Kỹ Năng Sinh Lực Lv${healthLevel} tăng thêm +${bonusVit} HP, -${bonusBurnoutRelief} Burnout)` : '';
+      const pledgeMsg = isWellnessPledge ? ' [🧘 Tâm Nguyện An Yên x1.5]' : '';
       history.push({
         age: character.age,
         event: "Khám sức khỏe tổng quát & Trị liệu dưỡng sinh",
-        choice: `Chi $${costCash.toLocaleString()} & ${costAP} AP (+${vitGained} Sinh lực, -${burnoutRelief} Burnout)${healthPerkMsg}`
+        choice: `Chi $${costCash.toLocaleString()} & ${costAP} AP (+${vitGained} Sinh lực, -${burnoutRelief} Burnout)${healthPerkMsg}${pledgeMsg}`
       });
       const combo = recordAndCheckCombo(character, 'wellness');
       character.history_log = history;
@@ -2206,7 +2211,7 @@ router.post('/action/wellness', async (req, res) => {
       return res.json({
         success: true,
         combo_triggered: combo,
-        message: `Trị liệu y tế phục hồi thể trạng thành công! (+${vitGained} Sinh lực, -${burnoutRelief} Burnout)${healthPerkMsg}`,
+        message: `Trị liệu y tế phục hồi thể trạng thành công! (+${vitGained} Sinh lực, -${burnoutRelief} Burnout)${healthPerkMsg}${pledgeMsg}`,
         character
       });
     }
@@ -2220,18 +2225,19 @@ router.post('/action/wellness', async (req, res) => {
 
       character.action_points -= costAP;
       character.cash -= costCash;
-      const vitGained = 15 + bonusVit;
-      const burnoutRelief = 35 + bonusBurnoutRelief;
+      const vitGained = Math.round((15 + bonusVit) * wellnessMult);
+      const burnoutRelief = Math.round((35 + bonusBurnoutRelief) * wellnessBurnoutMult);
       character.burnout = Math.max(0, character.burnout - burnoutRelief);
       character.vitality = Math.min(character.max_vitality || 100, character.vitality + vitGained);
       character.karma = Math.min(100, character.karma + 10);
       awardLifeExp(character, 35, "Khóa tu tĩnh tâm dưỡng sinh");
 
       const healthPerkMsg = healthLevel > 0 ? ` (Kỹ Năng Sinh Lực Lv${healthLevel} tăng thêm +${bonusVit} HP, -${bonusBurnoutRelief} Burnout)` : '';
+      const pledgeMsg = isWellnessPledge ? ' [🧘 Tâm Nguyện An Yên x1.5]' : '';
       history.push({
         age: character.age,
         event: "Khóa tu tĩnh tâm / Du lịch hòa mình vào thiên nhiên",
-        choice: `Chi $${costCash.toLocaleString()} & ${costAP} AP (+${vitGained} Sinh lực, -${burnoutRelief} Burnout)${healthPerkMsg}`
+        choice: `Chi $${costCash.toLocaleString()} & ${costAP} AP (+${vitGained} Sinh lực, -${burnoutRelief} Burnout)${healthPerkMsg}${pledgeMsg}`
       });
       character.history_log = history;
       await updateCharacter(character.id, character);
@@ -2270,7 +2276,9 @@ router.post('/action/overtime', async (req, res) => {
     const baseEarned = Math.round(1500 + (age * 120) + (Math.random() * 800));
     const hasCodeWhisperer = (character.innate_traits || []).includes("code_whisperer");
     const codeMultiplier = hasCodeWhisperer ? 1.35 : 1.0;
-    const earnedCash = Math.round(baseEarned * techMultiplier * negotiationMultiplier * codeMultiplier);
+    const isWealthPledge = character.active_pledge === 'pledge_wealth';
+    const pledgeWealthMultiplier = isWealthPledge ? 1.15 : 1.0;
+    const earnedCash = Math.round(baseEarned * techMultiplier * negotiationMultiplier * codeMultiplier * pledgeWealthMultiplier);
 
     const healthLevel = character.skills?.resilience_health?.level || 0;
     const burnoutReduction = healthLevel * 0.2; // 20% burnout reduction per level
@@ -2278,6 +2286,10 @@ router.post('/action/overtime', async (req, res) => {
     const hasStoicZen = (character.innate_traits || []).includes("stoic_zen");
     if (hasStoicZen) {
       burnoutGained = Math.max(2, Math.round(burnoutGained * 0.5)); // Giảm 50% kiệt sức khi cày việc (Stoic Zen)
+    }
+    const isWellnessPledge = character.active_pledge === 'pledge_wellness';
+    if (isWellnessPledge) {
+      burnoutGained = Math.max(1, Math.round(burnoutGained * 0.70)); // Kháng 30% Burnout khi cày việc
     }
 
     character.action_points -= 1;
@@ -2359,7 +2371,10 @@ router.post('/action/network', async (req, res) => {
     if (!character) return;
     const socialLevel = character.skills?.leadership_social?.level || 0;
     const socialDiscount = socialLevel === 1 ? 0.25 : socialLevel === 2 ? 0.50 : socialLevel >= 3 ? 0.70 : 0;
-    const costCash = Math.round(400 * (1 - socialDiscount));
+    const isSocialPledge = character.active_pledge === 'pledge_social';
+    const pledgeDiscount = isSocialPledge ? 0.50 : 0.0;
+    const combinedDiscount = Math.min(0.90, socialDiscount + pledgeDiscount);
+    const costCash = Math.round(400 * (1 - combinedDiscount));
 
     if (character.action_points < 1 || character.cash < costCash) {
       return res.status(400).json({ error: `Cần 1 AP và $${costCash.toLocaleString()} để mời đối tác cà phê / tham dự sự kiện kết nối!` });
@@ -2983,7 +2998,7 @@ router.post('/action/rpg-active-perk', async (req, res) => {
 // POST /api/game/tick - Advance simulation
 router.post('/tick', async (req, res) => {
   try {
-    const { choice_id, interaction_type, type: rawType, interaction_result, advance_only, invested_ap = 0 } = req.body;
+    const { choice_id, interaction_type, type: rawType, interaction_result, advance_only, invested_ap = 0, pledge_id } = req.body;
     const previous_dilemma = advance_only ? null : (req.body.previous_dilemma || getSessionData().currentDilemma);
     let character = await getLivingCharacter(res);
     if (!character) return;
@@ -2991,6 +3006,22 @@ router.post('/tick', async (req, res) => {
       return res.status(400).json({ error: "Không tìm thấy nhân vật đang hoạt động. Vui lòng bắt đầu kiếp sống mới!" });
     }
     if (character.is_deceased) return res.status(409).json({ error: 'Kiếp sống đã kết thúc.' });
+
+    // Annual Pledge Registration (Tâm Nguyện Gieo Mầm Cuối Năm)
+    if (pledge_id) {
+      character.active_pledge = pledge_id;
+      const pledgeNames = {
+        pledge_wealth: "📈 Tâm Nguyện Thịnh Vượng (+15% Thu nhập & +10% Lợi tức đầu tư)",
+        pledge_wellness: "🧘 Tâm Nguyện An Yên (Kháng 30% Burnout & x2 Dưỡng sinh)",
+        pledge_social: "🤝 Tâm Nguyện Nhân Mạch (x2 EXP Quý Nhân & -50% Chi phí giao lưu)"
+      };
+      character.history_log = character.history_log || [];
+      character.history_log.push({
+        age: character.age,
+        event: "Gieo Mầm Tâm Nguyện Giao Thừa",
+        choice: pledgeNames[pledge_id] || pledge_id
+      });
+    }
     let assets = await getAssets(character.id);
     let relationships = await getRelationships(character.id);
     let npcs = await getNpcs(character.id);

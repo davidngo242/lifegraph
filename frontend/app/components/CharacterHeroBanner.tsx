@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
+import SpineCharacterAvatar from './SpineCharacterAvatar';
 import SidekickPetCompanion from './SidekickPetCompanion';
 import {
   Cpu,
@@ -226,6 +227,7 @@ export default function CharacterHeroBanner({
 
   // Dynamic Action Feedback Realtime Overlay
   const [activeFeedback, setActiveFeedback] = useState<BannerActionFeedback | null>(null);
+  const [bannerAvatarMode, setBannerAvatarMode] = useState<'3d' | 'spine'>('3d');
 
   useEffect(() => {
     if (actionFeedback && actionFeedback.timestamp) {
@@ -532,19 +534,34 @@ export default function CharacterHeroBanner({
             {/* Borderless 3D Avatar (Tràn Banner Không Viền Vuông) */}
             <div className={avatarContainerClasses}>
               <div className={avatarFilterClasses}>
-                <Dynamic3DAvatar
-                  nationality={character.nationality}
-                  gender={character.gender || 'male'}
-                  age={age}
-                  burnout={burnout}
-                  vitality={vitality}
-                  reaction={reaction}
-                  isFastForwarding={isFastForwarding}
-                  showControls={false}
-                  traits={traits}
-                  netWorth={netWorth}
-                  className="w-full h-full overflow-visible pointer-events-auto"
-                />
+                {bannerAvatarMode === '3d' ? (
+                  <Dynamic3DAvatar
+                    nationality={character.nationality}
+                    gender={character.gender || 'male'}
+                    age={age}
+                    burnout={burnout}
+                    vitality={vitality}
+                    reaction={reaction}
+                    isFastForwarding={isFastForwarding}
+                    showControls={false}
+                    traits={traits}
+                    netWorth={netWorth}
+                    className="w-full h-full overflow-visible pointer-events-auto"
+                  />
+                ) : (
+                  <SpineCharacterAvatar
+                    nationality={character.nationality}
+                    gender={character.gender || 'male'}
+                    age={age}
+                    burnout={burnout}
+                    vitality={vitality}
+                    animation={reaction === 'celebrate' ? 'Jump' : reaction === 'exhausted' ? 'Idle_2' : reaction === 'shocked' ? 'Idle_1' : 'Front_idle'}
+                    showBones={false}
+                    netWorth={netWorth}
+                    traits={traits}
+                    className="w-full h-full overflow-visible pointer-events-auto"
+                  />
+                )}
               </div>
 
               {/* DYNAMIC AVATAR STATE OVERLAYS */}
@@ -584,6 +601,16 @@ export default function CharacterHeroBanner({
                   )}
                 </div>
               )}
+
+              {/* Mode Switcher Pill (3D <-> SPINE) */}
+              <button
+                type="button"
+                onClick={() => setBannerAvatarMode(prev => prev === '3d' ? 'spine' : '3d')}
+                className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-md bg-slate-900/80 hover:bg-slate-800 text-[10px] font-sans font-bold border border-cyan-500/40 text-cyan-300 backdrop-blur-md opacity-0 group-hover:opacity-100 transition shadow z-20 cursor-pointer"
+                title="Chuyển chế độ hiển thị 3D / SPINE"
+              >
+                {bannerAvatarMode === '3d' ? '3D' : 'SPINE'}
+              </button>
 
               {/* 360 Fullscreen Trigger */}
               <button

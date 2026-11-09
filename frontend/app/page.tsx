@@ -25,6 +25,7 @@ import CharacterHeroBanner, { BannerActionFeedback } from './components/Characte
 import AvatarInspectorModal from './components/AvatarInspectorModal';
 import CinemaDecisionRoomModal from './components/CinemaDecisionRoomModal';
 import InteractiveScene2D from './components/InteractiveScene2D';
+import YearEndReflectionModal from './components/rpg/YearEndReflectionModal';
 import type { AvatarReactionType } from './components/Dynamic3DAvatar';
 import AspirationUpgradeModal from './components/AspirationUpgradeModal';
 import LifeGraphHomePortal from './components/LifeGraphHomePortal';
@@ -111,6 +112,8 @@ export default function LifeGraphPage() {
   const [bannerFeedback, setBannerFeedback] = useState<BannerActionFeedback | null>(null);
   const [breakthroughAction, setBreakthroughAction] = useState<any>(null);
   const [incomingNpcEvent, setIncomingNpcEvent] = useState<any>(null);
+  const [isYearEndModalOpen, setIsYearEndModalOpen] = useState<boolean>(false);
+  const [isPledging, setIsPledging] = useState<boolean>(false);
 
   const triggerAvatarReaction = (reactionType: AvatarReactionType, durationMs: number = 3200) => {
     setAvatarReaction(reactionType);
@@ -228,6 +231,7 @@ export default function LifeGraphPage() {
     interaction_result?: any;
     advance_only?: boolean;
     invested_ap?: number;
+    pledge_id?: string;
   }) => {
     setLoading(true);
     setErrorMsg(null);
@@ -323,6 +327,18 @@ export default function LifeGraphPage() {
       interaction_type: "TIME_SKIP",
       interaction_result: { strategy: choice || 'accumulate' }
     });
+  };
+
+  const handlePledgeAndAdvance = async (pledgeId: 'pledge_wealth' | 'pledge_wellness' | 'pledge_social') => {
+    setIsPledging(true);
+    try {
+      await submitInteraction({ advance_only: true, pledge_id: pledgeId });
+      setIsYearEndModalOpen(false);
+    } catch (err) {
+      console.error("Gieo mầm tâm nguyện thất bại:", err);
+    } finally {
+      setIsPledging(false);
+    }
   };
 
   // Global Keyboard Shortcuts (Hotkeys)
@@ -444,7 +460,7 @@ export default function LifeGraphPage() {
         if (dilemma?.interaction_type === 'TIME_SKIP') {
           handleTimeSkipContinue('accumulate');
         } else {
-          submitInteraction({ advance_only: true });
+          setIsYearEndModalOpen(true);
         }
         return;
       }
@@ -2102,11 +2118,12 @@ export default function LifeGraphPage() {
                     <div className="flex sm:flex-col items-center sm:items-end gap-2 shrink-0">
                       <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap w-full sm:w-auto">
                         <button
-                          onClick={() => submitInteraction({ advance_only: true })}
-                          className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 font-bold text-xs uppercase tracking-wider border border-amber-500/50 flex items-center justify-center gap-1.5 transition active:scale-95 shadow"
-                          title="Chốt năm trực tiếp, AP dư tự chuyển hóa thành Dưỡng Sinh HP & giảm Burnout (Phím tắt: Space)"
+                          onClick={() => setIsYearEndModalOpen(true)}
+                          className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-950/80 to-slate-900 hover:from-amber-900/90 hover:to-slate-800 text-amber-300 font-bold text-xs uppercase tracking-wider border border-amber-500/50 flex items-center justify-center gap-1.5 transition active:scale-95 shadow group"
+                          title="Chiêm nghiệm việc đã làm, hạt mầm dang dở và gieo mầm tâm nguyện đón năm mới (Phím tắt: Space)"
                         >
-                          <span>⏩ Chốt Năm (+1 Tuổi)</span>
+                          <Sparkles className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-12 transition-transform" />
+                          <span>🌿 Chiêm Nghiệm Cuối Năm</span>
                           <kbd className="font-mono text-[10px] bg-black/40 text-amber-300 px-1 py-0.5 rounded font-bold">Space</kbd>
                         </button>
 
@@ -2165,7 +2182,10 @@ export default function LifeGraphPage() {
             <InteractiveScene2D
               character={character}
               onScenarioResolved={() => loadState()}
-              onAdvanceYear={() => submitInteraction({ advance_only: true })}
+              onAdvanceYear={() => {
+                setActiveView('game');
+                setIsYearEndModalOpen(true);
+              }}
               onBackToCockpit={() => setActiveView('game')}
             />
           </div>
@@ -2186,8 +2206,21 @@ export default function LifeGraphPage() {
           onClose={() => setShowCinemaDecisionModal(false)}
           character={character}
           onScenarioResolved={() => loadState()}
-          onAdvanceYear={() => submitInteraction({ advance_only: true })}
+          onAdvanceYear={() => {
+            setShowCinemaDecisionModal(false);
+            setIsYearEndModalOpen(true);
+          }}
           activeScenario={activeScenario}
+        />
+        {/* Year-End Reflection & Annual Pledge Modal (Nghi Thức Giao Thừa & Gieo Mầm Tâm Nguyện) */}
+        <YearEndReflectionModal
+          isOpen={isYearEndModalOpen}
+          onClose={() => setIsYearEndModalOpen(false)}
+          character={character}
+          unusedAP={character?.action_points || 0}
+          netWorth={netWorth}
+          onSelectPledgeAndAdvance={handlePledgeAndAdvance}
+          isAdvancing={isPledging}
         />
       </main>
     </div>

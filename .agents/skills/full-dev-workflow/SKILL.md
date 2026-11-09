@@ -178,3 +178,39 @@ flowchart TD
   - Năm có Biến Cố Ngã Rẽ Lớn (Threshold Milestones: 6t vào lớp 1, 18t đại học/khởi nghiệp, 28t hôn nhân/nhà cửa, 42t bước ngoặt nghề, 65t di chúc/sinh tử): Mở **Sân Khấu Tâm Thức Trong Gốc Cây** với 3 lăng kính bản ngã (Lý Trí, Trái Tim, Bản Năng).
 * **Chuỗi chuyển tiếp tự nhiên:** Giải quyết xong biến cố bằng xúc xắc D20 $\rightarrow$ Tự động chuyển tiếp vào Nghi Thức Chiêm Nghiệm Giao Thừa $\rightarrow$ Bước sang tuổi mới liền mạch.
 * **Sự liên kết chỉ số toàn diện:** Ngoại hình Chibi 3D & Linh thú MOBA, độ lớn của Đại Thụ, các sự kiện trên Narrative Feed đều đồng bộ 100% về mặt nhịp thở và câu chuyện.
+
+---
+
+## 5. Quy Chuẩn Sáng Tác Văn Bản & Lời Thoại "Khử Mùi AI" (Anti-AI Copywriting & Narrative Directives)
+
+> [!IMPORTANT]
+> **TÔN CHỈ BẤT DI BẤT DỊCH TỪ SẾP:** Mọi nội dung text trong LifeGraph (kịch bản, nhật ký, lời thoại NPC, mô tả vật phẩm, tooltip) phải mang hơi thở cuộc sống trần trụi, chân thực, gai góc và giàu cảm xúc con người. **TUYỆT ĐỐI CẤM NÓNG VỘI SINH CHỮ KIỂU "AI SLOP"** — rỗng tuếch, giáo điều, đạo đức giả và ngập tràn tính từ sáo rỗng.
+
+### 5.1. Bảng Đen Từ Ngữ & Mô Thức Cấm Cửa (AI Slop Blacklist)
+
+| Mô thức cấm (AI Clichés) | Ví dụ vi phạm cấm dùng | Cách viết thay thế chuẩn xác (Human & Gritty) |
+| :--- | :--- | :--- |
+| **Tính từ văn mẫu sáo rỗng** | *"Bản hòa ca cuộc sống", "Bức tranh muôn màu", "Ngã rẽ định mệnh", "Thắp sáng hy vọng", "Vòng xoáy nghiệt ngã"* | **Dùng chi tiết giác quan cụ thể:** Mùi ngai ngái của bùn non sau cơn mưa rào, tiếng quạt tai voi kêu cọt kẹt trưa hè, ánh đèn huỳnh quang chập chờn góc bếp. |
+| **Đạo đức giả & Giảng giải luân lý** | *"Bạn nhận ra rằng tình yêu thương gia đình là ngọn hải đăng soi sáng tâm hồn..."* | **Hành động & phản ứng tự nhiên:** Người cha không nói gì, chỉ lẳng lặng nhét xấp tiền 200 nghìn nhăn nhúm vào đáy balo của bạn trước giờ xe lăn bánh. |
+| **Cấu trúc câu đối xứng hoàn hảo, vô hồn** | *"Không chỉ mang lại niềm vui, mà còn mở ra những cơ hội mới..."* | **Khẩu ngữ đứt gãy, đời thường:** *"Ăn thêm nửa bát cơm đi rồi hẵng lo việc. Có thực mới vực được đạo, mày nhịn thế định sống bằng không khí à?"* |
+| **Khái quát hóa trừu tượng thay vì số liệu** | *"Bạn kiếm được một khoản tiền kha khá để trang trải cuộc sống khó khăn..."* | **Con số & chi phí cụ thể:** Tiền phòng trọ 1.620 kr, hóa đơn điện tháng này hụt mất 80 kr, ví còn đúng 3 đồng xu lẻ gỉ sét. |
+
+### 5.2. Nguyên Tắc "Show, Don't Tell" Trong Game RPG Đời Thực
+
+1. **Vật chất hóa cảm xúc:** Thay vì viết *"Bạn cảm thấy đau khổ và cô đơn"*, hãy viết: *"Đĩa cơm nguội ngắt để góc bàn từ chiều qua, kiến bắt đầu bu quanh mép chén. Tiếng chuông báo thức 5h sáng lại reo ầm ĩ."*
+2. **Khắc họa xã hội phân tầng (Sociolects):**
+   - **Tầng lớp lao động:** Khẩu ngữ thô mộc, câu ngắn, nhiều thán từ, thở dài, lo cơm áo gạo tiền sát sườn (`tiền họ`, `tiền đong gạo`, `nợ thẻ cào`, `đổi ca kíp`).
+   - **Tầng lớp trung lưu / trí thức:** Câu từ chuẩn mực nhưng ngột ngạt áp lực thi cử, KPI, trả góp chung cư, bằng cấp thạc sĩ.
+   - **Tầng lớp tinh hoa / tài phiệt:** Lạnh lùng, nói chuyện bằng chi phí cơ hội, tỷ suất sinh lời rủi ro (Risk-adjusted ROI), mạng lưới quan hệ và vị thế gia tộc.
+3. **Thổ nhưỡng & Bản sắc địa phương (Cultural Verisimilitude):**
+   - Cốt truyện ở **Bergen (Na Uy)**: Không tả chung chung mà phải có sương muối buốt giá vùng fjord, mùi cá hồi hun khói bến cảng Bryggen, giá cả đắt đỏ bằng đồng Krone (kr).
+   - Cốt truyện ở **Mogadishu (Somalia)**: Bụi cát bỏng rát Waberi, tiếng còi xe tuk-tuk inh ỏi, vị trà gia vị đậm đà trong chiếc cốc thủy tinh mẻ miệng.
+   - Cốt truyện ở **Hà Nội / Sài Gòn (Việt Nam)**: Tiếng rao bánh mì đêm ngõ sâu, quán cà phê cóc ven đường, tô bún riêu cua dậy mùi giấm bỗng trưa hè.
+
+### 5.3. Quy Trình Kiểm Duyệt Văn Phong Của Sub-agent Doc Writer & Reviewer
+
+* **Checklist 3 câu hỏi trước khi merge text:**
+  1. *Nếu đọc to lên bằng giọng người thật, câu này nghe có giống ai đó đang nói chuyện ngoài đời không, hay giống bài văn mẫu cấp 2 do máy viết?*
+  2. *Đoạn văn này có chứa chi tiết cụ thể về giác quan (mùi, vị, âm thanh, xúc giác) hoặc số tiền cụ thể không?*
+  3. *Có bị dính từ nào trong Blacklist sáo rỗng không?*
+* Nếu phát hiện vi phạm, Reviewer có quyền từ chối nghiệm thu và yêu cầu viết lại 100%.

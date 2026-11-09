@@ -404,9 +404,10 @@ export function interactNpc(character, npcId, actionType = "socialize") {
   let cashCost = 0;
   let message = "";
 
-  // Check bonuses from unlocked skills
+  // Check bonuses from unlocked skills & annual pledges
   const hasCharismaBoost = character.unlocked_skills?.includes("charisma_magnet");
-  const expMultiplier = hasCharismaBoost ? 2.0 : 1.0;
+  const isSocialPledge = character.active_pledge === "pledge_social";
+  const expMultiplier = (hasCharismaBoost ? 2.0 : 1.0) * (isSocialPledge ? 2.0 : 1.0);
 
   if (actionType === "socialize") {
     // Trò chuyện / Cà phê giao lưu (1 AP)
@@ -416,10 +417,10 @@ export function interactNpc(character, npcId, actionType = "socialize") {
     character.action_points -= apCost;
     expGain = Math.round(35 * expMultiplier);
     character.burnout = Math.max(0, (character.burnout || 0) - 8);
-    message = `Bạn đã có buổi gặp gỡ thân tình cùng ${npc.name}. Tình cảm gia tăng (+${expGain} Link EXP), giải tỏa bớt căng thẳng.`;
+    message = `Bạn đã có buổi gặp gỡ thân tình cùng ${npc.name}. Tình cảm gia tăng (+${expGain} Link EXP)${isSocialPledge ? ' [🤝 Nhân Mạch x2 EXP]' : ''}, giải tỏa bớt căng thẳng.`;
   } else if (actionType === "gift") {
-    // Tặng quà tri ân (1 AP + $500)
-    cashCost = 500;
+    // Tặng quà tri ân (1 AP + $500, giảm 50% nếu có pledge_social)
+    cashCost = isSocialPledge ? 250 : 500;
     if ((character.action_points || 0) < apCost) {
       return { success: false, error: "Cần tối thiểu 1 AP để chuẩn bị và trao gửi quà tặng!" };
     }
@@ -429,7 +430,7 @@ export function interactNpc(character, npcId, actionType = "socialize") {
     character.action_points -= apCost;
     character.cash -= cashCost;
     expGain = Math.round(65 * expMultiplier);
-    message = `Món quà tinh tế đã làm ${npc.name} vô cùng xúc động và trân quý tình bạn (+${expGain} Link EXP).`;
+    message = `Món quà tinh tế đã làm ${npc.name} vô cùng xúc động và trân quý tình bạn (+${expGain} Link EXP)${isSocialPledge ? ' [🤝 Chi phí -50%, EXP x2]' : ''}.`;
   } else if (actionType === "request_favor") {
     // Kích hoạt đặc quyền theo cấp độ
     if (npc.linkLevel < 3) {

@@ -508,6 +508,54 @@ export default function DynamicLifeTree({
     }
   };
 
+  // 5 Life Stages Procedural Evolution (Đại Thụ Tiến Hóa Thủ Tục)
+  const getGrowthStage = (age: number): 'sprout' | 'sapling' | 'flourishing_oak' | 'grand_pillar' | 'ancient_world_tree' => {
+    if (age <= 5) return 'sprout';
+    if (age <= 17) return 'sapling';
+    if (age <= 35) return 'flourishing_oak';
+    if (age <= 55) return 'grand_pillar';
+    return 'ancient_world_tree';
+  };
+  const growthStage = getGrowthStage(characterAge);
+
+  const STAGE_META = {
+    sprout: {
+      label: 'Mầm Non Búp Măng',
+      ageSpan: '0 - 5 Tuổi',
+      icon: '🌱',
+      themeColor: '#10b981',
+      desc: 'Rễ non ôm đất mẹ, vươn 2 chồi non bập bẹ tập đi.'
+    },
+    sapling: {
+      label: 'Cây Non Vươn Cành',
+      ageSpan: '6 - 17 Tuổi',
+      icon: '🌿',
+      themeColor: '#059669',
+      desc: 'Thân non vươn cành thẳng tắp, học hành tri thức và bạn bè đồng trang lứa.'
+    },
+    flourishing_oak: {
+      label: 'Thần Mộc Bùng Nở',
+      ageSpan: '18 - 35 Tuổi',
+      icon: '🌳',
+      themeColor: '#6366f1',
+      desc: 'Thần mộc vạm vỡ phân tỏa 3 Trụ Cột Quang Minh: Kỹ Năng, Nhân Mạch, Tài Sản.'
+    },
+    grand_pillar: {
+      label: 'Đại Thụ Vững Chãi',
+      ageSpan: '36 - 55 Tuổi',
+      icon: '🛡️',
+      themeColor: '#d97706',
+      desc: 'Rễ cọc đâm sâu ngàn dặm, tán đại thụ rợp bóng che chở gia đình và cơ nghiệp.'
+    },
+    ancient_world_tree: {
+      label: 'Cổ Thụ Hoàng Kim',
+      ageSpan: '56+ Tuổi',
+      icon: '👑',
+      themeColor: '#fbbf24',
+      desc: 'Cổ thụ kết tinh linh khí đất trời, quả di sản hoàng kim truyền thừa muôn đời.'
+    }
+  };
+
   // SVG Dimension Constants
   const canvasWidth = 640;
   const canvasHeight = 340;
@@ -531,6 +579,17 @@ export default function DynamicLifeTree({
               <span>Đại Thụ Sinh Mệnh Toàn Năng</span>
               <span className="text-[10px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                 Tuổi {characterAge}
+              </span>
+              <span
+                className="text-[10px] font-sans px-2 py-0.5 rounded-full border flex items-center gap-1 font-bold"
+                style={{
+                  backgroundColor: `${STAGE_META[growthStage].themeColor}20`,
+                  color: STAGE_META[growthStage].themeColor,
+                  borderColor: `${STAGE_META[growthStage].themeColor}40`
+                }}
+              >
+                <span>{STAGE_META[growthStage].icon}</span>
+                <span>{STAGE_META[growthStage].label}</span>
               </span>
             </h3>
             <p className="text-[11px] text-slate-400 hidden sm:block">
@@ -769,6 +828,23 @@ export default function DynamicLifeTree({
               <stop offset="100%" stopColor="#10b981" stopOpacity="0.8" />
             </linearGradient>
 
+            <linearGradient id="ancientWorldTreeGold" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#fef08a" />
+              <stop offset="40%" stopColor="#f59e0b" />
+              <stop offset="100%" stopColor="#b45309" />
+            </linearGradient>
+
+            <linearGradient id="woodOakGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#92400e" />
+              <stop offset="50%" stopColor="#78350f" />
+              <stop offset="100%" stopColor="#451a03" />
+            </linearGradient>
+
+            <linearGradient id="sproutGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+              <stop offset="0%" stopColor="#059669" />
+              <stop offset="100%" stopColor="#34d399" />
+            </linearGradient>
+
             <filter id="coreGlow" x="-30%" y="-30%" width="160%" height="160%">
               <feGaussianBlur stdDeviation="6" result="blur" />
               <feMerge>
@@ -790,6 +866,106 @@ export default function DynamicLifeTree({
             className="opacity-30 animate-[spin_30s_linear_infinite]"
             style={{ transformOrigin: `${centerX}px ${centerY}px` }}
           />
+
+          {/* Ground Curve / Soil Mound */}
+          <ellipse cx={centerX} cy={canvasHeight - 20} rx={180} ry={16} fill="rgba(15,23,42,0.85)" stroke="#334155" strokeWidth="1.5" />
+
+          {/* Procedural Trunk Geometry for the 5 Growth Stages */}
+          <g className="procedural-tree-trunk" id="proceduralTreeTrunk">
+            {growthStage === 'sprout' && (
+              <g className="stage-sprout">
+                {/* Curved delicate seedling stem */}
+                <path d="M 320 295 Q 316 235 320 180" stroke="url(#sproutGradient)" strokeWidth="8" strokeLinecap="round" fill="none" />
+                {/* Cotyledon baby leaves */}
+                <path d="M 320 185 Q 295 165 290 190 Q 305 195 320 185" fill="#34d399" />
+                <path d="M 320 185 Q 345 165 350 190 Q 335 195 320 185" fill="#34d399" />
+                {/* Root threads */}
+                <path d="M 320 295 Q 300 315 285 325" stroke="#059669" strokeWidth="2" strokeDasharray="3 3" fill="none" />
+                <path d="M 320 295 Q 340 315 355 325" stroke="#059669" strokeWidth="2" strokeDasharray="3 3" fill="none" />
+              </g>
+            )}
+
+            {growthStage === 'sapling' && (
+              <g className="stage-sapling">
+                {/* Straight slender youthful trunk */}
+                <path d="M 320 295 C 316 235, 324 185, 320 145" stroke="#059669" strokeWidth="14" strokeLinecap="round" fill="none" />
+                {/* Branches reaching for sunlight */}
+                <path d="M 320 215 Q 280 190 255 175" stroke="#10b981" strokeWidth="5" strokeLinecap="round" fill="none" />
+                <path d="M 320 185 Q 360 160 385 145" stroke="#10b981" strokeWidth="5" strokeLinecap="round" fill="none" />
+                {/* Foliage soft clouds */}
+                <circle cx={255} cy={175} r={16} fill="#10b981" opacity="0.3" />
+                <circle cx={385} cy={145} r={18} fill="#10b981" opacity="0.3" />
+              </g>
+            )}
+
+            {growthStage === 'flourishing_oak' && (
+              <g className="stage-flourishing-oak">
+                {/* Sturdy oak trunk */}
+                <path d="M 304 295 C 310 240, 314 180, 320 145 C 326 180, 330 240, 336 295 Z" fill="url(#woodOakGradient)" stroke="#78350f" strokeWidth="2" />
+                {/* 3 Sacred Canopy Boughs */}
+                <path d="M 314 180 Q 265 140 215 115" stroke="#78350f" strokeWidth="10" strokeLinecap="round" fill="none" />
+                <path d="M 320 150 Q 320 95 320 65" stroke="#78350f" strokeWidth="11" strokeLinecap="round" fill="none" />
+                <path d="M 326 180 Q 375 140 425 115" stroke="#78350f" strokeWidth="10" strokeLinecap="round" fill="none" />
+                {/* Foliage clusters */}
+                <circle cx={215} cy={115} r={24} fill="#6366f1" opacity="0.25" filter="url(#coreGlow)" />
+                <circle cx={320} cy={65} r={28} fill="#0284c7" opacity="0.25" filter="url(#coreGlow)" />
+                <circle cx={425} cy={115} r={24} fill="#f59e0b" opacity="0.25" filter="url(#coreGlow)" />
+              </g>
+            )}
+
+            {growthStage === 'grand_pillar' && (
+              <g className="stage-grand-pillar">
+                {/* Massive weathered ancient pillar trunk */}
+                <path d="M 292 295 C 304 240, 312 180, 320 138 C 328 180, 336 240, 348 295 Z" fill="url(#woodOakGradient)" stroke="#92400e" strokeWidth="3" />
+                {/* Buttress root anchors */}
+                <path d="M 292 295 Q 260 310 235 325" stroke="#78350f" strokeWidth="7" strokeLinecap="round" fill="none" />
+                <path d="M 348 295 Q 380 310 405 325" stroke="#78350f" strokeWidth="7" strokeLinecap="round" fill="none" />
+                {/* Broad sheltering canopy arches */}
+                <path d="M 310 170 Q 240 130 180 110" stroke="#78350f" strokeWidth="12" strokeLinecap="round" fill="none" />
+                <path d="M 320 140 Q 320 80 320 50" stroke="#78350f" strokeWidth="13" strokeLinecap="round" fill="none" />
+                <path d="M 330 170 Q 400 130 460 110" stroke="#78350f" strokeWidth="12" strokeLinecap="round" fill="none" />
+              </g>
+            )}
+
+            {growthStage === 'ancient_world_tree' && (
+              <g className="stage-ancient-world-tree">
+                {/* Radiant Golden Amber World Tree trunk */}
+                <path d="M 285 295 C 302 235, 312 175, 320 132 C 328 175, 338 235, 355 295 Z" fill="url(#ancientWorldTreeGold)" stroke="#f59e0b" strokeWidth="3" />
+                {/* Transcendent spiral runes on trunk */}
+                <path d="M 320 270 Q 326 245 320 220 Q 314 195 320 170" stroke="#fef08a" strokeWidth="3" strokeDasharray="6 4" fill="none" className="animate-pulse" />
+                {/* Deep ancient root foundation */}
+                <path d="M 285 295 Q 245 315 210 330" stroke="#d97706" strokeWidth="8" strokeLinecap="round" fill="none" />
+                <path d="M 355 295 Q 395 315 430 330" stroke="#d97706" strokeWidth="8" strokeLinecap="round" fill="none" />
+                {/* Golden heritage fruits (legacy orbs) */}
+                <circle cx={190} cy={100} r={9} fill="#fef08a" stroke="#f59e0b" strokeWidth="2" className="animate-bounce" />
+                <circle cx={450} cy={100} r={9} fill="#fef08a" stroke="#f59e0b" strokeWidth="2" className="animate-bounce" style={{ animationDelay: '0.4s' }} />
+                <circle cx={320} cy={45} r={11} fill="#fef08a" stroke="#eab308" strokeWidth="2" className="animate-pulse" />
+              </g>
+            )}
+          </g>
+
+          {/* Annual Tree Growth Rings (Vòng Vân Gỗ Đời Người) */}
+          <g className="annual-growth-rings" id="annualGrowthRings">
+            <ellipse cx={centerX} cy={canvasHeight - 22} rx={58} ry={14} fill="#451a03" stroke="#78350f" strokeWidth="2" />
+            {Array.from({ length: Math.min(characterAge, 45) }).map((_, i) => {
+              const rx = 5 + (i * 1.15);
+              const ry = 1.8 + (i * 0.26);
+              const isMilestone = [6, 18, 30, 42, 60].includes(i + 1);
+              return (
+                <ellipse
+                  key={`wood-ring-${i}`}
+                  cx={centerX}
+                  cy={canvasHeight - 22}
+                  rx={rx}
+                  ry={ry}
+                  fill="none"
+                  stroke={isMilestone ? '#fbbf24' : '#92400e'}
+                  strokeWidth={isMilestone ? '1.5' : '0.6'}
+                  strokeOpacity={isMilestone ? '0.9' : '0.4'}
+                />
+              );
+            })}
+          </g>
           <circle
             cx={centerX}
             cy={centerY}
@@ -801,6 +977,106 @@ export default function DynamicLifeTree({
             className="opacity-20 animate-[spin_45s_linear_infinite_reverse]"
             style={{ transformOrigin: `${centerX}px ${centerY}px` }}
           />
+
+          {/* Ground Curve / Soil Mound */}
+          <ellipse cx={centerX} cy={canvasHeight - 20} rx={180} ry={16} fill="rgba(15,23,42,0.85)" stroke="#334155" strokeWidth="1.5" />
+
+          {/* Procedural Trunk Geometry for the 5 Growth Stages */}
+          <g className="procedural-tree-trunk" id="proceduralTreeTrunk">
+            {growthStage === 'sprout' && (
+              <g className="stage-sprout">
+                {/* Curved delicate seedling stem */}
+                <path d="M 320 295 Q 316 235 320 180" stroke="url(#sproutGradient)" strokeWidth="8" strokeLinecap="round" fill="none" />
+                {/* Cotyledon baby leaves */}
+                <path d="M 320 185 Q 295 165 290 190 Q 305 195 320 185" fill="#34d399" />
+                <path d="M 320 185 Q 345 165 350 190 Q 335 195 320 185" fill="#34d399" />
+                {/* Root threads */}
+                <path d="M 320 295 Q 300 315 285 325" stroke="#059669" strokeWidth="2" strokeDasharray="3 3" fill="none" />
+                <path d="M 320 295 Q 340 315 355 325" stroke="#059669" strokeWidth="2" strokeDasharray="3 3" fill="none" />
+              </g>
+            )}
+
+            {growthStage === 'sapling' && (
+              <g className="stage-sapling">
+                {/* Straight slender youthful trunk */}
+                <path d="M 320 295 C 316 235, 324 185, 320 145" stroke="#059669" strokeWidth="14" strokeLinecap="round" fill="none" />
+                {/* Branches reaching for sunlight */}
+                <path d="M 320 215 Q 280 190 255 175" stroke="#10b981" strokeWidth="5" strokeLinecap="round" fill="none" />
+                <path d="M 320 185 Q 360 160 385 145" stroke="#10b981" strokeWidth="5" strokeLinecap="round" fill="none" />
+                {/* Foliage soft clouds */}
+                <circle cx={255} cy={175} r={16} fill="#10b981" opacity="0.3" />
+                <circle cx={385} cy={145} r={18} fill="#10b981" opacity="0.3" />
+              </g>
+            )}
+
+            {growthStage === 'flourishing_oak' && (
+              <g className="stage-flourishing-oak">
+                {/* Sturdy oak trunk */}
+                <path d="M 304 295 C 310 240, 314 180, 320 145 C 326 180, 330 240, 336 295 Z" fill="url(#woodOakGradient)" stroke="#78350f" strokeWidth="2" />
+                {/* 3 Sacred Canopy Boughs */}
+                <path d="M 314 180 Q 265 140 215 115" stroke="#78350f" strokeWidth="10" strokeLinecap="round" fill="none" />
+                <path d="M 320 150 Q 320 95 320 65" stroke="#78350f" strokeWidth="11" strokeLinecap="round" fill="none" />
+                <path d="M 326 180 Q 375 140 425 115" stroke="#78350f" strokeWidth="10" strokeLinecap="round" fill="none" />
+                {/* Foliage clusters */}
+                <circle cx={215} cy={115} r={24} fill="#6366f1" opacity="0.25" filter="url(#coreGlow)" />
+                <circle cx={320} cy={65} r={28} fill="#0284c7" opacity="0.25" filter="url(#coreGlow)" />
+                <circle cx={425} cy={115} r={24} fill="#f59e0b" opacity="0.25" filter="url(#coreGlow)" />
+              </g>
+            )}
+
+            {growthStage === 'grand_pillar' && (
+              <g className="stage-grand-pillar">
+                {/* Massive weathered ancient pillar trunk */}
+                <path d="M 292 295 C 304 240, 312 180, 320 138 C 328 180, 336 240, 348 295 Z" fill="url(#woodOakGradient)" stroke="#92400e" strokeWidth="3" />
+                {/* Buttress root anchors */}
+                <path d="M 292 295 Q 260 310 235 325" stroke="#78350f" strokeWidth="7" strokeLinecap="round" fill="none" />
+                <path d="M 348 295 Q 380 310 405 325" stroke="#78350f" strokeWidth="7" strokeLinecap="round" fill="none" />
+                {/* Broad sheltering canopy arches */}
+                <path d="M 310 170 Q 240 130 180 110" stroke="#78350f" strokeWidth="12" strokeLinecap="round" fill="none" />
+                <path d="M 320 140 Q 320 80 320 50" stroke="#78350f" strokeWidth="13" strokeLinecap="round" fill="none" />
+                <path d="M 330 170 Q 400 130 460 110" stroke="#78350f" strokeWidth="12" strokeLinecap="round" fill="none" />
+              </g>
+            )}
+
+            {growthStage === 'ancient_world_tree' && (
+              <g className="stage-ancient-world-tree">
+                {/* Radiant Golden Amber World Tree trunk */}
+                <path d="M 285 295 C 302 235, 312 175, 320 132 C 328 175, 338 235, 355 295 Z" fill="url(#ancientWorldTreeGold)" stroke="#f59e0b" strokeWidth="3" />
+                {/* Transcendent spiral runes on trunk */}
+                <path d="M 320 270 Q 326 245 320 220 Q 314 195 320 170" stroke="#fef08a" strokeWidth="3" strokeDasharray="6 4" fill="none" className="animate-pulse" />
+                {/* Deep ancient root foundation */}
+                <path d="M 285 295 Q 245 315 210 330" stroke="#d97706" strokeWidth="8" strokeLinecap="round" fill="none" />
+                <path d="M 355 295 Q 395 315 430 330" stroke="#d97706" strokeWidth="8" strokeLinecap="round" fill="none" />
+                {/* Golden heritage fruits (legacy orbs) */}
+                <circle cx={190} cy={100} r={9} fill="#fef08a" stroke="#f59e0b" strokeWidth="2" className="animate-bounce" />
+                <circle cx={450} cy={100} r={9} fill="#fef08a" stroke="#f59e0b" strokeWidth="2" className="animate-bounce" style={{ animationDelay: '0.4s' }} />
+                <circle cx={320} cy={45} r={11} fill="#fef08a" stroke="#eab308" strokeWidth="2" className="animate-pulse" />
+              </g>
+            )}
+          </g>
+
+          {/* Annual Tree Growth Rings (Vòng Vân Gỗ Đời Người) */}
+          <g className="annual-growth-rings" id="annualGrowthRings">
+            <ellipse cx={centerX} cy={canvasHeight - 22} rx={58} ry={14} fill="#451a03" stroke="#78350f" strokeWidth="2" />
+            {Array.from({ length: Math.min(characterAge, 45) }).map((_, i) => {
+              const rx = 5 + (i * 1.15);
+              const ry = 1.8 + (i * 0.26);
+              const isMilestone = [6, 18, 30, 42, 60].includes(i + 1);
+              return (
+                <ellipse
+                  key={`wood-ring-${i}`}
+                  cx={centerX}
+                  cy={canvasHeight - 22}
+                  rx={rx}
+                  ry={ry}
+                  fill="none"
+                  stroke={isMilestone ? '#fbbf24' : '#92400e'}
+                  strokeWidth={isMilestone ? '1.5' : '0.6'}
+                  strokeOpacity={isMilestone ? '0.9' : '0.4'}
+                />
+              );
+            })}
+          </g>
 
           {/* Draw Bezier Branch Lines from Center to each Node */}
           {nodes.map(node => {

@@ -848,3 +848,24 @@ flowchart TD
 1. **Lược bỏ phòng quyết định trong năm bình yên:** Không ép người chơi vào nếu không có bước ngoặt lớn.
 2. **Sân Khấu Tâm Thức:** 3 lăng kính bản ngã (Lý Trí, Trái Tim, Bản Năng) là 3 đốm sáng linh hồn phát quang trên cành cây.
 3. **Dòng chảy thời gian 100% liền mạch:** Giải quyết biến cố xong $\rightarrow$ Tự động chuyển tiếp vào Nghi Thức Chiêm Nghiệm $\rightarrow$ Bước sang tuổi mới, không còn cảm giác bị phân mảnh hay ngắt mạch cảm xúc.
+
+---
+
+## 22. Quy Chuẩn Chữ & Văn Phong Game "Khử Mùi AI" (Anti-AI Copywriting & Narrative Directives v1.0)
+
+Nhằm đảm bảo trải nghiệm chơi game sâu sắc, lôi cuốn và chân thực như cuộc đời thật, loại bỏ hoàn toàn cảm giác vô hồn, sáo rỗng của các văn bản sinh bởi AI:
+
+### 22.1. Tôn Chỉ "Hơi Thở Cuộc Sống Đời Thực" (Gritty Realism Principle)
+* Mỗi mẩu tin, lời thoại, sự kiện trên màn hình phải như được viết ra bởi một người từng trải qua cay đắng ngọt bùi của cuộc đời.
+* **Quy tắc 3 KHÔNG:**
+  1. *Không văn mẫu đạo lý sáo rỗng:* Cấm các câu đúc kết triết lý dạy đời vô thưởng vô phạt.
+  2. *Không tính từ bóng bẩy cường điệu:* Cấm các từ ngữ sáo ngữ như "ngã rẽ định mệnh", "bức tranh muôn màu", "thắp sáng ước mơ".
+  3. *Không đối xứng giả tạo:* Cho phép câu thoại ngắn, đứt quãng, tiếng thở dài, sự bối rối và ngôn ngữ đời thường.
+
+### 22.2. Kỹ Thuật "Vật Hóa Giác Quan & Số Liệu Thực Tế"
+* **Chi tiết giác quan:** Đưa vào âm thanh (tiếng mưa dột, tiếng còi xe), mùi vị (mùi dầu gió, mùi khói cá, mùi chanh sả), xúc giác (bàn tay chai sần, gió buốt gáy).
+* **Con số thực tế:** Thay vì "bạn kiếm được ít tiền", hãy nêu rõ con số: "Bán hết mớ cá thu được 450.000đ, trừ tiền dầu tàu còn dư 120.000đ nhét túi áo".
+
+### 22.3. Quy Định Về Tooltip & Microcopy Trên Giao Diện
+* **Tooltip chức năng:** Ngắn gọn dưới 20 từ, chỉ rõ lợi ích và cái giá phải trả (Trade-off). Không viết văn hoa.
+* **Badge & Nhãn trạng thái:** Dùng ngôn ngữ bình dị, dễ hiểu: `Đói lả`, `Nợ ngập đầu`, `Lưng đau nhức`, `Ấm no`, `Thảnh thơi`.

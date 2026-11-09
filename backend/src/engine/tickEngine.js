@@ -219,6 +219,16 @@ export async function processPassivePhase(character, assets, relationships) {
   const hasScholarlyDynasty = unlockedSkills.includes("leverage_power") && unlockedSkills.includes("encyclopedic_brain");
   const hasTrinityPerfection = unlockedSkills.includes("syndicate_kingmaker") && unlockedSkills.includes("capital_engine") && unlockedSkills.includes("transcendence_sage");
 
+  // Annual Pledges Multipliers (Tâm Nguyện Năm Mới)
+  const activePledge = character.active_pledge || null;
+  if (activePledge === 'pledge_wealth') {
+    if (totalAssetIncome > 0) {
+      totalAssetIncome = Math.round(totalAssetIncome * 1.10); // +10% lợi tức đầu tư thụ động
+    }
+    const pledgeWealthBonus = Math.round(Math.max(300, Math.min(30000, (Number(cash) || 0) * 0.05)));
+    cash += pledgeWealthBonus;
+  }
+
   // Family Trust Fund (Gia Phong + Tư Bản): 50% discount on asset maintenance
   if (hasFamilyTrustFund && totalAssetMaintenance > 0) {
     totalAssetMaintenance = Math.round(totalAssetMaintenance * 0.5);
@@ -296,6 +306,16 @@ export async function processPassivePhase(character, assets, relationships) {
     if (cash < -5000 && rel.affection_level > 20) {
       rel.affection_level = Math.max(10, rel.affection_level - 5);
       await updateRelationship(rel.id, { affection_level: rel.affection_level });
+    }
+  }
+
+  // Annual Pledge: Social Links & Family Warmth
+  if (activePledge === 'pledge_social') {
+    totalRelationshipCost = Math.round(totalRelationshipCost * 0.5); // Giảm 50% chi phí chăm sóc quan hệ
+    for (const rel of relationships) {
+      if (rel.status !== 'deceased') {
+        rel.affection_level = Math.min(100, (Number(rel.affection_level) || 50) + 8);
+      }
     }
   }
 
@@ -478,15 +498,19 @@ export async function processPassivePhase(character, assets, relationships) {
   // 12. Dynamic AP Economy (V7.5 Living Ecosystem)
   // Unused AP from previous year converts to peaceful recovery
   const unusedAP = Number(character.action_points) || 0;
-  const unusedApVitalityGain = unusedAP * 2;
-  const unusedApBurnoutRelief = unusedAP * 5;
+  const isWellnessPledge = activePledge === 'pledge_wellness';
+  const unusedApVitalityGain = unusedAP * (isWellnessPledge ? 4 : 2); // x2 hiệu quả khi có Tâm Nguyện An Yên
+  const unusedApBurnoutRelief = unusedAP * (isWellnessPledge ? 8 : 5);
   const convertedApNotice = unusedAP > 0
-    ? `🌿 Chuyển hóa ${unusedAP} AP dư thành Dưỡng Sinh: +${unusedApVitalityGain} HP & -${unusedApBurnoutRelief}% Burnout.`
+    ? `🌿 Chuyển hóa ${unusedAP} AP dư thành Dưỡng Sinh${isWellnessPledge ? ' (x2 Tâm Nguyện An Yên)' : ''}: +${unusedApVitalityGain} HP & -${unusedApBurnoutRelief}% Burnout.`
     : null;
 
   if (unusedAP > 0) {
     vitality = Math.min(maxVitality, vitality + unusedApVitalityGain);
     burnout = Math.max(0, burnout - unusedApBurnoutRelief);
+  }
+  if (isWellnessPledge) {
+    burnout = Math.max(0, burnout - 8); // Kháng 30% Burnout thụ động thường niên
   }
 
   // Base AP = 3
@@ -559,6 +583,7 @@ export async function processPassivePhase(character, assets, relationships) {
       locked_ap: lockedAP,
       locked_reasons: lockedReasons,
       is_deceased: false,
+      active_pledge: activePledge,
       hidden_flags: Array.from(flagsSet),
       global_indices: globalIndices,
       timeline_snapshots: timelineSnapshots
