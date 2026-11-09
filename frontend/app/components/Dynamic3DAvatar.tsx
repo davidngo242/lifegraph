@@ -112,6 +112,8 @@ function ProceduralCharacterMesh({
   const satchelRef = useRef<THREE.Group>(null);
   const leftArmRef = useRef<THREE.Group>(null);
   const rightArmRef = useRef<THREE.Group>(null);
+  const leftLegRef = useRef<THREE.Group>(null);
+  const rightLegRef = useRef<THREE.Group>(null);
 
   const isFemale = gender === 'female';
   const skinColor = useMemo(() => getSkinTone(nationality), [nationality]);
@@ -304,6 +306,55 @@ function ProceduralCharacterMesh({
     });
   }, [isBaby, burnout, isFemale, isWealthy, hasGarland, nationality]);
 
+  // Full Body Pants / Trousers Material
+  const pantsMaterial = useMemo(() => {
+    let pantsColor = '#334155'; // Slate dark
+    if (isBaby) {
+      pantsColor = isFemale ? '#fbcfe8' : '#bae6fd';
+    } else if (isWealthy) {
+      pantsColor = isFemale ? '#31102f' : '#0f172a'; // Luxury dark tuxedo trousers
+    } else if (hasGarland || nationality.toLowerCase().includes('na uy') || nationality.toLowerCase().includes('norway')) {
+      pantsColor = '#3e342b'; // Earthy Nordic brown trousers
+    } else if (nationality.toLowerCase().includes('việt')) {
+      pantsColor = isFemale ? '#f8fafc' : '#1e293b'; // Quần lụa trắng hoặc quần âu
+    }
+
+    return new THREE.MeshStandardMaterial({
+      color: pantsColor,
+      roughness: isWealthy ? 0.5 : 0.8,
+      metalness: isWealthy ? 0.15 : 0.05,
+    });
+  }, [isBaby, isWealthy, hasGarland, nationality, isFemale]);
+
+  // Full Body Boots / Shoes Material
+  const shoeMaterial = useMemo(() => {
+    let shoeColor = '#5c3a21'; // Classic leather boots
+    if (isBaby) {
+      shoeColor = '#fef08a';
+    } else if (isWealthy) {
+      shoeColor = '#09090b'; // Glossy polished black shoes
+    } else if (isFemale) {
+      shoeColor = '#831843'; // Rose/burgundy chic boots
+    }
+
+    return new THREE.MeshStandardMaterial({
+      color: shoeColor,
+      roughness: isWealthy ? 0.3 : 0.65,
+      metalness: isWealthy ? 0.3 : 0.08,
+    });
+  }, [isBaby, isWealthy, isFemale]);
+
+  const shoeSoleMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#0f172a',
+    roughness: 0.95,
+  }), []);
+
+  const beltMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: isWealthy ? '#0f172a' : '#573016',
+    roughness: 0.6,
+    metalness: 0.2,
+  }), [isWealthy]);
+
   // Real-time Procedural Animation Loop with Natural Blinking & Mouse Head Tracking
   useFrame((state) => {
     if (isFastForwarding) return;
@@ -315,7 +366,7 @@ function ProceduralCharacterMesh({
       const breatheSpeed = vitality < 30 ? 1.0 : 2.2;
       const breatheAmp = vitality < 30 ? 0.012 : 0.02;
       const breathe = Math.sin(t * breatheSpeed) * breatheAmp;
-      groupRef.current.position.y = -0.82 + breathe;
+      groupRef.current.position.y = 0.0 + breathe;
 
       // 2. Cursor Dõi Theo Tự Nhiên (Smooth Pointer Tracking)
       const targetRotationY = state.pointer.x * 0.35;
@@ -398,89 +449,239 @@ function ProceduralCharacterMesh({
           rightArmRef.current.rotation.y = THREE.MathUtils.lerp(rightArmRef.current.rotation.y, -0.32, 0.08);
         }
       }
+
+      // 8. Full-Body Dynamic Skeletal Leg Stance & Weight Shift
+      if (leftLegRef.current && rightLegRef.current) {
+        if (reaction === 'celebrate') {
+          // Excited jumping bounce: legs bend slightly in rhythm
+          const jumpBounce = Math.abs(Math.sin(t * 8)) * 0.08;
+          leftLegRef.current.position.y = -0.32 + jumpBounce;
+          rightLegRef.current.position.y = -0.32 + jumpBounce;
+          leftLegRef.current.rotation.x = Math.sin(t * 8) * 0.18;
+          rightLegRef.current.rotation.x = -Math.sin(t * 8) * 0.18;
+        } else if (reaction === 'exhausted' || vitality < 30) {
+          // Weak trembling knees, slight slouch
+          leftLegRef.current.rotation.z = 0.04;
+          leftLegRef.current.rotation.x = 0.08 + Math.sin(t * 1.5) * 0.02;
+          rightLegRef.current.rotation.z = -0.04;
+          rightLegRef.current.rotation.x = 0.08 - Math.sin(t * 1.5) * 0.02;
+        } else if (reaction === 'meditating') {
+          leftLegRef.current.rotation.x = 0;
+          leftLegRef.current.rotation.z = 0.03;
+          rightLegRef.current.rotation.x = 0;
+          rightLegRef.current.rotation.z = -0.03;
+        } else {
+          // Natural Champion Stance: organic breathing weight shift
+          const legSway = Math.sin(t * breatheSpeed) * 0.015;
+          leftLegRef.current.rotation.z = 0.04 + legSway;
+          rightLegRef.current.rotation.z = -0.04 - legSway;
+          leftLegRef.current.rotation.x = 0;
+          rightLegRef.current.rotation.x = 0;
+        }
+      }
     }
   });
 
   return (
-    <group ref={groupRef} position={[0, -0.82, 0]}>
+    <group ref={groupRef} position={[0, 0, 0]}>
       {isBaby ? (
-        /* Cute Baby Swaddle Wrap */
-        <group position={[0, 0.18, 0]}>
+        /* Cute Baby Swaddle Wrap with Little Kicking Booties */
+        <group position={[0, -0.1, 0]}>
           <mesh material={clothMaterial}>
-            <cylinderGeometry args={[0.32, 0.42, 0.6, 24]} />
+            <cylinderGeometry args={[0.26, 0.34, 0.62, 24]} />
           </mesh>
           <mesh position={[0, 0.28, 0.04]} rotation={[0.2, 0, 0]} material={clothMaterial}>
-            <torusGeometry args={[0.24, 0.05, 12, 24]} />
+            <torusGeometry args={[0.22, 0.045, 12, 24]} />
+          </mesh>
+          {/* Little Cute Baby Feet Kicking */}
+          <mesh position={[-0.1, -0.36, 0.1]} material={shoeMaterial}>
+            <sphereGeometry args={[0.065, 14, 14]} />
+          </mesh>
+          <mesh position={[0.1, -0.34, 0.12]} material={shoeMaterial}>
+            <sphereGeometry args={[0.065, 14, 14]} />
           </mesh>
         </group>
       ) : (
         <>
-          {/* Upper Torso & Collar (Áo Tunic hoặc Trang phục truyền thống) */}
-          <mesh position={[0, 0.1, 0]} material={clothMaterial}>
-            <cylinderGeometry args={[isFemale ? 0.36 : 0.42, isFemale ? 0.46 : 0.52, 0.65, 32]} />
+          {/* =========================================================================
+              FULL BODY LOWER SECTION: LEGS, KNEES, SHINS, ANKLES & BOOTS/SHOES
+              ========================================================================= */}
+          {/* Pelvis & Hips Base */}
+          <mesh position={[0, -0.22, 0]} material={pantsMaterial}>
+            <cylinderGeometry args={[isFemale ? 0.26 : 0.29, isFemale ? 0.24 : 0.27, 0.20, 24]} />
+          </mesh>
+
+          {/* Waist Belt & Buckle */}
+          <mesh position={[0, -0.15, 0]} material={beltMaterial}>
+            <torusGeometry args={[isFemale ? 0.265 : 0.295, 0.018, 12, 32]} />
+          </mesh>
+          <mesh position={[0, -0.15, isFemale ? 0.27 : 0.30]} material={goldMaterial}>
+            <boxGeometry args={[0.065, 0.048, 0.018]} />
+          </mesh>
+
+          {/* Tunic / Jacket Lower Hem Flair */}
+          <mesh position={[0, -0.26, 0]} material={clothMaterial}>
+            <cylinderGeometry args={[isFemale ? 0.27 : 0.30, isFemale ? 0.33 : 0.32, 0.16, 24]} />
+          </mesh>
+
+          {/* LEFT LEG & BOOT */}
+          <group ref={leftLegRef} position={[isFemale ? -0.13 : -0.15, -0.32, 0]}>
+            {/* Upper Thigh */}
+            <mesh position={[0, -0.13, 0]} material={pantsMaterial}>
+              <cylinderGeometry args={[0.078, 0.068, 0.26, 16]} />
+            </mesh>
+            {/* Knee Joint */}
+            <mesh position={[0, -0.26, 0.01]} material={pantsMaterial}>
+              <sphereGeometry args={[0.068, 14, 14]} />
+            </mesh>
+            {/* Lower Shin / Calf */}
+            <mesh position={[0, -0.40, 0]} material={pantsMaterial}>
+              <cylinderGeometry args={[0.064, 0.056, 0.26, 16]} />
+            </mesh>
+            {/* Boot Collar / Cuff */}
+            <mesh position={[0, -0.52, 0]} material={shoeMaterial}>
+              <torusGeometry args={[0.062, 0.016, 12, 24]} />
+            </mesh>
+            {/* Boot Body & Toe */}
+            <group position={[0, -0.60, 0.04]}>
+              {/* Sole */}
+              <mesh position={[0, -0.04, 0]} material={shoeSoleMaterial}>
+                <boxGeometry args={[0.11, 0.024, 0.22]} />
+              </mesh>
+              {/* Upper */}
+              <mesh position={[0, 0, 0]} material={shoeMaterial}>
+                <boxGeometry args={[0.10, 0.065, 0.20]} />
+              </mesh>
+              {/* Rounded Front Toe */}
+              <mesh position={[0, -0.005, 0.08]} material={shoeMaterial}>
+                <sphereGeometry args={[0.052, 14, 14]} />
+              </mesh>
+            </group>
+          </group>
+
+          {/* RIGHT LEG & BOOT */}
+          <group ref={rightLegRef} position={[isFemale ? 0.13 : 0.15, -0.32, 0]}>
+            {/* Upper Thigh */}
+            <mesh position={[0, -0.13, 0]} material={pantsMaterial}>
+              <cylinderGeometry args={[0.078, 0.068, 0.26, 16]} />
+            </mesh>
+            {/* Knee Joint */}
+            <mesh position={[0, -0.26, 0.01]} material={pantsMaterial}>
+              <sphereGeometry args={[0.068, 14, 14]} />
+            </mesh>
+            {/* Lower Shin / Calf */}
+            <mesh position={[0, -0.40, 0]} material={pantsMaterial}>
+              <cylinderGeometry args={[0.064, 0.056, 0.26, 16]} />
+            </mesh>
+            {/* Boot Collar / Cuff */}
+            <mesh position={[0, -0.52, 0]} material={shoeMaterial}>
+              <torusGeometry args={[0.062, 0.016, 12, 24]} />
+            </mesh>
+            {/* Boot Body & Toe */}
+            <group position={[0, -0.60, 0.04]}>
+              {/* Sole */}
+              <mesh position={[0, -0.04, 0]} material={shoeSoleMaterial}>
+                <boxGeometry args={[0.11, 0.024, 0.22]} />
+              </mesh>
+              {/* Upper */}
+              <mesh position={[0, 0, 0]} material={shoeMaterial}>
+                <boxGeometry args={[0.10, 0.065, 0.20]} />
+              </mesh>
+              {/* Rounded Front Toe */}
+              <mesh position={[0, -0.005, 0.08]} material={shoeMaterial}>
+                <sphereGeometry args={[0.052, 14, 14]} />
+              </mesh>
+            </group>
+          </group>
+
+          {/* =========================================================================
+              FULL BODY UPPER SECTION: TORSO, CHEST, SHOULDERS, ARMS & HANDS
+              ========================================================================= */}
+          {/* Mid Torso */}
+          <mesh position={[0, -0.02, 0]} material={clothMaterial}>
+            <cylinderGeometry args={[isFemale ? 0.28 : 0.32, isFemale ? 0.26 : 0.29, 0.22, 24]} />
+          </mesh>
+
+          {/* Upper Torso & Chest */}
+          <mesh position={[0, 0.16, 0]} material={clothMaterial}>
+            <cylinderGeometry args={[isFemale ? 0.32 : 0.36, isFemale ? 0.28 : 0.32, 0.26, 32]} />
           </mesh>
 
           {/* Shoulders */}
-          <mesh position={[isFemale ? -0.38 : -0.45, 0.32, 0]} material={clothMaterial}>
-            <sphereGeometry args={[isFemale ? 0.15 : 0.18, 16, 16]} />
+          <mesh position={[isFemale ? -0.34 : -0.38, 0.26, 0]} material={clothMaterial}>
+            <sphereGeometry args={[isFemale ? 0.13 : 0.15, 16, 16]} />
           </mesh>
-          <mesh position={[isFemale ? 0.38 : 0.45, 0.32, 0]} material={clothMaterial}>
-            <sphereGeometry args={[isFemale ? 0.15 : 0.18, 16, 16]} />
+          <mesh position={[isFemale ? 0.34 : 0.38, 0.26, 0]} material={clothMaterial}>
+            <sphereGeometry args={[isFemale ? 0.13 : 0.15, 16, 16]} />
           </mesh>
 
           {/* Left Arm & Hand (Skeletal Gotcha Pose Rigging) */}
-          <group ref={leftArmRef} position={[isFemale ? -0.38 : -0.45, 0.32, 0]}>
-            <mesh position={[0, -0.16, 0]} material={clothMaterial}>
-              <cylinderGeometry args={[0.085, 0.075, 0.28, 16]} />
+          <group ref={leftArmRef} position={[isFemale ? -0.34 : -0.38, 0.26, 0]}>
+            <mesh position={[0, -0.14, 0]} material={clothMaterial}>
+              <cylinderGeometry args={[0.075, 0.066, 0.26, 16]} />
             </mesh>
-            <mesh position={[0, -0.36, 0.06]} material={skinMaterial}>
-              <cylinderGeometry args={[0.07, 0.065, 0.22, 16]} />
+            <mesh position={[0, -0.27, 0]} material={clothMaterial}>
+              <sphereGeometry args={[0.066, 14, 14]} />
             </mesh>
-            <mesh position={[0, -0.48, 0.09]} material={skinMaterial}>
-              <sphereGeometry args={[0.08, 16, 16]} />
+            <mesh position={[0, -0.38, 0.04]} material={skinMaterial}>
+              <cylinderGeometry args={[0.062, 0.054, 0.20, 16]} />
+            </mesh>
+            {/* Hand & Fingers */}
+            <mesh position={[0, -0.50, 0.07]} material={skinMaterial}>
+              <sphereGeometry args={[0.068, 16, 16]} />
+            </mesh>
+            <mesh position={[-0.02, -0.48, 0.11]} rotation={[0.4, 0, 0]} material={skinMaterial}>
+              <sphereGeometry args={[0.028, 10, 10]} />
             </mesh>
           </group>
 
           {/* Right Arm & Hand (Skeletal Gotcha Pose Rigging) */}
-          <group ref={rightArmRef} position={[isFemale ? 0.38 : 0.45, 0.32, 0]}>
-            <mesh position={[0, -0.16, 0]} material={clothMaterial}>
-              <cylinderGeometry args={[0.085, 0.075, 0.28, 16]} />
+          <group ref={rightArmRef} position={[isFemale ? 0.34 : 0.38, 0.26, 0]}>
+            <mesh position={[0, -0.14, 0]} material={clothMaterial}>
+              <cylinderGeometry args={[0.075, 0.066, 0.26, 16]} />
             </mesh>
-            <mesh position={[0, -0.36, 0.06]} material={skinMaterial}>
-              <cylinderGeometry args={[0.07, 0.065, 0.22, 16]} />
+            <mesh position={[0, -0.27, 0]} material={clothMaterial}>
+              <sphereGeometry args={[0.066, 14, 14]} />
             </mesh>
-            <mesh position={[0, -0.48, 0.09]} material={skinMaterial}>
-              <sphereGeometry args={[0.08, 16, 16]} />
+            <mesh position={[0, -0.38, 0.04]} material={skinMaterial}>
+              <cylinderGeometry args={[0.062, 0.054, 0.20, 16]} />
+            </mesh>
+            {/* Hand & Fingers */}
+            <mesh position={[0, -0.50, 0.07]} material={skinMaterial}>
+              <sphereGeometry args={[0.068, 16, 16]} />
+            </mesh>
+            <mesh position={[0.02, -0.48, 0.11]} rotation={[0.4, 0, 0]} material={skinMaterial}>
+              <sphereGeometry args={[0.028, 10, 10]} />
             </mesh>
           </group>
 
           {/* Neck */}
-          <mesh position={[0, 0.52, 0]} material={skinMaterial}>
-            <cylinderGeometry args={[isFemale ? 0.14 : 0.16, isFemale ? 0.17 : 0.19, 0.28, 24]} />
+          <mesh position={[0, 0.38, 0]} material={skinMaterial}>
+            <cylinderGeometry args={[isFemale ? 0.12 : 0.14, isFemale ? 0.15 : 0.17, 0.22, 24]} />
           </mesh>
 
           {/* Crossbody Adventure Satchel Strap (Dây đai da vắt chéo như ảnh mẫu) */}
           {hasSatchel && (
-            <group ref={satchelRef} position={[0, 0.12, 0]}>
+            <group ref={satchelRef} position={[0, 0.06, 0]}>
               {/* Leather Strap across chest */}
-              <mesh position={[0, 0.15, 0.22]} rotation={[0, 0, 0.48]}>
-                <boxGeometry args={[0.065, 0.72, 0.02]} />
+              <mesh position={[0, 0.10, 0.19]} rotation={[0, 0, 0.48]}>
+                <boxGeometry args={[0.055, 0.62, 0.02]} />
                 <primitive object={satchelLeatherMaterial} attach="material" />
               </mesh>
 
               {/* Satchel Bag on Hip */}
-              <mesh position={[0.32, -0.05, 0.15]} rotation={[0.1, 0, -0.15]}>
-                <boxGeometry args={[0.22, 0.24, 0.12]} />
+              <mesh position={[0.26, -0.12, 0.14]} rotation={[0.1, 0, -0.15]}>
+                <boxGeometry args={[0.18, 0.20, 0.10]} />
                 <primitive object={satchelLeatherMaterial} attach="material" />
               </mesh>
               {/* Bag Flap */}
-              <mesh position={[0.32, 0.04, 0.18]} rotation={[0.2, 0, -0.15]}>
-                <boxGeometry args={[0.23, 0.12, 0.04]} />
+              <mesh position={[0.26, -0.04, 0.16]} rotation={[0.2, 0, -0.15]}>
+                <boxGeometry args={[0.19, 0.10, 0.035]} />
                 <primitive object={satchelLeatherMaterial} attach="material" />
               </mesh>
               {/* Decorative Leaves on Satchel */}
-              <mesh position={[0.35, -0.02, 0.22]} rotation={[0, 0, 0.4]}>
-                <coneGeometry args={[0.045, 0.11, 8]} />
+              <mesh position={[0.28, -0.09, 0.20]} rotation={[0, 0, 0.4]}>
+                <coneGeometry args={[0.038, 0.09, 8]} />
                 <primitive object={leafMaterial} attach="material" />
               </mesh>
             </group>
@@ -488,17 +689,17 @@ function ProceduralCharacterMesh({
 
           {/* Luxury Wealth Lapel Brooch / Gold Accessory */}
           {isWealthy && (
-            <group position={[0, 0.15, 0]}>
-              <mesh position={[0.2, 0.14, 0.25]} rotation={[0.2, 0.3, 0.4]} material={goldMaterial}>
-                <octahedronGeometry args={[0.042, 0]} />
+            <group position={[0, 0.08, 0]}>
+              <mesh position={[0.16, 0.12, 0.22]} rotation={[0.2, 0.3, 0.4]} material={goldMaterial}>
+                <octahedronGeometry args={[0.038, 0]} />
               </mesh>
               {isFemale ? (
-                <mesh position={[0, 0.34, 0.08]} rotation={[1.1, 0, 0]} material={goldMaterial}>
-                  <torusGeometry args={[0.19, 0.016, 12, 32]} />
+                <mesh position={[0, 0.28, 0.08]} rotation={[1.1, 0, 0]} material={goldMaterial}>
+                  <torusGeometry args={[0.16, 0.014, 12, 32]} />
                 </mesh>
               ) : (
-                <mesh position={[0, 0.04, 0.26]} material={goldMaterial}>
-                  <boxGeometry args={[0.032, 0.16, 0.012]} />
+                <mesh position={[0, 0.02, 0.23]} material={goldMaterial}>
+                  <boxGeometry args={[0.028, 0.14, 0.012]} />
                 </mesh>
               )}
             </group>
@@ -507,7 +708,7 @@ function ProceduralCharacterMesh({
       )}
 
       {/* Head Group (Rotatable & Cursor Tracking) */}
-      <group ref={headRef} position={[0, isBaby ? 0.74 : 0.88, 0]} scale={[headScale, headScale, headScale]}>
+      <group ref={headRef} position={[0, isBaby ? 0.58 : 0.68, 0]} scale={[headScale, headScale, headScale]}>
         {/* Head Cranium */}
         <mesh material={skinMaterial}>
           <sphereGeometry args={[isFemale ? 0.46 : 0.47, 32, 32]} />
@@ -841,13 +1042,13 @@ export default function Dynamic3DAvatar({
   return (
     <div className={`relative flex items-center justify-center overflow-visible ${className}`}>
       <Canvas
-        camera={{ position: [0, 0.08, 2.15], fov: 42 }}
+        camera={{ position: [0, 0.05, 3.65], fov: 38 }}
         className="w-full h-full cursor-grab active:cursor-grabbing overflow-visible"
         gl={{ antialias: true, alpha: true }}
       >
         <MoodLighting burnout={burnout} isMeditating={isMeditating} />
 
-        <Float speed={isFastForwarding ? 0 : 1.4} rotationIntensity={0.12} floatIntensity={0.25}>
+        <Float speed={isFastForwarding ? 0 : 1.4} rotationIntensity={0.06} floatIntensity={0.10}>
           <ProceduralCharacterMesh
             nationality={nationality}
             gender={gender}
@@ -865,8 +1066,9 @@ export default function Dynamic3DAvatar({
           <OrbitControls
             enableZoom={true}
             enablePan={false}
-            minDistance={1.2}
-            maxDistance={3.8}
+            minDistance={1.8}
+            maxDistance={5.2}
+            target={[0, 0.05, 0]}
             maxPolarAngle={Math.PI / 1.7}
             minPolarAngle={Math.PI / 3}
           />

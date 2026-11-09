@@ -406,8 +406,8 @@ export default function CharacterHeroBanner({
   const isSevereBurnout = age >= 18 && burnout > 80;
   const isInfant = age <= 5;
 
-  // Borderless, Expanded 3D Avatar (Tràn banner không viền hộp chữ nhật)
-  const avatarContainerClasses = `w-36 h-40 md:w-44 md:h-48 lg:w-48 lg:h-52 shrink-0 relative overflow-visible group transition-all duration-500 flex items-center justify-center select-none pointer-events-auto ${
+  // Borderless, Full-Body 3D Avatar (Tỉ lệ toàn thân thanh thoát: thấy rõ cả đầu, thân, tay chân)
+  const avatarContainerClasses = `w-32 h-44 sm:w-36 sm:h-52 md:w-40 md:h-56 lg:w-44 lg:h-60 shrink-0 relative overflow-visible group transition-all duration-500 flex items-center justify-center select-none pointer-events-auto ${
     feedbackAtmo
       ? 'scale-[1.03]'
       : isSevereBurnout
@@ -515,7 +515,7 @@ export default function CharacterHeroBanner({
           {/* Avatar 3D Holographic Stage with Dynamic Ground Reticle */}
           <div className="relative shrink-0 flex flex-col items-center">
             {/* Holographic Projection Disc under Avatar */}
-            <div className="absolute -bottom-3 w-36 md:w-44 lg:w-48 h-8 pointer-events-none select-none z-0">
+            <div className="absolute -bottom-2 w-32 sm:w-36 md:w-40 lg:w-44 h-7 pointer-events-none select-none z-0">
               <div
                 className={`w-full h-full rounded-[100%] blur-sm animate-pulse ${
                   isCriticalVitality

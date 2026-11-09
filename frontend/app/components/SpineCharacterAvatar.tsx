@@ -159,10 +159,10 @@ export default function SpineCharacterAvatar({
       ctx.scale(dpr, dpr);
       ctx.clearRect(0, 0, width, height);
 
-      // Center reference frame
+      // Center reference frame (Full-body framing)
       const cx = width / 2;
-      const cy = height * 0.73;
-      const scale = Math.min(width, height) / 380;
+      const cy = height * 0.76;
+      const scale = Math.min(width / 250, height / 340);
 
       // Skeletal Hierarchy State Variables
       let rootY = 0;
