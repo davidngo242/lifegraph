@@ -232,6 +232,14 @@ class SoundEngine {
     }
   }
 
+  public playChime() {
+    this.playYearEndChime();
+  }
+
+  public playAspirationTrumpet() {
+    this.playLevelUp();
+  }
+
   /**
    * Tiếng rền trầm báo hiệu biến cố phong ba vĩ mô (Macro Shock)
    */

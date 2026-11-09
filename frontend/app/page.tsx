@@ -23,6 +23,7 @@ import SkillTreeModal from './components/SkillTreeModal';
 import MultiTabSidebar from './components/MultiTabSidebar';
 import CharacterHeroBanner, { BannerActionFeedback } from './components/CharacterHeroBanner';
 import AvatarInspectorModal from './components/AvatarInspectorModal';
+import PetSanctuaryModal from './components/PetSanctuaryModal';
 import CinemaDecisionRoomModal from './components/CinemaDecisionRoomModal';
 import InteractiveScene2D from './components/InteractiveScene2D';
 import YearEndReflectionModal from './components/rpg/YearEndReflectionModal';
@@ -107,6 +108,7 @@ export default function LifeGraphPage() {
   const [aspiration, setAspiration] = useState<AspirationData | undefined>(undefined);
   const [showAspirationUpgradeModal, setShowAspirationUpgradeModal] = useState<boolean>(false);
   const [show3DInspectorModal, setShow3DInspectorModal] = useState<boolean>(false);
+  const [showPetSanctuaryModal, setShowPetSanctuaryModal] = useState<boolean>(false);
   const [annualDigest, setAnnualDigest] = useState<AnnualDigestData | null>(null);
   const [avatarReaction, setAvatarReaction] = useState<AvatarReactionType>('idle');
   const [bannerFeedback, setBannerFeedback] = useState<BannerActionFeedback | null>(null);
@@ -374,6 +376,7 @@ export default function LifeGraphPage() {
         if (showSkillSelector) { setShowSkillSelector(false); return; }
         if (showAspirationUpgradeModal) { setShowAspirationUpgradeModal(false); return; }
         if (show3DInspectorModal) { setShow3DInspectorModal(false); return; }
+        if (showPetSanctuaryModal) { setShowPetSanctuaryModal(false); return; }
         if (activeView === 'decision') { setActiveView('game'); return; }
         return;
       }
@@ -418,6 +421,7 @@ export default function LifeGraphPage() {
           showGuideModal ||
           showAspirationUpgradeModal ||
           show3DInspectorModal ||
+          showPetSanctuaryModal ||
           showShortcutsModal ||
           showEmergencyModal ||
           Boolean(activeMiniGame) ||
@@ -443,6 +447,7 @@ export default function LifeGraphPage() {
         showCinemaDecisionModal ||
         showAspirationUpgradeModal ||
         show3DInspectorModal ||
+        showPetSanctuaryModal ||
         showShortcutsModal ||
         showEmergencyModal ||
         Boolean(activeMiniGame) ||
@@ -514,6 +519,7 @@ export default function LifeGraphPage() {
     showCinemaDecisionModal,
     showAspirationUpgradeModal,
     show3DInspectorModal,
+    showPetSanctuaryModal,
     showShortcutsModal,
     showEmergencyModal,
     activeMiniGame,
@@ -1630,6 +1636,20 @@ export default function LifeGraphPage() {
         />
       )}
 
+      {/* 3D Pet Companion Sanctuary Modal (Linh Thú Các) */}
+      {showPetSanctuaryModal && character && (
+        <PetSanctuaryModal
+          isOpen={showPetSanctuaryModal}
+          onClose={() => setShowPetSanctuaryModal(false)}
+          character={character}
+          playerAccount={playerAccount}
+          onPetUpdate={(updatedChar) => {
+            setCharacter(updatedChar);
+            loadState();
+          }}
+        />
+      )}
+
       {/* Vendetta Heir Lineage Notice Modal */}
       {heirNotice && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
@@ -1813,28 +1833,22 @@ export default function LifeGraphPage() {
               </Tooltip>
             )}
 
-            {/* 3. Decision Room View Switcher Pill */}
-            {character && !character.is_deceased && (
+            {/* 3. Decision Cinema Modal Trigger (Only visible during active drama scenario) */}
+            {character && !character.is_deceased && (activeScenario || dilemma) && (
               <Tooltip
                 position="bottom"
-                content="Phòng đối thoại & quyết định then chốt [D]"
+                content="Kịch bản điện ảnh biến cố định mệnh 21:9"
               >
                 <button
-                  onClick={() => setActiveView('decision')}
-                  className={`relative px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
-                    activeView === 'decision'
-                      ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                  }`}
+                  onClick={() => setShowCinemaDecisionModal(true)}
+                  className="relative px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition bg-rose-950/80 hover:bg-rose-900 border border-rose-500/50 text-rose-200 animate-pulse shadow-md shadow-rose-950/40"
                 >
-                  <Clapperboard className="w-3.5 h-3.5" />
-                  <span className="hidden md:inline">Quyết Định</span>
-                  {activeScenario && (
-                    <span className="flex h-2 w-2 relative">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
-                    </span>
-                  )}
+                  <Clapperboard className="w-3.5 h-3.5 text-rose-400" />
+                  <span className="hidden md:inline font-bold">Biến Cố 21:9</span>
+                  <span className="flex h-2 w-2 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                  </span>
                 </button>
               </Tooltip>
             )}
@@ -2009,6 +2023,7 @@ export default function LifeGraphPage() {
               actionFeedback={bannerFeedback}
               isFastForwarding={loading}
               onOpen3DInspector={() => setShow3DInspectorModal(true)}
+              onOpenPetSanctuary={() => setShowPetSanctuaryModal(true)}
             />
 
 
@@ -2064,17 +2079,23 @@ export default function LifeGraphPage() {
                     </div>
                   )}
 
-                {/* Footer: Cánh Cửa Chuyển Tiếp Ngã Rẽ Năm Nay (Turning Point Gateway) */}
+                {/* Footer: Cánh Cửa Chuyển Tiếp Vòng Đời & Chiêm Nghiệm Cuối Năm */}
                   <div className="p-4 bg-[var(--bg-card-subtle)] border-t border-[var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="space-y-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10.5px] font-mono font-bold border border-amber-500/30 uppercase tracking-wider flex items-center gap-1.5">
-                          <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                        {activeScenario || dilemma ? (
+                          <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10.5px] font-mono font-bold border border-rose-500/30 uppercase tracking-wider flex items-center gap-1.5 animate-pulse">
+                            <span className="relative flex h-2 w-2">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                            </span>
+                            <span>🚨 Biến Cố Định Mệnh · Tuổi {character?.age}</span>
                           </span>
-                          <span>Ngã Rẽ Cuộc Đời · Tuổi {character?.age}</span>
-                        </span>
+                        ) : (
+                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10.5px] font-mono font-bold border border-emerald-500/30 uppercase tracking-wider flex items-center gap-1.5">
+                            <span>🌱 Vòng Đời Thần Mộc · Tuổi {character?.age}</span>
+                          </span>
+                        )}
                         {(character?.action_points || 0) > 0 ? (
                           <span className="text-[10.5px] font-mono text-amber-300/80 bg-amber-950/60 px-2 py-0.5 rounded-full border border-amber-500/20">
                             Còn {character.action_points} AP
@@ -2087,35 +2108,36 @@ export default function LifeGraphPage() {
                       </div>
 
                       <h4 className="text-sm sm:text-base font-bold text-white font-sans truncate">
-                        {activeScenario?.title || dilemma?.title || "Sân Khấu Tâm Trí Đang Đợi Bạn"}
+                        {activeScenario?.title || dilemma?.title || "Nhịp Thở Cuộc Đời Trôi Chảy"}
                       </h4>
 
                       <p className="text-xs text-slate-300 font-sans leading-relaxed line-clamp-2 max-w-xl">
-                        {activeScenario?.description || dilemma?.description || "Bước vào Phòng Quyết Định 3D để đối thoại, tìm kiếm manh mối và đổ xúc xắc định mệnh chốt năm."}
+                        {activeScenario?.description || dilemma?.description || "Hành động qua từng phiến lá, nuôi dưỡng cành nhánh và chiêm nghiệm gieo mầm đón chào năm mới."}
                       </p>
                     </div>
 
                     <div className="flex sm:flex-col items-center sm:items-end gap-2 shrink-0">
                       <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap w-full sm:w-auto">
-                        <button
-                          onClick={() => setIsYearEndModalOpen(true)}
-                          className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-950/80 to-slate-900 hover:from-amber-900/90 hover:to-slate-800 text-amber-300 font-bold text-xs uppercase tracking-wider border border-amber-500/50 flex items-center justify-center gap-1.5 transition active:scale-95 shadow group"
-                          title="Chiêm nghiệm việc đã làm, hạt mầm dang dở và gieo mầm tâm nguyện đón năm mới (Phím tắt: Space)"
-                        >
-                          <Sparkles className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-12 transition-transform" />
-                          <span>🌿 Chiêm Nghiệm Cuối Năm</span>
-                          <kbd className="font-mono text-[10px] bg-black/40 text-amber-300 px-1 py-0.5 rounded font-bold">Space</kbd>
-                        </button>
+                        {activeScenario || dilemma ? (
+                          <button
+                            onClick={() => setShowCinemaDecisionModal(true)}
+                            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 hover:from-rose-500 hover:to-amber-400 text-white font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-rose-950/50 transition active:scale-95 group animate-pulse"
+                            title="Bước vào Kịch Bản Điện Ảnh Định Mệnh 21:9"
+                          >
+                            <Clapperboard className="w-4 h-4 text-white" />
+                            <span>Kịch Bản Điện Ảnh 21:9</span>
+                            <span className="group-hover:translate-x-1 transition-transform">→</span>
+                          </button>
+                        ) : null}
 
                         <button
-                          onClick={() => setActiveView('decision')}
+                          onClick={() => setIsYearEndModalOpen(true)}
                           className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 transition active:scale-95 group"
-                          title="Bước vào Phòng Quyết Định 3D (Phím tắt: D)"
+                          title="Chiêm nghiệm việc đã làm, hạt mầm dang dở và gieo mầm tâm nguyện đón năm mới (Phím tắt: Space)"
                         >
-                          <Clapperboard className="w-4 h-4 text-slate-950" />
-                          <span>Phòng Quyết Định 3D</span>
-                          <kbd className="font-mono text-[10px] bg-black/20 text-slate-950 px-1.5 py-0.5 rounded font-bold">D</kbd>
-                          <span className="group-hover:translate-x-1 transition-transform">→</span>
+                          <Sparkles className="w-4 h-4 text-slate-950 group-hover:rotate-12 transition-transform" />
+                          <span>🌿 Chiêm Nghiệm & Giao Thừa</span>
+                          <kbd className="font-mono text-[10px] bg-black/20 text-slate-950 px-1.5 py-0.5 rounded font-bold">Space</kbd>
                         </button>
                       </div>
                       <span className="text-[10px] font-mono text-slate-400 hidden sm:inline">
