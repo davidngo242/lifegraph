@@ -152,22 +152,22 @@ export default function MiniGameHostModal({
     <div className="relative">
       {/* Floating Global Value Header (Nhắc nhở giá trị đời thực của minigame) */}
       {info && (
-        <div className="fixed top-3 left-1/2 -translate-x-1/2 z-[60] max-w-2xl w-[92%] bg-slate-900/95 border border-amber-500/50 rounded-2xl p-2.5 shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 text-xs pointer-events-none animate-in fade-in slide-in-from-top-3">
+        <div className="fixed top-3 left-1/2 -translate-x-1/2 z-[60] max-w-2xl w-[92%] bg-[var(--bg-card)] border border-amber-500/50 text-[var(--text-primary)] rounded-2xl p-2.5 shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 text-xs pointer-events-none animate-in fade-in slide-in-from-top-3">
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-xl shrink-0">{info.icon}</span>
             <div className="min-w-0">
-              <div className="flex items-center gap-1.5 font-bold text-amber-300 truncate">
+              <div className="flex items-center gap-1.5 font-bold text-amber-700 dark:text-amber-300 truncate">
                 <span>{info.title}</span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-200 border border-amber-500/30">
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-200 border border-amber-500/30">
                   Cột Mốc Thực Chiến
                 </span>
               </div>
-              <div className="text-[11px] text-slate-300 truncate">
+              <div className="text-[11px] text-[var(--text-secondary)] truncate">
                 {info.realLifeRoi}
               </div>
             </div>
           </div>
-          <div className="hidden sm:flex items-center gap-1 text-[10.5px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-1 rounded-lg border border-emerald-500/30 shrink-0">
+          <div className="hidden sm:flex items-center gap-1 text-[10.5px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-1 rounded-lg border border-emerald-500/30 shrink-0 font-bold">
             <Trophy className="w-3 h-3" />
             <span>Phát Triển Đời Người</span>
           </div>

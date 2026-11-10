@@ -2874,15 +2874,15 @@ export default function DynamicLifeTree({
               <Tooltip
                 content={
                   <div className="space-y-1 text-xs max-w-xs">
-                    <div className="flex items-center gap-1.5 font-bold text-amber-300">
+                    <div className="flex items-center gap-1.5 font-bold text-amber-700 dark:text-amber-300">
                       <span>{node.icon}</span>
                       <span>{node.title}</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-mono font-bold">
                         {node.apCost} AP
                       </span>
                     </div>
-                    <div className="text-slate-200">{node.gainText}</div>
-                    <div className="text-[11px] text-slate-400 italic">{node.flavor}</div>
+                    <div className="text-[var(--text-primary)] font-medium">{node.gainText}</div>
+                    <div className="text-[11px] text-[var(--text-secondary)] italic">{node.flavor}</div>
                   </div>
                 }
               >
@@ -2945,12 +2945,12 @@ export default function DynamicLifeTree({
           <Tooltip
             content={
               <div className="space-y-1 text-xs">
-                <div className="font-bold text-amber-300">
+                <div className="font-bold text-amber-700 dark:text-amber-300">
                   {characterAge === 0 ? '🌱 Mầm Sống Khởi Nguyên' : `🪵 Vòng Vân Gỗ Đời Người (${characterAge} Năm Tuổi)`}:
                 </div>
-                <div>Gốc rễ đời người tích lũy từng vòng vân gỗ theo năm tháng.</div>
-                <div className="text-[11px] text-emerald-300">Giai đoạn hiện tại: <span className="font-bold">{STAGE_META[growthStage].label}</span> ({STAGE_META[growthStage].ageSpan})</div>
-                <div className="text-[10px] text-slate-400 italic">{STAGE_META[growthStage].desc}</div>
+                <div className="text-[var(--text-primary)]">Gốc rễ đời người tích lũy từng vòng vân gỗ theo năm tháng.</div>
+                <div className="text-[11px] text-emerald-700 dark:text-emerald-300">Giai đoạn hiện tại: <span className="font-bold">{STAGE_META[growthStage].label}</span> ({STAGE_META[growthStage].ageSpan})</div>
+                <div className="text-[10px] text-[var(--text-secondary)] italic">{STAGE_META[growthStage].desc}</div>
               </div>
             }
           >

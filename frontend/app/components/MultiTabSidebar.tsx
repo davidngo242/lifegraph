@@ -443,15 +443,15 @@ export default function MultiTabSidebar({
         {activeTab === 'achievements' && (
           <div className="flex-1 overflow-y-auto space-y-4 pr-1 custom-scrollbar">
             {/* Life Epithet Banner */}
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-950/50 via-purple-950/40 to-slate-900 border border-amber-500/40 text-xs space-y-2 text-center">
-              <Crown className="w-7 h-7 text-amber-400 mx-auto" />
-              <div className="text-[10.5px] font-mono uppercase tracking-widest text-amber-300">
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-50 via-purple-50 to-amber-50 dark:from-amber-950/50 dark:via-purple-950/40 dark:to-slate-900 border border-amber-300 dark:border-amber-500/40 text-xs space-y-2 text-center">
+              <Crown className="w-7 h-7 text-amber-500 mx-auto" />
+              <div className="text-[10.5px] font-mono uppercase tracking-widest text-amber-800 dark:text-amber-300 font-bold">
                 Danh Hiệu Cuộc Đời
               </div>
-              <div className="font-black text-sm text-white font-sans">
+              <div className="font-black text-sm text-[var(--text-primary)] font-sans">
                 {getEpithet()}
               </div>
-              <p className="text-[11px] text-slate-300 font-sans leading-relaxed">
+              <p className="text-[11px] text-[var(--text-secondary)] font-sans leading-relaxed">
                 Được đúc kết từ những lựa chọn, thành quả sự nghiệp và nhân cách sống qua các năm.
               </p>
             </div>

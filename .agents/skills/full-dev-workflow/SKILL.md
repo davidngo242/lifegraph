@@ -336,3 +336,19 @@ flowchart TD
 
 
 
+
+
+---
+
+## 9. Tiêu Chuẩn Kiểm Định Mô Phỏng 1.000 Người Dùng & Đồng Bộ Đa Theme (1,000-User Stress & Dual-Theme UI Standard)
+
+Theo lệnh điều hành trực tiếp của **Sếp**, LifeGraph áp dụng quy chuẩn kiểm thử diện rộng tự động **1.000 User Stress Simulation** trước mọi bản phát hành:
+
+1. **Bộ Test Suite Độc Lập:** `test_1000_users_simulation.mjs`
+   - Mô phỏng 1.000 người dùng với đầy đủ 5 chặng đời từ 0 đến 95 tuổi (Ấu thơ, Thiếu niên, Trưởng thành, Dưỡng lão, Đại thọ).
+   - Bao phủ 4 theme: Daylight (40%), Obsidian (35%), Sepia (15%), Cyberpunk (10%).
+   - Kiểm tra tương phản WCAG 2.1 AA/AAA trên 18.000 lượt hiển thị modal ($1.000 \times 18$).
+2. **Quy Chuẩn Đồng Bộ Giao Diện Sáng / Tối (Zero Monochromatic Text):**
+   - 100% Modals và Cards sử dụng biến ngữ nghĩa `--bg-card`, `--bg-card-subtle`, `--text-primary`, `--text-secondary`, `--border-subtle`.
+   - Triệt tiêu hoàn toàn mã màu cứng gây chìm chữ khi đổi giao diện (cấm `bg-slate-950` không có prefix theme, cấm `text-white` trên nền sáng).
+   - Mọi bản build Next.js bắt buộc đạt exit code 0 (`npm run build`).

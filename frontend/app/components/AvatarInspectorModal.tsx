@@ -8,7 +8,7 @@ import { X, Sparkles, Eye, Sliders, Layers, RotateCcw, Activity, ShieldCheck, He
 const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-slate-950 rounded-2xl">
+    <div className="w-full h-full flex items-center justify-center bg-[var(--bg-card-subtle)] rounded-2xl">
       <div className="w-8 h-8 rounded-full border-2 border-amber-500/40 border-t-amber-400 animate-spin" />
     </div>
   )

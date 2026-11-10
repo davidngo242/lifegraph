@@ -188,17 +188,17 @@ export default function UnifiedNotificationCenter({
 
                 {/* HP Vitality Crisis */}
                 {isVitalityCritical && (
-                  <div className="p-3 rounded-2xl bg-rose-950/40 border border-rose-500/50 text-rose-200 text-xs space-y-2">
+                  <div className="p-3 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-500/50 text-rose-950 dark:text-rose-200 text-xs space-y-2">
                     <div className="flex items-center justify-between font-bold">
-                      <span className="flex items-center gap-1.5 text-rose-300">
+                      <span className="flex items-center gap-1.5 text-rose-800 dark:text-rose-300">
                         <Heart className="w-3.5 h-3.5 text-rose-500 fill-current animate-pulse" />
                         Nguy Kịch Sinh Mệnh ({character?.vitality}%)
                       </span>
-                      <span className="text-[10px] bg-rose-500/20 px-1.5 py-0.5 rounded text-rose-300 border border-rose-500/30">
+                      <span className="text-[10px] bg-rose-100 dark:bg-rose-500/20 px-1.5 py-0.5 rounded text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-500/30 font-bold">
                         Sắp Đột Tử
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+                    <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed font-sans">
                       Thể lực suy kiệt dưới 25%. Nguy cơ trút hơi thở cuối cùng khi bước sang năm mới!
                     </p>
                     <div className="flex items-center gap-2 pt-1">
@@ -231,17 +231,17 @@ export default function UnifiedNotificationCenter({
 
                 {/* Debt Crisis */}
                 {isDebtCritical && (
-                  <div className="p-3 rounded-2xl bg-amber-950/40 border border-amber-500/50 text-amber-200 text-xs space-y-2">
+                  <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-500/50 text-amber-950 dark:text-amber-200 text-xs space-y-2">
                     <div className="flex items-center justify-between font-bold">
-                      <span className="flex items-center gap-1.5 text-amber-300">
-                        <DollarSign className="w-3.5 h-3.5 text-amber-500" />
+                      <span className="flex items-center gap-1.5 text-amber-800 dark:text-amber-300">
+                        <DollarSign className="w-3.5 h-3.5 text-amber-600" />
                         Báo Động Nợ Nần (-${Math.abs(character?.cash || 0).toLocaleString()})
                       </span>
-                      <span className="text-[10px] bg-amber-500/20 px-1.5 py-0.5 rounded text-amber-300 border border-amber-500/30">
+                      <span className="text-[10px] bg-amber-100 dark:bg-amber-500/20 px-1.5 py-0.5 rounded text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-500/30 font-bold">
                         Lãi Phạt
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+                    <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed font-sans">
                       Tài khoản âm tiền mặt. Lãi suất ngầm và áp lực nợ sẽ bào mòn sinh mệnh mỗi năm!
                     </p>
                     <div className="flex items-center gap-2 pt-1">
@@ -262,7 +262,7 @@ export default function UnifiedNotificationCenter({
                             setIsOpen(false);
                             onOpenAssets();
                           }}
-                          className="py-1.5 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition"
+                          className="py-1.5 px-2.5 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] text-[var(--text-primary)] border border-[var(--border-subtle)] font-semibold text-xs transition"
                         >
                           <span>Thanh Lý Tài Sản</span>
                         </button>
@@ -273,14 +273,14 @@ export default function UnifiedNotificationCenter({
 
                 {/* Burnout Crisis */}
                 {isBurnoutCritical && (
-                  <div className="p-3 rounded-2xl bg-orange-950/40 border border-orange-500/50 text-orange-200 text-xs space-y-2">
+                  <div className="p-3 rounded-2xl bg-orange-50 dark:bg-orange-950/40 border border-orange-300 dark:border-orange-500/50 text-orange-950 dark:text-orange-200 text-xs space-y-2">
                     <div className="flex items-center justify-between font-bold">
-                      <span className="flex items-center gap-1.5 text-orange-300">
+                      <span className="flex items-center gap-1.5 text-orange-800 dark:text-orange-300">
                         <Flame className="w-3.5 h-3.5 text-orange-500 animate-pulse" />
                         Khủng Hoảng Kiệt Sức ({character?.burnout}%)
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+                    <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed font-sans">
                       Ngọn lửa Burnout bốc cao quá 80%. Tâm thần suy kiệt, tự trừ máu trần mỗi năm!
                     </p>
                     {onWellness && (
@@ -301,20 +301,20 @@ export default function UnifiedNotificationCenter({
 
             {/* 2. KHU VỰC BIẾN CỐ ĐỊNH MỆNH (Active Dilemma / Turning Point) */}
             {hasDilemma && (
-              <div className="p-3.5 rounded-2xl bg-gradient-to-r from-rose-950/60 via-purple-950/60 to-slate-900 border border-rose-500/50 text-xs space-y-2.5 shadow-md">
+              <div className="p-3.5 rounded-2xl bg-gradient-to-r from-rose-50 via-purple-50 to-amber-50 dark:from-rose-950/60 dark:via-purple-950/60 dark:to-slate-900 border border-rose-300 dark:border-rose-500/50 text-xs space-y-2.5 shadow-md">
                 <div className="flex items-center justify-between font-bold">
-                  <span className="flex items-center gap-1.5 text-rose-300 uppercase tracking-wider text-[11px]">
-                    <Clapperboard className="w-4 h-4 text-rose-400 animate-pulse" />
+                  <span className="flex items-center gap-1.5 text-rose-700 dark:text-rose-300 uppercase tracking-wider text-[11px]">
+                    <Clapperboard className="w-4 h-4 text-rose-500 animate-pulse" />
                     Biến Cố Định Mệnh Đang Chờ
                   </span>
-                  <span className="text-[10.5px] font-mono px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">
+                  <span className="text-[10.5px] font-mono px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-500/40 font-bold">
                     Tuổi {character?.age}
                   </span>
                 </div>
-                <div className="font-bold text-sm text-white font-sans">
+                <div className="font-bold text-sm text-[var(--text-primary)] font-sans">
                   {activeScenario?.title || dilemma?.title || 'Ngã Rẽ Vận Mệnh'}
                 </div>
-                <p className="text-[11px] text-slate-300 leading-relaxed font-sans line-clamp-2">
+                <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed font-sans line-clamp-2">
                   {activeScenario?.description || dilemma?.description || 'Một quyết định quan trọng ảnh hưởng sâu sắc đến sự nghiệp và tương lai.'}
                 </p>
                 {onOpenCinema && (

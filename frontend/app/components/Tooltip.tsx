@@ -65,12 +65,12 @@ export default function Tooltip({
       {isVisible && content && (
         <div
           role="tooltip"
-          className={`absolute z-[9999] ${getPositionClass()} px-3 py-2 text-[12px] leading-snug font-sans text-slate-100 bg-slate-900 border border-slate-700/90 rounded-xl shadow-[0_10px_35px_rgba(0,0,0,0.8)] backdrop-blur-xl pointer-events-none whitespace-normal min-w-[150px] max-w-[280px] animate-in fade-in zoom-in-95 duration-150`}
+          className={`absolute z-[9999] ${getPositionClass()} px-3 py-2 text-[12px] leading-snug font-sans text-[var(--text-primary)] bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-xl shadow-[0_10px_35px_rgba(0,0,0,0.35)] backdrop-blur-xl pointer-events-none whitespace-normal min-w-[150px] max-w-[280px] animate-in fade-in zoom-in-95 duration-150`}
         >
           {content}
           {/* Arrow */}
           <div
-            className={`absolute w-2 h-2 bg-slate-900 border-slate-700/90 rotate-45 pointer-events-none ${getArrowClass()}`}
+            className={`absolute w-2 h-2 bg-[var(--bg-card)] border-[var(--border-subtle)] rotate-45 pointer-events-none ${getArrowClass()}`}
           />
         </div>
       )}

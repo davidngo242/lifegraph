@@ -191,9 +191,9 @@ export default function KarmaSanctumModal({
           </div>
 
           {/* Section 3: Early Rebirth (Chuyển Kiếp Sớm) */}
-          <div className="p-4 rounded-2xl bg-rose-950/20 border border-rose-500/30">
-            <h3 className="text-xs font-bold text-rose-300 normal-case tracking-normal mb-1 flex items-center gap-1.5">
-              <Flame className="w-4 h-4 text-rose-400" /> Kết Thúc Kiếp Này & Tái Sinh Sớm
+          <div className="p-4 rounded-2xl bg-rose-50/80 dark:bg-rose-950/20 border border-rose-300 dark:border-rose-500/30">
+            <h3 className="text-xs font-bold text-rose-800 dark:text-rose-300 normal-case tracking-normal mb-1 flex items-center gap-1.5">
+              <Flame className="w-4 h-4 text-rose-500" /> Kết Thúc Kiếp Này & Tái Sinh Sớm
             </h3>
             <p className="text-[12px] text-[var(--text-secondary)] mb-3 leading-relaxed">
               Nếu số phận hiện tại bế tắc hoàn toàn, bạn có thể chủ động quy y cửa phật để kết thúc kiếp này sớm và bước vào Vòng Quay Tái Sinh.
@@ -202,7 +202,7 @@ export default function KarmaSanctumModal({
             {!confirmAbandon ? (
               <button
                 onClick={() => setConfirmAbandon(true)}
-                className="py-2.5 px-4 rounded-xl bg-rose-950/60 hover:bg-rose-900/80 border border-rose-500/40 text-rose-300 hover:text-white text-xs font-bold transition active:scale-95"
+                className="py-2.5 px-4 rounded-xl bg-rose-100 hover:bg-rose-200 dark:bg-rose-950/60 dark:hover:bg-rose-900/80 border border-rose-300 dark:border-rose-500/40 text-rose-800 dark:text-rose-300 text-xs font-bold transition active:scale-95"
               >
                 Yêu Cầu Chuyển Kiếp Sớm
               </button>
@@ -219,7 +219,7 @@ export default function KarmaSanctumModal({
                 </button>
                 <button
                   onClick={() => setConfirmAbandon(false)}
-                  className="py-2.5 px-3 rounded-xl bg-slate-800 text-[var(--text-secondary)] hover:text-white text-xs transition"
+                  className="py-2.5 px-3 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)] text-xs transition"
                 >
                   Hủy
                 </button>

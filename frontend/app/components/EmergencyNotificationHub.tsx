@@ -90,16 +90,16 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
       {/* POPUP MODAL DIALOG (Thay vì thông báo lơ lửng trên web) */}
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-in fade-in">
-          <div className="relative w-full max-w-lg bg-slate-950 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col max-h-[88vh] overflow-hidden">
+          <div className="relative w-full max-w-lg bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col max-h-[88vh] overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3.5 border-b border-slate-800">
+            <div className="flex items-center justify-between pb-3.5 border-b border-[var(--border-subtle)]">
               <div className="flex items-center gap-2.5">
                 <div className={`p-2 rounded-2xl border ${
                   criticalCount > 0
-                    ? 'bg-rose-500/20 text-rose-400 border-rose-500/30'
+                    ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border-rose-500/30'
                     : totalCount > 0
-                    ? 'bg-amber-500/20 text-amber-400 border-amber-500/30'
-                    : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                    ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border-amber-500/30'
+                    : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border-emerald-500/30'
                 }`}>
                   {criticalCount > 0 ? (
                     <ShieldAlert className="w-5 h-5" />
@@ -111,14 +111,14 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-white text-base">
+                  <h3 className="font-bold text-[var(--text-primary)] text-base">
                     {criticalCount > 0
                       ? 'Thông Báo Khẩn & Nguy Cấp'
                       : totalCount > 0
                       ? 'Trung Tâm Thông Báo Biến Cố'
                       : 'Trạng Thái Bình Yên'}
                   </h3>
-                  <p className="text-[12px] text-slate-400">
+                  <p className="text-[12px] text-[var(--text-secondary)]">
                     {totalCount > 0 ? `Có ${totalCount} việc cần bạn lưu tâm xử lý` : 'Mọi chỉ số đều trong tầm kiểm soát'}
                   </p>
                 </div>
@@ -126,7 +126,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
 
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition"
+                className="p-1.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)] transition"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -135,10 +135,10 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
             {/* Modal Body / Alerts List */}
             <div className="flex-1 overflow-y-auto py-4 space-y-3 pr-1">
               {totalCount === 0 ? (
-                <div className="p-8 rounded-2xl bg-slate-900/40 border border-slate-800 text-center space-y-2">
-                  <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
-                  <h4 className="font-bold text-sm text-slate-200">Không có biến cố nào</h4>
-                  <p className="text-xs text-slate-400 font-sans leading-relaxed">
+                <div className="p-8 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-center space-y-2">
+                  <CheckCircle2 className="w-10 h-10 text-emerald-600 dark:text-emerald-400 mx-auto" />
+                  <h4 className="font-bold text-sm text-[var(--text-primary)]">Không có biến cố nào</h4>
+                  <p className="text-xs text-[var(--text-secondary)] font-sans leading-relaxed">
                     Hiện tại nhân vật không gặp nguy cơ nợ nần, kiệt sức hay hiểm họa đe dọa sinh mạng. Bạn có thể an tâm tiếp tục hành trình cuộc đời.
                   </p>
                 </div>
@@ -152,39 +152,39 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
                       key={alert.id}
                       className={`p-4 rounded-2xl border text-xs space-y-2 transition-all ${
                         isCrit
-                          ? 'bg-rose-950/50 border-rose-500/50 text-rose-200'
+                          ? 'bg-rose-50 dark:bg-rose-950/50 border-rose-300 dark:border-rose-500/50 text-rose-950 dark:text-rose-200'
                           : isVen
-                          ? 'bg-teal-950/50 border-teal-500/50 text-teal-200'
-                          : 'bg-amber-950/40 border-amber-500/40 text-amber-200'
+                          ? 'bg-teal-50 dark:bg-teal-950/50 border-teal-300 dark:border-teal-500/50 text-teal-950 dark:text-teal-200'
+                          : 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-500/40 text-amber-950 dark:text-amber-200'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
-                        <div className="flex items-center gap-2 font-bold text-sm text-white">
+                        <div className="flex items-center gap-2 font-bold text-sm text-[var(--text-primary)]">
                           {isCrit ? (
-                            <Skull className="w-4 h-4 text-rose-400 shrink-0" />
+                            <Skull className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
                           ) : isVen ? (
-                            <Sparkles className="w-4 h-4 text-teal-400 shrink-0" />
+                            <Sparkles className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" />
                           ) : (
-                            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
                           )}
                           <span>{alert.title}</span>
                         </div>
 
                         <button
                           onClick={() => onDismiss(alert.id)}
-                          className="px-2 py-0.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-300 text-[12px] font-semibold transition"
+                          className="px-2 py-0.5 rounded-lg bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-[12px] font-semibold transition"
                         >
                           Đã hiểu
                         </button>
                       </div>
 
-                      <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-sans">
                         {alert.message}
                       </p>
 
                       {alert.actionHint && (
-                        <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[12px] text-slate-300 flex items-center gap-1.5">
-                          <span className="text-amber-300 font-bold shrink-0">💡 Gợi ý:</span>
+                        <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[12px] text-[var(--text-secondary)] flex items-center gap-1.5">
+                          <span className="text-amber-700 dark:text-amber-300 font-bold shrink-0">💡 Gợi ý:</span>
                           <span className="font-sans">{alert.actionHint}</span>
                         </div>
                       )}
@@ -195,11 +195,11 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
             </div>
 
             {/* Footer */}
-            <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
+            <div className="pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between gap-3">
               {totalCount > 1 ? (
                 <button
                   onClick={handleDismissAll}
-                  className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white text-xs font-semibold transition"
+                  className="px-3 py-2 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs font-semibold transition"
                 >
                   Xác nhận tất cả
                 </button>

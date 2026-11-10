@@ -242,24 +242,24 @@ export default function DeathRecapVideoModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in">
-      <div className="max-w-2xl w-full bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col items-center">
+    <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in">
+      <div className="max-w-2xl w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col items-center">
         {/* Top Control Bar */}
-        <div className="w-full flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
-          <div className="flex items-center gap-2 text-indigo-400 font-semibold text-sm">
+        <div className="w-full flex items-center justify-between pb-3 border-b border-[var(--border-subtle)] mb-4">
+          <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold text-sm">
             <Film className="w-4 h-4" />
             <span>Thước Phim Dĩ Vãng (15s Death Video Recap)</span>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition"
+            className="p-1.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)] transition"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* 16:9 Canvas Viewport */}
-        <div className="w-full rounded-2xl overflow-hidden border border-slate-800 shadow-2xl relative bg-black aspect-[16/10] flex items-center justify-center">
+        <div className="w-full rounded-2xl overflow-hidden border border-[var(--border-subtle)] shadow-2xl relative bg-black aspect-[16/10] flex items-center justify-center">
           <canvas
             ref={canvasRef}
             width={640}
@@ -273,13 +273,13 @@ export default function DeathRecapVideoModal({
           <div className="flex items-center gap-2">
             <button
               onClick={handleRestart}
-              className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/80 transition flex items-center gap-1.5 text-xs font-semibold"
+              className="p-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-subtle)] transition flex items-center gap-1.5 text-xs font-semibold"
             >
               <RotateCcw className="w-4 h-4" />
               <span>Phát Lại</span>
             </button>
 
-            <span className="text-xs font-sans tabular-nums text-slate-500">
+            <span className="text-xs font-sans tabular-nums text-[var(--text-secondary)] font-medium">
               {Math.round(progress * 15)}s / 15s
             </span>
           </div>

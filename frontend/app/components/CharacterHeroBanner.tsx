@@ -494,7 +494,7 @@ export default function CharacterHeroBanner({
       <div className="relative z-10 p-3.5 md:p-4 lg:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         
         {/* Left: 3D Avatar (ĐỘC BẢN 3D - BỎ HOÀN TOÀN 2D) + Core Identity */}
-        <div className="flex items-center gap-4 sm:gap-5 min-w-0 flex-1">
+        <div className="flex items-center gap-4 sm:gap-5 min-w-0 shrink-0">
           
           {/* Avatar 3D Champion Showcase Stage (Khung Diễn Võ 3D Độc Bản - Không Tràn Viền, Không Đè Chữ) */}
           <div className="relative shrink-0 select-none group">
@@ -673,27 +673,53 @@ export default function CharacterHeroBanner({
           </div>
         </div>
 
-        {/* Zone 2: Định Hướng Cuộc Đời & Nghề Nghiệp (Cột Giữa - Tối giản, triệt tiêu rác thị giác) */}
-        <div className="flex-1 flex flex-col justify-between gap-2 px-4 py-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] backdrop-blur-md min-w-0 shadow-sm">
-          {/* Row A: Nghề nghiệp & Trạng thái đặc biệt */}
-          <div className="flex items-center gap-2 flex-wrap justify-between">
+        {/* Unified Cockpit: Định Hướng Cuộc Đời & Trạng Thái Sinh Mệnh (Hợp nhất 2 block thành 1 block duy nhất theo lệnh của Sếp) */}
+        <div className="flex-1 flex flex-col justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] backdrop-blur-xl shadow-sm min-w-0">
+          
+          {/* Active Action Feedback Flash Notice */}
+          {activeFeedback && (
+            <div className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl border backdrop-blur-md animate-in fade-in slide-in-from-top-1 ${feedbackAtmo?.badgeBg}`}>
+              <span className="text-base shrink-0">{activeFeedback.icon || '✨'}</span>
+              <div className="flex items-center justify-between w-full min-w-0">
+                <span className="text-xs font-bold text-slate-900 dark:text-white truncate">{activeFeedback.title}</span>
+                {activeFeedback.delta && (
+                  <span className={`text-[11px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded border shrink-0 ${feedbackAtmo?.badgeDelta}`}>
+                    {activeFeedback.delta}
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Hàng 1: Trạm Trạng Thái & Định Hướng Toàn Cảnh (Status Header Bar) */}
+          <div className="flex items-center justify-between gap-2 flex-wrap pb-2 border-b border-[var(--border-subtle)]">
+            {/* Nhóm Trái: Vòng Đời, Nghề Nghiệp & Vị Thế */}
             <div className="flex items-center gap-1.5 flex-wrap">
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-800 dark:text-sky-200 font-bold text-xs shadow-sm">
+              {/* Life Stage Pill */}
+              <Tooltip content={<div className="text-[12px] max-w-xs">{lifeStage.desc}</div>}>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] cursor-help transition shadow-xs">
+                  <span className="text-xs">{lifeStage.icon}</span>
+                  <span className="text-[11px] font-bold text-[var(--text-primary)] truncate">{lifeStage.stage}</span>
+                </div>
+              </Tooltip>
+
+              {/* Nghề Nghiệp / Thân Phận */}
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-800 dark:text-sky-200 font-bold text-[11px] shadow-xs">
                 <Briefcase className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
-                <span className="truncate max-w-[160px] sm:max-w-[220px]">
+                <span className="truncate max-w-[130px] sm:max-w-[180px]">
                   {character.occupation || (age < 6 ? "Ấu nhi" : age < 18 ? "Học sinh" : "Lao động tự do")}
                 </span>
               </div>
 
+              {/* Nhãn đặc thù (Bán Thần, Tâm Nguyện, Thọ) */}
               {character.is_transhuman && (
                 <span className="text-[11px] font-sans px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold animate-pulse">
                   <Cpu className="w-3 h-3 inline mr-1" /> Bán Thần
                 </span>
               )}
 
-              {/* Active Annual Pledge Indicator */}
               {character.active_pledge && (
-                <span className={`text-[10.5px] px-2.5 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-sm shrink-0 ${
+                <span className={`text-[10.5px] px-2 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-xs shrink-0 ${
                   character.active_pledge === 'pledge_wealth'
                     ? 'bg-amber-500/15 text-amber-800 dark:text-amber-300 border-amber-500/40'
                     : character.active_pledge === 'pledge_wellness'
@@ -714,7 +740,7 @@ export default function CharacterHeroBanner({
                     <strong className="text-amber-300">⏳ Kỳ Vọng Thọ (Tuổi {age}):</strong> Tỷ lệ vượt qua thử thách sinh mệnh năm nay: <span className="text-amber-300 font-bold">~{survivalRate}%</span>.
                   </div>
                 }>
-                  <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-amber-500/40 bg-amber-500/15 text-amber-800 dark:text-amber-300 font-bold flex items-center gap-1 shadow-sm animate-pulse cursor-help">
+                  <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-amber-500/40 bg-amber-500/15 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 font-bold flex items-center gap-1 shadow-xs animate-pulse cursor-help">
                     <Hourglass className="w-3 h-3 text-amber-600 dark:text-amber-400 animate-[spin_6s_linear_infinite]" />
                     <span>~{survivalRate}% Thọ</span>
                   </span>
@@ -722,210 +748,192 @@ export default function CharacterHeroBanner({
               )}
             </div>
 
-            {/* Trọng tâm lứa tuổi */}
-            {(() => {
-              const focusText =
-                age < 6 ? "Bồi dưỡng thể chất & tình thân" :
-                age < 18 ? "Học tập & rèn chí lập thân" :
-                age < 35 ? "Lập nghiệp & tích lũy tài chính" :
-                age < 60 ? "Trụ cột gia đình & mở rộng cơ đồ" : "An hưởng tuổi già & truyền thừa";
-              return (
-                <Tooltip content={`Định hướng trọng tâm ở tuổi ${age}`}>
-                  <div className="flex items-center gap-1 text-[11px] text-[var(--text-secondary)] font-medium bg-[var(--bg-card)] px-2.5 py-0.5 rounded-lg border border-[var(--border-subtle)] shrink-0 cursor-help">
-                    <span className="text-indigo-500 font-bold">🎯 Trọng tâm:</span>
-                    <span className="text-[var(--text-primary)] font-semibold truncate max-w-[180px] sm:max-w-[220px]">
-                      {focusText}
-                    </span>
-                  </div>
-                </Tooltip>
-              );
-            })()}
-          </div>
-
-          {/* Row B: Gen bẩm sinh & Đặc tính */}
-          <div className="flex items-center gap-1.5 flex-wrap text-[11px] pt-0.5">
-            <span className="text-teal-600 dark:text-teal-400 font-bold flex items-center gap-1 text-[11px]">
-              🧬 Gen di truyền:
-            </span>
-            {character.innate_traits && character.innate_traits.length > 0 ? (
-              character.innate_traits.map((t: string) => {
-                const ft = formatTrait(t);
+            {/* Nhóm Phải: Trọng Tâm Sinh Mệnh & Tinh Thần Lạc Quan */}
+            <div className="flex items-center gap-2 flex-wrap shrink-0">
+              {/* Trọng tâm lứa tuổi */}
+              {(() => {
+                const focusText =
+                  age < 6 ? "Bồi dưỡng thể chất & tình thân" :
+                  age < 18 ? "Học tập & rèn chí lập thân" :
+                  age < 35 ? "Lập nghiệp & tích lũy tài chính" :
+                  age < 60 ? "Trụ cột gia đình & cơ đồ" : "An hưởng tuổi già & truyền thừa";
                 return (
-                  <Tooltip
-                    key={t}
-                    content={
-                      <div className="space-y-0.5">
-                        <div className="font-bold text-amber-300 flex items-center gap-1">
-                          <span>{ft.icon}</span>
-                          <span>{ft.name}</span>
-                        </div>
-                        <div className="text-[11.5px] text-slate-200">{ft.desc}</div>
-                      </div>
-                    }
-                  >
-                    <span
-                      className={`font-semibold px-2 py-0.5 rounded-full border text-[10.5px] flex items-center gap-1 transition cursor-help ${ft.badgeStyle}`}
-                    >
-                      <span>{ft.icon}</span>
-                      <span>{ft.name}</span>
-                    </span>
+                  <Tooltip content={`Định hướng trọng tâm ở tuổi ${age}`}>
+                    <div className="flex items-center gap-1 text-[11px] text-[var(--text-secondary)] font-medium bg-[var(--bg-card)] px-2.5 py-1 rounded-xl border border-[var(--border-subtle)] shrink-0 cursor-help shadow-xs">
+                      <span className="text-indigo-500 font-bold">🎯 Trọng tâm:</span>
+                      <span className="text-[var(--text-primary)] font-semibold truncate max-w-[160px] sm:max-w-[210px]">
+                        {focusText}
+                      </span>
+                    </div>
                   </Tooltip>
                 );
-              })
-            ) : (
-              <span className="text-[var(--text-secondary)] text-[11px] italic">
-                Hạt giống tố chất đang chờ thức tỉnh...
-              </span>
-            )}
+              })()}
+
+              {/* Tinh thần / Động lực sống */}
+              <Tooltip content={<div className="text-[12px]">Động lực sống & Tinh thần ({happiness}%). Trên 75% kích hoạt bứt phá thăng hoa.</div>}>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] cursor-help shadow-xs">
+                  <Smile className="w-3.5 h-3.5 text-amber-500" />
+                  <span className="text-[11px] font-medium text-[var(--text-secondary)] hidden sm:inline">Tinh thần:</span>
+                  <span className={`text-[11px] font-sans tabular-nums font-bold ${happiness >= 70 ? 'text-amber-500' : 'text-[var(--text-primary)]'}`}>
+                    {happiness}%
+                  </span>
+                  {isHappyBuffActive && (
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30 font-bold">
+                      Buff
+                    </span>
+                  )}
+                </div>
+              </Tooltip>
+            </div>
           </div>
 
-          {/* Row C: Khát Vọng Cuộc Đời (Life Aspiration Hub) */}
-          {aspiration && (
-            <div
-              onClick={() => {
-                if (aspiration.progress >= 100 || aspiration.is_completed) {
-                  onOpenAspirationUpgrade?.();
-                }
-              }}
-              className={`flex items-center justify-between gap-2.5 pt-1.5 border-t border-[var(--border-subtle)] text-[11px] transition ${
-                aspiration.progress >= 100 || aspiration.is_completed
-                  ? 'cursor-pointer hover:bg-amber-500/10 px-2 py-1 rounded-xl border-amber-500/40 bg-amber-500/5 animate-pulse'
-                  : ''
-              }`}
-            >
-              <div className="flex items-center gap-1.5 min-w-0">
-                <span className="w-5 h-5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 flex items-center justify-center text-xs shrink-0 shadow-sm">
-                  {aspiration.icon || '🎯'}
+          {/* Hàng 2: Lưới Đối Xứng 2 Cột (Trái: Tiềm Năng & Khát Vọng — Phải: Sinh Mệnh & Thể Trạng) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-center">
+            
+            {/* Cột 1 (Trái): Tiềm Năng Bẩm Sinh & Khát Vọng Cuộc Đời */}
+            <div className="flex flex-col justify-between gap-2.5 min-w-0">
+              {/* Gen di truyền */}
+              <div className="flex items-center gap-1.5 flex-wrap text-[11px]">
+                <span className="text-teal-600 dark:text-teal-400 font-bold flex items-center gap-1 text-[11px] shrink-0">
+                  🧬 Gen di truyền:
                 </span>
-                <Tooltip content={aspiration.target_summary || aspiration.title}>
-                  <div className="flex items-center gap-1.5 truncate">
-                    <span className="text-[var(--text-secondary)] text-[10.5px] font-medium hidden sm:inline">Khát vọng:</span>
-                    <span className="font-bold text-[var(--text-primary)] text-xs truncate max-w-[150px] sm:max-w-[200px]">
-                      {aspiration.title}
+                {character.innate_traits && character.innate_traits.length > 0 ? (
+                  character.innate_traits.map((t: string) => {
+                    const ft = formatTrait(t);
+                    return (
+                      <Tooltip
+                        key={t}
+                        content={
+                          <div className="space-y-0.5">
+                            <div className="font-bold text-amber-300 flex items-center gap-1">
+                              <span>{ft.icon}</span>
+                              <span>{ft.name}</span>
+                            </div>
+                            <div className="text-[11.5px] text-slate-200">{ft.desc}</div>
+                          </div>
+                        }
+                      >
+                        <span
+                          className={`font-semibold px-2 py-0.5 rounded-full border text-[10.5px] flex items-center gap-1 transition cursor-help ${ft.badgeStyle}`}
+                        >
+                          <span>{ft.icon}</span>
+                          <span>{ft.name}</span>
+                        </span>
+                      </Tooltip>
+                    );
+                  })
+                ) : (
+                  <span className="text-[var(--text-secondary)] text-[11px] italic">
+                    Hạt giống tố chất đang chờ thức tỉnh...
+                  </span>
+                )}
+              </div>
+
+              {/* Khát vọng cuộc đời (Life Aspiration Hub) */}
+              {aspiration && (
+                <div
+                  onClick={() => {
+                    if (aspiration.progress >= 100 || aspiration.is_completed) {
+                      onOpenAspirationUpgrade?.();
+                    }
+                  }}
+                  className={`flex items-center justify-between gap-2 text-[11px] transition ${
+                    aspiration.progress >= 100 || aspiration.is_completed
+                      ? 'cursor-pointer hover:bg-amber-500/10 px-2 py-1 rounded-xl border border-amber-500/40 bg-amber-500/5 animate-pulse'
+                      : ''
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="w-5 h-5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 flex items-center justify-center text-xs shrink-0 shadow-xs">
+                      {aspiration.icon || '🎯'}
+                    </span>
+                    <Tooltip content={aspiration.target_summary || aspiration.title}>
+                      <div className="flex items-center gap-1 truncate">
+                        <span className="text-[var(--text-secondary)] text-[10.5px] font-medium hidden sm:inline">Khát vọng:</span>
+                        <span className="font-bold text-[var(--text-primary)] text-xs truncate max-w-[130px] sm:max-w-[170px]">
+                          {aspiration.title}
+                        </span>
+                      </div>
+                    </Tooltip>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <div className="w-20 sm:w-24 h-2 bg-[var(--bg-card)] rounded-full overflow-hidden border border-[var(--border-subtle)] p-0.5">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          aspiration.progress >= 100
+                            ? 'bg-gradient-to-r from-amber-400 to-emerald-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
+                            : 'bg-gradient-to-r from-amber-400 via-amber-500 to-emerald-500'
+                        }`}
+                        style={{ width: `${Math.min(100, aspiration.progress)}%` }}
+                      />
+                    </div>
+                    <span className="font-sans tabular-nums font-bold text-xs text-amber-500">
+                      {aspiration.progress}%
+                    </span>
+                    {aspiration.progress >= 100 && (
+                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-bounce shadow-xs">
+                        Thăng Hạng!
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Cột 2 (Phải): Sinh Mệnh (HP) & Cân Bằng Tâm Trí (Stress) */}
+            <div className="flex flex-col justify-between gap-2 md:border-l md:border-[var(--border-subtle)] md:pl-5 min-w-0">
+              {/* Sinh Lực (HP) */}
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-[11.5px] font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                    <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500/20" /> Sinh Lực
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${healthStatus.color}`}>
+                      {healthStatus.label}
+                    </span>
+                    <span className="text-[11px] font-sans tabular-nums font-extrabold text-[var(--text-primary)]">
+                      {vitality}<span className="text-[var(--text-muted)] font-normal">/{maxVitality}</span>
                     </span>
                   </div>
-                </Tooltip>
-              </div>
+                </div>
 
-              <div className="flex items-center gap-2 shrink-0">
-                <div className="w-20 sm:w-28 h-2 bg-[var(--bg-card)] rounded-full overflow-hidden border border-[var(--border-subtle)] p-0.5">
+                <div className="w-full bg-[var(--bg-card)] h-2 rounded-full overflow-hidden border border-[var(--border-subtle)] p-0.5">
                   <div
-                    className={`h-full rounded-full transition-all duration-500 ${
-                      aspiration.progress >= 100
-                        ? 'bg-gradient-to-r from-amber-400 to-emerald-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
-                        : 'bg-gradient-to-r from-amber-400 via-amber-500 to-emerald-500'
-                    }`}
-                    style={{ width: `${Math.min(100, aspiration.progress)}%` }}
+                    className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500 rounded-full"
+                    style={{ width: `${Math.min(100, (vitality / maxVitality) * 100)}%` }}
                   />
                 </div>
-                <span className="font-sans tabular-nums font-bold text-xs text-amber-500">
-                  {aspiration.progress}%
-                </span>
-                {aspiration.progress >= 100 && (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black animate-bounce shadow-md">
-                    Thăng Hạng!
+              </div>
+
+              {/* Căng Thẳng (Stress) */}
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-[11.5px] font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                    <AlertTriangle className={`w-3.5 h-3.5 ${burnout >= 75 ? 'text-rose-500' : 'text-sky-500'}`} /> Căng Thẳng
                   </span>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${stress.color}`}>
+                      {stress.label}
+                    </span>
+                    <span className="text-[11px] font-sans tabular-nums font-bold text-[var(--text-primary)]">
+                      {burnout}%
+                    </span>
+                  </div>
+                </div>
 
-        {/* Zone 3: Sinh Mệnh & Tâm Lý (Cột Phải - Rõ ràng, trực quan, loại bỏ chỉ số thừa) */}
-        <div className="w-full lg:w-[320px] xl:w-[340px] shrink-0 p-3 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] backdrop-blur-xl shadow-md flex flex-col justify-between gap-2.5">
-          
-          {/* Active Action Feedback Flash Notice */}
-          {activeFeedback && (
-            <div className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl border backdrop-blur-md animate-in fade-in slide-in-from-top-1 ${feedbackAtmo?.badgeBg}`}>
-              <span className="text-base shrink-0">{activeFeedback.icon || '✨'}</span>
-              <div className="flex items-center justify-between w-full min-w-0">
-                <span className="text-xs font-bold text-slate-900 dark:text-white truncate">{activeFeedback.title}</span>
-                {activeFeedback.delta && (
-                  <span className={`text-[11px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded border shrink-0 ${feedbackAtmo?.badgeDelta}`}>
-                    {activeFeedback.delta}
-                  </span>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Row 1: Giai Đoạn Vòng Đời & Động Lực Tinh Thần */}
-          <div className="flex items-center justify-between gap-2 pb-1.5 border-b border-[var(--border-subtle)]">
-            {/* Life Stage Pill */}
-            <Tooltip content={<div className="text-[12px] max-w-xs">{lifeStage.desc}</div>}>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] cursor-help transition">
-                <span className="text-xs">{lifeStage.icon}</span>
-                <span className="text-[11px] font-bold text-[var(--text-primary)] truncate">{lifeStage.stage}</span>
-              </div>
-            </Tooltip>
-
-            {/* Motivation / Happiness */}
-            <Tooltip content={<div className="text-[12px]">Động lực sống & Tinh thần ({happiness}%). Trên 75% kích hoạt bứt phá thăng hoa.</div>}>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] cursor-help">
-                <Smile className="w-3.5 h-3.5 text-amber-500" />
-                <span className="text-[11px] font-medium text-[var(--text-secondary)]">Tinh thần:</span>
-                <span className={`text-[11px] font-sans tabular-nums font-bold ${happiness >= 70 ? 'text-amber-500' : 'text-[var(--text-primary)]'}`}>
-                  {happiness}%
-                </span>
-                {isHappyBuffActive && (
-                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30 font-bold">
-                    Buff
-                  </span>
-                )}
-              </div>
-            </Tooltip>
-          </div>
-
-          {/* Row 2: Thanh Sinh Lực (HP) - Rõ ràng, không thông số khó hiểu */}
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-[11.5px] font-bold text-[var(--text-primary)] flex items-center gap-1.5">
-                <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500/20" /> Sinh Lực
-              </span>
-              <div className="flex items-center gap-1.5">
-                <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${healthStatus.color}`}>
-                  {healthStatus.label}
-                </span>
-                <span className="text-[11px] font-sans tabular-nums font-extrabold text-[var(--text-primary)]">
-                  {vitality}<span className="text-[var(--text-muted)] font-normal">/{maxVitality}</span>
-                </span>
+                <div className="w-full bg-[var(--bg-card)] h-2 rounded-full overflow-hidden border border-[var(--border-subtle)] p-0.5">
+                  <div
+                    className={`h-full transition-all duration-500 rounded-full ${
+                      burnout >= 75 ? 'bg-gradient-to-r from-orange-500 to-rose-500' : 'bg-gradient-to-r from-teal-500 to-emerald-500'
+                    }`}
+                    style={{ width: `${Math.min(100, burnout)}%` }}
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Vitality Bar */}
-            <div className="w-full bg-[var(--bg-card-subtle)] h-2 rounded-full overflow-hidden border border-[var(--border-subtle)] p-0.5">
-              <div
-                className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500 rounded-full"
-                style={{ width: `${Math.min(100, (vitality / maxVitality) * 100)}%` }}
-              />
-            </div>
-          </div>
-
-          {/* Row 3: Thanh Căng Thẳng (Stress) - Rõ ràng, trực quan */}
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-[11.5px] font-bold text-[var(--text-primary)] flex items-center gap-1.5">
-                <AlertTriangle className={`w-3.5 h-3.5 ${burnout >= 75 ? 'text-rose-500' : 'text-sky-500'}`} /> Căng Thẳng
-              </span>
-              <div className="flex items-center gap-1.5">
-                <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${stress.color}`}>
-                  {stress.label}
-                </span>
-                <span className="text-[11px] font-sans tabular-nums font-bold text-[var(--text-primary)]">
-                  {burnout}%
-                </span>
-              </div>
-            </div>
-
-            {/* Burnout Bar */}
-            <div className="w-full bg-[var(--bg-card-subtle)] h-2 rounded-full overflow-hidden border border-[var(--border-subtle)] p-0.5">
-              <div
-                className={`h-full transition-all duration-500 rounded-full ${
-                  burnout >= 75 ? 'bg-gradient-to-r from-orange-500 to-rose-500' : 'bg-gradient-to-r from-teal-500 to-emerald-500'
-                }`}
-                style={{ width: `${Math.min(100, burnout)}%` }}
-              />
-            </div>
           </div>
 
         </div>
