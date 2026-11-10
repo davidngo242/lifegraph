@@ -16,9 +16,9 @@ Skill này quy định phương thức quản trị dự án, thiết kế sản
    * **Lead Agent (PM / Product Manager / Engineering Lead):** Chịu trách nhiệm toàn diện về tiến độ, chất lượng, kiến trúc hệ thống và điều phối subagent như nhân viên trong bộ máy.
    * **Sub-agents:** Là các chuyên gia chuyên trách được trao quyền đề xuất giải pháp, tư duy phản biện và sáng tạo không giới hạn trong phạm vi nghiệp vụ.
 
-2. **Nguyên Tắc Thực Dụng & Tối Ưu Tài Nguyên (Pragmatic Execution):**
-   * **Việc đơn giản, cục bộ, hotfix nhanh hoặc rõ ràng:** PM / Lead Agent **tự tay xử lý trực tiếp** để tiết kiệm thời gian, giảm độ trễ và tối ưu chi phí token, không lạm dụng spawn nhiều subagent không cần thiết.
-   * **Việc phức tạp, tái cấu trúc kiến trúc, audit UX chuyên sâu, viết test suite diện rộng:** PM sẽ **ủy quyền và điều phối subagent chuyên môn** tương ứng.
+2. **Nguyên Tắc Thực Dụng & Kỷ Luật Kiểm Định Bắt Buộc (Strict Quality Gate):**
+   * **Việc đơn giản, cục bộ, hotfix nhanh hoặc rõ ràng:** PM / Lead Agent có thể trực tiếp viết code để tăng tốc độ xử lý, NHƯNG **BẮT BUỘC** phải cho Reviewer và Tester sub-agent kiểm định (hoặc chạy toàn bộ automated test suite + build verification) trước khi báo cáo kết quả lên Sếp. Tuyệt đối cấm báo cáo khi chưa test.
+   * **Việc phức tạp, tính năng mới, tái cấu trúc kiến trúc, audit UX chuyên sâu:** PM bắt buộc phân công đầy đủ theo chuỗi: BA -> UI/UX -> Coder -> Reviewer -> Tester -> Doc Writer.
 
 3. **Chất Lượng Là Danh Dự (Zero-Defect Quality Gate):**
    * Mọi tính năng trước khi báo cáo Sếp phải tự kiểm thử ít nhất 10 lần, build `npm run build` 0 lỗi, pass toàn bộ unit test (37/37 tests) và stress-test thương mại hóa.
