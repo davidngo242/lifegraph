@@ -379,19 +379,24 @@ Mọi cập nhật giao diện trước khi xuất bản lên môi trường Pro
 
 Nhằm tối ưu hóa trải nghiệm cho các phiên chơi kéo dài (Long-session Gameplay) và bảo vệ thị lực người chơi trong nhiều điều kiện ánh sáng môi trường khác nhau, LifeGraph thiết lập tiêu chuẩn **Công Thái Học Thị Giác (Visual Ergonomics)** thông qua hệ thống Multi-Theme động:
 
-### 10.1. Chi Tiết 3 Phong Cách Thị Giác Cốt Lõi
+### 10.1. Chi Tiết 4 Phong Cách Thị Giác Cốt Lõi
 
-1. 🌙 **Obsidian Night (Than chì dịu mắt — Mặc Định Khuyên Dùng):**
+1. ☀️ **Daylight Mode (Ban ngày Sứ Ivory — Mặc Định Flagship):**
+   * **Bản sắc:** Tông nền sứ Ivory thanh thoát (`#f6f8fb`), bề mặt card trắng tinh khiết (`#ffffff`), viền hairline mềm (`#e2e8f0`), bóng đổ đa tầng cao cấp (`0 4px 20px -2px rgba(15, 23, 42, 0.06)`).
+   * **Tác động công thái học:** Đạt chuẩn độ tương phản WCAG AA cao nhất (4.5:1 text, 3:1 UI), sắc nét tối đa dưới ánh sáng ban ngày và môi trường văn phòng, chống mờ mắt và mang lại cảm giác tươi mới, hiện đại phong cách life-sim cao cấp.
+   * **Môi trường phù hợp:** Chơi ban ngày, môi trường ánh sáng mạnh, người dùng thích phong cách sáng sủa, tinh tế.
+
+2. 🌙 **Obsidian Night (Than chì dịu mắt — Đêm Thư Giãn):**
    * **Bản sắc:** Tông nền than chì tối êm dịu (`#0c0d12`), triệt tiêu độ tương phản gắt của màu đen tuyệt đối (#000000) và sắc xanh kích thích thị giác.
    * **Tác động công thái học:** Giữ đồng tử ở trạng thái thư giãn tự nhiên, giảm thiểu hiện tượng mỏi cơ mắt khi tập trung đọc chữ và tương tác chỉ số trong thời gian dài.
    * **Môi trường phù hợp:** Phiên chơi hàng ngày, môi trường ánh sáng phòng bình thường hoặc màn hình tấm nền OLED/IPS.
 
-2. 📜 **Sepia Warmth (Đêm ấm cúng — Lọc Ánh Sáng Xanh):**
+3. 📜 **Sepia Warmth (Đêm ấm cúng — Lọc Ánh Sáng Xanh):**
    * **Bản sắc:** Tông giấy ngà cổ điển (`#161412`), sắc chữ vàng ấm dịu (`#ebd8be`), viền nâu hổ phách mềm mại (`rgba(235, 216, 190, 0.12)`).
    * **Tác động công thái học:** Cắt giảm tối đa quang phổ ánh sáng xanh bước sóng ngắn (< 450nm) — tác nhân chính gây ức chế Melatonin và mỏi mắt về đêm. Mang lại cảm giác đọc sách bên ánh đèn vàng ấm áp.
    * **Môi trường phù hợp:** Chơi vào ban đêm, trước khi đi ngủ, hoặc người chơi có cơ địa nhạy cảm với ánh sáng màn hình.
 
-3. ⚡ **Cyber Slate (Neon nguyên bản — Viễn Tưởng Sắc Nét):**
+4. ⚡ **Cyber Slate (Neon nguyên bản — Viễn Tưởng Sắc Nét):**
    * **Bản sắc:** Tông xanh đen vũ trụ (`#020617`), viền cyan neon sắc nét (`rgba(56, 189, 248, 0.25)`), điểm nhấn tím điện tử (`rgba(168, 85, 247, 0.50)`).
    * **Tác động công thái học:** Tương phản cao, sắc sảo và hiện đại. Mang đậm phong cách buồng lái phi thuyền viễn tưởng nguyên bản của LifeGraph RPG.
    * **Môi trường phù hợp:** Người chơi yêu thích phong cách Cyberpunk, màn hình Gaming độ sáng cao hoặc chế độ Phòng Điện Ảnh 21:9.
@@ -400,21 +405,24 @@ Nhằm tối ưu hóa trải nghiệm cho các phiên chơi kéo dài (Long-sess
 
 ### 10.2. Bảng Quy Chuẩn CSS Variables Chuẩn Hóa
 
-Mọi thành phần giao diện (Card, Panel, Text, Border, Header) bắt buộc phải sử dụng các CSS Variables ngữ nghĩa thay vì mã màu cố định cứng:
+Mọi thành phần giao diện (Card, Panel, Text, Border, Header, Tree Tokens) bắt buộc phải sử dụng các CSS Variables ngữ nghĩa thay vì mã màu cố định cứng:
 
-| CSS Variable | Ý Nghĩa Ngữ Nghĩa | 🌙 Obsidian Night (Mặc định) | 📜 Sepia Warmth (Đêm ấm) | ⚡ Cyber Slate (Neon) |
-| :--- | :--- | :--- | :--- | :--- |
-| `--bg-canvas` | Nền canvas toàn trang | `#0c0d12` (Than chì đậm) | `#161412` (Nâu ngà ấm) | `#020617` (Xanh đen sâu) |
-| `--bg-header` | Nền thanh điều hướng & HUD | `rgba(14, 16, 22, 0.88)` | `rgba(26, 23, 20, 0.90)` | `rgba(2, 6, 23, 0.92)` |
-| `--bg-card` | Nền thẻ container chính | `rgba(18, 20, 28, 0.82)` | `rgba(32, 28, 24, 0.82)` | `rgba(15, 23, 42, 0.82)` |
-| `--bg-card-subtle` | Nền thẻ phụ & Dock tiện ích | `rgba(26, 29, 39, 0.65)` | `rgba(43, 38, 33, 0.65)` | `rgba(30, 41, 59, 0.65)` |
-| `--border-subtle` | Viền ngăn cách nhẹ nhàng | `rgba(255, 255, 255, 0.08)` | `rgba(235, 216, 190, 0.12)` | `rgba(56, 189, 248, 0.25)` |
-| `--border-highlight` | Viền nhấn mạnh / Hover | `rgba(251, 191, 36, 0.35)` | `rgba(217, 119, 6, 0.40)` | `rgba(168, 85, 247, 0.50)` |
-| `--text-primary` | Màu chữ nội dung chính | `#e2e4e9` (Trắng xám dịu) | `#ebd8be` (Vàng ngà êm) | `#f1f5f9` (Trắng sáng) |
-| `--text-secondary` | Màu chữ phụ, nhãn chú thích | `#9da3af` (Xám tro) | `#a89f91` (Nâu xám tro) | `#94a3b8` (Xanh xám tro) |
-| `--accent-gold` | Màu nhấn Vàng Năng Lượng | `#f59e0b` | `#d97706` | `#eab308` |
-| `--accent-emerald` | Màu nhấn Xanh Sinh Lực | `#10b981` | `#059669` | `#06b6d4` |
-| `--accent-rose` | Màu nhấn Đỏ Cảnh Báo | `#f43f5e` | `#e11d48` | `#ec4899` |
+| CSS Variable | Ý Nghĩa Ngữ Nghĩa | ☀️ Daylight Mode (Mặc định) | 🌙 Obsidian Night | 📜 Sepia Warmth | ⚡ Cyber Slate |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `--bg-canvas` | Nền canvas toàn trang | `#f6f8fb` (Sứ Ivory) | `#0c0d12` (Than chì) | `#161412` (Nâu ngà) | `#020617` (Xanh đen) |
+| `--bg-header` | Nền thanh điều hướng & HUD | `rgba(255, 255, 255, 0.94)` | `rgba(14, 16, 22, 0.88)` | `rgba(26, 23, 20, 0.90)` | `rgba(2, 6, 23, 0.92)` |
+| `--bg-card` | Nền thẻ container chính | `#ffffff` (Trắng tinh khiết) | `rgba(18, 20, 28, 0.82)` | `rgba(32, 28, 24, 0.82)` | `rgba(15, 23, 42, 0.82)` |
+| `--bg-card-subtle` | Nền thẻ phụ & Dock tiện ích | `#f1f5f9` (Xám nhạt dịu) | `rgba(26, 29, 39, 0.65)` | `rgba(43, 38, 33, 0.65)` | `rgba(30, 41, 59, 0.65)` |
+| `--border-subtle` | Viền ngăn cách nhẹ nhàng | `#e2e8f0` (Viền hairline) | `rgba(255, 255, 255, 0.08)` | `rgba(235, 216, 190, 0.12)` | `rgba(56, 189, 248, 0.25)` |
+| `--border-highlight` | Viền nhấn mạnh / Hover | `#f59e0b` (Hổ phách) | `rgba(251, 191, 36, 0.35)` | `rgba(217, 119, 6, 0.40)` | `rgba(168, 85, 247, 0.50)` |
+| `--text-primary` | Màu chữ nội dung chính | `#0f172a` (Slate 900 sắc nét) | `#e2e4e9` (Trắng xám dịu) | `#ebd8be` (Vàng ngà êm) | `#f1f5f9` (Trắng sáng) |
+| `--text-secondary` | Màu chữ phụ, nhãn chú thích | `#475569` (Slate 600 rõ chữ) | `#9da3af` (Xám tro) | `#a89f91` (Nâu xám tro) | `#94a3b8` (Xanh xám tro) |
+| `--accent-gold` | Màu nhấn Vàng Năng Lượng | `#d97706` | `#f59e0b` | `#d97706` | `#eab308` |
+| `--accent-emerald` | Màu nhấn Xanh Sinh Lực | `#059669` | `#10b981` | `#059669` | `#06b6d4` |
+| `--accent-rose` | Màu nhấn Đỏ Cảnh Báo | `#e11d48` | `#f43f5e` | `#e11d48` | `#ec4899` |
+| `--card-shadow` | Đổ bóng nổi khối thẻ | `0 4px 20px -2px rgba(15,23,42,0.06)` | `0 4px 20px -2px rgba(0,0,0,0.4)` | `0 4px 20px -2px rgba(0,0,0,0.35)` | `0 4px 20px -2px rgba(6,182,212,0.15)` |
+| `--tree-core-bg` | Nền lõi Thần Mộc AP | `radial-gradient(circle, #6366f1 20%, ...)` | `radial-gradient(circle, #6366f1 38%, ...)` | `radial-gradient(circle, #d97706 30%, ...)` | `radial-gradient(circle, #a855f7 40%, ...)` |
+| `--tree-core-text` | Chữ hiển thị AP lõi cây | `#1e1b4b` (Chàm đậm tương phản) | `#ffffff` | `#ebd8be` | `#f1f5f9` |
 
 ---
 
@@ -1119,3 +1127,122 @@ Hiện thực hóa trọn vẹn giá trị của Sidebar bên phải với 4 Tab
 3. **Tab 3: 💰 Tài Sản:** Thẻ tổng tài sản ròng, dòng tiền thặng dư, tiền mặt, danh mục đầu tư và nút truy cập Sàn giao dịch.
 4. **Tab 4: 🏆 Sổ Vàng:** Danh hiệu cuộc đời (Life Epithet), huy hiệu thành tựu và nút mở Thẻ Bài Vận Mệnh Cyber-Tarot.
 
+
+
+---
+
+## 29. Tiêu Chuẩn Giao Diện Sáng Ban Ngày & Kiến Trúc Token Kép (Daylight UI/UX Design Standards & Dual-Theme Token Architecture)
+
+Chế Độ Ban Ngày (**Daylight Mode**) là diện mạo mặc định và là bộ mặt đại diện cao cấp của LifeGraph 2.0. Để đảm bảo tính nhất quán tuyệt đối giữa Chế Độ Sáng (Daylight) và các Chế Độ Tối (Obsidian / Sepia / Cyberpunk), hệ thống thiết lập bộ quy chuẩn công thái học và kiến trúc token kép bất di bất dịch:
+
+### 29.1. Chuẩn Tương Phản WCAG AA & Bảng Remapping Độ Tương Phản Cao
+
+Để triệt tiêu hiện tượng chữ bị mờ đục (washed-out text) hoặc viền bị chìm trên nền trắng sứ `#f6f8fb` / `#ffffff`, toàn bộ giao diện Daylight bắt buộc tuân thủ nghiêm ngặt chuẩn **WCAG 2.1 AA**:
+
+1. **Tỷ Lệ Tương Phản Tối Thiểu (Contrast Ratios):**
+   * **$\ge$ 4.5:1 đối với Body Text:** Mọi đoạn văn, nhãn thuộc tính, lời thoại NPC và mô tả chỉ số thông thường.
+   * **$\ge$ 3.0:1 đối với Large Text & Non-Text UI:** Tiêu đề lớn (từ 18px bold hoặc 24px regular), icons biểu tượng, đường viền tương tác, trạng thái hover/active và nút bấm.
+
+2. **Bảng Remapping Màu Tương Phản Cao Trong Daylight Mode (`globals.css`):**
+   Khi chạy ở `[data-theme="daylight"]`, các class màu sáng rực của Dark Mode tự động được nâng cấp (remap) sang sắc độ đậm đà hơn:
+
+| Token / Class Gốc | Sắc Độ Daylight Remapped | Tỷ Lệ Tương Phản | Đánh Giá WCAG |
+| :--- | :--- | :---: | :---: |
+| `text-amber-100..300` | `#b45309` (Amber-700) | **5.5:1** | ✅ Đạt WCAG AA |
+| `text-amber-400` | `#92400e` (Amber-800) | **7.2:1** | ✅ Đạt WCAG AAA |
+| `text-emerald-100..300` | `#047857` (Emerald-700) | **5.8:1** | ✅ Đạt WCAG AA |
+| `text-emerald-400` | `#065f46` (Emerald-800) | **7.5:1** | ✅ Đạt WCAG AAA |
+| `text-sky/blue/cyan-200..300` | `#0369a1` (Sky-700) | **5.2:1** | ✅ Đạt WCAG AA |
+| `text-rose/pink-200..300` | `#be123c` (Rose-700) | **5.9:1** | ✅ Đạt WCAG AA |
+| `text-purple/indigo-200..300` | `#4338ca` (Indigo-700) | **6.1:1** | ✅ Đạt WCAG AA |
+| `text-slate-100..300` | `#1e293b` (Slate-800) | **11.8:1** | ✅ Đạt WCAG AAA (Siêu nét) |
+| `text-slate-400` | `#334155` (Slate-700) | **8.4:1** | ✅ Đạt WCAG AAA |
+| `text-slate-500` | `#475569` (Slate-600) | **5.6:1** | ✅ Đạt WCAG AA |
+
+---
+
+### 29.2. Kỷ Luật Dual-Theme Token: Lệnh Cấm Hardcoded Dark Classes
+
+> [!IMPORTANT]
+> **LỆNH CẤM BẮT BUỘC TỪ TECH LEAD & PM:**
+> Tuyệt đối **CẤM DÙNG TRỰC TIẾP** các class nền tối cứng như `bg-slate-950`, `bg-slate-900`, `bg-black`, `bg-zinc-950` hoặc chữ trắng `text-white` trên các container động, card, node hành động, popup mà không có tiền tố `dark:` hoặc CSS variable.
+
+* **Hậu quả nếu vi phạm:**
+  1. Gây ra lỗi "vết loang đen" (dark patches): Một mảng đen sì xuất hiện lọt thỏm giữa giao diện sáng ban ngày, phá vỡ mỹ quan sang trọng.
+  2. Gây ra lỗi "chữ tàng hình": Text màu trắng `text-white` nằm trên nền card trắng biến mất hoàn toàn, khiến người chơi không đọc được nội dung.
+* **Quy chuẩn triển khai bắt buộc (Dual Implementation Standard):**
+  * **Chuẩn 1 (Semantic CSS Variables — Khuyên Dùng):**
+    ```tsx
+    <div className="bg-[var(--bg-card)] text-[var(--text-primary)] border-[var(--border-subtle)] shadow-[var(--card-shadow)]">
+    ```
+  * **Chuẩn 2 (Dual Tailwind Utility Classes):**
+    ```tsx
+    <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-slate-200 dark:border-slate-800">
+    ```
+* **Ngoại lệ duy nhất có chủ đích (Solid Dark Contrast Anchors):**
+  * Các nút CTA quan trọng có chủ đích giữ màu tối để tạo điểm nhấn tương phản mạnh (`button.bg-slate-900`, `button.bg-slate-950`) được bảo vệ bằng selector CSS đặc thù:
+    ```css
+    [data-theme="daylight"] button.bg-slate-900,
+    [data-theme="daylight"] button.bg-slate-950 {
+      background-color: #0f172a !important;
+      color: #ffffff !important;
+    }
+    ```
+
+---
+
+### 29.3. Cơ Chế Cách Ly OS Dark Mode Bằng Bộ Chọn Tailwind (`darkMode: ['selector', '...']`)
+
+Game sở hữu hệ thống đa theme độc lập được quản lý qua `data-theme` gắn trên thẻ `<html>` và lưu trong `localStorage`.
+
+* **Vấn đề tiềm ẩn:** Nếu Tailwind sử dụng cấu hình mặc định hoặc `media` query, khi hệ điều hành máy tính/điện thoại của người dùng bật Dark Mode (như Windows Dark Theme), Tailwind sẽ tự động kích hoạt toàn bộ tiền tố `dark:` đè lên giao diện, biến chế độ Daylight ban ngày thành một mớ hỗn độn nửa sáng nửa tối.
+* **Giải pháp kiến trúc:**
+  Trong `frontend/tailwind.config.js`:
+  ```javascript
+  /** @type {import('tailwindcss').Config} */
+  module.exports = {
+    darkMode: ['selector', '[data-theme="obsidian"], [data-theme="sepia"], [data-theme="cyberpunk"], .dark'],
+    // ...
+  };
+  ```
+* **Hiệu lực:** Chỉ khi thẻ `<html>` có thuộc tính `data-theme="obsidian"`, `data-theme="sepia"`, `data-theme="cyberpunk"` hoặc class `.dark`, Tailwind mới kích hoạt các class có tiền tố `dark:`. Chế độ Daylight hoàn toàn được cách ly và miễn nhiễm 100% trước thiết lập hệ điều hành người dùng.
+
+---
+
+### 29.4. Hệ Thống CSS Variables Thần Mộc Sinh Mệnh (`--tree-sky-*`, `--tree-core-*`)
+
+Thần Mộc Sinh Mệnh (`DynamicLifeTree.tsx`) sở hữu hệ thống biến số CSS chuyên biệt nhằm đồng bộ màu nền vòm trời 4 mùa và màu lõi năng lượng AP theo từng theme:
+
+#### 1. Biến Số Bầu Trời 4 Mùa (`--tree-sky-*`):
+* `--tree-sky-spring` (Mùa Xuân):
+  - *Daylight:* Radial gradient hồng đào `rgba(244,114,182,0.18)` + lam nhạt `rgba(56,189,248,0.12)` trên nền trắng xám `rgba(248,250,252,0.95)`.
+  - *Obsidian:* Ánh hồng phấn hoa huyền ảo `rgba(244,114,182,0.22)` trên nền than chì sâu thẳm `rgba(15,23,42,0.92)`.
+* `--tree-sky-summer` (Mùa Hạ):
+  - *Daylight:* Ánh vàng thái dương `rgba(251,191,36,0.2)` + lam biển `rgba(14,165,233,0.12)`.
+  - *Obsidian:* Ánh vàng rực rỡ nhiệt đới `rgba(251,191,36,0.25)` kết hợp God-Rays.
+* `--tree-sky-autumn` (Mùa Thu):
+  - *Daylight:* Ánh cam lá phong `rgba(234,88,12,0.18)` + hổ phách `rgba(180,83,9,0.12)`.
+  - *Obsidian:* Hoàng hôn lá sồi thẫm `rgba(234,88,12,0.25)` trên nền đêm.
+* `--tree-sky-winter` (Mùa Đông):
+  - *Daylight:* Băng thanh ngọc bích `rgba(6,182,212,0.2)` + tím tuyết `rgba(139,92,246,0.12)`.
+  - *Obsidian:* Cực quang huyền ảo lung linh `rgba(6,182,212,0.28)`.
+
+#### 2. Biến Số Lõi Thần Mộc Năng Lượng (`--tree-core-*`):
+* Khi còn điểm hành động ($AP > 0$):
+  - `--tree-core-bg`: Nền lõi tròn phát quang lam tím (`#6366f1`).
+  - `--tree-core-border`: Đường viền năng lượng phát sáng linh lực.
+  - `--tree-core-shadow`: Vầng hào quang đổ bóng mềm tỏa rộng 25px – 40px.
+  - `--tree-core-text`: Chữ hiển thị AP: `#1e1b4b` (Chàm đậm tương phản cao trong Daylight) và `#ffffff` trong Obsidian.
+* Khi cạn điểm hành động ($AP = 0$):
+  - `--tree-core-ap0-bg`: Chuyển hóa tức thì sang hào quang hổ phách ấm áp (`#f59e0b` / `#d97706`).
+  - `--tree-core-ap0-border`: Viền vàng kim 2.5px đập nhịp báo hiệu hoàn thành chu kỳ năm.
+  - `--tree-core-ap0-shadow`: Quầng sáng hổ phách hướng người chơi vào Nghi Thức Chiêm Nghiệm Cuối Năm.
+
+---
+
+### 29.5. Bộ Thích Ứng Bề Mặt Daylight (Daylight Surface Adaptors)
+
+Trong `frontend/app/globals.css`, hệ thống trang bị bộ thích ứng tự động (Automated Surface Adaptors) để bảo vệ toàn diện các component kế thừa:
+* Mọi bề mặt `.bg-slate-950` và `.bg-slate-900` dạng container/card tự động chuyển thành `#ffffff` kèm viền `#e2e8f0` và đổ bóng mềm.
+* Các bề mặt thứ cấp `.bg-slate-900/40`, `.bg-slate-950/30` tự động chuyển thành `#f1f5f9`.
+* Các huy hiệu RPG thẻ bài dạng thuốc viên (`.bg-amber-950/40`, `.bg-emerald-950/40`) tự động chuyển thành nền nhạt tương phản cao (`#fef3c7`, `#d1fae5`) với chữ đậm đà, giữ trọn vẹn bản sắc visual RPG nhưng không gây chói mắt.

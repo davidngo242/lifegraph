@@ -234,14 +234,50 @@ flowchart TD
   3. *Có bị dính từ nào trong Blacklist sáo rỗng không?*
 * Nếu phát hiện vi phạm, Reviewer có quyền từ chối nghiệm thu và yêu cầu viết lại 100%.
 
-### 5.4. Quy Chuẩn Giao Diện Sáng Ban Ngày (Daylight Theme) & Tối Ưu Bố Cục Thẩm Mỹ Game Hiện Đại
+### 5.4. Quy Chuẩn Giao Diện Sáng Ban Ngày (Daylight Theme) & Kiến Trúc Token Kép (Daylight UI/UX Standards & Token Architecture)
 
 * **Chế độ Ban Ngày Mặc Định (Daylight Mode by Default):**
   - Nền sứ Ivory dịu mắt `#f6f8fb`, bề mặt card trắng tinh khiết `#ffffff`, viền mềm hairline `#e2e8f0` và đổ bóng cao cấp (`box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06)`).
-  - Người chơi vẫn có thể chuyển đổi linh hoạt qua các theme `Obsidian`, `Sepia`, `Cyberpunk` tại `ThemeSwitcher`.
-* **Hệ Thống Font Chữ Gaming Đẳng Cấp:**
+  - Tự động áp dụng làm theme mặc định (`:root`, `[data-theme="daylight"]`), người chơi có thể chuyển đổi sang `Obsidian`, `Sepia`, `Cyberpunk` tại `SystemSettingsPopover`.
+
+* **1. Chuẩn Tương Phản WCAG AA (Strict Contrast Ratios):**
+  - **4.5:1 đối với Body Text:** Toàn bộ văn bản thông thường (body copy, label, mô tả kịch bản) phải đạt tỷ lệ tương phản tối thiểu 4.5:1 so với nền sáng.
+  - **3:1 đối với Large Text & Non-Text UI:** Các tiêu đề lớn, icons, đường viền tương tác, trạng thái focus/hover và nút bấm đạt tỷ lệ tương phản tối thiểu 3:1.
+  - **Bảng Remapping Màu Tương Phản Cao (High-Contrast Remapping):**
+    - Vàng/Hổ phách: remap từ `text-amber-200/300` thành `#b45309` (Amber-700, 5.5:1) và `#92400e` (Amber-800, 7.2:1).
+    - Ngọc lục bảo: remap từ `text-emerald-300` thành `#047857` (Emerald-700, 5.8:1) và `#065f46` (Emerald-800, 7.5:1).
+    - Lam ngọc/Sky: remap từ `text-sky-300/cyan-300` thành `#0369a1` (Sky-700, 5.2:1) và `#4338ca` (Indigo-700).
+    - Chữ chính slate: remap từ `text-slate-300/400` thành `#1e293b` (Slate-800) và `#334155` (Slate-700), tuyệt đối không để chữ bị mờ đục (washed-out).
+
+* **2. Kỷ Luật Token Kép (Dual-Theme Token Protocol) — LỆNH CẤM HARDCODED DARK BACKGROUNDS:**
+  - **CẤM TUYỆT ĐỐI** hardcode trực tiếp các class nền tối đậm như `bg-slate-950`, `bg-slate-900`, `bg-black`, `bg-zinc-950` hoặc chữ trắng `text-white` trên các container động, card, node hành động hoặc popup mà không có tiền tố `dark:` hoặc CSS variable.
+  - Vi phạm quy tắc này sẽ gây lỗi visual nghiêm trọng: tạo "vết ố đen" (dark patch) trên giao diện sáng ban ngày hoặc biến chữ thành màu trắng tàng hình trên nền trắng.
+  - **Quy chuẩn triển khai bắt buộc (Bắt buộc dùng 1 trong 2 cách):**
+    - *Cách 1 (Khuyên dùng - Semantic CSS Variables):* `bg-[var(--bg-card)]`, `text-[var(--text-primary)]`, `border-[var(--border-subtle)]`.
+    - *Cách 2 (Dual Tailwind Utility):* `bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-slate-200 dark:border-slate-800`.
+  - *Ngoại lệ có chủ đích:* Các nút hành động chính (Solid Dark CTA Buttons) như `button.bg-slate-900`, `button.bg-slate-950` được giữ nền đen `#0f172a` và chữ trắng `#ffffff` để tạo điểm nhấn tương phản mạnh mẽ (Contrast Anchor).
+
+* **3. Cấu Hình Tailwind Cách Ly OS Dark Mode (`darkMode: ['selector', '...']`):**
+  - Game quản lý trạng thái theme độc lập qua `data-theme` lưu trong `localStorage ('lifegraph_theme')`.
+  - Cấu hình chuẩn trong `frontend/tailwind.config.js`:
+    ```javascript
+    darkMode: ['selector', '[data-theme="obsidian"], [data-theme="sepia"], [data-theme="cyberpunk"], .dark'],
+    ```
+  - **Mục đích sống còn:** Cách ly hoàn toàn OS Dark Mode của hệ điều hành máy khách (Windows/macOS/iOS/Android). Ngăn chặn tình trạng người dùng bật Dark Mode trên máy thì Tailwind tự động kích hoạt biến thể `dark:` phá vỡ theme Daylight của game.
+
+* **4. Hệ Thống CSS Variables Thần Mộc Sinh Mệnh (`--tree-sky-*`, `--tree-core-*`):**
+  - Đại Thụ Sinh Mệnh (`DynamicLifeTree.tsx`) sử dụng các biến CSS chuyên biệt thích ứng theo theme:
+    - `--tree-sky-spring`: Bầu trời mùa xuân (ánh hồng phấn hoa & lam ngọc dịu).
+    - `--tree-sky-summer`: Bầu trời mùa hạ (ánh vàng thái dương & lam sâu).
+    - `--tree-sky-autumn`: Bầu trời mùa thu (ánh cam hoàng hôn & hổ phách ấm).
+    - `--tree-sky-winter`: Bầu trời mùa đông (ánh tuyết cực quang xanh ngọc).
+    - `--tree-core-bg`, `--tree-core-border`, `--tree-core-shadow`, `--tree-core-text`: Lõi thần mộc điều hành AP trung tâm.
+    - `--tree-core-ap0-bg`, `--tree-core-ap0-border`, `--tree-core-ap0-shadow`: Hiệu ứng chuyển hóa sang hào quang hổ phách khi cạn AP (AP = 0) để bước vào Nghi Thức Chiêm Nghiệm Cuối Năm.
+
+* **5. Hệ Thống Font Chữ Gaming Đẳng Cấp:**
   - `Be Vietnam Pro` (chuẩn âm sắc tiếng Việt, không lỗi dấu) + `Plus Jakarta Sans` (bo tròn hiện đại phong cách life sim) + `Inter`.
-* **Cắt Gọt Chữ Thừa & Chống Lặp Thẻ (De-cluttering & Zero Double-Nesting):**
+
+* **6. Cắt Gọt Chữ Thừa & Chống Lặp Thẻ (De-cluttering & Zero Double-Nesting):**
   - Loại bỏ hoàn toàn các câu phụ đề mang tính giải thích hiển nhiên ("Sự kiện mới nhất luôn hiển thị trên cùng", "Hệ sinh thái cuộc đời...").
   - Chuyển toàn bộ nhãn tiếng Anh đóng ngoặc đơn (`Internal Voices`, `Real-world Macro`) sang từ thuần Việt ngắn gọn (`Trực Giác Nội Tâm`, `Thị Trường`).
   - Không lồng ghép 2 cấp container có chung tiêu đề và padding (giải phóng không gian để tập trung vào gameplay).

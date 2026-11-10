@@ -25,7 +25,7 @@ import SidekickPetCompanion from './SidekickPetCompanion';
 const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-slate-950 rounded-2xl">
+    <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-950 rounded-2xl">
       <div className="w-7 h-7 rounded-full border-2 border-amber-500/40 border-t-amber-400 animate-spin" />
     </div>
   )
@@ -326,54 +326,54 @@ export default function CharacterHeroBanner({
         return {
           glowGradient: 'from-amber-500/35 via-yellow-600/20 to-transparent',
           borderRing: 'ring-2 ring-amber-400 shadow-[0_0_35px_rgba(245,158,11,0.5)]',
-          badgeBg: 'bg-amber-950/90 border-amber-500/60 text-amber-200 shadow-amber-900/40',
-          badgeIconBg: 'bg-amber-500/20 text-amber-400 border-amber-500/40',
-          badgeDelta: 'bg-amber-500/25 text-amber-300 border-amber-500/40',
+          badgeBg: 'bg-amber-50/95 dark:bg-amber-950/90 border-amber-500/60 text-amber-900 dark:text-amber-200 shadow-amber-900/20 dark:shadow-amber-900/40',
+          badgeIconBg: 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/40',
+          badgeDelta: 'bg-amber-500/25 text-amber-800 dark:text-amber-300 border-amber-500/40',
           particlePulse: 'bg-amber-300',
         };
       case 'study':
         return {
           glowGradient: 'from-cyan-500/35 via-blue-600/20 to-transparent',
           borderRing: 'ring-2 ring-cyan-400 shadow-[0_0_35px_rgba(6,182,212,0.5)]',
-          badgeBg: 'bg-cyan-950/90 border-cyan-500/60 text-cyan-200 shadow-cyan-900/40',
-          badgeIconBg: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/40',
-          badgeDelta: 'bg-cyan-500/25 text-cyan-300 border-cyan-500/40',
+          badgeBg: 'bg-cyan-50/95 dark:bg-cyan-950/90 border-cyan-500/60 text-cyan-900 dark:text-cyan-200 shadow-cyan-900/20 dark:shadow-cyan-900/40',
+          badgeIconBg: 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border-cyan-500/40',
+          badgeDelta: 'bg-cyan-500/25 text-cyan-800 dark:text-cyan-300 border-cyan-500/40',
           particlePulse: 'bg-cyan-300',
         };
       case 'wellness':
         return {
           glowGradient: 'from-emerald-500/35 via-teal-600/20 to-transparent',
           borderRing: 'ring-2 ring-emerald-400 shadow-[0_0_35px_rgba(16,185,129,0.5)]',
-          badgeBg: 'bg-emerald-950/90 border-emerald-500/60 text-emerald-200 shadow-emerald-900/40',
-          badgeIconBg: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40',
-          badgeDelta: 'bg-emerald-500/25 text-emerald-300 border-emerald-500/40',
+          badgeBg: 'bg-emerald-50/95 dark:bg-emerald-950/90 border-emerald-500/60 text-emerald-900 dark:text-emerald-200 shadow-emerald-900/20 dark:shadow-emerald-900/40',
+          badgeIconBg: 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/40',
+          badgeDelta: 'bg-emerald-500/25 text-emerald-800 dark:text-emerald-300 border-emerald-500/40',
           particlePulse: 'bg-emerald-300',
         };
       case 'infant':
         return {
           glowGradient: 'from-pink-500/30 via-amber-400/20 to-transparent',
           borderRing: 'ring-2 ring-pink-400 shadow-[0_0_35px_rgba(244,114,182,0.5)]',
-          badgeBg: 'bg-pink-950/90 border-pink-400/60 text-pink-200 shadow-pink-900/40',
-          badgeIconBg: 'bg-pink-500/20 text-pink-300 border-pink-400/40',
-          badgeDelta: 'bg-pink-500/25 text-pink-300 border-pink-500/40',
+          badgeBg: 'bg-pink-50/95 dark:bg-pink-950/90 border-pink-400/60 text-pink-900 dark:text-pink-200 shadow-pink-900/20 dark:shadow-pink-900/40',
+          badgeIconBg: 'bg-pink-500/20 text-pink-600 dark:text-pink-300 border-pink-400/40',
+          badgeDelta: 'bg-pink-500/25 text-pink-800 dark:text-pink-300 border-pink-400/40',
           particlePulse: 'bg-pink-300',
         };
       case 'gamble':
         return {
           glowGradient: 'from-amber-500/35 via-rose-500/20 to-transparent',
           borderRing: 'ring-2 ring-amber-400 shadow-[0_0_35px_rgba(245,158,11,0.5)]',
-          badgeBg: 'bg-amber-950/90 border-amber-500/60 text-amber-200 shadow-amber-900/40',
-          badgeIconBg: 'bg-amber-500/20 text-amber-400 border-amber-500/40',
-          badgeDelta: 'bg-amber-500/25 text-amber-300 border-amber-500/40',
+          badgeBg: 'bg-amber-50/95 dark:bg-amber-950/90 border-amber-500/60 text-amber-900 dark:text-amber-200 shadow-amber-900/20 dark:shadow-amber-900/40',
+          badgeIconBg: 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/40',
+          badgeDelta: 'bg-amber-500/25 text-amber-800 dark:text-amber-300 border-amber-500/40',
           particlePulse: 'bg-amber-300',
         };
       case 'network':
         return {
           glowGradient: 'from-orange-500/35 via-rose-600/20 to-transparent',
           borderRing: 'ring-2 ring-orange-400 shadow-[0_0_35px_rgba(249,115,22,0.5)]',
-          badgeBg: 'bg-orange-950/90 border-orange-500/60 text-orange-200 shadow-orange-900/40',
-          badgeIconBg: 'bg-orange-500/20 text-orange-400 border-orange-500/40',
-          badgeDelta: 'bg-orange-500/25 text-orange-300 border-orange-500/40',
+          badgeBg: 'bg-orange-50/95 dark:bg-orange-950/90 border-orange-500/60 text-orange-900 dark:text-orange-200 shadow-orange-900/20 dark:shadow-orange-900/40',
+          badgeIconBg: 'bg-orange-500/20 text-orange-600 dark:text-orange-400 border-orange-500/40',
+          badgeDelta: 'bg-orange-500/25 text-orange-800 dark:text-orange-300 border-orange-500/40',
           particlePulse: 'bg-orange-300',
         };
       case 'milestone':
@@ -381,9 +381,9 @@ export default function CharacterHeroBanner({
         return {
           glowGradient: 'from-yellow-400/40 via-amber-500/25 to-transparent',
           borderRing: 'ring-2 ring-yellow-400 shadow-[0_0_40px_rgba(250,204,21,0.6)]',
-          badgeBg: 'bg-amber-950/90 border-yellow-400/70 text-yellow-100 shadow-amber-900/40',
-          badgeIconBg: 'bg-yellow-500/25 text-yellow-300 border-yellow-400/40',
-          badgeDelta: 'bg-yellow-500/30 text-yellow-200 border-yellow-400/50',
+          badgeBg: 'bg-amber-50/95 dark:bg-amber-950/90 border-yellow-500/70 text-yellow-950 dark:text-yellow-100 shadow-amber-900/20 dark:shadow-amber-900/40',
+          badgeIconBg: 'bg-yellow-500/25 text-yellow-700 dark:text-yellow-300 border-yellow-400/40',
+          badgeDelta: 'bg-yellow-500/30 text-yellow-900 dark:text-yellow-200 border-yellow-400/50',
           particlePulse: 'bg-yellow-300',
         };
     }
@@ -530,13 +530,13 @@ export default function CharacterHeroBanner({
 
               {/* Critical State Warning Pills (Top-Left of Stage) */}
               {isCriticalVitality && (
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-950/90 border border-rose-500/60 text-[10px] font-sans text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
+                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-50/95 dark:bg-rose-950/90 border border-rose-400/60 dark:border-rose-500/60 text-[10px] font-sans text-rose-900 dark:text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
                   <span>💔 Yếu ớt</span>
                 </div>
               )}
               {isSevereBurnout && (
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-950/90 border border-rose-500/70 text-[10px] font-sans text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
+                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-50/95 dark:bg-rose-950/90 border border-rose-400/70 dark:border-rose-500/70 text-[10px] font-sans text-rose-900 dark:text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping" />
                   <span>⚡ Kiệt sức</span>
                 </div>
@@ -840,7 +840,7 @@ export default function CharacterHeroBanner({
             <div className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl border backdrop-blur-md animate-in fade-in slide-in-from-top-1 ${feedbackAtmo?.badgeBg}`}>
               <span className="text-base shrink-0">{activeFeedback.icon || '✨'}</span>
               <div className="flex items-center justify-between w-full min-w-0">
-                <span className="text-xs font-bold text-white truncate">{activeFeedback.title}</span>
+                <span className="text-xs font-bold text-slate-900 dark:text-white truncate">{activeFeedback.title}</span>
                 {activeFeedback.delta && (
                   <span className={`text-[11px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded border shrink-0 ${feedbackAtmo?.badgeDelta}`}>
                     {activeFeedback.delta}
