@@ -76,13 +76,13 @@ export default function EpitaphModal({
 
   return (
     <>
-      <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in duration-700">
-        <div className="max-w-md w-full bg-slate-950 border border-slate-800 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
+      <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in duration-700">
+        <div className="max-w-md w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
           {/* Close / Return Home Button */}
           {onReturnHome && (
             <button
               onClick={onReturnHome}
-              className="absolute top-4 right-4 p-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition z-20"
+              className="absolute top-4 right-4 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition z-20"
               title="Trở về Trang Chủ Gia Phả"
             >
               <X className="w-4 h-4" />
@@ -90,36 +90,36 @@ export default function EpitaphModal({
           )}
 
           {/* Somber lighting */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-rose-950/30 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="w-16 h-16 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center mx-auto mb-5 text-slate-400">
+          <div className="w-16 h-16 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex items-center justify-center mx-auto mb-5 text-[var(--text-secondary)]">
             <Skull className="w-8 h-8 text-rose-500/80 animate-pulse" />
           </div>
 
-          <span className="text-[12px] font-sans font-semibold tracking-wide normal-case text-slate-500 block mb-1">
+          <span className="text-[12px] font-sans font-semibold tracking-wide normal-case text-[var(--text-secondary)] block mb-1">
             KẾT THÚC MỘT KIẾP NGƯỜI
           </span>
 
-          <h2 className="text-2xl font-sans font-bold text-white mb-1">
+          <h2 className="text-2xl font-sans font-bold text-[var(--text-primary)] mb-1">
             {name}
           </h2>
           
-          <p className="text-sm font-sans font-medium text-indigo-400 mb-6">
+          <p className="text-sm font-sans font-medium text-indigo-600 dark:text-indigo-400 mb-6">
             Hưởng thọ {age} tuổi
           </p>
 
-          <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 mb-6 text-left space-y-2 text-xs">
-            <div className="text-slate-400">
-              <span className="text-slate-500 font-sans font-medium">Biến cố cuối cùng:</span>
-              <p className="text-slate-200 mt-0.5 font-sans italic text-sm">"{cause}"</p>
+          <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] mb-6 text-left space-y-2 text-xs">
+            <div className="text-[var(--text-secondary)]">
+              <span className="font-sans font-medium">Biến cố cuối cùng:</span>
+              <p className="text-[var(--text-primary)] mt-0.5 font-sans italic text-sm">"{cause}"</p>
             </div>
-            <div className="text-slate-400 pt-2 border-t border-slate-800/50 flex justify-between items-center">
-              <span className="text-slate-500 font-sans font-medium">Tổng ngã rẽ cuộc đời:</span>
-              <span className="font-sans tabular-nums text-slate-300 font-bold">{historyLength} quyết định</span>
+            <div className="text-[var(--text-secondary)] pt-2 border-t border-[var(--border-subtle)] flex justify-between items-center">
+              <span className="font-sans font-medium">Tổng ngã rẽ cuộc đời:</span>
+              <span className="font-sans tabular-nums text-[var(--text-primary)] font-bold">{historyLength} quyết định</span>
             </div>
-            <div className="text-slate-400 pt-1 flex justify-between items-center">
-              <span className="text-slate-500 font-sans font-medium">Nghiệp lực tích lũy (Karma):</span>
-              <span className="font-sans tabular-nums text-amber-400 font-bold">+{karma} Karma</span>
+            <div className="text-[var(--text-secondary)] pt-1 flex justify-between items-center">
+              <span className="font-sans font-medium">Nghiệp lực tích lũy (Karma):</span>
+              <span className="font-sans tabular-nums text-amber-600 dark:text-amber-400 font-bold">+{karma} Karma</span>
             </div>
           </div>
 
@@ -183,7 +183,7 @@ export default function EpitaphModal({
             {onReturnHome && (
               <button
                 onClick={onReturnHome}
-                className="w-full py-3.5 px-6 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 font-semibold text-sm transition flex items-center justify-center gap-2 active:scale-[0.98]"
+                className="w-full py-3.5 px-6 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-subtle)] font-bold text-sm transition flex items-center justify-center gap-2 active:scale-[0.98]"
               >
                 <Home className="w-4 h-4 text-indigo-400" />
                 <span>Trở Về Trang Chủ Gia Phả (Nghỉ Ngơi & Tưởng Niệm)</span>

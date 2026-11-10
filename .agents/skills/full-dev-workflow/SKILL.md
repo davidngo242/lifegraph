@@ -320,4 +320,19 @@ flowchart TD
   - Tab 3: 💰 Tài Sản (Thẻ Net Worth, Dòng tiền thặng dư, Nhà ở, Danh mục đầu tư).
   - Tab 4: 🏆 Sổ Vàng (Danh hiệu cuộc đời, Cột mốc vinh danh & Thẻ Bài Cyber-Tarot).
 
+### 5.7. Quy Chuẩn Banner Nhân Vật & Triệt Tiêu Khối Nhiễu (CharacterHeroBanner v8.1)
+
+* **Level chuyển qua bên nhân vật (Left Identity Block):**
+  - Cụm `Lv.{life_level} {Title}`, thanh EXP và `+{SP} SP` được đặt ở vị trí cao nhất trên khối danh tính bên trái (ngay trên tên nhân vật).
+  - Tên nhân vật nổi bật với kích thước `text-xl md:text-2xl font-black` kèm huy hiệu Tầng Lớp Xã Hội (`socialStatus`).
+  - Xóa bỏ hoàn toàn watermark `STAGE 3D` dưới chân avatar.
+* **Nhà Ở (Housing) xuống dòng riêng biệt:**
+  - Vị trí địa lý (`📍 Thành phố`) và nơi ở (`🏠 Phòng trọ / Biệt thự...`) được tách thành 2 dòng riêng biệt, không để chung một dòng.
+* **Zone 2 & Zone 3 Tinh Gọn — Xóa Bỏ Chỉ Số Gây Nhiễu:**
+  - Loại bỏ các thông số khó hiểu, tối nghĩa: `Lão hóa: 1.0x`, `Đột quỵ: <2%`, `Hồi phục: +4 AP`.
+  - Loại bỏ badge Karma trùng lặp (`100 KP`).
+  - Giữ lại 2 thanh sinh tồn cốt lõi độ tương phản cao: `❤️ Sinh Lực` ({vitality}/{maxVitality} kèm trạng thái Sung mãn/Ổn định) và `⚡ Căng Thẳng` ({burnout}%).
+  - Cột giữa tập trung 3 phân tầng: Nghề nghiệp / Thân phận, Trọng tâm sinh mệnh & Gen di truyền, và Khát vọng cuộc đời.
+
+
 

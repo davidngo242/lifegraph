@@ -263,15 +263,15 @@ export default function SkillTreeTab({
       {/* 1. Header Bar: Title & SP Pill */}
       <div className="flex flex-wrap items-center justify-between pb-3 border-b border-[var(--border-subtle)] gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center shrink-0 shadow-inner">
+          <div className="w-9 h-9 rounded-2xl bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 flex items-center justify-center shrink-0 shadow-inner">
             <Award className="w-5 h-5 fill-current" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm md:text-base font-extrabold text-white">
+              <h3 className="text-sm md:text-base font-extrabold text-[var(--text-primary)]">
                 Đại Thụ Kỹ Năng Tam Vị Nhất Thể
               </h3>
-              <span className="text-[10.5px] px-2 py-0.5 rounded-full bg-indigo-950/80 text-indigo-300 border border-indigo-500/40 font-bold uppercase tracking-wide">
+              <span className="text-[10.5px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 font-bold uppercase tracking-wide">
                 The Trinity RPG Tree
               </span>
             </div>
@@ -282,25 +282,25 @@ export default function SkillTreeTab({
         </div>
 
         {/* SP Counter Pill */}
-        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-amber-950/80 border border-amber-500/50 shadow-lg shadow-amber-950/40">
-          <Sparkles className="w-4 h-4 text-amber-300 fill-amber-300/30 animate-pulse" />
-          <span className="text-xs font-bold text-amber-200">Điểm Kỹ Năng:</span>
-          <span className="text-sm md:text-base font-sans tabular-nums font-black text-amber-300">
-            {skillPoints} <span className="text-[10px] font-semibold text-amber-400/80">SP</span>
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-amber-500/15 border border-amber-500/40 text-amber-800 dark:text-amber-200 shadow-sm">
+          <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500/30 animate-pulse" />
+          <span className="text-xs font-bold text-amber-800 dark:text-amber-200">Điểm Kỹ Năng:</span>
+          <span className="text-sm md:text-base font-sans tabular-nums font-black text-amber-900 dark:text-amber-300">
+            {skillPoints} <span className="text-[10px] font-semibold text-amber-700 dark:text-amber-400">SP</span>
           </span>
         </div>
       </div>
 
       {/* 2. Triangle Resonance Synergies HUD (Cộng Hưởng Tam Giác Sinh Mệnh) */}
-      <div className="p-3 rounded-2xl bg-slate-950/60 border border-indigo-500/30 shadow-inner space-y-2">
+      <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] shadow-inner space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span className="text-xs font-bold text-slate-200 uppercase tracking-wide">
+            <span className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wide">
               Cộng Hưởng Tam Giác Sinh Mệnh (Resonance Synergies)
             </span>
           </div>
-          <span className="text-[10.5px] text-slate-400 font-sans tabular-nums">
+          <span className="text-[10.5px] text-[var(--text-secondary)] font-sans tabular-nums">
             {activeResonances.filter(r => r.isActive).length}/{TREE_RESONANCES.length} Đang Kích Hoạt
           </span>
         </div>
@@ -318,7 +318,7 @@ export default function SkillTreeTab({
                   className={`p-2 rounded-xl border transition flex items-center justify-between gap-2 cursor-help ${
                     res.isActive
                       ? 'bg-amber-500/15 border-amber-500/50 text-amber-700 dark:text-amber-300 shadow-sm'
-                      : 'bg-slate-900/40 border-slate-800/60 text-slate-500 opacity-60'
+                      : 'bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] opacity-60'
                   }`}
                 >
                   <div className="flex items-center gap-1.5 min-w-0">
@@ -328,11 +328,11 @@ export default function SkillTreeTab({
                     </span>
                   </div>
                   {res.isActive ? (
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold shrink-0">
+                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 font-bold shrink-0">
                       ✓ Sẵn Sàng
                     </span>
                   ) : (
-                    <span className="text-[9px] font-sans tabular-nums px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-400 shrink-0">
+                    <span className="text-[9px] font-sans tabular-nums px-1.5 py-0.2 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border border-[var(--border-subtle)] shrink-0">
                       {res.progress}
                     </span>
                   )}
@@ -366,26 +366,26 @@ export default function SkillTreeTab({
               onClick={() => setSelectedBranch(b.id as any)}
               className={`p-3 rounded-2xl border text-left transition-all active:scale-98 flex flex-col gap-1.5 ${
                 isSelected
-                  ? 'bg-gradient-to-br from-amber-500/15 via-slate-900 to-slate-950 border-amber-500/60 shadow-lg shadow-amber-950/20 ring-1 ring-amber-500/40'
-                  : 'bg-slate-950/60 hover:bg-slate-900 border-slate-800/80 text-slate-400 hover:text-white'
+                  ? 'bg-gradient-to-br from-amber-500/20 via-[var(--bg-card)] to-[var(--bg-card-subtle)] border-amber-500/60 shadow-md ring-1 ring-amber-500/40 text-[var(--text-primary)]'
+                  : 'bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xl p-1 rounded-xl bg-slate-900/80 border border-slate-800/80">{b.icon}</span>
+                <span className="text-xl p-1 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">{b.icon}</span>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-slate-900 text-indigo-300 border border-slate-800 font-bold">
+                  <span className="text-[10px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-[var(--bg-card)] text-indigo-700 dark:text-indigo-300 border border-[var(--border-subtle)] font-bold">
                     {unlockedInBranch}/{b.skills.length}
                   </span>
                 </div>
               </div>
 
               <div>
-                <div className={`text-xs sm:text-sm font-bold truncate ${isSelected ? 'text-white' : 'text-slate-300'}`}>
+                <div className={`text-xs sm:text-sm font-bold truncate ${isSelected ? 'text-[var(--text-primary)] font-extrabold' : 'text-[var(--text-secondary)]'}`}>
                   {b.name}
                 </div>
-                <div className="flex items-center gap-1 text-[10.5px] text-slate-400 mt-0.5">
+                <div className="flex items-center gap-1 text-[10.5px] text-[var(--text-secondary)] mt-0.5">
                   <span>Hệ sinh thái:</span>
-                  <span className="text-amber-300 font-semibold">{pillarMeta}</span>
+                  <span className="text-amber-700 dark:text-amber-400 font-semibold">{pillarMeta}</span>
                 </div>
               </div>
             </button>
@@ -394,7 +394,7 @@ export default function SkillTreeTab({
       </div>
 
       {/* 4. Branch Description Header */}
-      <div className="p-2.5 rounded-2xl bg-slate-950/50 border border-slate-800/70 text-xs text-slate-300 flex items-center gap-2.5">
+      <div className="p-2.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] flex items-center gap-2.5">
         <span className="text-base shrink-0">{currentBranch.icon}</span>
         <span className="leading-relaxed">{currentBranch.description}</span>
       </div>
@@ -412,26 +412,26 @@ export default function SkillTreeTab({
               key={skill.id}
               className={`relative p-3.5 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${
                 isUnlocked
-                  ? 'bg-gradient-to-br from-emerald-950/40 via-slate-950 to-slate-950 border-emerald-500/50 shadow-md shadow-emerald-950/20'
+                  ? 'bg-gradient-to-br from-emerald-500/10 via-[var(--bg-card-subtle)] to-[var(--bg-card-subtle)] border-emerald-500/50 shadow-sm'
                   : canUnlock
-                  ? 'bg-gradient-to-br from-amber-950/30 via-slate-950 to-indigo-950/20 border-amber-500/50 shadow-sm'
-                  : 'bg-slate-950/50 border-slate-800/60 opacity-60'
+                  ? 'bg-gradient-to-br from-amber-500/10 via-[var(--bg-card-subtle)] to-indigo-500/10 border-amber-500/50 shadow-sm'
+                  : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] opacity-60'
               }`}
             >
               {/* Card Header: Tier & Cost */}
               <div className="flex items-center justify-between">
-                <span className="text-[10.5px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-full bg-slate-900 text-slate-300 border border-slate-800">
+                <span className="text-[10.5px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-full bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                   Cấp {skill.tier}
                 </span>
                 {isUnlocked ? (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Đã Mở Khóa
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Đã Mở Khóa
                   </span>
                 ) : (
                   <span className={`text-[10.5px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-full border ${
                     canAfford
-                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                      : 'bg-slate-800 text-slate-400 border-slate-700'
+                      ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-500/40'
+                      : 'bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-300 dark:border-slate-700'
                   }`}>
                     {skill.costSp} SP
                   </span>
@@ -441,21 +441,21 @@ export default function SkillTreeTab({
               {/* Skill Core Info */}
               <div className="space-y-1.5">
                 <div className="flex items-center gap-2.5">
-                  <span className="text-2xl p-2 rounded-2xl bg-slate-900 border border-slate-800 shrink-0">
+                  <span className="text-2xl p-2 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shrink-0">
                     {skill.icon}
                   </span>
                   <div className="min-w-0">
-                    <h4 className={`text-xs sm:text-sm font-bold truncate ${isUnlocked ? 'text-emerald-200' : 'text-white'}`}>
+                    <h4 className={`text-xs sm:text-sm font-bold truncate ${isUnlocked ? 'text-emerald-700 dark:text-emerald-300' : 'text-[var(--text-primary)]'}`}>
                       {skill.name}
                     </h4>
                     {skill.requires && !hasPrereq && (
-                      <span className="text-[10px] text-rose-400 flex items-center gap-1 font-medium">
+                      <span className="text-[10px] text-rose-500 flex items-center gap-1 font-medium">
                         <Lock className="w-2.5 h-2.5" /> Yêu cầu mở khóa Cấp {skill.tier - 1}
                       </span>
                     )}
                   </div>
                 </div>
-                <p className="text-[11.5px] text-slate-300 leading-relaxed">
+                <p className="text-[11.5px] text-[var(--text-secondary)] leading-relaxed">
                   {skill.description}
                 </p>
               </div>
@@ -463,7 +463,7 @@ export default function SkillTreeTab({
               {/* Action Button */}
               <div className="pt-1">
                 {isUnlocked ? (
-                  <div className="w-full py-1.5 text-center text-[11px] font-bold text-emerald-400/90 bg-emerald-950/30 rounded-xl border border-emerald-500/20 flex items-center justify-center gap-1">
+                  <div className="w-full py-1.5 text-center text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 rounded-xl border border-emerald-500/25 flex items-center justify-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Đặc Quyền Vĩnh Viễn Đang Kích Hoạt</span>
                   </div>
@@ -475,7 +475,7 @@ export default function SkillTreeTab({
                     className={`w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95 shadow ${
                       canUnlock
                         ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black cursor-pointer'
-                        : 'bg-slate-900 text-slate-500 border border-slate-800 cursor-not-allowed'
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-300 dark:border-slate-700 cursor-not-allowed'
                     }`}
                   >
                     {unlockingId === skill.id ? (

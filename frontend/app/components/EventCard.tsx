@@ -81,9 +81,9 @@ export default function EventCard({
 
   if (!dilemma) {
     return (
-      <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 flex flex-col items-center justify-center min-h-[220px] text-slate-500 backdrop-blur-md">
-        <Compass className="w-7 h-7 animate-spin text-indigo-400/80 mb-2" />
-        <p className="text-xs normal-case font-sans font-medium text-slate-400">Đang điều phối bước ngoặt cuộc đời...</p>
+      <div className="bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl p-6 flex flex-col items-center justify-center min-h-[220px] text-[var(--text-secondary)] backdrop-blur-md">
+        <Compass className="w-7 h-7 animate-spin text-indigo-500 mb-2" />
+        <p className="text-xs normal-case font-sans font-medium text-[var(--text-secondary)]">Đang điều phối bước ngoặt cuộc đời...</p>
       </div>
     );
   }
@@ -364,22 +364,22 @@ export default function EventCard({
 
       {/* Smart Unspent AP Warning Banner */}
       {pendingUnspentWarning && (
-        <div className="p-3.5 rounded-2xl bg-amber-950/70 border-2 border-amber-500/60 text-amber-200 shadow-xl flex flex-col gap-2.5 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="p-3.5 rounded-2xl bg-amber-500/15 border-2 border-amber-500/50 text-amber-900 dark:text-amber-200 shadow-xl flex flex-col gap-2.5 animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="flex items-center justify-between gap-2 border-b border-amber-500/30 pb-2">
             <div className="flex items-center gap-2">
               <span className="text-lg">⚠️</span>
               <div>
-                <div className="font-bold text-white text-xs md:text-sm">
-                  Năm nay bạn vẫn còn <span className="text-amber-400 font-extrabold font-mono text-sm">{pendingUnspentWarning.unspentAP} AP</span> chưa dùng!
+                <div className="font-bold text-amber-950 dark:text-amber-100 text-xs md:text-sm">
+                  Năm nay bạn vẫn còn <span className="text-amber-700 dark:text-amber-400 font-extrabold font-mono text-sm">{pendingUnspentWarning.unspentAP} AP</span> chưa dùng!
                 </div>
-                <div className="text-[11px] text-amber-300/80">
-                  Hành động đang chọn: <strong className="text-white">{pendingUnspentWarning.option.action_title || pendingUnspentWarning.option.label}</strong>
+                <div className="text-[11px] text-amber-800 dark:text-amber-300">
+                  Hành động đang chọn: <strong className="text-amber-950 dark:text-amber-200">{pendingUnspentWarning.option.action_title || pendingUnspentWarning.option.label}</strong>
                 </div>
               </div>
             </div>
             <button
               onClick={() => setPendingUnspentWarning(null)}
-              className="text-amber-400 hover:text-white p-1 rounded-lg"
+              className="text-amber-700 dark:text-amber-300 hover:text-amber-950 dark:hover:text-white p-1 rounded-lg"
               title="Đóng"
             >
               <X className="w-4 h-4" />
@@ -397,13 +397,13 @@ export default function EventCard({
                 setInvestedApMap(prev => ({ ...prev, [opt.id]: newInvested }));
                 proceedOptionExecution(opt, newInvested);
               }}
-              className="p-2.5 rounded-xl bg-gradient-to-r from-amber-600/30 to-amber-500/30 hover:from-amber-600/50 hover:to-amber-500/50 border border-amber-400/60 text-white font-bold text-left transition flex flex-col justify-between group active:scale-95 shadow-md"
+              className="p-2.5 rounded-xl bg-gradient-to-r from-amber-600/30 to-amber-500/30 hover:from-amber-600/50 hover:to-amber-500/50 border border-amber-400/60 text-amber-950 dark:text-white font-bold text-left transition flex flex-col justify-between group active:scale-95 shadow-md"
             >
-              <div className="flex items-center gap-1.5 text-amber-300 font-bold mb-1">
-                <Zap className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <div className="flex items-center gap-1.5 text-amber-700 dark:text-amber-300 font-bold mb-1">
+                <Zap className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                 <span>⚡ Đầu tư 1 AP</span>
               </div>
-              <span className="text-[11px] text-slate-300 font-normal leading-tight">
+              <span className="text-[11px] text-[var(--text-secondary)] font-normal leading-tight">
                 Vào lựa chọn này (+15% tỷ lệ thành công)
               </span>
             </button>
@@ -415,12 +415,12 @@ export default function EventCard({
                 const opt = pendingUnspentWarning.option;
                 proceedOptionExecution(opt, pendingUnspentWarning.investedAp);
               }}
-              className="p-2.5 rounded-xl bg-gradient-to-r from-emerald-600/30 to-teal-600/30 hover:from-emerald-600/50 hover:to-teal-600/50 border border-emerald-400/60 text-white font-bold text-left transition flex flex-col justify-between group active:scale-95 shadow-md"
+              className="p-2.5 rounded-xl bg-gradient-to-r from-emerald-600/30 to-teal-600/30 hover:from-emerald-600/50 hover:to-teal-600/50 border border-emerald-400/60 text-emerald-950 dark:text-white font-bold text-left transition flex flex-col justify-between group active:scale-95 shadow-md"
             >
-              <div className="flex items-center gap-1.5 text-emerald-300 font-bold mb-1">
+              <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300 font-bold mb-1">
                 <span>🌿 Chuyển hóa Dưỡng Sinh</span>
               </div>
-              <span className="text-[11px] text-slate-300 font-normal leading-tight">
+              <span className="text-[11px] text-[var(--text-secondary)] font-normal leading-tight">
                 (+{pendingUnspentWarning.unspentAP * 2} HP) & Chốt Năm
               </span>
             </button>
@@ -429,12 +429,12 @@ export default function EventCard({
             <button
               type="button"
               onClick={() => setPendingUnspentWarning(null)}
-              className="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white font-bold text-left transition flex flex-col justify-between active:scale-95 shadow-md"
+              className="p-2.5 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-primary)] font-bold text-left transition flex flex-col justify-between active:scale-95 shadow-md"
             >
-              <div className="flex items-center gap-1.5 text-slate-300 font-bold mb-1">
+              <div className="flex items-center gap-1.5 text-[var(--text-primary)] font-bold mb-1">
                 <span>↩️ Quay lại dùng AP</span>
               </div>
-              <span className="text-[11px] text-slate-400 font-normal leading-tight">
+              <span className="text-[11px] text-[var(--text-secondary)] font-normal leading-tight">
                 Dùng nốt AP ở Action Hub bên dưới
               </span>
             </button>
@@ -520,10 +520,10 @@ export default function EventCard({
                     }}
                     className={`px-2 py-1 rounded-xl text-[11px] font-bold border transition flex items-center gap-1 ${
                       isCurrentlyInvested
-                        ? 'bg-amber-500/25 border-amber-400 text-amber-300 shadow-md shadow-amber-500/25 animate-pulse'
+                        ? 'bg-amber-500/25 border-amber-500 text-amber-700 dark:text-amber-300 shadow-md shadow-amber-500/25 animate-pulse'
                         : canInvestMore
-                        ? 'bg-slate-900/90 hover:bg-amber-950/40 border-slate-700 hover:border-amber-500/50 text-slate-300 hover:text-amber-300 active:scale-95'
-                        : 'bg-slate-950/60 border-slate-800 text-slate-600 cursor-not-allowed opacity-40'
+                        ? 'bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-amber-500/50 hover:text-amber-700 dark:hover:text-amber-300 active:scale-95'
+                        : 'bg-[var(--bg-card-subtle)]/50 border-[var(--border-subtle)] text-slate-400 dark:text-slate-600 cursor-not-allowed opacity-40'
                     }`}
                     title={
                       isCurrentlyInvested
@@ -551,8 +551,8 @@ export default function EventCard({
                   {costAp > 0 && (
                     <span className={`text-[12px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-lg flex items-center gap-1 border ${
                       !hasEnoughAP
-                        ? 'bg-rose-950/60 border-rose-500/40 text-rose-400'
-                        : 'bg-slate-900 border-slate-700 text-amber-400'
+                        ? 'bg-rose-500/15 border-rose-500/40 text-rose-700 dark:text-rose-400'
+                        : 'bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-700 dark:text-amber-400'
                     }`}>
                       <Zap className={`w-3 h-3 ${hasEnoughAP ? 'fill-current' : ''}`} />
                       {totalRequiredAp} AP

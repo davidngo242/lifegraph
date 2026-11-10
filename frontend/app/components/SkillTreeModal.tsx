@@ -101,8 +101,8 @@ export default function SkillTreeModal({
             onClick={() => setActiveTab('rpg_tree')}
             className={`pb-2.5 px-3 text-xs font-bold flex items-center gap-2 border-b-2 transition ${
               activeTab === 'rpg_tree'
-                ? 'border-indigo-400 text-indigo-200'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-indigo-500 text-indigo-700 dark:text-indigo-300 font-extrabold'
+                : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -114,8 +114,8 @@ export default function SkillTreeModal({
             onClick={() => setActiveTab('certifications')}
             className={`pb-2.5 px-3 text-xs font-bold flex items-center gap-2 border-b-2 transition ${
               activeTab === 'certifications'
-                ? 'border-indigo-400 text-indigo-200'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-indigo-500 text-indigo-700 dark:text-indigo-300 font-extrabold'
+                : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             <GraduationCap className="w-3.5 h-3.5" />
@@ -138,14 +138,14 @@ export default function SkillTreeModal({
             />
           ) : (
             <div className="space-y-4">
-              <div className="p-3 rounded-2xl bg-slate-950/60 border border-indigo-500/30 text-xs text-slate-300 flex items-center justify-between">
+              <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] flex items-center justify-between">
                 <div>
-                  <h4 className="font-bold text-white text-sm">Học Viện Kỹ Năng &amp; Sát Hạch Mini-game</h4>
-                  <p className="text-[11px] text-slate-400">Tham gia kỳ thi sát hạch để nhận chứng chỉ chuyên môn và gia tăng thu nhập suốt đời.</p>
+                  <h4 className="font-bold text-[var(--text-primary)] text-sm">Học Viện Kỹ Năng &amp; Sát Hạch Mini-game</h4>
+                  <p className="text-[11px] text-[var(--text-secondary)]">Tham gia kỳ thi sát hạch để nhận chứng chỉ chuyên môn và gia tăng thu nhập suốt đời.</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10.5px] text-slate-400">Độ tuổi tối thiểu:</span>
-                  <span className="text-xs font-bold text-amber-300 block">6 Tuổi trở lên</span>
+                  <span className="text-[10.5px] text-[var(--text-secondary)]">Độ tuổi tối thiểu:</span>
+                  <span className="text-xs font-bold text-amber-700 dark:text-amber-300 block">6 Tuổi trở lên</span>
                 </div>
               </div>
 
@@ -166,7 +166,7 @@ export default function SkillTreeModal({
                       <span className="text-lg">{b.icon}</span>
                       <span className="text-xs font-bold">{b.name}</span>
                     </div>
-                    <p className="text-[10.5px] text-slate-400 line-clamp-2">{b.desc}</p>
+                    <p className="text-[10.5px] text-[var(--text-secondary)] line-clamp-2">{b.desc}</p>
                   </button>
                 ))}
               </div>
@@ -176,17 +176,17 @@ export default function SkillTreeModal({
                 {currentCertBranch.levels.map(lvl => (
                   <div
                     key={lvl.level}
-                    className="p-3.5 rounded-2xl bg-slate-950/50 border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                    className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
+                        <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                           Cấp {lvl.level}
                         </span>
-                        <h5 className="text-xs sm:text-sm font-bold text-white">{lvl.title}</h5>
+                        <h5 className="text-xs sm:text-sm font-bold text-[var(--text-primary)]">{lvl.title}</h5>
                       </div>
-                      <p className="text-[11px] text-emerald-300 font-semibold mt-1">
-                        ★ {lvl.perkTitle}: <span className="text-slate-300 font-normal">{lvl.perkDesc}</span>
+                      <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold mt-1">
+                        ★ {lvl.perkTitle}: <span className="text-[var(--text-secondary)] font-normal">{lvl.perkDesc}</span>
                       </p>
                     </div>
 

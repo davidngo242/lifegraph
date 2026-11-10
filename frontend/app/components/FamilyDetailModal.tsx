@@ -76,11 +76,11 @@ export default function FamilyDetailModal({
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2.5 rounded-2xl bg-pink-500/20 text-pink-400 border border-pink-500/30">
+          <div className="p-2.5 rounded-2xl bg-pink-500/20 text-pink-600 dark:text-pink-400 border border-pink-500/30">
             <Users className="w-7 h-7" />
           </div>
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+            <h2 className="text-xl md:text-2xl font-bold text-[var(--text-primary)] tracking-tight">
               Gia Tộc & Người Thân Thiết
             </h2>
             <p className="text-xs text-[var(--text-secondary)]">
@@ -116,10 +116,10 @@ export default function FamilyDetailModal({
             className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] hover:border-pink-500/40 text-left transition active:scale-95 disabled:opacity-40"
           >
             <div className="flex items-center justify-between mb-1">
-              <Gift className="w-4 h-4 text-pink-400" />
-              <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
+              <Gift className="w-4 h-4 text-pink-500" />
+              <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">1 AP</span>
             </div>
-            <div className="text-xs font-bold text-white">Báo Hiếu Cha Mẹ</div>
+            <div className="text-xs font-bold text-[var(--text-primary)]">Báo Hiếu Cha Mẹ</div>
             <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">Chi $2.000 (Karma +20)</div>
           </button>
 
@@ -128,21 +128,21 @@ export default function FamilyDetailModal({
             <button
               disabled={loadingAction !== null || actionPoints < 1 || cash < 1500 || (characterAge ?? 18) < 16}
               onClick={() => executeAction('date', 1, 1500)}
-              className={`p-3 rounded-2xl bg-slate-950 border text-left transition active:scale-95 ${
+              className={`p-3 rounded-2xl bg-[var(--bg-card-subtle)] border text-left transition active:scale-95 ${
                 (characterAge ?? 18) < 16
-                  ? 'border-slate-800 opacity-50 cursor-not-allowed'
-                  : 'border-slate-800 hover:border-pink-500/40 disabled:opacity-40'
+                  ? 'border-[var(--border-subtle)] opacity-50 cursor-not-allowed'
+                  : 'border-[var(--border-subtle)] hover:border-pink-500/40 disabled:opacity-40'
               }`}
             >
               <div className="flex items-center justify-between mb-1">
                 {(characterAge ?? 18) < 16 ? (
-                  <Lock className="w-4 h-4 text-slate-500" />
+                  <Lock className="w-4 h-4 text-slate-400" />
                 ) : (
-                  <Heart className="w-4 h-4 text-rose-400" />
+                  <Heart className="w-4 h-4 text-rose-500" />
                 )}
-                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">1 AP</span>
               </div>
-              <div className="text-xs font-bold text-white">Hẹn Hò Gặp Gỡ</div>
+              <div className="text-xs font-bold text-[var(--text-primary)]">Hẹn Hò Gặp Gỡ</div>
               <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
                 {(characterAge ?? 18) < 16
                   ? `Khóa: Cần 16+ tuổi (Hiện tại: ${characterAge} tuổi)`
@@ -156,21 +156,21 @@ export default function FamilyDetailModal({
             <button
               disabled={loadingAction !== null || actionPoints < 2 || cash < 10000 || (characterAge ?? 18) < 18}
               onClick={() => executeAction('marry', 2, 10000)}
-              className={`p-3 rounded-2xl bg-slate-950 border text-left transition active:scale-95 ${
+              className={`p-3 rounded-2xl bg-[var(--bg-card-subtle)] border text-left transition active:scale-95 ${
                 (characterAge ?? 18) < 18
-                  ? 'border-slate-800 opacity-50 cursor-not-allowed'
-                  : 'border-slate-800 hover:border-pink-500/40 disabled:opacity-40'
+                  ? 'border-[var(--border-subtle)] opacity-50 cursor-not-allowed'
+                  : 'border-[var(--border-subtle)] hover:border-pink-500/40 disabled:opacity-40'
               }`}
             >
               <div className="flex items-center justify-between mb-1">
                 {(characterAge ?? 18) < 18 ? (
-                  <Lock className="w-4 h-4 text-slate-500" />
+                  <Lock className="w-4 h-4 text-slate-400" />
                 ) : (
-                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <Sparkles className="w-4 h-4 text-amber-500" />
                 )}
-                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">2 AP</span>
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">2 AP</span>
               </div>
-              <div className="text-xs font-bold text-white">Tổ Chức Hôn Lễ</div>
+              <div className="text-xs font-bold text-[var(--text-primary)]">Tổ Chức Hôn Lễ</div>
               <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
                 {(characterAge ?? 18) < 18
                   ? `Khóa: Cần 18+ tuổi (Hiện tại: ${characterAge} tuổi)`
@@ -184,21 +184,21 @@ export default function FamilyDetailModal({
             <button
               disabled={loadingAction !== null || actionPoints < 2 || cash < 8000 || (characterAge ?? 18) < 18 || (characterAge ?? 18) > 55}
               onClick={() => executeAction('have_child', 2, 8000)}
-              className={`p-3 rounded-2xl bg-slate-950 border text-left transition active:scale-95 ${
+              className={`p-3 rounded-2xl bg-[var(--bg-card-subtle)] border text-left transition active:scale-95 ${
                 (characterAge ?? 18) < 18
-                  ? 'border-slate-800 opacity-50 cursor-not-allowed'
-                  : 'border-slate-800 hover:border-pink-500/40 disabled:opacity-40'
+                  ? 'border-[var(--border-subtle)] opacity-50 cursor-not-allowed'
+                  : 'border-[var(--border-subtle)] hover:border-pink-500/40 disabled:opacity-40'
               }`}
             >
               <div className="flex items-center justify-between mb-1">
                 {(characterAge ?? 18) < 18 ? (
-                  <Lock className="w-4 h-4 text-slate-500" />
+                  <Lock className="w-4 h-4 text-slate-400" />
                 ) : (
-                  <Baby className="w-4 h-4 text-cyan-400" />
+                  <Baby className="w-4 h-4 text-cyan-500" />
                 )}
-                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">2 AP</span>
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">2 AP</span>
               </div>
-              <div className="text-xs font-bold text-white">Sinh Con Kế Thừa</div>
+              <div className="text-xs font-bold text-[var(--text-primary)]">Sinh Con Kế Thừa</div>
               <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
                 {(characterAge ?? 18) < 18
                   ? `Khóa: Cần 18+ tuổi (Hiện tại: ${characterAge} tuổi)`
@@ -215,10 +215,10 @@ export default function FamilyDetailModal({
               className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] hover:border-pink-500/40 text-left transition active:scale-95 disabled:opacity-40"
             >
               <div className="flex items-center justify-between mb-1">
-                <Sparkles className="w-4 h-4 text-emerald-400" />
-                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">1 AP</span>
+                <Sparkles className="w-4 h-4 text-emerald-500" />
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">1 AP</span>
               </div>
-              <div className="text-xs font-bold text-white">Dạy Dỗ Con Cái</div>
+              <div className="text-xs font-bold text-[var(--text-primary)]">Dạy Dỗ Con Cái</div>
               <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">Chi $2.000 (Tình cảm +20)</div>
             </button>
           )}
@@ -252,7 +252,7 @@ export default function FamilyDetailModal({
                     </div>
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h4 className="text-sm font-bold text-white">{rel.name}</h4>
+                        <h4 className="text-sm font-bold text-[var(--text-primary)]">{rel.name}</h4>
                         <span className={`text-[12px] px-2 py-0.5 rounded-full font-medium ${
                           rel.type === 'spouse' ? 'bg-pink-500/20 text-pink-300 border border-pink-500/30' :
                           rel.type === 'child' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' :

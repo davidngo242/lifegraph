@@ -1246,3 +1246,36 @@ Trong `frontend/app/globals.css`, hệ thống trang bị bộ thích ứng tự
 * Mọi bề mặt `.bg-slate-950` và `.bg-slate-900` dạng container/card tự động chuyển thành `#ffffff` kèm viền `#e2e8f0` và đổ bóng mềm.
 * Các bề mặt thứ cấp `.bg-slate-900/40`, `.bg-slate-950/30` tự động chuyển thành `#f1f5f9`.
 * Các huy hiệu RPG thẻ bài dạng thuốc viên (`.bg-amber-950/40`, `.bg-emerald-950/40`) tự động chuyển thành nền nhạt tương phản cao (`#fef3c7`, `#d1fae5`) với chữ đậm đà, giữ trọn vẹn bản sắc visual RPG nhưng không gây chói mắt.
+
+---
+
+## 30. Chuẩn Hóa Banner Danh Tính Nhân Vật & Header Tinh Gọn (CharacterHeroBanner & Macro Header v2.0)
+
+Nhằm thực thi triệt để chỉ đạo của Sếp về việc triệt tiêu rác thị giác (Decluttering), quy hoạch lại khối thông tin và xóa bỏ các thông số khó hiểu, hệ thống banner danh tính nhân vật (`CharacterHeroBanner.tsx`) và thanh điều hướng cấp cao (`HeaderMacroWeather.tsx`) tuân thủ nghiêm ngặt các quy chuẩn sau:
+
+### 30.1. Cột Trái: Cụm Danh Tính Cốt Lõi (Character Identity Hub)
+1. **Di dời Cấp Độ RPG (Level Capsule) sang bên nhân vật:**
+   - Cấp độ (`Lv.{level} {Title}`, thanh EXP, `+{SP} SP`) được đặt ở hàng trên cùng của khối thông tin bên trái (ngay phía trên tên nhân vật).
+   - Tên nhân vật hiển thị nổi bật với cỡ chữ `text-xl md:text-2xl font-black`, đi kèm Huy hiệu Tầng Lớp Xã Hội (`socialStatus.title` e.g. *Khởi Đầu Bĩ Cực*, *Cần Lao Tự Lập*, *Tinh Hoa Tài Phiệt*).
+2. **Xuống dòng riêng biệt cho Nhà Ở (Housing):**
+   - Vị trí địa lý (`📍 {character.current_city || nationality}`) nằm ở hàng 4.
+   - Nơi ở (`🏠 {housing.name}`) **bắt buộc xuống một dòng riêng biệt** ở hàng 5, sử dụng màu hổ phách ấm (`text-amber-700 dark:text-amber-300 font-semibold`), không gộp chung với dấu chấm ngăn cách để đảm bảo độ rõ ràng và trực quan tối đa.
+3. **Triệt tiêu nhãn kỹ thuật (Watermark):**
+   - Loại bỏ hoàn toàn nhãn `STAGE 3D` dưới góc ảnh đại diện để giải phóng không gian thẩm mỹ.
+
+### 30.2. Cột Giữa: Định Hướng Cuộc Đời & Nghề Nghiệp (Zone 2)
+1. **Triệt tiêu trùng lặp:**
+   - Loại bỏ huy hiệu Level và huy hiệu Tầng Lớp Xã Hội ở cột giữa (đã có ở cột trái).
+2. **Quy hoạch 3 phân tầng nội dung thông thoáng:**
+   - **Hàng 1 - Nghề nghiệp & Tâm nguyện:** Huy hiệu nghề nghiệp (`Briefcase` + `occupation`), nhãn đặc thù (*Bán Thần*, *Tâm Nguyện Năm*), và tỷ lệ kỳ vọng thọ (khi tuổi $\ge 70$).
+   - **Hàng 2 - Trọng tâm sinh mệnh & Gen:** Định hướng lứa tuổi (`🎯 Trọng tâm`) song hành cùng danh sách gen di truyền (`🧬 Gen`).
+   - **Hàng 3 - Khát vọng cuộc đời (Life Aspiration):** Thanh tiến độ thanh mảnh với icon mục tiêu, %, và nút thăng hạng khi đạt 100%.
+
+### 30.3. Cột Phải: Sinh Mệnh & Chỉ Số Trọng Yếu (Zone 3 Decluttering)
+1. **Loại bỏ hoàn toàn các thông số gây nhiễu:**
+   - Cắt bỏ các chỉ số gây rối mắt và không rõ mục đích người chơi: `Lão hóa: 1.0x`, `Đột quỵ: <2%`, `Hồi phục: +4 AP`.
+   - Cắt bỏ huy hiệu Karma trùng lặp (`100 KP`) vì đã hiển thị ở thanh trạng thái chính.
+2. **Quy hoạch 2 thanh sinh tồn tương phản cao:**
+   - **Thanh Sinh Lực (HP):** Biểu tượng `❤️ Sinh Lực`, nhãn trạng thái (`Sung mãn` / `Bình thường` / `Nguy kịch`), chỉ số `{vitality}/{maxVitality}`, gradient xanh ngọc dịu mắt.
+   - **Thanh Căng Thẳng (Stress):** Biểu tượng `⚡ Căng Thẳng`, nhãn trạng thái (`Ổn định` / `Căng thẳng` / `Nguy cấp`), chỉ số `{burnout}%`.
+   - **Giai đoạn vòng đời:** Huy hiệu giai đoạn tuổi đời (`🌱 Thời Kỳ Ấu Thơ`...) và Động lực sống (`😊 Tinh Thần: {happiness}%`).

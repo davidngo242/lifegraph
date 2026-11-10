@@ -68,15 +68,15 @@ export default function EmergencyRescueModal({
 
         {/* Debt Crisis Alert Banner if Cash < 0 */}
         {isDebtCrisis && (
-          <div className="mb-4 p-3 rounded-2xl bg-rose-950/60 border border-rose-500/60 text-rose-200 text-xs shadow-inner flex items-center justify-between gap-3 animate-pulse">
+          <div className="mb-4 p-3 rounded-2xl bg-rose-500/15 border border-rose-500/40 text-rose-800 dark:text-rose-200 text-xs shadow-inner flex items-center justify-between gap-3 animate-pulse">
             <div className="flex items-center gap-2">
-              <AlertOctagon className="w-5 h-5 text-rose-400 shrink-0" />
+              <AlertOctagon className="w-5 h-5 text-rose-500 shrink-0" />
               <div>
-                <strong className="text-white block font-sans">BẪY NỢ NGUY NGẬP (ÂM TIỀN MẶT)</strong>
-                <span>Tài khoản hiện tại: <strong className="font-mono text-rose-300">-${Math.abs(cash).toLocaleString()}</strong>. Cần giải cứu cấp tốc để tránh phá sản!</span>
+                <strong className="text-rose-900 dark:text-rose-100 block font-sans">BẪY NỢ NGUY NGẬP (ÂM TIỀN MẶT)</strong>
+                <span>Tài khoản hiện tại: <strong className="font-mono text-rose-700 dark:text-rose-300">-${Math.abs(cash).toLocaleString()}</strong>. Cần giải cứu cấp tốc để tránh phá sản!</span>
               </div>
             </div>
-            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-rose-900 border border-rose-400 text-rose-200 font-bold shrink-0">
+            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-800 dark:text-rose-200 font-bold shrink-0">
               VỠ NỢ
             </span>
           </div>
@@ -165,7 +165,7 @@ export default function EmergencyRescueModal({
             }}
             className={`w-full p-3.5 rounded-2xl border text-left transition flex items-center justify-between group ${
               actionPoints >= 1
-                ? 'bg-emerald-950/40 hover:bg-emerald-900/60 border-emerald-500/40 hover:border-emerald-400 text-white'
+                ? 'bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/40 hover:border-emerald-500 text-[var(--text-primary)]'
                 : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] text-slate-500 opacity-60 cursor-not-allowed'
             }`}
           >
@@ -258,20 +258,20 @@ export default function EmergencyRescueModal({
                   await onDebtRelief('liquidate_personal_items');
                   onClose();
                 }}
-                className="w-full p-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 hover:border-slate-500 text-left transition flex items-center justify-between group"
+                className="w-full p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-[var(--border-highlight)] text-left transition flex items-center justify-between group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-600 flex items-center justify-center text-slate-300 shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-secondary)] shrink-0">
                     <PackageMinus className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs md:text-sm font-bold text-slate-200 flex items-center gap-2">
+                    <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                       <span>Bán Gấp Đồ Đạc Cá Nhân (Liquidate Items)</span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-slate-800 text-emerald-400 border border-slate-600 font-bold">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
                         +$1.200
                       </span>
                     </div>
-                    <div className="text-[11px] text-slate-400">
+                    <div className="text-[11px] text-[var(--text-secondary)]">
                       Thanh lý tài sản cá nhân giải vây tức thì (+ $1.200, +10 Căng thẳng Burnout).
                     </div>
                   </div>

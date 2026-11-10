@@ -198,7 +198,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">🧸</span>
-                    <h3 className="text-sm font-black text-white tracking-wide uppercase">
+                    <h3 className="text-sm font-black text-[var(--text-primary)] tracking-wide uppercase">
                       4 Đồ Chơi Sinh Mệnh Bạn Cần Nhìn Mỗi Năm
                     </h3>
                   </div>
@@ -210,97 +210,97 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                   
                   {/* Khối 1: Năng Lượng (AP) */}
-                  <div className="p-4 rounded-3xl bg-gradient-to-b from-amber-950/30 to-slate-900/90 border-2 border-amber-500/40 hover:border-amber-400 transition-all duration-200 shadow-lg flex flex-col justify-between group">
+                  <div className="p-4 rounded-3xl bg-gradient-to-b from-amber-500/10 to-[var(--bg-card-subtle)] border-2 border-amber-500/40 hover:border-amber-500 transition-all duration-200 shadow-sm flex flex-col justify-between group">
                     <div>
                       <div className="flex items-center justify-between mb-2.5">
-                        <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
+                        <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
                           ⚡
                         </div>
-                        <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                        <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30">
                           Điểm AP
                         </span>
                       </div>
-                      <h4 className="text-base font-black text-white mb-1.5 flex items-center gap-1.5">
+                      <h4 className="text-base font-black text-[var(--text-primary)] mb-1.5 flex items-center gap-1.5">
                         <span>Tia Sét Năng Lượng</span>
                       </h4>
                       <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-medium">
                         Mỗi năm có 3-4 tia sét. Dùng tia sét để làm việc, đi chơi, khám bệnh!
                       </p>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-amber-500/20 text-[11px] text-amber-300 font-semibold flex items-center gap-1.5">
-                      <Lightbulb className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+                    <div className="mt-4 pt-3 border-t border-amber-500/20 text-[11px] text-amber-700 dark:text-amber-300 font-semibold flex items-center gap-1.5">
+                      <Lightbulb className="w-3.5 h-3.5 shrink-0 text-amber-500" />
                       <span>Thừa sét cuối năm tự biến thành máu!</span>
                     </div>
                   </div>
 
                   {/* Khối 2: Trái Tim (Sức Khỏe / HP) */}
-                  <div className="p-4 rounded-3xl bg-gradient-to-b from-rose-950/30 to-slate-900/90 border-2 border-rose-500/40 hover:border-rose-400 transition-all duration-200 shadow-lg flex flex-col justify-between group">
+                  <div className="p-4 rounded-3xl bg-gradient-to-b from-rose-500/10 to-[var(--bg-card-subtle)] border-2 border-rose-500/40 hover:border-rose-500 transition-all duration-200 shadow-sm flex flex-col justify-between group">
                     <div>
                       <div className="flex items-center justify-between mb-2.5">
-                        <div className="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-300 border border-rose-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
+                        <div className="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
                           ❤️
                         </div>
-                        <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                        <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-500/30">
                           Sống Còn
                         </span>
                       </div>
-                      <h4 className="text-base font-black text-white mb-1.5 flex items-center gap-1.5">
+                      <h4 className="text-base font-black text-[var(--text-primary)] mb-1.5 flex items-center gap-1.5">
                         <span>Trái Tim Khỏe Mạnh</span>
                       </h4>
                       <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-medium">
                         Trái tim đập thình thịch! Hết tim là ngủm, nhớ ăn ngon ngủ kỹ và đi bác sĩ.
                       </p>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-rose-500/20 text-[11px] text-rose-300 font-semibold flex items-center gap-1.5">
-                      <Heart className="w-3.5 h-3.5 shrink-0 text-rose-400 fill-rose-400/40" />
+                    <div className="mt-4 pt-3 border-t border-rose-500/20 text-[11px] text-rose-700 dark:text-rose-300 font-semibold flex items-center gap-1.5">
+                      <Heart className="w-3.5 h-3.5 shrink-0 text-rose-500 fill-rose-500/40" />
                       <span>Hết máu là Game Over ngay!</span>
                     </div>
                   </div>
 
                   {/* Khối 3: Ngọn Lửa (Căng Thẳng / Burnout) */}
-                  <div className="p-4 rounded-3xl bg-gradient-to-b from-orange-950/30 to-slate-900/90 border-2 border-orange-500/40 hover:border-orange-400 transition-all duration-200 shadow-lg flex flex-col justify-between group">
+                  <div className="p-4 rounded-3xl bg-gradient-to-b from-orange-500/10 to-[var(--bg-card-subtle)] border-2 border-orange-500/40 hover:border-orange-500 transition-all duration-200 shadow-sm flex flex-col justify-between group">
                     <div>
                       <div className="flex items-center justify-between mb-2.5">
-                        <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-300 border border-orange-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
+                        <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-700 dark:text-orange-300 border border-orange-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
                           💥
                         </div>
-                        <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/30">
+                        <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-700 dark:text-orange-300 border border-orange-500/30">
                           Mệt Mỏi
                         </span>
                       </div>
-                      <h4 className="text-base font-black text-white mb-1.5 flex items-center gap-1.5">
+                      <h4 className="text-base font-black text-[var(--text-primary)] mb-1.5 flex items-center gap-1.5">
                         <span>Ngọn Lửa Áp Lực</span>
                       </h4>
                       <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-medium">
                         Lửa bốc cao quá là mệt xỉu! Đi uống cà phê, nghỉ ngơi để dập lửa.
                       </p>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-orange-500/20 text-[11px] text-orange-300 font-semibold flex items-center gap-1.5">
-                      <Flame className="w-3.5 h-3.5 shrink-0 text-orange-400" />
+                    <div className="mt-4 pt-3 border-t border-orange-500/20 text-[11px] text-orange-700 dark:text-orange-300 font-semibold flex items-center gap-1.5">
+                      <Flame className="w-3.5 h-3.5 shrink-0 text-orange-500" />
                       <span>Lửa trên 80% sẽ thiêu rụi trái tim!</span>
                     </div>
                   </div>
 
                   {/* Khối 4: Túi Tiền (Tiền Bạc) */}
-                  <div className="p-4 rounded-3xl bg-gradient-to-b from-emerald-950/30 to-slate-900/90 border-2 border-emerald-500/40 hover:border-emerald-400 transition-all duration-200 shadow-lg flex flex-col justify-between group">
+                  <div className="p-4 rounded-3xl bg-gradient-to-b from-emerald-500/10 to-[var(--bg-card-subtle)] border-2 border-emerald-500/40 hover:border-emerald-500 transition-all duration-200 shadow-sm flex flex-col justify-between group">
                     <div>
                       <div className="flex items-center justify-between mb-2.5">
-                        <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
                           💰
                         </div>
-                        <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
                           Tài Sản
                         </span>
                       </div>
-                      <h4 className="text-base font-black text-white mb-1.5 flex items-center gap-1.5">
+                      <h4 className="text-base font-black text-[var(--text-primary)] mb-1.5 flex items-center gap-1.5">
                         <span>Túi Tiền Tiết Kiệm</span>
                       </h4>
                       <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-medium">
                         Đi làm để gom tiền mua nhà to, mua đồ chơi và chăm sóc ba mẹ.
                       </p>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-emerald-500/20 text-[11px] text-emerald-300 font-semibold flex items-center gap-1.5">
-                      <Coins className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+                    <div className="mt-4 pt-3 border-t border-emerald-500/20 text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold flex items-center gap-1.5">
+                      <Coins className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
                       <span>Mua nhà xịn để cơ thể khỏe re!</span>
                     </div>
                   </div>
@@ -309,33 +309,33 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
               </div>
 
               {/* 3. 4 MẸO VÀNG DỄ NHỚ CHO NGƯỜI MỚI BẮT ĐẦU */}
-              <div className="p-4 rounded-3xl bg-slate-900/70 border border-slate-800">
-                <h4 className="text-xs font-black text-[var(--text-secondary)] uppercase tracking-wider mb-3 flex items-center gap-2">
+              <div className="p-4 rounded-3xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+                <h4 className="text-xs font-black text-[var(--text-primary)] uppercase tracking-wider mb-3 flex items-center gap-2">
                   <span>💡</span> 4 Bí Quyết Dễ Ẹc Để Luôn Chiến Thắng
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                  <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-slate-950/60 border border-slate-800/80">
+                  <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                     <span className="text-lg">🏡</span>
                     <span className="text-[var(--text-secondary)]">
-                      <strong>Nâng cấp chỗ ở:</strong> Đổi phòng trọ lên căn hộ để ngủ ngon và ít bệnh.
+                      <strong className="text-[var(--text-primary)]">Nâng cấp chỗ ở:</strong> Đổi phòng trọ lên căn hộ để ngủ ngon và ít bệnh.
                     </span>
                   </div>
-                  <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-slate-950/60 border border-slate-800/80">
+                  <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                     <span className="text-lg">☕</span>
                     <span className="text-[var(--text-secondary)]">
-                      <strong>Thư giãn đúng lúc:</strong> Thấy lửa đỏ &gt; 80% là phải đi dưỡng sinh ngay.
+                      <strong className="text-[var(--text-primary)]">Thư giãn đúng lúc:</strong> Thấy lửa đỏ &gt; 80% là phải đi dưỡng sinh ngay.
                     </span>
                   </div>
-                  <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-slate-950/60 border border-slate-800/80">
+                  <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                     <span className="text-lg">🤝</span>
                     <span className="text-[var(--text-secondary)]">
-                      <strong>Kết thân với bạn bè:</strong> Khi hoạn nạn bạn bè sẽ cứu nguy cho bạn.
+                      <strong className="text-[var(--text-primary)]">Kết thân với bạn bè:</strong> Khi hoạn nạn bạn bè sẽ cứu nguy cho bạn.
                     </span>
                   </div>
-                  <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-slate-950/60 border border-slate-800/80">
+                  <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                     <span className="text-lg">👶</span>
                     <span className="text-[var(--text-secondary)]">
-                      <strong>Sinh con nối dõi:</strong> Về già để lại nhà cửa cho con cháu chơi tiếp!
+                      <strong className="text-[var(--text-primary)]">Sinh con nối dõi:</strong> Về già để lại nhà cửa cho con cháu chơi tiếp!
                     </span>
                   </div>
                 </div>
@@ -409,9 +409,9 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
               {/* TAB 1: CÂY KỸ NĂNG */}
               {advancedTab === 'rpg' && (
                 <div className="space-y-4 animate-in fade-in duration-150">
-                  <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
-                    <h3 className="font-bold text-white text-sm mb-1.5 flex items-center gap-2">
-                      <TrendingUp className="w-4 h-4 text-emerald-400" /> Hệ Thống Điểm Kỹ Năng (SP) & Tăng Cấp (EXP)
+                  <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+                    <h3 className="font-bold text-[var(--text-primary)] text-sm mb-1.5 flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4 text-emerald-500" /> Hệ Thống Điểm Kỹ Năng (SP) & Tăng Cấp (EXP)
                     </h3>
                     <p className="text-xs text-[var(--text-secondary)]">
                       Mỗi khi thanh EXP đầy, bạn nhận <strong>+1 SP</strong> để nâng cấp vào 3 nhánh kỹ năng tối thượng.
@@ -420,43 +420,43 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
 
                   <div className="space-y-3">
                     {/* Nhánh 1: Wealth */}
-                    <div className="p-3.5 rounded-2xl bg-amber-950/20 border border-amber-500/30">
-                      <h4 className="font-bold text-amber-300 text-xs sm:text-sm flex items-center gap-2 mb-2">
+                    <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30">
+                      <h4 className="font-bold text-amber-700 dark:text-amber-300 text-xs sm:text-sm flex items-center gap-2 mb-2">
                         💼 Nhánh 1: Thương Trường & Tài Phiệt (Wealth)
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                        <div className="p-2.5 rounded-xl bg-slate-950/70 border border-amber-900/40">
-                          <div className="font-bold text-white mb-0.5">Tier 1: Mắt Thần Định Giá (1 SP)</div>
+                        <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                          <div className="font-bold text-[var(--text-primary)] mb-0.5">Tier 1: Mắt Thần Định Giá (1 SP)</div>
                           <div className="text-[var(--text-secondary)] text-[11px]">Giảm 10% giá mua BĐS & cổ phiếu.</div>
                         </div>
-                        <div className="p-2.5 rounded-xl bg-slate-950/70 border border-amber-900/40">
-                          <div className="font-bold text-white mb-0.5">Tier 2: Đàm Phán Khắc Nghiệt (2 SP)</div>
+                        <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                          <div className="font-bold text-[var(--text-primary)] mb-0.5">Tier 2: Đàm Phán Khắc Nghiệt (2 SP)</div>
                           <div className="text-[var(--text-secondary)] text-[11px]">Cày việc nhận thêm +35% tiền mặt.</div>
                         </div>
-                        <div className="p-2.5 rounded-xl bg-slate-950/70 border border-amber-900/40">
-                          <div className="font-bold text-amber-300 mb-0.5">Tier 3: Cỗ Máy Dòng Tiền (3 SP)</div>
-                          <div className="text-amber-200 text-[11px] font-semibold">Tự động sinh +$25.000 USD/năm thụ động.</div>
+                        <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                          <div className="font-bold text-amber-700 dark:text-amber-300 mb-0.5">Tier 3: Cỗ Máy Dòng Tiền (3 SP)</div>
+                          <div className="text-amber-600 dark:text-amber-400 text-[11px] font-semibold">Tự động sinh +$25.000 USD/năm thụ động.</div>
                         </div>
                       </div>
                     </div>
 
                     {/* Nhánh 2: Social */}
-                    <div className="p-3.5 rounded-2xl bg-sky-950/20 border border-sky-500/30">
-                      <h4 className="font-bold text-sky-300 text-xs sm:text-sm flex items-center gap-2 mb-2">
+                    <div className="p-3.5 rounded-2xl bg-sky-500/10 border border-sky-500/30">
+                      <h4 className="font-bold text-sky-700 dark:text-sky-300 text-xs sm:text-sm flex items-center gap-2 mb-2">
                         🤝 Nhánh 2: Uy Quyền & Nhân Mạch (Social)
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                        <div className="p-2.5 rounded-xl bg-slate-950/70 border border-sky-900/40">
-                          <div className="font-bold text-white mb-0.5">Tier 1: Hào Quang Cuốn Hút (1 SP)</div>
+                        <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                          <div className="font-bold text-[var(--text-primary)] mb-0.5">Tier 1: Hào Quang Cuốn Hút (1 SP)</div>
                           <div className="text-[var(--text-secondary)] text-[11px]">x2 tốc độ tăng hảo cảm với NPC Quý nhân.</div>
                         </div>
-                        <div className="p-2.5 rounded-xl bg-slate-950/70 border border-sky-900/40">
-                          <div className="font-bold text-white mb-0.5">Tier 2: Mượn Gió Bẻ Măng (2 SP)</div>
+                        <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                          <div className="font-bold text-[var(--text-primary)] mb-0.5">Tier 2: Mượn Gió Bẻ Măng (2 SP)</div>
                           <div className="text-[var(--text-secondary)] text-[11px]">Kích hoạt quyền nhờ cậy đặc quyền cứu nguy.</div>
                         </div>
-                        <div className="p-2.5 rounded-xl bg-slate-950/70 border border-sky-900/40">
-                          <div className="font-bold text-sky-300 mb-0.5">Tier 3: Đế Chế Nhân Mạch (3 SP)</div>
-                          <div className="text-sky-200 text-[11px] font-semibold">Con cháu thừa kế sẵn mạng lưới quý nhân.</div>
+                        <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                          <div className="font-bold text-sky-700 dark:text-sky-300 mb-0.5">Tier 3: Đế Chế Nhân Mạch (3 SP)</div>
+                          <div className="text-sky-600 dark:text-sky-400 text-[11px] font-semibold">Con cháu thừa kế sẵn mạng lưới quý nhân.</div>
                         </div>
                       </div>
                     </div>
@@ -488,9 +488,9 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
               {/* TAB 2: QUÝ NHÂN */}
               {advancedTab === 'npcs' && (
                 <div className="space-y-3.5 animate-in fade-in duration-150">
-                  <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
-                    <h3 className="font-bold text-white text-sm mb-1 flex items-center gap-2">
-                      <Users className="w-4 h-4 text-pink-400" /> 4 Hình Mẫu Quý Nhân Đồng Hành
+                  <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+                    <h3 className="font-bold text-[var(--text-primary)] text-sm mb-1 flex items-center gap-2">
+                      <Users className="w-4 h-4 text-pink-500" /> 4 Hình Mẫu Quý Nhân Đồng Hành
                     </h3>
                     <p className="text-xs text-[var(--text-secondary)]">
                       Tương tác tăng Hảo cảm lên <strong>Cấp 3</strong> để mở khóa đặc quyền giải cứu sinh tử.
@@ -524,16 +524,16 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                         favor: "⭐ Cấp 3: Vận hành dự án thay bạn, sinh +$8.000 lợi nhuận."
                       }
                     ].map(npc => (
-                      <div key={npc.name} className="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-800 flex gap-3">
-                        <div className="w-11 h-11 rounded-2xl bg-slate-800 flex items-center justify-center text-2xl shrink-0 border border-slate-700">
+                      <div key={npc.name} className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex gap-3">
+                        <div className="w-11 h-11 rounded-2xl bg-[var(--bg-card)] flex items-center justify-center text-2xl shrink-0 border border-[var(--border-subtle)]">
                           {npc.icon}
                         </div>
                         <div>
                           <div className="flex items-center gap-2 mb-0.5">
-                            <span className="font-bold text-white text-xs sm:text-sm">{npc.name}</span>
+                            <span className="font-bold text-[var(--text-primary)] text-xs sm:text-sm">{npc.name}</span>
                           </div>
-                          <div className="text-[10px] text-teal-600 dark:text-teal-300 font-mono mb-1">{npc.role}</div>
-                          <div className="text-[11px] text-amber-300 font-medium bg-amber-950/30 p-1.5 rounded-lg border border-amber-900/30">
+                          <div className="text-[10px] text-teal-700 dark:text-teal-300 font-mono mb-1">{npc.role}</div>
+                          <div className="text-[11px] text-amber-800 dark:text-amber-300 font-medium bg-amber-500/15 p-1.5 rounded-lg border border-amber-500/30">
                             {npc.favor}
                           </div>
                         </div>
@@ -546,9 +546,9 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
               {/* TAB 3: ĐẦU TƯ & TÍCH SẢN */}
               {advancedTab === 'economy' && (
                 <div className="space-y-3.5 animate-in fade-in duration-150">
-                  <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/30">
-                    <h3 className="font-bold text-emerald-300 text-sm mb-1 flex items-center gap-2">
-                      <DollarSign className="w-4 h-4 text-emerald-400" /> Chiến Lược Tích Sản & Quản Trị Dòng Tiền
+                  <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30">
+                    <h3 className="font-bold text-emerald-800 dark:text-emerald-300 text-sm mb-1 flex items-center gap-2">
+                      <DollarSign className="w-4 h-4 text-emerald-500" /> Chiến Lược Tích Sản & Quản Trị Dòng Tiền
                     </h3>
                     <p className="text-xs text-[var(--text-secondary)]">
                       Nếu tiền mặt âm (&lt; $0), bạn bị tính lãi nợ <strong>4.5%/năm</strong> và tăng <strong>+25% Burnout</strong>.
@@ -556,8 +556,8 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-1.5">
-                      <h4 className="font-bold text-white text-xs flex items-center gap-1.5">
+                    <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] space-y-1.5">
+                      <h4 className="font-bold text-[var(--text-primary)] text-xs flex items-center gap-1.5">
                         <span>1. Cày Việc Chủ Động (18 - 35t)</span>
                       </h4>
                       <p className="text-xs text-[var(--text-secondary)]">
@@ -565,8 +565,8 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       </p>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-1.5">
-                      <h4 className="font-bold text-white text-xs flex items-center gap-1.5">
+                    <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] space-y-1.5">
+                      <h4 className="font-bold text-[var(--text-primary)] text-xs flex items-center gap-1.5">
                         <span>2. Cổ Tức BĐS & Cổ Phiếu</span>
                       </h4>
                       <p className="text-xs text-[var(--text-secondary)]">
@@ -574,8 +574,8 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       </p>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-1.5">
-                      <h4 className="font-bold text-white text-xs flex items-center gap-1.5">
+                    <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] space-y-1.5">
+                      <h4 className="font-bold text-[var(--text-primary)] text-xs flex items-center gap-1.5">
                         <span>3. Chi Phí Gia Đình & Con Cái</span>
                       </h4>
                       <p className="text-xs text-[var(--text-secondary)]">

@@ -217,8 +217,8 @@ export default function AncestralMemorialModal({
           onClick={() => setFilter('deceased')}
           className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
             filter === 'deceased'
-              ? 'bg-slate-700 text-white'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+              ? 'bg-amber-600 text-white dark:bg-amber-500 dark:text-slate-950 font-bold'
+              : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)]'
           }`}
         >
           Đã Viên Tịch ({lineage.length - nirvanaCount})
@@ -228,7 +228,7 @@ export default function AncestralMemorialModal({
       {/* 4. LINEAGE ANCESTOR CARDS */}
       <div className="space-y-4">
         {filteredLineage.length === 0 ? (
-          <div className="text-center p-8 rounded-3xl bg-slate-900/50 border border-slate-800 text-slate-400">
+          <div className="text-center p-8 rounded-3xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)]">
             Chưa có tiền nhân nào trong danh mục này.
           </div>
         ) : (
@@ -310,7 +310,7 @@ export default function AncestralMemorialModal({
 
                 {/* Ancestral Epitaph Quote */}
                 {item.epitaph_quote && (
-                  <div className="mt-3 p-3 rounded-2xl bg-slate-950/70 border border-slate-800/80 text-xs text-slate-300 font-sans italic leading-relaxed">
+                  <div className="mt-3 p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] font-sans italic leading-relaxed">
                     "{item.epitaph_quote}"
                   </div>
                 )}

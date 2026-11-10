@@ -386,12 +386,12 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-5 bg-black/90 backdrop-blur-xl animate-in fade-in">
-      <div className="relative w-full max-w-xl bg-slate-950 border-2 border-amber-500/60 rounded-3xl p-5 md:p-6 shadow-[0_0_50px_rgba(245,158,11,0.25)] flex flex-col overflow-hidden max-h-[95vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-5 bg-black/85 backdrop-blur-xl animate-in fade-in">
+      <div className="relative w-full max-w-xl bg-[var(--bg-card)] border-2 border-amber-500/60 rounded-3xl p-5 md:p-6 shadow-2xl flex flex-col overflow-hidden max-h-[95vh] text-[var(--text-primary)]">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition z-20"
+          className="absolute top-4 right-4 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition z-20"
         >
           <X className="w-4 h-4" />
         </button>
@@ -401,13 +401,13 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
         <div className="absolute bottom-0 right-1/4 w-80 h-32 bg-teal-500/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* Tab Navigation Switcher (Quyết định 4) */}
-        <div className="flex items-center gap-2 mb-4 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800/80 shrink-0">
+        <div className="flex items-center gap-2 mb-4 bg-[var(--bg-card-subtle)] p-1.5 rounded-2xl border border-[var(--border-subtle)] shrink-0">
           <button
             onClick={() => setActiveTab('tarot')}
             className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
               activeTab === 'tarot'
-                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/25'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black shadow-md shadow-amber-500/25'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)]'
             }`}
           >
             <span>🎴</span>
@@ -417,8 +417,8 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
             onClick={() => setActiveTab('hall_of_fame')}
             className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
               activeTab === 'hall_of_fame'
-                ? 'bg-gradient-to-r from-yellow-500 via-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/25'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                ? 'bg-gradient-to-r from-yellow-500 via-amber-500 to-amber-600 text-slate-950 font-black shadow-md shadow-amber-500/25'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)]'
             }`}
           >
             <Trophy className="w-3.5 h-3.5" />
@@ -433,14 +433,14 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
             <div className="p-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold text-xs normal-case tracking-normal mb-1.5 inline-block px-4">
               👑 {epithet}
             </div>
-            <h2 className="text-2xl md:text-3xl font-sans font-bold text-white tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-sans font-bold text-[var(--text-primary)] tracking-tight">
               {name}
             </h2>
-            <p className="text-xs text-slate-400 flex items-center justify-center gap-1.5 mt-0.5">
-              <MapPin className="w-3.5 h-3.5 text-rose-400" />
+            <p className="text-xs text-[var(--text-secondary)] flex items-center justify-center gap-1.5 mt-0.5">
+              <MapPin className="w-3.5 h-3.5 text-rose-500" />
               <span>{currentCity} ({nationality})</span>
               <span>•</span>
-              <span className="text-amber-400 font-bold">{deathCause ? `Hưởng thọ ${age} tuổi` : `Đang sống (${age} tuổi)`}</span>
+              <span className="text-amber-700 dark:text-amber-400 font-bold">{deathCause ? `Hưởng thọ ${age} tuổi` : `Đang sống (${age} tuổi)`}</span>
             </p>
           </div>
 
@@ -448,43 +448,43 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
             <>
               {/* 4 Stats Quad */}
               <div className="grid grid-cols-2 gap-2.5">
-                <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
-                  <span className="text-[12px] text-slate-400 block normal-case tracking-normal">Tiền Tích Lũy</span>
-                  <span className="text-sm md:text-base font-bold text-emerald-400 font-sans tabular-nums">
+                <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+                  <span className="text-[12px] text-[var(--text-secondary)] block normal-case tracking-normal">Tiền Tích Lũy</span>
+                  <span className="text-sm md:text-base font-bold text-emerald-700 dark:text-emerald-400 font-sans tabular-nums">
                     ${cash.toLocaleString()}
                   </span>
                 </div>
-                <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
-                  <span className="text-[12px] text-slate-400 block normal-case tracking-normal">Nghiệp Lực</span>
-                  <span className="text-sm md:text-base font-bold text-amber-500 font-sans tabular-nums">
+                <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+                  <span className="text-[12px] text-[var(--text-secondary)] block normal-case tracking-normal">Nghiệp Lực</span>
+                  <span className="text-sm md:text-base font-bold text-amber-700 dark:text-amber-500 font-sans tabular-nums">
                     +{karma} Karma
                   </span>
                 </div>
-                <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
-                  <span className="text-[12px] text-slate-400 block normal-case tracking-normal">Bằng Cấp Kỹ Năng</span>
-                  <span className="text-sm md:text-base font-bold text-sky-400 font-sans tabular-nums">
+                <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+                  <span className="text-[12px] text-[var(--text-secondary)] block normal-case tracking-normal">Bằng Cấp Kỹ Năng</span>
+                  <span className="text-sm md:text-base font-bold text-sky-700 dark:text-sky-400 font-sans tabular-nums">
                     ★ {totalSkillsLevel}/12 Cấp
                   </span>
                 </div>
-                <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800">
-                  <span className="text-[12px] text-slate-400 block normal-case tracking-normal">Hậu Duệ Gia Tộc</span>
-                  <span className="text-sm md:text-base font-bold text-rose-400 font-sans tabular-nums">
+                <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+                  <span className="text-[12px] text-[var(--text-secondary)] block normal-case tracking-normal">Hậu Duệ Gia Tộc</span>
+                  <span className="text-sm md:text-base font-bold text-rose-700 dark:text-rose-400 font-sans tabular-nums">
                     {relationships.length} Người
                   </span>
                 </div>
               </div>
 
               {/* 3 Defining Moments */}
-              <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 space-y-2">
-                <div className="text-[12px] font-bold text-amber-400 normal-case tracking-normal flex items-center gap-1.5">
+              <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] space-y-2">
+                <div className="text-[12px] font-bold text-amber-700 dark:text-amber-400 normal-case tracking-normal flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5" /> Ba Cột Mốc Định Mệnh:
                 </div>
                 {topMoments.map((m, idx) => (
-                  <div key={idx} className="p-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs flex items-start gap-2">
-                    <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-sky-950 text-sky-300 font-bold shrink-0">
+                  <div key={idx} className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs flex items-start gap-2">
+                    <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-700 dark:text-sky-300 font-bold shrink-0 border border-sky-500/30">
                       {m.age}t
                     </span>
-                    <span className="text-slate-300 text-[12px] leading-snug">{m.text}</span>
+                    <span className="text-[var(--text-secondary)] text-[12px] leading-snug">{m.text}</span>
                   </div>
                 ))}
               </div>
@@ -562,19 +562,19 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-4 pt-3 border-t border-slate-800 flex items-center gap-2.5">
+        <div className="mt-4 pt-3 border-t border-[var(--border-subtle)] flex items-center gap-2.5">
           <button
             onClick={handleCopySummary}
-            className="flex-1 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold text-xs normal-case tracking-normal transition flex items-center justify-center gap-2 active:scale-95"
+            className="flex-1 py-3 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] font-bold text-xs normal-case tracking-normal transition flex items-center justify-center gap-2 active:scale-95"
           >
             {copied ? (
               <>
-                <Check className="w-4 h-4 text-emerald-400" />
-                <span className="text-emerald-400">Đã Sao Chép!</span>
+                <Check className="w-4 h-4 text-emerald-500" />
+                <span className="text-emerald-600 dark:text-emerald-400">Đã Sao Chép!</span>
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4 text-slate-400" />
+                <Copy className="w-4 h-4 text-[var(--text-secondary)]" />
                 <span>{activeTab === 'tarot' ? 'Sao Chép Thẻ Bài' : 'Sao Chép Sổ Vàng'}</span>
               </>
             )}

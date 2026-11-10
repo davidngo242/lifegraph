@@ -50,37 +50,37 @@ export default function AvatarInspectorModal({
   const activeReaction = inspectorReaction || defaultReaction;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-3 sm:p-5 animate-in fade-in select-none">
-      <div className="max-w-4xl w-full bg-slate-950 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl relative flex flex-col gap-4 max-h-[92vh] overflow-y-auto custom-scrollbar">
+    <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-3 sm:p-5 animate-in fade-in select-none">
+      <div className="max-w-4xl w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 sm:p-6 shadow-2xl relative flex flex-col gap-4 max-h-[92vh] overflow-y-auto custom-scrollbar">
         {/* Close Button */}
         <button
           onClick={() => {
             setInspectorReaction(null);
             onClose();
           }}
-          className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition z-20 cursor-pointer"
+          className="absolute top-4 right-4 p-2 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] transition z-20 cursor-pointer"
           title="Đóng phòng kiểm định"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Modal Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-3 gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[var(--border-subtle)] pb-3 gap-3">
           <div>
-            <h3 className="text-base sm:text-lg font-black text-white flex items-center gap-2">
-              <span className="text-amber-400">✨ 3D Champion Studio 360°:</span>
+            <h3 className="text-base sm:text-lg font-black text-[var(--text-primary)] flex items-center gap-2">
+              <span className="text-amber-500">✨ 3D Champion Studio 360°:</span>
               <span>{character.name || 'Nhân Vật'}</span>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-sans tabular-nums font-bold">
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-sans tabular-nums font-bold">
                 {age} Tuổi · {character.gender === 'female' ? 'Nữ' : 'Nam'}
               </span>
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">
               Mô hình 3D Stylized Anime tiếp đất vững chãi trên Bục Ma Pháp Hoàng Kim · Kéo chuột xoay 360° và phóng to thu nhỏ
             </p>
           </div>
 
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-amber-500/30 text-amber-300 text-xs font-bold w-fit shrink-0">
-            <Eye className="w-4 h-4 text-amber-400" />
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-bold w-fit shrink-0">
+            <Eye className="w-4 h-4 text-amber-500" />
             <span>Chế Độ 3D Độc Bản</span>
           </div>
         </div>
@@ -179,14 +179,14 @@ export default function AvatarInspectorModal({
         {/* Emotion & Reaction Trigger Toolbar */}
         <div className="flex flex-col gap-2 pt-1">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               <span>Thử Nghiệm Cử Động Nhân Vật 3D (3D Skeletal Animations):</span>
             </span>
             {inspectorReaction && (
               <button
                 onClick={() => setInspectorReaction(null)}
-                className="text-[11px] text-slate-400 hover:text-white underline cursor-pointer"
+                className="text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] underline cursor-pointer"
               >
                 Đặt lại mặc định
               </button>
@@ -209,13 +209,13 @@ export default function AvatarInspectorModal({
                   onClick={() => setInspectorReaction(anim.id as AvatarReactionType)}
                   className={`px-3 py-2 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-0.5 transition active:scale-95 cursor-pointer ${
                     isSelected
-                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/80 shadow-lg shadow-amber-500/20'
-                      : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:bg-slate-800 hover:text-white'
+                      ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-500/80 shadow-md font-extrabold'
+                      : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:bg-[var(--bg-card)] hover:text-[var(--text-primary)]'
                   }`}
                   title={anim.desc}
                 >
                   <span>{anim.label}</span>
-                  <span className="text-[9.5px] text-slate-400 font-normal">{anim.desc.split(',')[0]}</span>
+                  <span className="text-[9.5px] text-[var(--text-secondary)] font-normal">{anim.desc.split(',')[0]}</span>
                 </button>
               );
             })}

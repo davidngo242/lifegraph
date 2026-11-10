@@ -141,22 +141,22 @@ export default function NPCDialogCard({
   };
 
   return (
-    <div className="bg-slate-900/95 border border-indigo-500/40 rounded-3xl p-5 md:p-6 shadow-2xl relative overflow-hidden backdrop-blur-xl flex flex-col gap-4">
+    <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 md:p-6 shadow-2xl relative overflow-hidden backdrop-blur-xl flex flex-col gap-4">
       
       {/* Top Header & Mode Toggle */}
       <div className="flex items-center justify-between">
-        <span className="text-[12px] font-sans font-bold tracking-wide normal-case px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center gap-1.5">
+        <span className="text-[12px] font-sans font-bold tracking-wide normal-case px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-500/40 flex items-center gap-1.5">
           <Users className="w-3.5 h-3.5" /> Sân Khấu Đối Thoại Nhân Vật
         </span>
 
         {/* Tab switch */}
-        <div className="flex items-center bg-slate-950/80 p-0.5 rounded-xl border border-slate-800 text-[12px]">
+        <div className="flex items-center bg-[var(--bg-card-subtle)] p-0.5 rounded-xl border border-[var(--border-subtle)] text-[12px]">
           <button
             onClick={() => { setActiveTab('dialogue'); setCustomResult(null); }}
             className={`px-2.5 py-1 rounded-lg font-medium transition ${
               activeTab === 'dialogue'
                 ? 'bg-indigo-600 text-white shadow-sm font-bold'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             💬 Phản Hồi Có Sẵn
@@ -176,16 +176,16 @@ export default function NPCDialogCard({
       </div>
 
       {/* Split Duel Faces Header */}
-      <div className="grid grid-cols-2 gap-3 p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800">
+      <div className="grid grid-cols-2 gap-3 p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
         {/* Left Side: Player */}
-        <div className="flex items-center gap-3 pr-2 border-r border-slate-800">
-          <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden border border-slate-700 shrink-0 bg-slate-900 shadow-md">
+        <div className="flex items-center gap-3 pr-2 border-r border-[var(--border-subtle)]">
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden border border-[var(--border-subtle)] shrink-0 bg-[var(--bg-card)] shadow-md">
             <img src={characterVisuals?.portrait_url || '/placeholder.png'} alt="You" className="w-full h-full object-cover" />
           </div>
           <div className="min-w-0">
-            <div className="text-[12px] font-sans tabular-nums text-indigo-400 font-bold normal-case truncate">BẠN</div>
-            <div className="text-xs md:text-sm font-bold text-white truncate">{characterName}</div>
-            <div className="text-[12px] text-slate-400 font-sans">{characterAge} tuổi</div>
+            <div className="text-[12px] font-sans tabular-nums text-indigo-600 dark:text-indigo-400 font-bold normal-case truncate">BẠN</div>
+            <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] truncate">{characterName}</div>
+            <div className="text-[12px] text-[var(--text-secondary)] font-sans">{characterAge} tuổi</div>
           </div>
         </div>
 
@@ -232,15 +232,15 @@ export default function NPCDialogCard({
                 onClick={() => handleOptionClick(option, idx)}
                 className={`w-full text-left p-3 rounded-2xl border transition-all duration-200 ${
                   isDisabled
-                    ? 'bg-slate-950/40 border-slate-800/40 opacity-40 cursor-not-allowed'
-                    : 'bg-slate-950/60 hover:bg-slate-800/90 border-slate-800 hover:border-indigo-400 active:scale-[0.99] group'
+                    ? 'bg-[var(--bg-card-subtle)]/40 border-[var(--border-subtle)] opacity-40 cursor-not-allowed'
+                    : 'bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border-[var(--border-subtle)] hover:border-indigo-400 active:scale-[0.99] group'
                 }`}
               >
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
                       {idx < 3 && (
-                        <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-amber-300 font-mono text-[10px] font-bold group-hover:border-indigo-400 group-hover:text-indigo-200 shadow-sm transition">
+                        <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-700 dark:text-amber-300 font-mono text-[10px] font-bold group-hover:border-indigo-400 shadow-sm transition">
                           {idx + 1}
                         </kbd>
                       )}
@@ -250,28 +250,28 @@ export default function NPCDialogCard({
                       </span>
 
                       {stance.needsRoll && (
-                        <span className="text-[12px] font-sans tabular-nums text-amber-400 flex items-center gap-0.5">
+                        <span className="text-[12px] font-sans tabular-nums text-amber-700 dark:text-amber-400 flex items-center gap-0.5">
                           <Dices className="w-2.5 h-2.5" /> Gieo Xúc Xắc
                         </span>
                       )}
 
                       <Tooltip content={option.action_title || option.label}>
-                        <span className="text-xs md:text-sm font-bold text-white group-hover:text-indigo-200 transition truncate cursor-help">
+                        <span className="text-xs md:text-sm font-bold text-[var(--text-primary)] group-hover:text-indigo-600 dark:group-hover:text-indigo-200 transition truncate cursor-help">
                           {option.action_title || option.label}
                         </span>
                       </Tooltip>
                     </div>
 
                     <Tooltip content={`Dự báo phản ứng: ${option.consequence_hint || option.effects_hint || "Lời nói định hình thái độ đối phương."}`}>
-                      <div className="text-[12px] text-slate-400 mt-0.5 truncate cursor-help">
+                      <div className="text-[12px] text-[var(--text-secondary)] mt-0.5 truncate cursor-help">
                         ↳ {option.consequence_hint || option.effects_hint || "Lời nói định hình thái độ đối phương."}
                       </div>
                     </Tooltip>
                   </div>
 
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <span className="text-[12px] font-sans tabular-nums font-bold text-amber-400 bg-slate-900 border border-slate-700 px-2 py-0.5 rounded-lg flex items-center gap-1">
-                      <Zap className="w-3 h-3 fill-amber-400" /> {option.cost_ap || 1} AP
+                    <span className="text-[12px] font-sans tabular-nums font-bold text-amber-700 dark:text-amber-400 bg-[var(--bg-card)] border border-[var(--border-subtle)] px-2 py-0.5 rounded-lg flex items-center gap-1">
+                      <Zap className="w-3 h-3 fill-amber-500" /> {option.cost_ap || 1} AP
                     </span>
                   </div>
                 </div>
