@@ -16,8 +16,10 @@ import FamilyDetailModal from './components/FamilyDetailModal';
 import MiniGameHostModal, { MiniGameType } from './components/minigames/MiniGameHostModal';
 import AspirationProgressBar, { AspirationData } from './components/AspirationProgressBar';
 import AnnualDigestBanner, { AnnualDigestData } from './components/AnnualDigestBanner';
-import EmergencyNotificationHub, { EmergencyAlert } from './components/EmergencyNotificationHub';
-import AudioVolumeControl from './components/AudioVolumeControl';
+import type { EmergencyAlert } from './components/EmergencyNotificationHub';
+import UnifiedNotificationCenter from './components/UnifiedNotificationCenter';
+import SystemSettingsPopover from './components/SystemSettingsPopover';
+import HeaderMacroWeather from './components/HeaderMacroWeather';
 import KarmaSanctumModal from './components/KarmaSanctumModal';
 import SkillTreeModal from './components/SkillTreeModal';
 import MultiTabSidebar from './components/MultiTabSidebar';
@@ -31,7 +33,6 @@ import type { AvatarReactionType } from './components/Dynamic3DAvatar';
 import AspirationUpgradeModal from './components/AspirationUpgradeModal';
 import LifeGraphHomePortal from './components/LifeGraphHomePortal';
 import AncestralMemorialModal from './components/AncestralMemorialModal';
-import MmoWeatherBar from './components/MmoWeatherBar';
 import LifeTarotCardModal from './components/LifeTarotCardModal';
 import GameGuideModal from './components/GameGuideModal';
 import Tooltip from './components/Tooltip';
@@ -39,7 +40,6 @@ import IncomingNpcEventModal from './components/IncomingNpcEventModal';
 import CommandBarHUD from './components/CommandBarHUD';
 import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 import EmergencyRescueModal from './components/EmergencyRescueModal';
-import ThemeSwitcher from './components/ThemeSwitcher';
 import { soundFx } from './utils/soundEffects';
 
 // Non-binary Interaction Components (V5 & V6)
@@ -1797,7 +1797,7 @@ export default function LifeGraphPage() {
       {/* Slim Top Navigation */}
       <header className="border-b border-[var(--border-subtle)] bg-[var(--bg-header)] backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-50 gap-3 max-w-full overflow-visible transition-colors duration-250">
         {/* 1. Left Zone: Brand Logo & View Switcher Tabs (Đẩy sát sang trái) */}
-        <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-wrap">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 via-amber-600 to-emerald-600 flex items-center justify-center font-black text-slate-950 text-xs shadow-md shadow-amber-500/25 shrink-0">
               LG
@@ -1861,62 +1861,18 @@ export default function LifeGraphPage() {
                 </button>
               </Tooltip>
             )}
-
-            {/* 3. Decision Cinema Modal Trigger (Only visible during active drama scenario) */}
-            {character && !character.is_deceased && (activeScenario || dilemma) && (
-              <Tooltip
-                position="bottom"
-                content="Kịch bản điện ảnh biến cố định mệnh 21:9"
-              >
-                <button
-                  onClick={() => setShowCinemaDecisionModal(true)}
-                  className="relative px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition bg-rose-950/80 hover:bg-rose-900 border border-rose-500/50 text-rose-200 animate-pulse shadow-md shadow-rose-950/40"
-                >
-                  <Clapperboard className="w-3.5 h-3.5 text-rose-400" />
-                  <span className="hidden md:inline font-bold">Biến Cố 21:9</span>
-                  <span className="flex h-2 w-2 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
-                  </span>
-                </button>
-              </Tooltip>
-            )}
           </div>
         </div>
 
-        {/* 2. Center: Empty spacer for clean breathing room */}
-        <div className="flex-1" />
+        {/* 2. Center: Integrated World Weather & Macro Equilibrium HUD */}
+        <HeaderMacroWeather
+          currentCity={character?.current_city || "Hà Nội"}
+          countryName={character?.nationality || "Việt Nam"}
+          countryTier={character?.country_tier || "T2"}
+        />
 
-        {/* 3. Right Zone: Clean Quick Actions, Karma, Theme & Audio */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
-          {/* Emergency SOS Rescue Button (Only when in critical condition or in debt) */}
-          {character && !character.is_deceased && (character.vitality < 30 || character.burnout > 75 || Number(character.cash ?? 0) < 0) && (
-            <button
-              onClick={() => setShowEmergencyModal(true)}
-              className="py-1 px-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs flex items-center gap-1.5 animate-pulse shadow-lg shadow-rose-950 active:scale-95 transition"
-            >
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-200" />
-              <span>CẤP CỨU SOS</span>
-            </button>
-          )}
-
-          {/* Cẩm Nang & Phím Tắt [?] */}
-          <Tooltip
-            position="bottom"
-            content="Xem luật chơi, cẩm nang sinh tồn và danh sách phím tắt [?]"
-          >
-            <button
-              onClick={() => setShowGuideModal(true)}
-              className="py-1 px-2 sm:px-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-amber-500/60 text-amber-700 dark:text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-              <span className="hidden sm:inline">Cẩm Nang</span>
-              <kbd className="text-[10px] font-mono px-1 py-0.2 rounded bg-[var(--bg-card)] border border-amber-500/40 text-amber-700 dark:text-amber-300 font-bold">
-                ?
-              </kbd>
-            </button>
-          </Tooltip>
-
+        {/* 3. Right Zone: Consolidated Quick Hub (Đền Thờ · Thông Báo · Thiết Lập) */}
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           {/* Đền Thờ Nghiệp Quả (Karma Sanctum) */}
           <Tooltip
             position="bottom"
@@ -1924,7 +1880,7 @@ export default function LifeGraphPage() {
           >
             <button
               onClick={() => setShowKarmaModal(true)}
-              className="py-1 px-2 sm:px-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-amber-400 text-[var(--text-primary)] text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
+              className="py-1 px-2.5 sm:px-3 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-amber-400 text-[var(--text-primary)] text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-300 fill-amber-400/30" />
               <span className="hidden md:inline">Đền Thờ</span>
@@ -1934,37 +1890,26 @@ export default function LifeGraphPage() {
             </button>
           </Tooltip>
 
-          {/* Sharable Life Tarot Card & Dynasty Hall of Fame Button */}
-          {character && (
-            <Tooltip
-              position="bottom"
-              content="🏆 Sổ Vàng Thành Tựu & Thẻ Vận Mệnh Cyber-Tarot"
-            >
-              <button
-                onClick={() => setShowTarotCardModal(true)}
-                className="py-1 px-2.5 sm:px-3 rounded-xl bg-gradient-to-r from-amber-950/40 via-purple-950/40 to-slate-900/60 hover:from-amber-900/60 hover:to-purple-900/60 border border-amber-500/40 hover:border-amber-400 text-amber-200 hover:text-amber-100 text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-amber-950/30 transition-all active:scale-95 group"
-              >
-                <span className="text-amber-400 group-hover:scale-110 transition-transform">🏆</span>
-                <span className="hidden sm:inline font-medium">Sổ Vàng & Thẻ Bài</span>
-                <span className="sm:hidden font-medium">Sổ Vàng</span>
-              </button>
-            </Tooltip>
-          )}
-
-          {/* Dynamic Notification Hub */}
-          <EmergencyNotificationHub
+          {/* Unified Notification Center (Gom SOS, Biến cố 21:9 & Cảnh báo) */}
+          <UnifiedNotificationCenter
             alerts={emergencyAlerts}
             onDismiss={handleDismissAlert}
+            activeScenario={activeScenario}
+            dilemma={dilemma}
+            onOpenCinema={() => setShowCinemaDecisionModal(true)}
+            onEmergencyRescue={() => setShowEmergencyModal(true)}
+            onWellness={handleWellness}
+            onOpenAssets={() => setShowAssetModal(true)}
+            character={character}
           />
 
-          {/* Visual Theme Switcher (Obsidian / Sepia / Cyber) */}
-          <ThemeSwitcher />
-
-          {/* Volume Control Slider */}
-          <AudioVolumeControl
-            isPlaying={isPlayingAudio}
-            onTogglePlay={toggleAudio}
+          {/* Unified System Settings Popover (Gom Giao diện Theme, Âm thanh & Cẩm nang [?]) */}
+          <SystemSettingsPopover
+            isPlayingAudio={isPlayingAudio}
+            onTogglePlayAudio={toggleAudio}
             audioRef={audioRef}
+            onOpenGuide={() => setShowGuideModal(true)}
+            onOpenShortcuts={() => setShowShortcutsModal(true)}
           />
         </div>
       </header>
@@ -2004,15 +1949,6 @@ export default function LifeGraphPage() {
         {/* 3. Game Cockpit View (3-Column Responsive Grid Cockpit) */}
         {activeView === 'game' && (
           <>
-            {/* Real-World Weather & MMO Macro State Global Bar */}
-            <div className="mb-3">
-              <MmoWeatherBar
-                currentCity={character?.current_city || "Hà Nội"}
-                countryName={character?.nationality || "Việt Nam"}
-                countryTier={character?.country_tier || "T2"}
-              />
-            </div>
-
             {/* Transhumanism Surgery Banner (Unlocked when Age > 60 and Net Worth > $15M) */}
             {canTranshuman && (
               <div className="p-3.5 rounded-2xl bg-[var(--bg-card)] border border-cyan-500/40 text-[var(--text-primary)] shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
@@ -2217,6 +2153,7 @@ export default function LifeGraphPage() {
                   onLaunchMiniGame={(type) => launchMiniGame(type)}
                   onUnlockSkill={handleUnlockSkill}
                   onNpcInteract={handleNpcInteract}
+                  onOpenTarotCardModal={() => setShowTarotCardModal(true)}
                   isLoading={loading}
                 />
               </div>

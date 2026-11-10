@@ -1085,3 +1085,37 @@ Theo chỉ đạo chiến lược tối cao của **Sếp**, Thần Mộc Sinh M
 3. **Tier 3 (18-35t / Flourishing Oak)**: Bệ đá cẩm thạch hai tầng, Vòng cổ tự ma pháp kim quang xoay chiều kim đồng hồ (`animate-tree-rune-cw`), 8 rune runes viền ngoài, bóng tiếp đất vững chắc.
 4. **Tier 4 (36-55t / Grand Pillar)**: Thêm Vòng tinh thể xanh lam xoay ngược chiều (`animate-tree-rune-ccw`) + 3 Trụ tia sáng thẳng đứng (`animate-tree-beam`) bốc từ bục lên thân cây.
 5. **Tier 5 (56+t / Ancient World Tree)**: Bệ Hoàng Kim Thần Thánh 3 tầng, 12 cổ tự runes xoay 2 chiều, 3 cột ánh sáng cực quang, 4 khối tinh thể lơ lửng xoay vần (2 Kim Cương Vàng + 2 Thạch Anh Tím).
+
+---
+
+## 28. Quy Chuẩn Tái Cấu Trúc Header 3 Vùng, Notification Center & MultiTabSidebar 4 Cột (v8.0)
+
+Thực hiện chỉ đạo chiến lược tối cao của **Sếp** về việc tối ưu toàn diện UI/UX hệ thống, giải phóng visual clutter và hợp nhất các chức năng phân tán:
+
+### 28.1. Header 3 Vùng Đẳng Cấp (Clean 3-Zone Top Navigation)
+* **Vùng 1 (Trái - Nhận Diện & Điều Hướng):**
+  - Brand Logo `LG LifeGraph 2.0` nhỏ gọn.
+  - View Switcher Pills gồm 2 tab chính danh: `🏛️ Trang Chủ` (Đại sảnh gia phả) | `🌱 Hành Trình` (Bảng điều khiển kiếp sống).
+  - Loại bỏ hoàn toàn nút `Biến Cố 21:9` trùng lặp khỏi Header (chỉ hiển thị trong Notification Center và Sân khấu Cây).
+* **Vùng 2 (Giữa - HUD Thời Tiết & Cõi Sống Tích Hợp):**
+  - Component `HeaderMacroWeather`: Hiển thị gọn `🌤️ Hà Nội 25°C · Cõi T2`.
+  - Tooltip giàu thông tin: Xem nhanh lạm phát, bất ổn xã hội, áp lực sinh thái và tin tức vĩ mô.
+  - Xóa bỏ thanh `MmoWeatherBar` rời rạc, giải phóng 60px chiều cao màn hình để nâng toàn bộ Cockpit game lên tầm mắt người chơi.
+* **Vùng 3 (Phải - Hub Tiện Ích Hợp Nhất 3 Cụm):**
+  1. `Đền Thờ Nghiệp Quả (Karma Pill)`: Giữ nguyên viên thuốc tâm linh sang trọng `✨ Đền Thờ | Karma`.
+  2. `UnifiedNotificationCenter`: Chuông thông báo thông minh đa tầng, tự động chuyển màu đỏ nhấp nháy khi có nguy cấp sinh mạng.
+  3. `SystemSettingsPopover (⚙️ Thiết Lập)`: Gom toàn bộ 4 theme thị giác, thanh trượt âm lượng/nhạc nền và phím tắt/cẩm nang vào 1 popover duy nhất thay vì dàn 7 nút tràn lan.
+
+### 28.2. Trung Tâm Thông Báo Nhất Quán (Unified Actionable Notification Center)
+* Thay thế toàn bộ popup modal đen ngòm xâm lấn màn hình bằng **Slide-over Popover Flyout** tinh gọn:
+  - **🔴 Nguy Cấp (Life-Threatening):** Cảnh báo thể lực < 25%, nợ nần âm tiền, kiệt sức burnout > 80% kèm nút hành động 1-click trực tiếp (`🌿 Dưỡng Sinh`, `💰 Cấp Cứu Nợ SOS`, `🚨 Cấp Cứu Y Tế`).
+  - **🟡 Biến Cố Định Mệnh:** Cảnh báo kịch bản ngã rẽ cuộc đời kèm nút bấm `[🎬 Vào Kịch Bản Điện Ảnh 21:9]`.
+  - **🟢 Tin Tức & Cột Mốc:** Điểm tin kinh tế và trạng thái bình yên an ổn.
+
+### 28.3. Sidebar Đa Năng 4 Tab Thực Thụ (True 4-Tab MultiTabSidebar)
+Hiện thực hóa trọn vẹn giá trị của Sidebar bên phải với 4 Tab tiện ích:
+1. **Tab 1: 📜 Nhật Ký:** Dòng chảy sự kiện, lịch sử qua các năm với bộ lọc thông minh (`Tất Cả`, `Cột Mốc`, `Sự Nghiệp`, `Gia Tộc`).
+2. **Tab 2: 👥 Nhân Mạch:** Quản trị 4 Quý Nhân bảo trợ (Cú, Đại Bàng, Sói, Bồ Câu) với Link Level, thanh EXP gắn kết, nút `Tâm Sự (1 AP)` / `Tặng Quà ($500)` và danh sách người thân gia đình.
+3. **Tab 3: 💰 Tài Sản:** Thẻ tổng tài sản ròng, dòng tiền thặng dư, tiền mặt, danh mục đầu tư và nút truy cập Sàn giao dịch.
+4. **Tab 4: 🏆 Sổ Vàng:** Danh hiệu cuộc đời (Life Epithet), huy hiệu thành tựu và nút mở Thẻ Bài Vận Mệnh Cyber-Tarot.
+

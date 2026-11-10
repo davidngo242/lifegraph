@@ -269,3 +269,19 @@ flowchart TD
   - Tier 4 (Trung Niên): Vòng Ngôi Sao Lam Ngọc xoay nghịch chiều (`tree-rune-rotate-ccw`) + 3 trụ ánh sáng thấu thiên (`tree-beam-ascend`).
   - Tier 5 (Cổ Thụ / Thần Mộc): Bệ Vàng Thần Thoại 12 cổ ngữ, dải Cực Quang ngút ngàn, tinh thể Kim Cương & Thạch Anh lơ lửng bay quanh quỹ đạo (`tree-crystal-orbit`).
 
+### 5.6. Quy Chuẩn Tái Cấu Trúc Header 3 Vùng, Notification Center & MultiTabSidebar 4 Cột (v8.0)
+
+* **Header 3 Vùng Tinh Gọn (Zero Action Clutter):**
+  - Trái: Logo `LG LifeGraph 2.0` + Switcher 2 Tab chính danh (`🏛️ Trang Chủ` | `🌱 Hành Trình`). Loại bỏ nút 21:9 trùng lặp.
+  - Giữa: Cụm thời tiết & cõi sống tích hợp (`HeaderMacroWeather.tsx`) hiển thị `🌤️ Hà Nội 25°C · Cõi T2`, xóa bỏ thanh `MmoWeatherBar` rời rạc giải phóng 60px chiều cao màn hình.
+  - Phải: Hợp nhất còn đúng 3 cụm chuẩn: `✨ Đền Thờ`, `🔔 UnifiedNotificationCenter`, `⚙️ SystemSettingsPopover` (gom Theme, Âm thanh & Cẩm nang [?]).
+* **Trung Tâm Thông Báo Nhất Quán (Actionable Popover):**
+  - Thay thế popup modal đen ngòm bằng popover flyout trượt mượt mà.
+  - Phân 3 cấp độ: 🔴 Nguy Cấp (HP < 25%, nợ xấu, burnout) kèm nút CTA xử lý nhanh (`Dưỡng Sinh`, `Cấp Cứu SOS`); 🟡 Biến Cố Định Mệnh kèm nút `[🎬 Vào Kịch Bản 21:9]`; 🟢 Tin Tức & Cột Mốc.
+* **Sidebar Đa Năng 4 Tab Thực Thụ (True 4-Tab MultiTabSidebar):**
+  - Tab 1: 📜 Nhật Ký (Timeline Feed & Lọc theo chủ đề).
+  - Tab 2: 👥 Nhân Mạch (4 Quý Nhân bảo trợ + Người thân gia đình kèm nút Tâm sự, Tặng quà, Bữa cơm).
+  - Tab 3: 💰 Tài Sản (Thẻ Net Worth, Dòng tiền thặng dư, Nhà ở, Danh mục đầu tư).
+  - Tab 4: 🏆 Sổ Vàng (Danh hiệu cuộc đời, Cột mốc vinh danh & Thẻ Bài Cyber-Tarot).
+
+
