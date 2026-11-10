@@ -328,11 +328,11 @@ flowchart TD
   - Xóa bỏ hoàn toàn watermark `STAGE 3D` dưới chân avatar.
 * **Nhà Ở (Housing) xuống dòng riêng biệt:**
   - Vị trí địa lý (`📍 Thành phố`) và nơi ở (`🏠 Phòng trọ / Biệt thự...`) được tách thành 2 dòng riêng biệt, không để chung một dòng.
-* **Zone 2 & Zone 3 Tinh Gọn — Xóa Bỏ Chỉ Số Gây Nhiễu:**
-  - Loại bỏ các thông số khó hiểu, tối nghĩa: `Lão hóa: 1.0x`, `Đột quỵ: <2%`, `Hồi phục: +4 AP`.
-  - Loại bỏ badge Karma trùng lặp (`100 KP`).
-  - Giữ lại 2 thanh sinh tồn cốt lõi độ tương phản cao: `❤️ Sinh Lực` ({vitality}/{maxVitality} kèm trạng thái Sung mãn/Ổn định) và `⚡ Căng Thẳng` ({burnout}%).
-  - Cột giữa tập trung 3 phân tầng: Nghề nghiệp / Thân phận, Trọng tâm sinh mệnh & Gen di truyền, và Khát vọng cuộc đời.
+* **Hợp Nhất 2 Block (Zone 2 & Zone 3) thành 1 Cockpit Duy Nhất (Unified HUD Cockpit):**
+  - Xóa bỏ việc chia cắt 2 hộp độc lập gây rối mắt và rác viền padding kép.
+  - Hàng 1 (Thanh Header trạng thái): Nhóm Trái (Giai đoạn lứa tuổi, Nghề nghiệp, Bán Thần/Tâm Nguyện) + Nhóm Phải (Trọng tâm lứa tuổi, Tinh thần lạc quan % kèm Buff).
+  - Hàng 2 (Lưới đối xứng 2 cột cân bằng): Cột trái (Gen di truyền + Khát vọng cuộc đời %); Cột phải (Sinh Lực HP + Căng Thẳng Stress).
+  - Loại bỏ hoàn toàn các thông số tối nghĩa (`Lão hóa: 1.0x`, `Đột quỵ: <2%`, `Hồi phục: +4 AP`) và huy hiệu `100 KP` trùng lặp.
 
 
 

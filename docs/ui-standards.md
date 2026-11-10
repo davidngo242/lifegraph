@@ -1263,22 +1263,22 @@ Nhằm thực thi triệt để chỉ đạo của Sếp về việc triệt ti�
 3. **Triệt tiêu nhãn kỹ thuật (Watermark):**
    - Loại bỏ hoàn toàn nhãn `STAGE 3D` dưới góc ảnh đại diện để giải phóng không gian thẩm mỹ.
 
-### 30.2. Cột Giữa: Định Hướng Cuộc Đời & Nghề Nghiệp (Zone 2)
-1. **Triệt tiêu trùng lặp:**
-   - Loại bỏ huy hiệu Level và huy hiệu Tầng Lớp Xã Hội ở cột giữa (đã có ở cột trái).
-2. **Quy hoạch 3 phân tầng nội dung thông thoáng:**
-   - **Hàng 1 - Nghề nghiệp & Tâm nguyện:** Huy hiệu nghề nghiệp (`Briefcase` + `occupation`), nhãn đặc thù (*Bán Thần*, *Tâm Nguyện Năm*), và tỷ lệ kỳ vọng thọ (khi tuổi $\ge 70$).
-   - **Hàng 2 - Trọng tâm sinh mệnh & Gen:** Định hướng lứa tuổi (`🎯 Trọng tâm`) song hành cùng danh sách gen di truyền (`🧬 Gen`).
-   - **Hàng 3 - Khát vọng cuộc đời (Life Aspiration):** Thanh tiến độ thanh mảnh với icon mục tiêu, %, và nút thăng hạng khi đạt 100%.
-
-### 30.3. Cột Phải: Sinh Mệnh & Chỉ Số Trọng Yếu (Zone 3 Decluttering)
-1. **Loại bỏ hoàn toàn các thông số gây nhiễu:**
-   - Cắt bỏ các chỉ số gây rối mắt và không rõ mục đích người chơi: `Lão hóa: 1.0x`, `Đột quỵ: <2%`, `Hồi phục: +4 AP`.
-   - Cắt bỏ huy hiệu Karma trùng lặp (`100 KP`) vì đã hiển thị ở thanh trạng thái chính.
-2. **Quy hoạch 2 thanh sinh tồn tương phản cao:**
-   - **Thanh Sinh Lực (HP):** Biểu tượng `❤️ Sinh Lực`, nhãn trạng thái (`Sung mãn` / `Bình thường` / `Nguy kịch`), chỉ số `{vitality}/{maxVitality}`, gradient xanh ngọc dịu mắt.
-   - **Thanh Căng Thẳng (Stress):** Biểu tượng `⚡ Căng Thẳng`, nhãn trạng thái (`Ổn định` / `Căng thẳng` / `Nguy cấp`), chỉ số `{burnout}%`.
-   - **Giai đoạn vòng đời:** Huy hiệu giai đoạn tuổi đời (`🌱 Thời Kỳ Ấu Thơ`...) và Động lực sống (`😊 Tinh Thần: {happiness}%`).
+### 30.2. Cột Phải: Trạm Cockpit Thống Nhất (Unified Life & Destiny Cockpit)
+Theo lệnh của Sếp, hai khối hộp độc lập (Zone 2 và Zone 3) đã được **hợp nhất hoàn toàn thành một khối duy nhất** (`Unified Cockpit`) đặt bên phải Avatar/Identity:
+1. **Triệt tiêu phân mảnh & Hộp lồng hộp (Box-in-box fatigue):**
+   - Không còn 2 thẻ card nằm kề nhau gây rối mắt và lãng phí padding kép.
+   - Toàn bộ trạng thái cuộc đời được đặt trong 1 khung thẻ duy nhất `rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] backdrop-blur-xl`.
+2. **Hàng 1 — Thanh Trạng Thái & Định Hướng Toàn Cảnh (Status Header Bar):**
+   - **Nhóm Trái:** Giai đoạn cuộc đời (`🌱 {lifeStage.stage}`), Nghề nghiệp (`Briefcase {occupation}`), nhãn đặc thù (*Bán Thần*, *Tâm Nguyện*, *Thọ* khi $\ge 70$).
+   - **Nhóm Phải:** Trọng tâm lứa tuổi (`🎯 Trọng tâm: {focusText}`), Động lực sống & Tinh thần (`😊 Tinh thần: {happiness}% [Buff]`).
+3. **Hàng 2 — Lưới Đối Xứng 2 Cột Cân Bằng (Balanced 2-Column Grid):**
+   - **Cột Trái (Tiềm Năng & Khát Vọng):**
+     - Danh sách gen di truyền bẩm sinh (`🧬 Gen di truyền:`).
+     - Khát vọng cuộc đời (`🎯 Khát vọng: {aspiration.title}`) với thanh tiến độ %, chỉ số %, và nút thăng hạng khi $\ge 100\%$.
+   - **Cột Phải (Sinh Mệnh & Thể Trạng):**
+     - Sinh Lực HP (`❤️ Sinh Lực: {vitality}/{maxVitality} [Sung mãn]`) với thanh tiến độ xanh ngọc mượt mà.
+     - Căng Thẳng Burnout (`⚡ Căng Thẳng: {burnout}% [Ổn định]`) với thanh tiến độ dịu mắt.
+   - Hai cột được ngăn cách bằng đường kẻ tinh tế (`md:border-l md:border-[var(--border-subtle)] md:pl-5`), tạo nhịp điệu thị giác cân xứng, sang trọng và dễ nắm bắt trong 2 giây.
 
 
 ---
