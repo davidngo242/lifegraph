@@ -181,18 +181,18 @@ export default function CharacterHeroBanner({
   const survivalRate = Math.max(10, Math.min(99, Math.round((vitality / maxVitality) * Math.max(20, 100 - (age - 70) * 2.8))));
 
   const getHealthStatus = () => {
-    if (vitality >= 80) return { label: "Sung mãn", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" };
-    if (vitality >= 50) return { label: "Ổn định", color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/30" };
-    if (vitality >= 25) return { label: "Suy yếu", color: "text-amber-400 bg-amber-500/10 border-amber-500/30" };
-    return { label: "Nguy kịch", color: "text-rose-400 bg-rose-500/20 border-rose-500/40 animate-pulse" };
+    if (vitality >= 80) return { label: "Sung mãn", color: "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30" };
+    if (vitality >= 50) return { label: "Ổn định", color: "text-cyan-700 dark:text-cyan-400 bg-cyan-500/10 border-cyan-500/30" };
+    if (vitality >= 25) return { label: "Suy yếu", color: "text-amber-800 dark:text-amber-400 bg-amber-500/10 border-amber-500/30" };
+    return { label: "Nguy kịch", color: "text-rose-700 dark:text-rose-400 bg-rose-500/20 border-rose-500/40 animate-pulse" };
   };
   const healthStatus = getHealthStatus();
 
   const getStress = () => {
-    if (burnout >= 80) return { label: "Nguy cấp", color: "text-rose-400" };
-    if (burnout >= 55) return { label: "Căng thẳng", color: "text-orange-400" };
-    if (burnout >= 30) return { label: "Mệt mỏi", color: "text-amber-400" };
-    return { label: "Ổn định", color: "text-emerald-400" };
+    if (burnout >= 80) return { label: "Nguy cấp", color: "text-rose-700 dark:text-rose-400" };
+    if (burnout >= 55) return { label: "Căng thẳng", color: "text-orange-700 dark:text-orange-400" };
+    if (burnout >= 30) return { label: "Mệt mỏi", color: "text-amber-800 dark:text-amber-400" };
+    return { label: "Ổn định", color: "text-emerald-700 dark:text-emerald-400" };
   };
   const stress = getStress();
 
@@ -241,11 +241,11 @@ export default function CharacterHeroBanner({
 
   // Social Status Badge
   const getSocialStatus = () => {
-    if (netWorth >= 5000000) return { title: "Tinh Hoa Tài Phiệt", icon: "👑", color: "text-amber-300 border-amber-500/50 bg-amber-500/20" };
-    if (netWorth >= 1000000) return { title: "Thượng Lưu Quý Tộc", icon: "💎", color: "text-teal-300 border-teal-500/50 bg-teal-500/20" };
-    if (netWorth >= 250000) return { title: "Trung Lưu Thị Thành", icon: "🏙️", color: "text-blue-300 border-blue-500/50 bg-blue-500/20" };
-    if (netWorth >= 50000) return { title: "Cần Lao Tự Lập", icon: "🌱", color: "text-emerald-300 border-emerald-500/50 bg-emerald-500/20" };
-    return { title: "Khởi Đầu Bĩ Cực", icon: "🍂", color: "text-amber-200 border-amber-700/60 bg-amber-950/40" };
+    if (netWorth >= 5000000) return { title: "Tinh Hoa Tài Phiệt", icon: "👑", color: "text-amber-800 dark:text-amber-300 border-amber-500/40 bg-amber-500/15 dark:bg-amber-500/20" };
+    if (netWorth >= 1000000) return { title: "Thượng Lưu Quý Tộc", icon: "💎", color: "text-teal-800 dark:text-teal-300 border-teal-500/40 bg-teal-500/15 dark:bg-teal-500/20" };
+    if (netWorth >= 250000) return { title: "Trung Lưu Thị Thành", icon: "🏙️", color: "text-blue-800 dark:text-blue-300 border-blue-500/40 bg-blue-500/15 dark:bg-blue-500/20" };
+    if (netWorth >= 50000) return { title: "Cần Lao Tự Lập", icon: "🌱", color: "text-emerald-800 dark:text-emerald-300 border-emerald-500/40 bg-emerald-500/15 dark:bg-emerald-500/20" };
+    return { title: "Khởi Đầu Bĩ Cực", icon: "🍂", color: "text-amber-800 dark:text-amber-200 border-amber-600/40 bg-amber-500/15 dark:bg-amber-950/40" };
   };
   const socialStatus = getSocialStatus();
 
@@ -663,8 +663,8 @@ export default function CharacterHeroBanner({
               </span>
 
               <Tooltip content={`Nghề nghiệp: ${character.occupation || (age < 6 ? "Ấu nhi" : age < 18 ? "Học sinh" : "Lao động tự do")}`}>
-                <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-sky-500/40 bg-sky-950/60 text-sky-200 font-bold flex items-center gap-1 shadow-sm cursor-help">
-                  <Briefcase className="w-3 h-3 text-sky-400" />
+                <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-sky-500/40 bg-sky-500/15 dark:bg-sky-950/60 text-sky-800 dark:text-sky-200 font-bold flex items-center gap-1 shadow-sm cursor-help">
+                  <Briefcase className="w-3 h-3 text-sky-600 dark:text-sky-400" />
                   <span className="truncate max-w-[130px]">{character.occupation || (age < 6 ? "Ấu nhi" : age < 18 ? "Học sinh" : "Lao động tự do")}</span>
                 </span>
               </Tooltip>
@@ -681,8 +681,8 @@ export default function CharacterHeroBanner({
                     <strong className="text-amber-300">⏳ Đồng Hồ Cát (Tuổi {age}):</strong> Tỷ lệ vượt qua thử thách sinh mệnh năm nay: <span className="text-amber-300 font-bold">~{survivalRate}%</span>. Hãy duy trì Sinh Lực và dưỡng sinh an tịnh.
                   </div>
                 }>
-                  <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-amber-500/60 bg-amber-950/70 text-amber-300 font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.3)] animate-pulse cursor-help">
-                    <Hourglass className="w-3 h-3 text-amber-400 animate-[spin_6s_linear_infinite]" />
+                  <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-amber-500/40 bg-amber-500/15 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.2)] animate-pulse cursor-help">
+                    <Hourglass className="w-3 h-3 text-amber-600 dark:text-amber-400 animate-[spin_6s_linear_infinite]" />
                     <span>~{survivalRate}% Thọ</span>
                   </span>
                 </Tooltip>
@@ -717,10 +717,10 @@ export default function CharacterHeroBanner({
             {character.active_pledge && (
               <span className={`text-[10.5px] px-2 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-sm shrink-0 ${
                 character.active_pledge === 'pledge_wealth'
-                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                  ? 'bg-amber-500/15 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/40'
                   : character.active_pledge === 'pledge_wellness'
-                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                  : 'bg-sky-500/20 text-sky-300 border-sky-500/40'
+                  ? 'bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border-emerald-500/40'
+                  : 'bg-sky-500/15 dark:bg-sky-500/20 text-sky-800 dark:text-sky-300 border-sky-500/40'
               }`}>
                 <span>
                   {character.active_pledge === 'pledge_wealth' ? '📈 Thịnh Vượng' :
@@ -913,8 +913,8 @@ export default function CharacterHeroBanner({
             {/* Quick Metrics Inline */}
             <div className="flex items-center justify-between text-[10px] text-[var(--text-secondary)] font-sans tabular-nums pt-0.5">
               <span>Lão hóa: <strong className="text-[var(--text-primary)]">{character.aging_speed ? character.aging_speed.toFixed(1) + 'x' : '1.0x'}</strong></span>
-              <span>Đột quỵ: <strong className="text-emerald-500 font-bold">&lt;2%</strong></span>
-              <span>Hồi phục: <strong className="text-amber-500 font-bold">+{apGainPerYear} AP</strong></span>
+              <span>Đột quỵ: <strong className="text-emerald-700 dark:text-emerald-500 font-bold">&lt;2%</strong></span>
+              <span>Hồi phục: <strong className="text-amber-700 dark:text-amber-500 font-bold">+{apGainPerYear} AP</strong></span>
             </div>
           </div>
 

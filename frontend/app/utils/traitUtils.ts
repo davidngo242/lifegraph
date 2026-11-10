@@ -336,8 +336,8 @@ export function formatTrait(traitId: string | undefined | null): FormattedTrait 
     desc: "Đặc tính di truyền tự nhiên",
     icon: "🧬",
     category: "buff",
-    badgeStyle: "bg-slate-900/80 text-slate-300 border-slate-700/60",
-    pillColor: "text-slate-400"
+    badgeStyle: "bg-slate-100 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700/60",
+    pillColor: "text-slate-600 dark:text-slate-400"
   };
 }
 
@@ -363,23 +363,23 @@ export function getCountryTierBadge(tier: string | undefined | null): { label: s
   if (t.includes('T1')) {
     return {
       label: "Tier 1 · Thịnh Vượng",
-      style: "bg-sky-500/15 text-sky-300 border-sky-500/30"
+      style: "bg-sky-500/15 text-sky-800 dark:text-sky-300 border-sky-500/30"
     };
   }
   if (t.includes('T2')) {
     return {
       label: "Tier 2 · Đang Phát Triển",
-      style: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+      style: "bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border-emerald-500/30"
     };
   }
   if (t.includes('T3')) {
     return {
       label: "Tier 3 · Khắc Nghiệt",
-      style: "bg-rose-500/15 text-rose-300 border-rose-500/30"
+      style: "bg-rose-500/15 text-rose-800 dark:text-rose-300 border-rose-500/30"
     };
   }
   return {
     label: tier || "Quốc Gia",
-    style: "bg-slate-800 text-slate-300 border-slate-700"
+    style: "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border-slate-300 dark:border-slate-700"
   };
 }

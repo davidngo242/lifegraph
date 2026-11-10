@@ -85,7 +85,7 @@ export default function NarrativeFeed({
   return (
     <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-4 md:p-5 shadow-xl backdrop-blur-xl flex flex-col h-auto max-h-[520px] lg:max-h-none lg:h-[calc(100vh-6.5rem)] lg:sticky top-20 overflow-hidden transition-colors duration-200">
       {/* Header: Replaced redundant age badge with Timeline Progress and Filters */}
-      <div className="flex flex-col gap-2.5 pb-3 border-b border-slate-800/80 mb-2.5 shrink-0">
+      <div className="flex flex-col gap-2.5 pb-3 border-b border-[var(--border-subtle)] mb-2.5 shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
@@ -102,7 +102,7 @@ export default function NarrativeFeed({
           </div>
 
           {isOldAge && (
-            <span className="text-[12px] font-sans px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 flex items-center gap-1 animate-pulse">
+            <span className="text-[12px] font-sans px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/30 flex items-center gap-1 animate-pulse">
               <EyeOff className="w-3 h-3" /> Trí nhớ mờ dần
             </span>
           )}
@@ -187,7 +187,7 @@ export default function NarrativeFeed({
                 className={`relative pl-5 pb-1 transition-all group ${memoryStyle}`}
               >
                 {/* Timeline vertical connector line */}
-                <div className="absolute left-2 top-3 bottom-0 w-0.5 bg-slate-800 group-last:hidden" />
+                <div className="absolute left-2 top-3 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-800 group-last:hidden" />
 
                 {/* Timeline node icon */}
                 <div className={`absolute left-0 top-1.5 w-4 h-4 rounded-full flex items-center justify-center border transition-all ${
@@ -220,7 +220,7 @@ export default function NarrativeFeed({
                     </div>
 
                     {isLatest && (
-                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 font-bold animate-pulse flex items-center gap-1">
+                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold animate-pulse flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" /> Vừa xong
                       </span>
                     )}

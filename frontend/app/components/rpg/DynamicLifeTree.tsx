@@ -323,10 +323,10 @@ export default function DynamicLifeTree({
           angleDeg: -165, // Cánh Tây xa
           distanceRatio: 0.78,
           color: {
-            border: 'border-pink-500/50',
-            bg: 'bg-pink-950/70',
+            border: 'border-pink-400/60 dark:border-pink-500/50',
+            bg: 'bg-pink-50/95 dark:bg-pink-950/70',
             glow: '#f43f5e',
-            text: 'text-pink-300',
+            text: 'text-pink-900 dark:text-pink-300',
             line: '#e11d48'
           }
         },
@@ -341,10 +341,10 @@ export default function DynamicLifeTree({
           angleDeg: -125, // Cánh Tây Bắc Trí Tuệ
           distanceRatio: 0.76,
           color: {
-            border: 'border-sky-500/50',
-            bg: 'bg-sky-950/70',
+            border: 'border-sky-400/60 dark:border-sky-500/50',
+            bg: 'bg-sky-50/95 dark:bg-sky-950/70',
             glow: '#0284c7',
-            text: 'text-sky-300',
+            text: 'text-sky-900 dark:text-sky-300',
             line: '#0284c7'
           }
         },
@@ -359,10 +359,10 @@ export default function DynamicLifeTree({
           angleDeg: -45, // Cánh Đông Bắc
           distanceRatio: 0.76,
           color: {
-            border: 'border-amber-500/50',
-            bg: 'bg-amber-950/70',
+            border: 'border-amber-400/60 dark:border-amber-500/50',
+            bg: 'bg-amber-50/95 dark:bg-amber-950/70',
             glow: '#f59e0b',
-            text: 'text-amber-300',
+            text: 'text-amber-900 dark:text-amber-300',
             line: '#d97706'
           }
         },
@@ -377,10 +377,10 @@ export default function DynamicLifeTree({
           angleDeg: -10, // Cánh Đông
           distanceRatio: 0.76,
           color: {
-            border: 'border-teal-500/50',
-            bg: 'bg-teal-950/70',
+            border: 'border-teal-400/60 dark:border-teal-500/50',
+            bg: 'bg-teal-50/95 dark:bg-teal-950/70',
             glow: '#14b8a6',
-            text: 'text-teal-300',
+            text: 'text-teal-900 dark:text-teal-300',
             line: '#0d9488'
           }
         },
@@ -395,10 +395,10 @@ export default function DynamicLifeTree({
           angleDeg: 145, // Tây Nam cội rễ (không đè thân mầm và avatar)
           distanceRatio: 0.65,
           color: {
-            border: 'border-emerald-500/50',
-            bg: 'bg-emerald-950/70',
+            border: 'border-emerald-400/60 dark:border-emerald-500/50',
+            bg: 'bg-emerald-50/95 dark:bg-emerald-950/70',
             glow: '#10b981',
-            text: 'text-emerald-300',
+            text: 'text-emerald-900 dark:text-emerald-300',
             line: '#059669'
           }
         }
@@ -417,10 +417,10 @@ export default function DynamicLifeTree({
           angleDeg: -90, // Vươn cao Thiên Đỉnh (Zenith)
           distanceRatio: 0.85,
           color: {
-            border: 'border-amber-400',
-            bg: 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950',
+            border: 'border-amber-500 dark:border-amber-400',
+            bg: 'bg-gradient-to-r from-amber-50 via-yellow-100 to-amber-50 dark:from-amber-950 dark:via-yellow-950 dark:to-amber-950',
             glow: '#eab308',
-            text: 'text-amber-200',
+            text: 'text-amber-950 dark:text-amber-200',
             line: '#f59e0b'
           }
         });
@@ -443,10 +443,10 @@ export default function DynamicLifeTree({
           angleDeg: -145,
           distanceRatio: 0.76,
           color: {
-            border: 'border-sky-500/50',
-            bg: 'bg-sky-950/70',
+            border: 'border-sky-400/60 dark:border-sky-500/50',
+            bg: 'bg-sky-50/95 dark:bg-sky-950/70',
             glow: '#38bdf8',
-            text: 'text-sky-300',
+            text: 'text-sky-900 dark:text-sky-300',
             line: '#0284c7'
           }
         },
@@ -461,10 +461,10 @@ export default function DynamicLifeTree({
           angleDeg: -35,
           distanceRatio: 0.76,
           color: {
-            border: 'border-emerald-500/50',
-            bg: 'bg-emerald-950/70',
+            border: 'border-emerald-400/60 dark:border-emerald-500/50',
+            bg: 'bg-emerald-50/95 dark:bg-emerald-950/70',
             glow: '#10b981',
-            text: 'text-emerald-300',
+            text: 'text-emerald-900 dark:text-emerald-300',
             line: '#059669'
           }
         },
@@ -479,10 +479,10 @@ export default function DynamicLifeTree({
           angleDeg: -5,
           distanceRatio: 0.75,
           color: {
-            border: 'border-amber-500/50',
-            bg: 'bg-amber-950/70',
+            border: 'border-amber-400/60 dark:border-amber-500/50',
+            bg: 'bg-amber-50/95 dark:bg-amber-950/70',
             glow: '#f59e0b',
-            text: 'text-amber-300',
+            text: 'text-amber-900 dark:text-amber-300',
             line: '#d97706'
           }
         },
@@ -497,10 +497,10 @@ export default function DynamicLifeTree({
           angleDeg: 35,
           distanceRatio: 0.68,
           color: {
-            border: 'border-teal-500/50',
-            bg: 'bg-teal-950/70',
+            border: 'border-teal-400/60 dark:border-teal-500/50',
+            bg: 'bg-teal-50/95 dark:bg-teal-950/70',
             glow: '#14b8a6',
-            text: 'text-teal-300',
+            text: 'text-teal-900 dark:text-teal-300',
             line: '#0d9488'
           }
         },
@@ -515,10 +515,10 @@ export default function DynamicLifeTree({
           angleDeg: 140,
           distanceRatio: 0.65,
           color: {
-            border: 'border-amber-500/40',
-            bg: 'bg-amber-500/10',
+            border: 'border-amber-400/60 dark:border-amber-500/40',
+            bg: 'bg-amber-50/95 dark:bg-amber-500/10',
             glow: '#f59e0b',
-            text: 'text-amber-700 dark:text-amber-300',
+            text: 'text-amber-900 dark:text-amber-300',
             line: '#d97706'
           }
         }
@@ -537,10 +537,10 @@ export default function DynamicLifeTree({
           angleDeg: -90,
           distanceRatio: 0.85,
           color: {
-            border: 'border-amber-400',
-            bg: 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950',
+            border: 'border-amber-500 dark:border-amber-400',
+            bg: 'bg-gradient-to-r from-amber-50 via-yellow-100 to-amber-50 dark:from-amber-950 dark:via-yellow-950 dark:to-amber-950',
             glow: '#eab308',
-            text: 'text-amber-200',
+            text: 'text-amber-950 dark:text-amber-200',
             line: '#f59e0b'
           }
         });
@@ -566,10 +566,10 @@ export default function DynamicLifeTree({
         angleDeg: -160,
         distanceRatio: 0.78,
         color: {
-          border: 'border-emerald-500/50',
-          bg: 'bg-emerald-950/70',
+          border: 'border-emerald-400/60 dark:border-emerald-500/50',
+          bg: 'bg-emerald-50/95 dark:bg-emerald-950/70',
           glow: '#10b981',
-          text: 'text-emerald-300',
+          text: 'text-emerald-950 dark:text-emerald-300',
           line: '#059669'
         }
       };
@@ -585,10 +585,10 @@ export default function DynamicLifeTree({
         angleDeg: -160,
         distanceRatio: 0.78,
         color: {
-          border: 'border-cyan-500/50',
-          bg: 'bg-cyan-950/70',
+          border: 'border-cyan-400/60 dark:border-cyan-500/50',
+          bg: 'bg-cyan-50/95 dark:bg-cyan-950/70',
           glow: '#06b6d4',
-          text: 'text-cyan-300',
+          text: 'text-cyan-950 dark:text-cyan-300',
           line: '#0891b2'
         }
       };
@@ -604,10 +604,10 @@ export default function DynamicLifeTree({
         angleDeg: -160,
         distanceRatio: 0.78,
         color: {
-          border: 'border-amber-500/50',
-          bg: 'bg-amber-950/70',
+          border: 'border-amber-400/60 dark:border-amber-500/50',
+          bg: 'bg-amber-50/95 dark:bg-amber-950/70',
           glow: '#f59e0b',
-          text: 'text-amber-300',
+          text: 'text-amber-950 dark:text-amber-300',
           line: '#d97706'
         }
       };
@@ -623,10 +623,10 @@ export default function DynamicLifeTree({
         angleDeg: -160,
         distanceRatio: 0.78,
         color: {
-          border: 'border-purple-500/50',
-          bg: 'bg-purple-950/70',
+          border: 'border-purple-400/60 dark:border-purple-500/50',
+          bg: 'bg-purple-50/95 dark:bg-purple-950/70',
           glow: '#a855f7',
-          text: 'text-purple-300',
+          text: 'text-purple-950 dark:text-purple-300',
           line: '#9333ea'
         }
       };
@@ -642,10 +642,10 @@ export default function DynamicLifeTree({
         angleDeg: -160, // Cành Hoàng Kim Tài Sản
         distanceRatio: 0.78,
         color: {
-          border: 'border-emerald-500/50',
-          bg: 'bg-emerald-950/70',
+          border: 'border-emerald-400/60 dark:border-emerald-500/50',
+          bg: 'bg-emerald-50/95 dark:bg-emerald-950/70',
           glow: '#10b981',
-          text: 'text-emerald-300',
+          text: 'text-emerald-950 dark:text-emerald-300',
           line: '#059669'
         }
       };
@@ -664,10 +664,10 @@ export default function DynamicLifeTree({
         angleDeg: -125, // Cành Tây Bắc Trí Tuệ (cách biệt 35 deg với Đột Phá)
         distanceRatio: 0.76,
         color: {
-          border: 'border-sky-500/50',
-          bg: 'bg-sky-950/70',
+          border: 'border-sky-400/60 dark:border-sky-500/50',
+          bg: 'bg-sky-50/95 dark:bg-sky-950/70',
           glow: '#0284c7',
-          text: 'text-sky-300',
+          text: 'text-sky-900 dark:text-sky-300',
           line: '#0284c7'
         }
       },
@@ -682,10 +682,10 @@ export default function DynamicLifeTree({
         angleDeg: -45, // Cành Đông Bắc Nhân Mạch
         distanceRatio: 0.76,
         color: {
-          border: 'border-amber-500/40',
-          bg: 'bg-amber-500/10',
+          border: 'border-amber-400/60 dark:border-amber-500/40',
+          bg: 'bg-amber-50/95 dark:bg-amber-500/10',
           glow: '#f59e0b',
-          text: 'text-amber-700 dark:text-amber-300',
+          text: 'text-amber-900 dark:text-amber-300',
           line: '#d97706'
         }
       },
@@ -700,10 +700,10 @@ export default function DynamicLifeTree({
         angleDeg: -10, // Cánh Đông Tài Sản
         distanceRatio: 0.78,
         color: {
-          border: 'border-pink-500/50',
-          bg: 'bg-pink-950/70',
+          border: 'border-pink-400/60 dark:border-pink-500/50',
+          bg: 'bg-pink-50/95 dark:bg-pink-950/70',
           glow: '#f43f5e',
-          text: 'text-pink-300',
+          text: 'text-pink-900 dark:text-pink-300',
           line: '#e11d48'
         }
       },
@@ -718,10 +718,10 @@ export default function DynamicLifeTree({
         angleDeg: 145, // Cội Rễ Sinh Mệnh Tây Nam
         distanceRatio: 0.65,
         color: {
-          border: 'border-teal-500/50',
-          bg: 'bg-teal-950/70',
+          border: 'border-teal-400/60 dark:border-teal-500/50',
+          bg: 'bg-teal-50/95 dark:bg-teal-950/70',
           glow: '#14b8a6',
-          text: 'text-teal-300',
+          text: 'text-teal-900 dark:text-teal-300',
           line: '#0d9488'
         }
       }
@@ -740,10 +740,10 @@ export default function DynamicLifeTree({
         angleDeg: -90, // Vươn cao Thiên Đỉnh (Zenith) - không đè nút Đèn Sách (-125)
         distanceRatio: 0.85,
         color: {
-          border: 'border-amber-400',
-          bg: 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950',
+          border: 'border-amber-500 dark:border-amber-400',
+          bg: 'bg-gradient-to-r from-amber-50 via-yellow-100 to-amber-50 dark:from-amber-950 dark:via-yellow-950 dark:to-amber-950',
           glow: '#eab308',
-          text: 'text-amber-200',
+          text: 'text-amber-950 dark:text-amber-200',
           line: '#f59e0b'
         }
       });
@@ -1099,12 +1099,12 @@ export default function DynamicLifeTree({
           style={{
             background:
               currentSeason.id === 'spring'
-                ? 'radial-gradient(ellipse 90% 65% at 50% 15%, rgba(244,114,182,0.22) 0%, rgba(56,189,248,0.12) 40%, rgba(15,23,42,0.92) 85%), linear-gradient(180deg, rgba(253,242,248,0.06) 0%, rgba(15,23,42,0.96) 100%)'
+                ? 'var(--tree-sky-spring)'
                 : currentSeason.id === 'summer'
-                ? 'radial-gradient(ellipse 95% 70% at 50% 10%, rgba(251,191,36,0.25) 0%, rgba(14,165,233,0.14) 40%, rgba(15,23,42,0.92) 85%), linear-gradient(180deg, rgba(254,243,199,0.07) 0%, rgba(15,23,42,0.96) 100%)'
+                ? 'var(--tree-sky-summer)'
                 : currentSeason.id === 'autumn'
-                ? 'radial-gradient(ellipse 90% 65% at 50% 15%, rgba(234,88,12,0.25) 0%, rgba(180,83,9,0.15) 45%, rgba(15,23,42,0.92) 85%), linear-gradient(180deg, rgba(255,237,213,0.07) 0%, rgba(15,23,42,0.96) 100%)'
-                : 'radial-gradient(ellipse 95% 70% at 50% 10%, rgba(6,182,212,0.28) 0%, rgba(139,92,246,0.18) 45%, rgba(15,23,42,0.92) 85%), linear-gradient(180deg, rgba(224,242,254,0.07) 0%, rgba(15,23,42,0.96) 100%)'
+                ? 'var(--tree-sky-autumn)'
+                : 'var(--tree-sky-winter)'
           }}
         />
 
@@ -2768,10 +2768,10 @@ export default function DynamicLifeTree({
                   }}
                   className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs transition-all duration-300 shadow-xl border cursor-pointer hover:scale-125 ${
                     linkLvl >= 4
-                      ? 'bg-gradient-to-br from-amber-500/30 to-yellow-600/40 border-amber-400 text-amber-200 ring-2 ring-amber-400/70 shadow-amber-500/50 animate-pulse'
+                      ? 'bg-amber-100 dark:bg-gradient-to-br dark:from-amber-500/30 dark:to-yellow-600/40 border-amber-500 dark:border-amber-400 text-amber-900 dark:text-amber-200 ring-2 ring-amber-400/70 shadow-amber-500/50 animate-pulse'
                       : linkLvl >= 2
-                      ? 'bg-sky-950/80 border-sky-400 text-sky-200 ring-1 ring-sky-400/50 shadow-sky-500/40'
-                      : 'bg-slate-900/80 border-slate-700 text-slate-300 hover:border-sky-400'
+                      ? 'bg-sky-100 dark:bg-sky-950/80 border-sky-400 text-sky-800 dark:text-sky-200 ring-1 ring-sky-400/50 shadow-sky-500/40'
+                      : 'bg-slate-100 dark:bg-slate-900/80 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-sky-400'
                   }`}
                 >
                   {npc.avatar || (idx === 0 ? '🦉' : idx === 1 ? '🦅' : idx === 2 ? '🐺' : '🕊️')}
@@ -2817,15 +2817,9 @@ export default function DynamicLifeTree({
             style={{
               left: '50%',
               top: `${(centerY / canvasHeight) * 100}%`,
-              background: actionPoints === 0
-                ? 'radial-gradient(circle, rgba(245,158,11,0.6) 0%, rgba(180,83,9,0.4) 50%, rgba(15,23,42,0.95) 85%)'
-                : 'radial-gradient(circle, rgba(99,102,241,0.38) 0%, rgba(15,23,42,0.95) 75%)',
-              boxShadow: actionPoints === 0
-                ? '0 0 50px rgba(245,158,11,0.65), inset 0 0 25px rgba(251,191,36,0.35)'
-                : '0 0 40px rgba(99,102,241,0.45)',
-              border: actionPoints === 0
-                ? '2.5px solid rgba(251,191,36,0.95)'
-                : '2px solid rgba(129,140,248,0.65)'
+              background: actionPoints === 0 ? 'var(--tree-core-ap0-bg)' : 'var(--tree-core-bg)',
+              boxShadow: actionPoints === 0 ? 'var(--tree-core-ap0-shadow)' : 'var(--tree-core-shadow)',
+              border: actionPoints === 0 ? 'var(--tree-core-ap0-border)' : '2px solid var(--tree-core-border)'
             }}
           >
             <div className={`absolute inset-0 rounded-full border pointer-events-none ${
@@ -2834,19 +2828,19 @@ export default function DynamicLifeTree({
 
             <div className={`w-9 h-9 rounded-full flex items-center justify-center text-base shadow-inner group-hover:scale-110 transition-transform ${
               actionPoints === 0
-                ? 'bg-amber-500/30 border border-amber-400 text-amber-200'
-                : 'bg-indigo-500/20 border border-indigo-400/40 text-white'
+                ? 'bg-amber-500/30 border border-amber-400 text-amber-900 dark:text-amber-200'
+                : 'bg-indigo-500/15 dark:bg-indigo-500/20 border border-indigo-400/40 text-indigo-900 dark:text-white'
             }`}>
               {actionPoints === 0 ? '✨' : STAGE_META[growthStage].icon}
             </div>
 
             <div className={`text-xs font-sans font-bold mt-1 leading-none tracking-tight ${
-              actionPoints === 0 ? 'text-amber-300 font-black' : 'text-white'
+              actionPoints === 0 ? 'text-amber-900 dark:text-amber-300 font-black' : 'text-slate-900 dark:text-white'
             }`}>
               {actionPoints > 0 ? `${actionPoints} AP` : '✨ Giao Thừa'}
             </div>
             <div className={`text-[9.5px] font-mono mt-0.5 opacity-90 truncate max-w-[92px] ${
-              actionPoints === 0 ? 'text-amber-200 font-bold' : 'text-emerald-300'
+              actionPoints === 0 ? 'text-amber-800 dark:text-amber-200 font-bold' : 'text-emerald-700 dark:text-emerald-300'
             }`}>
               {actionPoints === 0 ? 'Gieo Mầm →' : STAGE_META[growthStage].label}
             </div>
@@ -2899,9 +2893,9 @@ export default function DynamicLifeTree({
                   onClick={() => handleNodeClick(node)}
                   className={`relative px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-tl-[26px] rounded-br-[26px] rounded-tr-[10px] rounded-bl-[10px] border text-left transition-all duration-300 flex items-center gap-2 select-none active:scale-95 shadow-xl backdrop-blur-md ${
                     node.isBreakthrough
-                      ? 'bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950 border-amber-400 text-amber-200 ring-2 ring-amber-400/60 shadow-amber-900/50 animate-pulse'
+                      ? 'bg-gradient-to-r from-amber-50 via-yellow-100 to-amber-50 border-amber-500 text-amber-950 shadow-amber-300/40 ring-2 ring-amber-400/50 dark:from-amber-950 dark:via-yellow-950 dark:to-amber-950 dark:border-amber-400 dark:text-amber-200 dark:ring-amber-400/60 dark:shadow-amber-900/50 animate-pulse'
                       : isHealingAction && treeHealthState === 'withered'
-                      ? 'bg-emerald-950/90 border-emerald-400 text-emerald-200 ring-2 ring-emerald-400 shadow-emerald-500/60 animate-bounce'
+                      ? 'bg-emerald-50 border-emerald-500 text-emerald-950 ring-2 ring-emerald-400 shadow-emerald-400/40 animate-bounce dark:bg-emerald-950/90 dark:border-emerald-400 dark:text-emerald-200'
                       : node.color.bg + ' ' + node.color.border + ' ' + node.color.text
                   } ${
                     isHovered ? 'scale-110 -rotate-2 z-30 shadow-2xl ring-2 ring-white/60' : ''
@@ -2915,29 +2909,29 @@ export default function DynamicLifeTree({
                   }}
                 >
                   {/* Organic leaf vein highlight line */}
-                  <div className="absolute top-1/2 left-2 right-2 h-[1px] bg-white/10 pointer-events-none -translate-y-1/2" />
+                  <div className="absolute top-1/2 left-2 right-2 h-[1px] bg-slate-900/10 dark:bg-white/10 pointer-events-none -translate-y-1/2" />
 
                   {/* Leaflet Icon Orb */}
-                  <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black/40 border border-white/20 flex items-center justify-center text-base sm:text-lg shrink-0 group-hover:scale-125 transition-transform">
+                  <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-900/10 dark:bg-black/40 border border-slate-900/15 dark:border-white/20 flex items-center justify-center text-base sm:text-lg shrink-0 group-hover:scale-125 transition-transform">
                     {node.icon}
                   </span>
 
                   {/* Leaflet Titles & Benefits (Zero-Truncation Design Standard) */}
                   <div className="min-w-0 pr-1 text-left">
-                    <div className="text-xs font-bold text-white whitespace-normal leading-tight max-w-[155px] sm:max-w-[185px]">
+                    <div className="text-xs font-bold text-slate-900 dark:text-white whitespace-normal leading-tight max-w-[155px] sm:max-w-[185px]">
                       {node.title}
                     </div>
                     <div className={`text-[9.5px] font-mono mt-0.5 whitespace-normal leading-tight max-w-[155px] sm:max-w-[185px] ${
                       node.isBreakthrough
-                        ? 'text-amber-300 font-black tracking-wider animate-pulse drop-shadow'
-                        : 'text-slate-200 opacity-90'
+                        ? 'text-amber-800 dark:text-amber-300 font-black tracking-wider animate-pulse drop-shadow'
+                        : 'text-slate-600 dark:text-slate-200'
                     }`}>
                       {node.gainText}
                     </div>
                   </div>
 
                   {/* Dewdrop AP Cost Badge */}
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-black/60 text-amber-300 border border-amber-400/30 shrink-0 font-bold shadow-inner">
+                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-amber-100 dark:bg-black/60 text-amber-900 dark:text-amber-300 border border-amber-400/40 shrink-0 font-bold shadow-sm">
                     {node.apCost} AP
                   </span>
                 </button>
@@ -2960,15 +2954,15 @@ export default function DynamicLifeTree({
               </div>
             }
           >
-            <div className="px-3 py-1 rounded-full bg-slate-950/90 hover:bg-slate-900 border border-amber-500/40 text-[10.5px] font-sans text-amber-300 font-bold flex items-center gap-1.5 shadow-lg backdrop-blur cursor-help transition">
+            <div className="px-3 py-1 rounded-full bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-amber-500/50 text-[10.5px] font-sans text-amber-800 dark:text-amber-300 font-bold flex items-center gap-1.5 shadow-lg backdrop-blur cursor-help transition">
               <span>{characterAge === 0 ? '🌱' : '🪵'}</span>
               <span>
                 {characterAge === 0
                   ? 'Mầm Sống Khởi Nguyên • Gốc Rễ Đời Người'
                   : `${characterAge} Vòng Vân Gỗ Đời Người`}
               </span>
-              <span className="text-slate-500">•</span>
-              <span className="text-emerald-400">{STAGE_META[growthStage].label}</span>
+              <span className="text-slate-400">•</span>
+              <span className="text-emerald-700 dark:text-emerald-400">{STAGE_META[growthStage].label}</span>
             </div>
           </Tooltip>
         </div>
