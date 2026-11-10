@@ -234,6 +234,30 @@ export default function DynamicLifeTree({
   );
   const seasonClimate = isTropicalCountry ? currentSeason.tropicalClimate : currentSeason.temperateClimate;
 
+  // Dynamic 4-Season Foliage Color Profiles (Đổi sắc thái tán cây theo chu kỳ bốn mùa)
+  const seasonalFoliageGlow = {
+    spring: {
+      wisdom: { start: '#f472b6', mid: '#db2777', stop: '#4a044e' },
+      social: { start: '#34d399', mid: '#059669', stop: '#022c22' },
+      wealth: { start: '#fde047', mid: '#f59e0b', stop: '#451a03' }
+    },
+    summer: {
+      wisdom: { start: '#38bdf8', mid: '#0284c7', stop: '#082f49' },
+      social: { start: '#10b981', mid: '#047857', stop: '#022c22' },
+      wealth: { start: '#fbbf24', mid: '#d97706', stop: '#451a03' }
+    },
+    autumn: {
+      wisdom: { start: '#c084fc', mid: '#7e22ce', stop: '#3b0764' },
+      social: { start: '#f97316', mid: '#c2410c', stop: '#431407' },
+      wealth: { start: '#eab308', mid: '#b45309', stop: '#451a03' }
+    },
+    winter: {
+      wisdom: { start: '#7dd3fc', mid: '#0284c7', stop: '#0c4a6e' },
+      social: { start: '#67e8f9', mid: '#0891b2', stop: '#164e63' },
+      wealth: { start: '#f8fafc', mid: '#94a3b8', stop: '#334155' }
+    }
+  }[currentSeason.id];
+
   // Equipped Spirit Guardian Pet (Quyết định 4)
   const equippedPet = character?.equipped_pet || 'none';
   const [petHeartAnim, setPetHeartAnim] = useState<boolean>(false);
@@ -1069,6 +1093,205 @@ export default function DynamicLifeTree({
       {/* ========================================================================= */}
       <div className="relative w-full h-[540px] sm:h-[580px] overflow-hidden flex items-center justify-center rounded-3xl bg-[var(--bg-canvas)] border border-[var(--border-subtle)] shadow-2xl transition-colors duration-200">
         
+        {/* Dynamic Seasonal Sky Dome & Ambient Backdrop Aura */}
+        <div
+          className="absolute inset-0 pointer-events-none transition-all duration-1000 z-0"
+          style={{
+            background:
+              currentSeason.id === 'spring'
+                ? 'radial-gradient(ellipse 90% 65% at 50% 15%, rgba(244,114,182,0.22) 0%, rgba(56,189,248,0.12) 40%, rgba(15,23,42,0.92) 85%), linear-gradient(180deg, rgba(253,242,248,0.06) 0%, rgba(15,23,42,0.96) 100%)'
+                : currentSeason.id === 'summer'
+                ? 'radial-gradient(ellipse 95% 70% at 50% 10%, rgba(251,191,36,0.25) 0%, rgba(14,165,233,0.14) 40%, rgba(15,23,42,0.92) 85%), linear-gradient(180deg, rgba(254,243,199,0.07) 0%, rgba(15,23,42,0.96) 100%)'
+                : currentSeason.id === 'autumn'
+                ? 'radial-gradient(ellipse 90% 65% at 50% 15%, rgba(234,88,12,0.25) 0%, rgba(180,83,9,0.15) 45%, rgba(15,23,42,0.92) 85%), linear-gradient(180deg, rgba(255,237,213,0.07) 0%, rgba(15,23,42,0.96) 100%)'
+                : 'radial-gradient(ellipse 95% 70% at 50% 10%, rgba(6,182,212,0.28) 0%, rgba(139,92,246,0.18) 45%, rgba(15,23,42,0.92) 85%), linear-gradient(180deg, rgba(224,242,254,0.07) 0%, rgba(15,23,42,0.96) 100%)'
+          }}
+        />
+
+        {/* 60fps GPU-Accelerated Dynamic Particle Weather Stream */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
+          {currentSeason.id === 'spring' && (
+            <>
+              {/* 20 Falling Cherry & Peach Blossoms */}
+              {[
+                { left: 5, delay: 0.2, dur: 7.2, size: 14, rot: 15, isGold: false },
+                { left: 12, delay: 2.1, dur: 8.5, size: 12, rot: -30, isGold: true },
+                { left: 18, delay: 4.3, dur: 6.8, size: 16, rot: 45, isGold: false },
+                { left: 25, delay: 1.0, dur: 9.0, size: 13, rot: -15, isGold: false },
+                { left: 32, delay: 5.5, dur: 7.6, size: 15, rot: 35, isGold: true },
+                { left: 39, delay: 0.8, dur: 8.2, size: 12, rot: -40, isGold: false },
+                { left: 46, delay: 3.4, dur: 9.4, size: 17, rot: 50, isGold: false },
+                { left: 53, delay: 1.9, dur: 7.4, size: 14, rot: 20, isGold: false },
+                { left: 60, delay: 4.8, dur: 8.6, size: 13, rot: -25, isGold: true },
+                { left: 67, delay: 2.7, dur: 7.9, size: 15, rot: 30, isGold: false },
+                { left: 74, delay: 0.5, dur: 8.8, size: 12, rot: -35, isGold: false },
+                { left: 81, delay: 3.9, dur: 7.5, size: 16, rot: 25, isGold: true },
+                { left: 88, delay: 1.4, dur: 9.2, size: 14, rot: -10, isGold: false },
+                { left: 94, delay: 5.0, dur: 8.1, size: 13, rot: 40, isGold: false },
+                { left: 15, delay: 6.2, dur: 7.8, size: 15, rot: -20, isGold: false },
+                { left: 29, delay: 7.1, dur: 8.4, size: 14, rot: 35, isGold: false },
+                { left: 43, delay: 6.6, dur: 7.3, size: 13, rot: -15, isGold: true },
+                { left: 58, delay: 7.8, dur: 8.9, size: 16, rot: 45, isGold: false },
+                { left: 72, delay: 6.9, dur: 7.7, size: 12, rot: -30, isGold: false },
+                { left: 86, delay: 7.4, dur: 8.3, size: 15, rot: 20, isGold: false },
+              ].map((p, i) => (
+                <span
+                  key={`spring-petal-stream-${i}`}
+                  className="absolute text-base select-none pointer-events-none animate-tree-petal-fall"
+                  style={{
+                    left: `${p.left}%`,
+                    top: '-24px',
+                    animationDelay: `${p.delay}s`,
+                    animationDuration: `${p.dur}s`,
+                    ['--fall-dur' as any]: `${p.dur}s`,
+                    fontSize: `${p.size}px`,
+                    filter: p.isGold ? 'drop-shadow(0 0 6px rgba(251,191,36,0.6))' : 'drop-shadow(0 0 6px rgba(244,114,182,0.5))'
+                  }}
+                >
+                  {p.isGold ? '✨' : '🌸'}
+                </span>
+              ))}
+            </>
+          )}
+
+          {currentSeason.id === 'summer' && (
+            <>
+              {/* 18 Ascending Glowing Summer Fireflies */}
+              {[
+                { left: 8, bottom: 25, delay: 0.3, dur: 4.8, size: 6 },
+                { left: 16, bottom: 35, delay: 1.8, dur: 5.6, size: 8 },
+                { left: 24, bottom: 15, delay: 3.2, dur: 4.5, size: 7 },
+                { left: 32, bottom: 40, delay: 0.9, dur: 5.2, size: 9 },
+                { left: 40, bottom: 20, delay: 2.4, dur: 4.9, size: 8 },
+                { left: 48, bottom: 30, delay: 4.1, dur: 5.8, size: 7 },
+                { left: 56, bottom: 18, delay: 1.3, dur: 4.6, size: 9 },
+                { left: 64, bottom: 38, delay: 2.9, dur: 5.4, size: 8 },
+                { left: 72, bottom: 22, delay: 0.6, dur: 5.0, size: 7 },
+                { left: 80, bottom: 32, delay: 3.6, dur: 4.7, size: 8 },
+                { left: 88, bottom: 15, delay: 1.7, dur: 5.5, size: 9 },
+                { left: 93, bottom: 28, delay: 2.7, dur: 4.8, size: 6 },
+                { left: 20, bottom: 45, delay: 4.6, dur: 5.1, size: 8 },
+                { left: 36, bottom: 25, delay: 3.9, dur: 4.9, size: 7 },
+                { left: 52, bottom: 42, delay: 5.2, dur: 5.3, size: 8 },
+                { left: 68, bottom: 20, delay: 4.3, dur: 4.7, size: 9 },
+                { left: 78, bottom: 46, delay: 5.7, dur: 5.4, size: 7 },
+                { left: 85, bottom: 35, delay: 4.9, dur: 5.0, size: 8 }
+              ].map((f, i) => (
+                <span
+                  key={`summer-firefly-${i}`}
+                  className="absolute rounded-full bg-amber-300 pointer-events-none animate-tree-firefly"
+                  style={{
+                    left: `${f.left}%`,
+                    bottom: `${f.bottom}%`,
+                    width: `${f.size}px`,
+                    height: `${f.size}px`,
+                    animationDelay: `${f.delay}s`,
+                    animationDuration: `${f.dur}s`,
+                    ['--fly-dur' as any]: `${f.dur}s`,
+                    boxShadow: '0 0 12px 3px rgba(251,191,36,0.95), 0 0 20px 6px rgba(245,158,11,0.6)'
+                  }}
+                />
+              ))}
+            </>
+          )}
+
+          {currentSeason.id === 'autumn' && (
+            <>
+              {/* 20 Swirling Autumn Leaves */}
+              {[
+                { left: 6, delay: 0.3, dur: 7.5, size: 16, icon: '🍁' },
+                { left: 14, delay: 2.4, dur: 8.8, size: 14, icon: '🍂' },
+                { left: 21, delay: 4.6, dur: 7.0, size: 17, icon: '🍁' },
+                { left: 28, delay: 1.1, dur: 9.2, size: 15, icon: '🍂' },
+                { left: 35, delay: 3.8, dur: 8.0, size: 18, icon: '🍁' },
+                { left: 42, delay: 0.6, dur: 8.6, size: 14, icon: '🍂' },
+                { left: 49, delay: 5.2, dur: 7.4, size: 16, icon: '🍁' },
+                { left: 56, delay: 2.0, dur: 9.0, size: 15, icon: '🍂' },
+                { left: 63, delay: 4.1, dur: 8.2, size: 17, icon: '🍁' },
+                { left: 70, delay: 1.5, dur: 7.7, size: 14, icon: '🍂' },
+                { left: 77, delay: 5.7, dur: 8.9, size: 16, icon: '🍁' },
+                { left: 84, delay: 3.0, dur: 7.3, size: 15, icon: '🍂' },
+                { left: 91, delay: 0.8, dur: 9.5, size: 18, icon: '🍁' },
+                { left: 96, delay: 4.8, dur: 8.3, size: 14, icon: '🍂' },
+                { left: 18, delay: 6.4, dur: 7.9, size: 16, icon: '🍁' },
+                { left: 33, delay: 7.2, dur: 8.5, size: 15, icon: '🍂' },
+                { left: 47, delay: 6.8, dur: 7.6, size: 17, icon: '🍁' },
+                { left: 62, delay: 7.9, dur: 8.7, size: 14, icon: '🍂' },
+                { left: 75, delay: 6.5, dur: 7.8, size: 16, icon: '🍁' },
+                { left: 88, delay: 7.6, dur: 8.4, size: 15, icon: '🍂' }
+              ].map((leaf, i) => (
+                <span
+                  key={`autumn-leaf-stream-${i}`}
+                  className="absolute select-none pointer-events-none animate-tree-leaf-swirl"
+                  style={{
+                    left: `${leaf.left}%`,
+                    top: '-24px',
+                    animationDelay: `${leaf.delay}s`,
+                    animationDuration: `${leaf.dur}s`,
+                    ['--fall-dur' as any]: `${leaf.dur}s`,
+                    fontSize: `${leaf.size}px`,
+                    filter: 'drop-shadow(0 0 6px rgba(234,88,12,0.6))'
+                  }}
+                >
+                  {leaf.icon}
+                </span>
+              ))}
+            </>
+          )}
+
+          {currentSeason.id === 'winter' && (
+            <>
+              {/* 26 Falling Snowflakes (Parallax Multi-Depth) */}
+              {[
+                { left: 4, delay: 0.2, dur: 6.0, size: 16, opacity: 0.95 },
+                { left: 10, delay: 2.5, dur: 8.5, size: 10, opacity: 0.7 },
+                { left: 17, delay: 4.8, dur: 5.6, size: 18, opacity: 1.0 },
+                { left: 23, delay: 1.2, dur: 9.0, size: 9, opacity: 0.65 },
+                { left: 29, delay: 3.5, dur: 6.5, size: 15, opacity: 0.9 },
+                { left: 36, delay: 0.7, dur: 8.2, size: 11, opacity: 0.75 },
+                { left: 42, delay: 5.1, dur: 5.8, size: 17, opacity: 0.95 },
+                { left: 48, delay: 2.1, dur: 8.8, size: 10, opacity: 0.7 },
+                { left: 54, delay: 4.3, dur: 6.2, size: 15, opacity: 0.9 },
+                { left: 61, delay: 1.6, dur: 9.3, size: 9, opacity: 0.6 },
+                { left: 67, delay: 5.8, dur: 5.4, size: 19, opacity: 1.0 },
+                { left: 73, delay: 3.1, dur: 8.0, size: 11, opacity: 0.75 },
+                { left: 79, delay: 0.4, dur: 6.6, size: 16, opacity: 0.9 },
+                { left: 86, delay: 4.5, dur: 8.6, size: 10, opacity: 0.7 },
+                { left: 92, delay: 2.8, dur: 5.7, size: 18, opacity: 0.95 },
+                { left: 97, delay: 1.0, dur: 9.1, size: 8, opacity: 0.6 },
+                { left: 13, delay: 6.3, dur: 6.4, size: 15, opacity: 0.9 },
+                { left: 26, delay: 7.1, dur: 8.1, size: 10, opacity: 0.75 },
+                { left: 39, delay: 6.7, dur: 5.9, size: 17, opacity: 0.95 },
+                { left: 52, delay: 7.8, dur: 8.7, size: 11, opacity: 0.7 },
+                { left: 65, delay: 6.4, dur: 6.3, size: 16, opacity: 0.9 },
+                { left: 77, delay: 7.5, dur: 8.4, size: 10, opacity: 0.7 },
+                { left: 89, delay: 6.9, dur: 5.8, size: 18, opacity: 1.0 },
+                { left: 20, delay: 8.2, dur: 7.2, size: 13, opacity: 0.8 },
+                { left: 58, delay: 8.6, dur: 6.9, size: 14, opacity: 0.85 },
+                { left: 83, delay: 8.0, dur: 7.5, size: 12, opacity: 0.8 }
+              ].map((snow, i) => (
+                <span
+                  key={`winter-snow-stream-${i}`}
+                  className="absolute select-none pointer-events-none animate-tree-snow-drift font-sans"
+                  style={{
+                    left: `${snow.left}%`,
+                    top: '-24px',
+                    animationDelay: `${snow.delay}s`,
+                    animationDuration: `${snow.dur}s`,
+                    ['--fall-dur' as any]: `${snow.dur}s`,
+                    fontSize: `${snow.size}px`,
+                    opacity: snow.opacity,
+                    color: '#f0f9ff',
+                    filter: 'drop-shadow(0 0 5px rgba(224,242,254,0.9))'
+                  }}
+                >
+                  ❄
+                </span>
+              ))}
+            </>
+          )}
+        </div>
+        
         {/* Sickness Alarm Banner (Khi Cây Bị Bệnh / Kiệt Sức) */}
         {treeHealthState === 'withered' && (
           <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30 px-3.5 py-1 rounded-full bg-rose-950/90 border border-rose-500/70 text-rose-200 text-[11px] font-bold flex items-center gap-2 shadow-2xl shadow-rose-950/90 animate-pulse pointer-events-none whitespace-nowrap">
@@ -1358,21 +1581,27 @@ export default function DynamicLifeTree({
             </linearGradient>
 
             <radialGradient id="wisdomFoliageGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor={treeHealthState === 'withered' ? '#4c1d95' : '#818cf8'} stopOpacity="0.45" />
-              <stop offset="60%" stopColor={treeHealthState === 'withered' ? '#311042' : '#4338ca'} stopOpacity="0.2" />
-              <stop offset="100%" stopColor="#0f172a" stopOpacity="0" />
+              <stop offset="0%" stopColor={treeHealthState === 'withered' ? '#4c1d95' : seasonalFoliageGlow.wisdom.start} stopOpacity="0.55" />
+              <stop offset="55%" stopColor={treeHealthState === 'withered' ? '#311042' : seasonalFoliageGlow.wisdom.mid} stopOpacity="0.28" />
+              <stop offset="100%" stopColor={seasonalFoliageGlow.wisdom.stop} stopOpacity="0" />
             </radialGradient>
 
             <radialGradient id="socialFoliageGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor={treeHealthState === 'withered' ? '#581c87' : '#38bdf8'} stopOpacity="0.45" />
-              <stop offset="60%" stopColor="#0284c7" stopOpacity="0.2" />
-              <stop offset="100%" stopColor="#0369a1" stopOpacity="0" />
+              <stop offset="0%" stopColor={treeHealthState === 'withered' ? '#581c87' : seasonalFoliageGlow.social.start} stopOpacity="0.55" />
+              <stop offset="55%" stopColor={treeHealthState === 'withered' ? '#0284c7' : seasonalFoliageGlow.social.mid} stopOpacity="0.28" />
+              <stop offset="100%" stopColor={seasonalFoliageGlow.social.stop} stopOpacity="0" />
             </radialGradient>
 
             <radialGradient id="wealthFoliageGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor={treeHealthState === 'withered' ? '#78350f' : '#fbbf24'} stopOpacity="0.45" />
-              <stop offset="60%" stopColor="#d97706" stopOpacity="0.2" />
-              <stop offset="100%" stopColor="#78350f" stopOpacity="0" />
+              <stop offset="0%" stopColor={treeHealthState === 'withered' ? '#78350f' : seasonalFoliageGlow.wealth.start} stopOpacity="0.55" />
+              <stop offset="55%" stopColor={treeHealthState === 'withered' ? '#d97706' : seasonalFoliageGlow.wealth.mid} stopOpacity="0.28" />
+              <stop offset="100%" stopColor={seasonalFoliageGlow.wealth.stop} stopOpacity="0" />
+            </radialGradient>
+
+            <radialGradient id="sproutHaloGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor={currentSeason.id === 'spring' ? '#f472b6' : '#34d399'} stopOpacity="0.35" />
+              <stop offset="50%" stopColor={currentSeason.id === 'spring' ? '#10b981' : '#059669'} stopOpacity="0.18" />
+              <stop offset="100%" stopColor="#064e3b" stopOpacity="0" />
             </radialGradient>
 
             {/* Rose & Children Gradients (Quyết định 2: Phương Án A) */}
@@ -1627,54 +1856,82 @@ export default function DynamicLifeTree({
           <g className="procedural-tree-trunk" id="proceduralTreeTrunk">
             {growthStage === 'sprout' && (
               <g className="stage-sprout">
+                {/* Sprout Luminous Ambient Halo */}
+                <ellipse cx="360" cy="365" rx="130" ry="120" fill="url(#sproutHaloGrad)" className="animate-tree-foliage-breath" />
+
                 {/* Sacred Seed (Hạt Giống Thần Thoại Khởi Nguyên) */}
-                <ellipse cx="360" cy="480" rx="22" ry="14" fill="#064e3b" stroke="#10b981" strokeWidth="2.5" filter="url(#coreGlow)" />
-                <ellipse cx="360" cy="478" rx="16" ry="9" fill="#10b981" opacity="0.4" />
+                <ellipse cx="360" cy="480" rx="24" ry="15" fill="#064e3b" stroke="#10b981" strokeWidth="2.5" filter="url(#coreGlow)" />
+                <ellipse cx="360" cy="477" rx="17" ry="10" fill="#34d399" opacity="0.6" />
+                <circle cx="360" cy="476" r="4" fill="#fef08a" filter="url(#coreGlow)" className="animate-pulse" />
 
                 {/* 3D Curved Seedling Trunk (Thân Mầm Ngọc Bích Khối Trụ) */}
                 <path
-                  d="M 351 480 C 344 380, 354 310, 360 270 C 366 310, 376 380, 369 480 Z"
+                  d="M 350 480 C 342 380, 353 305, 360 265 C 367 305, 378 380, 370 480 Z"
                   fill={treeHealthState === 'withered' ? 'url(#witheredBarkGradient)' : 'url(#sproutGradient)'}
                   stroke={treeHealthState === 'withered' ? '#450a0a' : '#047857'}
                   strokeWidth="2.5"
                 />
 
-                {/* Internal Mana Sap Meridian in Sprout */}
+                {/* Internal Flowing Mana Sap Meridian in Sprout */}
                 <path
-                  d="M 360 475 C 356 385, 362 310, 360 270"
+                  d="M 360 475 C 355 385, 365 305, 360 265"
                   stroke="url(#manaSapGradient)"
-                  strokeWidth="4"
-                  strokeDasharray="6 4"
+                  strokeWidth="4.5"
+                  strokeDasharray="8 6"
                   fill="none"
-                  className="animate-pulse"
+                  className="animate-tree-mana-stream"
                 />
 
                 {/* Left Cotyledon Baby Leaf (Lá Mầm Ngọc Bích Trái) */}
                 <path
-                  d="M 358 340 C 295 295, 240 320, 235 350 C 270 375, 325 355, 358 340 Z"
+                  d="M 357 340 C 285 285, 225 315, 220 350 C 260 380, 325 358, 357 340 Z"
                   fill={treeHealthState === 'withered' ? '#713f12' : '#10b981'}
                   stroke={treeHealthState === 'withered' ? '#451a03' : '#34d399'}
-                  strokeWidth="2"
+                  strokeWidth="2.5"
                   filter="url(#coreGlow)"
                 />
                 {/* Left leaf internal glowing vein */}
-                <path d="M 358 340 Q 300 330, 245 348" stroke="#a7f3d0" strokeWidth="2" strokeDasharray="3 3" fill="none" opacity="0.8" />
+                <path d="M 357 340 Q 290 328, 230 348" stroke="#d1fae5" strokeWidth="2.2" strokeDasharray="4 3" fill="none" opacity="0.9" />
+                {/* Sparkling Morning Dewdrop on left leaf */}
+                <circle cx="232" cy="346" r="3.2" fill="#67e8f9" filter="url(#coreGlow)" className="animate-ping" style={{ animationDuration: '3s' }} />
 
                 {/* Right Cotyledon Baby Leaf (Lá Mầm Ngọc Bích Phải) */}
                 <path
-                  d="M 362 335 C 425 290, 480 315, 485 345 C 450 370, 395 350, 362 335 Z"
+                  d="M 363 335 C 435 280, 495 310, 500 345 C 460 375, 395 353, 363 335 Z"
                   fill={treeHealthState === 'withered' ? '#854d0e' : '#34d399'}
                   stroke={treeHealthState === 'withered' ? '#451a03' : '#6ee7b7'}
-                  strokeWidth="2"
+                  strokeWidth="2.5"
                   filter="url(#coreGlow)"
                 />
                 {/* Right leaf internal glowing vein */}
-                <path d="M 362 335 Q 420 325, 475 343" stroke="#d1fae5" strokeWidth="2" strokeDasharray="3 3" fill="none" opacity="0.8" />
+                <path d="M 363 335 Q 430 323, 490 343" stroke="#ecfdf5" strokeWidth="2.2" strokeDasharray="4 3" fill="none" opacity="0.9" />
+                {/* Sparkling Morning Dewdrop on right leaf */}
+                <circle cx="488" cy="341" r="3.2" fill="#67e8f9" filter="url(#coreGlow)" className="animate-ping" style={{ animationDuration: '3.6s' }} />
 
-                {/* Root capillary threads */}
-                <path d="M 360 485 Q 315 500, 260 508" stroke="#059669" strokeWidth="3" strokeDasharray="4 4" fill="none" />
-                <path d="M 360 485 Q 405 500, 460 508" stroke="#059669" strokeWidth="3" strokeDasharray="4 4" fill="none" />
-                <path d="M 360 485 Q 350 504, 340 514" stroke="#059669" strokeWidth="2.5" strokeDasharray="3 3" fill="none" />
+                {/* Crown emerging leaflet shoot */}
+                <path d="M 360 265 C 351 245, 342 238, 347 228 C 357 236, 360 252, 360 265 Z" fill="#6ee7b7" stroke="#059669" strokeWidth="1.5" />
+                <path d="M 360 265 C 369 245, 378 238, 373 228 C 363 236, 360 252, 360 265 Z" fill="#a7f3d0" stroke="#059669" strokeWidth="1.5" />
+                <circle cx="360" cy="232" r="4.5" fill="#fef08a" stroke="#f59e0b" strokeWidth="1.2" filter="url(#coreGlow)" className="animate-pulse" />
+
+                {/* Seasonal features on Sprout */}
+                {currentSeason.id === 'spring' && (
+                  <>
+                    <circle cx="347" cy="236" r="5.5" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                    <circle cx="373" cy="236" r="5.5" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                  </>
+                )}
+                {currentSeason.id === 'winter' && (
+                  <>
+                    <path d="M 226 348 Q 285 322, 355 338" stroke="#f8fafc" strokeWidth="3.5" strokeLinecap="round" fill="none" opacity="0.95" />
+                    <path d="M 494 343 Q 435 317, 365 333" stroke="#f8fafc" strokeWidth="3.5" strokeLinecap="round" fill="none" opacity="0.95" />
+                  </>
+                )}
+
+                {/* Root capillary threads gripping the earth */}
+                <path d="M 360 485 Q 310 500, 250 508" stroke="#10b981" strokeWidth="3.5" strokeDasharray="5 4" fill="none" />
+                <path d="M 360 485 Q 410 500, 470 508" stroke="#10b981" strokeWidth="3.5" strokeDasharray="5 4" fill="none" />
+                <path d="M 360 485 Q 350 505, 338 516" stroke="#059669" strokeWidth="3" strokeDasharray="4 3" fill="none" />
+                <path d="M 360 485 Q 370 505, 382 516" stroke="#059669" strokeWidth="3" strokeDasharray="4 3" fill="none" />
               </g>
             )}
 
@@ -1688,22 +1945,38 @@ export default function DynamicLifeTree({
                   strokeLinecap="round"
                   fill="none"
                 />
-                {/* Pulsing Mana Meridian Sap */}
+                {/* Flowing Mana Meridian Sap */}
                 <path
                   d="M 360 475 C 356 385, 364 290, 360 195"
                   stroke="url(#manaSapGradient)"
                   strokeWidth="5"
                   strokeDasharray="8 6"
                   fill="none"
-                  className="animate-pulse"
+                  className="animate-tree-mana-stream"
                 />
                 {/* Branches reaching for sunlight */}
                 <path d="M 360 320 Q 280 260, 220 210" stroke={treeHealthState === 'withered' ? '#581c87' : '#10b981'} strokeWidth="10" strokeLinecap="round" fill="none" />
                 <path d="M 360 270 Q 440 210, 500 170" stroke={treeHealthState === 'withered' ? '#581c87' : '#10b981'} strokeWidth="10" strokeLinecap="round" fill="none" />
-                {/* Foliage soft clouds */}
-                <circle cx="220" cy="210" r="38" fill={treeHealthState === 'withered' ? '#3b0764' : '#10b981'} opacity="0.35" filter="url(#foliageBlur)" />
-                <circle cx="500" cy="170" r="42" fill={treeHealthState === 'withered' ? '#3b0764' : '#10b981'} opacity="0.35" filter="url(#foliageBlur)" />
-                <circle cx="360" cy="190" r="46" fill={treeHealthState === 'withered' ? '#2e1065' : '#34d399'} opacity="0.3" filter="url(#foliageBlur)" />
+                
+                {/* Winter Snow Caps on Sapling */}
+                {currentSeason.id === 'winter' && (
+                  <>
+                    <path d="M 358 316 Q 282 256, 222 206" stroke="#f8fafc" strokeWidth="3.5" strokeLinecap="round" fill="none" opacity="0.9" />
+                    <path d="M 362 266 Q 438 206, 498 166" stroke="#f8fafc" strokeWidth="3.5" strokeLinecap="round" fill="none" opacity="0.9" />
+                  </>
+                )}
+                {/* Spring Blossom Buds on Sapling */}
+                {currentSeason.id === 'spring' && (
+                  <>
+                    <circle cx="220" cy="208" r="6" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                    <circle cx="500" cy="168" r="6" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                  </>
+                )}
+
+                {/* Foliage soft clouds with breathing motion */}
+                <circle cx="220" cy="210" r="42" fill="url(#wisdomFoliageGlow)" opacity="0.45" filter="url(#foliageBlur)" className="animate-tree-foliage-breath" />
+                <circle cx="500" cy="170" r="46" fill="url(#wealthFoliageGlow)" opacity="0.45" filter="url(#foliageBlur)" className="animate-tree-foliage-breath" />
+                <circle cx="360" cy="190" r="50" fill="url(#socialFoliageGlow)" opacity="0.4" filter="url(#foliageBlur)" className="animate-tree-foliage-breath" />
               </g>
             )}
 
@@ -1720,31 +1993,49 @@ export default function DynamicLifeTree({
                 <path d="M 326 480 Q 270 496, 215 508" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="14" strokeLinecap="round" fill="none" />
                 <path d="M 394 480 Q 450 496, 505 508" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="14" strokeLinecap="round" fill="none" />
 
-                {/* Central Meridian (Đốc Mạch Thần Mộc) */}
-                <path d="M 360 475 Q 365 370, 360 265" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="10 8" fill="none" className="animate-pulse" />
+                {/* Central Flowing Meridian (Đốc Mạch Thần Mộc) */}
+                <path d="M 360 475 Q 365 370, 360 265" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="10 8" fill="none" className="animate-tree-mana-stream" />
 
                 {/* BOUGH 1: Wisdom & Mastery (West / North-West - Organic Bezier Tapered Curve) */}
                 <path d="M 350 290 C 300 245, 225 180, 140 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="18" strokeLinecap="round" fill="none" />
-                <path d="M 350 290 C 300 245, 225 180, 140 95" stroke="url(#manaSapGradient)" strokeWidth="4.5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                <path d="M 350 290 C 300 245, 225 180, 140 95" stroke="url(#manaSapGradient)" strokeWidth="4.5" strokeDasharray="8 6" fill="none" className="animate-tree-mana-stream" />
                 <path d="M 240 195 C 195 205, 150 225, 115 240" stroke="#78350f" strokeWidth="8" strokeLinecap="round" fill="none" />
 
                 {/* BOUGH 2: Crown of Social Fellowship (Zenith Crown - Sheltering Arch) */}
                 <path d="M 360 265 C 352 195, 368 135, 360 65" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="19" strokeLinecap="round" fill="none" />
-                <path d="M 360 265 C 352 195, 368 135, 360 65" stroke="url(#manaSapGradient)" strokeWidth="4.5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                <path d="M 360 265 C 352 195, 368 135, 360 65" stroke="url(#manaSapGradient)" strokeWidth="4.5" strokeDasharray="8 6" fill="none" className="animate-tree-mana-stream" />
                 <path d="M 360 135 C 335 105, 305 90, 280 80" stroke="#78350f" strokeWidth="8" strokeLinecap="round" fill="none" />
                 <path d="M 360 135 C 385 105, 415 90, 440 80" stroke="#78350f" strokeWidth="8" strokeLinecap="round" fill="none" />
 
                 {/* BOUGH 3: Wealth & Abundance (East / North-East - Organic Tapered Bough) */}
                 <path d="M 370 290 C 420 245, 495 180, 580 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="18" strokeLinecap="round" fill="none" />
-                <path d="M 370 290 C 420 245, 495 180, 580 95" stroke="url(#manaSapGradient)" strokeWidth="4.5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                <path d="M 370 290 C 420 245, 495 180, 580 95" stroke="url(#manaSapGradient)" strokeWidth="4.5" strokeDasharray="8 6" fill="none" className="animate-tree-mana-stream" />
                 <path d="M 480 195 C 525 205, 570 225, 605 240" stroke="#78350f" strokeWidth="8" strokeLinecap="round" fill="none" />
 
-                {/* Layered Foliage Canopy Clusters */}
-                <circle cx="140" cy="95" r="68" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="115" cy="235" r="38" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" />
-                <circle cx="360" cy="65" r="78" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="580" cy="95" r="68" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="605" cy="235" r="38" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" />
+                {/* Winter Snow Caps on Oak Boughs */}
+                {currentSeason.id === 'winter' && (
+                  <g className="winter-snow-caps-oak">
+                    <path d="M 348 286 C 298 241, 223 176, 138 91" stroke="#f8fafc" strokeWidth="4.5" strokeLinecap="round" fill="none" opacity="0.9" />
+                    <path d="M 358 261 C 350 191, 366 131, 358 61" stroke="#f8fafc" strokeWidth="4.5" strokeLinecap="round" fill="none" opacity="0.9" />
+                    <path d="M 372 286 C 422 241, 497 176, 582 91" stroke="#f8fafc" strokeWidth="4.5" strokeLinecap="round" fill="none" opacity="0.9" />
+                  </g>
+                )}
+
+                {/* Spring Cherry Blossoms on Oak Boughs */}
+                {currentSeason.id === 'spring' && (
+                  <g className="spring-blossoms-oak">
+                    <circle cx="140" cy="95" r="7.5" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                    <circle cx="360" cy="65" r="8.5" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                    <circle cx="580" cy="95" r="7.5" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                  </g>
+                )}
+
+                {/* Layered Foliage Canopy Clusters with Breathing Motion */}
+                <circle cx="140" cy="95" r="68" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" className="animate-tree-foliage-breath" />
+                <circle cx="115" cy="235" r="38" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" className="animate-tree-foliage-breath" />
+                <circle cx="360" cy="65" r="78" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" className="animate-tree-foliage-breath" />
+                <circle cx="580" cy="95" r="68" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" className="animate-tree-foliage-breath" />
+                <circle cx="605" cy="235" r="38" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" className="animate-tree-foliage-breath" />
               </g>
             )}
 
@@ -1761,30 +2052,48 @@ export default function DynamicLifeTree({
                 <path d="M 315 480 Q 260 495, 200 508" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#5c2409'} strokeWidth="16" strokeLinecap="round" fill="none" />
                 <path d="M 405 480 Q 460 495, 520 508" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#5c2409'} strokeWidth="16" strokeLinecap="round" fill="none" />
 
-                {/* Dual Meridian Sap Channels */}
-                <path d="M 355 475 Q 361 360, 355 250" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="12 8" fill="none" className="animate-pulse" />
-                <path d="M 365 475 Q 371 360, 365 250" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="12 8" fill="none" className="animate-pulse" />
+                {/* Dual Flowing Meridian Sap Channels */}
+                <path d="M 355 475 Q 361 360, 355 250" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="12 8" fill="none" className="animate-tree-mana-stream" />
+                <path d="M 365 475 Q 371 360, 365 250" stroke="url(#manaSapGradient)" strokeWidth="6" strokeDasharray="12 8" fill="none" className="animate-tree-mana-stream" />
 
                 {/* Broad Sheltering Fractal Boughs */}
                 <path d="M 345 275 C 290 230, 215 170, 130 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
-                <path d="M 345 275 C 290 230, 215 170, 130 95" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="10 8" fill="none" className="animate-pulse" />
+                <path d="M 345 275 C 290 230, 215 170, 130 95" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="10 8" fill="none" className="animate-tree-mana-stream" />
                 <path d="M 230 190 C 185 200, 140 220, 105 238" stroke="#5c2409" strokeWidth="8" strokeLinecap="round" fill="none" />
 
                 <path d="M 360 250 C 352 185, 368 125, 360 60" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
-                <path d="M 360 250 C 352 185, 368 125, 360 60" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="10 8" fill="none" className="animate-pulse" />
+                <path d="M 360 250 C 352 185, 368 125, 360 60" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="10 8" fill="none" className="animate-tree-mana-stream" />
                 <path d="M 360 120 C 330 90, 300 75, 270 65" stroke="#5c2409" strokeWidth="9" strokeLinecap="round" fill="none" />
                 <path d="M 360 120 C 390 90, 420 75, 450 65" stroke="#5c2409" strokeWidth="9" strokeLinecap="round" fill="none" />
 
                 <path d="M 375 275 C 430 230, 505 170, 590 95" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#78350f'} strokeWidth="20" strokeLinecap="round" fill="none" />
-                <path d="M 375 275 C 430 230, 505 170, 590 95" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="10 8" fill="none" className="animate-pulse" />
+                <path d="M 375 275 C 430 230, 505 170, 590 95" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="10 8" fill="none" className="animate-tree-mana-stream" />
                 <path d="M 490 190 C 535 200, 580 220, 615 238" stroke="#5c2409" strokeWidth="8" strokeLinecap="round" fill="none" />
 
-                {/* Colossal canopy foliage */}
-                <circle cx="130" cy="95" r="74" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="105" cy="235" r="42" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" />
-                <circle cx="360" cy="60" r="82" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="590" cy="95" r="74" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="615" cy="235" r="42" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" />
+                {/* Winter Snow Caps on Pillar */}
+                {currentSeason.id === 'winter' && (
+                  <g className="winter-snow-caps-pillar">
+                    <path d="M 342 271 C 288 226, 213 166, 128 91" stroke="#f8fafc" strokeWidth="5" strokeLinecap="round" fill="none" opacity="0.9" />
+                    <path d="M 358 246 C 350 181, 366 121, 358 56" stroke="#f8fafc" strokeWidth="5" strokeLinecap="round" fill="none" opacity="0.9" />
+                    <path d="M 378 271 C 432 226, 507 166, 592 91" stroke="#f8fafc" strokeWidth="5" strokeLinecap="round" fill="none" opacity="0.9" />
+                  </g>
+                )}
+
+                {/* Spring Cherry Blossoms on Pillar */}
+                {currentSeason.id === 'spring' && (
+                  <g className="spring-blossoms-pillar">
+                    <circle cx="130" cy="95" r="8" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                    <circle cx="360" cy="60" r="9" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                    <circle cx="590" cy="95" r="8" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                  </g>
+                )}
+
+                {/* Colossal canopy foliage with breathing motion */}
+                <circle cx="130" cy="95" r="74" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" className="animate-tree-foliage-breath" />
+                <circle cx="105" cy="235" r="42" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" className="animate-tree-foliage-breath" />
+                <circle cx="360" cy="60" r="82" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" className="animate-tree-foliage-breath" />
+                <circle cx="590" cy="95" r="74" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" className="animate-tree-foliage-breath" />
+                <circle cx="615" cy="235" r="42" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" className="animate-tree-foliage-breath" />
               </g>
             )}
 
@@ -1798,7 +2107,7 @@ export default function DynamicLifeTree({
                   strokeWidth="3.5"
                 />
                 {/* Transcendent spiral runes on trunk */}
-                <path d="M 360 450 Q 370 380, 360 320 Q 350 260, 360 200" stroke="#fef08a" strokeWidth="4" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                <path d="M 360 450 Q 370 380, 360 320 Q 350 260, 360 200" stroke="#fef08a" strokeWidth="4" strokeDasharray="8 6" fill="none" className="animate-tree-mana-stream" />
 
                 {/* Buttress Root Anchors gripping the Sacred Dais */}
                 <path d="M 320 482 Q 260 490, 210 496" stroke={treeHealthState === 'withered' ? '#3f3f46' : '#d97706'} strokeWidth="14" strokeLinecap="round" fill="none" />
@@ -1806,31 +2115,49 @@ export default function DynamicLifeTree({
 
                 {/* BOUGH 1: Wisdom & Skills (West / North-West - Organic Bezier Tapered Branch) */}
                 <path d="M 346 270 C 285 235, 215 170, 135 95" stroke="url(#ancientWorldTreeGold)" strokeWidth="18" strokeLinecap="round" fill="none" />
-                <path d="M 346 270 C 285 235, 215 170, 135 95" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                <path d="M 346 270 C 285 235, 215 170, 135 95" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-tree-mana-stream" />
                 {/* Secondary fractal twigs on Wisdom Bough */}
                 <path d="M 235 185 C 190 195, 145 220, 110 240" stroke="#d97706" strokeWidth="8" strokeLinecap="round" fill="none" />
                 <path d="M 185 135 C 160 115, 140 100, 120 70" stroke="#f59e0b" strokeWidth="6" strokeLinecap="round" fill="none" />
 
                 {/* BOUGH 2: Crown of Social Links (Center / Zenith - Soaring Canopy Arch) */}
                 <path d="M 360 250 C 352 195, 368 135, 360 55" stroke="url(#ancientWorldTreeGold)" strokeWidth="19" strokeLinecap="round" fill="none" />
-                <path d="M 360 250 C 352 195, 368 135, 360 55" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                <path d="M 360 250 C 352 195, 368 135, 360 55" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-tree-mana-stream" />
                 {/* Crown arch bifurcation */}
                 <path d="M 360 125 C 335 95, 305 80, 275 70" stroke="#d97706" strokeWidth="9" strokeLinecap="round" fill="none" />
                 <path d="M 360 125 C 385 95, 415 80, 445 70" stroke="#d97706" strokeWidth="9" strokeLinecap="round" fill="none" />
 
                 {/* BOUGH 3: Wealth & Abundance (East / North-East - Organic Golden Branch) */}
                 <path d="M 374 270 C 435 235, 505 170, 585 95" stroke="url(#ancientWorldTreeGold)" strokeWidth="18" strokeLinecap="round" fill="none" />
-                <path d="M 374 270 C 435 235, 505 170, 585 95" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-pulse" />
+                <path d="M 374 270 C 435 235, 505 170, 585 95" stroke="url(#manaSapGradient)" strokeWidth="5" strokeDasharray="8 6" fill="none" className="animate-tree-mana-stream" />
                 {/* Secondary fractal twigs on Wealth Bough */}
                 <path d="M 485 185 C 530 195, 575 220, 610 240" stroke="#d97706" strokeWidth="8" strokeLinecap="round" fill="none" />
                 <path d="M 535 135 C 560 115, 580 100, 600 70" stroke="#f59e0b" strokeWidth="6" strokeLinecap="round" fill="none" />
 
-                {/* Layered Foliage Clusters */}
-                <circle cx="135" cy="95" r="75" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="105" cy="235" r="42" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" />
-                <circle cx="360" cy="55" r="85" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="585" cy="95" r="75" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" />
-                <circle cx="615" cy="235" r="42" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" />
+                {/* Winter Snow Caps on World Tree */}
+                {currentSeason.id === 'winter' && (
+                  <g className="winter-snow-caps-world-tree">
+                    <path d="M 344 266 C 283 231, 213 166, 133 91" stroke="#f8fafc" strokeWidth="5.5" strokeLinecap="round" fill="none" opacity="0.9" />
+                    <path d="M 358 246 C 350 191, 366 131, 358 51" stroke="#f8fafc" strokeWidth="5.5" strokeLinecap="round" fill="none" opacity="0.9" />
+                    <path d="M 376 266 C 437 231, 507 166, 587 91" stroke="#f8fafc" strokeWidth="5.5" strokeLinecap="round" fill="none" opacity="0.9" />
+                  </g>
+                )}
+
+                {/* Spring Blossoms on World Tree */}
+                {currentSeason.id === 'spring' && (
+                  <g className="spring-blossoms-world-tree">
+                    <circle cx="135" cy="95" r="9" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                    <circle cx="360" cy="55" r="10" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                    <circle cx="585" cy="95" r="9" fill="url(#roseFlowerGrad)" filter="url(#coreGlow)" />
+                  </g>
+                )}
+
+                {/* Layered Foliage Clusters with Breathing Motion */}
+                <circle cx="135" cy="95" r="75" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" className="animate-tree-foliage-breath" />
+                <circle cx="105" cy="235" r="42" fill="url(#wisdomFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" className="animate-tree-foliage-breath" />
+                <circle cx="360" cy="55" r="85" fill="url(#socialFoliageGlow)" filter="url(#foliageBlur)" className="animate-tree-foliage-breath" />
+                <circle cx="585" cy="95" r="75" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" className="animate-tree-foliage-breath" />
+                <circle cx="615" cy="235" r="42" fill="url(#wealthFoliageGlow)" filter="url(#foliageBlur)" opacity="0.6" className="animate-tree-foliage-breath" />
 
                 {/* Golden heritage fruits (legacy orbs) */}
                 <circle cx="120" cy="90" r="14" fill="#fef08a" stroke="#f59e0b" strokeWidth="3" className="animate-bounce" />
@@ -2151,8 +2478,10 @@ export default function DynamicLifeTree({
               transform="translate(260, 465)"
             >
               <title>🐶 Cún Cỏ Trung Nghĩa (Nhấp để vuốt ve & nghe sủa -8% Burnout)</title>
+              {/* Pet Dais Aura Ring */}
+              <ellipse cx="20" cy="24" rx="18" ry="7" fill="url(#daisGoldPlateGrad)" opacity="0.45" filter="url(#coreGlow)" />
               {/* Pet Shadow */}
-              <ellipse cx="20" cy="24" rx="16" ry="6" fill="#020617" opacity="0.6" />
+              <ellipse cx="20" cy="24" rx="15" ry="5" fill="#020617" opacity="0.7" />
               {/* Wagging Tail */}
               <path
                 d="M 6 16 Q 0 8 4 4"
@@ -2195,8 +2524,10 @@ export default function DynamicLifeTree({
               transform="translate(515, 155)"
             >
               <title>🐱 Mèo Thần Tài (Nhấp để vuốt ve & chiêu tài lộc +5% Yield)</title>
+              {/* Cat Dais Aura Ring */}
+              <ellipse cx="16" cy="28" rx="17" ry="6" fill="url(#daisGoldPlateGrad)" opacity="0.45" filter="url(#coreGlow)" />
               {/* Cat Shadow */}
-              <ellipse cx="16" cy="28" rx="14" ry="5" fill="#020617" opacity="0.5" />
+              <ellipse cx="16" cy="28" rx="13" ry="4.5" fill="#020617" opacity="0.6" />
               {/* Cat Body */}
               <ellipse cx="16" cy="18" rx="11" ry="10" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1.5" />
               {/* Calico spot */}
@@ -2241,6 +2572,8 @@ export default function DynamicLifeTree({
               transform="translate(195, 275)"
             >
               <title>🦊 Hồ Ly Cửu Vĩ (Nhấp để kích hoạt hào quang mị lực +5 Charm)</title>
+              {/* Spirit Lotus Dais under Fox */}
+              <ellipse cx="16" cy="24" rx="20" ry="7" fill="#a855f7" opacity="0.3" filter="url(#coreGlow)" />
               {/* 9 Ethereal Glowing Tails radiating */}
               <g className="opacity-70 animate-pulse" style={{ animationDuration: '2s' }}>
                 {[-50, -35, -20, -10, 0, 10, 20, 35, 50].map((deg, i) => (
@@ -2283,6 +2616,8 @@ export default function DynamicLifeTree({
               transform="translate(330, 20)"
             >
               <title>🐉 Ấu Long Luân Hồi (Nhấp để rồng ngâm hộ mệnh +10 Karma, -30% Shock)</title>
+              {/* Dragon Celestial Cloud Dais */}
+              <ellipse cx="32" cy="40" rx="24" ry="8" fill="#38bdf8" opacity="0.35" filter="url(#coreGlow)" />
               {/* Serpentine Dragon Body (Curved loop) */}
               <path
                 d="M 10 32 C 0 20, 20 5, 35 15 C 45 22, 55 35, 42 42 C 30 48, 15 42, 28 30"

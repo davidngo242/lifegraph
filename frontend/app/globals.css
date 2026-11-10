@@ -422,25 +422,117 @@ img, canvas, svg, video {
 }
 
 @keyframes tree-petal-fall {
-  0% { transform: translate(0, -20px) rotate(0deg); opacity: 0; }
-  15% { opacity: 0.95; }
-  85% { opacity: 0.85; }
-  100% { transform: translate(60px, 560px) rotate(360deg); opacity: 0; }
+  0% {
+    transform: translate3d(0, -30px, 0) rotate(0deg) scale(0.8);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.95;
+    transform: translate3d(15px, 60px, 0) rotate(45deg) scale(1);
+  }
+  35% {
+    transform: translate3d(-20px, 190px, 0) rotate(135deg) scale(0.95);
+  }
+  65% {
+    transform: translate3d(30px, 360px, 0) rotate(240deg) scale(1.05);
+    opacity: 0.9;
+  }
+  85% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(10px, 620px, 0) rotate(360deg) scale(0.85);
+    opacity: 0;
+  }
 }
 
 @keyframes tree-leaf-swirl {
-  0% { transform: translate(0, -20px) rotate(0deg); opacity: 0; }
-  20% { opacity: 0.95; }
-  50% { transform: translate(-45px, 260px) rotate(180deg); }
-  80% { opacity: 0.85; }
-  100% { transform: translate(35px, 560px) rotate(360deg); opacity: 0; }
+  0% {
+    transform: translate3d(0, -30px, 0) rotate(0deg) scale(0.75);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.95;
+    transform: translate3d(-25px, 70px, 0) rotate(-45deg) scale(1);
+  }
+  45% {
+    transform: translate3d(35px, 220px, 0) rotate(90deg) scale(1.1);
+  }
+  75% {
+    transform: translate3d(-30px, 410px, 0) rotate(210deg) scale(0.95);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(20px, 620px, 0) rotate(360deg) scale(0.8);
+    opacity: 0;
+  }
 }
 
 @keyframes tree-snow-drift {
-  0% { transform: translate(0, -20px); opacity: 0; }
-  20% { opacity: 0.9; }
-  80% { opacity: 0.8; }
-  100% { transform: translate(30px, 560px); opacity: 0; }
+  0% {
+    transform: translate3d(0, -30px, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.95;
+  }
+  50% {
+    transform: translate3d(25px, 280px, 0);
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(-15px, 620px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes tree-firefly-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.7);
+    opacity: 0.15;
+  }
+  25% {
+    opacity: 0.95;
+    transform: translate3d(16px, -50px, 0) scale(1.15);
+  }
+  55% {
+    opacity: 0.4;
+    transform: translate3d(-18px, -110px, 0) scale(0.85);
+  }
+  75% {
+    opacity: 1;
+    transform: translate3d(20px, -170px, 0) scale(1.2);
+  }
+  100% {
+    transform: translate3d(-10px, -240px, 0) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes tree-mana-sap-flow {
+  from {
+    stroke-dashoffset: 64;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes tree-foliage-breath {
+  0% {
+    transform: scale(0.975);
+    opacity: 0.88;
+  }
+  50% {
+    transform: scale(1.035);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.975);
+    opacity: 0.88;
+  }
 }
 
 @keyframes tree-godray-pulse {
@@ -471,6 +563,36 @@ img, canvas, svg, video {
 .animate-tree-rune-ccw {
   animation: tree-rune-rotate-ccw 20s linear infinite;
   transform-origin: center;
+}
+
+.animate-tree-petal-fall {
+  animation: tree-petal-fall var(--fall-dur, 8s) ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-tree-leaf-swirl {
+  animation: tree-leaf-swirl var(--fall-dur, 8.5s) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: transform, opacity;
+}
+
+.animate-tree-snow-drift {
+  animation: tree-snow-drift var(--fall-dur, 7s) linear infinite;
+  will-change: transform, opacity;
+}
+
+.animate-tree-firefly {
+  animation: tree-firefly-drift var(--fly-dur, 5s) ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-tree-mana-stream {
+  animation: tree-mana-sap-flow 2.2s linear infinite;
+}
+
+.animate-tree-foliage-breath {
+  animation: tree-foliage-breath 6s ease-in-out infinite alternate;
+  transform-origin: center;
+  transform-box: fill-box;
 }
 
 .animate-tree-godray {

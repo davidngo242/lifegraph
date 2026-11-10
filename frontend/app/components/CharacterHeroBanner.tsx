@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import Tooltip from './Tooltip';
 import { formatTrait } from '../utils/traitUtils';
+import SidekickPetCompanion from './SidekickPetCompanion';
 
 const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
