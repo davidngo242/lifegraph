@@ -1213,7 +1213,8 @@ function GoldenMagicDais({
   isMeditating?: boolean;
 }) {
   const outerRuneRef = useRef<THREE.Group>(null);
-  const innerRuneRef = useRef<THREE.Group>(null);
+  const midRuneRef = useRef<THREE.Group>(null);
+  const footAuraRef = useRef<THREE.Group>(null);
   const lightBeamsRef = useRef<THREE.Group>(null);
   const floatingCrystalsRef = useRef<THREE.Group>(null);
 
@@ -1239,25 +1240,32 @@ function GoldenMagicDais({
   const goldGlowMaterial = useMemo(() => new THREE.MeshBasicMaterial({
     color: '#fbbf24',
     transparent: true,
-    opacity: 0.92,
+    opacity: 0.95,
+    depthWrite: false,
+    side: THREE.DoubleSide
   }), []);
 
   const cyanRuneMaterial = useMemo(() => new THREE.MeshBasicMaterial({
     color: '#38bdf8',
     transparent: true,
-    opacity: 0.85,
+    opacity: 0.92,
+    depthWrite: false,
+    side: THREE.DoubleSide
   }), []);
 
   const contactShadowMaterial = useMemo(() => new THREE.MeshBasicMaterial({
     color: '#020617',
     transparent: true,
-    opacity: 0.65,
+    opacity: 0.45,
+    depthWrite: false,
+    side: THREE.DoubleSide
   }), []);
 
   const verticalBeamMaterial = useMemo(() => new THREE.MeshBasicMaterial({
     color: daisTier >= 5 ? '#67e8f9' : daisTier >= 4 ? '#c084fc' : '#fef08a',
     transparent: true,
-    opacity: daisTier >= 4 ? 0.22 : 0.15,
+    opacity: daisTier >= 4 ? 0.22 : 0.16,
+    depthWrite: false,
     side: THREE.DoubleSide,
   }), [daisTier]);
 
@@ -1286,8 +1294,11 @@ function GoldenMagicDais({
     if (outerRuneRef.current) {
       outerRuneRef.current.rotation.y = t * (daisTier >= 4 ? 0.22 : 0.16);
     }
-    if (innerRuneRef.current) {
-      innerRuneRef.current.rotation.y = -t * (daisTier >= 4 ? 0.32 : 0.24);
+    if (midRuneRef.current) {
+      midRuneRef.current.rotation.y = -t * (daisTier >= 4 ? 0.28 : 0.22);
+    }
+    if (footAuraRef.current) {
+      footAuraRef.current.rotation.y = t * 0.35;
     }
     if (lightBeamsRef.current) {
       lightBeamsRef.current.position.y = -0.98 + (Math.sin(t * 2.2) * 0.02);
@@ -1303,12 +1314,7 @@ function GoldenMagicDais({
 
   return (
     <group position={[0, -0.98, 0]}>
-      {/* 1. Realistic Contact Shadow directly under feet */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 0]} material={contactShadowMaterial}>
-        <ringGeometry args={[0, 0.46, 32]} />
-      </mesh>
-
-      {/* 2. Dais Stepped Plinth Base (Đế Bục Hoàng Kim Cẩm Thạch Sang Trọng) */}
+      {/* 1. Dais Stepped Plinth Base (Đế Bục Hoàng Kim Cẩm Thạch Sang Trọng) */}
       <mesh position={[0, -0.04, 0]} material={daisCoreMaterial}>
         <cylinderGeometry args={[0.92, 1.05, 0.06, 36]} />
       </mesh>
@@ -1316,28 +1322,39 @@ function GoldenMagicDais({
         <cylinderGeometry args={[0.94, 0.96, 0.025, 36]} />
       </mesh>
 
-      {/* 3. Outer Golden Magic Rune Ring */}
-      <group ref={outerRuneRef} position={[0, 0.01, 0]}>
+      {/* 2. Soft Realistic Foot Contact Shadows (Bóng đổ dưới từng bàn chân, không che phủ tâm bục) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-0.14, 0.003, 0.04]} material={contactShadowMaterial}>
+        <ringGeometry args={[0, 0.11, 16]} />
+      </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.14, 0.003, 0.04]} material={contactShadowMaterial}>
+        <ringGeometry args={[0, 0.11, 16]} />
+      </mesh>
+
+      {/* 3. Outer Golden Magic Rune Ring (Vòng Trận Pháp Ngoại Vi Hoàng Kim) */}
+      <group ref={outerRuneRef} position={[0, 0.008, 0]}>
         <mesh rotation={[-Math.PI / 2, 0, 0]} material={goldGlowMaterial}>
-          <ringGeometry args={[0.82, 0.88, 36]} />
+          <ringGeometry args={[0.82, 0.89, 48]} />
         </mesh>
         {/* Perimeter Rune Marks */}
         {runeAngles.map((angle, i) => {
           const rad = (angle * Math.PI) / 180;
-          const rx = Math.cos(rad) * 0.85;
-          const rz = Math.sin(rad) * 0.85;
+          const rx = Math.cos(rad) * 0.855;
+          const rz = Math.sin(rad) * 0.855;
           return (
-            <mesh key={`outer-rune-${i}`} position={[rx, 0.012, rz]} rotation={[0, -rad, 0]} material={goldGlowMaterial}>
+            <mesh key={`outer-rune-${i}`} position={[rx, 0.004, rz]} rotation={[0, -rad, 0]} material={goldGlowMaterial}>
               <boxGeometry args={[0.045, 0.005, 0.016]} />
             </mesh>
           );
         })}
       </group>
 
-      {/* 4. Inner Cyan Geometric Star Lines (Vòng Tinh Thể Xanh Lam Ngược Chiều) */}
-      <group ref={innerRuneRef} position={[0, 0.015, 0]}>
+      {/* 4. Mid Cyan / Teal Magic Circle Ring & Star Spokes (Vòng Trận Pháp Trung Tâm Lam Ngọc) */}
+      <group ref={midRuneRef} position={[0, 0.010, 0]}>
         <mesh rotation={[-Math.PI / 2, 0, 0]} material={cyanRuneMaterial}>
-          <ringGeometry args={[0.56, 0.59, 32]} />
+          <ringGeometry args={[0.55, 0.62, 36]} />
+        </mesh>
+        <mesh rotation={[-Math.PI / 2, 0, 0]} material={goldGlowMaterial}>
+          <ringGeometry args={[0.49, 0.51, 36]} />
         </mesh>
         {[0, 60, 120].map((rotDeg, idx) => {
           const rad = (rotDeg * Math.PI) / 180;
@@ -1349,12 +1366,35 @@ function GoldenMagicDais({
         })}
       </group>
 
-      {/* 5. Center Golden Core Disc */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.008, 0]} material={goldGlowMaterial}>
-        <ringGeometry args={[0.18, 0.22, 24]} />
+      {/* 5. VÒNG HÀO QUANG TRỰC TIẾP DƯỚI CHÂN NHÂN VẬT (Foot Aura Halo Ring - Ôm Sát Dưới Chân Rực Rỡ) */}
+      <group ref={footAuraRef} position={[0, 0.012, 0]}>
+        {/* Vòng Hào Quang Hoàng Kim Dưới Chân */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} material={goldGlowMaterial}>
+          <ringGeometry args={[0.33, 0.39, 36]} />
+        </mesh>
+        {/* Vòng Viền Lam Ngọc Hộ Thể */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} material={cyanRuneMaterial}>
+          <ringGeometry args={[0.26, 0.28, 32]} />
+        </mesh>
+        {/* 4 Ngọc Ấn Rune Nhỏ Quanh Chân */}
+        {[0, 90, 180, 270].map((deg, i) => {
+          const rad = (deg * Math.PI) / 180;
+          const fx = Math.cos(rad) * 0.36;
+          const fz = Math.sin(rad) * 0.36;
+          return (
+            <mesh key={`foot-gem-${i}`} position={[fx, 0.003, fz]} rotation={[-Math.PI / 2, 0, rad]} material={goldGlowMaterial}>
+              <planeGeometry args={[0.026, 0.026]} />
+            </mesh>
+          );
+        })}
+      </group>
+
+      {/* 6. Center Golden Core Sun Disc (Tâm Trận Thái Dương Phát Quang) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.014, 0]} material={goldGlowMaterial}>
+        <ringGeometry args={[0.13, 0.18, 24]} />
       </mesh>
 
-      {/* 6. Vertical Light Shroud & Rising Energy Beams */}
+      {/* 7. Vertical Light Shroud & Rising Energy Beams (Màn Quang Thiên Giới) */}
       <group ref={lightBeamsRef}>
         <mesh position={[0, 0.35, 0]} material={verticalBeamMaterial}>
           <cylinderGeometry args={[0.82, 0.90, 0.7, 24, 1, true]} />
@@ -1371,7 +1411,7 @@ function GoldenMagicDais({
         ))}
       </group>
 
-      {/* 7. Tier 4 & 5 Floating Magic Crystals */}
+      {/* 8. Tier 4 & 5 Floating Magic Crystals */}
       {daisTier === 4 && (
         <group ref={floatingCrystalsRef} position={[0, 0.26, 0]}>
           {[0, 90, 180, 270].map((deg, i) => {
@@ -1737,9 +1777,13 @@ function Procedural3DPetCompanion({ petType = 'none' }: { petType?: string }) {
       {/* 2. MOCHI FORTUNE CAT (Mèo Thần Tài - Trắng Mochi Tròn Trĩnh, Ôm Tiền Vàng, Vẫy Tay May Mắn) */}
       {petType === 'cat' && (
         <group ref={catRef} position={[0.36, -0.92, 0.24]} rotation={[0, -0.32, 0]} scale={[1.32, 1.32, 1.32]}>
-          {/* Ground Contact Shadow */}
+          {/* Ground Contact Shadow & Luminous Spirit Ring */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]} material={petContactShadow}>
             <ringGeometry args={[0, 0.13, 24]} />
+          </mesh>
+          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.003, 0]}>
+            <ringGeometry args={[0.06, 0.15, 24]} />
+            <meshBasicMaterial color="#38bdf8" transparent opacity={0.75} side={THREE.DoubleSide} depthWrite={false} />
           </mesh>
 
           {/* Round Mochi Body */}
@@ -1850,9 +1894,13 @@ function Procedural3DPetCompanion({ petType = 'none' }: { petType?: string }) {
       {/* 3. LUCKY SHIBA PUPPY (Cún Cỏ Trung Nghĩa - Lông Vàng Mật Ong, Mắt Cún Tròn Xoe, Yếm Trắng) */}
       {petType === 'puppy' && (
         <group ref={pupRef} position={[0.36, -0.92, 0.24]} rotation={[0, -0.32, 0]} scale={[1.32, 1.32, 1.32]}>
-          {/* Ground Contact Shadow */}
+          {/* Ground Contact Shadow & Luminous Spirit Ring */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]} material={petContactShadow}>
             <ringGeometry args={[0, 0.13, 24]} />
+          </mesh>
+          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.003, 0]}>
+            <ringGeometry args={[0.06, 0.15, 24]} />
+            <meshBasicMaterial color="#fbbf24" transparent opacity={0.75} side={THREE.DoubleSide} depthWrite={false} />
           </mesh>
 
           {/* Round Honey Body */}
@@ -1949,9 +1997,13 @@ function Procedural3DPetCompanion({ petType = 'none' }: { petType?: string }) {
       {/* 4. KITSUNE FOX (Hồ Ly Phúc Tinh - Chibi Mochi Tròn Trĩnh, 2 Mắt Hổ Phách Long Lanh, 3 Đuôi Bồng Bềnh) */}
       {petType === 'fox' && (
         <group ref={foxRef} position={[0.36, -0.92, 0.24]} rotation={[0, -0.32, 0]} scale={[1.32, 1.32, 1.32]}>
-          {/* Ground Contact Shadow */}
+          {/* Ground Contact Shadow & Luminous Spirit Ring */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]} material={petContactShadow}>
             <ringGeometry args={[0, 0.13, 24]} />
+          </mesh>
+          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.003, 0]}>
+            <ringGeometry args={[0.06, 0.15, 24]} />
+            <meshBasicMaterial color="#fb923c" transparent opacity={0.75} side={THREE.DoubleSide} depthWrite={false} />
           </mesh>
 
           {/* Round Mochi Fox Body */}
