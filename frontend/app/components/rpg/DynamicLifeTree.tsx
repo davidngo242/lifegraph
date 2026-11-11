@@ -37,6 +37,7 @@ import { formatCurrency } from '../../utils/currencyUtils';
 import dynamic from 'next/dynamic';
 import SkillTreeTab from './SkillTreeTab';
 import SocialLinksTab from './SocialLinksTab';
+import CulturalLandscapeBackdrop from './CulturalLandscapeBackdrop';
 import { soundFx } from '../../utils/soundEffects';
 
 export interface LifeTreeNode {
@@ -1106,6 +1107,14 @@ export default function DynamicLifeTree({
                 ? 'var(--tree-sky-autumn)'
                 : 'var(--tree-sky-winter)'
           }}
+        />
+
+        {/* Dynamic National Cultural Landscape Panorama Backdrop */}
+        <CulturalLandscapeBackdrop
+          nationality={nationality}
+          currentCity={character?.current_city}
+          seasonId={currentSeason.id}
+          characterAge={characterAge}
         />
 
         {/* 60fps GPU-Accelerated Dynamic Particle Weather Stream */}

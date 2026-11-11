@@ -1321,3 +1321,29 @@ Nhằm xóa bỏ hoàn toàn hiện tượng chữ đồng màu, chìm màu ho�
 * Phân bổ 4 theme: Daylight (400 users), Obsidian (350 users), Sepia (150 users), Cyberpunk (100 users).
 * Tự động kiểm tra độ tương phản trên **18.000 lượt mở modal** ($1.000 \times 18$).
 * Kết quả: **100% PASS, 0 lỗi va đập màu, thời gian mô phỏng < 30ms.**
+
+
+---
+
+## 32. Hệ Thống Toàn Cảnh Danh Thắng Biểu Tượng Quốc Gia (National Cultural Landscape Panorama)
+
+Nhằm đáp ứng chỉ đạo của **Sếp** về việc xóa bỏ cảnh nền đơn điệu, "trơn tuột" phía sau Đại Thụ Sinh Mệnh, LifeGraph 2.0 tích hợp hệ thống cảnh quan văn hóa toàn cảnh đa tầng thủ tục (`CulturalLandscapeBackdrop.tsx`):
+
+### 32.1. Phân Tầng Thị Giác & Bản Sắc Biểu Tượng 8 Quốc Gia
+Toàn bộ danh lam thắng cảnh được vẽ bằng vector SVG nghệ thuật bán trong suốt (`opacity: 0.22 - 0.35`), phối màu êm ái cùng hệ thống vòm trời 4 mùa và không làm nhiễu loạn các nút lá hành động:
+
+| Quốc Gia | Cảnh Quan Nền Viễn Cảnh (Layer 1) | Kiến Trúc Biểu Tượng Trung Cảnh (Layer 2) | Chi Tiết Văn Hóa Đặc Thù (Layer 3) |
+| :--- | :--- | :--- | :--- |
+| **Ba Lan (`poland`)** | Dãy núi High Tatras phủ tuyết (Rysy, Kasprowy Wierch) | Lâu đài Hoàng gia Wawel (Kraków) sừng sững bên sông Vistula | Tháp chuông đôi Gothic Kościół Mariacki, bóng Đại bàng trắng |
+| **Việt Nam (`vietnam`)** | Quần thể núi đá vôi Vịnh Hạ Long nhấp nhô mây mờ | Khuê Văn Các mái đao cong & Chùa Một Cột nghìn năm | Ruộng bậc thang uốn lượn, thuyền buồm nâu Hạ Long, cánh cò trắng |
+| **Nhật Bản (`japan`)** | Núi Phú Sĩ tuyết phủ đối xứng hoàn mỹ | Chùa cổ ngũ tầng Chureito Pagoda dưới rặng thông bonsai | Cổng Thần đạo Torii son đỏ nổi trên hồ, vầng dương Phù Tang |
+| **Hàn Quốc (`korea`)** | Đỉnh núi Namsan & dãy Bukhansan trập trùng | Cung điện hoàng gia Gyeongbokgung & cổng Gwanghwamun | Tháp N Seoul Tower hiện đại, tường đá Hanok Bukchon |
+| **Thái Lan (`thailand`)** | Rừng nhiệt đới & sông Chao Phraya thơ mộng | Đại bảo tháp Wat Arun (Chùa Bình Minh) cao vút | Mái chùa cong đuôi rồng thần Naga dát vàng, bóng voi thần |
+| **Hoa Kỳ (`usa`)** | Hẻm núi sa thạch đỏ kỳ vĩ Grand Canyon | Cầu Cổng Vàng (Golden Gate Bridge) San Francisco | Đường chân trời Manhattan Skyline, rừng thông khổng lồ Sequoia |
+| **Đức (`germany`)** | Dãy núi Alps tuyết trắng vùng Bavaria | Lâu đài cổ tích Neuschwanstein trên vách đá | Cổng thành Brandenburg Berlin, thung lũng Rừng Đen |
+| **Syria (`syria`)** | Cồn cát hoàng kim sa mạc Syria | Hàng cột đá La Mã khổng lồ thành cổ Palmyra | Mái vòm Hồi giáo Damascus, ốc đảo chà là nghìn lẻ một đêm |
+| **Mặc định (`universal`)** | Dãy núi Thái Sơ nguyên sinh ba tầng | Đồi thông cổ đại & suối nguồn sinh mệnh | Khởi nguyên Thần Mộc linh thiêng |
+
+### 32.2. Kỹ Thuật Hòa Quyện Chân Trời (Seamless Horizon Mist Fade)
+* **Chống Cắt Gãy Thị Giác:** Đáy của bức tranh toàn cảnh được phủ dải sương mù chân trời `linearGradient(to top, var(--bg-canvas) 0%, transparent 60%)`, giúp vách núi và dòng sông hòa quyện mượt mà vào bục cội rễ (Dais) và vòng vân gỗ mà không có bất kỳ đường viền thô ráp nào.
+* **Huy Hiệu Di Sản Tinh Tế (Heritage Badge):** Góc dưới bên trái canvas hiển thị viên thuốc di sản `📍 {Quốc gia} • {Danh thắng}` kèm tooltip chi tiết giới thiệu giá trị lịch sử và phong cảnh quê hương.

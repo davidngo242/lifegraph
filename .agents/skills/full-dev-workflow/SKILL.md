@@ -347,8 +347,17 @@ Theo lệnh điều hành trực tiếp của **Sếp**, LifeGraph áp dụng qu
 1. **Bộ Test Suite Độc Lập:** `test_1000_users_simulation.mjs`
    - Mô phỏng 1.000 người dùng với đầy đủ 5 chặng đời từ 0 đến 95 tuổi (Ấu thơ, Thiếu niên, Trưởng thành, Dưỡng lão, Đại thọ).
    - Bao phủ 4 theme: Daylight (40%), Obsidian (35%), Sepia (15%), Cyberpunk (10%).
-   - Kiểm tra tương phản WCAG 2.1 AA/AAA trên 18.000 lượt hiển thị modal ($1.000 \times 18$).
+   - Kiểm tra tương phản WCAG 2.1 AA/AAA trên 19.000 lượt hiển thị component & modal ($1.000 \times 19$).
 2. **Quy Chuẩn Đồng Bộ Giao Diện Sáng / Tối (Zero Monochromatic Text):**
    - 100% Modals và Cards sử dụng biến ngữ nghĩa `--bg-card`, `--bg-card-subtle`, `--text-primary`, `--text-secondary`, `--border-subtle`.
    - Triệt tiêu hoàn toàn mã màu cứng gây chìm chữ khi đổi giao diện (cấm `bg-slate-950` không có prefix theme, cấm `text-white` trên nền sáng).
    - Mọi bản build Next.js bắt buộc đạt exit code 0 (`npm run build`).
+
+---
+
+## 10. Cảnh Quan Văn Hóa Biểu Tượng Quốc Gia (`CulturalLandscapeBackdrop.tsx`)
+
+Để xóa bỏ nền trống phía sau Đại Thụ Sinh Mệnh, mỗi quốc gia sở hữu một hệ thống phong cảnh vector SVG đa tầng riêng biệt tự động nhận diện từ `character.nationality` và `character.current_city`:
+* **8 Quốc gia chuyên biệt + Mặc định:** Ba Lan (Dãy Tatras & Lâu đài Wawel), Việt Nam (Vịnh Hạ Long, Khuê Văn Các & Ruộng bậc thang), Nhật Bản (Núi Phú Sĩ, Torii & Chùa 5 tầng), Hàn Quốc (Gyeongbokgung & Tháp Namsan), Thái Lan (Wat Arun & Voi thần), Hoa Kỳ (Golden Gate & Grand Canyon), Đức (Neuschwanstein & Alps Bavaria), Syria (Palmyra & Sa mạc), và Cao Nguyên Thần Mộc mặc định.
+* **Kỷ luật hòa quyện (`z-0`):** Độ mờ `opacity-35 dark:opacity-25`, kết hợp màng sương chuyển tiếp (`horizon-mist-blend`) ở chân núi để hòa nhập mượt mà vào canvas nền mà không che khuất chữ hay nút bấm hành động.
+* **Huy hiệu di sản:** Pill góc dưới bên trái kèm tooltip mô tả danh lam thắng cảnh quê hương nhân vật.

@@ -339,3 +339,54 @@ test('WCAG 2.1 AA Contrast Verification: Color values meet minimum 4.5:1 ratio',
   assert.ok(getContrastRatio(emerald800, bgCard) >= 4.5, 'emerald-800 meets AA on white');
   assert.ok(getContrastRatio(rose900, bgCard) >= 7.0, 'rose-900 meets AAA on white');
 });
+
+
+// ============================================================================
+// SUITE 5: Cultural Landscape Backdrop Verification
+// ============================================================================
+test('Cultural Landscape Backdrop: Panoramic silhouettes, national landmarks & seamless horizon integration', () => {
+  const backdropContent = readFile('frontend/app/components/rpg/CulturalLandscapeBackdrop.tsx');
+  const treeContent = readFile('frontend/app/components/rpg/DynamicLifeTree.tsx');
+
+  // 1. DynamicLifeTree imports and mounts CulturalLandscapeBackdrop
+  assert.ok(
+    treeContent.includes('CulturalLandscapeBackdrop'),
+    'DynamicLifeTree must import and render CulturalLandscapeBackdrop'
+  );
+
+  // 2. Cultural profile coverage for all key nationalities
+  const requiredCountries = ['poland', 'vietnam', 'japan', 'korea', 'thailand', 'usa', 'germany', 'syria', 'universal'];
+  for (const country of requiredCountries) {
+    assert.ok(
+      backdropContent.includes(`${country}:`),
+      `CulturalLandscapeBackdrop must define profile for ${country}`
+    );
+  }
+
+  // 3. Landmark representation in SVG
+  assert.ok(backdropContent.includes('Tatra'), 'Must feature High Tatra mountain range for Poland');
+  assert.ok(backdropContent.includes('Wawel'), 'Must feature Wawel Royal Castle for Poland');
+  assert.ok(backdropContent.includes('Hạ Long'), 'Must feature Hạ Long Bay for Vietnam');
+  assert.ok(backdropContent.includes('Khuê Văn Các'), 'Must feature Khuê Văn Các / One Pillar Pagoda for Vietnam');
+  assert.ok(backdropContent.includes('Fuji'), 'Must feature Mount Fuji for Japan');
+  assert.ok(backdropContent.includes('Torii'), 'Must feature Shinto Torii Gate for Japan');
+  assert.ok(backdropContent.includes('Gyeongbokgung'), 'Must feature Gyeongbokgung Palace for Korea');
+  assert.ok(backdropContent.includes('Wat Arun'), 'Must feature Wat Arun Temple of Dawn for Thailand');
+  assert.ok(backdropContent.includes('Grand Canyon'), 'Must feature Grand Canyon for USA');
+
+  // 4. Seamless atmospheric mist blending
+  assert.ok(
+    backdropContent.includes('horizon-mist-blend'),
+    'Must include soft atmospheric horizon mist fade to integrate into canvas'
+  );
+
+  // 5. Dual-theme adaptive heritage badge
+  assert.ok(
+    backdropContent.includes('bg-[var(--bg-card)]'),
+    'Heritage badge must use semantic --bg-card token'
+  );
+  assert.ok(
+    backdropContent.includes('text-amber-800 dark:text-amber-300'),
+    'Heritage badge must use high-contrast dual-theme amber colors'
+  );
+});
