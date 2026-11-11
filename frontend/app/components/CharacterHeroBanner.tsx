@@ -223,6 +223,8 @@ export default function CharacterHeroBanner({
 
   // Dynamic Action Feedback Realtime Overlay
   const [activeFeedback, setActiveFeedback] = useState<BannerActionFeedback | null>(null);
+  // Mobile: thu gọn chip Gen di truyền (hiện 2 chip đầu + nút "+N")
+  const [showAllTraits, setShowAllTraits] = useState(false);
 
   useEffect(() => {
     if (actionFeedback && actionFeedback.timestamp) {
@@ -540,7 +542,7 @@ export default function CharacterHeroBanner({
               {/* Top-Right: 360 Fullscreen Studio Trigger */}
               <button
                 onClick={onOpen3DInspector}
-                className="absolute top-2 right-2 p-1.5 rounded-xl bg-white/95 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 text-amber-800 dark:text-amber-300 border border-amber-600/50 dark:border-amber-500/30 backdrop-blur-md transition shadow-md z-20 cursor-pointer opacity-85 group-hover:opacity-100"
+                className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-11 h-11 sm:w-auto sm:h-auto flex items-center justify-center sm:p-1.5 rounded-xl bg-white/95 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 text-amber-800 dark:text-amber-300 border border-amber-600/50 dark:border-amber-500/30 backdrop-blur-md transition shadow-md z-20 cursor-pointer opacity-85 group-hover:opacity-100"
                 title="Mở phòng kiểm định 360°"
               >
                 <Maximize2 className="w-3.5 h-3.5" />
@@ -629,7 +631,7 @@ export default function CharacterHeroBanner({
               }`}>
                 <span>{character.gender === 'female' ? '♀️ Nữ' : '♂️ Nam'}</span>
               </span>
-              <span className="text-[var(--text-secondary)] font-medium text-xs px-2 py-0.5 rounded-lg bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+              <span className="hidden sm:inline-flex text-[var(--text-secondary)] font-medium text-xs px-2 py-0.5 rounded-lg bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
                 🌍 {nationality}
               </span>
             </div>
@@ -759,7 +761,7 @@ export default function CharacterHeroBanner({
                   age < 60 ? "Trụ cột gia đình & cơ đồ" : "An hưởng tuổi già & truyền thừa";
                 return (
                   <Tooltip content={`Định hướng trọng tâm ở tuổi ${age}`}>
-                    <div className="flex items-center gap-1 text-xs text-[var(--text-secondary)] font-medium bg-[var(--bg-card)] px-2.5 py-1 rounded-xl border border-[var(--border-subtle)] min-w-0 max-w-full cursor-help shadow-xs">
+                    <div className="hidden sm:flex items-center gap-1 text-xs text-[var(--text-secondary)] font-medium bg-[var(--bg-card)] px-2.5 py-1 rounded-xl border border-[var(--border-subtle)] min-w-0 max-w-full cursor-help shadow-xs">
                       <span className="text-indigo-700 dark:text-indigo-400 font-bold shrink-0">🎯 Trọng tâm:</span>
                       <span className="text-[var(--text-primary)] font-semibold truncate max-w-[160px] sm:max-w-[210px]">
                         {focusText}
@@ -798,30 +800,44 @@ export default function CharacterHeroBanner({
                   🧬 Gen di truyền:
                 </span>
                 {character.innate_traits && character.innate_traits.length > 0 ? (
-                  character.innate_traits.map((t: string) => {
-                    const ft = formatTrait(t);
-                    return (
-                      <Tooltip
-                        key={t}
-                        content={
-                          <div className="space-y-0.5">
-                            <div className="font-bold text-amber-800 dark:text-amber-300 flex items-center gap-1">
-                              <span>{ft.icon}</span>
-                              <span>{ft.name}</span>
+                  <>
+                    {character.innate_traits.map((t: string, idx: number) => {
+                      const ft = formatTrait(t);
+                      // Dưới sm: chỉ hiện 2 chip đầu, còn lại ẩn tới khi bấm "+N"
+                      const collapsedOnMobile = idx >= 2 && !showAllTraits;
+                      return (
+                        <Tooltip
+                          key={t}
+                          content={
+                            <div className="space-y-0.5">
+                              <div className="font-bold text-amber-800 dark:text-amber-300 flex items-center gap-1">
+                                <span>{ft.icon}</span>
+                                <span>{ft.name}</span>
+                              </div>
+                              <div className="text-xs text-slate-700 dark:text-slate-200">{ft.desc}</div>
                             </div>
-                            <div className="text-xs text-slate-700 dark:text-slate-200">{ft.desc}</div>
-                          </div>
-                        }
-                      >
-                        <span
-                          className={`font-semibold px-2 py-0.5 rounded-full border text-xs flex items-center gap-1 transition cursor-help ${ft.badgeStyle}`}
+                          }
                         >
-                          <span>{ft.icon}</span>
-                          <span>{ft.name}</span>
-                        </span>
-                      </Tooltip>
-                    );
-                  })
+                          <span
+                            className={`font-semibold px-2 py-0.5 rounded-full border text-xs items-center gap-1 transition cursor-help max-w-full min-w-0 ${collapsedOnMobile ? 'hidden sm:flex' : 'flex'} ${ft.badgeStyle}`}
+                          >
+                            <span className="shrink-0">{ft.icon}</span>
+                            <span className="truncate">{ft.name}</span>
+                          </span>
+                        </Tooltip>
+                      );
+                    })}
+                    {character.innate_traits.length > 2 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAllTraits((v) => !v)}
+                        aria-expanded={showAllTraits}
+                        className="sm:hidden min-h-[32px] px-2.5 py-0.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)] transition"
+                      >
+                        {showAllTraits ? 'Thu gọn' : `+${character.innate_traits.length - 2} xem thêm`}
+                      </button>
+                    )}
+                  </>
                 ) : (
                   <span className="text-[var(--text-secondary)] text-xs italic">
                     Hạt giống tố chất đang chờ thức tỉnh...

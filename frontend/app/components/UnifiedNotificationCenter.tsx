@@ -121,7 +121,7 @@ export default function UnifiedNotificationCenter({
             {criticalIssuesCount > 0
               ? `Báo Động (${criticalIssuesCount})`
               : hasDilemma
-              ? `Biến Cố 21:9`
+              ? <>Biến Cố<span className="hidden sm:inline"> 21:9</span></>
               : totalBadges > 0
               ? `Thông Báo (${totalBadges})`
               : 'Bình yên'}
@@ -345,7 +345,7 @@ export default function UnifiedNotificationCenter({
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-[var(--text-primary)] text-xs flex items-center gap-1.5">
-                        <Info className="w-3.5 h-3.5 text-indigo-400" />
+                        <Info className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                         {alert.title}
                       </span>
                       <button
@@ -367,7 +367,7 @@ export default function UnifiedNotificationCenter({
             {/* 4. TRẠNG THÁI BÌNH YÊN (All Clear) */}
             {criticalIssuesCount === 0 && !hasDilemma && alerts.length === 0 && (
               <div className="p-6 text-center space-y-2 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
-                <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
+                <CheckCircle2 className="w-8 h-8 text-emerald-600 dark:text-emerald-400 mx-auto" />
                 <div className="font-bold text-xs text-[var(--text-primary)]">
                   Mọi Chỉ Số Đều Ổn Định
                 </div>

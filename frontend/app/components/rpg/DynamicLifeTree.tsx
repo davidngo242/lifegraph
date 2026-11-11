@@ -1601,7 +1601,7 @@ export default function DynamicLifeTree({
             >
               <span className="text-sm">{currentSeason.icon}</span>
               <span className={`font-bold ${currentSeason.textBadge}`}>{currentSeason.name}</span>
-              <span className="text-slate-400 dark:text-slate-500 hidden md:inline">•</span>
+              <span className="text-slate-600 dark:text-slate-300 hidden md:inline">•</span>
               <span className="text-xs text-slate-700 dark:text-slate-200 hidden md:inline truncate max-w-[125px] font-sans font-medium">
                 {seasonClimate.title}
               </span>
@@ -3082,7 +3082,8 @@ export default function DynamicLifeTree({
               key={node.id}
               className="hidden md:block absolute z-20 -translate-x-1/2 -translate-y-1/2 pointer-events-auto w-max max-w-[300px]"
               style={{
-                left: `${leftPercent}%`,
+                // Kẹp trong khung: nhãn node không bị cắt mép khi canvas hẹp (md/lg)
+                left: `clamp(125px, ${leftPercent}%, calc(100% - 125px))`,
                 top: `${topPercent}%`
               }}
               onMouseEnter={() => setHoveredNodeId(node.id)}
@@ -3131,10 +3132,10 @@ export default function DynamicLifeTree({
 
                   {/* Leaflet Titles & Benefits (Zero-Truncation Design Standard) */}
                   <div className="min-w-0 pr-1 text-left">
-                    <div className="text-xs font-bold text-slate-900 dark:text-white whitespace-normal leading-tight max-w-[155px] sm:max-w-[185px]">
+                    <div className="text-xs font-bold text-slate-900 dark:text-white whitespace-normal leading-tight max-w-[110px] xl:max-w-[185px]">
                       {node.title}
                     </div>
-                    <div className={`text-xs font-mono mt-0.5 whitespace-normal leading-tight max-w-[155px] sm:max-w-[185px] ${
+                    <div className={`text-xs font-mono mt-0.5 whitespace-normal leading-tight max-w-[110px] xl:max-w-[185px] ${
                       node.isBreakthrough
                         ? 'text-amber-800 dark:text-amber-300 font-black tracking-wider animate-pulse drop-shadow'
                         : 'text-slate-600 dark:text-slate-200'
@@ -3270,7 +3271,7 @@ export default function DynamicLifeTree({
                   ? 'Mầm Sống Khởi Nguyên • Gốc Rễ Đời Người'
                   : `${characterAge} Vòng Vân Gỗ`}
               </span>
-              <span className="text-slate-400 hidden sm:inline shrink-0">•</span>
+              <span className="text-slate-600 dark:text-slate-300 hidden sm:inline shrink-0">•</span>
               <span className="text-emerald-700 dark:text-emerald-400 hidden sm:inline shrink-0">{STAGE_META[growthStage].label}</span>
             </div>
           </Tooltip>
@@ -3456,7 +3457,7 @@ export default function DynamicLifeTree({
                     className={`p-2.5 rounded-xl text-xs font-bold flex items-center justify-between gap-2 transition border cursor-pointer ${
                       canMentor
                         ? 'bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/60 text-indigo-950 dark:text-indigo-200 border-indigo-400/50 active:scale-95 shadow-sm'
-                        : 'bg-slate-100 dark:bg-slate-900/40 text-slate-500 border-slate-200 dark:border-slate-700 cursor-not-allowed opacity-60'
+                        : 'bg-slate-100 dark:bg-slate-900/40 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 cursor-not-allowed opacity-60'
                     }`}
                   >
                     <span className="flex items-center gap-1.5">
@@ -3567,7 +3568,7 @@ export default function DynamicLifeTree({
       {/* ========================================================================= */}
       {treeViewMode === 'life_actions' && nodes.length > 0 && (
         <div className="md:hidden flex flex-col gap-2" aria-label="Hành động trong năm">
-          {nodes.map(node => {
+          {[...nodes].sort((a, b) => Number(!!b.isBreakthrough) - Number(!!a.isBreakthrough)).map(node => {
             const canAfford = actionPoints >= node.apCost;
             const isPulsing = pulseActiveId === node.id;
             return (
@@ -3576,9 +3577,9 @@ export default function DynamicLifeTree({
                 type="button"
                 disabled={isLoading || !canAfford}
                 onClick={() => handleNodeClick(node)}
-                className={`relative w-full min-h-[56px] px-3 py-2 rounded-2xl border text-left flex items-center gap-3 select-none shadow-md transition-all duration-200 active:scale-[0.98] ${getNodeSkin(node)} ${
+                className={`relative w-full min-h-[56px] px-3 py-2 rounded-2xl border text-left flex items-center gap-3 select-none shadow-md transition-all duration-200 active:scale-[0.98] ${getNodeSkin(node).replace('animate-pulse', '').replace('animate-bounce', '')} ${
                   isPulsing ? 'scale-[0.98] ring-4 ring-emerald-400' : ''
-                } ${!canAfford ? 'opacity-50 cursor-not-allowed grayscale-[0.3]' : 'cursor-pointer'}`}
+                } ${!canAfford ? 'opacity-80 cursor-not-allowed grayscale-[0.35]' : 'cursor-pointer'}`}
               >
                 <span className="w-10 h-10 rounded-full bg-slate-900/10 dark:bg-black/40 border border-slate-900/15 dark:border-white/20 flex items-center justify-center text-xl shrink-0">
                   {node.icon}
@@ -3595,8 +3596,15 @@ export default function DynamicLifeTree({
                     {node.gainText}
                   </span>
                 </span>
-                <span className="text-xs font-mono px-2 py-1 rounded-full bg-amber-100 dark:bg-black/60 text-amber-900 dark:text-amber-300 border border-amber-400/40 shrink-0 font-bold shadow-sm whitespace-nowrap">
-                  {node.apCost} AP
+                <span
+                  title={canAfford ? undefined : `Cần ${node.apCost} AP, hiện còn ${actionPoints} AP`}
+                  className={`text-xs font-mono px-2 py-1 rounded-full border shrink-0 font-bold shadow-sm whitespace-nowrap ${
+                    canAfford
+                      ? 'bg-amber-100 dark:bg-black/60 text-amber-900 dark:text-amber-300 border-amber-400/40'
+                      : 'bg-rose-100 dark:bg-rose-950 text-rose-900 dark:text-rose-200 border-rose-500/70'
+                  }`}
+                >
+                  {canAfford ? `${node.apCost} AP` : `Thiếu AP · ${node.apCost}`}
                 </span>
               </button>
             );

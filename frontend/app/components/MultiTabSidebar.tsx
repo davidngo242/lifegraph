@@ -182,12 +182,12 @@ export default function MultiTabSidebar({
           <div className="flex-1 overflow-y-auto space-y-4 pr-1 custom-scrollbar">
             {/* 4 Quý Nhân Đồng Hành (Celestial Social Links) */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between pb-1 border-b border-[var(--border-subtle)]">
-                <span className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-amber-500" />
-                  4 Quý Nhân Bảo Trợ (Social Links)
+              <div className="flex items-center justify-between gap-x-2 gap-y-0.5 flex-wrap pb-1 border-b border-[var(--border-subtle)]">
+                <span className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider flex items-center gap-1 min-w-0">
+                  <Sparkles className="w-3 h-3 text-amber-500 shrink-0" />
+                  <span>4 Quý Nhân Bảo Trợ<span className="hidden sm:inline"> (Social Links)</span></span>
                 </span>
-                <span className="text-xs text-[var(--text-secondary)]">Tối đa Lv.5</span>
+                <span className="text-xs text-[var(--text-secondary)] whitespace-nowrap">Tối đa Lv.5</span>
               </div>
 
               {socialLinks.length === 0 ? (
@@ -210,11 +210,11 @@ export default function MultiTabSidebar({
                       key={npc.id}
                       className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] hover:border-indigo-400/50 transition-all space-y-2"
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xl select-none">{meta.icon}</span>
-                          <div>
-                            <div className="font-bold text-xs text-[var(--text-primary)] flex items-center gap-1.5">
+                      <div className="flex items-center justify-between gap-x-2 gap-y-2 flex-wrap">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="text-xl select-none shrink-0">{meta.icon}</span>
+                          <div className="min-w-0">
+                            <div className="font-bold text-xs text-[var(--text-primary)] flex items-center gap-1.5 flex-wrap">
                               <span>{npc.name}</span>
                               <span className="text-xs px-1.5 py-0.2 rounded-md bg-indigo-500/15 text-indigo-800 dark:text-indigo-400 border border-indigo-500/30 font-mono font-bold">
                                 Lv.{npc.linkLevel}
@@ -228,11 +228,11 @@ export default function MultiTabSidebar({
 
                         {/* Quick Action Buttons */}
                         {onNpcInteract && (
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-1.5 flex-wrap">
                             <button
                               onClick={() => handleNpcAction(npc.id, 'socialize')}
                               disabled={interactingNpcId !== null || (character.action_points || 0) < 1}
-                              className="px-2 py-1 rounded-lg bg-[var(--bg-card)] hover:bg-indigo-500/15 border border-[var(--border-subtle)] hover:border-indigo-500/40 text-xs font-semibold text-[var(--text-primary)] flex items-center gap-1 transition active:scale-95 disabled:opacity-40"
+                              className="min-h-[44px] sm:min-h-0 px-2.5 sm:px-2 py-1 whitespace-nowrap rounded-lg bg-[var(--bg-card)] hover:bg-indigo-500/15 border border-[var(--border-subtle)] hover:border-indigo-500/40 text-xs font-semibold text-[var(--text-primary)] flex items-center gap-1 transition active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
                               title="Tâm sự nâng cao gắn kết (1 AP)"
                             >
                               <MessageCircle className="w-3 h-3 text-indigo-500" />
@@ -241,7 +241,7 @@ export default function MultiTabSidebar({
                             <button
                               onClick={() => handleNpcAction(npc.id, 'gift')}
                               disabled={interactingNpcId !== null || cash < 500 || (character.action_points || 0) < 1}
-                              className="px-2 py-1 rounded-lg bg-[var(--bg-card)] hover:bg-pink-500/15 border border-[var(--border-subtle)] hover:border-pink-500/40 text-xs font-semibold text-[var(--text-primary)] flex items-center gap-1 transition active:scale-95 disabled:opacity-40"
+                              className="min-h-[44px] sm:min-h-0 px-2.5 sm:px-2 py-1 whitespace-nowrap rounded-lg bg-[var(--bg-card)] hover:bg-pink-500/15 border border-[var(--border-subtle)] hover:border-pink-500/40 text-xs font-semibold text-[var(--text-primary)] flex items-center gap-1 transition active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
                               title="Tặng quà tri ân ($500, 1 AP)"
                             >
                               <Gift className="w-3 h-3 text-pink-500" />

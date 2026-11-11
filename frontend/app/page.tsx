@@ -1816,7 +1816,7 @@ export default function LifeGraphPage() {
             >
               <button
                 onClick={() => setActiveView('home')}
-                className={`px-2 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
+                className={`min-w-[44px] sm:min-w-0 min-h-[44px] sm:min-h-0 justify-center px-2 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                   activeView === 'home'
                     ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-950 font-bold shadow-md shadow-slate-900/20'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
@@ -1834,7 +1834,7 @@ export default function LifeGraphPage() {
               >
                 <button
                   onClick={() => setActiveView('game')}
-                  className={`px-2 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
+                  className={`min-w-[44px] sm:min-w-0 min-h-[44px] sm:min-h-0 justify-center px-2 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                     activeView === 'game'
                       ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-950 font-bold shadow-md shadow-slate-900/20'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
@@ -1851,7 +1851,7 @@ export default function LifeGraphPage() {
               >
                 <button
                   onClick={() => setShowRebirthModal(true)}
-                  className={`px-2 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
+                  className={`min-w-[44px] sm:min-w-0 min-h-[44px] sm:min-h-0 justify-center px-2 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                     activeView === 'home'
                       ? 'text-[var(--text-secondary)] hover:text-amber-500 hover:bg-[rgba(255,255,255,0.04)]'
                       : 'bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 text-slate-950 font-black shadow-md shadow-amber-500/25 hover:opacity-95'

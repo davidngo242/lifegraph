@@ -332,7 +332,7 @@ export default function EventCard({
                     : 'bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
-                <Heart className="w-3 h-3 text-rose-400" />
+                <Heart className="w-3 h-3 text-rose-600 dark:text-rose-400" />
                 <span className="truncate">Trái Tim</span>
               </button>
 
@@ -344,7 +344,7 @@ export default function EventCard({
                     : 'bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
-                <ShieldAlert className="w-3 h-3 text-teal-400" />
+                <ShieldAlert className="w-3 h-3 text-teal-700 dark:text-teal-400" />
                 <span className="truncate">Bản Năng</span>
               </button>
             </div>
@@ -523,7 +523,7 @@ export default function EventCard({
                         ? 'bg-amber-500/25 border-amber-500 text-amber-800 dark:text-amber-300 shadow-md shadow-amber-500/25 animate-pulse'
                         : canInvestMore
                         ? 'bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-amber-500/50 hover:text-amber-700 dark:hover:text-amber-300 active:scale-95'
-                        : 'bg-[var(--bg-card-subtle)]/50 border-[var(--border-subtle)] text-slate-600 dark:text-slate-600 cursor-not-allowed opacity-70 dark:opacity-40'
+                        : 'bg-[var(--bg-card-subtle)]/50 border-[var(--border-subtle)] text-slate-600 dark:text-slate-400 cursor-not-allowed opacity-70 dark:opacity-60'
                     }`}
                     title={
                       isCurrentlyInvested
@@ -539,7 +539,7 @@ export default function EventCard({
                   </button>
 
                   <Tooltip content={<div className="font-sans italic text-slate-700 dark:text-slate-300">{consequence}</div>}>
-                    <button className="text-slate-600 dark:text-slate-500 hover:text-indigo-700 dark:hover:text-indigo-300 transition p-1">
+                    <button className="text-slate-600 dark:text-slate-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition p-1">
                       <HelpCircle className="w-3.5 h-3.5" />
                     </button>
                   </Tooltip>

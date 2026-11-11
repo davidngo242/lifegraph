@@ -168,10 +168,10 @@ export default function NarrativeFeed({
       {/* Narrative Feed Timeline (Newest on top, smooth scroll) */}
       <div className="flex-1 overflow-y-auto space-y-3 pr-1 mb-1 select-text custom-scrollbar">
         {displayHistory.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center text-slate-600 dark:text-slate-500 text-xs italic font-sans p-6">
+          <div className="h-full flex flex-col items-center justify-center text-center text-slate-600 dark:text-slate-400 text-xs italic font-sans p-6">
             <BookOpen className="w-8 h-8 opacity-30 mb-2 text-indigo-400" />
             <p>Chưa có ký ức nào trong danh mục này.</p>
-            <p className="text-[12px] text-slate-600 dark:text-slate-500 mt-0.5">Tiếp tục hành trình để bồi đắp dòng lịch sử.</p>
+            <p className="text-[12px] text-slate-600 dark:text-slate-400 mt-0.5">Tiếp tục hành trình để bồi đắp dòng lịch sử.</p>
           </div>
         ) : (
           displayHistory.map((item, idx) => {
