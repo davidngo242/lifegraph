@@ -3,6 +3,8 @@ const rawBackend = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_UR
 const backendUrl = rawBackend.replace(/\/+$/, '');
 
 const nextConfig = {
+  // Cho phép nhiều dev server song song (mỗi agent một thư mục build riêng)
+  distDir: process.env.NEXT_DIST_DIR || '.next',
   reactStrictMode: false,
   async headers() {
     return [
