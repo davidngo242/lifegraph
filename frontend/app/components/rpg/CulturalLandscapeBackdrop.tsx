@@ -148,6 +148,96 @@ export const CULTURAL_LANDSCAPES: Record<string, LandscapeProfile> = {
       waterFog: '#fef3c7'
     }
   },
+  somalia: {
+    id: 'somalia',
+    name: 'Somalia',
+    flag: '🇸🇴',
+    landmark: 'Hải Đăng Cổ Mogadishu & Bờ Biển Ấn Độ Dương',
+    subLandmarks: 'Cổng Vòm Đá San Hô Shangani • Tháp Minaret • Cảng Biển Banadir',
+    description: 'Vùng Sừng Châu Phi rực nắng gió Ấn Độ Dương với ngọn hải đăng cổ Mogadishu, vòm cổng san hô trắng Shangani và những rặng dừa ven biển Lido.',
+    atmosphereColor: {
+      farHills: '#0284c7',
+      midHills: '#0369a1',
+      nearLandmarks: '#0c4a6e',
+      accentGlow: '#f59e0b',
+      waterFog: '#bae6fd'
+    }
+  },
+  norway: {
+    id: 'norway',
+    name: 'Na Uy',
+    flag: '🇳🇴',
+    landmark: 'Vịnh Hẹp Geirangerfjord & Bầu Trời Cực Quang',
+    subLandmarks: 'Vách Đá Trolltunga • Phố Gỗ Bergen Bryggen • Rừng Thông Bắc Âu',
+    description: 'Vương quốc Bắc Âu huyền ảo với vịnh hẹp Geirangerfjord sâu thẳm, những dãy nhà gỗ màu sắc tại bến cảng Bergen và dải cực quang xanh ngọc.',
+    atmosphereColor: {
+      farHills: '#0369a1',
+      midHills: '#0f766e',
+      nearLandmarks: '#134e4a',
+      accentGlow: '#34d399',
+      waterFog: '#cffafe'
+    }
+  },
+  switzerland: {
+    id: 'switzerland',
+    name: 'Thụy Sĩ',
+    flag: '🇨🇭',
+    landmark: 'Đỉnh Tuyết Matterhorn & Hồ Geneva',
+    subLandmarks: 'Dãy Alps Hùng Vĩ • Cầu Gỗ Chapel Lucerne • Tháp Zytglogge',
+    description: 'Trái tim châu Âu với đỉnh Matterhorn tuyết phủ sừng sững trên dãy Alps, mặt hồ Geneva xanh ngọc và những mái nhà gỗ Chalet thanh bình.',
+    atmosphereColor: {
+      farHills: '#3b82f6',
+      midHills: '#1d4ed8',
+      nearLandmarks: '#1e3a8a',
+      accentGlow: '#e11d48',
+      waterFog: '#dbeafe'
+    }
+  },
+  brazil: {
+    id: 'brazil',
+    name: 'Brazil',
+    flag: '🇧🇷',
+    landmark: 'Tượng Chúa Cứu Thế Rio & Núi Sugarloaf',
+    subLandmarks: 'Vịnh Biển Copacabana • Rừng Rậm Amazon • Đỉnh Corcovado',
+    description: 'Xứ sở Samba đầy sức sống với đỉnh Corcovado nâng đỡ Tượng Chúa Cứu Thế sải tay ôm trọn vịnh Copacabana và dãy núi đá Sugarloaf.',
+    atmosphereColor: {
+      farHills: '#16a34a',
+      midHills: '#15803d',
+      nearLandmarks: '#166534',
+      accentGlow: '#facc15',
+      waterFog: '#dcfce7'
+    }
+  },
+  haiti: {
+    id: 'haiti',
+    name: 'Haiti',
+    flag: '🇭🇹',
+    landmark: 'Pháo Đài Đá Citadelle Laferrière & Biển Caribe',
+    subLandmarks: 'Cung Điện Sans-Souci • Đỉnh Pic la Selle • Vịnh Xanh Caribe',
+    description: 'Hòn ngọc kiên cường vùng Caribe với pháo đài đá khổng lồ Citadelle Laferrière ngự trên đỉnh núi cao nhìn ra biển xanh ngắt.',
+    atmosphereColor: {
+      farHills: '#2563eb',
+      midHills: '#1d4ed8',
+      nearLandmarks: '#1e3a8a',
+      accentGlow: '#f43f5e',
+      waterFog: '#e0f2fe'
+    }
+  },
+  uk: {
+    id: 'uk',
+    name: 'Vương Quốc Anh',
+    flag: '🇬🇧',
+    landmark: 'Tháp Đồng Hồ Big Ben & Cầu Tháp London',
+    subLandmarks: 'Sông Thames Sương Mù • Vòng Quay London Eye • Đồi Xanh Cotswolds',
+    description: 'Xứ sở sương mù cổ kính với tháp đồng hồ Big Ben soi bóng sông Thames, nhịp cầu Tower Bridge Gothic và nét trầm mặc London.',
+    atmosphereColor: {
+      farHills: '#475569',
+      midHills: '#334155',
+      nearLandmarks: '#1e293b',
+      accentGlow: '#dc2626',
+      waterFog: '#e2e8f0'
+    }
+  },
   universal: {
     id: 'universal',
     name: 'Cao Nguyên Thần Mộc',
@@ -191,6 +281,24 @@ export function resolveCountryLandscape(nationality?: string, city?: string): La
   }
   if (query.includes('syria') || query.includes('damascus') || query.includes('palmyra') || query.includes('trung đông')) {
     return CULTURAL_LANDSCAPES.syria;
+  }
+  if (query.includes('somalia') || query.includes('mogadishu') || query.includes('banadir') || query.includes('hargeisa') || query.includes('shangani')) {
+    return CULTURAL_LANDSCAPES.somalia;
+  }
+  if (query.includes('na uy') || query.includes('norway') || query.includes('oslo') || query.includes('bergen') || query.includes('geiranger')) {
+    return CULTURAL_LANDSCAPES.norway;
+  }
+  if (query.includes('thụy sĩ') || query.includes('switzerland') || query.includes('zurich') || query.includes('zürich') || query.includes('geneva') || query.includes('bern')) {
+    return CULTURAL_LANDSCAPES.switzerland;
+  }
+  if (query.includes('brazil') || query.includes('brasil') || query.includes('rio') || query.includes('paulo') || query.includes('copacabana')) {
+    return CULTURAL_LANDSCAPES.brazil;
+  }
+  if (query.includes('haiti') || query.includes('port-au-prince') || query.includes('cap-haitien') || query.includes('laferrière')) {
+    return CULTURAL_LANDSCAPES.haiti;
+  }
+  if (query.includes('vương quốc anh') || query.includes('nước anh') || query.includes('united kingdom') || query.includes('britain') || query.includes('england') || query.includes('london') || /\buk\b/.test(query)) {
+    return CULTURAL_LANDSCAPES.uk;
   }
 
   return CULTURAL_LANDSCAPES.universal;
@@ -604,7 +712,189 @@ export default function CulturalLandscapeBackdrop({
           </g>
         )}
 
-        {/* 9. UNIVERSAL / HIGHLANDS — Dãy Núi Thái Sơ Điệp Trùng */}
+        {/* 9. SOMALIA — Hải Đăng Mogadishu, Cổng Vòm San Hô Shangani & Bờ Biển Ấn Độ Dương */}
+        {landscape.id === 'somalia' && (
+          <g className="transition-all duration-700">
+            {/* Indian Ocean Gentle Horizon & Coastal Dunes */}
+            <path
+              d="M0 390 Q240 340 520 375 T1020 350 T1200 370 L1200 560 L0 560 Z"
+              fill="url(#grad-far-somalia)"
+            />
+            <path
+              d="M0 440 Q280 410 600 430 T1200 415 L1200 560 L0 560 Z"
+              fill="url(#grad-mid-somalia)"
+            />
+            {/* Left Bank — Historic Mogadishu Old Stone Lighthouse & White-Washed Shangani Arches */}
+            <g transform="translate(80, 225)" fill="url(#grad-near-somalia)">
+              {/* White-washed coastal stone base & arched colonnade */}
+              <rect x="0" y="100" width="170" height="65" rx="3" />
+              <path d="M20 140 L20 115 Q35 98 50 115 L50 140 Z" fill="var(--bg-canvas)" opacity="0.45" />
+              <path d="M68 140 L68 115 Q83 98 98 115 L98 140 Z" fill="var(--bg-canvas)" opacity="0.45" />
+              {/* Coral-stone Minaret Dome */}
+              <path d="M122 100 L122 55 L154 55 L154 100 Z" />
+              <path d="M120 55 Q138 25 156 55 Z" />
+              {/* Old Mogadishu Lighthouse Tower */}
+              <polygon points="34,100 40,22 64,22 70,100" />
+              <rect x="38" y="10" width="28" height="12" rx="2" />
+              <circle cx="52" cy="16" r="10" fill={landscape.atmosphereColor.accentGlow} opacity="0.5" />
+            </g>
+            {/* Right Bank — Traditional Dhow Lateen Sailboat & Coastal Date Palms */}
+            <g transform="translate(970, 300)" fill="url(#grad-near-somalia)">
+              <path d="M15 95 Q70 110 135 95 L120 108 Q68 118 25 108 Z" />
+              <polygon points="65,90 120,10 92,90" opacity="0.85" />
+              <line x1="65" y1="5" x2="65" y2="95" stroke="currentColor" strokeWidth="2.5" />
+              <g transform="translate(155, 10)" stroke={landscape.atmosphereColor.nearLandmarks} strokeWidth="2.5" opacity="0.65" fill="none">
+                <path d="M20 100 Q28 45 35 12" />
+                <path d="M35 12 Q10 -5 -5 10" />
+                <path d="M35 12 Q42 -15 62 -5" />
+                <path d="M35 12 Q60 5 72 24" />
+              </g>
+            </g>
+          </g>
+        )}
+
+        {/* 10. NA UY (NORWAY) — Vịnh Hẹp Geirangerfjord, Nhà Gỗ Bergen & Cực Quang */}
+        {landscape.id === 'norway' && (
+          <g className="transition-all duration-700">
+            {/* Aurora Borealis Ribbons in Nordic Sky */}
+            <path
+              d="M120 110 Q340 40 580 120 T1060 75 L1060 150 Q800 185 560 160 T120 175 Z"
+              fill={landscape.atmosphereColor.accentGlow}
+              opacity="0.22"
+            />
+            {/* Towering Fjord Cliffs & Trolltunga Promontory */}
+            <path
+              d="M0 170 L180 210 L290 360 L440 390 L600 370 L760 390 L910 340 L1020 190 L1200 160 L1200 560 L0 560 Z"
+              fill="url(#grad-far-norway)"
+            />
+            <path
+              d="M0 320 L120 280 L230 350 L480 410 L760 405 L960 330 L1200 280 L1200 560 L0 560 Z"
+              fill="url(#grad-mid-norway)"
+            />
+            {/* Left Bank — Bergen Bryggen Pointed Timber Gables */}
+            <g transform="translate(75, 290)" fill="url(#grad-near-norway)">
+              <polygon points="0,35 20,0 40,35" />
+              <rect x="0" y="35" width="40" height="75" />
+              <polygon points="44,40 64,5 84,40" />
+              <rect x="44" y="40" width="40" height="70" />
+              <polygon points="88,30 108,-5 128,30" />
+              <rect x="88" y="30" width="40" height="80" />
+            </g>
+            {/* Right Bank — Nordic Spruce Grove Silhouette */}
+            <g transform="translate(990, 290)" fill="url(#grad-near-norway)">
+              <polygon points="30,10 10,85 50,85" />
+              <polygon points="75,-5 50,85 100,85" />
+              <polygon points="120,20 100,85 140,85" />
+            </g>
+          </g>
+        )}
+
+        {/* 11. THỤY SĨ (SWITZERLAND) — Đỉnh Tuyết Matterhorn & Hồ Geneva */}
+        {landscape.id === 'switzerland' && (
+          <g className="transition-all duration-700">
+            {/* Iconic Matterhorn Pyramid Peak */}
+            <path
+              d="M0 390 L220 260 L380 310 L590 115 L635 125 L820 310 L990 245 L1200 360 L1200 560 L0 560 Z"
+              fill="url(#grad-far-switzerland)"
+            />
+            {/* Matterhorn Crisp Snow Cap */}
+            <path
+              d="M590 115 L635 125 L695 215 L610 190 L535 225 Z"
+              fill="url(#snow-cap-grad)"
+            />
+            {/* Left Bank — Zytglogge Clock Tower Bern */}
+            <g transform="translate(95, 250)" fill="url(#grad-near-switzerland)">
+              <rect x="25" y="45" width="42" height="105" rx="2" />
+              <polygon points="20,45 46,0 72,45" />
+              <circle cx="46" cy="70" r="10" fill={landscape.atmosphereColor.accentGlow} opacity="0.55" />
+              <rect x="70" y="85" width="75" height="65" rx="2" />
+            </g>
+            {/* Right Bank — Lucerne Chapel Bridge & Timber Tower */}
+            <g transform="translate(950, 315)" fill="url(#grad-near-switzerland)">
+              <rect x="75" y="15" width="34" height="80" />
+              <polygon points="70,15 92,-10 114,15" />
+              <path d="M-40 60 L90 45 L140 60 L140 75 L-40 85 Z" />
+            </g>
+          </g>
+        )}
+
+        {/* 12. BRAZIL — Tượng Chúa Cứu Thế Rio & Núi Đường Sugarloaf */}
+        {landscape.id === 'brazil' && (
+          <g className="transition-all duration-700">
+            {/* Rounded Granite Sugarloaf Mountain & Corcovado Ridge */}
+            <path
+              d="M0 380 Q140 240 280 350 Q450 280 610 210 Q740 310 920 270 Q1070 180 1200 340 L1200 560 L0 560 Z"
+              fill="url(#grad-far-brazil)"
+            />
+            {/* Christ the Redeemer Statue perched on Corcovado Summit */}
+            <g transform="translate(578, 132)" fill="url(#grad-near-brazil)">
+              <rect x="26" y="25" width="12" height="54" rx="2" />
+              <circle cx="32" cy="18" r="7" />
+              <rect x="0" y="28" width="64" height="8" rx="3" />
+            </g>
+            {/* Copacabana Coastal Palms & Curved Harbor */}
+            <g transform="translate(80, 310)" stroke={landscape.atmosphereColor.nearLandmarks} strokeWidth="3" fill="none" opacity="0.75">
+              <path d="M30 115 Q38 60 55 20" />
+              <path d="M55 20 Q25 5 10 22" />
+              <path d="M55 20 Q55 -10 80 0" />
+              <path d="M55 20 Q85 15 98 35" />
+            </g>
+          </g>
+        )}
+
+        {/* 13. HAITI — Pháo Đài Đá Citadelle Laferrière & Đỉnh Pic la Selle */}
+        {landscape.id === 'haiti' && (
+          <g className="transition-all duration-700">
+            {/* Caribbean Mountain Ridges */}
+            <path
+              d="M0 390 L180 260 L360 320 L580 190 L790 300 L990 230 L1200 350 L1200 560 L0 560 Z"
+              fill="url(#grad-far-haiti)"
+            />
+            {/* Citadelle Laferrière Prow-Shaped Fortress Silhouette */}
+            <g transform="translate(495, 162)" fill="url(#grad-near-haiti)">
+              <polygon points="10,70 55,10 140,25 160,70" />
+              <rect x="50" y="0" width="22" height="20" />
+              <rect x="95" y="10" width="30" height="20" />
+            </g>
+            {/* Sans-Souci Arch Ruins & Palms */}
+            <g transform="translate(90, 320)" fill="url(#grad-near-haiti)">
+              <rect x="0" y="30" width="130" height="75" rx="3" />
+              <path d="M25 105 L25 55 Q45 35 65 55 L65 105 Z" fill="var(--bg-canvas)" opacity="0.4" />
+              <path d="M80 105 L80 55 Q100 35 120 55 L120 105 Z" fill="var(--bg-canvas)" opacity="0.4" />
+            </g>
+          </g>
+        )}
+
+        {/* 14. VƯƠNG QUỐC ANH (UK) — Tháp Đồng Hồ Big Ben & Cầu Tháp London */}
+        {landscape.id === 'uk' && (
+          <g className="transition-all duration-700">
+            {/* Misty Thames Horizon & Westminster Skyline */}
+            <path
+              d="M0 390 Q280 340 580 375 T1200 360 L1200 560 L0 560 Z"
+              fill="url(#grad-far-uk)"
+            />
+            {/* Left Bank — Elizabeth Tower (Big Ben) & Houses of Parliament */}
+            <g transform="translate(80, 210)" fill="url(#grad-near-uk)">
+              <rect x="20" y="65" width="32" height="125" />
+              <polygon points="16,65 36,10 56,65" />
+              <circle cx="36" cy="86" r="10" fill={landscape.atmosphereColor.accentGlow} opacity="0.6" />
+              <rect x="55" y="120" width="125" height="70" rx="2" />
+              <polygon points="75,120 85,95 95,120" />
+              <polygon points="135,120 145,95 155,120" />
+            </g>
+            {/* Right Bank — Tower Bridge Twin Gothic Towers */}
+            <g transform="translate(940, 250)" fill="url(#grad-near-uk)">
+              <rect x="25" y="30" width="24" height="110" />
+              <polygon points="21,30 37,2 53,30" />
+              <rect x="95" y="30" width="24" height="110" />
+              <polygon points="91,30 107,2 123,30" />
+              <rect x="49" y="52" width="46" height="10" />
+              <rect x="-15" y="105" width="165" height="12" />
+            </g>
+          </g>
+        )}
+
+        {/* 15. UNIVERSAL / HIGHLANDS — Dãy Núi Thái Sơ Điệp Trùng */}
         {landscape.id === 'universal' && (
           <g className="transition-all duration-700">
             <path
@@ -664,7 +954,7 @@ export default function CulturalLandscapeBackdrop({
         >
           <div className="px-2.5 py-1 rounded-full bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-amber-500/40 text-[10.5px] font-sans text-amber-800 dark:text-amber-300 font-bold flex items-center gap-1.5 shadow-md backdrop-blur-md cursor-help transition-all duration-200 hover:scale-105 active:scale-95 group">
             <span className="text-xs group-hover:scale-125 transition-transform">{landscape.flag}</span>
-            <span className="truncate max-w-[140px] sm:max-w-[200px]">
+            <span className="truncate max-w-[140px] sm:max-w-[215px]">
               {landscape.name} • {landscape.landmark.split('&')[0].trim()}
             </span>
           </div>

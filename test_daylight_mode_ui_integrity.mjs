@@ -354,8 +354,11 @@ test('Cultural Landscape Backdrop: Panoramic silhouettes, national landmarks & s
     'DynamicLifeTree must import and render CulturalLandscapeBackdrop'
   );
 
-  // 2. Cultural profile coverage for all key nationalities
-  const requiredCountries = ['poland', 'vietnam', 'japan', 'korea', 'thailand', 'usa', 'germany', 'syria', 'universal'];
+  // 2. Cultural profile coverage for all 14 LifeGraph playable nationalities + fallback
+  const requiredCountries = [
+    'poland', 'vietnam', 'japan', 'korea', 'thailand', 'usa', 'germany', 'syria',
+    'somalia', 'norway', 'switzerland', 'brazil', 'haiti', 'uk', 'universal'
+  ];
   for (const country of requiredCountries) {
     assert.ok(
       backdropContent.includes(`${country}:`),
@@ -373,6 +376,12 @@ test('Cultural Landscape Backdrop: Panoramic silhouettes, national landmarks & s
   assert.ok(backdropContent.includes('Gyeongbokgung'), 'Must feature Gyeongbokgung Palace for Korea');
   assert.ok(backdropContent.includes('Wat Arun'), 'Must feature Wat Arun Temple of Dawn for Thailand');
   assert.ok(backdropContent.includes('Grand Canyon'), 'Must feature Grand Canyon for USA');
+  assert.ok(backdropContent.includes('Mogadishu'), 'Must feature Mogadishu Lighthouse & Coast for Somalia');
+  assert.ok(backdropContent.includes('Geirangerfjord'), 'Must feature Geirangerfjord for Norway');
+  assert.ok(backdropContent.includes('Matterhorn'), 'Must feature Matterhorn Alpine peak for Switzerland');
+  assert.ok(backdropContent.includes('Sugarloaf'), 'Must feature Sugarloaf & Christ the Redeemer for Brazil');
+  assert.ok(backdropContent.includes('Citadelle Laferrière'), 'Must feature Citadelle Laferrière for Haiti');
+  assert.ok(backdropContent.includes('Big Ben'), 'Must feature Big Ben & Tower Bridge for UK');
 
   // 4. Seamless atmospheric mist blending
   assert.ok(
@@ -388,5 +397,45 @@ test('Cultural Landscape Backdrop: Panoramic silhouettes, national landmarks & s
   assert.ok(
     backdropContent.includes('text-amber-800 dark:text-amber-300'),
     'Heritage badge must use high-contrast dual-theme amber colors'
+  );
+});
+
+// ============================================================================
+// SUITE 6: Zero-Overlap Tree Spatial Geometry & Top-Bar Decluttering Audit
+// ============================================================================
+test('Zero-Overlap Layout: Action node separation, clear zenith sky & bottom symmetry', () => {
+  const treeContent = readFile('frontend/app/components/rpg/DynamicLifeTree.tsx');
+  const backdropContent = readFile('frontend/app/components/rpg/CulturalLandscapeBackdrop.tsx');
+
+  // 1. Upper-left & upper-right action nodes fanned out cleanly (-152° / -28°) from breakthrough (-90°)
+  assert.ok(
+    treeContent.includes('angleDeg: -152'),
+    'Upper-left leaf nodes must angle outward at -152° to prevent overlapping zenith breakthrough card'
+  );
+  assert.ok(
+    treeContent.includes('angleDeg: -28'),
+    'Upper-right leaf nodes must angle outward at -28° for symmetric zenith clearance'
+  );
+
+  // 2. Canvas top corners clear (no duplicate giant floating pillar banners inside canvas)
+  assert.ok(
+    !treeContent.includes('BOUGH 1: KỸ NĂNG & TRÍ TUỆ'),
+    'Must NOT duplicate giant Pillar overlay boxes inside top canopy of canvas'
+  );
+
+  // 3. Celestial NPC constellation forms high zenith crown arc outside corner badges
+  assert.ok(
+    treeContent.includes('{ x: 255, y: 54') && treeContent.includes('{ x: 325, y: 42'),
+    'NPC constellation orbs must orbit clean crown arc clear of Season/Pet corner pills and breakthrough button'
+  );
+
+  // 4. Bottom-left Cultural Heritage & Bottom-right Annual Growth Rings never overlap
+  assert.ok(
+    backdropContent.includes('bottom-2.5 left-3 sm:left-4'),
+    'Cultural Heritage badge anchors cleanly on bottom-left corner'
+  );
+  assert.ok(
+    treeContent.includes('bottom-2.5 right-3 sm:right-4'),
+    'Annual Growth Rings badge must anchor on bottom-right so it never collides with bottom-left Heritage badge or center dais'
   );
 });

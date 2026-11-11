@@ -1329,7 +1329,7 @@ Nhằm xóa bỏ hoàn toàn hiện tượng chữ đồng màu, chìm màu ho�
 
 Nhằm đáp ứng chỉ đạo của **Sếp** về việc xóa bỏ cảnh nền đơn điệu, "trơn tuột" phía sau Đại Thụ Sinh Mệnh, LifeGraph 2.0 tích hợp hệ thống cảnh quan văn hóa toàn cảnh đa tầng thủ tục (`CulturalLandscapeBackdrop.tsx`):
 
-### 32.1. Phân Tầng Thị Giác & Bản Sắc Biểu Tượng 8 Quốc Gia
+### 32.1. Phân Tầng Thị Giác & Bản Sắc Biểu Tượng 14 Quốc Gia LifeGraph
 Toàn bộ danh lam thắng cảnh được vẽ bằng vector SVG nghệ thuật bán trong suốt (`opacity: 0.22 - 0.35`), phối màu êm ái cùng hệ thống vòm trời 4 mùa và không làm nhiễu loạn các nút lá hành động:
 
 | Quốc Gia | Cảnh Quan Nền Viễn Cảnh (Layer 1) | Kiến Trúc Biểu Tượng Trung Cảnh (Layer 2) | Chi Tiết Văn Hóa Đặc Thù (Layer 3) |
@@ -1342,8 +1342,32 @@ Toàn bộ danh lam thắng cảnh được vẽ bằng vector SVG nghệ thuậ
 | **Hoa Kỳ (`usa`)** | Hẻm núi sa thạch đỏ kỳ vĩ Grand Canyon | Cầu Cổng Vàng (Golden Gate Bridge) San Francisco | Đường chân trời Manhattan Skyline, rừng thông khổng lồ Sequoia |
 | **Đức (`germany`)** | Dãy núi Alps tuyết trắng vùng Bavaria | Lâu đài cổ tích Neuschwanstein trên vách đá | Cổng thành Brandenburg Berlin, thung lũng Rừng Đen |
 | **Syria (`syria`)** | Cồn cát hoàng kim sa mạc Syria | Hàng cột đá La Mã khổng lồ thành cổ Palmyra | Mái vòm Hồi giáo Damascus, ốc đảo chà là nghìn lẻ một đêm |
+| **Somalia (`somalia`)** | Chân trời biển xanh Ấn Độ Dương & đồi cát ven biển | Hải đăng cổ Mogadishu & cổng vòm đá san hô trắng Shangani | Mái vòm tháp Minaret, thuyền buồm Dhow & rặng dừa Banadir |
+| **Na Uy (`norway`)** | Vịnh hẹp Geirangerfjord vách đá dựng đứng & Trolltunga | Dải cực quang xanh ngọc (Aurora) vắt ngang trời Bắc Âu | Dãy nhà gỗ mái nhọn Bergen Bryggen & rừng vân sam Bắc Cực |
+| **Thụy Sĩ (`switzerland`)** | Đỉnh tuyết Matterhorn hình kim tự tháp trên dãy Alps | Tháp đồng hồ cổ Zytglogge (Bern) soi bóng mặt hồ | Cầu gỗ mái che Chapel Bridge (Lucerne) thanh bình |
+| **Brazil (`brazil`)** | Dãy núi đá tròn Sugarloaf & đỉnh Corcovado rậm rạp | Tượng Chúa Cứu Thế Rio sải tay ôm trọn vịnh biển | Rặng dừa nhiệt đới & bờ cát cong vịnh Copacabana |
+| **Haiti (`haiti`)** | Rặng núi Caribe dốc đứng đỉnh Pic la Selle | Pháo đài đá khổng lồ Citadelle Laferrière trên đỉnh núi | Cổng vòm cung điện Sans-Souci & bờ vịnh Caribe |
+| **Vương Quốc Anh (`uk`)** | Đường chân trời Westminster phủ sương sông Thames | Tháp đồng hồ Elizabeth (Big Ben) & mái vòm Nghị viện | Nhịp cầu tháp đôi Gothic Tower Bridge bắc qua dòng Thames |
 | **Mặc định (`universal`)** | Dãy núi Thái Sơ nguyên sinh ba tầng | Đồi thông cổ đại & suối nguồn sinh mệnh | Khởi nguyên Thần Mộc linh thiêng |
 
 ### 32.2. Kỹ Thuật Hòa Quyện Chân Trời (Seamless Horizon Mist Fade)
 * **Chống Cắt Gãy Thị Giác:** Đáy của bức tranh toàn cảnh được phủ dải sương mù chân trời `linearGradient(to top, var(--bg-canvas) 0%, transparent 60%)`, giúp vách núi và dòng sông hòa quyện mượt mà vào bục cội rễ (Dais) và vòng vân gỗ mà không có bất kỳ đường viền thô ráp nào.
-* **Huy Hiệu Di Sản Tinh Tế (Heritage Badge):** Góc dưới bên trái canvas hiển thị viên thuốc di sản `📍 {Quốc gia} • {Danh thắng}` kèm tooltip chi tiết giới thiệu giá trị lịch sử và phong cảnh quê hương.
+* **Huy Hiệu Đáy Đối Xứng Không Chồng Lấn:** Huy hiệu di sản văn hóa neo cố định ở góc dưới trái (`bottom-2.5 left-3 sm:left-4`), còn huy hiệu `Mầm Sống Khởi Nguyên • Vòng Vân Gỗ` neo ở góc dưới phải (`bottom-2.5 right-3 sm:right-4`), để trống hoàn toàn tâm giữa cho Bệ Gốc Dais và Linh Thú tỏa sáng.
+
+---
+
+## 33. Kỷ Luật Không Gian Đa Tầng & Chống Chồng Chéo Trên Đại Thụ (Zero-Overlap Tree Geometry Standard)
+
+Để triệt tiêu 100% tình trạng lặp nhãn điều hướng, chữ đè nút hoặc đâm vào bục gốc trên màn hình 2 cột (`DynamicLifeTree.tsx`):
+
+1. **Thanh Điều Hướng & Tam Trụ Thống Nhất (Hợp Nhất Ngoài Canvas):**
+   * Gộp 3 lăng kính điều hướng (`Vòng Đời & Hành Động`, `Nhánh Kỹ Năng`, `Nhân Mạch Quý Nhân`) cùng nút `Cành Hoàng Kim` thành một thanh điều khiển gọn phía trên canvas, **tuyệt đối không lặp lại** 3 khung thẻ lớn bên trong bầu trời canvas.
+   * Cảnh báo cây kiệt sức hiển thị dạng dải inline phía trên canvas thay vì che phủ vùng đỉnh tán cây.
+   * Bầu trời canvas phía trên chỉ giữ đúng 2 badge góc gọn (`Xuân/Hạ/Thu/Đông` ở góc trên trái `top-3 left-3`, `Linh Thú` ở góc trên phải `top-3 right-3`).
+2. **Phân Giãn Tọa Độ Tán Lá Cành (Breakthrough Separation Law):**
+   * Tâm cốt lõi: `centerX = 360`, `centerY = 275`, `baseRadius = 182` trên khung `viewBox="0 0 720 520"` (`h-[560px] sm:h-[600px]`).
+   * Nút Đột Phá thiên đỉnh (`breakthrough`) giữ góc `-90°` (`distanceRatio: 0.86`). Hai nhánh lá phía trên hai bên buộc phải mở rộng góc sang ngang đạt **`-152°` (Tây Bắc)** và **`-28°` (Đông Bắc)** với `distanceRatio: 0.90` — cách nút Đột Phá `62°`, tạo khoảng hở dọc `>= 25px–36px`, triệt tiêu hoàn toàn lỗi va chạm viền thẻ.
+   * Hai nhánh giữa mở ngang `172°` / `8°` (`distanceRatio: 0.94`) và nhánh cội rễ hạ ở `138°` / `42°` (`distanceRatio: 0.84`), bảo toàn khoảng trống quanh Vòng Lõi Trung Tâm và Bệ Gốc Dais.
+3. **Vòng Cung Quý Nhân & Huyệt Đạo Không Điểm Chạm:**
+   * 4 nút Quý Nhân (`npcPositions`) xếp hình vòm thiên đỉnh thoáng đạt tại `{(255, 54), (325, 42), (395, 42), (465, 54)}`, nằm ngoài hoàn toàn vùng pill góc và phía trên thẻ Đột Phá.
+   * 5 Huyệt Đạo Kinh Mạch (`MERIDIAN_ACUPOINTS`) đặt tại `{(125, 105), (205, 132), (360, 184), (515, 132), (595, 105)}` dọc thân và cành chính, đảm bảo 0% giao cắt với mọi thẻ hành động.

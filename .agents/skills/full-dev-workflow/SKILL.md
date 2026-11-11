@@ -355,9 +355,10 @@ Theo lệnh điều hành trực tiếp của **Sếp**, LifeGraph áp dụng qu
 
 ---
 
-## 10. Cảnh Quan Văn Hóa Biểu Tượng Quốc Gia (`CulturalLandscapeBackdrop.tsx`)
+## 10. Cảnh Quan Văn Hóa Quốc Gia & Kỷ Luật Không Gian Đại Thụ (`CulturalLandscapeBackdrop.tsx` & `DynamicLifeTree.tsx`)
 
-Để xóa bỏ nền trống phía sau Đại Thụ Sinh Mệnh, mỗi quốc gia sở hữu một hệ thống phong cảnh vector SVG đa tầng riêng biệt tự động nhận diện từ `character.nationality` và `character.current_city`:
-* **8 Quốc gia chuyên biệt + Mặc định:** Ba Lan (Dãy Tatras & Lâu đài Wawel), Việt Nam (Vịnh Hạ Long, Khuê Văn Các & Ruộng bậc thang), Nhật Bản (Núi Phú Sĩ, Torii & Chùa 5 tầng), Hàn Quốc (Gyeongbokgung & Tháp Namsan), Thái Lan (Wat Arun & Voi thần), Hoa Kỳ (Golden Gate & Grand Canyon), Đức (Neuschwanstein & Alps Bavaria), Syria (Palmyra & Sa mạc), và Cao Nguyên Thần Mộc mặc định.
-* **Kỷ luật hòa quyện (`z-0`):** Độ mờ `opacity-35 dark:opacity-25`, kết hợp màng sương chuyển tiếp (`horizon-mist-blend`) ở chân núi để hòa nhập mượt mà vào canvas nền mà không che khuất chữ hay nút bấm hành động.
-* **Huy hiệu di sản:** Pill góc dưới bên trái kèm tooltip mô tả danh lam thắng cảnh quê hương nhân vật.
+Để xóa bỏ nền trống phía sau Đại Thụ Sinh Mệnh đồng thời loại bỏ hoàn toàn lỗi chồng chéo chữ/nút ở phần đầu và đáy canvas:
+* **14 Quốc gia chuyên biệt + Mặc định:** Ba Lan (Tatras & Wawel), Việt Nam (Hạ Long & Khuê Văn Các), Nhật Bản (Phú Sĩ & Torii), Hàn Quốc (Gyeongbokgung & Namsan), Thái Lan (Wat Arun & Voi thần), Hoa Kỳ (Golden Gate & Grand Canyon), Đức (Neuschwanstein & Alps), Syria (Palmyra & Sa mạc), **Somalia** (Hải đăng Mogadishu & Thượng thành san hô Shangani), **Na Uy** (Vịnh hẹp Geirangerfjord & Cực quang), **Thụy Sĩ** (Đỉnh Matterhorn & Tháp đồng hồ Bern), **Brazil** (Tượng Chúa Cứu Thế Rio & Núi Sugarloaf), **Haiti** (Pháo đài Citadelle Laferrière), **Vương Quốc Anh** (Big Ben & Cầu Tháp London), cùng Cao Nguyên Thần Mộc mặc định.
+* **Thanh Tam Trụ Thống Nhất & Tối Giản Đầu Canvas:** Gộp lăng kính chế độ xem và Cành Hoàng Kim vào một thanh gọn phía trên canvas; loại bỏ hoàn toàn 3 thẻ cột trụ trùng lặp trong bầu trời cây; giữ canvas thoáng chỉ với 2 badge góc (`top-3 left-3` & `top-3 right-3`).
+* **Chuẩn Góc Phân Bổ Zero-Overlap:** Nút Đột Phá thiên đỉnh tại `-90°` (`distanceRatio: 0.86`); hai nhánh trên mở rộng góc ra `-152°` / `-28°` (`distanceRatio: 0.90`); 4 nút Quý Nhân xếp cung thiên đỉnh `{(255,54), (325,42), (395,42), (465,54)}`; 5 Huyệt Đạo nằm trên cành sạch `{(125,105), (205,132), (360,184), (515,132), (595,105)}`.
+* **Đối Xứng Đáy Canvas:** Huy hiệu Di Sản Văn Hóa neo cố định góc dưới trái (`bottom-2.5 left-3 sm:left-4`), Huy hiệu Vòng Vân Gỗ / Mầm Sống Khởi Nguyên neo góc dưới phải (`bottom-2.5 right-3 sm:right-4`), để trống giữa đáy làm nổi bật Bệ Gốc Dais và Linh Thú.
