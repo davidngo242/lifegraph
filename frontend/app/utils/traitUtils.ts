@@ -300,17 +300,17 @@ export function formatTrait(traitId: string | undefined | null): FormattedTrait 
   const entry = TRAIT_REGISTRY[cleanId];
 
   if (entry) {
-    let badgeStyle = "bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/40 shadow-sm";
+    let badgeStyle = "bg-amber-500/15 text-amber-800 dark:text-amber-300 border-amber-500/40 shadow-sm";
     let pillColor = "text-amber-600 dark:text-amber-400";
 
     if (entry.category === 'curse') {
-      badgeStyle = "bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-500/40 shadow-sm";
+      badgeStyle = "bg-rose-500/15 text-rose-800 dark:text-rose-300 border-rose-500/40 shadow-sm";
       pillColor = "text-rose-600 dark:text-rose-400";
     } else if (entry.category === 'rare') {
-      badgeStyle = "bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-500/50 shadow-sm";
+      badgeStyle = "bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/50 shadow-sm";
       pillColor = "text-amber-600 dark:text-amber-400";
     } else if (entry.category === 'buff') {
-      badgeStyle = "bg-teal-500/15 text-teal-700 dark:text-teal-300 border-teal-500/40 shadow-sm";
+      badgeStyle = "bg-teal-500/15 text-teal-800 dark:text-teal-300 border-teal-500/40 shadow-sm";
       pillColor = "text-teal-600 dark:text-teal-400";
     }
 

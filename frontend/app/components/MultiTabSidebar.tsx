@@ -103,17 +103,17 @@ export default function MultiTabSidebar({
   return (
     <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-3 md:p-4 shadow-xl backdrop-blur-xl flex flex-col h-auto max-h-[620px] lg:max-h-none lg:h-[calc(100vh-6.5rem)] lg:sticky top-20 overflow-hidden transition-colors duration-200">
       {/* 1. TOP TAB NAVIGATION BAR */}
-      <div className="flex items-center gap-1 p-1 bg-[var(--bg-card-subtle)] rounded-2xl border border-[var(--border-subtle)] shrink-0 mb-3">
+      <div className="flex items-stretch gap-1 p-1 bg-[var(--bg-card-subtle)] rounded-2xl border border-[var(--border-subtle)] shrink-0 mb-3 overflow-x-auto">
         <button
           onClick={() => setActiveTab('journal')}
-          className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition ${
+          className={`flex-1 min-w-0 min-h-[44px] sm:min-h-0 py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-semibold flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 transition ${
             activeTab === 'journal'
-              ? 'bg-[var(--bg-card)] text-amber-600 dark:text-amber-400 font-bold border border-[var(--border-subtle)] shadow-sm'
+              ? 'bg-[var(--bg-card)] text-amber-800 dark:text-amber-400 font-bold border border-[var(--border-subtle)] shadow-sm'
               : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
           }`}
         >
           <BookOpen className="w-3.5 h-3.5 shrink-0" />
-          <span className="truncate">Nhật Ký</span>
+          <span className="whitespace-nowrap leading-tight">Nhật Ký</span>
           {history.length > 0 && (
             <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] hidden sm:inline">
               {history.length}
@@ -123,38 +123,38 @@ export default function MultiTabSidebar({
 
         <button
           onClick={() => setActiveTab('social')}
-          className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition ${
+          className={`flex-1 min-w-0 min-h-[44px] sm:min-h-0 py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-semibold flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 transition ${
             activeTab === 'social'
-              ? 'bg-[var(--bg-card)] text-indigo-600 dark:text-indigo-400 font-bold border border-[var(--border-subtle)] shadow-sm'
+              ? 'bg-[var(--bg-card)] text-indigo-800 dark:text-indigo-400 font-bold border border-[var(--border-subtle)] shadow-sm'
               : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
           }`}
         >
           <Users className="w-3.5 h-3.5 shrink-0" />
-          <span className="truncate">Nhân Mạch</span>
+          <span className="whitespace-nowrap leading-tight">Nhân Mạch</span>
         </button>
 
         <button
           onClick={() => setActiveTab('assets')}
-          className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition ${
+          className={`flex-1 min-w-0 min-h-[44px] sm:min-h-0 py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-semibold flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 transition ${
             activeTab === 'assets'
-              ? 'bg-[var(--bg-card)] text-emerald-600 dark:text-emerald-400 font-bold border border-[var(--border-subtle)] shadow-sm'
+              ? 'bg-[var(--bg-card)] text-emerald-800 dark:text-emerald-400 font-bold border border-[var(--border-subtle)] shadow-sm'
               : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
           }`}
         >
           <Building2 className="w-3.5 h-3.5 shrink-0" />
-          <span className="truncate">Tài Sản</span>
+          <span className="whitespace-nowrap leading-tight">Tài Sản</span>
         </button>
 
         <button
           onClick={() => setActiveTab('achievements')}
-          className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition ${
+          className={`flex-1 min-w-0 min-h-[44px] sm:min-h-0 py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-semibold flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 transition ${
             activeTab === 'achievements'
-              ? 'bg-[var(--bg-card)] text-amber-500 font-bold border border-[var(--border-subtle)] shadow-sm'
+              ? 'bg-[var(--bg-card)] text-amber-800 dark:text-amber-400 font-bold border border-[var(--border-subtle)] shadow-sm'
               : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
           }`}
         >
           <Trophy className="w-3.5 h-3.5 shrink-0 text-amber-500" />
-          <span className="truncate">Sổ Vàng</span>
+          <span className="whitespace-nowrap leading-tight">Sổ Vàng</span>
         </button>
       </div>
 
@@ -216,7 +216,7 @@ export default function MultiTabSidebar({
                           <div>
                             <div className="font-bold text-xs text-[var(--text-primary)] flex items-center gap-1.5">
                               <span>{npc.name}</span>
-                              <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 font-mono font-bold">
+                              <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-indigo-500/15 text-indigo-800 dark:text-indigo-400 border border-indigo-500/30 font-mono font-bold">
                                 Lv.{npc.linkLevel}
                               </span>
                             </div>
@@ -267,7 +267,7 @@ export default function MultiTabSidebar({
 
                       {/* Perk description */}
                       {npc.benefit && (
-                        <div className="text-[10px] text-amber-700 dark:text-amber-300 font-sans italic bg-amber-500/10 px-2 py-1 rounded-lg border border-amber-500/20">
+                        <div className="text-[10px] text-amber-800 dark:text-amber-300 font-sans italic bg-amber-500/10 px-2 py-1 rounded-lg border border-amber-500/20">
                           ✦ Hiệu ứng bảo trợ: {npc.benefit}
                         </div>
                       )}
@@ -286,7 +286,7 @@ export default function MultiTabSidebar({
                 </span>
                 <button
                   onClick={onOpenFamily}
-                  className="text-[10.5px] text-indigo-500 hover:text-indigo-400 font-semibold flex items-center gap-0.5"
+                  className="text-[10.5px] text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 font-semibold flex items-center gap-0.5"
                 >
                   <span>Mở Gia Phả</span>
                   <ChevronRight className="w-3 h-3" />
@@ -316,7 +316,7 @@ export default function MultiTabSidebar({
                         </div>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-[11px] font-mono font-bold text-pink-500">
+                        <span className="text-[11px] font-mono font-bold text-pink-700 dark:text-pink-400">
                           {rel.affinity ?? 50}%
                         </span>
                         <Heart className="w-3 h-3 text-pink-500 fill-current" />
@@ -362,13 +362,13 @@ export default function MultiTabSidebar({
                   <TrendingUp className="w-4 h-4" />
                 </span>
               </div>
-              <div className="text-2xl font-black font-sans tracking-tight text-emerald-600 dark:text-emerald-400">
+              <div className="text-2xl font-black font-sans tracking-tight text-emerald-800 dark:text-emerald-400">
                 {formatCurrency(netWorth, nationality).primary}
               </div>
               <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[var(--border-subtle)] text-[11px]">
                 <div>
                   <div className="text-[var(--text-secondary)]">Tiền mặt khả dụng:</div>
-                  <div className={`font-mono font-bold ${cash < 0 ? 'text-rose-500' : 'text-[var(--text-primary)]'}`}>
+                  <div className={`font-mono font-bold ${cash < 0 ? 'text-rose-700 dark:text-rose-400' : 'text-[var(--text-primary)]'}`}>
                     ${cash.toLocaleString()}
                   </div>
                 </div>
@@ -389,7 +389,7 @@ export default function MultiTabSidebar({
                 </span>
                 <button
                   onClick={onOpenAssets}
-                  className="text-[10.5px] text-emerald-600 dark:text-emerald-400 hover:underline font-semibold flex items-center gap-0.5"
+                  className="text-[10.5px] text-emerald-800 dark:text-emerald-400 hover:underline font-semibold flex items-center gap-0.5"
                 >
                   <span>Mở Sàn Giao Dịch</span>
                   <ExternalLink className="w-3 h-3" />
@@ -402,7 +402,7 @@ export default function MultiTabSidebar({
                   <p>Bạn chưa sở hữu bất động sản hay cổ phiếu nào.</p>
                   <button
                     onClick={onOpenAssets}
-                    className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition"
+                    className="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs transition"
                   >
                     Xem Sàn Giao Dịch Tài Sản
                   </button>
@@ -419,14 +419,14 @@ export default function MultiTabSidebar({
                           <Building2 className="w-3.5 h-3.5 text-emerald-500" />
                           {asset.name}
                         </span>
-                        <span className="font-mono text-emerald-600 dark:text-emerald-400">
+                        <span className="font-mono text-emerald-800 dark:text-emerald-400">
                           ${Number(asset.current_value || 0).toLocaleString()}
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-[10.5px] text-[var(--text-secondary)]">
                         <span>Loại: {asset.type || 'Bất động sản'}</span>
                         {asset.annual_cash_flow ? (
-                          <span className="text-emerald-500 font-mono">
+                          <span className="text-emerald-700 dark:text-emerald-400 font-mono">
                             +${asset.annual_cash_flow.toLocaleString()}/năm
                           </span>
                         ) : null}
@@ -516,7 +516,7 @@ export default function MultiTabSidebar({
             {onOpenTarotCardModal && (
               <button
                 onClick={onOpenTarotCardModal}
-                className="w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-amber-500 via-purple-600 to-indigo-600 hover:opacity-95 text-white font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-950/40 transition active:scale-95"
+                className="w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-amber-700 via-purple-700 to-indigo-700 dark:from-amber-500 dark:via-purple-600 dark:to-indigo-600 hover:opacity-95 text-white font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-950/40 transition active:scale-95"
               >
                 <Trophy className="w-4 h-4 text-amber-200" />
                 <span>Xem Sổ Vàng & Thẻ Bài Cyber-Tarot</span>

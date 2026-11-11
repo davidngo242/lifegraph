@@ -9,6 +9,7 @@
   --bg-header: rgba(255, 255, 255, 0.94);
   --bg-card: #ffffff;
   --bg-card-subtle: #f1f5f9;
+  --bg-popover: #ffffff;
   --border-subtle: #e2e8f0;
   --border-highlight: #f59e0b;
   --text-primary: #0f172a;
@@ -40,8 +41,9 @@
 [data-theme="obsidian"] {
   --bg-canvas: #0c0d12;
   --bg-header: rgba(14, 16, 22, 0.88);
-  --bg-card: rgba(18, 20, 28, 0.82);
+  --bg-card: rgba(18, 20, 28, 0.92);
   --bg-card-subtle: rgba(26, 29, 39, 0.65);
+  --bg-popover: #14161e;
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-highlight: rgba(251, 191, 36, 0.35);
   --text-primary: #e2e4e9;
@@ -70,44 +72,48 @@
   color-scheme: dark;
 }
 
+/* SEPIA - "Giấy ngà ấm": theme SÁNG-ẤM cho đọc lâu (KHÔNG thuộc nhóm theme tối; không kích hoạt `dark:`).
+   Tương phản: chữ chính #35261a/#f2e9d8 = 12.1:1, phụ #4f3b27 = 8.8:1, muted #62492f = 6.9:1. */
 [data-theme="sepia"] {
-  --bg-canvas: #161412;
-  --bg-header: rgba(26, 23, 20, 0.90);
-  --bg-card: rgba(32, 28, 24, 0.82);
-  --bg-card-subtle: rgba(43, 38, 33, 0.65);
-  --border-subtle: rgba(235, 216, 190, 0.12);
-  --border-highlight: rgba(217, 119, 6, 0.40);
-  --text-primary: #ebd8be;
-  --text-secondary: #a89f91;
-  --text-muted: #8c8273;
-  --accent-gold: #d97706;
-  --accent-emerald: #059669;
-  --accent-rose: #e11d48;
+  --bg-canvas: #f2e9d8;
+  --bg-header: rgba(250, 243, 228, 0.95);
+  --bg-card: #fbf6ea;
+  --bg-card-subtle: #efe4cc;
+  --bg-popover: #fbf6ea;
+  --border-subtle: #d9c9a8;
+  --border-highlight: #b9772a;
+  --text-primary: #35261a;
+  --text-secondary: #4f3b27;
+  --text-muted: #62492f;
+  --accent-gold: #8f4a0c;
+  --accent-emerald: #0f6b4a;
+  --accent-rose: #a3173f;
   --background: var(--bg-canvas);
   --foreground: var(--text-primary);
-  --bg-ambient-starter: linear-gradient(180deg, rgba(43, 38, 33, 0.5) 0%, rgba(32, 28, 24, 0.95) 50%, #161412 100%);
-  --bg-ambient-middle: linear-gradient(180deg, rgba(55, 48, 40, 0.5) 0%, rgba(32, 28, 24, 0.9) 50%, #161412 100%);
-  --bg-ambient-luxury: linear-gradient(180deg, rgba(70, 55, 30, 0.5) 0%, rgba(32, 28, 24, 0.9) 50%, #161412 100%);
-  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
-  --tree-sky-spring: radial-gradient(ellipse 90% 65% at 50% 15%, rgba(244,114,182,0.2) 0%, rgba(56,189,248,0.1) 40%, rgba(22,20,18,0.92) 85%);
-  --tree-sky-summer: radial-gradient(ellipse 95% 70% at 50% 10%, rgba(251,191,36,0.22) 0%, rgba(14,165,233,0.12) 40%, rgba(22,20,18,0.92) 85%);
-  --tree-sky-autumn: radial-gradient(ellipse 90% 65% at 50% 15%, rgba(234,88,12,0.22) 0%, rgba(180,83,9,0.14) 45%, rgba(22,20,18,0.92) 85%);
-  --tree-sky-winter: radial-gradient(ellipse 95% 70% at 50% 10%, rgba(6,182,212,0.24) 0%, rgba(139,92,246,0.16) 45%, rgba(22,20,18,0.92) 85%);
-  --tree-core-bg: radial-gradient(circle, rgba(217,119,6,0.3) 0%, rgba(22,20,18,0.95) 75%);
-  --tree-core-border: rgba(217,119,6,0.6);
-  --tree-core-shadow: 0 0 35px rgba(217,119,6,0.35);
-  --tree-core-text: #ebd8be;
-  --tree-core-ap0-bg: radial-gradient(circle, rgba(245,158,11,0.5) 0%, rgba(43,38,33,0.9) 70%, rgba(22,20,18,0.95) 85%);
-  --tree-core-ap0-border: 2.5px solid rgba(251,191,36,0.9);
-  --tree-core-ap0-shadow: 0 0 45px rgba(245,158,11,0.5);
-  color-scheme: dark;
+  --bg-ambient-starter: linear-gradient(180deg, #efe3c9 0%, #f4ecdb 50%, #f8f1e2 100%);
+  --bg-ambient-middle: linear-gradient(180deg, #ecdfc4 0%, #f4ecdb 50%, #f1e4cd 100%);
+  --bg-ambient-luxury: linear-gradient(180deg, #f1e2bd 0%, #f4ecdb 50%, #efdfc6 100%);
+  --card-shadow: 0 4px 20px -2px rgba(90, 60, 20, 0.12);
+  --tree-sky-spring: radial-gradient(ellipse 90% 65% at 50% 15%, rgba(214,120,150,0.18) 0%, rgba(120,170,160,0.12) 40%, rgba(244,236,219,0.95) 85%);
+  --tree-sky-summer: radial-gradient(ellipse 95% 70% at 50% 10%, rgba(230,160,40,0.24) 0%, rgba(120,170,190,0.12) 40%, rgba(244,236,219,0.95) 85%);
+  --tree-sky-autumn: radial-gradient(ellipse 90% 65% at 50% 15%, rgba(200,100,30,0.22) 0%, rgba(160,90,30,0.12) 45%, rgba(244,236,219,0.95) 85%);
+  --tree-sky-winter: radial-gradient(ellipse 95% 70% at 50% 10%, rgba(110,160,175,0.24) 0%, rgba(150,130,170,0.12) 45%, rgba(244,236,219,0.95) 85%);
+  --tree-core-bg: radial-gradient(circle, rgba(185,119,42,0.26) 0%, rgba(251,246,234,0.92) 62%, rgba(251,246,234,0.98) 85%);
+  --tree-core-border: rgba(185,119,42,0.6);
+  --tree-core-shadow: 0 4px 25px rgba(143,74,12,0.25);
+  --tree-core-text: #35261a;
+  --tree-core-ap0-bg: radial-gradient(circle, rgba(245,158,11,0.35) 0%, rgba(254,243,199,0.85) 50%, rgba(251,246,234,0.98) 85%);
+  --tree-core-ap0-border: 2.5px solid rgba(180,83,9,0.85);
+  --tree-core-ap0-shadow: 0 4px 30px rgba(180,83,9,0.35);
+  color-scheme: light;
 }
 
 [data-theme="cyberpunk"] {
   --bg-canvas: #020617;
   --bg-header: rgba(2, 6, 23, 0.92);
-  --bg-card: rgba(15, 23, 42, 0.82);
+  --bg-card: rgba(15, 23, 42, 0.92);
   --bg-card-subtle: rgba(30, 41, 59, 0.65);
+  --bg-popover: #0b1226;
   --border-subtle: rgba(56, 189, 248, 0.25);
   --border-highlight: rgba(168, 85, 247, 0.50);
   --text-primary: #f1f5f9;
@@ -347,6 +353,227 @@
   border-color: #ec4899 !important;
   color: #9d174d !important;
 }
+
+/* ========================================================================= */
+/* SEPIA (giấy ngà ấm) - phiên bản ấm của bộ adaptor Daylight bên trên.        */
+/* Sinh từ khối Daylight: đổi nền trắng/xám lạnh -> ngà/kem ấm, chữ slate -> nâu */
+/* đậm. Mọi class "tối cứng" (bg-slate-900, text-slate-200...) được ánh xạ về    */
+/* bề mặt sáng + chữ nâu đậm để không còn vùng tối lẻ loi trong theme sáng.      */
+/* ========================================================================= */
+
+/* 1. Container surfaces adaptation */
+[data-theme="sepia"] .bg-slate-950:not(button):not(a):not(.badge-dark),
+[data-theme="sepia"] .bg-slate-950\/90:not(button):not(a):not(.badge-dark),
+[data-theme="sepia"] .bg-slate-950\/80:not(button):not(a):not(.badge-dark),
+[data-theme="sepia"] .bg-slate-950\/75:not(button):not(a):not(.badge-dark),
+[data-theme="sepia"] .bg-slate-950\/70:not(button):not(a):not(.badge-dark),
+[data-theme="sepia"] .bg-slate-950\/60:not(button):not(a):not(.badge-dark),
+[data-theme="sepia"] .bg-slate-900:not(button):not(a):not(.badge-dark),
+[data-theme="sepia"] .bg-slate-900\/95:not(button):not(a):not(.badge-dark),
+[data-theme="sepia"] .bg-slate-900\/90:not(button):not(a):not(.badge-dark),
+[data-theme="sepia"] .bg-slate-900\/80:not(button):not(a):not(.badge-dark),
+[data-theme="sepia"] .bg-slate-900\/70:not(button):not(a):not(.badge-dark),
+[data-theme="sepia"] .bg-slate-900\/60:not(button):not(a):not(.badge-dark),
+[data-theme="sepia"] .bg-slate-900\/50:not(button):not(a):not(.badge-dark) {
+  background-color: #fbf6ea;
+  border-color: #d9c9a8;
+  box-shadow: 0 4px 20px -2px rgba(90, 60, 20, 0.10);
+}
+
+[data-theme="sepia"] .bg-slate-900\/40,
+[data-theme="sepia"] .bg-slate-900\/30,
+[data-theme="sepia"] .bg-slate-900\/20,
+[data-theme="sepia"] .bg-slate-950\/40,
+[data-theme="sepia"] .bg-slate-950\/30,
+[data-theme="sepia"] .bg-slate-950\/20 {
+  background-color: #efe4cc;
+  border-color: #d9c9a8;
+}
+
+[data-theme="sepia"] .border-slate-800,
+[data-theme="sepia"] .border-slate-800\/80,
+[data-theme="sepia"] .border-slate-800\/70,
+[data-theme="sepia"] .border-slate-800\/60,
+[data-theme="sepia"] .border-slate-800\/40,
+[data-theme="sepia"] .border-slate-700,
+[data-theme="sepia"] .border-slate-700\/80,
+[data-theme="sepia"] .border-slate-700\/60 {
+  border-color: #cdbb96;
+}
+
+/* 2. Solid dark active buttons stay crisp dark with white text */
+[data-theme="sepia"] button.bg-slate-900,
+[data-theme="sepia"] button.bg-slate-950,
+[data-theme="sepia"] a.bg-slate-900,
+[data-theme="sepia"] a.bg-slate-950 {
+  background-color: #3b2a1a !important;
+  color: #fff8ec !important;
+  border-color: #3b2a1a !important;
+}
+
+/* 3. High-Contrast Text Remapping in Daylight Mode (Zero Washed-Out Text) */
+[data-theme="sepia"] .text-amber-100,
+[data-theme="sepia"] .text-amber-200,
+[data-theme="sepia"] .text-amber-300,
+[data-theme="sepia"] .text-yellow-100,
+[data-theme="sepia"] .text-yellow-200,
+[data-theme="sepia"] .text-yellow-300 {
+  color: #8f4a0c !important; /* Amber nâu (5.5:1 trên giấy ngà) */
+}
+
+[data-theme="sepia"] .text-amber-400 {
+  color: #92400e !important; /* Amber 800 (Pass WCAG 7.2:1) */
+}
+
+[data-theme="sepia"] .text-emerald-100,
+[data-theme="sepia"] .text-emerald-200,
+[data-theme="sepia"] .text-emerald-300,
+[data-theme="sepia"] .text-green-200,
+[data-theme="sepia"] .text-green-300 {
+  color: #065f46 !important; /* Emerald 800 */
+}
+
+[data-theme="sepia"] .text-emerald-400 {
+  color: #065f46 !important; /* Emerald 800 (Pass 7.5:1) */
+}
+
+[data-theme="sepia"] .text-teal-100,
+[data-theme="sepia"] .text-teal-200,
+[data-theme="sepia"] .text-teal-300 {
+  color: #115e59 !important; /* Teal 800 */
+}
+
+[data-theme="sepia"] .text-cyan-100,
+[data-theme="sepia"] .text-cyan-200,
+[data-theme="sepia"] .text-cyan-300,
+[data-theme="sepia"] .text-sky-200,
+[data-theme="sepia"] .text-sky-300,
+[data-theme="sepia"] .text-blue-200,
+[data-theme="sepia"] .text-blue-300 {
+  color: #075985 !important; /* Sky 800 */
+}
+
+[data-theme="sepia"] .text-rose-100,
+[data-theme="sepia"] .text-rose-200,
+[data-theme="sepia"] .text-rose-300,
+[data-theme="sepia"] .text-pink-200,
+[data-theme="sepia"] .text-pink-300 {
+  color: #9f1239 !important; /* Rose 800 */
+}
+
+[data-theme="sepia"] .text-purple-200,
+[data-theme="sepia"] .text-purple-300,
+[data-theme="sepia"] .text-indigo-200,
+[data-theme="sepia"] .text-indigo-300 {
+  color: #4338ca !important; /* Indigo 700 */
+}
+
+[data-theme="sepia"] .text-slate-100,
+[data-theme="sepia"] .text-slate-200,
+[data-theme="sepia"] .text-slate-300,
+[data-theme="sepia"] .text-gray-200,
+[data-theme="sepia"] .text-gray-300 {
+  color: #35261a !important; /* Slate 800 - cực kỳ sắc nét */
+}
+
+[data-theme="sepia"] .text-slate-400,
+[data-theme="sepia"] .text-gray-400 {
+  color: #4f3b27 !important; /* Slate 700 */
+}
+
+[data-theme="sepia"] .text-slate-500,
+[data-theme="sepia"] .text-gray-500 {
+  color: #62492f !important; /* Slate 600 */
+}
+
+/* 4. White text inside light surfaces becomes slate-900 */
+[data-theme="sepia"] .bg-white .text-white:not(button):not(.btn):not([role="button"]),
+[data-theme="sepia"] .bg-\[var\(--bg-card\)\] .text-white:not(button):not(.btn):not([role="button"]),
+[data-theme="sepia"] .bg-\[var\(--bg-card-subtle\)\] .text-white:not(button):not(.btn):not([role="button"]),
+[data-theme="sepia"] .bg-\[var\(--bg-canvas\)\] .text-white:not(button):not(.btn):not([role="button"]) {
+  color: #35261a !important;
+}
+
+/* 5. Deep dark RPG pill badges adaptation in Daylight */
+[data-theme="sepia"] .bg-amber-950\/40,
+[data-theme="sepia"] .bg-amber-950\/60,
+[data-theme="sepia"] .bg-amber-950\/70,
+[data-theme="sepia"] .bg-amber-950\/90 {
+  background-color: #fef3c7 !important;
+  border-color: #f59e0b !important;
+  color: #92400e !important;
+}
+
+[data-theme="sepia"] .bg-emerald-950\/40,
+[data-theme="sepia"] .bg-emerald-950\/60,
+[data-theme="sepia"] .bg-emerald-950\/70,
+[data-theme="sepia"] .bg-emerald-950\/90 {
+  background-color: #d1fae5 !important;
+  border-color: #10b981 !important;
+  color: #065f46 !important;
+}
+
+[data-theme="sepia"] .bg-teal-950\/40,
+[data-theme="sepia"] .bg-teal-950\/60,
+[data-theme="sepia"] .bg-teal-950\/70 {
+  background-color: #ccfbf1 !important;
+  border-color: #14b8a6 !important;
+  color: #0f766e !important;
+}
+
+[data-theme="sepia"] .bg-sky-950\/40,
+[data-theme="sepia"] .bg-sky-950\/60,
+[data-theme="sepia"] .bg-sky-950\/70 {
+  background-color: #e0f2fe !important;
+  border-color: #0ea5e9 !important;
+  color: #0369a1 !important;
+}
+
+[data-theme="sepia"] .bg-pink-950\/40,
+[data-theme="sepia"] .bg-pink-950\/60,
+[data-theme="sepia"] .bg-pink-950\/70 {
+  background-color: #fce7f3 !important;
+  border-color: #ec4899 !important;
+  color: #9d174d !important;
+}
+
+
+/* Sepia: các bề mặt sáng lạnh viết cứng trong component -> ấm hoá */
+[data-theme="sepia"] .bg-white,
+[data-theme="sepia"] .bg-white\/95,
+[data-theme="sepia"] .bg-white\/90,
+[data-theme="sepia"] .bg-white\/80,
+[data-theme="sepia"] .bg-slate-50,
+[data-theme="sepia"] .bg-slate-50\/95,
+[data-theme="sepia"] .bg-slate-50\/90 {
+  background-color: #fbf6ea;
+}
+[data-theme="sepia"] .bg-slate-100,
+[data-theme="sepia"] .bg-slate-200 {
+  background-color: #efe4cc;
+}
+[data-theme="sepia"] .border-slate-200,
+[data-theme="sepia"] .border-slate-300 {
+  border-color: #d9c9a8;
+}
+
+/* Sepia: chữ màu 500-700 (vốn viết cho nền trắng) đậm lên để đạt >= 4.5:1 trên giấy ngà/ô tint ấm */
+[data-theme="sepia"] .text-amber-500, [data-theme="sepia"] .text-amber-600, [data-theme="sepia"] .text-amber-700,
+[data-theme="sepia"] .text-yellow-600, [data-theme="sepia"] .text-yellow-700 { color: #8f4a0c; }
+[data-theme="sepia"] .text-orange-500, [data-theme="sepia"] .text-orange-600, [data-theme="sepia"] .text-orange-700,
+[data-theme="sepia"] .text-red-500, [data-theme="sepia"] .text-red-600 { color: #9a3412; }
+[data-theme="sepia"] .text-emerald-500, [data-theme="sepia"] .text-emerald-600, [data-theme="sepia"] .text-emerald-700,
+[data-theme="sepia"] .text-green-600, [data-theme="sepia"] .text-green-700 { color: #065f46; }
+[data-theme="sepia"] .text-teal-500, [data-theme="sepia"] .text-teal-600, [data-theme="sepia"] .text-teal-700 { color: #115e59; }
+[data-theme="sepia"] .text-cyan-500, [data-theme="sepia"] .text-cyan-600, [data-theme="sepia"] .text-cyan-700 { color: #155e75; }
+[data-theme="sepia"] .text-sky-500, [data-theme="sepia"] .text-sky-600, [data-theme="sepia"] .text-sky-700,
+[data-theme="sepia"] .text-blue-500, [data-theme="sepia"] .text-blue-600 { color: #075985; }
+[data-theme="sepia"] .text-rose-500, [data-theme="sepia"] .text-rose-600, [data-theme="sepia"] .text-rose-700 { color: #9f1239; }
+[data-theme="sepia"] .text-pink-500, [data-theme="sepia"] .text-pink-600, [data-theme="sepia"] .text-pink-700 { color: #9d174d; }
+[data-theme="sepia"] .text-purple-500, [data-theme="sepia"] .text-purple-600, [data-theme="sepia"] .text-purple-700,
+[data-theme="sepia"] .text-violet-500, [data-theme="sepia"] .text-violet-600, [data-theme="sepia"] .text-fuchsia-600 { color: #6b21a8; }
+[data-theme="sepia"] .text-indigo-500, [data-theme="sepia"] .text-indigo-600, [data-theme="sepia"] .text-indigo-700 { color: #3730a3; }
+[data-theme="sepia"] .text-slate-600, [data-theme="sepia"] .text-slate-700 { color: #4f3b27; }
 
 /* Zoom protection and text size locking */
 html {

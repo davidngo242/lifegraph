@@ -38,7 +38,7 @@ export default function AudioVolumeControl({ isPlaying, onTogglePlay, audioRef }
                 M
               </kbd>
             </div>
-            <div className="text-[10px] text-slate-300">
+            <div className="text-[11px] text-[var(--text-secondary)]">
               {isPlaying ? "Bấm để tạm dừng âm thanh (hoặc nhấn phím M)." : "Bấm để bật âm nhạc thiền định (hoặc nhấn phím M)."}
             </div>
           </div>
@@ -83,7 +83,7 @@ export default function AudioVolumeControl({ isPlaying, onTogglePlay, audioRef }
 
       {/* Floating Volume Slider Popover */}
       {showSlider && (
-        <div className="absolute top-11 right-0 w-48 bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-2xl p-3 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2">
+        <div className="absolute top-11 right-0 w-48 bg-[var(--bg-popover)] border border-[var(--border-highlight)] ring-1 ring-black/10 rounded-2xl p-3 shadow-2xl shadow-black/40 z-[120] isolate animate-in fade-in slide-in-from-top-2">
           <div className="flex items-center justify-between text-[12px] text-[var(--text-secondary)] mb-2">
             <span className="flex items-center gap-1 text-[var(--text-primary)] font-medium">
               <Music className="w-3 h-3 text-indigo-600 dark:text-indigo-400" /> Âm Lượng
@@ -97,7 +97,7 @@ export default function AudioVolumeControl({ isPlaying, onTogglePlay, audioRef }
             max="100"
             value={volume}
             onChange={handleVolumeChange}
-            className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+            className="w-full h-1.5 bg-[var(--border-subtle)] rounded-lg appearance-none cursor-pointer accent-indigo-500"
           />
 
           <div className="flex justify-between text-[12px] text-[var(--text-secondary)] mt-1">

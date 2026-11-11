@@ -23,7 +23,7 @@ interface ThemeItem {
 const THEMES: ThemeItem[] = [
   { id: 'daylight', label: 'Ban Ngày', icon: '☀️', desc: 'Sáng ngà thanh lịch, dịu mắt ban ngày' },
   { id: 'obsidian', label: 'Obsidian', icon: '🌙', desc: 'Than chì ấm sâu, chống mỏi mắt' },
-  { id: 'sepia', label: 'Sepia', icon: '📜', desc: 'Nâu ấm hoài niệm, lọc ánh sáng xanh' },
+  { id: 'sepia', label: 'Sepia', icon: '📜', desc: 'Giấy ngà ấm, chữ nâu đậm, đọc lâu dịu mắt' },
   { id: 'cyberpunk', label: 'Cyber', icon: '⚡', desc: 'Neon tương phản cao huyền bí' },
 ];
 
@@ -102,7 +102,7 @@ export default function SystemSettingsPopover({
 
   return (
     <div className="relative" ref={popoverRef}>
-      <Tooltip position="bottom" content="Thiết lập giao diện, âm thanh & trợ giúp (⚙️)">
+      <Tooltip position="bottom" content={isOpen ? null : "Thiết lập giao diện, âm thanh & trợ giúp (⚙️)"}>
         <button
           onClick={() => setIsOpen(!isOpen)}
           aria-expanded={isOpen}
@@ -120,7 +120,7 @@ export default function SystemSettingsPopover({
 
       {/* Flyout Popover */}
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-2xl p-4 z-[90] animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-4 text-[var(--text-primary)]">
+        <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 max-w-[calc(100vw-1.5rem)] rounded-2xl bg-[var(--bg-popover)] border border-[var(--border-highlight)] ring-1 ring-black/10 shadow-2xl shadow-black/40 p-4 z-[120] isolate animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-4 text-[var(--text-primary)]">
           {/* Header */}
           <div className="flex items-center justify-between pb-2.5 border-b border-[var(--border-subtle)]">
             <div className="flex items-center gap-2">
@@ -196,7 +196,7 @@ export default function SystemSettingsPopover({
                   max="100"
                   value={volume}
                   onChange={handleVolumeChange}
-                  className="w-full accent-amber-500 h-1.5 bg-slate-700 rounded-lg cursor-pointer"
+                  className="w-full accent-amber-500 h-1.5 bg-[var(--border-subtle)] rounded-lg cursor-pointer"
                 />
                 <span className="font-mono text-[11px] font-bold text-[var(--text-secondary)] w-7 text-right">
                   {volume}%

@@ -35,9 +35,9 @@ const THEME_OPTIONS: ThemeOption[] = [
     id: 'sepia',
     label: 'Sepia',
     icon: '📜',
-    shortDesc: 'Đêm ấm cúng',
-    desc: 'Sepia Warmth: Giấy ngà & nâu xám ấm hoài niệm, lọc tối đa ánh sáng xanh, êm ái cho phiên chơi đêm',
-    activeColor: 'bg-amber-700/25 text-amber-100 border-amber-600/50 shadow-[0_0_12px_rgba(217,119,6,0.2)]'
+    shortDesc: 'Giấy ngà ấm',
+    desc: 'Sepia Paper: Giao diện SÁNG-ẤM giấy ngà, chữ nâu đậm tương phản cao, dịu mắt khi đọc lâu',
+    activeColor: 'bg-amber-700/15 text-amber-900 border-amber-700/50 shadow-[0_0_12px_rgba(180,83,9,0.18)]'
   },
   {
     id: 'cyberpunk',
@@ -83,7 +83,7 @@ export default function ThemeSwitcher() {
   if (!mounted) {
     return (
       <div className="flex items-center gap-1 p-1 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs opacity-60">
-        <span className="px-2 py-0.5 text-xs text-slate-400">🌙 Giao diện</span>
+        <span className="px-2 py-0.5 text-xs text-[var(--text-secondary)]">🌙 Giao diện</span>
       </div>
     );
   }
@@ -105,7 +105,7 @@ export default function ThemeSwitcher() {
               className={`px-2 sm:px-2.5 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 border ${
                 isActive
                   ? `${item.activeColor} font-bold scale-[1.02]`
-                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.04)]'
+                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)]'
               }`}
             >
               <span className="text-xs shrink-0 select-none">{item.icon}</span>

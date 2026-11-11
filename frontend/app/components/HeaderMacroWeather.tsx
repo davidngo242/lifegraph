@@ -86,7 +86,7 @@ export default function HeaderMacroWeather({
         <div className="flex items-center gap-2 px-3 py-1 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] hover:border-amber-500/50 text-xs font-semibold text-[var(--text-primary)] cursor-pointer transition shadow-sm">
           <span className="text-sm select-none">{weather.icon}</span>
           <span className="truncate max-w-[90px]">{currentCity.split(" ")[0]}</span>
-          <span className="font-mono font-bold text-amber-600 dark:text-amber-400">{weather.temp_celsius}°C</span>
+          <span className="font-mono font-bold text-amber-800 dark:text-amber-400">{weather.temp_celsius}°C</span>
           <span className="w-1 h-1 rounded-full bg-[var(--text-secondary)] opacity-50" />
           <span className="flex items-center gap-1 font-mono text-[11px] text-[var(--text-secondary)]">
             <Globe className="w-3 h-3 text-indigo-400" />
