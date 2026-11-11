@@ -70,6 +70,13 @@ export interface ActionPointHubProps {
   onRpgActivePerk?: (type: string) => Promise<string | void>;
   onSeniorAction?: (actionType: 'write_memoir' | 'grandchild_mentorship' | 'early_estate_will') => Promise<string | void>;
   onDebtRelief?: (reliefType: 'family_soft_loan' | 'liquidate_personal_items') => Promise<string | void>;
+  onHealthCheckup?: () => Promise<string | void>;
+  onOpenCinema?: () => void;
+  activeScenario?: any;
+  dilemma?: any;
+  annualDigest?: any;
+  isNextAgeMilestone?: boolean;
+  isPledging?: boolean;
   onOpenPetSanctuary?: () => void;
   hiddenFlags?: string[];
   isLoading: boolean;
@@ -112,6 +119,13 @@ export default function ActionPointHub({
   onRpgActivePerk,
   onSeniorAction,
   onDebtRelief,
+  onHealthCheckup,
+  onOpenCinema,
+  activeScenario,
+  dilemma,
+  annualDigest,
+  isNextAgeMilestone = false,
+  isPledging = false,
   onOpenPetSanctuary,
   hiddenFlags = [],
   isLoading
@@ -157,18 +171,18 @@ export default function ActionPointHub({
   };
 
   return (
-    <div className={`w-full ${isEmbedded ? '' : 'rounded-3xl border border-slate-800 bg-slate-900/90 backdrop-blur-xl p-4 shadow-2xl'} flex flex-col gap-3 relative transition-all duration-300`}>
+    <div className={`w-full ${isEmbedded ? '' : 'rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-card)] backdrop-blur-xl p-4 shadow-2xl'} flex flex-col gap-3 relative transition-all duration-300`}>
       {/* Real-time Toast Feedback Notification */}
       {actionNotice && (
         <div className={`p-3 rounded-2xl text-xs font-semibold flex items-center gap-2 shadow-lg transition-all animate-in fade-in duration-200 border ${
           actionNotice.type === 'success'
-            ? 'bg-emerald-950/90 text-emerald-300 border-emerald-500/50 shadow-emerald-950/60'
-            : 'bg-rose-950/90 text-rose-300 border-rose-500/50 shadow-rose-950/60'
+            ? 'bg-emerald-50/95 dark:bg-emerald-950/90 text-emerald-900 dark:text-emerald-300 border-emerald-400/60 dark:border-emerald-500/50 shadow-emerald-500/15'
+            : 'bg-rose-50/95 dark:bg-rose-950/90 text-rose-900 dark:text-rose-200 border-rose-400/60 dark:border-rose-500/50 shadow-rose-500/15'
         }`}>
           {actionNotice.type === 'success' ? (
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
           ) : (
-            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+            <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
           )}
           <span>{actionNotice.text}</span>
         </div>
@@ -200,6 +214,7 @@ export default function ActionPointHub({
         onBreakthrough={onBreakthrough ? () => handleAction('breakthrough', onBreakthrough, breakthroughAction?.costAp || 2, breakthroughAction?.costCash || 0) : undefined}
         onFastForwardToSchool={onFastForwardToSchool}
         onTimeSkip={onTimeSkip}
+        onAdvanceYear={onTimeSkip}
         onOpenYearEndReflection={onOpenYearEndReflection}
         onOpenAssets={onOpenAssets}
         onOpenFamily={onOpenFamily}
@@ -209,6 +224,16 @@ export default function ActionPointHub({
         onFamilyMeal={onFamilyMeal}
         onFamilyMentorship={onFamilyMentorship}
         onRpgActivePerk={onRpgActivePerk ? (type) => handleAction(`perk_${type}`, () => onRpgActivePerk(type), 1, type === 'vip_networking' ? 1500 : 0) : undefined}
+        onSeniorAction={onSeniorAction ? (actionType) => handleAction(`senior_${actionType}`, () => onSeniorAction(actionType), 0, 0) : undefined}
+        onDebtRelief={onDebtRelief ? (reliefType) => handleAction(`debt_${reliefType}`, () => onDebtRelief(reliefType), 0, 0) : undefined}
+        onHealthCheckup={onHealthCheckup ? () => handleAction('health_checkup', onHealthCheckup, 1, 0) : undefined}
+        onLaunchMiniGame={onLaunchMiniGame}
+        onOpenCinema={onOpenCinema}
+        activeScenario={activeScenario}
+        dilemma={dilemma}
+        annualDigest={annualDigest}
+        isNextAgeMilestone={isNextAgeMilestone}
+        isPledging={isPledging}
         onOpenPetSanctuary={onOpenPetSanctuary}
         isLoading={isLoading || activeButton !== null}
       />

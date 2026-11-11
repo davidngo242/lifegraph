@@ -325,5 +325,10 @@ test('1,000-User Cultural Landscape: All 1,000 users across 14 nations map to de
 
   // Verify tropical nationalities & zero-overlap geometry hold for all 1,000 simulated trajectories
   assert.ok(treeSource.includes("'Somalia'") && treeSource.includes("'Haiti'"), 'Equatorial/Caribbean nations must map cleanly to tropical climate');
-  assert.ok(treeSource.includes('angleDeg: -152') && treeSource.includes('bottom-2.5 right-3 sm:right-4'), 'Zero-overlap tree geometry must hold for all 1,000 users');
+  assert.ok(
+    treeSource.includes('angleDeg: -145') &&
+    treeSource.includes('bottom-3 right-3 sm:right-4') &&
+    treeSource.includes("treeViewMode === 'family_roots'"),
+    'Unified zero-overlap Life Tree geometry & integrated Family Roots must hold for all 1,000 users'
+  );
 });

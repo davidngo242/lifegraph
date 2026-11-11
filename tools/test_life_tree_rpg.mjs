@@ -39,18 +39,22 @@ runTest('DynamicLifeTree imports SkillTreeTab and SocialLinksTab', () => {
   assert.ok(lifeTreeSource.includes('SocialLinksTab'), 'Must import SocialLinksTab');
 });
 
-runTest('DynamicLifeTree provides 3 Unified Ecosystem Tabs (Vòng Đời, Kỹ Năng, Nhân Mạch)', () => {
+runTest('DynamicLifeTree provides 4 Unified Ecosystem Tabs (Vòng Đời, Kỹ Năng, Nhân Mạch, Rễ Gia Đình)', () => {
   assert.ok(lifeTreeSource.includes('treeViewMode'), 'Must manage treeViewMode state');
   assert.ok(lifeTreeSource.includes('life_actions'), 'Must support life_actions mode');
   assert.ok(lifeTreeSource.includes('skill_tree'), 'Must support skill_tree mode');
   assert.ok(lifeTreeSource.includes('social_links'), 'Must support social_links mode');
+  assert.ok(lifeTreeSource.includes('family_roots'), 'Must support family_roots mode');
 });
 
-runTest('DynamicLifeTree features 3 Sacred Pillars on Canopy (Kỹ Năng, Nhân Mạch, Tài Sản)', () => {
+runTest('DynamicLifeTree features 4 Sacred Pillars + Integrated Family Root Conduits & Event Strips', () => {
   assert.ok(lifeTreeSource.includes('Nhánh Kỹ Năng'), 'Must render Skill Pillar');
   assert.ok(lifeTreeSource.includes('Nhân Mạch Quý Nhân'), 'Must render Social Link Pillar');
   assert.ok(lifeTreeSource.includes('Cành Hoàng Kim'), 'Must render Wealth Pillar');
-  assert.ok(lifeTreeSource.includes('Gốc Rễ Gia Đình'), 'Must preserve Family Roots');
+  assert.ok(lifeTreeSource.includes('Gốc Rễ Gia Đình'), 'Must render Family Roots Pillar');
+  assert.ok(lifeTreeSource.includes('family-root-tendrils'), 'Must anchor SVG root tendrils to trunk');
+  assert.ok(lifeTreeSource.includes('Kịch Bản Điện Ảnh 21:9'), 'Must integrate active scenario CTA inside Life Tree');
+  assert.ok(lifeTreeSource.includes('onAdvanceYear'), 'Must unify year advancement inside Life Tree');
 });
 
 runTest('DynamicLifeTree renders Tri-Branch RPG Skill Tree in skill_tree mode', () => {
@@ -78,9 +82,15 @@ const pagePath = path.resolve(rootDir, 'frontend', 'app', 'page.tsx');
 assert.ok(fs.existsSync(pagePath), 'page.tsx must exist');
 const pageSource = fs.readFileSync(pagePath, 'utf8');
 
-runTest('page.tsx provides handleUnlockSkill and handleNpcInteract to ActionPointHub', () => {
+runTest('page.tsx provides full Life Tree Loop Callbacks & Zero Detached Footer', () => {
   assert.ok(pageSource.includes('onUnlockSkill={handleUnlockSkill}'), 'Must pass handleUnlockSkill');
   assert.ok(pageSource.includes('onNpcInteract={handleNpcInteract}'), 'Must pass handleNpcInteract');
+  assert.ok(pageSource.includes('onHealthCheckup={handleHealthCheckup}'), 'Must pass handleHealthCheckup');
+  assert.ok(pageSource.includes('onSeniorAction={handleSeniorAction}'), 'Must pass handleSeniorAction');
+  assert.ok(pageSource.includes('onDebtRelief={handleDebtRelief}'), 'Must pass handleDebtRelief');
+  assert.ok(pageSource.includes('activeScenario={activeScenario}'), 'Must pass activeScenario to ActionPointHub');
+  assert.ok(pageSource.includes('annualDigest={annualDigest}'), 'Must pass annualDigest to ActionPointHub');
+  assert.ok(!pageSource.includes('Footer: Cánh Cửa Chuyển Tiếp Vòng Đời'), 'Must remove detached redundant footer from page.tsx');
   assert.ok(pageSource.includes('/rpg/unlock-skill'), 'Must connect to unlock-skill endpoint');
   assert.ok(pageSource.includes('/rpg/npc-interact'), 'Must connect to npc-interact endpoint');
 });

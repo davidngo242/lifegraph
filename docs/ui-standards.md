@@ -1352,22 +1352,27 @@ Toàn bộ danh lam thắng cảnh được vẽ bằng vector SVG nghệ thuậ
 
 ### 32.2. Kỹ Thuật Hòa Quyện Chân Trời (Seamless Horizon Mist Fade)
 * **Chống Cắt Gãy Thị Giác:** Đáy của bức tranh toàn cảnh được phủ dải sương mù chân trời `linearGradient(to top, var(--bg-canvas) 0%, transparent 60%)`, giúp vách núi và dòng sông hòa quyện mượt mà vào bục cội rễ (Dais) và vòng vân gỗ mà không có bất kỳ đường viền thô ráp nào.
-* **Huy Hiệu Đáy Đối Xứng Không Chồng Lấn:** Huy hiệu di sản văn hóa neo cố định ở góc dưới trái (`bottom-2.5 left-3 sm:left-4`), còn huy hiệu `Mầm Sống Khởi Nguyên • Vòng Vân Gỗ` neo ở góc dưới phải (`bottom-2.5 right-3 sm:right-4`), để trống hoàn toàn tâm giữa cho Bệ Gốc Dais và Linh Thú tỏa sáng.
+* **Huy Hiệu Đáy Đối Xứng Không Chồng Lấn:** Huy hiệu di sản văn hóa neo cố định ở góc dưới trái (`bottom-3 left-3 sm:left-4 z-30`), còn huy hiệu `Mầm Sống Khởi Nguyên • Vòng Vân Gỗ` neo ở góc dưới phải (`bottom-3 right-3 sm:right-4 z-30`), nâng khoảng thoáng đáy tránh bóng Bệ Gốc Dais và để trống hoàn toàn tâm giữa cho Linh Thú tỏa sáng.
 
 ---
 
-## 33. Kỷ Luật Không Gian Đa Tầng & Chống Chồng Chéo Trên Đại Thụ (Zero-Overlap Tree Geometry Standard)
+## 33. Kỷ Luật Không Gian Đa Tầng & Hợp Nhất Hệ Sinh Thái Đại Thụ Toàn Năng (All-in-One Life Tree Cockpit)
 
-Để triệt tiêu 100% tình trạng lặp nhãn điều hướng, chữ đè nút hoặc đâm vào bục gốc trên màn hình 2 cột (`DynamicLifeTree.tsx`):
+Để triệt tiêu 100% tình trạng lặp nhãn điều hướng, bố cục rời rạc ở chân trang, chữ đè nút hoặc đâm vào bục gốc trên màn hình 2 cột (`DynamicLifeTree.tsx` & `page.tsx`):
 
-1. **Thanh Điều Hướng & Tam Trụ Thống Nhất (Hợp Nhất Ngoài Canvas):**
-   * Gộp 3 lăng kính điều hướng (`Vòng Đời & Hành Động`, `Nhánh Kỹ Năng`, `Nhân Mạch Quý Nhân`) cùng nút `Cành Hoàng Kim` thành một thanh điều khiển gọn phía trên canvas, **tuyệt đối không lặp lại** 3 khung thẻ lớn bên trong bầu trời canvas.
-   * Cảnh báo cây kiệt sức hiển thị dạng dải inline phía trên canvas thay vì che phủ vùng đỉnh tán cây.
+1. **Thanh Điều Hướng & 4 Lăng Kính Thống Nhất (Hợp Nhất Ngoài Canvas):**
+   * Gộp 4 lăng kính điều hướng (`Vòng Đời & Hành Động`, `Nhánh Kỹ Năng`, `Nhân Mạch Quý Nhân`, `Gốc Rễ Gia Đình`) cùng nút `Cành Hoàng Kim` thành một thanh điều khiển gọn phía trên canvas, **tuyệt đối không lặp lại** 3 khung thẻ lớn bên trong bầu trời canvas.
+   * **Hợp Nhất Tiến Trình Năm & Chiêm Nghiệm:** Đưa nút `✨ Gieo Mầm` (`Chiêm Nghiệm Cuối Năm`) và `🌿 Sang Tuổi X [Space]` trực tiếp vào thanh Header của `DynamicLifeTree`, **khai tử hoàn toàn** khung footer rời rạc bên dưới `ActionPointHub` ở `page.tsx`.
+   * **Dải Tương Tác Biến Cố & Cứu Trợ Tích Hợp (Sanctuary Strip):** Biến cố kịch bản 21:9 (`Kịch Bản Điện Ảnh 21:9`), thử thách cột mốc (`Thử Thách Cột Mốc`), báo động cây kiệt sức / khám tổng quát (`Khám Tổng Quát`), cứu trợ nợ (`Vay Mềm Người Thân`, `Thanh Lý Đồ Đạc`), và nghi thức tuổi già (`Viết Hồi Ký`, `Dạy Cháu`, `Lập Di Chúc`) được quy hoạch thành dải inline gọn phía trên canvas khi phát sinh — tuyệt đối không che tán lá.
    * Bầu trời canvas phía trên chỉ giữ đúng 2 badge góc gọn (`Xuân/Hạ/Thu/Đông` ở góc trên trái `top-3 left-3`, `Linh Thú` ở góc trên phải `top-3 right-3`).
-2. **Phân Giãn Tọa Độ Tán Lá Cành (Breakthrough Separation Law):**
+2. **Tích Hợp Rễ Gia Đình Trực Tiếp Vào Thân Cây & Lăng Kính Thứ 4 (`family_roots`):**
+   * **Xóa bỏ hoàn toàn** dải thẻ Gia Đình rời rạc dưới chân cây (`3RD PILLAR`).
+   * Gắn 2 nhánh rễ phát sáng SVG (`family-root-tendrils`) nối từ Bệ Gốc tới **2 Điểm Kết Nối Rễ Trực Tiếp** ở chân đất tại `(102, 436)` (`Bầu Sữa Mẹ` / `Bữa Cơm` `+10 HP`) và `(618, 436)` (`Lời Khuyên` `+8 Karma` / `Gia Tộc & Gốc Rễ`), đáp ứng responsive an toàn trên mobile và không chạm vùng hạt giống Con Cái `(185, 468)`.
+   * Triển khai Drawer trượt ngang thứ 4 (`treeViewMode === 'family_roots'`) dùng chung token `bg-[var(--bg-card)] border-l border-[var(--border-subtle)] text-[var(--text-primary)]` chứa đầy đủ thông tin phụ mẫu, phối ngẫu, hậu duệ, `Phả Hệ Dòng Tộc ↗`, `Khám Tổng Quát`, nghi thức tuổi già và giải cứu nợ.
+3. **Phân Giãn Tọa Độ Tán Lá Cành (Breakthrough & Root Separation Law):**
    * Tâm cốt lõi: `centerX = 360`, `centerY = 275`, `baseRadius = 182` trên khung `viewBox="0 0 720 520"` (`h-[560px] sm:h-[600px]`).
-   * Nút Đột Phá thiên đỉnh (`breakthrough`) giữ góc `-90°` (`distanceRatio: 0.86`). Hai nhánh lá phía trên hai bên buộc phải mở rộng góc sang ngang đạt **`-152°` (Tây Bắc)** và **`-28°` (Đông Bắc)** với `distanceRatio: 0.90` — cách nút Đột Phá `62°`, tạo khoảng hở dọc `>= 25px–36px`, triệt tiêu hoàn toàn lỗi va chạm viền thẻ.
-   * Hai nhánh giữa mở ngang `172°` / `8°` (`distanceRatio: 0.94`) và nhánh cội rễ hạ ở `138°` / `42°` (`distanceRatio: 0.84`), bảo toàn khoảng trống quanh Vòng Lõi Trung Tâm và Bệ Gốc Dais.
-3. **Vòng Cung Quý Nhân & Huyệt Đạo Không Điểm Chạm:**
+   * Nút Đột Phá thiên đỉnh (`breakthrough`) giữ góc `-90°` (`distanceRatio: 0.86`). Hai nhánh lá phía trên hai bên buộc phải mở rộng góc sang ngang đạt **`-145°` (Tây Bắc)** và **`-35°` (Đông Bắc)** với `distanceRatio: 0.88`.
+   * Hai nhánh giữa mở ngang cân đối ở **`180°` / `0°`** (`distanceRatio: 0.94`) và nhánh cội rễ hạ ở **`142°` / `38°`** (`distanceRatio: 0.86`), đảm bảo khoảng cách hình học `>= 115` đơn vị SVG tới 2 Nút Rễ Gia Đình `(102, 436)` / `(618, 436)` và tách biệt hoàn toàn khỏi Vòng Lõi Trung Tâm, Pet SVGs và Bệ Gốc Dais (`cy={496}, ry=17`).
+4. **Vòng Cung Quý Nhân & Huyệt Đạo Không Điểm Chạm:**
    * 4 nút Quý Nhân (`npcPositions`) xếp hình vòm thiên đỉnh thoáng đạt tại `{(255, 54), (325, 42), (395, 42), (465, 54)}`, nằm ngoài hoàn toàn vùng pill góc và phía trên thẻ Đột Phá.
    * 5 Huyệt Đạo Kinh Mạch (`MERIDIAN_ACUPOINTS`) đặt tại `{(125, 105), (205, 132), (360, 184), (515, 132), (595, 105)}` dọc thân và cành chính, đảm bảo 0% giao cắt với mọi thẻ hành động.

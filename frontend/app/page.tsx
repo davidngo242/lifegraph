@@ -2039,95 +2039,20 @@ export default function LifeGraphPage() {
                         onRpgActivePerk={handleRpgActivePerk}
                         onSeniorAction={handleSeniorAction}
                         onDebtRelief={handleDebtRelief}
+                        onHealthCheckup={handleHealthCheckup}
+                        onOpenCinema={() => setShowCinemaDecisionModal(true)}
+                        activeScenario={activeScenario}
+                        dilemma={dilemma}
+                        annualDigest={annualDigest}
+                        isNextAgeMilestone={isNextAgeMilestone}
+                        isPledging={isPledging}
                         hiddenFlags={character.hidden_flags || []}
                         isLoading={loading}
                       />
                     </div>
                   )}
 
-                {/* Footer: Cánh Cửa Chuyển Tiếp Vòng Đời & Chiêm Nghiệm Cuối Năm */}
-                  <div className="p-4 bg-[var(--bg-card-subtle)] border-t border-[var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="space-y-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        {activeScenario || dilemma ? (
-                          <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10.5px] font-mono font-bold border border-rose-500/30 uppercase tracking-wider flex items-center gap-1.5 animate-pulse">
-                            <span className="relative flex h-2 w-2">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
-                            </span>
-                            <span>🚨 Biến Cố Định Mệnh · Tuổi {character?.age}</span>
-                          </span>
-                        ) : (
-                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10.5px] font-mono font-bold border border-emerald-500/30 uppercase tracking-wider flex items-center gap-1.5">
-                            <span>🌱 Vòng Đời Thần Mộc · Tuổi {character?.age}</span>
-                          </span>
-                        )}
-                        {(character?.action_points || 0) > 0 ? (
-                          <span className="text-[10.5px] font-mono text-amber-300/80 bg-amber-950/60 px-2 py-0.5 rounded-full border border-amber-500/20">
-                            Còn {character.action_points} AP
-                          </span>
-                        ) : (
-                          <span className="text-[10.5px] font-mono text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                            Đã sẵn sàng chốt năm
-                          </span>
-                        )}
-                      </div>
-
-                      <h4 className="text-sm sm:text-base font-bold text-white font-sans truncate">
-                        {activeScenario?.title || dilemma?.title || "Nhịp Thở Cuộc Đời Trôi Chảy"}
-                      </h4>
-
-                      <p className="text-xs text-slate-300 font-sans leading-relaxed line-clamp-2 max-w-xl">
-                        {activeScenario?.description || dilemma?.description || "Hành động qua từng phiến lá, nuôi dưỡng cành nhánh và chiêm nghiệm gieo mầm đón chào năm mới."}
-                      </p>
-                    </div>
-
-                    <div className="flex sm:flex-col items-center sm:items-end gap-2 shrink-0">
-                      <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap w-full sm:w-auto">
-                        {activeScenario || dilemma ? (
-                          <button
-                            onClick={() => setShowCinemaDecisionModal(true)}
-                            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 hover:from-rose-500 hover:to-amber-400 text-white font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-rose-950/50 transition active:scale-95 group animate-pulse"
-                            title="Bước vào Kịch Bản Điện Ảnh Định Mệnh 21:9"
-                          >
-                            <Clapperboard className="w-4 h-4 text-white" />
-                            <span>Kịch Bản Điện Ảnh 21:9</span>
-                            <span className="group-hover:translate-x-1 transition-transform">→</span>
-                          </button>
-                        ) : null}
-
-                        <button
-                          onClick={handleSmartYearAdvance}
-                          disabled={isPledging || loading}
-                          className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 transition active:scale-95 group disabled:opacity-50"
-                          title={isNextAgeMilestone 
-                            ? `Cột mốc cuộc đời Tuổi ${(character?.age || 0) + 1}: Mở Chiêm Nghiệm & Gieo Mầm Tâm Nguyện Thập Kỷ (Space)` 
-                            : `Bước sang Tuổi ${(character?.age || 0) + 1} mượt mà trong nháy mắt (Space)`}
-                        >
-                          <Sparkles className="w-4 h-4 text-slate-950 group-hover:rotate-12 transition-transform" />
-                          <span>
-                            {isNextAgeMilestone 
-                              ? `🌿 Cột Mốc Tuổi ${(character?.age || 0) + 1} & Chiêm Nghiệm`
-                              : `🌿 Bước Sang Tuổi ${(character?.age || 0) + 1}`}
-                          </span>
-                          <kbd className="font-mono text-[10px] bg-black/20 text-slate-950 px-1.5 py-0.5 rounded font-bold">Space</kbd>
-                        </button>
-
-                        {!isNextAgeMilestone && (
-                          <button
-                            onClick={() => setIsYearEndModalOpen(true)}
-                            className="px-3 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 hover:text-amber-200 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition active:scale-95"
-                            title="Chủ động gieo mầm tâm nguyện & đúc kết chiêm nghiệm bất cứ lúc nào"
-                          >
-                            <span>✨ Gieo Mầm</span>
-                          </button>
-                        )}
-                      </div>
-                      <span className="text-[10px] font-mono text-slate-400 hidden sm:inline">
-                        {(character?.action_points || 0) > 0 ? "AP chưa dùng sẽ tự chuyển thành Dưỡng Sinh (+2 HP / -5% Stress)" : "Đã sẵn sàng mở khóa tuổi mới"}
-                      </span>
-                    </div>
-                  </div>
+                  {/* Chiêm Nghiệm Cuối Năm, Cánh Cửa Chuyển Tiếp Vòng Đời, Gia Đình & Biến Cố đã quy hoạch đồng bộ vào Đại Thụ Sinh Mệnh */}
                 </div>
               </div>
 

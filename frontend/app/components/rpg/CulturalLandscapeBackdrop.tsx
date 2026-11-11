@@ -930,7 +930,7 @@ export default function CulturalLandscapeBackdrop({
       </svg>
 
       {/* 2. ELEGANT CULTURAL HERITAGE BADGE (Pill Góc Dưới Trái Canvas) */}
-      <div className="absolute bottom-2.5 left-3 sm:left-4 z-20 pointer-events-auto">
+      <div className="absolute bottom-3 left-3 sm:left-4 z-30 pointer-events-auto">
         <Tooltip
           position="top"
           align="left"

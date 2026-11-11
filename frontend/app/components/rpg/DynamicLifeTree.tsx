@@ -30,7 +30,10 @@ import {
   AlertTriangle,
   X,
   Layers,
-  Leaf
+  Leaf,
+  Clapperboard,
+  Gamepad2,
+  Stethoscope
 } from 'lucide-react';
 import Tooltip from '../Tooltip';
 import { formatCurrency } from '../../utils/currencyUtils';
@@ -84,6 +87,7 @@ export interface DynamicLifeTreeProps {
   } | null;
   onFastForwardToSchool?: () => void;
   onTimeSkip?: () => void;
+  onAdvanceYear?: () => void;
   onOpenYearEndReflection?: () => void;
   onOpenAssets?: () => void;
   onOpenFamily?: () => void;
@@ -94,6 +98,16 @@ export interface DynamicLifeTreeProps {
   onFamilyMentorship?: () => void;
   onRpgActivePerk?: (type: string) => void;
   onOpenPetSanctuary?: () => void;
+  onLaunchMiniGame?: (gameType: any) => void;
+  onSeniorAction?: (actionType: 'write_memoir' | 'grandchild_mentorship' | 'early_estate_will') => Promise<string | void>;
+  onDebtRelief?: (reliefType: 'family_soft_loan' | 'liquidate_personal_items') => Promise<string | void>;
+  onHealthCheckup?: () => Promise<string | void>;
+  onOpenCinema?: () => void;
+  activeScenario?: any;
+  dilemma?: any;
+  annualDigest?: any;
+  isNextAgeMilestone?: boolean;
+  isPledging?: boolean;
   isLoading?: boolean;
 }
 
@@ -113,6 +127,7 @@ export default function DynamicLifeTree({
   breakthroughAction,
   onFastForwardToSchool,
   onTimeSkip,
+  onAdvanceYear,
   onOpenYearEndReflection,
   onOpenAssets,
   onOpenFamily,
@@ -123,9 +138,19 @@ export default function DynamicLifeTree({
   onFamilyMentorship,
   onRpgActivePerk,
   onOpenPetSanctuary,
+  onLaunchMiniGame,
+  onSeniorAction,
+  onDebtRelief,
+  onHealthCheckup,
+  onOpenCinema,
+  activeScenario,
+  dilemma,
+  annualDigest,
+  isNextAgeMilestone = false,
+  isPledging = false,
   isLoading = false
 }: DynamicLifeTreeProps) {
-  const [treeViewMode, setTreeViewMode] = useState<'life_actions' | 'skill_tree' | 'social_links'>('life_actions');
+  const [treeViewMode, setTreeViewMode] = useState<'life_actions' | 'skill_tree' | 'social_links' | 'family_roots'>('life_actions');
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [pulseActiveId, setPulseActiveId] = useState<string | null>(null);
 
@@ -144,6 +169,9 @@ export default function DynamicLifeTree({
   const burnout = Number(character?.burnout ?? 0);
   const vitalityVal = Number(vitality ?? character?.vitality ?? 80);
   const isDebt = cash < 0;
+  const activeEventData = activeScenario || dilemma;
+  const hasActiveEvent = Boolean(activeEventData);
+  const milestoneChallenge = annualDigest?.milestone_challenge || null;
 
   // 3-Level Dynamic Life Tree Health State (Sức Khỏe & Thể Trạng Thần Mộc)
   const getTreeHealthState = (): 'thriving' | 'fatigued' | 'withered' => {
@@ -321,7 +349,7 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+15 Tình cảm, -10 Stress',
           flavor: 'Dụi đầu vào cổ mẹ nũng nịu đòi bế, nghe tiếng cha cười vang gian nhà',
-          angleDeg: 172, // Cánh Tây hạ cân đối
+          angleDeg: 180, // Cánh Tây hạ cân đối
           distanceRatio: 0.94,
           color: {
             border: 'border-pink-400/60 dark:border-pink-500/50',
@@ -339,8 +367,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+10 Trí tuệ, +5 Karma',
           flavor: 'Lắc chiếc lục lạc leng keng, tò mò gặm thử mẩu gỗ vuông cha đẽo',
-          angleDeg: -152, // Cánh Tây Bắc Trí Tuệ (tách biệt hẳn nút Đột Phá -90°)
-          distanceRatio: 0.90,
+          angleDeg: -145, // Cánh Tây Bắc Trí Tuệ (tách biệt hẳn nút Đột Phá -90°)
+          distanceRatio: 0.88,
           color: {
             border: 'border-sky-400/60 dark:border-sky-500/50',
             bg: 'bg-sky-50/95 dark:bg-sky-950/70',
@@ -357,8 +385,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+10 Đề kháng, -5 Stress',
           flavor: 'Nằm phơi nắng sớm ngoài hiên, gió phe phẩy làm khô lớp mồ hôi trộm',
-          angleDeg: -28, // Cánh Đông Bắc thoáng đạt
-          distanceRatio: 0.90,
+          angleDeg: -35, // Cánh Đông Bắc thoáng đạt
+          distanceRatio: 0.88,
           color: {
             border: 'border-amber-400/60 dark:border-amber-500/50',
             bg: 'bg-amber-50/95 dark:bg-amber-950/70',
@@ -375,7 +403,7 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+3 Max HP, +8 Thể lực',
           flavor: 'Bám thành giường lò dò từng bước, ngã dập mông lại lồm cồm bò dậy',
-          angleDeg: 8, // Cánh Đông hạ cân đối
+          angleDeg: 0, // Cánh Đông hạ cân đối
           distanceRatio: 0.94,
           color: {
             border: 'border-teal-400/60 dark:border-teal-500/50',
@@ -393,8 +421,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+15 Thể chất, +5 HP',
           flavor: 'Ngậm bầu sữa ấm của mẹ, no bụng rồi chìm vào giấc ngủ thật say',
-          angleDeg: 138, // Tây Nam cội rễ (không đè bệ gốc & badge đáy)
-          distanceRatio: 0.84,
+          angleDeg: 142, // Tây Nam cội rễ (tách hẳn nút Bệ Gốc & Rễ Gia Đình)
+          distanceRatio: 0.86,
           color: {
             border: 'border-emerald-400/60 dark:border-emerald-500/50',
             bg: 'bg-emerald-50/95 dark:bg-emerald-950/70',
@@ -441,8 +469,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+12 Karma học vấn',
           flavor: 'Nắn nót từng dòng mực tím, quyết tâm giải bằng được bài toán đố hóc búa',
-          angleDeg: -152,
-          distanceRatio: 0.90,
+          angleDeg: -145,
+          distanceRatio: 0.88,
           color: {
             border: 'border-sky-400/60 dark:border-sky-500/50',
             bg: 'bg-sky-50/95 dark:bg-sky-950/70',
@@ -459,8 +487,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+$25 tiền tiêu vặt, +Gia đạo',
           flavor: 'Quét sạch hiên nhà, rửa xong chồng bát đũa mỡ màng để mẹ về đỡ nhọc',
-          angleDeg: -28,
-          distanceRatio: 0.90,
+          angleDeg: -35,
+          distanceRatio: 0.88,
           color: {
             border: 'border-emerald-400/60 dark:border-emerald-500/50',
             bg: 'bg-emerald-50/95 dark:bg-emerald-950/70',
@@ -477,7 +505,7 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+10 HP, -20 Stress',
           flavor: 'Tranh bóng trên sân đất nứt nẻ, mồ hôi ướt đẫm lưng áo mà vui hết nấc',
-          angleDeg: 8,
+          angleDeg: 0,
           distanceRatio: 0.94,
           color: {
             border: 'border-amber-400/60 dark:border-amber-500/50',
@@ -495,8 +523,8 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+Khám phá, Nuôi dưỡng tâm hồn',
           flavor: 'Trèo cây hái quả dại, lội mương bắt ốc cùng đám bạn xóm dưới',
-          angleDeg: 42,
-          distanceRatio: 0.84,
+          angleDeg: 38,
+          distanceRatio: 0.86,
           color: {
             border: 'border-teal-400/60 dark:border-teal-500/50',
             bg: 'bg-teal-50/95 dark:bg-teal-950/70',
@@ -513,7 +541,7 @@ export default function DynamicLifeTree({
           apCost: 1,
           gainText: '+Hảo cảm, Gia đạo thuận hòa',
           flavor: 'Ngồi bên mâm cơm tối kể chuyện trường lớp, nghe cha thở dài chuyện tiền nong',
-          angleDeg: 172,
+          angleDeg: 180,
           distanceRatio: 0.94,
           color: {
             border: 'border-amber-400/60 dark:border-amber-500/40',
@@ -564,7 +592,7 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+$3.5k Thặng dư, +15 Karma',
         flavor: 'Tập trung cao độ trong phòng mổ, giật lại sự sống cho bệnh nhân từ tay tử thần',
-        angleDeg: 172,
+        angleDeg: 180,
         distanceRatio: 0.94,
         color: {
           border: 'border-emerald-400/60 dark:border-emerald-500/50',
@@ -583,7 +611,7 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+$3.2k Thặng dư, +10 Trí tuệ',
         flavor: 'Tối ưu thuật toán chịu tải hàng triệu người dùng, hoàn thành bản phát hành quan trọng',
-        angleDeg: 172,
+        angleDeg: 180,
         distanceRatio: 0.94,
         color: {
           border: 'border-cyan-400/60 dark:border-cyan-500/50',
@@ -602,7 +630,7 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+$4.5k Thặng dư, +Uy quyền',
         flavor: 'Bảo vệ kế hoạch kinh doanh trước các quỹ mạo hiểm, ký kết hợp đồng thương mại lớn',
-        angleDeg: 172,
+        angleDeg: 180,
         distanceRatio: 0.94,
         color: {
           border: 'border-amber-400/60 dark:border-amber-500/50',
@@ -621,7 +649,7 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+$2.8k, +Danh vọng vang xa',
         flavor: 'Đốt cháy đam mê trên từng nét vẽ trang sách, tạo nên tác phẩm để đời cho công chúng',
-        angleDeg: 172,
+        angleDeg: 180,
         distanceRatio: 0.94,
         color: {
           border: 'border-purple-400/60 dark:border-purple-500/50',
@@ -640,7 +668,7 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+$1.5k~$3k Thặng dư',
         flavor: 'Tăng ca mỏi mắt bên bàn làm việc, đổi mồ hôi lấy từng đồng tiền nuôi sống bản thân',
-        angleDeg: 172, // Cành Hoàng Kim Tài Sản
+        angleDeg: 180, // Cành Hoàng Kim Tài Sản
         distanceRatio: 0.94,
         color: {
           border: 'border-emerald-400/60 dark:border-emerald-500/50',
@@ -662,8 +690,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+8 Karma, Nâng trình chuyên môn',
         flavor: 'Thức trắng đêm nghiên cứu tài liệu chuyên ngành, mở rộng tầm nhìn học thuật',
-        angleDeg: -152, // Cành Tây Bắc Trí Tuệ (tách biệt hẳn nút Đột Phá -90°)
-        distanceRatio: 0.90,
+        angleDeg: -145, // Cành Tây Bắc Trí Tuệ (tách biệt hẳn nút Đột Phá -90°)
+        distanceRatio: 0.88,
         color: {
           border: 'border-sky-400/60 dark:border-sky-500/50',
           bg: 'bg-sky-50/95 dark:bg-sky-950/70',
@@ -680,8 +708,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: 'Gặp gỡ tri kỷ, Mở lối làm ăn',
         flavor: 'Mời ly cà phê vỉa hè hay bữa tối thân tình, kết nối những mối quan hệ vàng ngọc',
-        angleDeg: -28, // Cành Đông Bắc Nhân Mạch
-        distanceRatio: 0.90,
+        angleDeg: -35, // Cành Đông Bắc Nhân Mạch
+        distanceRatio: 0.88,
         color: {
           border: 'border-amber-400/60 dark:border-amber-500/40',
           bg: 'bg-amber-50/95 dark:bg-amber-500/10',
@@ -698,7 +726,7 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: 'Cơ hội x2 vốn hoặc rút củi',
         flavor: 'Đặt lệnh mua mã cổ phiếu tiềm năng, tim đập thình thịch theo từng nhịp bảng điện tử',
-        angleDeg: 8, // Cánh Đông Tài Sản
+        angleDeg: 0, // Cánh Đông Tài Sản
         distanceRatio: 0.94,
         color: {
           border: 'border-pink-400/60 dark:border-pink-500/50',
@@ -716,8 +744,8 @@ export default function DynamicLifeTree({
         apCost: 1,
         gainText: '+15 Sinh lực, -25 Stress',
         flavor: 'Tắm nước nóng xua tan cơn đau nhức xương khớp, ngủ một giấc sâu không mộng mị',
-        angleDeg: 138, // Cội Rễ Sinh Mệnh Tây Nam (tránh bệ gốc & nhãn đáy)
-        distanceRatio: 0.84,
+        angleDeg: 142, // Cội Rễ Sinh Mệnh Tây Nam (tránh bệ gốc, rễ gia đình & nhãn đáy)
+        distanceRatio: 0.86,
         color: {
           border: 'border-teal-400/60 dark:border-teal-500/50',
           bg: 'bg-teal-50/95 dark:bg-teal-950/70',
@@ -1015,46 +1043,67 @@ export default function DynamicLifeTree({
             </Tooltip>
           )}
 
-          {/* Year-End Sacred Ritual / Turn Advancement Button */}
-          {(onOpenYearEndReflection || onTimeSkip) && (
-            <Tooltip
-              position="bottom"
-              align="right"
-              content={
-                actionPoints === 0
-                  ? "Đã dùng hết năng lượng năm nay. Nhấn để bước vào thời khắc Giao Thừa và đón năm mới!"
-                  : "Khép lại năm sớm: Năng lượng AP dư thừa sẽ tự động quy đổi thành Dưỡng Sinh (+2 HP / -5% Căng thẳng)."
-              }
-            >
-              <button
-                onClick={() => (onOpenYearEndReflection ? onOpenYearEndReflection() : onTimeSkip?.())}
-                disabled={isLoading}
-                className={`px-3 py-1 rounded-xl font-bold text-xs transition active:scale-95 shadow-md flex items-center gap-1.5 ${
-                  actionPoints === 0
-                    ? 'bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black shadow-amber-500/30 animate-pulse ring-2 ring-amber-300/60'
-                    : 'bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:border-amber-500/40'
-                }`}
-              >
-                {actionPoints === 0 ? (
-                  <>
+          {/* Year-End Sacred Ritual & Unified Turn Advancement Pair */}
+          {(onOpenYearEndReflection || onAdvanceYear || onTimeSkip) && (
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {onOpenYearEndReflection && !isNextAgeMilestone && (
+                <Tooltip
+                  position="bottom"
+                  align="right"
+                  content="Chiêm Nghiệm Cuối Năm & Gieo Mầm Tâm Nguyện: Chủ động tổng kết và đặt lời nguyện bất cứ lúc nào."
+                >
+                  <button
+                    type="button"
+                    onClick={onOpenYearEndReflection}
+                    disabled={isLoading || isPledging}
+                    title="Chiêm Nghiệm Cuối Năm"
+                    className="px-2.5 py-1 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:border-amber-500/50 font-bold text-[11px] flex items-center gap-1 shadow-sm transition active:scale-95 cursor-pointer"
+                  >
                     <span>✨</span>
-                    <span>Chiêm Nghiệm Cuối Năm</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </>
-                ) : (
-                  <>
-                    <span>🌿</span>
-                    <span>Khép Năm Sớm</span>
-                  </>
-                )}
-              </button>
-            </Tooltip>
+                    <span>Gieo Mầm</span>
+                  </button>
+                </Tooltip>
+              )}
+
+              {(onAdvanceYear || onTimeSkip) && (
+                <Tooltip
+                  position="bottom"
+                  align="right"
+                  content={
+                    actionPoints === 0
+                      ? `Đã dùng hết năng lượng năm nay. Nhấn (hoặc bấm Space) để mở khóa Tuổi ${characterAge + 1}!`
+                      : `Bước sang Tuổi ${characterAge + 1} [Space]: AP chưa dùng tự động chuyển thành Dưỡng Sinh (+2 HP / -5% Căng thẳng).`
+                  }
+                >
+                  <button
+                    type="button"
+                    onClick={() => (onAdvanceYear ? onAdvanceYear() : onTimeSkip?.())}
+                    disabled={isLoading || isPledging}
+                    className={`px-3 py-1 rounded-xl font-bold text-xs transition active:scale-95 shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50 ${
+                      actionPoints === 0
+                        ? 'bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-400 text-slate-950 font-black shadow-amber-500/30 animate-pulse ring-2 ring-amber-400/60'
+                        : 'bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/70 dark:hover:bg-amber-900/70 text-amber-950 dark:text-amber-200 border border-amber-400/50'
+                    }`}
+                  >
+                    <span>{isNextAgeMilestone ? '✨' : '🌿'}</span>
+                    <span>
+                      {isNextAgeMilestone
+                        ? `Cột Mốc Tuổi ${characterAge + 1}`
+                        : `Sang Tuổi ${characterAge + 1}`}
+                    </span>
+                    <kbd className="font-mono text-[9.5px] bg-slate-900/10 dark:bg-black/35 px-1.5 py-0.2 rounded font-bold hidden sm:inline">
+                      Space
+                    </kbd>
+                  </button>
+                </Tooltip>
+              )}
+            </div>
           )}
         </div>
       </div>
 
       {/* ========================================================================= */}
-      {/* UNIFIED SACRED PILLAR & LENS BAR (HỢP NHẤT KHÔNG TRÙNG LẶP TRÊN ĐỈNH CÂY) */}
+      {/* UNIFIED 4-PILLAR LENS BAR (HỢP NHẤT 4 TRỤ CỘT TRÊN ĐỈNH ĐẠI THỤ) */}
       {/* ========================================================================= */}
       <div className="flex items-center justify-between gap-2 flex-wrap relative z-20">
         <div className="flex items-center gap-1 p-1 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] shadow-inner flex-wrap">
@@ -1122,6 +1171,27 @@ export default function DynamicLifeTree({
               {character?.social_links?.filter((n: any) => n.linkLevel >= 2).length || 0}/{character?.social_links?.length || 4}
             </span>
           </button>
+
+          <button
+            type="button"
+            onClick={() => setTreeViewMode('family_roots')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+              treeViewMode === 'family_roots'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md shadow-emerald-500/25'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+            }`}
+          >
+            <span>🏡 Gốc Rễ Gia Đình</span>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold border ${
+              treeViewMode === 'family_roots'
+                ? 'bg-slate-900/15 border-slate-900/25 text-slate-950'
+                : isParentsDeceased
+                ? 'bg-rose-500/15 text-rose-800 dark:text-rose-300 border-rose-500/30'
+                : 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border-emerald-500/35'
+            }`}>
+              {isParentsDeceased ? 'Di sản' : canEatMeal || canMentor ? 'Ấm êm' : 'Bình an'}
+            </span>
+          </button>
         </div>
 
         {/* Wealth Pillar Shortcut */}
@@ -1140,11 +1210,143 @@ export default function DynamicLifeTree({
         </Tooltip>
       </div>
 
-      {/* Inline Sickness Alarm Strip (Placed cleanly above Canvas so it NEVER overlaps Tree Nodes) */}
-      {treeHealthState === 'withered' && (
-        <div className="px-3.5 py-1.5 rounded-2xl bg-rose-50/95 dark:bg-rose-950/90 border border-rose-400/70 dark:border-rose-500/70 text-rose-900 dark:text-rose-200 text-[11px] font-bold flex items-center gap-2 shadow-sm animate-pulse">
-          <AlertTriangle className="w-3.5 h-3.5 text-rose-500 shrink-0" />
-          <span>Thần Mộc Đang Bị Kiệt Sức! Kinh mạch tắc nghẽn — Hãy chọn Dưỡng Sinh hoặc Bầu Sữa Mẹ để hồi sinh!</span>
+      {/* ========================================================================= */}
+      {/* INTEGRATED DESTINY EVENT, MILESTONE & INTERVENTION SANCTUARY STRIP */}
+      {/* (Quy hoạch các sự kiện chức năng ngay đỉnh Thần Mộc, không tách thẻ thừa) */}
+      {/* ========================================================================= */}
+      {(hasActiveEvent || milestoneChallenge || treeHealthState === 'withered' || (isDebt && onDebtRelief) || (characterAge >= 56 && onSeniorAction)) && (
+        <div className="space-y-1.5 relative z-20">
+          {hasActiveEvent && (
+            <div className="px-3.5 py-2 rounded-2xl bg-rose-50/95 dark:bg-rose-950/85 border border-rose-400/70 dark:border-rose-500/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-sm">
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5 text-[10.5px] font-mono font-bold text-rose-800 dark:text-rose-300 uppercase tracking-wider">
+                  <span className="relative flex h-2 w-2 shrink-0">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-600 dark:bg-rose-400" />
+                  </span>
+                  <span>Biến Cố Định Mệnh • Tuổi {characterAge}</span>
+                </div>
+                <div className="text-xs font-bold text-rose-950 dark:text-rose-100 truncate">
+                  {activeEventData?.title}
+                </div>
+                {activeEventData?.description && (
+                  <div className="text-[11px] text-rose-900/80 dark:text-rose-200/85 line-clamp-1">
+                    {activeEventData.description}
+                  </div>
+                )}
+              </div>
+              {onOpenCinema && (
+                <button
+                  type="button"
+                  onClick={onOpenCinema}
+                  className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-rose-500 dark:hover:bg-rose-400 dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow transition active:scale-95 shrink-0 cursor-pointer"
+                >
+                  <Clapperboard className="w-3.5 h-3.5" />
+                  <span>Kịch Bản Điện Ảnh 21:9</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          )}
+
+          {milestoneChallenge && onLaunchMiniGame && (
+            <div className="px-3.5 py-2 rounded-2xl bg-amber-50/95 dark:bg-amber-950/75 border border-amber-400/70 dark:border-amber-500/50 flex flex-wrap items-center justify-between gap-2 shadow-sm">
+              <div className="flex items-center gap-2 min-w-0">
+                <Gamepad2 className="w-4 h-4 text-amber-700 dark:text-amber-300 shrink-0" />
+                <div className="min-w-0">
+                  <div className="text-[11px] font-bold text-amber-950 dark:text-amber-100 truncate">
+                    Thử Thách Cột Mốc Tuổi {milestoneChallenge.age}: {milestoneChallenge.title}
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => onLaunchMiniGame(milestoneChallenge.game_type)}
+                className="px-3 py-1 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[11px] flex items-center gap-1 shadow-sm transition active:scale-95 shrink-0 cursor-pointer"
+              >
+                <span>Thử Thách Ngay</span>
+                <ChevronRight className="w-3 h-3" />
+              </button>
+            </div>
+          )}
+
+          {treeHealthState === 'withered' && (
+            <div className="px-3.5 py-1.5 rounded-2xl bg-rose-50/95 dark:bg-rose-950/90 border border-rose-400/70 dark:border-rose-500/70 text-rose-900 dark:text-rose-200 text-[11px] font-bold flex flex-wrap items-center justify-between gap-2 shadow-sm">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                <span>Thần Mộc Đang Kiệt Sức! Hãy chọn Dưỡng Sinh, Khám Sức Khỏe hoặc chạm Rễ Gia Đình để hồi sinh!</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                {onHealthCheckup && (
+                  <button
+                    type="button"
+                    onClick={() => onHealthCheckup()}
+                    disabled={isLoading}
+                    className="px-2.5 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-900/70 text-emerald-950 dark:text-emerald-200 border border-emerald-500/40 text-[10.5px] font-bold flex items-center gap-1 cursor-pointer"
+                  >
+                    <Stethoscope className="w-3 h-3" />
+                    <span>Khám Tổng Quát</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {isDebt && onDebtRelief && (
+            <div className="px-3.5 py-1.5 rounded-2xl bg-orange-50/95 dark:bg-orange-950/75 border border-orange-400/60 dark:border-orange-500/50 text-orange-950 dark:text-orange-200 text-[11px] font-bold flex flex-wrap items-center justify-between gap-2 shadow-sm">
+              <span>💸 Cảnh Báo Nợ Nần ({formattedCash.primary}): Giải cứu dòng tiền kịp thời</span>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => onDebtRelief('family_soft_loan')}
+                  disabled={isLoading}
+                  className="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/60 border border-amber-500/40 text-amber-950 dark:text-amber-200 text-[10.5px] font-bold cursor-pointer"
+                >
+                  🤝 Vay Mềm Người Thân
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onDebtRelief('liquidate_personal_items')}
+                  disabled={isLoading}
+                  className="px-2.5 py-1 rounded-lg bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-[10.5px] font-bold cursor-pointer"
+                >
+                  📦 Thanh Lý Đồ Đạc
+                </button>
+              </div>
+            </div>
+          )}
+
+          {characterAge >= 56 && onSeniorAction && (
+            <div className="px-3.5 py-1.5 rounded-2xl bg-amber-50/90 dark:bg-amber-950/65 border border-amber-500/40 text-amber-950 dark:text-amber-200 text-[11px] font-bold flex flex-wrap items-center justify-between gap-2 shadow-sm">
+              <span>👑 Nghi Thức Tuổi Hạc &amp; Truyền Thừa Di Sản:</span>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => onSeniorAction('write_memoir')}
+                  disabled={isLoading}
+                  className="px-2.5 py-1 rounded-lg bg-[var(--bg-card)] hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-500/40 text-amber-900 dark:text-amber-200 text-[10.5px] font-bold cursor-pointer"
+                >
+                  ✍️ Viết Hồi Ký
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onSeniorAction('grandchild_mentorship')}
+                  disabled={isLoading}
+                  className="px-2.5 py-1 rounded-lg bg-[var(--bg-card)] hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-500/40 text-amber-900 dark:text-amber-200 text-[10.5px] font-bold cursor-pointer"
+                >
+                  👨‍👩‍👧‍👦 Dạy Cháu
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onSeniorAction('early_estate_will')}
+                  disabled={isLoading}
+                  className="px-2.5 py-1 rounded-lg bg-[var(--bg-card)] hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-500/40 text-amber-900 dark:text-amber-200 text-[10.5px] font-bold cursor-pointer"
+                >
+                  ⚖️ Lập Di Chúc
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -2259,8 +2461,8 @@ export default function DynamicLifeTree({
           {/* 4. SACRED TREE ROOT DAIS PROGRESSION (BỆ GỐC CÂY THĂNG HOA THEO LEVEL) */}
           {/* ========================================================================= */}
           <g className="sacred-root-dais" id="sacredRootDais">
-            {/* Ground Contact Shadow */}
-            <ellipse cx={centerX} cy={502} rx={daisTier >= 4 ? 135 : 105} ry={daisTier >= 4 ? 26 : 20} fill="#020617" opacity="0.75" />
+            {/* Ground Contact Shadow (tinh gọn viền đáy, không đè badge di sản góc dưới) */}
+            <ellipse cx={centerX} cy={496} rx={daisTier >= 4 ? 128 : 98} ry={17} fill="#020617" opacity="0.72" />
 
             {/* Stepped Base Plinth */}
             {daisTier === 1 && (
@@ -2379,6 +2581,44 @@ export default function DynamicLifeTree({
                   />
                 );
               })}
+            </g>
+
+            {/* Organic Family Root Conduit Tendrils nourishing the trunk from soil edges */}
+            <g className="family-root-tendrils pointer-events-none">
+              <path
+                d="M 342 486 Q 218 478 102 436"
+                fill="none"
+                stroke={isParentsDeceased ? '#64748b' : '#10b981'}
+                strokeWidth="2.5"
+                strokeOpacity={isParentsDeceased ? '0.3' : '0.55'}
+              />
+              {!isParentsDeceased && canEatMeal && (
+                <path
+                  d="M 342 486 Q 218 478 102 436"
+                  fill="none"
+                  stroke="#34d399"
+                  strokeWidth="2"
+                  strokeDasharray="5 11"
+                  className="animate-[dash_2s_linear_infinite]"
+                />
+              )}
+              <path
+                d="M 378 486 Q 502 478 618 436"
+                fill="none"
+                stroke={isParentsDeceased ? '#64748b' : '#6366f1'}
+                strokeWidth="2.5"
+                strokeOpacity={isParentsDeceased ? '0.3' : '0.55'}
+              />
+              {!isParentsDeceased && canMentor && (
+                <path
+                  d="M 378 486 Q 502 478 618 436"
+                  fill="none"
+                  stroke="#a5b4fc"
+                  strokeWidth="2"
+                  strokeDasharray="5 11"
+                  className="animate-[dash_2s_linear_infinite]"
+                />
+              )}
             </g>
           </g>
 
@@ -2907,8 +3147,102 @@ export default function DynamicLifeTree({
           );
         })}
 
+        {/* ========================================================================= */}
+        {/* IN-TREE FAMILY ROOT CONDUITS (RỄ CỘI NGUỒN TÍCH HỢP NGAY CHÂN THẦN MỘC) */}
+        {/* ========================================================================= */}
+        <div
+          className="absolute z-20 left-3 sm:left-[14.2%] sm:-translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+          style={{
+            top: `${(436 / canvasHeight) * 100}%`
+          }}
+        >
+          {canEatMeal && onFamilyMeal ? (
+            <Tooltip
+              position="top"
+              align="left"
+              content="Rễ Dưỡng Chất Gia Đình: +10 Sinh lực, hồi phục sinh khí và bồi đắp tình thân ấm êm."
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  soundFx.playHealingPulse();
+                  setHealingPulse(true);
+                  setTimeout(() => setHealingPulse(false), 1200);
+                  onFamilyMeal();
+                }}
+                disabled={isLoading}
+                className="px-2.5 py-1.5 rounded-2xl bg-amber-50/95 hover:bg-amber-100 dark:bg-amber-950/85 dark:hover:bg-amber-900 border border-amber-500/60 text-amber-950 dark:text-amber-200 text-[11px] font-bold flex items-center gap-1.5 shadow-lg backdrop-blur-md transition hover:scale-105 active:scale-95 cursor-pointer"
+              >
+                <Utensils className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                <span>{characterAge <= 5 ? 'Bầu Sữa Mẹ' : 'Bữa Cơm'}</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30">
+                  +10 HP
+                </span>
+              </button>
+            </Tooltip>
+          ) : (
+            <Tooltip
+              position="top"
+              align="left"
+              content="Nhấp để mở Gốc Rễ Gia Đình, xem gia phong & kết nối người thân."
+            >
+              <button
+                type="button"
+                onClick={() => setTreeViewMode('family_roots')}
+                className="px-2.5 py-1.5 rounded-2xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-emerald-500/50 text-[var(--text-primary)] text-[11px] font-bold flex items-center gap-1.5 shadow-lg backdrop-blur-md transition hover:scale-105 active:scale-95 cursor-pointer"
+              >
+                <span>🏡</span>
+                <span>{household?.family_buff?.name ? household.family_buff.name : 'Rễ Gia Đình'}</span>
+              </button>
+            </Tooltip>
+          )}
+        </div>
+
+        <div
+          className="absolute z-20 right-3 sm:right-auto sm:left-[85.8%] sm:-translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+          style={{
+            top: `${(436 / canvasHeight) * 100}%`
+          }}
+        >
+          {household && !isParentsDeceased && onFamilyMentorship && canMentor ? (
+            <Tooltip
+              position="top"
+              align="right"
+              content="Rễ Trí Tuệ Phụ Mẫu: Lắng nghe chỉ dẫn của cha mẹ nhận +8 Karma & soi sáng đường đời."
+            >
+              <button
+                type="button"
+                onClick={onFamilyMentorship}
+                disabled={isLoading}
+                className="px-2.5 py-1.5 rounded-2xl bg-indigo-50/95 hover:bg-indigo-100 dark:bg-indigo-950/85 dark:hover:bg-indigo-900 border border-indigo-400/60 text-indigo-950 dark:text-indigo-200 text-[11px] font-bold flex items-center gap-1.5 shadow-lg backdrop-blur-md transition hover:scale-105 active:scale-95 cursor-pointer"
+              >
+                <MessageSquare className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                <span>Lời Khuyên</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-indigo-500/15 text-indigo-800 dark:text-indigo-300 border border-indigo-500/30">
+                  +8 Karma
+                </span>
+              </button>
+            </Tooltip>
+          ) : (
+            <Tooltip
+              position="top"
+              align="right"
+              content="Xem toàn cảnh Phả Hệ Dòng Tộc & Gốc Rễ Gia Đình ngay trên Thần Mộc."
+            >
+              <button
+                type="button"
+                onClick={() => setTreeViewMode('family_roots')}
+                className="px-2.5 py-1.5 rounded-2xl bg-emerald-50/95 hover:bg-emerald-100 dark:bg-emerald-950/85 dark:hover:bg-emerald-900 border border-emerald-500/50 text-emerald-950 dark:text-emerald-200 text-[11px] font-bold flex items-center gap-1.5 shadow-lg backdrop-blur-md transition hover:scale-105 active:scale-95 cursor-pointer"
+              >
+                <span>🌳</span>
+                <span>Gia Tộc &amp; Gốc Rễ</span>
+              </button>
+            </Tooltip>
+          )}
+        </div>
+
         {/* Annual Growth Rings Interactive Pill Badge (Đặt đối xứng góc dưới phải, không đè Bệ Gốc & Nhãn Phong Cảnh) */}
-        <div className="absolute bottom-2.5 right-3 sm:right-4 z-20 pointer-events-auto">
+        <div className="absolute bottom-3 right-3 sm:right-4 z-30 pointer-events-auto">
           <Tooltip
             position="top"
             align="right"
@@ -3023,86 +3357,203 @@ export default function DynamicLifeTree({
           </div>
         )}
 
-      </div>
-
-      {/* ========================================================================= */}
-      {/* 3RD PILLAR: GỐC RỄ GIA ĐÌNH & CỘI NGUỒN (CHÂN CÂY / PHÍA NAM) */}
-      {/* ========================================================================= */}
-      <div className="p-3 rounded-2xl bg-gradient-to-r from-emerald-50/80 via-slate-50 to-white dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-950 border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md relative z-10">
-        <div className="flex items-center gap-2.5 min-w-0 w-full sm:w-auto">
-          <span className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-sm shrink-0">
-            🌿
-          </span>
-          <div className="min-w-0">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">
-                Gốc Rễ Gia Đình &amp; Cội Nguồn
-              </span>
-              {household?.family_buff && (
-                <span className="text-[10px] font-semibold text-amber-800 dark:text-amber-300 px-2 py-0.2 rounded-full bg-amber-500/10 border border-amber-500/20">
-                  ⭐ {household.family_buff.name}
+        {treeViewMode === 'family_roots' && (
+          <div className="absolute inset-y-0 right-0 w-full md:w-[480px] z-40 bg-[var(--bg-card)] border-l border-[var(--border-subtle)] text-[var(--text-primary)] shadow-2xl backdrop-blur-2xl p-4 overflow-y-auto animate-in slide-in-from-right duration-300 flex flex-col gap-3">
+            <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)]">
+              <div className="flex items-center gap-2">
+                <span className="p-2 rounded-xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-base">
+                  🏡
                 </span>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
+                    <span>Gốc Rễ Gia Đình &amp; Cội Nguồn</span>
+                    <span className={`px-2 py-0.2 rounded-full text-[10px] font-bold border ${
+                      isParentsDeceased
+                        ? 'text-rose-800 dark:text-rose-300 bg-rose-100 dark:bg-rose-950/60 border-rose-400/40'
+                        : 'text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/60 border-emerald-400/40'
+                    }`}>
+                      {isParentsDeceased ? 'Đã khuất' : 'Bình an'}
+                    </span>
+                  </h4>
+                  <p className="text-[10.5px] text-[var(--text-secondary)]">
+                    Mạch nguồn dưỡng sinh nuôi lớn Thần Mộc &amp; nghi thức gia tộc
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setTreeViewMode('life_actions')}
+                className="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-300 dark:border-slate-700 transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto pr-1 space-y-3">
+              {/* Parents & Family Lineage Card */}
+              <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] space-y-2">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">
+                    Cội Nguồn Huyết Thống
+                  </span>
+                  {household?.family_buff && (
+                    <span className="text-[10.5px] font-semibold text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/25">
+                      ⭐ {household.family_buff.name}
+                    </span>
+                  )}
+                </div>
+                <div className="text-xs text-[var(--text-primary)] font-medium">
+                  {household?.father_name ? `Bố: ${household.father_name}` : 'Mồ côi'}
+                  {household?.mother_name ? ` • Mẹ: ${household.mother_name}` : ''}
+                </div>
+                {(hasSpouse || childrenList.length > 0) && (
+                  <div className="pt-1.5 border-t border-[var(--border-subtle)] flex items-center gap-2 flex-wrap text-[11px] text-[var(--text-secondary)]">
+                    {hasSpouse && (
+                      <span className="px-2 py-0.5 rounded-lg bg-rose-500/10 text-rose-800 dark:text-rose-300 border border-rose-500/25 font-semibold">
+                        ❤️ Phối ngẫu: {spouse?.name || spouse?.target_name || 'Tri kỷ trăm năm'}
+                      </span>
+                    )}
+                    {childrenList.length > 0 && (
+                      <span className="px-2 py-0.5 rounded-lg bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/25 font-semibold">
+                        👶 Hậu duệ: {childrenList.length} người con
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* 1-Click Family Root Actions */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {canEatMeal && onFamilyMeal && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      soundFx.playHealingPulse();
+                      onFamilyMeal();
+                    }}
+                    disabled={isLoading}
+                    className="p-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/60 dark:hover:bg-amber-900/60 text-amber-950 dark:text-amber-200 border border-amber-500/40 text-xs font-bold flex items-center justify-between gap-2 transition active:scale-95 shadow-sm cursor-pointer"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <Utensils className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                      <span>{characterAge <= 5 ? 'Bầu Sữa Mẹ' : 'Bữa Cơm'}</span>
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300">+10 HP</span>
+                  </button>
+                )}
+
+                {household && !isParentsDeceased && onFamilyMentorship && (
+                  <button
+                    type="button"
+                    onClick={onFamilyMentorship}
+                    disabled={!canMentor || isLoading}
+                    className={`p-2.5 rounded-xl text-xs font-bold flex items-center justify-between gap-2 transition border cursor-pointer ${
+                      canMentor
+                        ? 'bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/60 text-indigo-950 dark:text-indigo-200 border-indigo-400/50 active:scale-95 shadow-sm'
+                        : 'bg-slate-100 dark:bg-slate-900/40 text-slate-500 border-slate-200 dark:border-slate-700 cursor-not-allowed opacity-60'
+                    }`}
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <MessageSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                      <span>Lời Khuyên</span>
+                    </span>
+                    <span className="text-[10px] font-mono text-indigo-800 dark:text-indigo-300">
+                      {canMentor ? '+8 Karma' : 'Đã dùng'}
+                    </span>
+                  </button>
+                )}
+
+                {onHealthCheckup && (
+                  <button
+                    type="button"
+                    onClick={() => onHealthCheckup()}
+                    disabled={isLoading}
+                    className="p-2.5 rounded-xl bg-teal-50 hover:bg-teal-100 dark:bg-teal-950/60 dark:hover:bg-teal-900/60 text-teal-950 dark:text-teal-200 border border-teal-500/40 text-xs font-bold flex items-center justify-between gap-2 transition active:scale-95 shadow-sm cursor-pointer"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <Stethoscope className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                      <span>Khám Tổng Quát</span>
+                    </span>
+                    <span className="text-[10px] font-mono text-teal-800 dark:text-teal-300">+20 HP</span>
+                  </button>
+                )}
+
+                {onOpenFamily && (
+                  <button
+                    type="button"
+                    onClick={onOpenFamily}
+                    className="p-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 border border-emerald-500/50 text-emerald-900 dark:text-emerald-200 text-xs font-bold flex items-center justify-between gap-2 transition active:scale-95 cursor-pointer"
+                  >
+                    <span>Phả Hệ Dòng Tộc</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              {/* Contextual Senior Legacy & Debt Relief inside Family Roots Sanctuary */}
+              {characterAge >= 56 && onSeniorAction && (
+                <div className="p-3 rounded-2xl bg-amber-50/80 dark:bg-amber-950/50 border border-amber-500/35 space-y-2">
+                  <div className="text-xs font-bold text-amber-900 dark:text-amber-300">
+                    👑 Nghi Thức Tuổi Hạc &amp; Di Sản Gia Tộc
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => onSeniorAction('write_memoir')}
+                      disabled={isLoading}
+                      className="px-2.5 py-1.5 rounded-lg bg-[var(--bg-card)] hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-500/40 text-xs font-bold text-amber-950 dark:text-amber-200 cursor-pointer"
+                    >
+                      ✍️ Viết Hồi Ký (+25 Karma)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onSeniorAction('grandchild_mentorship')}
+                      disabled={isLoading}
+                      className="px-2.5 py-1.5 rounded-lg bg-[var(--bg-card)] hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-500/40 text-xs font-bold text-amber-950 dark:text-amber-200 cursor-pointer"
+                    >
+                      👨‍👩‍👧‍👦 Chỉ Dạy Con Cháu
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onSeniorAction('early_estate_will')}
+                      disabled={isLoading}
+                      className="px-2.5 py-1.5 rounded-lg bg-[var(--bg-card)] hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-500/40 text-xs font-bold text-amber-950 dark:text-amber-200 cursor-pointer"
+                    >
+                      ⚖️ Lập Di Chúc Sớm
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {isDebt && onDebtRelief && (
+                <div className="p-3 rounded-2xl bg-rose-50/80 dark:bg-rose-950/50 border border-rose-500/40 space-y-2">
+                  <div className="text-xs font-bold text-rose-900 dark:text-rose-200">
+                    💸 Gỡ Rối Khủng Hoảng Nợ Nần
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => onDebtRelief('family_soft_loan')}
+                      disabled={isLoading}
+                      className="px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 dark:bg-amber-900/60 border border-amber-500/40 text-xs font-bold text-amber-950 dark:text-amber-200 cursor-pointer"
+                    >
+                      🤝 Vay Mềm Người Thân (+$3k)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onDebtRelief('liquidate_personal_items')}
+                      disabled={isLoading}
+                      className="px-2.5 py-1.5 rounded-lg bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs font-bold text-[var(--text-primary)] cursor-pointer"
+                    >
+                      📦 Thanh Lý Đồ Đạc (+$1.2k)
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
-            <div className="text-xs text-slate-600 dark:text-slate-300 truncate">
-              {household?.father_name ? `Bố: ${household.father_name}` : 'Mồ côi'}
-              {household?.mother_name ? ` • Mẹ: ${household.mother_name}` : ''}
-              <span className={`ml-2 text-[10px] px-1.5 py-0.2 rounded font-semibold ${isParentsDeceased ? 'text-rose-700 dark:text-rose-400 bg-rose-100 dark:bg-rose-950/60' : 'text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60'}`}>
-                {isParentsDeceased ? 'Đã khuất' : 'Bình an'}
-              </span>
-            </div>
           </div>
-        </div>
+        )}
 
-        {/* 1-Click Family Interactions & Phả Hệ Button */}
-        <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-wrap">
-          {canEatMeal && onFamilyMeal && (
-            <Tooltip content="Ăn cơm cùng gia đình: +10 HP, hồi phục sinh lực và bồi đắp tình thân ấm êm.">
-              <button
-                type="button"
-                onClick={onFamilyMeal}
-                disabled={isLoading}
-                className="py-1.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/60 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-200 border border-amber-500/40 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow"
-              >
-                <Utensils className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                <span>{characterAge <= 5 ? 'Bầu Sữa Mẹ' : 'Bữa Cơm'}</span>
-                <span className="text-[10px] font-mono text-amber-800 dark:text-amber-300/80 ml-1">+10 HP</span>
-              </button>
-            </Tooltip>
-          )}
-
-          {household && !isParentsDeceased && onFamilyMentorship && (
-            <Tooltip content={canMentor ? "Lắng nghe lời chỉ dẫn của cha mẹ để nhận +8 Karma và sáng suốt hướng đi." : "Năm nay bạn đã nhận lời khuyên từ cha mẹ rồi."}>
-              <button
-                type="button"
-                onClick={onFamilyMentorship}
-                disabled={!canMentor || isLoading}
-                className={`py-1.5 px-3 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition border ${
-                  canMentor
-                    ? 'bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/60 text-indigo-900 dark:text-indigo-200 border border-indigo-400/50 active:scale-95 shadow'
-                    : 'bg-slate-100 dark:bg-slate-900/40 text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-800 cursor-not-allowed opacity-60'
-                }`}
-              >
-                <MessageSquare className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                <span>Lời Khuyên</span>
-                <span className="text-[10px] font-mono text-indigo-800 dark:text-indigo-300/80 ml-1">
-                  {canMentor ? '+8 Karma' : 'Đã dùng'}
-                </span>
-              </button>
-            </Tooltip>
-          )}
-
-          {onOpenFamily && (
-            <button
-              type="button"
-              onClick={onOpenFamily}
-              className="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 dark:bg-emerald-600/30 dark:hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-800 dark:text-emerald-200 text-xs font-bold transition flex items-center gap-1 active:scale-95"
-            >
-              <span>Phả Hệ Dòng Tộc</span>
-              <ArrowUpRight className="w-3 h-3" />
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );

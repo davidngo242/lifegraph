@@ -92,6 +92,7 @@ test('Theme Tokens: Base Canvas and Card tokens are valid and high-contrast in d
 test('Dark Class Audit: DynamicLifeTree.tsx, CharacterHeroBanner.tsx, NarrativeFeed.tsx have no un-prefixed dark classes', () => {
   const targetFiles = [
     'frontend/app/components/rpg/DynamicLifeTree.tsx',
+    'frontend/app/components/ActionPointHub.tsx',
     'frontend/app/components/CharacterHeroBanner.tsx',
     'frontend/app/components/NarrativeFeed.tsx'
   ];
@@ -401,41 +402,74 @@ test('Cultural Landscape Backdrop: Panoramic silhouettes, national landmarks & s
 });
 
 // ============================================================================
-// SUITE 6: Zero-Overlap Tree Spatial Geometry & Top-Bar Decluttering Audit
+// SUITE 6: Zero-Overlap Tree Spatial Geometry & Unified All-in-One Cockpit Audit
 // ============================================================================
-test('Zero-Overlap Layout: Action node separation, clear zenith sky & bottom symmetry', () => {
+test('Zero-Overlap Layout: Action node separation, clear zenith sky, family root conduits & bottom symmetry', () => {
   const treeContent = readFile('frontend/app/components/rpg/DynamicLifeTree.tsx');
   const backdropContent = readFile('frontend/app/components/rpg/CulturalLandscapeBackdrop.tsx');
+  const pageContent = readFile('frontend/app/page.tsx');
 
-  // 1. Upper-left & upper-right action nodes fanned out cleanly (-152° / -28°) from breakthrough (-90°)
+  // 1. Tightened symmetric action leaf distribution with clear clearance above Root Conduits
   assert.ok(
-    treeContent.includes('angleDeg: -152'),
-    'Upper-left leaf nodes must angle outward at -152° to prevent overlapping zenith breakthrough card'
+    treeContent.includes('angleDeg: -145') && treeContent.includes('angleDeg: -35'),
+    'Upper-left & upper-right leaf nodes must angle outward at -145° / -35° around zenith breakthrough (-90°)'
   );
   assert.ok(
-    treeContent.includes('angleDeg: -28'),
-    'Upper-right leaf nodes must angle outward at -28° for symmetric zenith clearance'
+    treeContent.includes('angleDeg: 180') && treeContent.includes('angleDeg: 0'),
+    'Mid-row leaf nodes must sit horizontally at 180° / 0° for balanced upper/lower spacing'
+  );
+  assert.ok(
+    treeContent.includes('angleDeg: 142') && treeContent.includes('angleDeg: 38'),
+    'Lower-row leaf nodes must sit at 142° / 38° clear of Dais and Family Root Conduits'
   );
 
-  // 2. Canvas top corners clear (no duplicate giant floating pillar banners inside canvas)
+  // Mathematical clearance check: Left Root (102, 436) vs lower-left leaf (142°, distanceRatio 0.86)
+  const rad142 = (142 * Math.PI) / 180;
+  const leafX = 360 + Math.cos(rad142) * (182 * 0.86 * 1.25);
+  const leafY = 275 + Math.sin(rad142) * (182 * 0.86 * 1.05);
+  const rootDist = Math.hypot(leafX - 102, leafY - 436);
+  assert.ok(
+    rootDist >= 95,
+    `Expected >= 95 SVG units clearance between lower-left leaf and Left Family Root Conduit (got ${rootDist.toFixed(1)})`
+  );
+
+  // 2. Canvas top corners clear & zero detached footer boxes below tree
   assert.ok(
     !treeContent.includes('BOUGH 1: KỸ NĂNG & TRÍ TUỆ'),
     'Must NOT duplicate giant Pillar overlay boxes inside top canopy of canvas'
   );
+  assert.ok(
+    !treeContent.includes('3RD PILLAR: GỐC RỄ GIA ĐÌNH & CỘI NGUỒN (CHÂN CÂY / PHÍA NAM)'),
+    'Must NOT render detached Family footer box outside Life Tree canvas'
+  );
+  assert.ok(
+    !pageContent.includes('Footer: Cánh Cửa Chuyển Tiếp Vòng Đời'),
+    'Must NOT render redundant detached footer card below ActionPointHub in page.tsx'
+  );
 
-  // 3. Celestial NPC constellation forms high zenith crown arc outside corner badges
+  // 3. Family Roots & Active Events unified INTO DynamicLifeTree cockpit
+  assert.ok(
+    treeContent.includes("treeViewMode === 'family_roots'") && treeContent.includes('family-root-tendrils'),
+    'Family Roots must be integrated into both the Tree Soil Conduits and the 4th in-tree Drawer'
+  );
+  assert.ok(
+    treeContent.includes('Kịch Bản Điện Ảnh 21:9') && treeContent.includes('Thử Thách Cột Mốc'),
+    'Active Scenarios/Dilemmas and Milestone Mini-Games must integrate cleanly into DynamicLifeTree'
+  );
+
+  // 4. Celestial NPC constellation forms high zenith crown arc outside corner badges
   assert.ok(
     treeContent.includes('{ x: 255, y: 54') && treeContent.includes('{ x: 325, y: 42'),
     'NPC constellation orbs must orbit clean crown arc clear of Season/Pet corner pills and breakthrough button'
   );
 
-  // 4. Bottom-left Cultural Heritage & Bottom-right Annual Growth Rings never overlap
+  // 5. Bottom-left Cultural Heritage & Bottom-right Annual Growth Rings raised cleanly & never overlap
   assert.ok(
-    backdropContent.includes('bottom-2.5 left-3 sm:left-4'),
-    'Cultural Heritage badge anchors cleanly on bottom-left corner'
+    backdropContent.includes('bottom-3 left-3 sm:left-4 z-30'),
+    'Cultural Heritage badge anchors cleanly on bottom-left corner with bottom clearance'
   );
   assert.ok(
-    treeContent.includes('bottom-2.5 right-3 sm:right-4'),
+    treeContent.includes('bottom-3 right-3 sm:right-4 z-30'),
     'Annual Growth Rings badge must anchor on bottom-right so it never collides with bottom-left Heritage badge or center dais'
   );
 });
