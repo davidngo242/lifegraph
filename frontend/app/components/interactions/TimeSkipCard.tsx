@@ -24,10 +24,10 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
   return (
     <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl transition-colors duration-200">
       <div className="flex items-center justify-between mb-4">
-        <span className="text-[12px] font-sans font-medium tracking-wide normal-case px-3 py-1 rounded-full bg-sky-500/15 text-sky-300 border border-sky-500/30 flex items-center gap-1.5">
+        <span className="text-[12px] font-sans font-medium tracking-wide normal-case px-3 py-1 rounded-full bg-sky-500/15 text-sky-800 dark:text-sky-300 border border-sky-500/30 flex items-center gap-1.5">
           <FastForward className="w-3.5 h-3.5 animate-pulse" /> Khoảng Lặng Cuộc Đời (Time Skip)
         </span>
-        <span className="text-xs font-sans text-sky-400 font-bold">
+        <span className="text-xs font-sans text-sky-700 dark:text-sky-400 font-bold">
           <span className="font-sans tabular-nums">+{yearsJump}</span> Tuổi trôi qua
         </span>
       </div>
@@ -40,8 +40,8 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
         "{dilemma?.narrative || "Thời gian trôi qua không một biến cố nào quá lớn, để lại những trải nghiệm định hình cuộc đời."}"
       </div>
 
-      <div className="p-4 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs text-sky-300 font-sans mb-6 flex items-center gap-2">
-        <Clock className="w-4 h-4 text-sky-400 shrink-0" />
+      <div className="p-4 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs text-sky-800 dark:text-sky-300 font-sans mb-6 flex items-center gap-2">
+        <Clock className="w-4 h-4 text-sky-700 dark:text-sky-400 shrink-0" />
         <span>
           {isInfant
             ? `Những năm tháng đầu đời vô lo vô nghĩ. Bạn muốn em bé phát triển theo hướng nào trong ${yearsJump} năm này?`
@@ -61,7 +61,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
         >
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <div className="flex items-center gap-2 text-sky-400 font-bold text-sm group-hover:text-sky-300">
+              <div className="flex items-center gap-2 text-sky-700 dark:text-sky-400 font-bold text-sm group-hover:text-sky-300">
                 {isInfant ? (
                   <>
                     <Baby className="w-4 h-4" />
@@ -79,7 +79,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
                   </>
                 )}
               </div>
-              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-sky-300 font-mono text-xs font-bold group-hover:border-sky-400 shadow-sm">
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-sky-800 dark:text-sky-300 font-mono text-xs font-bold group-hover:border-sky-400 shadow-sm">
                 1
               </kbd>
             </div>
@@ -91,7 +91,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
                 : `Tập trung làm việc cật lực và học thêm. Thu về thêm thặng dư tiền mặt sau ${yearsJump} năm.`}
             </p>
           </div>
-          <div className="mt-3 text-[12px] font-sans tabular-nums text-sky-300 font-medium">
+          <div className="mt-3 text-[12px] font-sans tabular-nums text-sky-800 dark:text-sky-300 font-medium">
             {isInfant
               ? "+15 Sinh Lực · +3 Max HP · Đề kháng vàng"
               : isMinor
@@ -108,7 +108,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
         >
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm group-hover:text-emerald-300">
+              <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-400 font-bold text-sm group-hover:text-emerald-300">
                 {isInfant ? (
                   <>
                     <Sparkles className="w-4 h-4" />
@@ -126,7 +126,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
                   </>
                 )}
               </div>
-              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-emerald-300 font-mono text-xs font-bold group-hover:border-emerald-400 shadow-sm">
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-emerald-800 dark:text-emerald-300 font-mono text-xs font-bold group-hover:border-emerald-400 shadow-sm">
                 2
               </kbd>
             </div>
@@ -138,7 +138,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
                 : `Trân trọng từng bữa cơm bên người thân. Thanh lọc hoàn toàn kiệt sức và tăng cường thể chất.`}
             </p>
           </div>
-          <div className="mt-3 text-[12px] font-sans tabular-nums text-emerald-300 font-medium">
+          <div className="mt-3 text-[12px] font-sans tabular-nums text-emerald-800 dark:text-emerald-300 font-medium">
             {isInfant
               ? "+15 Karma · Xua tan quấy khóc · Ấm áp tình thân"
               : isMinor

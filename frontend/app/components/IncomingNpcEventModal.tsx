@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { PhoneCall, X, ArrowRight, Sparkles, MessageCircle } from 'lucide-react';
 
 interface Option {
@@ -48,8 +49,8 @@ export default function IncomingNpcEventModal({
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
+  const modal = (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
       <div className="w-full max-w-lg bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 md:p-6 shadow-2xl relative overflow-hidden transition-colors">
         
         {/* Glow ambient background */}
@@ -64,11 +65,11 @@ export default function IncomingNpcEventModal({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-base font-black text-[var(--text-primary)]">{event.npcName}</span>
-                <span className="text-xs font-bold px-2 py-0.2 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+                <span className="text-xs font-bold px-2 py-0.2 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30">
                   {event.npcRole}
                 </span>
               </div>
-              <span className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-1 mt-0.5">
+              <span className="text-xs text-amber-800 dark:text-amber-400 flex items-center gap-1 mt-0.5">
                 <PhoneCall className="w-3 h-3 animate-pulse" />
                 <span>Liên hệ đầu năm mới</span>
               </span>
@@ -77,7 +78,7 @@ export default function IncomingNpcEventModal({
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl hover:bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition"
+            className="p-1.5 rounded-xl hover:bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
           >
             <X className="w-4 h-4" />
           </button>
@@ -85,7 +86,7 @@ export default function IncomingNpcEventModal({
 
         {/* Event Narrative Body */}
         <div className="space-y-3 mb-5">
-          <h3 className="text-sm md:text-base font-bold text-amber-700 dark:text-amber-300">
+          <h3 className="text-sm md:text-base font-bold text-amber-800 dark:text-amber-300">
             {event.title}
           </h3>
           <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs md:text-sm text-[var(--text-primary)] leading-relaxed italic">
@@ -118,7 +119,7 @@ export default function IncomingNpcEventModal({
               <div className="shrink-0 flex items-center gap-1.5">
                 {opt.costAp && opt.costAp > 0 && (
                   <span className={`text-xs font-sans tabular-nums px-2 py-0.5 rounded font-bold ${
-                    opt.id === 'accept' ? 'bg-slate-950/20 text-slate-950 border border-slate-950/30' : 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40'
+                    opt.id === 'accept' ? 'bg-slate-950/20 text-slate-950 border border-slate-950/30' : 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40'
                   }`}>
                     {opt.costAp} AP
                   </span>
@@ -132,4 +133,8 @@ export default function IncomingNpcEventModal({
       </div>
     </div>
   );
+
+  // Render qua portal để thoát khỏi stacking-context của <main> (z-10), nếu không header sticky z-50 sẽ đè lên modal.
+  if (typeof document === 'undefined') return modal;
+  return createPortal(modal, document.body);
 }

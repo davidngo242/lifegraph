@@ -156,7 +156,7 @@ export default function MiniGameHostModal({
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-xl shrink-0">{info.icon}</span>
             <div className="min-w-0">
-              <div className="flex items-center gap-1.5 font-bold text-amber-700 dark:text-amber-300 truncate">
+              <div className="flex items-center gap-1.5 font-bold text-amber-800 dark:text-amber-300 truncate">
                 <span>{info.title}</span>
                 <span className="text-xs px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-200 border border-amber-500/30">
                   Cột Mốc Thực Chiến
@@ -167,7 +167,7 @@ export default function MiniGameHostModal({
               </div>
             </div>
           </div>
-          <div className="hidden sm:flex items-center gap-1 text-xs font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-1 rounded-lg border border-emerald-500/30 shrink-0 font-bold">
+          <div className="hidden sm:flex items-center gap-1 text-xs font-mono text-emerald-800 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-1 rounded-lg border border-emerald-500/30 shrink-0 font-bold">
             <Trophy className="w-3 h-3" />
             <span>Phát Triển Đời Người</span>
           </div>

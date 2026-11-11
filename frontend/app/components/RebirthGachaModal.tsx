@@ -232,12 +232,12 @@ export default function RebirthGachaModal({
 
   // 2. Main Rebirth Gacha Wheel & Karma Shop
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">
+    <div className="fixed inset-0 z-[60] bg-black/60 dark:bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">
       <div className="max-w-xl w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-3xl p-5 md:p-7 shadow-2xl relative overflow-hidden flex flex-col max-h-[95vh] overflow-y-auto custom-scrollbar transition-colors duration-200">
         {onClose && (
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] transition z-10"
+            className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] transition z-10 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
           >
             <X className="w-5 h-5" />
           </button>
@@ -249,7 +249,7 @@ export default function RebirthGachaModal({
         {/* Header */}
         <div className="text-center mb-5">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <span className="text-[12px] font-sans font-semibold tracking-normal normal-case text-amber-700 dark:text-amber-300 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 inline-block">
+            <span className="text-[12px] font-sans font-semibold tracking-normal normal-case text-amber-800 dark:text-amber-300 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 inline-block">
               {rollResult ? '✨ VẬN MỆNH ĐÃ AN BÀI' : 'Phòng chờ tái sinh'}
             </span>
           </div>
@@ -267,7 +267,7 @@ export default function RebirthGachaModal({
         </div>
 
         {errorMessage && (
-          <div className="mb-4 p-3 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
+          <div className="mb-4 p-3 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-800 dark:text-rose-300 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{errorMessage}</span>
           </div>
@@ -277,11 +277,11 @@ export default function RebirthGachaModal({
         {!rollResult && !isSpinning && (
           <div className="flex items-center justify-between p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] mb-3 shadow-sm">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
-                <Sparkles className="w-4 h-4 text-amber-500 animate-pulse" />
+              <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-800 dark:text-amber-400 shrink-0">
+                <Sparkles className="w-4 h-4 text-amber-700 dark:text-amber-500 animate-pulse" />
               </div>
               <div>
-                <span className="text-xs uppercase font-bold tracking-wider text-amber-700 dark:text-amber-400 block">Ví Nghiệp Lực Tiền Kiếp</span>
+                <span className="text-xs uppercase font-bold tracking-wider text-amber-800 dark:text-amber-400 block">Ví Nghiệp Lực Tiền Kiếp</span>
                 <span className="text-xs font-bold text-[var(--text-primary)] font-mono">{karma.toLocaleString()} Karma Khả Dụng</span>
               </div>
             </div>
@@ -289,7 +289,7 @@ export default function RebirthGachaModal({
               <span className="text-xs text-[var(--text-secondary)] block font-medium">
                 {totalCost > 0 ? 'Đang phân bổ:' : 'Khả dụng:'}
               </span>
-              <span className={`text-xs font-bold font-mono ${totalCost > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+              <span className={`text-xs font-bold font-mono ${totalCost > 0 ? 'text-amber-800 dark:text-amber-400' : 'text-emerald-800 dark:text-emerald-400'}`}>
                 {totalCost > 0 ? `-${totalCost.toLocaleString()} Karma` : `${currentAvailableKarma.toLocaleString()} Karma`}
               </span>
             </div>
@@ -298,15 +298,15 @@ export default function RebirthGachaModal({
 
         {/* Gender Selection Compact Row */}
         {!rollResult && !isSpinning && (
-          <div className="flex items-center justify-between p-2.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] mb-3 text-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] mb-3 text-xs">
             <span className="text-[var(--text-primary)] font-semibold flex items-center gap-1.5 text-xs shrink-0">
               <span>👤 Bản Thể Giới Tính:</span>
             </span>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-stretch sm:items-center gap-1.5 min-w-0">
               {[
-                { id: 'random', label: 'Tùy Duyên', icon: '🎲' },
-                { id: 'male', label: 'Nam Giới (♂)', icon: '👦' },
-                { id: 'female', label: 'Nữ Giới (♀)', icon: '👧' }
+                { id: 'random', label: 'Tùy Duyên', short: 'Tùy Duyên', icon: '🎲' },
+                { id: 'male', label: 'Nam Giới (♂)', short: 'Nam ♂', icon: '👦' },
+                { id: 'female', label: 'Nữ Giới (♀)', short: 'Nữ ♀', icon: '👧' }
               ].map(item => {
                 const isSelected = selectedGender === item.id;
                 return (
@@ -314,14 +314,15 @@ export default function RebirthGachaModal({
                     key={item.id}
                     type="button"
                     onClick={() => setSelectedGender(item.id as any)}
-                    className={`py-1 px-3 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition active:scale-95 ${
+                    className={`py-1 px-2 sm:px-3 min-h-[44px] sm:min-h-0 flex-1 sm:flex-none justify-center whitespace-nowrap rounded-xl border text-xs font-bold flex items-center gap-1 sm:gap-1.5 transition active:scale-95 ${
                       isSelected
                         ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/20'
                         : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:text-[var(--text-primary)]'
                     }`}
                   >
                     <span>{item.icon}</span>
-                    <span>{item.label}</span>
+                    <span className="sm:hidden">{item.short}</span>
+                    <span className="hidden sm:inline">{item.label}</span>
                   </button>
                 );
               })}
@@ -343,7 +344,7 @@ export default function RebirthGachaModal({
             >
               <span>🎭 1. Gói Kịch Bản Đời Người</span>
               {starterPackCost > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-mono">
+                <span className="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 text-xs font-mono">
                   -{starterPackCost} K
                 </span>
               )}
@@ -359,7 +360,7 @@ export default function RebirthGachaModal({
             >
               <span>🔮 2. Tùy Chọn Phước Báo</span>
               {perksCost > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-mono">
+                <span className="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 text-xs font-mono">
                   -{perksCost} K
                 </span>
               )}
@@ -372,7 +373,7 @@ export default function RebirthGachaModal({
           <div className="space-y-2 mb-4 animate-in fade-in duration-200">
             <div className="flex items-center justify-between text-xs px-1">
               <span className="text-[var(--text-secondary)] text-xs">Chọn 1 kịch bản khởi nguyên để mở đường cho số mệnh:</span>
-              <span className="text-amber-700 dark:text-amber-400 font-mono text-xs font-bold">
+              <span className="text-amber-800 dark:text-amber-400 font-mono text-xs font-bold">
                 {selectedStarterPack === 'standard' ? 'Gói Cơ Bản (0 K)' : `Đã chọn: ${STARTER_PACKS.find(p => p.id === selectedStarterPack)?.name}`}
               </span>
             </div>
@@ -388,7 +389,7 @@ export default function RebirthGachaModal({
                     position="top"
                     content={
                       <div className="space-y-1">
-                        <div className="flex items-center gap-1.5 font-bold text-amber-700 dark:text-amber-300">
+                        <div className="flex items-center gap-1.5 font-bold text-amber-800 dark:text-amber-300">
                           <span>{pack.icon}</span>
                           <span>{pack.name}</span>
                           <span className="text-xs px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-800 dark:text-amber-200">
@@ -396,7 +397,7 @@ export default function RebirthGachaModal({
                           </span>
                         </div>
                         <div className="text-xs text-[var(--text-secondary)] leading-relaxed">{pack.desc}</div>
-                        <div className="text-xs text-amber-700 dark:text-amber-400 font-mono pt-0.5">
+                        <div className="text-xs text-amber-800 dark:text-amber-400 font-mono pt-0.5">
                           Chi phí: {pack.karmaCost === 0 ? 'Miễn phí' : `${pack.karmaCost.toLocaleString()} Karma`}
                         </div>
                       </div>
@@ -424,21 +425,21 @@ export default function RebirthGachaModal({
                         <div className="flex items-center justify-between mb-1.5">
                           <span className="text-2xl">{pack.icon}</span>
                           {pack.karmaCost === 0 ? (
-                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30">
                               Miễn Phí
                             </span>
                           ) : canAfford ? (
-                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-mono">
+                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-mono">
                               {pack.karmaCost.toLocaleString()} Karma
                             </span>
                           ) : (
-                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30 font-mono flex items-center gap-1">
+                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-800 dark:text-rose-300 border border-rose-500/30 font-mono flex items-center gap-1">
                               🔒 {pack.karmaCost.toLocaleString()} K
                             </span>
                           )}
                         </div>
                         <div className="font-bold text-sm text-[var(--text-primary)]">{pack.name}</div>
-                        <span className="text-xs px-2 py-0.5 rounded-md bg-[var(--bg-card-subtle)] text-amber-700 dark:text-amber-300 border border-[var(--border-subtle)] block w-fit my-1 font-semibold">
+                        <span className="text-xs px-2 py-0.5 rounded-md bg-[var(--bg-card-subtle)] text-amber-800 dark:text-amber-300 border border-[var(--border-subtle)] block w-fit my-1 font-semibold">
                           {pack.badge}
                         </span>
                       </div>
@@ -456,7 +457,7 @@ export default function RebirthGachaModal({
           <div className="space-y-2 mb-4 animate-in fade-in duration-200">
             <div className="flex items-center justify-between text-xs px-1">
               <span className="text-[var(--text-secondary)] text-xs">Tùy chọn gia hộ kiếp sống bằng phước báo cá nhân:</span>
-              <span className="text-amber-700 dark:text-amber-400 font-mono text-xs font-bold">
+              <span className="text-amber-800 dark:text-amber-400 font-mono text-xs font-bold">
                 {perksCost > 0 ? `Đã chọn: ${Object.keys(selectedPerks).filter(k => selectedPerks[k]).length} Phước Báo` : 'Chưa chọn'}
               </span>
             </div>
@@ -509,7 +510,7 @@ export default function RebirthGachaModal({
                     position="top"
                     content={
                       <div className="space-y-1">
-                        <div className="flex items-center gap-1.5 font-bold text-amber-700 dark:text-amber-300">
+                        <div className="flex items-center gap-1.5 font-bold text-amber-800 dark:text-amber-300">
                           <span>{item.icon}</span>
                           <span>{item.title}</span>
                           <span className="text-xs px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-800 dark:text-amber-200 font-mono">
@@ -543,7 +544,7 @@ export default function RebirthGachaModal({
                             </span>
                           </div>
                           {isLocked && (
-                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
                               ✓ Đã Bật
                             </span>
                           )}
@@ -555,10 +556,10 @@ export default function RebirthGachaModal({
 
                       <div className="mt-3 pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between">
                         {isOwnedPermanent ? (
-                          <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">ĐÃ SỞ HỮU VĨNH VIỄN</span>
+                          <span className="text-xs font-bold text-emerald-800 dark:text-emerald-400">ĐÃ SỞ HỮU VĨNH VIỄN</span>
                         ) : isBought ? (
                           <>
-                            <span className="text-xs font-bold text-amber-700 dark:text-amber-400 font-mono">-{item.cost} Karma</span>
+                            <span className="text-xs font-bold text-amber-800 dark:text-amber-400 font-mono">-{item.cost} Karma</span>
                             <button
                               type="button"
                               onClick={(e) => handleCancelPerk(item.key, e)}
@@ -572,16 +573,16 @@ export default function RebirthGachaModal({
                             <span className="text-xs font-mono text-slate-400 line-through">
                               {item.cost} Karma
                             </span>
-                            <span className="text-xs px-1.5 py-0.2 rounded bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30 font-semibold">
+                            <span className="text-xs px-1.5 py-0.2 rounded bg-rose-500/15 text-rose-800 dark:text-rose-300 border border-rose-500/30 font-semibold">
                               Thiếu {(item.cost - currentAvailableKarma).toLocaleString()} K
                             </span>
                           </div>
                         ) : (
                           <div className="flex items-center justify-between w-full">
-                            <span className="text-xs font-mono font-bold text-amber-700 dark:text-amber-400">
+                            <span className="text-xs font-mono font-bold text-amber-800 dark:text-amber-400">
                               {item.cost} Karma
                             </span>
-                            <span className="text-xs px-2 py-0.5 rounded-lg bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold hover:bg-amber-500 hover:text-slate-950 transition">
+                            <span className="text-xs px-2 py-0.5 rounded-lg bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold hover:bg-amber-500 hover:text-slate-950 transition">
                               + Kích Hoạt
                             </span>
                           </div>
@@ -599,7 +600,7 @@ export default function RebirthGachaModal({
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="text-xl shrink-0">{formatTrait(chosenTrait).icon}</span>
                   <div className="min-w-0">
-                    <span className="text-xs uppercase font-bold text-amber-700 dark:text-amber-400 block">Mã Gen Đã Khóa:</span>
+                    <span className="text-xs uppercase font-bold text-amber-800 dark:text-amber-400 block">Mã Gen Đã Khóa:</span>
                     <span className="text-xs font-bold text-[var(--text-primary)] truncate block">{formatTrait(chosenTrait).name}</span>
                   </div>
                 </div>
@@ -617,7 +618,7 @@ export default function RebirthGachaModal({
 
         {/* Trait Picker Dialog Modal */}
         {showTraitPicker && (
-          <div className="fixed inset-0 z-60 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">
+          <div className="fixed inset-0 z-[70] bg-black/70 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">
             <div className="max-w-lg w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-3xl p-5 shadow-2xl space-y-3">
               <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
                 <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
@@ -627,7 +628,7 @@ export default function RebirthGachaModal({
                 <button
                   type="button"
                   onClick={() => setShowTraitPicker(false)}
-                  className="p-1 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                  className="p-1 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -644,7 +645,7 @@ export default function RebirthGachaModal({
                       position="top"
                       content={
                         <div className="space-y-0.5">
-                          <div className="font-bold text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
+                          <div className="font-bold text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
                             <span>{ft.icon}</span>
                             <span>{ft.name}</span>
                           </div>
@@ -684,8 +685,8 @@ export default function RebirthGachaModal({
         {/* Dynamic Spinning Roulette or Rolled Outcome */}
         {isSpinning ? (
           <div className="p-5 rounded-2xl bg-[var(--bg-card-subtle)] border border-amber-400/50 shadow-md flex flex-col items-center justify-center gap-3 my-2 animate-pulse">
-            <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 text-xs font-sans tabular-nums font-bold normal-case tracking-normal">
-              <Dice5 className="w-4 h-4 animate-spin text-amber-500" />
+            <div className="flex items-center gap-2 text-amber-800 dark:text-amber-400 text-xs font-sans tabular-nums font-bold normal-case tracking-normal">
+              <Dice5 className="w-4 h-4 animate-spin text-amber-700 dark:text-amber-500" />
               <span>Bánh Xe Luân Hồi Đang Xoay Số Mệnh...</span>
             </div>
 
@@ -693,15 +694,15 @@ export default function RebirthGachaModal({
             <div className="w-full grid grid-cols-3 gap-2 py-2">
               <div className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-center">
                 <span className="text-[12px] text-[var(--text-secondary)] block">Quốc gia</span>
-                <span className="font-sans tabular-nums text-xs font-bold text-sky-600 dark:text-sky-400 truncate block">{reelCountry}</span>
+                <span className="font-sans tabular-nums text-xs font-bold text-sky-800 dark:text-sky-400 truncate block">{reelCountry}</span>
               </div>
               <div className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-center">
                 <span className="text-[12px] text-[var(--text-secondary)] block">Xuất thân</span>
-                <span className="font-sans tabular-nums text-xs font-bold text-emerald-600 dark:text-emerald-400 truncate block">{reelBackground}</span>
+                <span className="font-sans tabular-nums text-xs font-bold text-emerald-800 dark:text-emerald-400 truncate block">{reelBackground}</span>
               </div>
               <div className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-center">
                 <span className="text-[12px] text-[var(--text-secondary)] block">Mã gen</span>
-                <span className="font-sans tabular-nums text-xs font-bold text-amber-600 dark:text-amber-400 truncate block">{formatTrait(reelTrait).name}</span>
+                <span className="font-sans tabular-nums text-xs font-bold text-amber-800 dark:text-amber-400 truncate block">{formatTrait(reelTrait).name}</span>
               </div>
             </div>
           </div>
@@ -713,35 +714,35 @@ export default function RebirthGachaModal({
               <div className="absolute -top-12 -right-12 w-36 h-36 bg-amber-400/10 rounded-full blur-2xl pointer-events-none" />
 
               {/* Section 1: Character Identity & Birthplace */}
-              <div className="flex items-start justify-between gap-3 pb-3.5 border-b border-[var(--border-subtle)]">
-                <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-start justify-between gap-3 pb-3.5 border-b border-[var(--border-subtle)]">
+                <div className="flex items-center gap-3 min-w-0">
                   <div className="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-xl shrink-0">
                     {rollResult.character.gender === 'female' ? '👧' : '👦'}
                   </div>
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="text-base md:text-lg font-bold text-[var(--text-primary)] tracking-tight">
+                      <h3 className="text-base md:text-lg font-bold text-[var(--text-primary)] tracking-tight break-words">
                         {rollResult.character.name || 'Hài Nhi Sơ Sinh'}
                       </h3>
                       <span className={`text-xs font-bold px-2 py-0.2 rounded-full border flex items-center gap-0.5 ${
                         rollResult.character.gender === 'female'
-                          ? 'bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-500/30'
-                          : 'bg-sky-500/15 text-sky-700 dark:text-sky-300 border-sky-500/30'
+                          ? 'bg-rose-500/15 text-rose-800 dark:text-rose-300 border-rose-500/30'
+                          : 'bg-sky-500/15 text-sky-800 dark:text-sky-300 border-sky-500/30'
                       }`}>
                         {rollResult.character.gender === 'female' ? '♀ Nữ' : '♂ Nam'}
                       </span>
                     </div>
-                    <div className="text-xs text-[var(--text-secondary)] flex items-center gap-1.5 mt-0.5">
-                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">🌱 0 Tuổi (Sơ Sinh)</span>
+                    <div className="text-xs text-[var(--text-secondary)] flex items-center flex-wrap gap-x-1.5 gap-y-0.5 mt-0.5">
+                      <span className="text-emerald-800 dark:text-emerald-400 font-semibold whitespace-nowrap">🌱 0 Tuổi (Sơ Sinh)</span>
                       <span>•</span>
-                      <span className="text-[var(--text-primary)] font-medium">Khởi Thủy Kiếp Mới</span>
+                      <span className="text-[var(--text-primary)] font-medium whitespace-nowrap">Khởi Thủy Kiếp Mới</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Country & Tier Badge */}
-                <div className="text-right shrink-0">
-                  <div className="flex items-center gap-1.5 justify-end">
+                <div className="sm:text-right shrink-0">
+                  <div className="flex items-center gap-1.5 sm:justify-end">
                     <span className="text-base">{getCountryFlag(rollResult.character.nationality)}</span>
                     <span className="font-bold text-[var(--text-primary)] text-xs md:text-sm">
                       {rollResult.character.nationality}
@@ -761,13 +762,13 @@ export default function RebirthGachaModal({
               </div>
 
               {/* Section 2: Family Background */}
-              <div className="py-2.5 border-b border-[var(--border-subtle)] flex items-center justify-between gap-3 text-xs">
+              <div className="py-2.5 border-b border-[var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-3 text-xs">
                 <span className="text-[var(--text-secondary)] font-medium flex items-center gap-1.5 shrink-0">
-                  <Home className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <Home className="w-3.5 h-3.5 text-emerald-800 dark:text-emerald-400" />
                   <span>Vị thế gia tộc:</span>
                 </span>
                 <Tooltip content={rollResult.character.background} position="top" align="right">
-                  <span className="font-semibold text-[var(--text-primary)] text-right truncate max-w-[280px] block cursor-help">
+                  <span className="font-semibold text-[var(--text-primary)] sm:text-right sm:truncate sm:max-w-[280px] block cursor-help">
                     {rollResult.character.background}
                   </span>
                 </Tooltip>
@@ -777,7 +778,7 @@ export default function RebirthGachaModal({
               <div className="pt-2.5">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-[var(--text-primary)] font-semibold flex items-center gap-1.5">
-                    <Dna className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                    <Dna className="w-3.5 h-3.5 text-amber-800 dark:text-amber-400" />
                     <span>Mã Gen Di Truyền Tiên Thiên:</span>
                   </span>
                   <span className="text-xs text-[var(--text-secondary)] font-mono">
@@ -794,12 +795,12 @@ export default function RebirthGachaModal({
                         position="top"
                         content={
                           <div className="space-y-1">
-                            <div className="flex items-center gap-1.5 font-bold text-amber-700 dark:text-amber-300">
+                            <div className="flex items-center gap-1.5 font-bold text-amber-800 dark:text-amber-300">
                               <span>{trait.icon}</span>
                               <span>{trait.name}</span>
                               <span className={`text-xs px-1.5 py-0.2 rounded font-semibold uppercase tracking-wider ${
                                 trait.category === 'curse'
-                                  ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300'
+                                  ? 'bg-rose-500/20 text-rose-800 dark:text-rose-300'
                                   : trait.category === 'rare'
                                   ? 'bg-amber-500/20 text-amber-800 dark:text-amber-300'
                                   : 'bg-emerald-500/20 text-emerald-800 dark:text-emerald-300'
@@ -823,7 +824,7 @@ export default function RebirthGachaModal({
                               </span>
                               <span className={`text-xs px-1.5 py-0.2 rounded font-semibold uppercase tracking-wider shrink-0 ${
                                 trait.category === 'curse'
-                                  ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300'
+                                  ? 'bg-rose-500/20 text-rose-800 dark:text-rose-300'
                                   : trait.category === 'rare'
                                   ? 'bg-amber-500/20 text-amber-800 dark:text-amber-300'
                                   : 'bg-emerald-500/20 text-emerald-800 dark:text-emerald-300'
@@ -845,7 +846,7 @@ export default function RebirthGachaModal({
               {/* Section 4: Karma Perks Summary */}
               <div className="mt-2.5 pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs text-[var(--text-secondary)] flex-wrap gap-1.5">
                 <span className="flex items-center gap-1 text-[var(--text-primary)] font-medium">
-                  <Sparkles className="w-3 h-3 text-amber-500" />
+                  <Sparkles className="w-3 h-3 text-amber-700 dark:text-amber-500" />
                   <span>Đặc quyền Karma:</span>
                 </span>
                 <div className="flex items-center gap-1 flex-wrap">
@@ -874,7 +875,7 @@ export default function RebirthGachaModal({
             <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-200 flex items-center gap-2">
               <span className="text-base shrink-0">⚖️</span>
               <span className="leading-snug text-[var(--text-secondary)] text-xs">
-                <strong className="text-amber-700 dark:text-amber-300">Nhân Quả An Bài:</strong> Bánh xe luân hồi đã chốt hạ số mệnh. Hãy đón nhận và kiến tạo cuộc đời của riêng bạn!
+                <strong className="text-amber-800 dark:text-amber-300">Nhân Quả An Bài:</strong> Bánh xe luân hồi đã chốt hạ số mệnh. Hãy đón nhận và kiến tạo cuộc đời của riêng bạn!
               </span>
             </div>
 
@@ -906,8 +907,8 @@ export default function RebirthGachaModal({
               <ArrowRight className="w-4 h-4" />
             </button>
             <div className="flex items-center justify-between text-xs text-[var(--text-secondary)] px-2 mt-2">
-              <span>Đang phân bổ: <strong className="text-amber-700 dark:text-amber-400 font-mono">{totalCost.toLocaleString()} Karma</strong></span>
-              <span>Khởi đầu: <strong className="text-emerald-600 dark:text-emerald-400">0 Tuổi (Cockpit Sơ Sinh)</strong></span>
+              <span>Đang phân bổ: <strong className="text-amber-800 dark:text-amber-400 font-mono">{totalCost.toLocaleString()} Karma</strong></span>
+              <span>Khởi đầu: <strong className="text-emerald-800 dark:text-emerald-400">0 Tuổi (Cockpit Sơ Sinh)</strong></span>
             </div>
           </div>
         )}

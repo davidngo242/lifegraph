@@ -149,12 +149,12 @@ export default function LifeTightropeMiniGame({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-xl bg-slate-900 border border-amber-500/40 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col items-center overflow-hidden">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+      <div className="relative w-full max-w-xl bg-[var(--bg-card-subtle)] border border-amber-500/40 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col items-center overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition z-20"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] text-slate-400 hover:text-white hover:bg-slate-700 transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
         >
           <X className="w-4 h-4" />
         </button>
@@ -172,7 +172,7 @@ export default function LifeTightropeMiniGame({
             </div>
 
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30">
+              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/30">
                 Cân Bằng Trung Niên (29–48 Tuổi)
               </span>
             </div>
@@ -183,41 +183,41 @@ export default function LifeTightropeMiniGame({
             </p>
 
             {/* How to play card */}
-            <div className="w-full bg-slate-950/80 border border-slate-800 rounded-2xl p-4 mb-4 text-left space-y-2.5 text-xs">
-              <div className="font-bold text-amber-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
+            <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-2xl p-4 mb-4 text-left space-y-2.5 text-xs">
+              <div className="font-bold text-amber-800 dark:text-amber-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
                 <Sparkles className="w-4 h-4" /> Hướng Dẫn & Thao Tác:
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
-                <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
-                  <div className="font-semibold text-pink-300 flex items-center gap-1.5 mb-1">
-                    <ArrowLeft className="w-3.5 h-3.5 text-pink-400" /> Nghiêng Về Gia Đình:
+                <div className="p-2.5 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+                  <div className="font-semibold text-pink-800 dark:text-pink-300 flex items-center gap-1.5 mb-1">
+                    <ArrowLeft className="w-3.5 h-3.5 text-pink-700 dark:text-pink-400" /> Nghiêng Về Gia Đình:
                   </div>
                   <span className="text-[12px] text-slate-400">
-                    Bấm nút hoặc phím <strong className="text-pink-300 font-sans tabular-nums">[⬅️ Mũi Tên Trái]</strong> hoặc <strong className="text-pink-300 font-sans tabular-nums">[A]</strong> để dồn tâm sức cho mái ấm.
+                    Bấm nút hoặc phím <strong className="text-pink-800 dark:text-pink-300 font-sans tabular-nums">[⬅️ Mũi Tên Trái]</strong> hoặc <strong className="text-pink-800 dark:text-pink-300 font-sans tabular-nums">[A]</strong> để dồn tâm sức cho mái ấm.
                   </span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
-                  <div className="font-semibold text-cyan-300 flex items-center gap-1.5 mb-1">
-                    <ArrowRight className="w-3.5 h-3.5 text-cyan-400" /> Nghiêng Về Sự Nghiệp:
+                <div className="p-2.5 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+                  <div className="font-semibold text-cyan-800 dark:text-cyan-300 flex items-center gap-1.5 mb-1">
+                    <ArrowRight className="w-3.5 h-3.5 text-cyan-700 dark:text-cyan-400" /> Nghiêng Về Sự Nghiệp:
                   </div>
                   <span className="text-[12px] text-slate-400">
-                    Bấm nút hoặc phím <strong className="text-cyan-300 font-sans tabular-nums">[➡️ Mũi Tên Phải]</strong> hoặc <strong className="text-cyan-300 font-sans tabular-nums">[D]</strong> để cày cuốc thăng tiến.
+                    Bấm nút hoặc phím <strong className="text-cyan-800 dark:text-cyan-300 font-sans tabular-nums">[➡️ Mũi Tên Phải]</strong> hoặc <strong className="text-cyan-800 dark:text-cyan-300 font-sans tabular-nums">[D]</strong> để cày cuốc thăng tiến.
                   </span>
                 </div>
               </div>
-              <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-[12px] text-slate-400">
+              <div className="p-2 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[12px] text-slate-400">
                 💡 <strong>Mẹo:</strong> Đòn bập bênh sẽ rung lắc ngẫu nhiên khi có biến cố gia đình hoặc hạn deadline. Đừng nghiêng quá 42° kẻo ngã!
               </div>
             </div>
 
             {/* Stakes card */}
-            <div className="w-full bg-slate-950/50 border border-slate-800/80 rounded-2xl p-3 mb-5 text-xs text-left grid grid-cols-2 gap-3">
+            <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-2xl p-3 mb-5 text-xs text-left grid grid-cols-2 gap-3">
               <div>
-                <span className="text-emerald-400 font-bold block mb-0.5">🌟 Cân Bằng Đỉnh Cao:</span>
+                <span className="text-emerald-800 dark:text-emerald-400 font-bold block mb-0.5">🌟 Cân Bằng Đỉnh Cao:</span>
                 <span className="text-[12px] text-slate-400">Thanh lọc -40 Burnout, +10 Karma, Cờ &quot;Bậc Thầy Cân Bằng&quot;.</span>
               </div>
               <div>
-                <span className="text-rose-400 font-bold block mb-0.5">⚠️ Rơi Khỏi Dây:</span>
+                <span className="text-rose-700 dark:text-rose-400 font-bold block mb-0.5">⚠️ Rơi Khỏi Dây:</span>
                 <span className="text-[12px] text-slate-400">Khủng hoảng trung niên: +25 Burnout, -5 Sinh lực.</span>
               </div>
             </div>
@@ -246,14 +246,14 @@ export default function LifeTightropeMiniGame({
         {stage === 'playing' && (
           <div className="w-full flex flex-col items-center">
             {/* Header */}
-            <div className="w-full flex items-center justify-between pb-3 border-b border-slate-800 mb-3 text-xs">
-              <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300 font-medium border border-amber-500/20">
+            <div className="w-full flex items-center justify-between gap-2 pr-12 sm:pr-14 pb-3 border-b border-[var(--border-subtle)] mb-3 text-xs">
+              <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-800 dark:text-amber-300 font-medium border border-amber-500/20">
                 ⚖️ Thăng Bằng Cuộc Sống
               </span>
               <div className="flex items-center gap-2 font-sans tabular-nums">
                 <span className="text-slate-400">Thời gian:</span>
                 <span className={`px-2.5 py-0.5 rounded font-bold ${
-                  timeLeft <= 4 ? 'bg-rose-500/20 text-rose-400 animate-pulse' : 'bg-amber-500/20 text-amber-300'
+                  timeLeft <= 4 ? 'bg-rose-500/20 text-rose-700 dark:text-rose-400 animate-pulse' : 'bg-amber-500/20 text-amber-800 dark:text-amber-300'
                 }`}>
                   {timeLeft}s
                 </span>
@@ -261,14 +261,14 @@ export default function LifeTightropeMiniGame({
             </div>
 
             {/* Life Event Announcement */}
-            <div className="w-full p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-center mb-4 min-h-[44px] flex items-center justify-center">
-              <span className="text-xs text-amber-300 font-medium animate-fadeIn">
+            <div className="w-full p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-center mb-4 min-h-[44px] flex items-center justify-center">
+              <span className="text-xs text-amber-800 dark:text-amber-300 font-medium animate-fadeIn">
                 📢 {currentEvent}
               </span>
             </div>
 
             {/* Tightrope Seesaw Arena */}
-            <div className="relative w-full h-56 bg-slate-950 rounded-2xl border border-slate-800 flex items-center justify-center overflow-hidden mb-4 select-none">
+            <div className="relative w-full h-56 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden mb-4 select-none">
               {/* Center Pivot Triangle */}
               <div className="absolute bottom-12 w-0 h-0 border-l-[18px] border-l-transparent border-r-[18px] border-r-transparent border-b-[36px] border-b-amber-500 shadow-lg shadow-amber-500/30" />
 
@@ -280,7 +280,7 @@ export default function LifeTightropeMiniGame({
                 {/* Left Weight: Family */}
                 <div className="relative -top-8 flex flex-col items-center">
                   <span className="text-2xl filter drop-shadow">🏡</span>
-                  <span className="text-[12px] font-bold text-pink-300 bg-slate-900/90 px-1.5 py-0.5 rounded border border-pink-500/40 whitespace-nowrap">
+                  <span className="text-[12px] font-bold text-pink-800 dark:text-pink-300 bg-[var(--bg-card-subtle)] px-1.5 py-0.5 rounded border border-pink-500/40 whitespace-nowrap">
                     Gia Đình
                   </span>
                 </div>
@@ -294,7 +294,7 @@ export default function LifeTightropeMiniGame({
                 {/* Right Weight: Career */}
                 <div className="relative -top-8 flex flex-col items-center">
                   <span className="text-2xl filter drop-shadow">💼</span>
-                  <span className="text-[12px] font-bold text-cyan-300 bg-slate-900/90 px-1.5 py-0.5 rounded border border-cyan-500/40 whitespace-nowrap">
+                  <span className="text-[12px] font-bold text-cyan-800 dark:text-cyan-300 bg-[var(--bg-card-subtle)] px-1.5 py-0.5 rounded border border-cyan-500/40 whitespace-nowrap">
                     Sự Nghiệp
                   </span>
                 </div>
@@ -302,7 +302,7 @@ export default function LifeTightropeMiniGame({
 
               {/* Tilt Angle Readout */}
               <div className="absolute top-2 left-3 text-[12px] font-sans tabular-nums text-slate-400">
-                Độ nghiêng: <strong className={Math.abs(angle) > 28 ? 'text-rose-400' : 'text-emerald-400'}>
+                Độ nghiêng: <strong className={Math.abs(angle) > 28 ? 'text-rose-700 dark:text-rose-400' : 'text-emerald-800 dark:text-emerald-400'}>
                   {Math.round(angle)}°
                 </strong> (Giới hạn: ±42°)
               </div>
@@ -312,20 +312,20 @@ export default function LifeTightropeMiniGame({
             <div className="w-full grid grid-cols-2 gap-3">
               <button
                 onClick={() => nudge(-3.6)}
-                className="py-3 px-4 rounded-xl bg-pink-950/60 hover:bg-pink-900/80 border border-pink-500/40 text-pink-200 font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-pink-950/40"
+                className="py-3 px-4 rounded-xl bg-pink-950/60 hover:bg-pink-900/80 border border-pink-500/40 text-pink-800 dark:text-pink-200 font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-pink-950/40"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Nghiêng Gia Đình</span>
-                <span className="hidden sm:inline text-[12px] font-sans tabular-nums text-pink-300 bg-pink-950 px-1.5 py-0.5 rounded">[⬅️/A]</span>
+                <span className="hidden sm:inline text-[12px] font-sans tabular-nums text-pink-800 dark:text-pink-300 bg-pink-500/15 dark:bg-pink-950 px-1.5 py-0.5 rounded">[⬅️/A]</span>
               </button>
 
               <button
                 onClick={() => nudge(3.6)}
-                className="py-3 px-4 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/40 text-cyan-200 font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-cyan-950/40"
+                className="py-3 px-4 rounded-xl bg-cyan-500/15 dark:bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/40 text-cyan-800 dark:text-cyan-200 font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-cyan-950/40"
               >
                 <span>Nghiêng Sự Nghiệp</span>
                 <ArrowRight className="w-4 h-4" />
-                <span className="hidden sm:inline text-[12px] font-sans tabular-nums text-cyan-300 bg-cyan-950 px-1.5 py-0.5 rounded">[➡️/D]</span>
+                <span className="hidden sm:inline text-[12px] font-sans tabular-nums text-cyan-800 dark:text-cyan-300 bg-cyan-500/15 dark:bg-cyan-950 px-1.5 py-0.5 rounded">[➡️/D]</span>
               </button>
             </div>
           </div>
@@ -339,10 +339,10 @@ export default function LifeTightropeMiniGame({
             <div
               className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-3 shadow-lg ${
                 status === 'success'
-                  ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 shadow-emerald-500/20'
+                  ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-800 dark:text-emerald-400 shadow-emerald-500/20'
                   : status === 'fair'
-                  ? 'bg-amber-500/20 border border-amber-500/40 text-amber-400 shadow-amber-500/20'
-                  : 'bg-rose-500/20 border border-rose-500/40 text-rose-400 shadow-rose-500/20'
+                  ? 'bg-amber-500/20 border border-amber-500/40 text-amber-800 dark:text-amber-400 shadow-amber-500/20'
+                  : 'bg-rose-500/20 border border-rose-500/40 text-rose-700 dark:text-rose-400 shadow-rose-500/20'
               }`}
             >
               {status === 'success' ? '⚖️' : status === 'fair' ? '🛡️' : '⚠️'}
@@ -360,7 +360,7 @@ export default function LifeTightropeMiniGame({
               Điểm số cân bằng: <strong className="text-white font-bold">{Math.max(0, Math.round(100 - Math.abs(angle) * 2.2))}/100</strong>
             </div>
 
-            <p className="text-xs text-slate-300 bg-slate-950 border border-slate-800 rounded-2xl p-3.5 mb-5 max-w-md leading-relaxed">
+            <p className="text-xs text-slate-300 bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-2xl p-3.5 mb-5 max-w-md leading-relaxed">
               {status === 'success'
                 ? "Bạn làm chủ thời gian và tâm trí hoàn hảo! Mái ấm ngập tiếng cười mà công danh vẫn rạng rỡ (-40 Burnout, +10 Karma, cờ 'Bậc Thầy Cân Bằng')."
                 : status === 'fair'

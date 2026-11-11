@@ -1916,7 +1916,7 @@ export default function LifeGraphPage() {
       </header>
 
       {/* Main Container: Dynamic View Router */}
-      <main className="flex-1 max-w-[1720px] w-full mx-auto p-3 md:p-5 z-10 relative">
+      <main className="flex-1 max-w-[1720px] w-full mx-auto p-3 md:p-5 relative">
         {/* 1. Trang Chủ (Home Portal) View - Luôn tích hợp toàn bộ Gia Phả các kiếp */}
         {errorMsg && !character && (
           <div role="alert" className="mb-4 rounded-xl border border-rose-700 bg-slate-900 p-4 text-rose-200 shadow-xl">

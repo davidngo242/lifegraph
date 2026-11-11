@@ -65,14 +65,14 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
           onClick={() => setIsOpen(true)}
           className={`px-2.5 sm:px-3 py-1 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-95 shadow-sm ${
             criticalCount > 0
-              ? 'bg-rose-950/80 hover:bg-rose-900 border-rose-500/70 text-rose-200 shadow-md shadow-rose-950/50 animate-pulse'
+              ? 'bg-rose-500/15 dark:bg-rose-950/80 hover:bg-rose-900 border-rose-500/70 text-rose-800 dark:text-rose-200 shadow-md shadow-rose-950/50 animate-pulse'
               : totalCount > 0
-              ? 'bg-amber-950/70 hover:bg-amber-900 border-amber-500/60 text-amber-200'
+              ? 'bg-amber-950/70 hover:bg-amber-900 border-amber-500/60 text-amber-800 dark:text-amber-200'
               : 'bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)]'
           }`}
         >
           <div className="relative flex items-center">
-            <Megaphone className={`w-3.5 h-3.5 ${criticalCount > 0 ? 'text-rose-500 animate-bounce' : totalCount > 0 ? 'text-amber-500' : 'text-[var(--text-secondary)]'}`} />
+            <Megaphone className={`w-3.5 h-3.5 ${criticalCount > 0 ? 'text-rose-700 dark:text-rose-500 animate-bounce' : totalCount > 0 ? 'text-amber-700 dark:text-amber-500' : 'text-[var(--text-secondary)]'}`} />
             {criticalCount > 0 && (
               <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-rose-500 animate-ping" />
             )}
@@ -96,10 +96,10 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
               <div className="flex items-center gap-2.5">
                 <div className={`p-2 rounded-2xl border ${
                   criticalCount > 0
-                    ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border-rose-500/30'
+                    ? 'bg-rose-500/20 text-rose-800 dark:text-rose-400 border-rose-500/30'
                     : totalCount > 0
-                    ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border-amber-500/30'
-                    : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border-emerald-500/30'
+                    ? 'bg-amber-500/20 text-amber-800 dark:text-amber-400 border-amber-500/30'
+                    : 'bg-emerald-500/20 text-emerald-800 dark:text-emerald-400 border-emerald-500/30'
                 }`}>
                   {criticalCount > 0 ? (
                     <ShieldAlert className="w-5 h-5" />
@@ -136,7 +136,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
             <div className="flex-1 overflow-y-auto py-4 space-y-3 pr-1">
               {totalCount === 0 ? (
                 <div className="p-8 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-center space-y-2">
-                  <CheckCircle2 className="w-10 h-10 text-emerald-600 dark:text-emerald-400 mx-auto" />
+                  <CheckCircle2 className="w-10 h-10 text-emerald-800 dark:text-emerald-400 mx-auto" />
                   <h4 className="font-bold text-sm text-[var(--text-primary)]">Không có biến cố nào</h4>
                   <p className="text-xs text-[var(--text-secondary)] font-sans leading-relaxed">
                     Hiện tại nhân vật không gặp nguy cơ nợ nần, kiệt sức hay hiểm họa đe dọa sinh mạng. Bạn có thể an tâm tiếp tục hành trình cuộc đời.
@@ -161,11 +161,11 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center gap-2 font-bold text-sm text-[var(--text-primary)]">
                           {isCrit ? (
-                            <Skull className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
+                            <Skull className="w-4 h-4 text-rose-800 dark:text-rose-400 shrink-0" />
                           ) : isVen ? (
-                            <Sparkles className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" />
+                            <Sparkles className="w-4 h-4 text-teal-800 dark:text-teal-400 shrink-0" />
                           ) : (
-                            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                            <AlertTriangle className="w-4 h-4 text-amber-800 dark:text-amber-400 shrink-0" />
                           )}
                           <span>{alert.title}</span>
                         </div>
@@ -184,7 +184,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
 
                       {alert.actionHint && (
                         <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[12px] text-[var(--text-secondary)] flex items-center gap-1.5">
-                          <span className="text-amber-700 dark:text-amber-300 font-bold shrink-0">💡 Gợi ý:</span>
+                          <span className="text-amber-800 dark:text-amber-300 font-bold shrink-0">💡 Gợi ý:</span>
                           <span className="font-sans">{alert.actionHint}</span>
                         </div>
                       )}

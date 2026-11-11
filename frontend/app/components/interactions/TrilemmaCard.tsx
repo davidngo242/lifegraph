@@ -18,9 +18,9 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
   ];
 
   const getSacrificeBadge = (type: string) => {
-    if (type === "cash") return { icon: <DollarSign className="w-3.5 h-3.5 text-rose-400" />, label: "Tổn Thất Tiền Bạc", color: "border-rose-500/40 text-rose-300 bg-rose-500/10" };
-    if (type === "vitality") return { icon: <Heart className="w-3.5 h-3.5 text-rose-400" />, label: "Tổn Thất Thể Lực", color: "border-amber-500/40 text-amber-300 bg-amber-500/10" };
-    return { icon: <Users className="w-3.5 h-3.5 text-rose-400" />, label: "Tổn Thất Nghĩa Tình", color: "border-sky-500/40 text-sky-300 bg-sky-500/10" };
+    if (type === "cash") return { icon: <DollarSign className="w-3.5 h-3.5 text-rose-700 dark:text-rose-400" />, label: "Tổn Thất Tiền Bạc", color: "border-rose-500/40 text-rose-800 dark:text-rose-300 bg-rose-500/10" };
+    if (type === "vitality") return { icon: <Heart className="w-3.5 h-3.5 text-rose-700 dark:text-rose-400" />, label: "Tổn Thất Thể Lực", color: "border-amber-500/40 text-amber-800 dark:text-amber-300 bg-amber-500/10" };
+    return { icon: <Users className="w-3.5 h-3.5 text-rose-700 dark:text-rose-400" />, label: "Tổn Thất Nghĩa Tình", color: "border-sky-500/40 text-sky-800 dark:text-sky-300 bg-sky-500/10" };
   };
 
   // Sync Age accurately
@@ -35,11 +35,11 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
 
       {/* Header Badge */}
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[12px] font-sans font-bold tracking-wide normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
+        <span className="text-[12px] font-sans font-bold tracking-wide normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
           <Triangle className="w-3 h-3 fill-amber-400/30" /> Tam Giác Bất Khả Thi (Trilemma)
         </span>
         {characterAge && (
-          <span className="text-xs font-sans tabular-nums font-bold text-amber-400">
+          <span className="text-xs font-sans tabular-nums font-bold text-amber-800 dark:text-amber-400">
             Năm {characterAge} Tuổi
           </span>
         )}
@@ -74,7 +74,7 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
                   <span className={`text-[12px] font-sans font-medium px-2 py-0.5 rounded-full border flex items-center gap-1 shrink-0 ${badge.color}`}>
                     {badge.icon} {badge.label}
                   </span>
-                  <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-300 font-mono text-xs font-bold group-hover:border-[var(--border-highlight)] shadow-sm">
+                  <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-800 dark:text-amber-300 font-mono text-xs font-bold group-hover:border-[var(--border-highlight)] shadow-sm">
                     {idx + 1}
                   </kbd>
                 </div>
@@ -85,7 +85,7 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
 
               <div className="mt-2 pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between text-[12px] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]">
                 <span className="line-clamp-2">{opt.consequence_hint}</span>
-                <ArrowRight className="w-3.5 h-3.5 text-amber-400 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity ml-1" />
+                <ArrowRight className="w-3.5 h-3.5 text-amber-800 dark:text-amber-400 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity ml-1" />
               </div>
             </button>
           );

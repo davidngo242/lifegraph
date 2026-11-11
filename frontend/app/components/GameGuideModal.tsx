@@ -33,7 +33,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div 
@@ -43,7 +43,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
         
         {/* ================= HEADER ================= */}
         <div className="px-5 py-4 border-b border-[var(--border-subtle)] bg-[var(--bg-card-subtle)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shrink-0">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 via-amber-600 to-emerald-600 flex items-center justify-center text-slate-950 shadow-lg shadow-amber-500/20 shrink-0">
               {mode === 'fun' ? (
                 <Smile className="w-6 h-6 text-slate-950 animate-bounce duration-1000" />
@@ -58,8 +58,8 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                 </h2>
                 <span className={`text-xs font-mono px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
                   mode === 'fun'
-                    ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40'
-                    : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40'
+                    ? 'bg-amber-500/20 text-amber-900 dark:text-amber-300 border border-amber-500/40'
+                    : 'bg-emerald-500/20 text-emerald-900 dark:text-emerald-300 border border-emerald-500/40'
                 }`}>
                   {mode === 'fun' ? 'Bé 6 tuổi cũng hiểu' : 'Dành cho Cao Thủ'}
                 </span>
@@ -105,7 +105,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="w-9 h-9 rounded-2xl bg-slate-800/80 hover:bg-slate-700 text-[var(--text-secondary)] hover:text-white flex items-center justify-center transition active:scale-95 shrink-0"
+              className="w-9 h-9 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-[var(--border-highlight)] text-[var(--text-primary)] flex items-center justify-center transition active:scale-95 shrink-0 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0"
               aria-label="Đóng bảng hướng dẫn"
             >
               <X className="w-4 h-4" />
@@ -131,7 +131,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                       3 Bước Chơi Ngay Trong 10 Giây
                     </h3>
                   </div>
-                  <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                  <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1">
                     <Sparkles className="w-3 h-3" /> Cứ lặp lại là thọ 100 tuổi!
                   </span>
                 </div>
@@ -139,47 +139,47 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {/* Step 1 */}
                   <div className="p-3.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] flex items-start gap-3 relative group hover:border-amber-400 transition shadow-sm">
-                    <div className="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 font-black text-lg flex items-center justify-center shrink-0 shadow-inner">
+                    <div className="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 font-black text-lg flex items-center justify-center shrink-0 shadow-inner">
                       ⚡
                     </div>
                     <div>
-                      <div className="text-xs font-mono text-amber-700 dark:text-amber-400 font-bold uppercase tracking-wider">
+                      <div className="text-xs font-mono text-amber-800 dark:text-amber-400 font-bold uppercase tracking-wider">
                         Bước 1
                       </div>
                       <h4 className="font-extrabold text-[var(--text-primary)] text-sm mb-1">
                         Bấm Chọn 1 Việc Làm
                       </h4>
                       <p className="text-xs text-[var(--text-secondary)] leading-snug">
-                        Bấm <strong className="text-amber-600 dark:text-amber-400">Đi làm</strong> kiếm tiền, hoặc bấm <strong className="text-emerald-600 dark:text-emerald-400">Tập thể dục</strong> để khỏe mạnh!
+                        Bấm <strong className="text-amber-800 dark:text-amber-400">Đi làm</strong> kiếm tiền, hoặc bấm <strong className="text-emerald-800 dark:text-emerald-400">Tập thể dục</strong> để khỏe mạnh!
                       </p>
                     </div>
                   </div>
 
                   {/* Step 2 */}
                   <div className="p-3.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] flex items-start gap-3 relative group hover:border-amber-400 transition shadow-sm">
-                    <div className="w-10 h-10 rounded-2xl bg-teal-500/20 text-teal-700 dark:text-teal-300 border border-teal-500/40 font-black text-lg flex items-center justify-center shrink-0 shadow-inner">
+                    <div className="w-10 h-10 rounded-2xl bg-teal-500/20 text-teal-800 dark:text-teal-300 border border-teal-500/40 font-black text-lg flex items-center justify-center shrink-0 shadow-inner">
                       ⏩
                     </div>
                     <div>
-                      <div className="text-xs font-mono text-teal-700 dark:text-teal-400 font-bold uppercase tracking-wider">
+                      <div className="text-xs font-mono text-teal-800 dark:text-teal-400 font-bold uppercase tracking-wider">
                         Bước 2
                       </div>
                       <h4 className="font-extrabold text-[var(--text-primary)] text-sm mb-1">
                         Bước Sang Tuổi Mới
                       </h4>
                       <p className="text-xs text-[var(--text-secondary)] leading-snug">
-                        Bấm nút <strong className="text-amber-600 dark:text-amber-400">"Bước Sang Tuổi Mới"</strong> ở góc phải để lớn lên!
+                        Bấm nút <strong className="text-amber-800 dark:text-amber-400">"Bước Sang Tuổi Mới"</strong> ở góc phải để lớn lên!
                       </p>
                     </div>
                   </div>
 
                   {/* Step 3 */}
                   <div className="p-3.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] flex items-start gap-3 relative group hover:border-emerald-400 transition shadow-sm">
-                    <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 font-black text-lg flex items-center justify-center shrink-0 shadow-inner">
+                    <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/40 font-black text-lg flex items-center justify-center shrink-0 shadow-inner">
                       🌟
                     </div>
                     <div>
-                      <div className="text-xs font-mono text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider">
+                      <div className="text-xs font-mono text-emerald-800 dark:text-emerald-400 font-bold uppercase tracking-wider">
                         Bước 3
                       </div>
                       <h4 className="font-extrabold text-[var(--text-primary)] text-sm mb-1">
@@ -213,10 +213,10 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                   <div className="p-4 rounded-3xl bg-gradient-to-b from-amber-500/10 to-[var(--bg-card-subtle)] border-2 border-amber-500/40 hover:border-amber-500 transition-all duration-200 shadow-sm flex flex-col justify-between group">
                     <div>
                       <div className="flex items-center justify-between mb-2.5">
-                        <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
+                        <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
                           ⚡
                         </div>
-                        <span className="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+                        <span className="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30">
                           Điểm AP
                         </span>
                       </div>
@@ -227,8 +227,8 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                         Mỗi năm có 3-4 tia sét. Dùng tia sét để làm việc, đi chơi, khám bệnh!
                       </p>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-amber-500/20 text-xs text-amber-700 dark:text-amber-300 font-semibold flex items-center gap-1.5">
-                      <Lightbulb className="w-3.5 h-3.5 shrink-0 text-amber-500" />
+                    <div className="mt-4 pt-3 border-t border-amber-500/20 text-xs text-amber-800 dark:text-amber-300 font-semibold flex items-center gap-1.5">
+                      <Lightbulb className="w-3.5 h-3.5 shrink-0 text-amber-700 dark:text-amber-500" />
                       <span>Thừa sét cuối năm tự biến thành máu!</span>
                     </div>
                   </div>
@@ -237,10 +237,10 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                   <div className="p-4 rounded-3xl bg-gradient-to-b from-rose-500/10 to-[var(--bg-card-subtle)] border-2 border-rose-500/40 hover:border-rose-500 transition-all duration-200 shadow-sm flex flex-col justify-between group">
                     <div>
                       <div className="flex items-center justify-between mb-2.5">
-                        <div className="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
+                        <div className="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
                           ❤️
                         </div>
-                        <span className="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-500/30">
+                        <span className="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-500/30">
                           Sống Còn
                         </span>
                       </div>
@@ -251,8 +251,8 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                         Trái tim đập thình thịch! Hết tim là ngủm, nhớ ăn ngon ngủ kỹ và đi bác sĩ.
                       </p>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-rose-500/20 text-xs text-rose-700 dark:text-rose-300 font-semibold flex items-center gap-1.5">
-                      <Heart className="w-3.5 h-3.5 shrink-0 text-rose-500 fill-rose-500/40" />
+                    <div className="mt-4 pt-3 border-t border-rose-500/20 text-xs text-rose-800 dark:text-rose-300 font-semibold flex items-center gap-1.5">
+                      <Heart className="w-3.5 h-3.5 shrink-0 text-rose-700 dark:text-rose-500 fill-rose-500/40" />
                       <span>Hết máu là Game Over ngay!</span>
                     </div>
                   </div>
@@ -261,10 +261,10 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                   <div className="p-4 rounded-3xl bg-gradient-to-b from-orange-500/10 to-[var(--bg-card-subtle)] border-2 border-orange-500/40 hover:border-orange-500 transition-all duration-200 shadow-sm flex flex-col justify-between group">
                     <div>
                       <div className="flex items-center justify-between mb-2.5">
-                        <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-700 dark:text-orange-300 border border-orange-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
+                        <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-800 dark:text-orange-300 border border-orange-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
                           💥
                         </div>
-                        <span className="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-700 dark:text-orange-300 border border-orange-500/30">
+                        <span className="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-800 dark:text-orange-300 border border-orange-500/30">
                           Mệt Mỏi
                         </span>
                       </div>
@@ -275,8 +275,8 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                         Lửa bốc cao quá là mệt xỉu! Đi uống cà phê, nghỉ ngơi để dập lửa.
                       </p>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-orange-500/20 text-xs text-orange-700 dark:text-orange-300 font-semibold flex items-center gap-1.5">
-                      <Flame className="w-3.5 h-3.5 shrink-0 text-orange-500" />
+                    <div className="mt-4 pt-3 border-t border-orange-500/20 text-xs text-orange-800 dark:text-orange-300 font-semibold flex items-center gap-1.5">
+                      <Flame className="w-3.5 h-3.5 shrink-0 text-orange-700 dark:text-orange-500" />
                       <span>Lửa trên 80% sẽ thiêu rụi trái tim!</span>
                     </div>
                   </div>
@@ -285,10 +285,10 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                   <div className="p-4 rounded-3xl bg-gradient-to-b from-emerald-500/10 to-[var(--bg-card-subtle)] border-2 border-emerald-500/40 hover:border-emerald-500 transition-all duration-200 shadow-sm flex flex-col justify-between group">
                     <div>
                       <div className="flex items-center justify-between mb-2.5">
-                        <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
                           💰
                         </div>
-                        <span className="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                        <span className="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30">
                           Tài Sản
                         </span>
                       </div>
@@ -299,8 +299,8 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                         Đi làm để gom tiền mua nhà to, mua đồ chơi và chăm sóc ba mẹ.
                       </p>
                     </div>
-                    <div className="mt-4 pt-3 border-t border-emerald-500/20 text-xs text-emerald-700 dark:text-emerald-300 font-semibold flex items-center gap-1.5">
-                      <Coins className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
+                    <div className="mt-4 pt-3 border-t border-emerald-500/20 text-xs text-emerald-800 dark:text-emerald-300 font-semibold flex items-center gap-1.5">
+                      <Coins className="w-3.5 h-3.5 shrink-0 text-emerald-700 dark:text-emerald-500" />
                       <span>Mua nhà xịn để cơ thể khỏe re!</span>
                     </div>
                   </div>
@@ -344,7 +344,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
               {/* Bottom Quick Action Banner */}
               <div className="flex flex-col sm:flex-row items-center justify-between p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] gap-3 shadow-sm">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-700 dark:text-amber-300 flex items-center justify-center font-bold text-xl shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-800 dark:text-amber-300 flex items-center justify-center font-bold text-xl shrink-0">
                     🎮
                   </div>
                   <div>
@@ -411,7 +411,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                 <div className="space-y-4 animate-in fade-in duration-150">
                   <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
                     <h3 className="font-bold text-[var(--text-primary)] text-sm mb-1.5 flex items-center gap-2">
-                      <TrendingUp className="w-4 h-4 text-emerald-500" /> Hệ Thống Điểm Kỹ Năng (SP) & Tăng Cấp (EXP)
+                      <TrendingUp className="w-4 h-4 text-emerald-700 dark:text-emerald-500" /> Hệ Thống Điểm Kỹ Năng (SP) & Tăng Cấp (EXP)
                     </h3>
                     <p className="text-xs text-[var(--text-secondary)]">
                       Mỗi khi thanh EXP đầy, bạn nhận <strong>+1 SP</strong> để nâng cấp vào 3 nhánh kỹ năng tối thượng.
@@ -421,7 +421,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                   <div className="space-y-3">
                     {/* Nhánh 1: Wealth */}
                     <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30">
-                      <h4 className="font-bold text-amber-700 dark:text-amber-300 text-xs sm:text-sm flex items-center gap-2 mb-2">
+                      <h4 className="font-bold text-amber-800 dark:text-amber-300 text-xs sm:text-sm flex items-center gap-2 mb-2">
                         💼 Nhánh 1: Thương Trường & Tài Phiệt (Wealth)
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
@@ -434,15 +434,15 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                           <div className="text-[var(--text-secondary)] text-xs">Cày việc nhận thêm +35% tiền mặt.</div>
                         </div>
                         <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
-                          <div className="font-bold text-amber-700 dark:text-amber-300 mb-0.5">Tier 3: Cỗ Máy Dòng Tiền (3 SP)</div>
-                          <div className="text-amber-600 dark:text-amber-400 text-xs font-semibold">Tự động sinh +$25.000 USD/năm thụ động.</div>
+                          <div className="font-bold text-amber-800 dark:text-amber-300 mb-0.5">Tier 3: Cỗ Máy Dòng Tiền (3 SP)</div>
+                          <div className="text-amber-800 dark:text-amber-400 text-xs font-semibold">Tự động sinh +$25.000 USD/năm thụ động.</div>
                         </div>
                       </div>
                     </div>
 
                     {/* Nhánh 2: Social */}
                     <div className="p-3.5 rounded-2xl bg-sky-500/10 border border-sky-500/30">
-                      <h4 className="font-bold text-sky-700 dark:text-sky-300 text-xs sm:text-sm flex items-center gap-2 mb-2">
+                      <h4 className="font-bold text-sky-800 dark:text-sky-300 text-xs sm:text-sm flex items-center gap-2 mb-2">
                         🤝 Nhánh 2: Uy Quyền & Nhân Mạch (Social)
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
@@ -455,15 +455,15 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                           <div className="text-[var(--text-secondary)] text-xs">Kích hoạt quyền nhờ cậy đặc quyền cứu nguy.</div>
                         </div>
                         <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
-                          <div className="font-bold text-sky-700 dark:text-sky-300 mb-0.5">Tier 3: Đế Chế Nhân Mạch (3 SP)</div>
-                          <div className="text-sky-600 dark:text-sky-400 text-xs font-semibold">Con cháu thừa kế sẵn mạng lưới quý nhân.</div>
+                          <div className="font-bold text-sky-800 dark:text-sky-300 mb-0.5">Tier 3: Đế Chế Nhân Mạch (3 SP)</div>
+                          <div className="text-sky-800 dark:text-sky-400 text-xs font-semibold">Con cháu thừa kế sẵn mạng lưới quý nhân.</div>
                         </div>
                       </div>
                     </div>
 
                     {/* Nhánh 3: Sage */}
                     <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30">
-                      <h4 className="font-bold text-amber-700 dark:text-amber-300 text-xs sm:text-sm flex items-center gap-2 mb-2">
+                      <h4 className="font-bold text-amber-800 dark:text-amber-300 text-xs sm:text-sm flex items-center gap-2 mb-2">
                         🧘 Nhánh 3: Tâm Thức & Chân Nhân (Sage)
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
@@ -473,11 +473,11 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                         </div>
                         <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                           <div className="font-bold text-[var(--text-primary)] mb-0.5">Tier 2: Bách Khoa Toàn Thư (2 SP)</div>
-                          <div className="text-teal-600 dark:text-teal-300 text-xs font-semibold">Tự động đỗ 100% mọi kỳ thi sát hạch.</div>
+                          <div className="text-teal-800 dark:text-teal-300 text-xs font-semibold">Tự động đỗ 100% mọi kỳ thi sát hạch.</div>
                         </div>
                         <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
-                          <div className="font-bold text-amber-600 dark:text-amber-400 mb-0.5">Tier 3: Giác Ngộ Niết Bàn (3 SP)</div>
-                          <div className="text-amber-700 dark:text-amber-300 text-xs font-semibold">+15 Máu trần, giảm 50% đột tử, x2 Karma kiếp sau.</div>
+                          <div className="font-bold text-amber-800 dark:text-amber-400 mb-0.5">Tier 3: Giác Ngộ Niết Bàn (3 SP)</div>
+                          <div className="text-amber-800 dark:text-amber-300 text-xs font-semibold">+15 Máu trần, giảm 50% đột tử, x2 Karma kiếp sau.</div>
                         </div>
                       </div>
                     </div>
@@ -490,7 +490,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                 <div className="space-y-3.5 animate-in fade-in duration-150">
                   <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
                     <h3 className="font-bold text-[var(--text-primary)] text-sm mb-1 flex items-center gap-2">
-                      <Users className="w-4 h-4 text-pink-500" /> 4 Hình Mẫu Quý Nhân Đồng Hành
+                      <Users className="w-4 h-4 text-pink-700 dark:text-pink-500" /> 4 Hình Mẫu Quý Nhân Đồng Hành
                     </h3>
                     <p className="text-xs text-[var(--text-secondary)]">
                       Tương tác tăng Hảo cảm lên <strong>Cấp 3</strong> để mở khóa đặc quyền giải cứu sinh tử.
@@ -532,7 +532,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                           <div className="flex items-center gap-2 mb-0.5">
                             <span className="font-bold text-[var(--text-primary)] text-xs sm:text-sm">{npc.name}</span>
                           </div>
-                          <div className="text-xs text-teal-700 dark:text-teal-300 font-mono mb-1">{npc.role}</div>
+                          <div className="text-xs text-teal-800 dark:text-teal-300 font-mono mb-1">{npc.role}</div>
                           <div className="text-xs text-amber-800 dark:text-amber-300 font-medium bg-amber-500/15 p-1.5 rounded-lg border border-amber-500/30">
                             {npc.favor}
                           </div>
@@ -548,7 +548,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                 <div className="space-y-3.5 animate-in fade-in duration-150">
                   <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30">
                     <h3 className="font-bold text-emerald-800 dark:text-emerald-300 text-sm mb-1 flex items-center gap-2">
-                      <DollarSign className="w-4 h-4 text-emerald-500" /> Chiến Lược Tích Sản & Quản Trị Dòng Tiền
+                      <DollarSign className="w-4 h-4 text-emerald-700 dark:text-emerald-500" /> Chiến Lược Tích Sản & Quản Trị Dòng Tiền
                     </h3>
                     <p className="text-xs text-[var(--text-secondary)]">
                       Nếu tiền mặt âm (&lt; $0), bạn bị tính lãi nợ <strong>4.5%/năm</strong> và tăng <strong>+25% Burnout</strong>.
@@ -597,7 +597,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                     { age: "56+ Tuổi", title: "Hoàng Hôn & Luân Hồi", desc: "Dưỡng lão, an hưởng cổ tức, làm di chúc truyền thừa cho con cháu kiếp sau!" }
                   ].map(stage => (
                     <div key={stage.age} className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex items-center gap-3">
-                      <div className="px-2.5 py-1 rounded-xl bg-amber-500/15 text-amber-700 dark:text-amber-300 font-mono text-xs font-bold shrink-0 border border-amber-500/30">
+                      <div className="px-2.5 py-1 rounded-xl bg-amber-500/15 text-amber-800 dark:text-amber-300 font-mono text-xs font-bold shrink-0 border border-amber-500/30">
                         {stage.age}
                       </div>
                       <div>
@@ -624,7 +624,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
             ) : (
               <button
                 onClick={() => setMode('fun')}
-                className="text-amber-600 dark:text-amber-300 hover:underline font-semibold flex items-center gap-1"
+                className="text-amber-800 dark:text-amber-300 hover:underline font-semibold flex items-center gap-1"
               >
                 <span>🧸 Quay lại Bản Đồ Vui Nhộn (Dễ Nhất)</span>
               </button>

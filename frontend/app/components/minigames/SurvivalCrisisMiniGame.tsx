@@ -175,12 +175,12 @@ export default function SurvivalCrisisMiniGame({
   const activeCheckpoint = checkpoints[Math.min(currentStep, checkpoints.length - 1)];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-4 bg-black/90 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-2xl bg-slate-950 border border-rose-500/40 rounded-3xl p-5 md:p-8 shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-4 bg-black/90 backdrop-blur-md animate-in fade-in">
+      <div className="relative w-full max-w-2xl bg-[var(--bg-card)] border border-rose-500/40 rounded-3xl p-5 md:p-8 shadow-2xl flex flex-col overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition z-20"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-slate-400 hover:text-white transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
         >
           <X className="w-4 h-4" />
         </button>
@@ -194,7 +194,7 @@ export default function SurvivalCrisisMiniGame({
             <div className="w-16 h-16 rounded-3xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-3xl mb-4 shadow-xl shadow-rose-500/20">
               🚨
             </div>
-            <div className="text-xs font-sans tabular-nums normal-case tracking-wide text-rose-400 font-bold mb-1">
+            <div className="text-xs font-sans tabular-nums normal-case tracking-wide text-rose-700 dark:text-rose-400 font-bold mb-1">
               Báo Động Sinh Tồn Thực Địa • {currentCity} ({nationality})
             </div>
             <h2 className="text-2xl font-black text-white tracking-tight mb-2">
@@ -206,14 +206,14 @@ export default function SurvivalCrisisMiniGame({
             </p>
 
             <div className="grid grid-cols-2 gap-3 w-full max-w-md mb-6 text-left text-xs">
-              <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
                 <div className="text-[12px] text-slate-400 normal-case font-bold">Thoát Nạn An Toàn</div>
-                <div className="text-emerald-400 font-bold mt-0.5">Vượt 4 Trạm & Thể Lực ≥ 50%</div>
+                <div className="text-emerald-800 dark:text-emerald-400 font-bold mt-0.5">Vượt 4 Trạm & Thể Lực ≥ 50%</div>
                 <div className="text-[12px] text-slate-400 mt-1">↳ +25 Karma, +20 Sinh Lực, cờ 'Chuyên Gia Sinh Tồn'</div>
               </div>
-              <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
                 <div className="text-[12px] text-slate-400 normal-case font-bold">Mắc Kẹt Nguy Hiểm</div>
-                <div className="text-rose-400 font-bold mt-0.5">Hết Giờ Hoặc Thể Lực Tụt 0%</div>
+                <div className="text-rose-700 dark:text-rose-400 font-bold mt-0.5">Hết Giờ Hoặc Thể Lực Tụt 0%</div>
                 <div className="text-[12px] text-slate-400 mt-1">↳ -15 Sinh lực, mất mát tài sản tích trữ</div>
               </div>
             </div>
@@ -232,13 +232,13 @@ export default function SurvivalCrisisMiniGame({
         {stage === 'playing' && (
           <div className="flex flex-col gap-4">
             {/* Top Status Bar: Timer & Vitality */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex items-center justify-between gap-2 pr-12 sm:pr-14 pb-3 border-b border-[var(--border-subtle)]">
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5 text-xs font-sans tabular-nums font-bold text-rose-400">
-                  <Heart className="w-4 h-4 text-rose-500 fill-current animate-pulse" />
+                <div className="flex items-center gap-1.5 text-xs font-sans tabular-nums font-bold text-rose-700 dark:text-rose-400">
+                  <Heart className="w-4 h-4 text-rose-700 dark:text-rose-500 fill-current animate-pulse" />
                   <span>Thể Lực: {vitalityLeft}%</span>
                 </div>
-                <span className="text-slate-600">|</span>
+                <span className="text-slate-700 dark:text-slate-400">|</span>
                 <span className="text-[12px] text-slate-400">
                   📍 {currentCity}
                 </span>
@@ -247,8 +247,8 @@ export default function SurvivalCrisisMiniGame({
               {/* Big Countdown Badge */}
               <div className={`px-3 py-1 rounded-xl font-sans tabular-nums font-black text-xs border flex items-center gap-1.5 ${
                 timeLeft <= 5
-                  ? 'bg-rose-500/20 text-rose-300 border-rose-500/50 animate-bounce'
-                  : 'bg-slate-900 text-amber-300 border-slate-700'
+                  ? 'bg-rose-500/20 text-rose-800 dark:text-rose-300 border-rose-500/50 animate-bounce'
+                  : 'bg-[var(--bg-card-subtle)] text-amber-800 dark:text-amber-300 border-[var(--border-subtle)]'
               }`}>
                 <span>⏱️ Còn:</span>
                 <span className="text-sm">{timeLeft}s</span>
@@ -262,10 +262,10 @@ export default function SurvivalCrisisMiniGame({
                   key={cp.id}
                   className={`p-2 rounded-xl text-center border text-[12px] transition ${
                     idx === currentStep
-                      ? 'bg-rose-500/20 border-rose-500 text-rose-200 font-bold shadow-md shadow-rose-950'
+                      ? 'bg-rose-500/20 border-rose-500 text-rose-800 dark:text-rose-200 font-bold shadow-md shadow-rose-950'
                       : idx < currentStep
-                      ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300'
-                      : 'bg-slate-900/60 border-slate-800 text-slate-500'
+                      ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-800 dark:text-emerald-300'
+                      : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] text-slate-700 dark:text-slate-400'
                   }`}
                 >
                   <div className="text-base mb-0.5">{cp.icon}</div>
@@ -275,14 +275,14 @@ export default function SurvivalCrisisMiniGame({
             </div>
 
             {/* Active Checkpoint Card */}
-            <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex items-start gap-3.5">
-              <div className="text-3xl p-2 rounded-2xl bg-slate-950 border border-slate-800 shrink-0">
+            <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] flex items-start gap-3.5">
+              <div className="text-3xl p-2 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shrink-0">
                 {activeCheckpoint.icon}
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
                   <h3 className="text-sm font-bold text-white">{activeCheckpoint.name}</h3>
-                  <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                  <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-500/30">
                     Mức độ: {activeCheckpoint.dangerLevel}
                   </span>
                 </div>
@@ -296,9 +296,9 @@ export default function SurvivalCrisisMiniGame({
             <div className="grid grid-cols-2 gap-3 pt-2">
               <button
                 onClick={() => handleAction('careful')}
-                className="p-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 text-left transition active:scale-95 flex flex-col gap-1"
+                className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-emerald-500/50 text-left transition active:scale-95 flex flex-col gap-1"
               >
-                <div className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4" />
                   <span>Di Chuyển Thận Trọng</span>
                 </div>
@@ -315,7 +315,7 @@ export default function SurvivalCrisisMiniGame({
                   <Flame className="w-4 h-4" />
                   <span>Bứt Tốc Vượt Rào</span>
                 </div>
-                <div className="text-[12px] text-rose-200">
+                <div className="text-[12px] text-rose-800 dark:text-rose-200">
                   Tiến thẳng trạm kế ngay lập tức nhưng rủi ro va quẹt (-10~20 HP).
                 </div>
               </button>
@@ -338,11 +338,11 @@ export default function SurvivalCrisisMiniGame({
 
             <div className="text-xs font-sans tabular-nums normal-case tracking-wide font-bold mb-1">
               {finalStatus === 'success' ? (
-                <span className="text-emerald-400">Sinh Tồn Oanh Liệt</span>
+                <span className="text-emerald-800 dark:text-emerald-400">Sinh Tồn Oanh Liệt</span>
               ) : finalStatus === 'fair' ? (
-                <span className="text-amber-400">Vượt Qua Thử Thách</span>
+                <span className="text-amber-800 dark:text-amber-400">Vượt Qua Thử Thách</span>
               ) : (
-                <span className="text-rose-400">Mắc Kẹt Nguy Hiểm</span>
+                <span className="text-rose-700 dark:text-rose-400">Mắc Kẹt Nguy Hiểm</span>
               )}
             </div>
 
@@ -353,7 +353,7 @@ export default function SurvivalCrisisMiniGame({
               {resultSummary}
             </p>
 
-            <div className="w-full max-w-md p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-left text-xs space-y-1.5 mb-6">
+            <div className="w-full max-w-md p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-left text-xs space-y-1.5 mb-6">
               <div className="text-[12px] normal-case font-bold text-slate-400 tracking-normal mb-1">Nhật Ký Đường Chạy:</div>
               {logEvents.map((item, idx) => (
                 <div key={idx} className="text-slate-300 text-[12px] font-sans tabular-nums">
