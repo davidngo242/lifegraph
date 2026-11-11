@@ -101,7 +101,7 @@ export default function AncestralMemorialModal({
 
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold flex items-center gap-1.5">
+                <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold flex items-center gap-1.5">
                   <Feather className="w-3 h-3" /> Đài Tưởng Niệm Gia Phả & Bảng Vàng Dòng Họ
                 </span>
                 <span className="text-xs font-sans tabular-nums font-bold text-amber-700 dark:text-amber-400">
@@ -124,7 +124,7 @@ export default function AncestralMemorialModal({
               disabled={incenseLoading || incenseOffered}
               className={`w-full md:w-auto px-4 py-2.5 rounded-2xl font-bold text-xs normal-case tracking-normal flex items-center justify-center gap-2 transition shadow-lg active:scale-95 ${
                 incenseOffered
-                  ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 cursor-default'
+                  ? 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 cursor-default'
                   : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-amber-500/25 font-black'
               }`}
             >
@@ -164,7 +164,7 @@ export default function AncestralMemorialModal({
 
         <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-amber-400/30 shadow-sm">
           <div className="text-[12px] text-amber-700 dark:text-amber-300 normal-case tracking-normal font-semibold">Đắc Đạo Niết Bàn</div>
-          <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-amber-600 dark:text-amber-300 mt-0.5">
+          <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-amber-700 dark:text-amber-300 mt-0.5">
             {nirvanaCount} Tiền Nhân
           </div>
           <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">Thoát khỏi vòng luân hồi</div>
@@ -172,17 +172,17 @@ export default function AncestralMemorialModal({
 
         <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-teal-400/30 shadow-sm">
           <div className="text-[12px] text-teal-700 dark:text-teal-300 normal-case tracking-normal font-semibold">Gia Sản Đỉnh Cao</div>
-          <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-teal-600 dark:text-teal-300 mt-0.5 truncate">
+          <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-teal-700 dark:text-teal-300 mt-0.5 leading-tight [overflow-wrap:anywhere]">
             ${maxNetWorthEver.toLocaleString()}
           </div>
-          <div className="text-[12px] text-[var(--text-secondary)] mt-0.5 truncate">
+          <div className="text-[12px] text-[var(--text-secondary)] mt-0.5 [overflow-wrap:anywhere]">
             {formatCurrency(maxNetWorthEver, "Việt Nam").secondaryVnd}
           </div>
         </div>
 
         <div className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-amber-400/30 shadow-sm">
           <div className="text-[12px] text-amber-700 dark:text-amber-300 normal-case tracking-normal font-semibold">Nghiệp Lực Dòng Tộc</div>
-          <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400 mt-0.5">
+          <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-amber-700 dark:text-amber-400 mt-0.5">
             {playerAccount?.total_karma ?? 250} Karma
           </div>
           <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">Phúc đức tích lũy</div>
@@ -190,10 +190,10 @@ export default function AncestralMemorialModal({
       </div>
 
       {/* 3. FILTER TABS */}
-      <div className="flex items-center gap-2 border-b border-[var(--border-subtle)] pb-2">
+      <div className="flex items-center gap-2 border-b border-[var(--border-subtle)] pb-2 flex-wrap">
         <button
           onClick={() => setFilter('all')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
+          className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
             filter === 'all'
               ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-950 font-bold shadow-md shadow-slate-900/20'
               : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)]'
@@ -215,7 +215,7 @@ export default function AncestralMemorialModal({
 
         <button
           onClick={() => setFilter('deceased')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
+          className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
             filter === 'deceased'
               ? 'bg-amber-600 text-white dark:bg-amber-500 dark:text-slate-950 font-bold'
               : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)]'
@@ -252,7 +252,7 @@ export default function AncestralMemorialModal({
 
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                   {/* Left: Avatar & Identity */}
-                  <div className="flex items-start gap-3.5">
+                  <div className="flex items-start gap-3.5 min-w-0">
                     <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0 border-2 shadow-sm ${
                       isNirvana
                         ? 'bg-amber-500/15 border-amber-400/60 text-amber-700 dark:text-amber-300'
@@ -261,17 +261,17 @@ export default function AncestralMemorialModal({
                       {isNirvana ? '🕊️' : '🪦'}
                     </div>
 
-                    <div>
+                    <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-base md:text-lg font-bold text-[var(--text-primary)]">
                           {item.name}
                         </span>
-                        <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
+                        <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold">
                           ĐỜI THỨ {item.generation}
                         </span>
                         <span className={`text-[12px] font-medium px-2 py-0.5 rounded-full border ${
                           isNirvana
-                            ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-500/40 font-bold'
+                            ? 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/40 font-bold'
                             : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border-[var(--border-subtle)]'
                         }`}>
                           {isNirvana ? '🕊️ Đắc Đạo Niết Bàn' : '🪦 Viên Tịch'}
@@ -284,25 +284,25 @@ export default function AncestralMemorialModal({
                         <span>{item.nationality}</span>
                         {item.aspiration_title && (
                           <>
-                            <span>•</span>
-                            <span className="text-teal-600 dark:text-teal-300 font-medium">Khát vọng: {item.aspiration_title}</span>
+                            <span className="hidden sm:inline" aria-hidden="true">•</span>
+                            <span className="basis-full sm:basis-auto text-teal-700 dark:text-teal-300 font-medium">Khát vọng: {item.aspiration_title}</span>
                           </>
                         )}
                       </div>
 
-                      <div className="text-xs text-rose-600 dark:text-rose-400/80 mt-1 italic">
+                      <div className="text-xs text-rose-700 dark:text-rose-400 mt-1 italic">
                         {item.cause_of_passing}
                       </div>
                     </div>
                   </div>
 
                   {/* Right: Net Worth & Residual Blessings */}
-                  <div className="flex md:flex-col items-end justify-between md:justify-start gap-1 shrink-0 text-right">
-                    <div className="text-[12px] text-slate-400 normal-case tracking-normal">Gia Sản Để Lại</div>
-                    <div className="text-sm md:text-base font-sans tabular-nums font-bold text-teal-300">
+                  <div className="flex flex-wrap md:flex-col items-end justify-between md:justify-start gap-x-2 gap-y-0.5 md:shrink-0 text-right">
+                    <div className="text-[12px] text-[var(--text-secondary)] normal-case tracking-normal whitespace-nowrap">Gia Sản Để Lại</div>
+                    <div className="text-sm md:text-base font-sans tabular-nums font-bold text-teal-700 dark:text-teal-300 whitespace-nowrap">
                       {formattedWorth.primary}
                     </div>
-                    <div className="text-[12px] font-sans tabular-nums text-slate-500">
+                    <div className="text-[12px] font-sans tabular-nums text-[var(--text-secondary)] whitespace-nowrap">
                       {formattedWorth.secondaryVnd}
                     </div>
                   </div>
@@ -317,12 +317,12 @@ export default function AncestralMemorialModal({
 
                 {/* Legacy Blessing strip */}
                 {item.blessing && (
-                  <div className="mt-2.5 pt-2 border-t border-slate-800/70 flex items-center justify-between text-xs text-amber-300/90 font-medium">
+                  <div className="mt-2.5 pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between gap-2 text-xs text-amber-800 dark:text-amber-300 font-medium">
                     <span className="flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                       <span>Ân đức gia trì: {item.blessing}</span>
                     </span>
-                    <span className="text-[12px] font-sans tabular-nums text-slate-500">
+                    <span className="text-[12px] font-sans tabular-nums text-[var(--text-secondary)] shrink-0">
                       {item.recorded_at ? new Date(item.recorded_at).toLocaleDateString('vi-VN') : ''}
                     </span>
                   </div>

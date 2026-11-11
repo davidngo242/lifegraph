@@ -66,12 +66,12 @@ export default function AncestralFamilyTree({
       {/* Header: Phòng Thờ Tổ Tiên & Nghi Thức Thắp Hương */}
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between pb-5 mb-6 border-b border-[var(--border-subtle)] gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-x-2 gap-y-1 flex-wrap mb-1">
             <span className="text-2xl">🏛️</span>
-            <h2 className="text-xl md:text-2xl font-black text-amber-700 dark:text-amber-200 tracking-tight">
+            <h2 className="text-xl md:text-2xl font-black text-amber-800 dark:text-amber-200 tracking-tight">
               Nhà Thờ Tổ & Cây Phả Hệ Gia Tộc
             </h2>
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 text-xs font-bold font-mono">
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 text-xs font-bold font-mono whitespace-nowrap">
               {lineage.length} Đời Truyền Thừa
             </span>
           </div>
@@ -128,29 +128,29 @@ export default function AncestralFamilyTree({
                     ? 'bg-gradient-to-r from-amber-500/15 via-[var(--bg-card-subtle)] to-amber-500/15 border-amber-500/50 shadow-amber-900/10'
                     : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] hover:border-amber-500/40'
                 }`}>
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
+                  <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
                       <div className="w-12 h-12 rounded-2xl bg-[var(--bg-card)] border border-amber-500/40 flex items-center justify-center text-2xl shadow shrink-0">
                         {isFirst ? '👑' : '🧓'}
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm md:text-base font-black text-[var(--text-primary)]">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
+                          <span className="text-sm md:text-base font-black text-[var(--text-primary)] break-words">
                             {ancestor.name}
                           </span>
-                          <span className="text-xs font-sans tabular-nums px-2 py-0.2 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 font-bold">
+                          <span className="text-xs font-sans tabular-nums px-2 py-0.2 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 font-bold">
                             Đời thứ {ancestor.generation}
                           </span>
                         </div>
-                        <div className="text-xs text-[var(--text-secondary)] flex items-center gap-2 mt-0.5">
+                        <div className="text-xs text-[var(--text-secondary)] flex items-center gap-x-2 gap-y-0.5 flex-wrap mt-0.5">
                           <span>Hưởng thọ: <strong className="text-[var(--text-primary)]">{ancestor.age} tuổi</strong></span>
-                          <span>•</span>
-                          <span>Phước đức: <strong className="text-amber-700 dark:text-amber-400">{ancestor.karma} KP</strong></span>
+                          <span className="hidden sm:inline" aria-hidden="true">•</span>
+                          <span>Phước đức: <strong className="text-amber-800 dark:text-amber-400">{ancestor.karma} KP</strong></span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="text-right shrink-0">
+                    <div className="sm:text-right sm:shrink-0">
                       <div className="text-xs text-[var(--text-secondary)] uppercase tracking-wider font-semibold">Tài Sản Cực Đại</div>
                       <div className="text-sm font-sans tabular-nums font-black text-emerald-700 dark:text-emerald-400">
                         +${Number(ancestor.max_net_worth || 0).toLocaleString()}

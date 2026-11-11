@@ -58,13 +58,13 @@ export default function AnnualDigestBanner({
       {/* Top Header: Tag, Cash Flow & Close button */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-[12px] font-sans tabular-nums normal-case px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold flex items-center gap-1 shrink-0">
-            <Newspaper className="w-3 h-3 text-amber-600 dark:text-amber-400" /> Điểm Tin {digest.age_reached}t
+          <span className="text-[12px] font-sans tabular-nums normal-case px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold flex items-center gap-1 shrink-0">
+            <Newspaper className="w-3 h-3 text-amber-800 dark:text-amber-400" /> Điểm Tin {digest.age_reached}t
           </span>
 
-          <div className="flex items-center gap-1 text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded-lg bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+          <div className="flex items-center gap-1 whitespace-nowrap shrink-0 text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded-lg bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
             <span className="text-[var(--text-secondary)]">Dòng tiền:</span>
-            <span className={`font-bold flex items-center gap-0.5 ${isPositiveFlow ? 'text-teal-600 dark:text-teal-300' : 'text-rose-600 dark:text-rose-400'}`}>
+            <span className={`font-bold flex items-center gap-0.5 whitespace-nowrap ${isPositiveFlow ? 'text-teal-700 dark:text-teal-300' : 'text-rose-700 dark:text-rose-400'}`}>
               {isPositiveFlow ? '+' : ''}{netFormatted.primary}
               {isPositiveFlow ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
             </span>
@@ -103,7 +103,7 @@ export default function AnnualDigestBanner({
           >
             <span className="flex items-center gap-1.5 min-w-0">
               <Gamepad2 className="w-3.5 h-3.5 shrink-0" />
-              <span className="truncate">Thử Thách ({digest.milestone_challenge.age}t): {digest.milestone_challenge.title}</span>
+              <span className="text-left sm:truncate" title={digest.milestone_challenge.title}>Thử Thách ({digest.milestone_challenge.age}t): {digest.milestone_challenge.title}</span>
             </span>
             <ChevronRight className="w-3.5 h-3.5 shrink-0 ml-1" />
           </button>
@@ -115,7 +115,7 @@ export default function AnnualDigestBanner({
         <div className="pt-2 border-t border-[var(--border-subtle)] flex items-start gap-2 bg-[var(--bg-card-subtle)] rounded-xl p-2 border border-[var(--border-subtle)] text-xs">
           <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5 animate-pulse" />
           <div className="flex-1 min-w-0">
-            <div className="font-semibold text-amber-700 dark:text-amber-300 flex items-center gap-1.5 flex-wrap">
+            <div className="font-semibold text-amber-800 dark:text-amber-300 flex items-center gap-1.5 flex-wrap">
               <span>{digest.childhood_event.title}</span>
               {digest.childhood_event.effects?.cash_delta && (
                 <span className="text-[12px] font-sans tabular-nums px-1 py-0.2 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
@@ -123,7 +123,7 @@ export default function AnnualDigestBanner({
                 </span>
               )}
               {digest.childhood_event.effects?.karma_delta && (
-                <span className="text-[12px] font-sans tabular-nums px-1 py-0.2 rounded bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
+                <span className="text-[12px] font-sans tabular-nums px-1 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold">
                   +{digest.childhood_event.effects.karma_delta} Karma
                 </span>
               )}

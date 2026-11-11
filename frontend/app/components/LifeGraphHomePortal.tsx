@@ -213,10 +213,10 @@ export default function LifeGraphHomePortal({
 
               <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-teal-400/30 hover:border-teal-400/50 transition shadow-sm">
                 <div className="text-[12px] text-teal-700 dark:text-teal-300 normal-case tracking-normal font-semibold">Gia Sản Kỷ Lục</div>
-                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-teal-700 dark:text-teal-300 mt-1 truncate">
+                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-teal-700 dark:text-teal-300 mt-1 leading-tight [overflow-wrap:anywhere]">
                   {hasRealLineage ? `$${maxNetWorthEver.toLocaleString()}` : '—'}
                 </div>
-                <div className="text-[12px] text-[var(--text-secondary)] mt-0.5 truncate">
+                <div className="text-[12px] text-[var(--text-secondary)] mt-0.5 [overflow-wrap:anywhere]">
                   {hasRealLineage ? formatCurrency(maxNetWorthEver, "Việt Nam").secondaryVnd : 'Chưa có kỷ lục'}
                 </div>
               </div>
@@ -464,7 +464,7 @@ export default function LifeGraphHomePortal({
 
                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                     {/* Left: Generation Avatar & Identity */}
-                    <div className="flex items-start gap-3.5">
+                    <div className="flex items-start gap-3.5 min-w-0">
                       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0 border-2 shadow-sm ${
                         isNirvana
                           ? 'bg-amber-500/15 border-amber-400/60 text-amber-800 dark:text-amber-300 shadow-amber-500/10'
@@ -473,7 +473,7 @@ export default function LifeGraphHomePortal({
                         {isNirvana ? '🕊️' : '🪦'}
                       </div>
 
-                      <div>
+                      <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-base md:text-lg font-bold text-[var(--text-primary)]">
                             {item.name}
@@ -496,8 +496,8 @@ export default function LifeGraphHomePortal({
                           <span>{item.nationality}</span>
                           {item.aspiration_title && (
                             <>
-                              <span>•</span>
-                              <span className="text-teal-700 dark:text-teal-300 font-medium">Khát vọng: {item.aspiration_title}</span>
+                              <span className="hidden sm:inline" aria-hidden="true">•</span>
+                              <span className="basis-full sm:basis-auto text-teal-700 dark:text-teal-300 font-medium">Khát vọng: {item.aspiration_title}</span>
                             </>
                           )}
                         </div>
@@ -509,12 +509,12 @@ export default function LifeGraphHomePortal({
                     </div>
 
                     {/* Right: Net Worth & Residual Blessings */}
-                    <div className="flex md:flex-col items-end justify-between md:justify-start gap-0.5 shrink-0 text-right">
-                      <div className="text-[12px] text-[var(--text-secondary)] normal-case tracking-normal">Gia Sản Để Lại</div>
-                      <div className="text-sm md:text-base font-sans tabular-nums font-bold text-teal-700 dark:text-teal-300">
+                    <div className="flex flex-wrap md:flex-col items-end justify-between md:justify-start gap-x-2 gap-y-0.5 md:shrink-0 text-right">
+                      <div className="text-[12px] text-[var(--text-secondary)] normal-case tracking-normal whitespace-nowrap">Gia Sản Để Lại</div>
+                      <div className="text-sm md:text-base font-sans tabular-nums font-bold text-teal-700 dark:text-teal-300 whitespace-nowrap">
                         {formattedWorth.primary}
                       </div>
-                      <div className="text-[12px] font-sans tabular-nums text-[var(--text-secondary)]">
+                      <div className="text-[12px] font-sans tabular-nums text-[var(--text-secondary)] whitespace-nowrap">
                         {formattedWorth.secondaryVnd}
                       </div>
                     </div>
