@@ -19,9 +19,19 @@ Giữ nguyên Gate 2 (build/test 100% pass) ở mọi cỡ; chỉ bỏ việc g�
 - Một brief ngắn (<= 40 dòng) + đường dẫn tới file brief chung; đừng bắt mỗi agent đọc cả AGENTS.md và SKILL.md dài. Đưa 10 dòng quy tắc cốt lõi vào brief.
 - Chia theo **tập file sở hữu rời nhau**; không để 2 agent sửa cùng file.
 - Chuẩn bị môi trường MỘT LẦN ở Lead (forwarder backend, cổng, distDir) rồi truyền sẵn lệnh. Đợt vừa rồi 5 agent mỗi người tự dò lại lỗi `ENOTFOUND` của Node và tự viết forwarder.
-- Chỉ định đầu ra: báo cáo <= 40 dòng, bảng trước/sau, danh sách file. Không cho phép dán lại toàn bộ log.
+- Chỉ định đầu ra theo mục 2b (<= 10 dòng + REPORT.md).
 - Không spawn agent cho việc <= 3 bước hoặc đọc 1–2 file.
 - Mỗi agent chỉ chạy audit phạm vi của mình; một lần audit đầy đủ do Tester chạy.
+
+## 2b. Hợp đồng báo cáo subagent (BẮT BUỘC, Sếp chỉ đạo 2026-11-11)
+Nguyên tắc: **Lead là người nắm kết quả rồi báo cáo Sếp**. Subagent không báo cáo dài, không viết log vào hội thoại.
+- Báo cáo trả về tối đa **10 dòng**: (1) Trạng thái PASS / FAIL / BLOCKED, (2) 3–5 ý chính, (3) số liệu then chốt trước/sau, (4) việc cần Lead quyết, (5) đường dẫn file chi tiết.
+- Chi tiết (bảng đo, danh sách file, ảnh, đề xuất cải tiến) ghi vào **một file** `scratchpad/agents/<ten>/REPORT.md`. Lead chỉ mở file khi cần, không dán lại vào hội thoại.
+- Không dán log lệnh, diff, JSON; không báo cáo lại lần hai; không viết lời chào/kết luận dài.
+- "Đánh giá cải tiến thêm": tối đa 3 mục ưu tiên cao, mỗi mục 1 dòng; phần còn lại vào REPORT.md.
+- Lead tổng hợp thành **một** báo cáo ngắn cho Sếp: kết quả, rủi ro, quyết định cần Sếp.
+Đoạn chèn vào cuối mọi brief:
+> BÁO CÁO: trả về <=10 dòng (trạng thái, 3–5 ý chính, số liệu then chốt, việc cần Lead quyết, đường dẫn REPORT.md). Mọi chi tiết ghi vào REPORT.md, không dán log vào hội thoại.
 
 ## 3. Ảnh, log, file lớn
 - Không `Read` ảnh full-page (ví dụ 780x4534) khi chỉ cần một vùng: crop bằng Playwright `clip` hoặc đo bằng script rồi chỉ xem ảnh khi số đo bất thường.
