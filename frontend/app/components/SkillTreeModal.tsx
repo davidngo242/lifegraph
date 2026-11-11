@@ -65,11 +65,11 @@ export default function SkillTreeModal({
                 <h2 className="text-sm md:text-base font-extrabold text-[var(--text-primary)]">
                   Đại Thụ Kỹ Năng &amp; Hệ Sinh Thái Sinh Mệnh
                 </h2>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold uppercase">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold uppercase">
                   Level {character?.life_level || 1} • {character?.title || "Kẻ Khởi Đầu"}
                 </span>
               </div>
-              <p className="text-[11px] text-[var(--text-secondary)]">
+              <p className="text-xs text-[var(--text-secondary)]">
                 Tam vị nhất thể: Gia Phong Huyết Thống, Sản Nghiệp Tư Bản &amp; Thân Tâm Trí Tuệ
               </p>
             </div>
@@ -141,10 +141,10 @@ export default function SkillTreeModal({
               <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] flex items-center justify-between">
                 <div>
                   <h4 className="font-bold text-[var(--text-primary)] text-sm">Học Viện Kỹ Năng &amp; Sát Hạch Mini-game</h4>
-                  <p className="text-[11px] text-[var(--text-secondary)]">Tham gia kỳ thi sát hạch để nhận chứng chỉ chuyên môn và gia tăng thu nhập suốt đời.</p>
+                  <p className="text-xs text-[var(--text-secondary)]">Tham gia kỳ thi sát hạch để nhận chứng chỉ chuyên môn và gia tăng thu nhập suốt đời.</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10.5px] text-[var(--text-secondary)]">Độ tuổi tối thiểu:</span>
+                  <span className="text-xs text-[var(--text-secondary)]">Độ tuổi tối thiểu:</span>
                   <span className="text-xs font-bold text-amber-700 dark:text-amber-300 block">6 Tuổi trở lên</span>
                 </div>
               </div>
@@ -166,7 +166,7 @@ export default function SkillTreeModal({
                       <span className="text-lg">{b.icon}</span>
                       <span className="text-xs font-bold">{b.name}</span>
                     </div>
-                    <p className="text-[10.5px] text-[var(--text-secondary)] line-clamp-2">{b.desc}</p>
+                    <p className="text-xs text-[var(--text-secondary)] line-clamp-2">{b.desc}</p>
                   </button>
                 ))}
               </div>
@@ -180,12 +180,12 @@ export default function SkillTreeModal({
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
+                        <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                           Cấp {lvl.level}
                         </span>
                         <h5 className="text-xs sm:text-sm font-bold text-[var(--text-primary)]">{lvl.title}</h5>
                       </div>
-                      <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold mt-1">
+                      <p className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold mt-1">
                         ★ {lvl.perkTitle}: <span className="text-[var(--text-secondary)] font-normal">{lvl.perkDesc}</span>
                       </p>
                     </div>

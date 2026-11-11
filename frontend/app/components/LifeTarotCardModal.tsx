@@ -505,7 +505,7 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
                     <Crown className="w-4 h-4 text-amber-400" />
                     Bảng Vàng Danh Dự Gia Tộc
                   </h3>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Lưu danh sử sách các mốc son chói lọi trong hành trình</p>
+                  <p className="text-xs text-slate-400 mt-0.5">Lưu danh sử sách các mốc son chói lọi trong hành trình</p>
                 </div>
                 <div className="px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold tabular-nums">
                   {unlockedCount} / {achievements.length} Mở Khóa
@@ -529,19 +529,19 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
                           <h4 className={`text-xs font-bold ${ach.isUnlocked ? 'text-amber-200' : 'text-slate-300'}`}>
                             {ach.title}
                           </h4>
-                          <span className={`text-[10px] font-medium ${ach.isUnlocked ? 'text-emerald-400' : 'text-slate-400'}`}>
+                          <span className={`text-xs font-medium ${ach.isUnlocked ? 'text-emerald-400' : 'text-slate-400'}`}>
                             {ach.progressText}
                           </span>
                         </div>
                       </div>
-                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase shrink-0 ${
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full uppercase shrink-0 ${
                         ach.isUnlocked ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' : 'bg-slate-800 text-slate-400'
                       }`}>
                         {ach.isUnlocked ? 'Đạt' : 'Chưa'}
                       </span>
                     </div>
 
-                    <p className="text-[11px] text-slate-400 mt-2 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
                       {ach.desc}
                     </p>
 

@@ -240,7 +240,7 @@ export default function NPCDialogCard({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
                       {idx < 3 && (
-                        <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-700 dark:text-amber-300 font-mono text-[10px] font-bold group-hover:border-indigo-400 shadow-sm transition">
+                        <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-700 dark:text-amber-300 font-mono text-xs font-bold group-hover:border-indigo-400 shadow-sm transition">
                           {idx + 1}
                         </kbd>
                       )}

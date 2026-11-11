@@ -64,7 +64,7 @@ export default function IncomingNpcEventModal({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-base font-black text-[var(--text-primary)]">{event.npcName}</span>
-                <span className="text-[11px] font-bold px-2 py-0.2 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+                <span className="text-xs font-bold px-2 py-0.2 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
                   {event.npcRole}
                 </span>
               </div>
@@ -110,14 +110,14 @@ export default function IncomingNpcEventModal({
                 <div className={`text-xs md:text-sm font-bold transition flex items-center gap-2 ${opt.id === 'accept' ? 'text-slate-950' : 'group-hover:text-amber-600 dark:group-hover:text-amber-300'}`}>
                   <span>{opt.label}</span>
                 </div>
-                <div className={`text-[11px] mt-0.5 ${opt.id === 'accept' ? 'text-slate-900/80 font-medium' : 'text-[var(--text-secondary)]'}`}>
+                <div className={`text-xs mt-0.5 ${opt.id === 'accept' ? 'text-slate-900/80 font-medium' : 'text-[var(--text-secondary)]'}`}>
                   {opt.hint}
                 </div>
               </div>
 
               <div className="shrink-0 flex items-center gap-1.5">
                 {opt.costAp && opt.costAp > 0 && (
-                  <span className={`text-[10px] font-sans tabular-nums px-2 py-0.5 rounded font-bold ${
+                  <span className={`text-xs font-sans tabular-nums px-2 py-0.5 rounded font-bold ${
                     opt.id === 'accept' ? 'bg-slate-950/20 text-slate-950 border border-slate-950/30' : 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40'
                   }`}>
                     {opt.costAp} AP

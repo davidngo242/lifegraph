@@ -115,11 +115,11 @@ export default function AvatarInspectorModal({
 
           {/* Left Overlay: Character Info & Mood */}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5 pointer-events-none z-10">
-            <span className="text-[11.5px] font-sans px-2.5 py-0.5 rounded-full bg-black/70 text-slate-300 border border-slate-700/60 backdrop-blur w-fit">
+            <span className="text-xs font-sans px-2.5 py-0.5 rounded-full bg-black/70 text-slate-300 border border-slate-700/60 backdrop-blur w-fit">
               🌍 Quốc gia: <b className="text-white">{character.nationality || 'Việt Nam'}</b>
             </span>
             <span
-              className={`text-[11.5px] font-sans px-2.5 py-0.5 rounded-full border backdrop-blur w-fit ${
+              className={`text-xs font-sans px-2.5 py-0.5 rounded-full border backdrop-blur w-fit ${
                 burnout > 75
                   ? 'bg-rose-950/80 text-rose-300 border-rose-600 animate-pulse'
                   : 'bg-black/70 text-emerald-300 border-emerald-700/60'
@@ -130,21 +130,21 @@ export default function AvatarInspectorModal({
 
             {/* Visual Trait Badges */}
             <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-              <span className="text-[10.5px] px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-500/50 backdrop-blur">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-500/50 backdrop-blur">
                 🍃 Vòng Hoa & Túi Khăn
               </span>
               {hasGlasses && (
-                <span className="text-[10.5px] px-2 py-0.5 rounded-full bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 backdrop-blur">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 backdrop-blur">
                   👓 Kính Tri Thức 3D
                 </span>
               )}
               {hasHalo && (
-                <span className="text-[10.5px] px-2 py-0.5 rounded-full bg-amber-950/80 text-amber-300 border border-amber-500/50 backdrop-blur font-bold">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-amber-950/80 text-amber-300 border border-amber-500/50 backdrop-blur font-bold">
                   🪷 Kim Quang Hào Quang
                 </span>
               )}
               {isWealthy && (
-                <span className="text-[10.5px] px-2 py-0.5 rounded-full bg-yellow-950/80 text-yellow-300 border border-yellow-500/50 backdrop-blur font-bold">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-950/80 text-yellow-300 border border-yellow-500/50 backdrop-blur font-bold">
                   💎 Trâm Quý Tộc / Tuxedo
                 </span>
               )}
@@ -153,7 +153,7 @@ export default function AvatarInspectorModal({
 
           {/* Right Overlay: Camera Interaction Hint */}
           <div className="absolute top-3 right-3 pointer-events-none z-10">
-            <span className="text-[10.5px] font-mono px-2.5 py-1 rounded-full bg-black/70 text-cyan-300 border border-cyan-500/30 backdrop-blur flex items-center gap-1.5">
+            <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-black/70 text-cyan-300 border border-cyan-500/30 backdrop-blur flex items-center gap-1.5">
               <RotateCcw className="w-3 h-3 text-cyan-400" />
               <span>Kéo xoay 360° · Cuộn zoom</span>
             </span>
@@ -167,7 +167,7 @@ export default function AvatarInspectorModal({
                  character.equipped_pet === 'cat' ? '🐱' :
                  character.equipped_pet === 'puppy' ? '🐶' : '🦊'}
               </span>
-              <span className="text-[11px] font-bold text-amber-300 font-mono">
+              <span className="text-xs font-bold text-amber-300 font-mono">
                 {character.equipped_pet === 'dragon' ? 'Ấu Long Luân Hồi 3D' :
                  character.equipped_pet === 'cat' ? 'Mèo Thần Tài 3D' :
                  character.equipped_pet === 'puppy' ? 'Cún Trung Nghĩa 3D' : 'Hồ Ly Cửu Vĩ 3D'}
@@ -186,7 +186,7 @@ export default function AvatarInspectorModal({
             {inspectorReaction && (
               <button
                 onClick={() => setInspectorReaction(null)}
-                className="text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] underline cursor-pointer"
+                className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] underline cursor-pointer"
               >
                 Đặt lại mặc định
               </button>
@@ -215,7 +215,7 @@ export default function AvatarInspectorModal({
                   title={anim.desc}
                 >
                   <span>{anim.label}</span>
-                  <span className="text-[9.5px] text-[var(--text-secondary)] font-normal">{anim.desc.split(',')[0]}</span>
+                  <span className="text-xs text-[var(--text-secondary)] font-normal">{anim.desc.split(',')[0]}</span>
                 </button>
               );
             })}

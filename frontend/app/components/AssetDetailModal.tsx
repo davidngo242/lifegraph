@@ -461,7 +461,7 @@ export default function AssetDetailModal({
                           <div className="space-y-1">
                             <div className="font-bold text-amber-300">{item.name}</div>
                             <div className="text-slate-100 text-xs leading-relaxed">{item.desc}</div>
-                            <div className="text-[11px] text-emerald-300 font-mono">
+                            <div className="text-xs text-emerald-300 font-mono">
                               Giá: {renderMoney(item.cost)} • Cấp {item.tier_label}
                             </div>
                           </div>

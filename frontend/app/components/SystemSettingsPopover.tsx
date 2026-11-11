@@ -141,7 +141,7 @@ export default function SystemSettingsPopover({
 
           {/* 1. Theme Selection */}
           <div className="space-y-2">
-            <div className="text-[11px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
+            <div className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">
               Giao Diện Thị Giác
             </div>
             <div className="grid grid-cols-2 gap-1.5">
@@ -171,10 +171,10 @@ export default function SystemSettingsPopover({
           {/* 2. Audio & Volume Controls */}
           <div className="space-y-2 pt-2 border-t border-[var(--border-subtle)]">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
+              <span className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">
                 Âm Thanh & Nhạc Nền
               </span>
-              <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)]">
+              <kbd className="text-xs font-mono px-1.5 py-0.5 rounded bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)]">
                 Phím M
               </kbd>
             </div>
@@ -198,7 +198,7 @@ export default function SystemSettingsPopover({
                   onChange={handleVolumeChange}
                   className="w-full accent-amber-500 h-1.5 bg-[var(--border-subtle)] rounded-lg cursor-pointer"
                 />
-                <span className="font-mono text-[11px] font-bold text-[var(--text-secondary)] w-7 text-right">
+                <span className="font-mono text-xs font-bold text-[var(--text-secondary)] w-7 text-right">
                   {volume}%
                 </span>
               </div>
@@ -207,7 +207,7 @@ export default function SystemSettingsPopover({
 
           {/* 3. Guide & Shortcuts */}
           <div className="space-y-1.5 pt-2 border-t border-[var(--border-subtle)]">
-            <div className="text-[11px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
+            <div className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">
               Trợ Giúp & Hướng Dẫn
             </div>
             <div className="grid grid-cols-2 gap-1.5">

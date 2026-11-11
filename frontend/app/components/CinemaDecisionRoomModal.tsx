@@ -61,10 +61,10 @@ export default function CinemaDecisionRoomModal({
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-300 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-400 shadow-[0_0_8px_#f43f5e]"></span>
                 </span>
-                <span className="tracking-wider uppercase font-black text-[10px] sm:text-[11px] text-white hidden xs:inline">
+                <span className="tracking-wider uppercase font-black text-xs sm:text-xs text-white hidden xs:inline">
                   🚨 TÌNH HUỐNG SINH TỬ NGUY CẤP
                 </span>
-                <span className="tracking-wider uppercase font-black text-[10px] text-white xs:hidden">
+                <span className="tracking-wider uppercase font-black text-xs text-white xs:hidden">
                   🚨 SINH TỬ
                 </span>
               </div>
@@ -74,10 +74,10 @@ export default function CinemaDecisionRoomModal({
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500 shadow-[0_0_8px_#f43f5e]"></span>
                 </span>
-                <span className="tracking-widest uppercase font-extrabold text-[10px] sm:text-[11px] text-rose-300 hidden xs:inline">
+                <span className="tracking-widest uppercase font-extrabold text-xs sm:text-xs text-rose-300 hidden xs:inline">
                   CINEMA 21:9 · LIVE TAKE
                 </span>
-                <span className="tracking-widest uppercase font-extrabold text-[10px] text-rose-300 xs:hidden">
+                <span className="tracking-widest uppercase font-extrabold text-xs text-rose-300 xs:hidden">
                   21:9
                 </span>
               </div>
@@ -92,7 +92,7 @@ export default function CinemaDecisionRoomModal({
                   {scenarioTitle}
                 </h3>
               </Tooltip>
-              <div className="hidden md:flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[11px] font-sans font-bold text-amber-300 shrink-0">
+              <div className="hidden md:flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs font-sans font-bold text-amber-300 shrink-0">
                 <Sparkles className="w-3 h-3 text-amber-400" />
                 <span>Tuổi {age}</span>
                 <span className="text-[var(--text-secondary)]">•</span>
@@ -112,7 +112,7 @@ export default function CinemaDecisionRoomModal({
               <ChevronLeft className="w-4 h-4 text-sky-400 group-hover:-translate-x-0.5 transition-transform" />
               <span className="hidden sm:inline">Trở Về Cockpit</span>
               <span className="sm:hidden">Cockpit</span>
-              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-[var(--text-secondary)] group-hover:text-amber-300 transition">
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-secondary)] group-hover:text-amber-300 transition">
                 Esc
               </kbd>
             </button>
@@ -167,9 +167,9 @@ export default function CinemaDecisionRoomModal({
           </div>
 
           {/* Right: Intuitive Keyboard Shortcuts & Hotkey Badges */}
-          <div className="flex items-center gap-3 text-[11px] text-[var(--text-secondary)] font-sans shrink-0">
+          <div className="flex items-center gap-3 text-xs text-[var(--text-secondary)] font-sans shrink-0">
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-sky-300 font-bold">
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-mono text-sky-300 font-bold">
                 Esc
               </kbd>
               <span className="hidden xs:inline">Cockpit</span>
@@ -178,7 +178,7 @@ export default function CinemaDecisionRoomModal({
             <span className="text-[var(--border-subtle)]">•</span>
 
             <span className="flex items-center gap-1">
-              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-300 font-bold">
+              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-mono text-amber-300 font-bold">
                 <MousePointerClick className="w-3 h-3 text-amber-400" />
                 <span>Hotspot</span>
               </span>
@@ -188,7 +188,7 @@ export default function CinemaDecisionRoomModal({
             <span className="text-[var(--border-subtle)]">•</span>
 
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-emerald-300 font-bold">
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-mono text-emerald-300 font-bold">
                 1, 2, 3
               </kbd>
               <span className="hidden xs:inline">Ngã Rẽ</span>

@@ -69,14 +69,14 @@ export default function HeaderMacroWeather({
               <span className="text-sky-400">🌍 {currentCity} ({countryName})</span>
               <span className="text-amber-400 font-mono">Cõi {countryTier}</span>
             </div>
-            <div className="text-[11px] text-[var(--text-secondary)] space-y-0.5">
+            <div className="text-xs text-[var(--text-secondary)] space-y-0.5">
               <div>Thời tiết: <strong className="text-[var(--text-primary)]">{weather.condition} · {weather.temp_celsius}°C</strong></div>
               <div>Lạm phát: <strong className="text-amber-400 font-mono">{playerServer.inflation_rate}%</strong></div>
               <div>Bất ổn xã hội: <strong className="text-rose-400 font-mono">{playerServer.social_unrest}%</strong></div>
               <div>Áp lực sinh thái: <strong className="text-emerald-400 font-mono">{playerServer.environmental_pressure}%</strong></div>
             </div>
             {latestNews && (
-              <div className="pt-1 border-t border-slate-700/60 text-[11px] text-slate-300 leading-relaxed italic">
+              <div className="pt-1 border-t border-slate-700/60 text-xs text-slate-300 leading-relaxed italic">
                 📰 {latestNews.headline}
               </div>
             )}
@@ -88,7 +88,7 @@ export default function HeaderMacroWeather({
           <span className="truncate max-w-[90px]">{currentCity.split(" ")[0]}</span>
           <span className="font-mono font-bold text-amber-800 dark:text-amber-400">{weather.temp_celsius}°C</span>
           <span className="w-1 h-1 rounded-full bg-[var(--text-secondary)] opacity-50" />
-          <span className="flex items-center gap-1 font-mono text-[11px] text-[var(--text-secondary)]">
+          <span className="flex items-center gap-1 font-mono text-xs text-[var(--text-secondary)]">
             <Globe className="w-3 h-3 text-indigo-400" />
             <span className="font-bold text-[var(--text-primary)]">{countryTier}</span>
           </span>

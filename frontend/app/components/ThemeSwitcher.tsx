@@ -109,7 +109,7 @@ export default function ThemeSwitcher() {
               }`}
             >
               <span className="text-xs shrink-0 select-none">{item.icon}</span>
-              <span className="hidden sm:inline tracking-tight text-[11px] md:text-xs">
+              <span className="hidden sm:inline tracking-tight text-xs md:text-xs">
                 {item.label}
               </span>
             </button>

@@ -88,7 +88,7 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShor
             <div>
               <h2 className="text-base md:text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
                 Hệ Thống Phím Tắt Toàn Cục
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
                   HOTKEYS
                 </span>
               </h2>
@@ -116,7 +116,7 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShor
                 <div className="text-xs md:text-sm font-semibold text-[var(--text-primary)] leading-snug">
                   {item.description}
                 </div>
-                <div className="text-[11px] text-[var(--text-secondary)] mt-0.5">
+                <div className="text-xs text-[var(--text-secondary)] mt-0.5">
                   Phân loại: <span className="text-[var(--text-primary)] font-medium">{item.category}</span>
                 </div>
               </div>
@@ -129,7 +129,7 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShor
         </div>
 
         {/* Pro Tip Footer */}
-        <div className="pt-3 border-t border-[var(--border-subtle)] text-[11px] text-[var(--text-secondary)] flex items-center gap-2">
+        <div className="pt-3 border-t border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] flex items-center gap-2">
           <span className="text-amber-400 shrink-0">💡</span>
           <span>
             <strong>Ghi chú:</strong> Phím tắt tự động bỏ qua khi con trỏ đang nhập văn bản trong các ô input hoặc khi đang mở các bảng hộp thoại.

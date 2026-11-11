@@ -372,7 +372,7 @@ export default function EventCard({
                 <div className="font-bold text-amber-950 dark:text-amber-100 text-xs md:text-sm">
                   Năm nay bạn vẫn còn <span className="text-amber-800 dark:text-amber-400 font-extrabold font-mono text-sm">{pendingUnspentWarning.unspentAP} AP</span> chưa dùng!
                 </div>
-                <div className="text-[11px] text-amber-800 dark:text-amber-300">
+                <div className="text-xs text-amber-800 dark:text-amber-300">
                   Hành động đang chọn: <strong className="text-amber-950 dark:text-amber-200">{pendingUnspentWarning.option.action_title || pendingUnspentWarning.option.label}</strong>
                 </div>
               </div>
@@ -403,7 +403,7 @@ export default function EventCard({
                 <Zap className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                 <span>⚡ Đầu tư 1 AP</span>
               </div>
-              <span className="text-[11px] text-[var(--text-secondary)] font-normal leading-tight">
+              <span className="text-xs text-[var(--text-secondary)] font-normal leading-tight">
                 Vào lựa chọn này (+15% tỷ lệ thành công)
               </span>
             </button>
@@ -420,7 +420,7 @@ export default function EventCard({
               <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300 font-bold mb-1">
                 <span>🌿 Chuyển hóa Dưỡng Sinh</span>
               </div>
-              <span className="text-[11px] text-[var(--text-secondary)] font-normal leading-tight">
+              <span className="text-xs text-[var(--text-secondary)] font-normal leading-tight">
                 (+{pendingUnspentWarning.unspentAP * 2} HP) & Chốt Năm
               </span>
             </button>
@@ -434,7 +434,7 @@ export default function EventCard({
               <div className="flex items-center gap-1.5 text-[var(--text-primary)] font-bold mb-1">
                 <span>↩️ Quay lại dùng AP</span>
               </div>
-              <span className="text-[11px] text-[var(--text-secondary)] font-normal leading-tight">
+              <span className="text-xs text-[var(--text-secondary)] font-normal leading-tight">
                 Dùng nốt AP ở Action Hub bên dưới
               </span>
             </button>
@@ -472,7 +472,7 @@ export default function EventCard({
                   <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
                     {/* Hotkey badge */}
                     {idx < 3 && (
-                      <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-800 dark:text-amber-300 font-mono text-[10px] font-bold group-hover:border-[var(--border-highlight)] dark:group-hover:text-amber-200 shadow-sm transition">
+                      <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-800 dark:text-amber-300 font-mono text-xs font-bold group-hover:border-[var(--border-highlight)] dark:group-hover:text-amber-200 shadow-sm transition">
                         {idx + 1}
                       </kbd>
                     )}
@@ -518,7 +518,7 @@ export default function EventCard({
                         setInvestedApMap(prev => ({ ...prev, [option.id]: 1 }));
                       }
                     }}
-                    className={`px-2 py-1 rounded-xl text-[11px] font-bold border transition flex items-center gap-1 ${
+                    className={`px-2 py-1 rounded-xl text-xs font-bold border transition flex items-center gap-1 ${
                       isCurrentlyInvested
                         ? 'bg-amber-500/25 border-amber-500 text-amber-800 dark:text-amber-300 shadow-md shadow-amber-500/25 animate-pulse'
                         : canInvestMore

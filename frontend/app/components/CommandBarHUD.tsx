@@ -58,7 +58,7 @@ export default function CommandBarHUD({
                 <div className="font-bold text-sky-800 dark:text-sky-300 text-xs">
                   {activeView === 'game' ? 'Chuyển sang Xem Nhanh Gia Phả' : 'Chuyển sang Buồng Lái Kiếp Sống'}
                 </div>
-                <div className="text-[11px] text-[var(--text-secondary)]">
+                <div className="text-xs text-[var(--text-secondary)]">
                   Bật/tắt nhanh giữa góc nhìn buồng lái RPG và cây gia phả tiền nhân.
                 </div>
               </div>
@@ -95,9 +95,9 @@ export default function CommandBarHUD({
               <div className="p-0.5">
                 <div className="font-bold text-amber-800 dark:text-amber-300 text-xs flex items-center gap-1">
                   <span>🎬 Phòng Quyết Định 21:9</span>
-                  <kbd className="px-1 py-0.2 rounded bg-[var(--bg-card)] text-[10px] text-[var(--text-secondary)] border border-[var(--border-subtle)]">[D]</kbd>
+                  <kbd className="px-1 py-0.2 rounded bg-[var(--bg-card)] text-xs text-[var(--text-secondary)] border border-[var(--border-subtle)]">[D]</kbd>
                 </div>
-                <div className="text-[11px] text-[var(--text-secondary)]">
+                <div className="text-xs text-[var(--text-secondary)]">
                   Mở không gian đối diện ngã rẽ cuộc đời ở định dạng điện ảnh toàn cảnh 21:9.
                 </div>
               </div>
@@ -110,7 +110,7 @@ export default function CommandBarHUD({
             >
               <Film className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               <span className="hidden md:inline">Phòng Điện Ảnh</span>
-              <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-800 dark:text-amber-400 font-bold">
+              <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-mono text-amber-800 dark:text-amber-400 font-bold">
                 D
               </kbd>
             </button>
@@ -130,29 +130,29 @@ export default function CommandBarHUD({
             {/* Badges [1], [2], [3], [Space] */}
             <div className="flex items-center gap-1">
               <span className="flex items-center gap-0.5">
-                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-800 dark:text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
+                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-mono text-amber-800 dark:text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
                   1
                 </kbd>
-                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-800 dark:text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
+                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-mono text-amber-800 dark:text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
                   2
                 </kbd>
-                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-800 dark:text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
+                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-mono text-amber-800 dark:text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
                   3
                 </kbd>
-                <span className="text-[10px] text-[var(--text-secondary)] hidden xl:inline ml-0.5">Chọn Ngã Rẽ</span>
+                <span className="text-xs text-[var(--text-secondary)] hidden xl:inline ml-0.5">Chọn Ngã Rẽ</span>
               </span>
 
               <span className="text-slate-500 hidden sm:inline">|</span>
 
               <span className="flex items-center gap-1">
-                <kbd className="px-2 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-emerald-800 dark:text-emerald-300 font-bold group-hover:border-emerald-400/60 shadow-sm">
+                <kbd className="px-2 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-mono text-emerald-800 dark:text-emerald-300 font-bold group-hover:border-emerald-400/60 shadow-sm">
                   Space
                 </kbd>
-                <span className="text-[10px] text-[var(--text-secondary)] hidden xl:inline">Sang Năm</span>
+                <span className="text-xs text-[var(--text-secondary)] hidden xl:inline">Sang Năm</span>
               </span>
             </div>
 
-            <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 ml-1">
+            <span className="text-xs font-mono px-1 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 ml-1">
               ?
             </span>
           </button>
@@ -169,7 +169,7 @@ export default function CommandBarHUD({
                     <HeartPulse className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 animate-pulse" />
                     <span>Cảnh Báo Nguy Kịch Sinh Tồn</span>
                   </div>
-                  <div className="text-[11px] text-slate-700 dark:text-slate-300 mt-1">
+                  <div className="text-xs text-slate-700 dark:text-slate-300 mt-1">
                     {vitality < 30 && (
                       <div className="text-rose-700 dark:text-rose-400 font-semibold">
                         • Sinh Lực cực thấp ({vitality}%): Nguy cơ tử vong cao!
@@ -193,7 +193,7 @@ export default function CommandBarHUD({
               >
                 <HeartPulse className="w-3.5 h-3.5 animate-bounce" />
                 <span className="tracking-wide">CẤP CỨU KHẨN CẤP</span>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-rose-950/80 text-rose-200 border border-rose-400/50">
+                <span className="text-xs font-mono px-1.5 py-0.2 rounded bg-rose-950/80 text-rose-200 border border-rose-400/50">
                   {vitality < 30 ? `HP ${vitality}%` : `Burnout ${burnout}%`}
                 </span>
               </button>

@@ -49,7 +49,7 @@ export default function EmergencyRescueModal({
             <div>
               <h2 className="text-base md:text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
                 Cấp Cứu Khẩn Cấp Sinh Mệnh
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 animate-pulse">
+                <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 animate-pulse">
                   CRITICAL
                 </span>
               </h2>
@@ -76,7 +76,7 @@ export default function EmergencyRescueModal({
                 <span>Tài khoản hiện tại: <strong className="font-mono text-rose-700 dark:text-rose-300">-${Math.abs(cash).toLocaleString()}</strong>. Cần giải cứu cấp tốc để tránh phá sản!</span>
               </div>
             </div>
-            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-800 dark:text-rose-200 font-bold shrink-0">
+            <span className="font-mono text-xs px-2 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-800 dark:text-rose-200 font-bold shrink-0">
               VỠ NỢ
             </span>
           </div>
@@ -110,7 +110,7 @@ export default function EmergencyRescueModal({
               />
             </div>
             {isLowVitality && (
-              <div className="text-[10px] text-rose-300 font-semibold mt-1">
+              <div className="text-xs text-rose-300 font-semibold mt-1">
                 ⚠️ Nguy kịch: Có thể trút hơi thở cuối cùng!
               </div>
             )}
@@ -142,7 +142,7 @@ export default function EmergencyRescueModal({
               />
             </div>
             {isHighBurnout && (
-              <div className="text-[10px] text-amber-300 font-semibold mt-1">
+              <div className="text-xs text-amber-300 font-semibold mt-1">
                 ⚠️ Khủng hoảng: Tinh thần suy sụp nghiêm trọng!
               </div>
             )}
@@ -176,11 +176,11 @@ export default function EmergencyRescueModal({
               <div>
                 <div className="text-xs md:text-sm font-bold flex items-center gap-2">
                   <span>Dưỡng Sinh Phục Hồi Toàn Diện</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                     1 AP
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-300">
+                <div className="text-xs text-slate-300">
                   Phục hồi sinh lực (+HP) và giải tỏa mức độ Burnout ngay lập tức.
                 </div>
               </div>
@@ -203,11 +203,11 @@ export default function EmergencyRescueModal({
               <div>
                 <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                   <span>Thỉnh Phước Bảo Mạng (Đền Thờ Nghiệp Quả)</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
+                  <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
                     0 AP · Dùng Karma
                   </span>
                 </div>
-                <div className="text-[11px] text-[var(--text-secondary)]">
+                <div className="text-xs text-[var(--text-secondary)]">
                   Thỉnh bùa hộ mệnh hoặc phước lành hồi sinh khi cạn kiệt điểm hành động.
                 </div>
               </div>
@@ -239,11 +239,11 @@ export default function EmergencyRescueModal({
                   <div>
                     <div className="text-xs md:text-sm font-bold text-amber-200 flex items-center gap-2">
                       <span>Vay Mềm Thân Tộc (Family Soft Loan)</span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                      <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
                         +$3.000
                       </span>
                     </div>
-                    <div className="text-[11px] text-slate-300">
+                    <div className="text-xs text-slate-300">
                       Huy động người thân hỗ trợ khẩn cấp (+ $3.000 tiền mặt, -10 Hảo cảm gia đình).
                     </div>
                   </div>
@@ -267,11 +267,11 @@ export default function EmergencyRescueModal({
                   <div>
                     <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                       <span>Bán Gấp Đồ Đạc Cá Nhân (Liquidate Items)</span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
+                      <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
                         +$1.200
                       </span>
                     </div>
-                    <div className="text-[11px] text-[var(--text-secondary)]">
+                    <div className="text-xs text-[var(--text-secondary)]">
                       Thanh lý tài sản cá nhân giải vây tức thì (+ $1.200, +10 Căng thẳng Burnout).
                     </div>
                   </div>

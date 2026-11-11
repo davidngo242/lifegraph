@@ -74,7 +74,7 @@ export default function TrilemmaCard({ dilemma, characterAge, onSelectOption, is
                   <span className={`text-[12px] font-sans font-medium px-2 py-0.5 rounded-full border flex items-center gap-1 shrink-0 ${badge.color}`}>
                     {badge.icon} {badge.label}
                   </span>
-                  <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-300 font-mono text-[10px] font-bold group-hover:border-[var(--border-highlight)] shadow-sm">
+                  <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-300 font-mono text-xs font-bold group-hover:border-[var(--border-highlight)] shadow-sm">
                     {idx + 1}
                   </kbd>
                 </div>

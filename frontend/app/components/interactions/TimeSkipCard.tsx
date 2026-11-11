@@ -79,7 +79,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
                   </>
                 )}
               </div>
-              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-sky-300 font-mono text-[10px] font-bold group-hover:border-sky-400 shadow-sm">
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-sky-300 font-mono text-xs font-bold group-hover:border-sky-400 shadow-sm">
                 1
               </kbd>
             </div>
@@ -126,7 +126,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
                   </>
                 )}
               </div>
-              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-emerald-300 font-mono text-[10px] font-bold group-hover:border-emerald-400 shadow-sm">
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-emerald-300 font-mono text-xs font-bold group-hover:border-emerald-400 shadow-sm">
                 2
               </kbd>
             </div>
@@ -148,7 +148,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
         </button>
       </div>
 
-      <div className="text-center text-[11px] text-[var(--text-secondary)] font-sans mt-2">
+      <div className="text-center text-xs text-[var(--text-secondary)] font-sans mt-2">
         Nhấn phím <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card-subtle)] text-[var(--text-primary)] font-mono border border-[var(--border-subtle)]">1</kbd> hoặc <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card-subtle)] text-[var(--text-primary)] font-mono border border-[var(--border-subtle)]">2</kbd> để chọn đường hướng, hoặc <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card-subtle)] text-[var(--text-primary)] font-mono border border-[var(--border-subtle)]">Space</kbd> để tiếp tục nhanh.
       </div>
     </div>

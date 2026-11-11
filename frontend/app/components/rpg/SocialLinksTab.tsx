@@ -81,9 +81,9 @@ export default function SocialLinksTab({
           <div>
             <h3 className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5">
               <span>Mạng Lưới Nhân Mạch</span>
-              <span className="text-[11px] text-amber-700 dark:text-amber-400 font-normal">Social Links 1–5</span>
+              <span className="text-xs text-amber-700 dark:text-amber-400 font-normal">Social Links 1–5</span>
             </h3>
-            <span className="text-[11px] text-[var(--text-secondary)]">
+            <span className="text-xs text-[var(--text-secondary)]">
               Giao lưu và củng cố liên kết với Quý Nhân, Tri Kỷ và Kình Địch để mở khóa những đặc quyền thay đổi vận mệnh.
             </span>
           </div>
@@ -120,11 +120,11 @@ export default function SocialLinksTab({
                     <div>
                       <div className="flex items-center gap-1.5">
                         <h4 className="text-xs font-bold text-[var(--text-primary)]">{npc.name}</h4>
-                        <span className={`text-[10px] font-semibold px-2 py-0.2 rounded-full border ${badge.color}`}>
+                        <span className={`text-xs font-semibold px-2 py-0.2 rounded-full border ${badge.color}`}>
                           {badge.label}
                         </span>
                       </div>
-                      <span className="text-[11px] text-teal-600 dark:text-teal-300 block font-medium">{npc.role}</span>
+                      <span className="text-xs text-teal-600 dark:text-teal-300 block font-medium">{npc.role}</span>
                     </div>
                   </div>
 
@@ -140,19 +140,19 @@ export default function SocialLinksTab({
                         }`}
                       />
                     ))}
-                    <span className="text-[10.5px] font-sans tabular-nums font-bold text-amber-700 dark:text-amber-300 ml-1">
+                    <span className="text-xs font-sans tabular-nums font-bold text-amber-700 dark:text-amber-300 ml-1">
                       Cấp {npc.linkLevel}
                     </span>
                   </div>
                 </div>
 
-                <p className="text-[11px] text-[var(--text-secondary)] italic mb-2">
+                <p className="text-xs text-[var(--text-secondary)] italic mb-2">
                   {npc.description}
                 </p>
 
                 {/* Link EXP Progress Bar */}
                 <div className="space-y-1 mb-2.5">
-                  <div className="flex items-center justify-between text-[10px] font-sans tabular-nums text-[var(--text-secondary)]">
+                  <div className="flex items-center justify-between text-xs font-sans tabular-nums text-[var(--text-secondary)]">
                     <span>Hảo Cảm</span>
                     <span className="text-amber-700 dark:text-amber-400 font-semibold">{npc.linkExp}/{npc.maxExp} EXP</span>
                   </div>
@@ -165,7 +165,7 @@ export default function SocialLinksTab({
                 </div>
 
                 {/* Milestone Perks Accordion / List */}
-                <div className="space-y-1 text-[10.5px] bg-slate-900/50 p-2 rounded-xl border border-slate-800/60">
+                <div className="space-y-1 text-xs bg-slate-900/50 p-2 rounded-xl border border-slate-800/60">
                   {npc.perks.map(p => {
                     const isUnlocked = npc.linkLevel >= p.level;
                     return (
@@ -178,7 +178,7 @@ export default function SocialLinksTab({
                             <strong className="text-amber-300 block">
                               Cấp {p.level}: {p.title}
                             </strong>
-                            <div className="text-[11.5px] text-slate-200">{p.desc}</div>
+                            <div className="text-xs text-slate-200">{p.desc}</div>
                           </div>
                         }
                       >
@@ -190,7 +190,7 @@ export default function SocialLinksTab({
                             <strong className={isUnlocked ? 'text-amber-200' : 'text-slate-500'}>
                               Cấp {p.level}: {p.title}
                             </strong>
-                            <span className={`block truncate text-[10px] ${isUnlocked ? 'text-slate-300' : 'text-slate-600'}`}>
+                            <span className={`block truncate text-xs ${isUnlocked ? 'text-slate-300' : 'text-slate-600'}`}>
                               {p.desc}
                             </span>
                           </div>
@@ -207,31 +207,31 @@ export default function SocialLinksTab({
                 <button
                   disabled={isBusy || actionPoints < 1}
                   onClick={() => handleAction(npc.id, 'socialize')}
-                  className="py-1.5 px-2 rounded-xl bg-[var(--bg-card)] hover:bg-amber-500/10 border border-[var(--border-subtle)] hover:border-amber-400/50 text-[var(--text-primary)] text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 transition active:scale-95 disabled:opacity-40"
+                  className="py-1.5 px-2 rounded-xl bg-[var(--bg-card)] hover:bg-amber-500/10 border border-[var(--border-subtle)] hover:border-amber-400/50 text-[var(--text-primary)] text-xs font-bold flex flex-col items-center justify-center gap-0.5 transition active:scale-95 disabled:opacity-40"
                 >
                   <span className="flex items-center gap-1">
                     <Heart className="w-3 h-3 text-pink-500" /> Giao Lưu
                   </span>
-                  <span className="text-[9.5px] font-sans tabular-nums text-[var(--text-secondary)]">-1 AP · +35 EXP</span>
+                  <span className="text-xs font-sans tabular-nums text-[var(--text-secondary)]">-1 AP · +35 EXP</span>
                 </button>
 
                 {/* 2. Tặng quà */}
                 <button
                   disabled={isBusy || actionPoints < 1 || cash < 500}
                   onClick={() => handleAction(npc.id, 'gift')}
-                  className="py-1.5 px-2 rounded-xl bg-[var(--bg-card)] hover:bg-amber-500/10 border border-[var(--border-subtle)] hover:border-amber-400/50 text-[var(--text-primary)] text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 transition active:scale-95 disabled:opacity-40"
+                  className="py-1.5 px-2 rounded-xl bg-[var(--bg-card)] hover:bg-amber-500/10 border border-[var(--border-subtle)] hover:border-amber-400/50 text-[var(--text-primary)] text-xs font-bold flex flex-col items-center justify-center gap-0.5 transition active:scale-95 disabled:opacity-40"
                 >
                   <span className="flex items-center gap-1">
                     <Gift className="w-3 h-3 text-amber-500" /> Tặng Quà
                   </span>
-                  <span className="text-[9.5px] font-sans tabular-nums text-amber-600 dark:text-amber-400">-$500 · +65 EXP</span>
+                  <span className="text-xs font-sans tabular-nums text-amber-600 dark:text-amber-400">-$500 · +65 EXP</span>
                 </button>
 
                 {/* 3. Mượn lực đặc quyền */}
                 <button
                   disabled={isBusy || actionPoints < 1 || !canFavor}
                   onClick={() => handleAction(npc.id, 'request_favor')}
-                  className={`py-1.5 px-2 rounded-xl border text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 transition active:scale-95 ${
+                  className={`py-1.5 px-2 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-0.5 transition active:scale-95 ${
                     canFavor
                       ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black shadow-sm'
                       : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] text-[var(--text-secondary)] opacity-50 cursor-not-allowed'
@@ -242,7 +242,7 @@ export default function SocialLinksTab({
                     {canFavor ? <Zap className="w-3 h-3 text-slate-950 fill-slate-950" /> : <Lock className="w-3 h-3" />}
                     <span>Mượn Lực</span>
                   </span>
-                  <span className="text-[9.5px] font-sans tabular-nums text-slate-900 dark:text-slate-950 font-bold">
+                  <span className="text-xs font-sans tabular-nums text-slate-900 dark:text-slate-950 font-bold">
                     {canFavor ? "-1 AP · Đặc Quyền" : "Khóa (Cấp 3)"}
                   </span>
                 </button>

@@ -169,7 +169,7 @@ export default function PetSanctuaryModal({
                 <h2 className="text-lg sm:text-xl font-black tracking-tight text-[var(--text-primary)]">
                   Linh Thú Các • Tiệm Thú Cưng 3D
                 </h2>
-                <span className="text-[10.5px] px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold">
                   3D In-Canvas
                 </span>
               </div>
@@ -206,7 +206,7 @@ export default function PetSanctuaryModal({
           {equippedPet !== 'none' && (
             <button
               onClick={() => handleEquipPet('none')}
-              className="px-2.5 py-1 rounded-xl bg-slate-500/15 hover:bg-slate-500/25 border border-slate-500/30 text-[11px] font-bold text-[var(--text-secondary)] transition active:scale-95"
+              className="px-2.5 py-1 rounded-xl bg-slate-500/15 hover:bg-slate-500/25 border border-slate-500/30 text-xs font-bold text-[var(--text-secondary)] transition active:scale-95"
             >
               Cho pet nghỉ (Thu hồi)
             </button>
@@ -241,7 +241,7 @@ export default function PetSanctuaryModal({
               >
                 {/* Active Indicator Ribbon */}
                 {isEquipped && (
-                  <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                  <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-xs font-black uppercase tracking-wider flex items-center gap-1 shadow-sm">
                     <Sparkles className="w-3 h-3" />
                     <span>Đang Đồng Hành</span>
                   </div>
@@ -256,27 +256,27 @@ export default function PetSanctuaryModal({
 
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className={`text-[10px] font-bold px-2 py-0.2 rounded-full border ${getRarityBadge(pet.rarity)}`}>
+                        <span className={`text-xs font-bold px-2 py-0.2 rounded-full border ${getRarityBadge(pet.rarity)}`}>
                           {pet.rarityLabel}
                         </span>
-                        <span className="text-[10px] text-[var(--text-secondary)] italic">
+                        <span className="text-xs text-[var(--text-secondary)] italic">
                           {pet.animationType}
                         </span>
                       </div>
                       <h3 className="text-sm font-extrabold text-[var(--text-primary)] mt-0.5 truncate">
                         {pet.name}
                       </h3>
-                      <div className="text-[11px] text-[var(--text-secondary)]">{pet.title}</div>
+                      <div className="text-xs text-[var(--text-secondary)]">{pet.title}</div>
                     </div>
                   </div>
 
                   {/* Lore Description */}
-                  <p className="text-[11.5px] text-[var(--text-secondary)] leading-relaxed">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                     {pet.description}
                   </p>
 
                   {/* Buff Box */}
-                  <div className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[11px] font-semibold text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
+                  <div className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-semibold text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                     <span>{pet.buff}</span>
                   </div>
@@ -291,7 +291,7 @@ export default function PetSanctuaryModal({
                           ${pet.cost.toLocaleString()}
                         </span>
                         {pet.costKarma > 0 && (
-                          <span className="text-[10.5px] text-amber-700 dark:text-amber-400 font-bold">
+                          <span className="text-xs text-amber-700 dark:text-amber-400 font-bold">
                             / {pet.costKarma} Karma
                           </span>
                         )}

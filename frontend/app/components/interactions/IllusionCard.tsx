@@ -59,7 +59,7 @@ export default function IllusionCard({ dilemma, onAccept, isLoading }: IllusionC
         <span className="text-[12px] font-sans font-bold tracking-normal normal-case px-3.5 py-1 rounded-full bg-rose-500/30 text-rose-200 border border-rose-500/60 flex items-center gap-1.5 animate-pulse">
           <AlertOctagon className="w-4 h-4 text-rose-400" /> ⚡ BIẾN CỐ ĐỘT XUẤT · ĐỐI SÁCH KHỦNG HOẢNG
         </span>
-        <span className="text-[11px] font-medium text-rose-300/80 bg-rose-950/60 border border-rose-500/30 px-2.5 py-0.5 rounded-full">
+        <span className="text-xs font-medium text-rose-300/80 bg-rose-950/60 border border-rose-500/30 px-2.5 py-0.5 rounded-full">
           Quyền Quyết Định Thuộc Về Bạn
         </span>
       </div>
@@ -113,7 +113,7 @@ export default function IllusionCard({ dilemma, onAccept, isLoading }: IllusionC
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className={`text-[11px] font-bold px-2 py-0.5 rounded-lg border flex items-center gap-1 ${badgeColor}`}>
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded-lg border flex items-center gap-1 ${badgeColor}`}>
                     {icon}
                     <span>{strat.id === 'fight' ? 'Đấu Tranh' : strat.id === 'pivot' ? 'Thích Ứng' : 'Bảo Toàn'}</span>
                   </span>
@@ -129,7 +129,7 @@ export default function IllusionCard({ dilemma, onAccept, isLoading }: IllusionC
               </div>
 
               {strat.risk_hint && (
-                <div className="pt-2 border-t border-slate-800/80 text-[11px] text-slate-400 font-sans flex items-start gap-1.5">
+                <div className="pt-2 border-t border-slate-800/80 text-xs text-slate-400 font-sans flex items-start gap-1.5">
                   <span className="text-amber-400 font-bold shrink-0">▸</span>
                   <span>{strat.risk_hint}</span>
                 </div>

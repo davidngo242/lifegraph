@@ -93,7 +93,7 @@ export default function YearEndReflectionModal({
                 <h2 className="text-base sm:text-lg font-black text-[var(--text-primary)] tracking-wide">
                   Nghi Thức Giao Thừa & Chiêm Nghiệm Cuối Năm
                 </h2>
-                <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 text-[11px] font-mono font-bold">
+                <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 text-xs font-mono font-bold">
                   Giao Thời
                 </span>
               </div>
@@ -131,11 +131,11 @@ export default function YearEndReflectionModal({
                   <Activity className="w-3.5 h-3.5" />
                   <span>Dưỡng Sinh Cuối Năm</span>
                 </span>
-                <span className="font-mono text-[11px] px-1.5 py-0.2 rounded bg-emerald-500/20 border border-emerald-500/40">
+                <span className="font-mono text-xs px-1.5 py-0.2 rounded bg-emerald-500/20 border border-emerald-500/40">
                   {unusedAP} AP dư
                 </span>
               </div>
-              <p className="text-[11px] text-slate-300 leading-relaxed">
+              <p className="text-xs text-slate-300 leading-relaxed">
                 {unusedAP > 0 ? (
                   <>Năng lượng chưa dùng chuyển hóa: <span className="text-emerald-400 font-bold">+{vitGain} HP</span> & <span className="text-cyan-400 font-bold">-{burnoutRelief}% Căng thẳng</span>.</>
                 ) : (
@@ -146,21 +146,21 @@ export default function YearEndReflectionModal({
 
             {/* Net Worth Snapshot */}
             <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs flex items-center justify-between">
-              <span className="text-slate-400 text-[11px]">Tài sản tích lũy:</span>
+              <span className="text-slate-400 text-xs">Tài sản tích lũy:</span>
               <span className="text-amber-300 font-mono font-bold">{formattedNetWorth.primary}</span>
             </div>
 
             {/* Recent History Notes */}
             <div className="flex flex-col gap-1.5">
-              <span className="text-[10px] text-slate-500 font-mono uppercase">Lựa chọn tiêu biểu:</span>
+              <span className="text-xs text-slate-500 font-mono uppercase">Lựa chọn tiêu biểu:</span>
               {historyForCurrentAge.length > 0 ? (
                 historyForCurrentAge.map((h: any, idx: number) => (
-                  <div key={idx} className="text-[11px] text-slate-300 pl-2 border-l-2 border-indigo-500/40 truncate">
+                  <div key={idx} className="text-xs text-slate-300 pl-2 border-l-2 border-indigo-500/40 truncate">
                     {h.choice || h.event}
                   </div>
                 ))
               ) : (
-                <div className="text-[11px] text-slate-500 italic">
+                <div className="text-xs text-slate-500 italic">
                   Một năm bình yên trôi qua theo nhịp sống tự nhiên.
                 </div>
               )}
@@ -177,7 +177,7 @@ export default function YearEndReflectionModal({
             <div className="flex flex-col gap-2">
               {/* Unspent SP */}
               <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-xs flex items-center justify-between">
-                <span className="text-amber-700 dark:text-amber-300 text-[11px] flex items-center gap-1.5">
+                <span className="text-amber-700 dark:text-amber-300 text-xs flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                   <span>Điểm Kỹ Năng chưa khai phá:</span>
                 </span>
@@ -188,7 +188,7 @@ export default function YearEndReflectionModal({
 
               {/* Unfinished Social */}
               <div className="p-2.5 rounded-xl bg-sky-500/15 border border-sky-500/30 text-xs flex items-center justify-between">
-                <span className="text-sky-700 dark:text-sky-300 text-[11px] flex items-center gap-1.5">
+                <span className="text-sky-700 dark:text-sky-300 text-xs flex items-center gap-1.5">
                   <Users className="w-3.5 h-3.5 text-sky-500" />
                   <span>Quý nhân chưa sâu sắc:</span>
                 </span>
@@ -198,7 +198,7 @@ export default function YearEndReflectionModal({
               </div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-800 dark:text-amber-200 leading-relaxed italic mt-auto">
+            <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-200 leading-relaxed italic mt-auto">
               &ldquo;Một năm vất vả qua đi rồi. Đêm nay thở phào nhẹ nhõm, ăn bát cơm nóng với gia đình rồi ngày mai lại tiếp tục bước tiếp.&rdquo;
             </div>
           </div>
@@ -209,7 +209,7 @@ export default function YearEndReflectionModal({
           <div className="flex items-center justify-between">
             <h3 className="text-xs sm:text-sm font-black text-amber-700 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
               <span>🌱 Gieo Mầm Tâm Nguyện Năm Mới</span>
-              <span className="text-[10px] text-[var(--text-secondary)] font-normal lowercase">(chọn 1 để tự động đón tuổi {nextAge})</span>
+              <span className="text-xs text-[var(--text-secondary)] font-normal lowercase">(chọn 1 để tự động đón tuổi {nextAge})</span>
             </h3>
             {isAdvancing && (
               <span className="text-xs text-amber-700 dark:text-amber-300 font-bold animate-pulse flex items-center gap-1">
@@ -235,7 +235,7 @@ export default function YearEndReflectionModal({
                 <span className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-base group-hover:scale-110 transition-transform">
                   📈
                 </span>
-                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
+                <span className="text-xs font-mono px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
                   +15% Thu nhập
                 </span>
               </div>
@@ -243,11 +243,11 @@ export default function YearEndReflectionModal({
                 <h4 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] group-hover:text-amber-600 dark:group-hover:text-amber-200">
                   Tâm Nguyện Thịnh Vượng
                 </h4>
-                <p className="text-[11px] text-[var(--text-secondary)] mt-1 leading-snug">
+                <p className="text-xs text-[var(--text-secondary)] mt-1 leading-snug">
                   +15% thu nhập cày việc và +10% lợi tức từ cổ tức, danh mục đầu tư năm sau.
                 </p>
               </div>
-              <div className="flex items-center justify-between pt-1 border-t border-[var(--border-subtle)] text-[10.5px] font-bold text-amber-700 dark:text-amber-300 group-hover:translate-x-0.5 transition-transform">
+              <div className="flex items-center justify-between pt-1 border-t border-[var(--border-subtle)] text-xs font-bold text-amber-700 dark:text-amber-300 group-hover:translate-x-0.5 transition-transform">
                 <span>Gieo Mầm Vận Tài</span>
                 <ArrowRight className="w-3 h-3" />
               </div>
@@ -268,7 +268,7 @@ export default function YearEndReflectionModal({
                 <span className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-base group-hover:scale-110 transition-transform">
                   🧘
                 </span>
-                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
+                <span className="text-xs font-mono px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
                   Kháng Stress
                 </span>
               </div>
@@ -276,11 +276,11 @@ export default function YearEndReflectionModal({
                 <h4 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] group-hover:text-emerald-600 dark:group-hover:text-emerald-200">
                   Tâm Nguyện An Yên
                 </h4>
-                <p className="text-[11px] text-[var(--text-secondary)] mt-1 leading-snug">
+                <p className="text-xs text-[var(--text-secondary)] mt-1 leading-snug">
                   Kháng 30% Burnout khi cày việc và nhân đôi (+100%) hiệu quả hồi phục Dưỡng Sinh.
                 </p>
               </div>
-              <div className="flex items-center justify-between pt-1 border-t border-[var(--border-subtle)] text-[10.5px] font-bold text-emerald-700 dark:text-emerald-300 group-hover:translate-x-0.5 transition-transform">
+              <div className="flex items-center justify-between pt-1 border-t border-[var(--border-subtle)] text-xs font-bold text-emerald-700 dark:text-emerald-300 group-hover:translate-x-0.5 transition-transform">
                 <span>Gieo Mầm Sinh Mệnh</span>
                 <ArrowRight className="w-3 h-3" />
               </div>
@@ -301,7 +301,7 @@ export default function YearEndReflectionModal({
                 <span className="w-8 h-8 rounded-xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-base group-hover:scale-110 transition-transform">
                   🤝
                 </span>
-                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-700 dark:text-sky-300 border border-sky-500/30 font-bold">
+                <span className="text-xs font-mono px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-700 dark:text-sky-300 border border-sky-500/30 font-bold">
                   x2 Quý Nhân
                 </span>
               </div>
@@ -309,11 +309,11 @@ export default function YearEndReflectionModal({
                 <h4 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] group-hover:text-sky-600 dark:group-hover:text-sky-200">
                   Tâm Nguyện Nhân Mạch
                 </h4>
-                <p className="text-[11px] text-[var(--text-secondary)] mt-1 leading-snug">
+                <p className="text-xs text-[var(--text-secondary)] mt-1 leading-snug">
                   Gấp đôi Link EXP kết giao và giảm 50% chi phí quà tặng, mời cơm đối tác năm sau.
                 </p>
               </div>
-              <div className="flex items-center justify-between pt-1 border-t border-[var(--border-subtle)] text-[10.5px] font-bold text-sky-700 dark:text-sky-300 group-hover:translate-x-0.5 transition-transform">
+              <div className="flex items-center justify-between pt-1 border-t border-[var(--border-subtle)] text-xs font-bold text-sky-700 dark:text-sky-300 group-hover:translate-x-0.5 transition-transform">
                 <span>Gieo Mầm Thâm Giao</span>
                 <ArrowRight className="w-3 h-3" />
               </div>

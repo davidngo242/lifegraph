@@ -138,7 +138,7 @@ export default function AncestralFamilyTree({
                           <span className="text-sm md:text-base font-black text-[var(--text-primary)]">
                             {ancestor.name}
                           </span>
-                          <span className="text-[11px] font-sans tabular-nums px-2 py-0.2 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 font-bold">
+                          <span className="text-xs font-sans tabular-nums px-2 py-0.2 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 font-bold">
                             Đời thứ {ancestor.generation}
                           </span>
                         </div>
@@ -151,7 +151,7 @@ export default function AncestralFamilyTree({
                     </div>
 
                     <div className="text-right shrink-0">
-                      <div className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-semibold">Tài Sản Cực Đại</div>
+                      <div className="text-xs text-[var(--text-secondary)] uppercase tracking-wider font-semibold">Tài Sản Cực Đại</div>
                       <div className="text-sm font-sans tabular-nums font-black text-emerald-700 dark:text-emerald-400">
                         +${Number(ancestor.max_net_worth || 0).toLocaleString()}
                       </div>
@@ -166,7 +166,7 @@ export default function AncestralFamilyTree({
                   )}
 
                   {ancestor.cause_of_passing && (
-                    <div className="mt-2 text-[11px] text-slate-400 flex items-center gap-1.5">
+                    <div className="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
                       <span className="text-rose-400">🕊️</span>
                       <span>{ancestor.cause_of_passing}</span>
                     </div>
@@ -196,7 +196,7 @@ export default function AncestralFamilyTree({
                     <span className="text-base font-black text-[var(--text-primary)]">
                       {currentCharacter.name}
                     </span>
-                    <span className="text-[11px] font-sans tabular-nums px-2 py-0.2 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-400/50 font-bold">
+                    <span className="text-xs font-sans tabular-nums px-2 py-0.2 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-400/50 font-bold">
                       Đời Hiện Tại · {currentCharacter.generation || (lineage.length + 1)}
                     </span>
                   </div>
