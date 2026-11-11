@@ -108,9 +108,9 @@ export default function EventCard({
   }
 
   const getRiskLabel = (risk: number) => {
-    if (risk >= 65) return { text: `${risk}% rủi ro`, color: "text-rose-400 border-rose-500/30 bg-rose-500/10" };
-    if (risk >= 35) return { text: `${risk}% rủi ro`, color: "text-amber-400 border-amber-500/30 bg-amber-500/10" };
-    return { text: `An toàn`, color: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10" };
+    if (risk >= 65) return { text: `${risk}% rủi ro`, color: "text-rose-800 dark:text-rose-400 border-rose-500/30 bg-rose-500/10" };
+    if (risk >= 35) return { text: `${risk}% rủi ro`, color: "text-amber-800 dark:text-amber-400 border-amber-500/30 bg-amber-500/10" };
+    return { text: `An toàn`, color: "text-emerald-800 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/10" };
   };
 
   const displayTitle = characterAge
@@ -158,34 +158,34 @@ export default function EventCard({
     if (costAp >= 2 || text.includes('đổi đời') || text.includes('đột phá') || text.includes('liều')) {
       return {
         tag: '🎲 Canh Bạc Đột Phá',
-        color: 'text-amber-300 border-amber-500/40 bg-amber-500/15',
+        color: 'text-amber-800 dark:text-amber-300 border-amber-500/40 bg-amber-500/15',
         needsRoll: true
       };
     }
     if (text.includes('ngủ') || text.includes('an toàn') || text.includes('rút lui') || text.includes('tiết kiệm') || text.includes('chăm sóc')) {
       return {
         tag: '⚡ Thận Trọng / Tự Vệ',
-        color: 'text-teal-300 border-teal-500/40 bg-teal-500/15',
+        color: 'text-teal-800 dark:text-teal-300 border-teal-500/40 bg-teal-500/15',
         needsRoll: option.risk_percent >= 25
       };
     }
     if (text.includes('giúp') || text.includes('chia sẻ') || text.includes('mẹ') || text.includes('bạn') || text.includes('thân')) {
       return {
         tag: '❤️ Thấu Cảm & Tình Thân',
-        color: 'text-rose-300 border-rose-500/40 bg-rose-500/15',
+        color: 'text-rose-800 dark:text-rose-300 border-rose-500/40 bg-rose-500/15',
         needsRoll: option.risk_percent >= 25
       };
     }
     if (index === 0) {
       return {
         tag: '🧠 Lý Trí & Quyết Đoán',
-        color: 'text-indigo-300 border-indigo-500/40 bg-indigo-500/15',
+        color: 'text-indigo-800 dark:text-indigo-300 border-indigo-500/40 bg-indigo-500/15',
         needsRoll: option.risk_percent >= 20
       };
     }
     return {
       tag: '🎭 Khôn Khéo & Tùy Cơ',
-      color: 'text-amber-700 dark:text-amber-300 border-amber-500/40 bg-amber-500/15',
+      color: 'text-amber-800 dark:text-amber-300 border-amber-500/40 bg-amber-500/15',
       needsRoll: option.risk_percent >= 25
     };
   };
@@ -248,11 +248,11 @@ export default function EventCard({
       {/* Header Bar */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-[12px] font-semibold normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+          <span className="text-[12px] font-semibold normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-900 dark:text-amber-300 border border-amber-600/40 dark:border-amber-500/30">
             Sân Khấu Tâm Thức & Biến Cố
           </span>
           {characterAge !== undefined && (
-            <span className="text-xs font-sans tabular-nums font-bold text-amber-400">
+            <span className="text-xs font-sans tabular-nums font-bold text-amber-800 dark:text-amber-400">
               Năm {characterAge} Tuổi
             </span>
           )}
@@ -264,7 +264,7 @@ export default function EventCard({
             onClick={() => { setActiveTab('standard'); setCustomResult(null); }}
             className={`px-2.5 py-1 rounded-lg font-medium transition ${
               activeTab === 'standard'
-                ? 'bg-amber-600/30 text-amber-200 border border-amber-500/40 shadow-sm font-bold'
+                ? 'bg-amber-500/25 dark:bg-amber-600/30 text-amber-900 dark:text-amber-200 border border-amber-600/50 dark:border-amber-500/40 shadow-sm font-bold'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
@@ -328,7 +328,7 @@ export default function EventCard({
                 onClick={() => setActiveVoice('heart')}
                 className={`py-1 px-1.5 rounded-lg flex items-center justify-center gap-1 border transition ${
                   activeVoice === 'heart'
-                    ? 'bg-rose-950/80 border-rose-400/60 text-rose-200 font-bold'
+                    ? 'bg-rose-100 dark:bg-rose-950/80 border-rose-500/60 dark:border-rose-400/60 text-rose-900 dark:text-rose-200 font-bold'
                     : 'bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
@@ -340,7 +340,7 @@ export default function EventCard({
                 onClick={() => setActiveVoice('primal')}
                 className={`py-1 px-1.5 rounded-lg flex items-center justify-center gap-1 border transition ${
                   activeVoice === 'primal'
-                    ? 'bg-teal-950/80 border-teal-400/60 text-teal-200 font-bold'
+                    ? 'bg-teal-100 dark:bg-teal-950/80 border-teal-600/60 dark:border-teal-400/60 text-teal-900 dark:text-teal-200 font-bold'
                     : 'bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
@@ -370,7 +370,7 @@ export default function EventCard({
               <span className="text-lg">⚠️</span>
               <div>
                 <div className="font-bold text-amber-950 dark:text-amber-100 text-xs md:text-sm">
-                  Năm nay bạn vẫn còn <span className="text-amber-700 dark:text-amber-400 font-extrabold font-mono text-sm">{pendingUnspentWarning.unspentAP} AP</span> chưa dùng!
+                  Năm nay bạn vẫn còn <span className="text-amber-800 dark:text-amber-400 font-extrabold font-mono text-sm">{pendingUnspentWarning.unspentAP} AP</span> chưa dùng!
                 </div>
                 <div className="text-[11px] text-amber-800 dark:text-amber-300">
                   Hành động đang chọn: <strong className="text-amber-950 dark:text-amber-200">{pendingUnspentWarning.option.action_title || pendingUnspentWarning.option.label}</strong>
@@ -379,7 +379,7 @@ export default function EventCard({
             </div>
             <button
               onClick={() => setPendingUnspentWarning(null)}
-              className="text-amber-700 dark:text-amber-300 hover:text-amber-950 dark:hover:text-white p-1 rounded-lg"
+              className="text-amber-800 dark:text-amber-300 hover:text-amber-950 dark:hover:text-white p-1 rounded-lg"
               title="Đóng"
             >
               <X className="w-4 h-4" />
@@ -399,7 +399,7 @@ export default function EventCard({
               }}
               className="p-2.5 rounded-xl bg-gradient-to-r from-amber-600/30 to-amber-500/30 hover:from-amber-600/50 hover:to-amber-500/50 border border-amber-400/60 text-amber-950 dark:text-white font-bold text-left transition flex flex-col justify-between group active:scale-95 shadow-md"
             >
-              <div className="flex items-center gap-1.5 text-amber-700 dark:text-amber-300 font-bold mb-1">
+              <div className="flex items-center gap-1.5 text-amber-800 dark:text-amber-300 font-bold mb-1">
                 <Zap className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                 <span>⚡ Đầu tư 1 AP</span>
               </div>
@@ -472,7 +472,7 @@ export default function EventCard({
                   <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
                     {/* Hotkey badge */}
                     {idx < 3 && (
-                      <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-300 font-mono text-[10px] font-bold group-hover:border-[var(--border-highlight)] group-hover:text-amber-200 shadow-sm transition">
+                      <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-800 dark:text-amber-300 font-mono text-[10px] font-bold group-hover:border-[var(--border-highlight)] dark:group-hover:text-amber-200 shadow-sm transition">
                         {idx + 1}
                       </kbd>
                     )}
@@ -483,13 +483,13 @@ export default function EventCard({
                     </span>
 
                     {(stance.needsRoll || isCurrentlyInvested) && (
-                      <span className="text-[12px] font-sans tabular-nums text-amber-400 flex items-center gap-0.5">
+                      <span className="text-[12px] font-sans tabular-nums text-amber-800 dark:text-amber-400 flex items-center gap-0.5">
                         <Dices className="w-2.5 h-2.5" /> Thử thách
                       </span>
                     )}
 
                     <Tooltip content={actionText}>
-                      <span className="text-xs md:text-sm font-bold text-[var(--text-primary)] group-hover:text-amber-200 transition truncate cursor-help">
+                      <span className="text-xs md:text-sm font-bold text-[var(--text-primary)] group-hover:text-amber-800 dark:group-hover:text-amber-200 transition truncate cursor-help">
                         {actionText}
                       </span>
                     </Tooltip>
@@ -520,10 +520,10 @@ export default function EventCard({
                     }}
                     className={`px-2 py-1 rounded-xl text-[11px] font-bold border transition flex items-center gap-1 ${
                       isCurrentlyInvested
-                        ? 'bg-amber-500/25 border-amber-500 text-amber-700 dark:text-amber-300 shadow-md shadow-amber-500/25 animate-pulse'
+                        ? 'bg-amber-500/25 border-amber-500 text-amber-800 dark:text-amber-300 shadow-md shadow-amber-500/25 animate-pulse'
                         : canInvestMore
                         ? 'bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-amber-500/50 hover:text-amber-700 dark:hover:text-amber-300 active:scale-95'
-                        : 'bg-[var(--bg-card-subtle)]/50 border-[var(--border-subtle)] text-slate-400 dark:text-slate-600 cursor-not-allowed opacity-40'
+                        : 'bg-[var(--bg-card-subtle)]/50 border-[var(--border-subtle)] text-slate-600 dark:text-slate-600 cursor-not-allowed opacity-70 dark:opacity-40'
                     }`}
                     title={
                       isCurrentlyInvested
@@ -538,8 +538,8 @@ export default function EventCard({
                     <span className="sm:hidden">{isCurrentlyInvested ? '+1 AP' : '+1 AP'}</span>
                   </button>
 
-                  <Tooltip content={<div className="font-sans italic text-slate-300">{consequence}</div>}>
-                    <button className="text-slate-500 hover:text-indigo-300 transition p-1">
+                  <Tooltip content={<div className="font-sans italic text-slate-700 dark:text-slate-300">{consequence}</div>}>
+                    <button className="text-slate-600 dark:text-slate-500 hover:text-indigo-700 dark:hover:text-indigo-300 transition p-1">
                       <HelpCircle className="w-3.5 h-3.5" />
                     </button>
                   </Tooltip>
@@ -551,8 +551,8 @@ export default function EventCard({
                   {costAp > 0 && (
                     <span className={`text-[12px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-lg flex items-center gap-1 border ${
                       !hasEnoughAP
-                        ? 'bg-rose-500/15 border-rose-500/40 text-rose-700 dark:text-rose-400'
-                        : 'bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-700 dark:text-amber-400'
+                        ? 'bg-rose-500/15 border-rose-500/40 text-rose-800 dark:text-rose-400'
+                        : 'bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-800 dark:text-amber-400'
                     }`}>
                       <Zap className={`w-3 h-3 ${hasEnoughAP ? 'fill-current' : ''}`} />
                       {totalRequiredAp} AP
@@ -573,7 +573,7 @@ export default function EventCard({
               <Sparkles className="w-4 h-4 text-amber-500" />
               Tự do nhập vai. Bạn sẽ xử lý tình huống này thế nào?
             </span>
-            <span className="text-[12px] font-sans tabular-nums text-amber-700 dark:text-amber-400 flex items-center gap-1 bg-[var(--bg-card)] px-2 py-0.5 rounded-lg border border-[var(--border-subtle)]">
+            <span className="text-[12px] font-sans tabular-nums text-amber-800 dark:text-amber-400 flex items-center gap-1 bg-[var(--bg-card)] px-2 py-0.5 rounded-lg border border-[var(--border-subtle)]">
               <Zap className="w-3 h-3 fill-amber-500 text-amber-500" /> Tiêu hao: 1 AP
             </span>
           </div>
@@ -617,7 +617,7 @@ export default function EventCard({
           {/* Custom Action Result Feedback */}
           {customResult && (
             <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-[var(--text-primary)] animate-in fade-in duration-300">
-              <div className="font-bold text-amber-700 dark:text-amber-400 flex items-center gap-1 mb-1">
+              <div className="font-bold text-amber-800 dark:text-amber-400 flex items-center gap-1 mb-1">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
                 Phán Quyết Định Mệnh
               </div>
@@ -636,7 +636,7 @@ export default function EventCard({
               disabled={isResolving || !customActionText.trim() || !!customResult}
               className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition ${
                 isResolving || !customActionText.trim() || !!customResult
-                  ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                  ? 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-bold shadow-md shadow-amber-500/25 active:scale-95'
               }`}
             >

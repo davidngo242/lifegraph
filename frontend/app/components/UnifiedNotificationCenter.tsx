@@ -103,16 +103,16 @@ export default function UnifiedNotificationCenter({
           aria-label="Trung tâm thông báo"
           className={`py-1 px-2.5 sm:px-3 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-95 shadow-sm ${
             criticalIssuesCount > 0
-              ? 'bg-rose-950/80 hover:bg-rose-900 border-rose-500/70 text-rose-200 shadow-md shadow-rose-950/50 animate-pulse'
+              ? 'bg-rose-100 hover:bg-rose-200 border-rose-500 text-rose-950 shadow-md shadow-rose-300/50 dark:bg-rose-950/80 dark:hover:bg-rose-900 dark:border-rose-500/70 dark:text-rose-200 dark:shadow-rose-950/50 animate-pulse'
               : hasDilemma
-              ? 'bg-amber-950/80 hover:bg-amber-900 border-amber-500/60 text-amber-200 shadow-sm'
+              ? 'bg-amber-100 hover:bg-amber-200 border-amber-600 text-amber-950 shadow-sm dark:bg-amber-950/80 dark:hover:bg-amber-900 dark:border-amber-500/60 dark:text-amber-200'
               : totalBadges > 0
-              ? 'bg-indigo-950/50 hover:bg-indigo-900/60 border-indigo-500/40 text-indigo-200'
+              ? 'bg-indigo-100 hover:bg-indigo-200 border-indigo-500 text-indigo-950 dark:bg-indigo-950/50 dark:hover:bg-indigo-900/60 dark:border-indigo-500/40 dark:text-indigo-200'
               : 'bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
           }`}
         >
           <div className="relative flex items-center">
-            <Bell className={`w-3.5 h-3.5 ${criticalIssuesCount > 0 ? 'text-rose-400 animate-bounce' : hasDilemma ? 'text-amber-400' : 'text-current'}`} />
+            <Bell className={`w-3.5 h-3.5 ${criticalIssuesCount > 0 ? 'text-rose-600 dark:text-rose-400 animate-bounce' : hasDilemma ? 'text-amber-700 dark:text-amber-400' : 'text-current'}`} />
             {criticalIssuesCount > 0 && (
               <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-rose-500 animate-ping" />
             )}
@@ -181,7 +181,7 @@ export default function UnifiedNotificationCenter({
             {/* 1. KHU VỰC NGUY CẤP (Critical / Life-Threatening) */}
             {criticalIssuesCount > 0 && (
               <div className="space-y-2">
-                <div className="text-[10.5px] font-mono font-bold text-rose-500 uppercase tracking-wider flex items-center gap-1">
+                <div className="text-[10.5px] font-mono font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
                   Hiểm Họa Cần Xử Lý Ngay
                 </div>
@@ -208,7 +208,7 @@ export default function UnifiedNotificationCenter({
                             setIsOpen(false);
                             onWellness();
                           }}
-                          className="flex-1 py-1.5 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1 transition shadow-sm"
+                          className="flex-1 py-1.5 px-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs flex items-center justify-center gap-1 transition shadow-sm"
                         >
                           <span>🌿 Dưỡng Sinh (+15 HP)</span>
                         </button>
@@ -289,7 +289,7 @@ export default function UnifiedNotificationCenter({
                           setIsOpen(false);
                           onWellness();
                         }}
-                        className="w-full py-1.5 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1 transition shadow-sm"
+                        className="w-full py-1.5 px-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs flex items-center justify-center gap-1 transition shadow-sm"
                       >
                         <span>☕ Dưỡng Sinh Hạ Áp Lực (-25 Stress)</span>
                       </button>

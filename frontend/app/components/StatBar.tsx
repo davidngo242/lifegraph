@@ -22,10 +22,10 @@ export default function StatBar({
   burnout
 }: StatBarProps) {
   const getStressDescription = () => {
-    if (burnout > 80) return { label: "NGUY KỊCH", color: "text-rose-500 animate-pulse font-bold" };
-    if (burnout > 60) return { label: "Kiệt quệ", color: "text-orange-400 font-semibold" };
-    if (burnout > 35) return { label: "Căng thẳng", color: "text-amber-400" };
-    return { label: "Ổn định", color: "text-emerald-400" };
+    if (burnout > 80) return { label: "NGUY KỊCH", color: "text-rose-700 dark:text-rose-400 animate-pulse font-bold" };
+    if (burnout > 60) return { label: "Kiệt quệ", color: "text-orange-700 dark:text-orange-400 font-semibold" };
+    if (burnout > 35) return { label: "Căng thẳng", color: "text-amber-800 dark:text-amber-400" };
+    return { label: "Ổn định", color: "text-emerald-800 dark:text-emerald-400" };
   };
 
   const stress = getStressDescription();
@@ -36,7 +36,7 @@ export default function StatBar({
     <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-2xl p-4 backdrop-blur-md shadow-2xl flex flex-wrap items-center justify-between gap-3">
       {/* 1. Sức sống (Vitality with Max Cap) */}
       <div className="flex items-center gap-3 min-w-[190px] flex-1">
-        <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400">
+        <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400">
           <Heart className="w-5 h-5 fill-rose-500/30" />
         </div>
         <div className="flex-1">
@@ -61,15 +61,15 @@ export default function StatBar({
       <div className="flex items-center gap-3 min-w-[150px]">
         <div className={`p-2.5 rounded-xl border ${
           cash < 0 
-            ? 'bg-rose-500/10 border-rose-500/30 text-rose-400' 
-            : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+            ? 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400' 
+            : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-400'
         }`}>
           <DollarSign className="w-5 h-5" />
         </div>
         <div>
           <div className="text-[12px] text-[var(--text-secondary)] font-semibold tracking-normal font-sans">TIỀN MẶT</div>
           <div className={`text-base font-sans tabular-nums font-bold ${
-            cash < 0 ? 'text-rose-400 tracking-tight' : 'text-[var(--text-primary)]'
+            cash < 0 ? 'text-rose-700 dark:text-rose-400 tracking-tight' : 'text-[var(--text-primary)]'
           }`}>
             {cash < 0 ? `-$${Math.abs(cash).toLocaleString()}` : `$${cash.toLocaleString()}`}
           </div>
@@ -78,12 +78,12 @@ export default function StatBar({
 
       {/* 3. Tổng tài sản ròng (Net Worth) */}
       <div className="flex items-center gap-3 min-w-[150px]">
-        <div className="p-2.5 rounded-xl bg-teal-500/10 border border-teal-500/30 text-teal-400">
+        <div className="p-2.5 rounded-xl bg-teal-500/10 border border-teal-500/30 text-teal-700 dark:text-teal-400">
           <DollarSign className="w-5 h-5" />
         </div>
         <div>
           <div className="text-[12px] text-[var(--text-secondary)] font-semibold tracking-normal font-sans">TỔNG TÀI SẢN</div>
-          <div className="text-base font-sans tabular-nums font-bold text-teal-300">
+          <div className="text-base font-sans tabular-nums font-bold text-teal-800 dark:text-teal-300">
             ${displayNetWorth.toLocaleString()}
           </div>
         </div>
@@ -92,7 +92,7 @@ export default function StatBar({
       {/* 4. Trạng thái tâm lý (Stress) */}
       <div className="flex items-center gap-3 min-w-[130px]">
         <div className={`p-2.5 rounded-xl border ${
-          burnout > 80 ? 'bg-rose-500/20 border-rose-500/50 text-rose-400' : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400'
+          burnout > 80 ? 'bg-rose-500/20 border-rose-500/50 text-rose-600 dark:text-rose-400' : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400'
         }`}>
           <AlertTriangle className={`w-5 h-5 ${burnout > 80 ? 'animate-bounce' : ''}`} />
         </div>
@@ -106,12 +106,12 @@ export default function StatBar({
 
       {/* 5. Nghiệp lực (Karma) */}
       <div className="flex items-center gap-3 min-w-[120px]">
-        <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500">
+        <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-500">
           <Sparkles className="w-5 h-5" />
         </div>
         <div>
           <div className="text-[12px] text-[var(--text-secondary)] font-semibold tracking-normal font-sans">NGHIỆP LỰC</div>
-          <div className="text-sm font-sans tabular-nums font-bold text-amber-600 dark:text-amber-400">
+          <div className="text-sm font-sans tabular-nums font-bold text-amber-800 dark:text-amber-400">
             {karma}
           </div>
         </div>

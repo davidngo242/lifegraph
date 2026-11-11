@@ -55,7 +55,7 @@ export default function CommandBarHUD({
             position="bottom"
             content={
               <div className="p-0.5">
-                <div className="font-bold text-sky-300 text-xs">
+                <div className="font-bold text-sky-800 dark:text-sky-300 text-xs">
                   {activeView === 'game' ? 'Chuyển sang Xem Nhanh Gia Phả' : 'Chuyển sang Buồng Lái Kiếp Sống'}
                 </div>
                 <div className="text-[11px] text-[var(--text-secondary)]">
@@ -69,19 +69,19 @@ export default function CommandBarHUD({
               disabled={isLoading}
               className={`px-2.5 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 border transition active:scale-95 ${
                 activeView === 'game'
-                  ? 'bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border-[var(--border-subtle)] text-sky-300 hover:text-[var(--text-primary)]'
-                  : 'bg-sky-600/30 border-sky-400/50 text-sky-200 hover:bg-sky-600/40'
+                  ? 'bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border-[var(--border-subtle)] text-sky-800 dark:text-sky-300 hover:text-[var(--text-primary)]'
+                  : 'bg-sky-500/20 dark:bg-sky-600/30 border-sky-600/50 dark:border-sky-400/50 text-sky-900 dark:text-sky-200 hover:bg-sky-500/30 dark:hover:bg-sky-600/40'
               }`}
             >
               {activeView === 'game' ? (
                 <>
-                  <Eye className="w-3.5 h-3.5 text-sky-400" />
+                  <Eye className="w-3.5 h-3.5 text-sky-700 dark:text-sky-400" />
                   <span className="hidden sm:inline">Chế Độ Xem Nhanh</span>
                   <span className="sm:hidden">Xem Nhanh</span>
                 </>
               ) : (
                 <>
-                  <EyeOff className="w-3.5 h-3.5 text-sky-300" />
+                  <EyeOff className="w-3.5 h-3.5 text-sky-700 dark:text-sky-300" />
                   <span>Về Buồng Lái</span>
                 </>
               )}
@@ -93,7 +93,7 @@ export default function CommandBarHUD({
             position="bottom"
             content={
               <div className="p-0.5">
-                <div className="font-bold text-amber-600 dark:text-amber-300 text-xs flex items-center gap-1">
+                <div className="font-bold text-amber-800 dark:text-amber-300 text-xs flex items-center gap-1">
                   <span>🎬 Phòng Quyết Định 21:9</span>
                   <kbd className="px-1 py-0.2 rounded bg-[var(--bg-card)] text-[10px] text-[var(--text-secondary)] border border-[var(--border-subtle)]">[D]</kbd>
                 </div>
@@ -110,7 +110,7 @@ export default function CommandBarHUD({
             >
               <Film className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               <span className="hidden md:inline">Phòng Điện Ảnh</span>
-              <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-600 dark:text-amber-400 font-bold">
+              <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-800 dark:text-amber-400 font-bold">
                 D
               </kbd>
             </button>
@@ -124,35 +124,35 @@ export default function CommandBarHUD({
             onClick={onOpenShortcutsHelp}
             className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[rgba(255,255,255,0.06)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs transition active:scale-95 group shadow-sm"
           >
-            <Keyboard className="w-3.5 h-3.5 text-indigo-400 group-hover:text-indigo-300" />
+            <Keyboard className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-800 dark:group-hover:text-indigo-300" />
             <span className="font-medium text-xs hidden lg:inline">Phím Tắt:</span>
 
             {/* Badges [1], [2], [3], [Space] */}
             <div className="flex items-center gap-1">
               <span className="flex items-center gap-0.5">
-                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
+                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-800 dark:text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
                   1
                 </kbd>
-                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
+                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-800 dark:text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
                   2
                 </kbd>
-                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
+                <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-amber-800 dark:text-amber-300 font-bold group-hover:border-amber-400/60 shadow-sm">
                   3
                 </kbd>
                 <span className="text-[10px] text-[var(--text-secondary)] hidden xl:inline ml-0.5">Chọn Ngã Rẽ</span>
               </span>
 
-              <span className="text-slate-600 hidden sm:inline">|</span>
+              <span className="text-slate-500 hidden sm:inline">|</span>
 
               <span className="flex items-center gap-1">
-                <kbd className="px-2 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-emerald-300 font-bold group-hover:border-emerald-400/60 shadow-sm">
+                <kbd className="px-2 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-emerald-800 dark:text-emerald-300 font-bold group-hover:border-emerald-400/60 shadow-sm">
                   Space
                 </kbd>
                 <span className="text-[10px] text-[var(--text-secondary)] hidden xl:inline">Sang Năm</span>
               </span>
             </div>
 
-            <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 ml-1">
+            <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 ml-1">
               ?
             </span>
           </button>
@@ -165,22 +165,22 @@ export default function CommandBarHUD({
               position="bottom"
               content={
                 <div className="p-0.5 max-w-xs">
-                  <div className="font-bold text-rose-300 text-xs flex items-center gap-1">
-                    <HeartPulse className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
+                  <div className="font-bold text-rose-800 dark:text-rose-300 text-xs flex items-center gap-1">
+                    <HeartPulse className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 animate-pulse" />
                     <span>Cảnh Báo Nguy Kịch Sinh Tồn</span>
                   </div>
-                  <div className="text-[11px] text-slate-300 mt-1">
+                  <div className="text-[11px] text-slate-700 dark:text-slate-300 mt-1">
                     {vitality < 30 && (
-                      <div className="text-rose-400 font-semibold">
+                      <div className="text-rose-700 dark:text-rose-400 font-semibold">
                         • Sinh Lực cực thấp ({vitality}%): Nguy cơ tử vong cao!
                       </div>
                     )}
                     {burnout > 75 && (
-                      <div className="text-amber-400 font-semibold">
+                      <div className="text-amber-800 dark:text-amber-400 font-semibold">
                         • Kiệt Sức báo động ({burnout}%): Tinh thần suy sụp!
                       </div>
                     )}
-                    <div className="mt-1 text-slate-300">
+                    <div className="mt-1 text-slate-700 dark:text-slate-300">
                       Bấm để mở phương án Dưỡng Sinh hoặc Thỉnh Phước bảo mạng ngay lập tức.
                     </div>
                   </div>
