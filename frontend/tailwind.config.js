@@ -1,6 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ['selector', '[data-theme="obsidian"], [data-theme="sepia"], [data-theme="cyberpunk"], .dark'],
+  // QUAN TRỌNG: dạng ['selector', 'a, b, c'] của Tailwind sinh ra `:where(a, b, c .dark *)` -> chỉ khớp chính phần tử
+  // <html data-theme=...> chứ KHÔNG khớp phần tử con, khiến mọi biến thể `dark:` chết trong theme tối.
+  // Dùng 'variant' với selector tự viết để `dark:` khớp cả <html> lẫn mọi hậu duệ của theme tối (không theo OS).
+  // Sepia là theme SÁNG-ẤM (giấy ngà) nên KHÔNG nằm trong danh sách; nó dùng adaptor `[data-theme="sepia"]` trong globals.css.
+  darkMode: ['variant', [
+    '&:where([data-theme="obsidian"], [data-theme="obsidian"] *, [data-theme="cyberpunk"], [data-theme="cyberpunk"] *, .dark, .dark *)',
+  ]],
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",

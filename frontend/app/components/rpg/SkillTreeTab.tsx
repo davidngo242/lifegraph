@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Sparkles,
   Lock,
@@ -232,6 +232,20 @@ export default function SkillTreeTab({
   const [selectedBranch, setSelectedBranch] = useState<'social' | 'wealth' | 'sage'>('social');
   const [unlockingId, setUnlockingId] = useState<string | null>(null);
 
+  // Tab được đặt trong cả panel hẹp (~480px) lẫn modal rộng: đo bề rộng thật thay vì dùng breakpoint của viewport.
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [wide, setWide] = useState(false);
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver((entries) => {
+      const w = entries[0]?.contentRect.width ?? 0;
+      setWide(w >= 640);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   const branches = Object.values(skillTree || DEFAULT_TREE);
   const currentBranch = (skillTree && skillTree[selectedBranch]) || branches[0];
 
@@ -258,24 +272,24 @@ export default function SkillTreeTab({
   });
 
   return (
-    <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-3 md:p-5 shadow-2xl backdrop-blur-xl flex flex-col gap-4">
+    <div ref={rootRef} className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-3 md:p-5 shadow-2xl backdrop-blur-xl flex flex-col gap-4">
       
       {/* 1. Header Bar: Title & SP Pill */}
       <div className="flex flex-wrap items-center justify-between pb-3 border-b border-[var(--border-subtle)] gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-2xl bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 flex items-center justify-center shrink-0 shadow-inner">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-9 h-9 rounded-2xl bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 flex items-center justify-center shrink-0 shadow-inner">
             <Award className="w-5 h-5 fill-current" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center flex-wrap gap-x-2 gap-y-1">
               <h3 className="text-sm md:text-base font-extrabold text-[var(--text-primary)]">
                 Đại Thụ Kỹ Năng Tam Vị Nhất Thể
               </h3>
-              <span className="text-[10.5px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 font-bold uppercase tracking-wide">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-800 dark:text-indigo-300 border border-indigo-500/30 font-bold uppercase tracking-wide whitespace-nowrap">
                 The Trinity RPG Tree
               </span>
             </div>
-            <p className="text-[11px] text-[var(--text-secondary)]">
+            <p className="text-xs text-[var(--text-secondary)]">
               Gốc Rễ Gia Phong • Cành Vàng Tư Bản • Đỉnh Cao Trí Tuệ — Rèn luyện đặc quyền định đoạt vận mệnh
             </p>
           </div>
@@ -283,29 +297,29 @@ export default function SkillTreeTab({
 
         {/* SP Counter Pill */}
         <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-amber-500/15 border border-amber-500/40 text-amber-800 dark:text-amber-200 shadow-sm">
-          <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500/30 animate-pulse" />
+          <Sparkles className="w-4 h-4 text-amber-700 dark:text-amber-500 fill-amber-500/30 animate-pulse" />
           <span className="text-xs font-bold text-amber-800 dark:text-amber-200">Điểm Kỹ Năng:</span>
           <span className="text-sm md:text-base font-sans tabular-nums font-black text-amber-900 dark:text-amber-300">
-            {skillPoints} <span className="text-[10px] font-semibold text-amber-700 dark:text-amber-400">SP</span>
+            {skillPoints} <span className="text-xs font-semibold text-amber-800 dark:text-amber-400">SP</span>
           </span>
         </div>
       </div>
 
       {/* 2. Triangle Resonance Synergies HUD (Cộng Hưởng Tam Giác Sinh Mệnh) */}
       <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] shadow-inner space-y-2">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-700 dark:text-amber-500" />
             <span className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wide">
               Cộng Hưởng Tam Giác Sinh Mệnh (Resonance Synergies)
             </span>
           </div>
-          <span className="text-[10.5px] text-[var(--text-secondary)] font-sans tabular-nums">
+          <span className="text-xs text-[var(--text-secondary)] font-sans tabular-nums whitespace-nowrap">
             {activeResonances.filter(r => r.isActive).length}/{TREE_RESONANCES.length} Đang Kích Hoạt
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+        <div className={`grid gap-2 ${wide ? 'grid-cols-2 xl:grid-cols-4' : 'grid-cols-1'}`}>
           {activeResonances.map(res => {
             return (
               <Tooltip
@@ -317,22 +331,22 @@ export default function SkillTreeTab({
                 <div
                   className={`p-2 rounded-xl border transition flex items-center justify-between gap-2 cursor-help ${
                     res.isActive
-                      ? 'bg-amber-500/15 border-amber-500/50 text-amber-700 dark:text-amber-300 shadow-sm'
+                      ? 'bg-amber-500/15 border-amber-500/50 text-amber-800 dark:text-amber-300 shadow-sm'
                       : 'bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] opacity-60'
                   }`}
                 >
                   <div className="flex items-center gap-1.5 min-w-0">
                     <span className="text-sm shrink-0">{res.icon}</span>
-                    <span className="text-[11px] font-bold truncate">
+                    <span className="text-xs font-bold leading-tight">
                       {res.name}
                     </span>
                   </div>
                   {res.isActive ? (
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 font-bold shrink-0">
+                    <span className="text-xs px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 font-bold shrink-0">
                       ✓ Sẵn Sàng
                     </span>
                   ) : (
-                    <span className="text-[9px] font-sans tabular-nums px-1.5 py-0.2 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border border-[var(--border-subtle)] shrink-0">
+                    <span className="text-xs font-sans tabular-nums px-1.5 py-0.2 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border border-[var(--border-subtle)] shrink-0">
                       {res.progress}
                     </span>
                   )}
@@ -344,7 +358,7 @@ export default function SkillTreeTab({
       </div>
 
       {/* 3. The Three Trinity Pillar Selectors (Gia Phong, Tư Bản, Trí Tuệ) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+      <div className={`grid gap-2.5 ${wide ? 'grid-cols-3' : 'grid-cols-1'}`}>
         {branches.map(b => {
           const isSelected = selectedBranch === b.id;
           const unlockedInBranch = b.skills.filter(s => unlockedSet.has(s.id)).length;
@@ -373,19 +387,19 @@ export default function SkillTreeTab({
               <div className="flex items-center justify-between">
                 <span className="text-xl p-1 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">{b.icon}</span>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-[var(--bg-card)] text-indigo-700 dark:text-indigo-300 border border-[var(--border-subtle)] font-bold">
+                  <span className="text-xs font-sans tabular-nums px-2 py-0.5 rounded-full bg-[var(--bg-card)] text-indigo-800 dark:text-indigo-300 border border-[var(--border-subtle)] font-bold">
                     {unlockedInBranch}/{b.skills.length}
                   </span>
                 </div>
               </div>
 
               <div>
-                <div className={`text-xs sm:text-sm font-bold truncate ${isSelected ? 'text-[var(--text-primary)] font-extrabold' : 'text-[var(--text-secondary)]'}`}>
+                <div className={`text-xs sm:text-sm font-bold leading-tight ${isSelected ? 'text-[var(--text-primary)] font-extrabold' : 'text-[var(--text-secondary)]'}`}>
                   {b.name}
                 </div>
-                <div className="flex items-center gap-1 text-[10.5px] text-[var(--text-secondary)] mt-0.5">
+                <div className="flex items-center gap-1 text-xs text-[var(--text-secondary)] mt-0.5">
                   <span>Hệ sinh thái:</span>
-                  <span className="text-amber-700 dark:text-amber-400 font-semibold">{pillarMeta}</span>
+                  <span className="text-amber-800 dark:text-amber-400 font-semibold">{pillarMeta}</span>
                 </div>
               </div>
             </button>
@@ -400,7 +414,7 @@ export default function SkillTreeTab({
       </div>
 
       {/* 5. Skill Progression Pathway (Tier 1 -> Tier 2 -> Tier 3) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className={`grid gap-3 ${wide ? 'grid-cols-3' : 'grid-cols-1'}`}>
         {currentBranch.skills.map((skill) => {
           const isUnlocked = unlockedSet.has(skill.id);
           const hasPrereq = !skill.requires || unlockedSet.has(skill.requires);
@@ -420,18 +434,18 @@ export default function SkillTreeTab({
             >
               {/* Card Header: Tier & Cost */}
               <div className="flex items-center justify-between">
-                <span className="text-[10.5px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-full bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
+                <span className="text-xs font-sans tabular-nums font-bold px-2 py-0.5 rounded-full bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                   Cấp {skill.tier}
                 </span>
                 {isUnlocked ? (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Đã Mở Khóa
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-700 dark:text-emerald-500" /> Đã Mở Khóa
                   </span>
                 ) : (
-                  <span className={`text-[10.5px] font-sans tabular-nums font-bold px-2 py-0.5 rounded-full border ${
+                  <span className={`text-xs font-sans tabular-nums font-bold px-2 py-0.5 rounded-full border ${
                     canAfford
-                      ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-500/40'
-                      : 'bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-300 dark:border-slate-700'
+                      ? 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/40'
+                      : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700'
                   }`}>
                     {skill.costSp} SP
                   </span>
@@ -445,17 +459,17 @@ export default function SkillTreeTab({
                     {skill.icon}
                   </span>
                   <div className="min-w-0">
-                    <h4 className={`text-xs sm:text-sm font-bold truncate ${isUnlocked ? 'text-emerald-700 dark:text-emerald-300' : 'text-[var(--text-primary)]'}`}>
+                    <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isUnlocked ? 'text-emerald-800 dark:text-emerald-300' : 'text-[var(--text-primary)]'}`}>
                       {skill.name}
                     </h4>
                     {skill.requires && !hasPrereq && (
-                      <span className="text-[10px] text-rose-500 flex items-center gap-1 font-medium">
+                      <span className="text-xs text-rose-700 dark:text-rose-500 flex items-center gap-1 font-medium">
                         <Lock className="w-2.5 h-2.5" /> Yêu cầu mở khóa Cấp {skill.tier - 1}
                       </span>
                     )}
                   </div>
                 </div>
-                <p className="text-[11.5px] text-[var(--text-secondary)] leading-relaxed">
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                   {skill.description}
                 </p>
               </div>
@@ -463,7 +477,7 @@ export default function SkillTreeTab({
               {/* Action Button */}
               <div className="pt-1">
                 {isUnlocked ? (
-                  <div className="w-full py-1.5 text-center text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 rounded-xl border border-emerald-500/25 flex items-center justify-center gap-1">
+                  <div className="w-full py-1.5 text-center text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-500/15 rounded-xl border border-emerald-500/25 flex items-center justify-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Đặc Quyền Vĩnh Viễn Đang Kích Hoạt</span>
                   </div>
@@ -475,7 +489,7 @@ export default function SkillTreeTab({
                     className={`w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95 shadow ${
                       canUnlock
                         ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black cursor-pointer'
-                        : 'bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-300 dark:border-slate-700 cursor-not-allowed'
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 cursor-not-allowed'
                     }`}
                   >
                     {unlockingId === skill.id ? (

@@ -75,19 +75,19 @@ export default function StickyProfileSidebar({
   const apGainPerYear = vitality >= 70 ? 4 : vitality >= 40 ? 3 : 2;
 
   const getHealthStatus = () => {
-    if (vitality >= 80) return { label: "Sung mãn", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" };
-    if (vitality >= 50) return { label: "Ổn định", color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/30" };
-    if (vitality >= 25) return { label: "Suy yếu", color: "text-amber-400 bg-amber-500/10 border-amber-500/30" };
-    return { label: "Nguy kịch", color: "text-rose-400 bg-rose-500/20 border-rose-500/40 animate-pulse" };
+    if (vitality >= 80) return { label: "Sung mãn", color: "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30" };
+    if (vitality >= 50) return { label: "Ổn định", color: "text-cyan-800 dark:text-cyan-400 bg-cyan-500/10 border-cyan-500/30" };
+    if (vitality >= 25) return { label: "Suy yếu", color: "text-amber-800 dark:text-amber-400 bg-amber-500/10 border-amber-500/30" };
+    return { label: "Nguy kịch", color: "text-rose-700 dark:text-rose-400 bg-rose-500/20 border-rose-500/40 animate-pulse" };
   };
   const healthStatus = getHealthStatus();
 
   // Mental Burnout Status
   const getStress = () => {
-    if (burnout >= 80) return { label: "Nguy cấp", color: "text-rose-400 bg-rose-500/20 border-rose-500/40 animate-pulse" };
-    if (burnout >= 55) return { label: "Căng thẳng", color: "text-orange-400 bg-orange-500/10 border-orange-500/30" };
-    if (burnout >= 30) return { label: "Mệt mỏi", color: "text-amber-400 bg-amber-500/10 border-amber-500/30" };
-    return { label: "Ổn định", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" };
+    if (burnout >= 80) return { label: "Nguy cấp", color: "text-rose-700 dark:text-rose-400 bg-rose-500/20 border-rose-500/40 animate-pulse" };
+    if (burnout >= 55) return { label: "Căng thẳng", color: "text-orange-800 dark:text-orange-400 bg-orange-500/10 border-orange-500/30" };
+    if (burnout >= 30) return { label: "Mệt mỏi", color: "text-amber-800 dark:text-amber-400 bg-amber-500/10 border-amber-500/30" };
+    return { label: "Ổn định", color: "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30" };
   };
   const stress = getStress();
 
@@ -173,7 +173,7 @@ export default function StickyProfileSidebar({
         </span>
         {character.household.family_buff && (
           <Tooltip content={`Gia đạo gia truyền: ${character.household.family_buff.name}`}>
-            <span className="text-[10px] font-semibold text-amber-300 px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 truncate max-w-[140px] cursor-help">
+            <span className="text-xs font-semibold text-amber-300 px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 truncate max-w-[140px] cursor-help">
               ⭐ {character.household.family_buff.name}
             </span>
           </Tooltip>
@@ -181,7 +181,7 @@ export default function StickyProfileSidebar({
       </div>
 
       {/* Parents Line */}
-      <div className="flex items-center justify-between text-[11px] text-slate-300 bg-slate-900/60 px-2.5 py-1.5 rounded-xl border border-slate-800/60">
+      <div className="flex items-center justify-between text-xs text-slate-300 bg-slate-900/60 px-2.5 py-1.5 rounded-xl border border-slate-800/60">
         {(() => {
           const parentText = `${character.household.father_name ? `Bố: ${character.household.father_name}` : "Mồ côi"}${character.household.mother_name ? ` • Mẹ: ${character.household.mother_name}` : ""}`;
           return (
@@ -192,7 +192,7 @@ export default function StickyProfileSidebar({
             </Tooltip>
           );
         })()}
-        <span className={`shrink-0 text-[10px] font-sans px-1.5 py-0.2 rounded font-semibold ${
+        <span className={`shrink-0 text-xs font-sans px-1.5 py-0.2 rounded font-semibold ${
           isParentsDeceased
             ? 'bg-rose-950/50 text-rose-300 border border-rose-800/60'
             : 'bg-emerald-950/50 text-emerald-300 border border-emerald-800/60'
@@ -207,7 +207,7 @@ export default function StickyProfileSidebar({
         <button
           onClick={onFamilyMeal}
           disabled={!canEatFamilyMeal}
-          className={`py-1.5 px-2 rounded-xl text-[11px] font-semibold flex items-center justify-between transition border ${
+          className={`py-1.5 px-2 rounded-xl text-xs font-semibold flex items-center justify-between transition border ${
             isParentsDeceased
               ? 'bg-slate-950 text-slate-600 border-slate-900 cursor-not-allowed'
               : canEatFamilyMeal
@@ -220,7 +220,7 @@ export default function StickyProfileSidebar({
             <Utensils className="w-3 h-3 text-amber-400 shrink-0" />
             <span className="truncate">{age < 6 ? "Bầu Sữa Mẹ" : "Bữa Cơm"}</span>
           </span>
-          <span className="text-[10px] text-amber-300/80 font-mono shrink-0 ml-1">
+          <span className="text-xs text-amber-300/80 font-mono shrink-0 ml-1">
             {canEatFamilyMeal ? (age < 6 ? "+10 HP" : "-15 Stress") : "Đã dùng"}
           </span>
         </button>
@@ -230,7 +230,7 @@ export default function StickyProfileSidebar({
           <button
             onClick={onFamilyMentorship}
             disabled={!canMentorship}
-            className={`py-1.5 px-2 rounded-xl text-[11px] font-semibold flex items-center justify-between transition border ${
+            className={`py-1.5 px-2 rounded-xl text-xs font-semibold flex items-center justify-between transition border ${
               canMentorship
                 ? 'bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border-amber-500/40 active:scale-98 shadow'
                 : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border-[var(--border-subtle)] opacity-60 cursor-not-allowed'
@@ -241,7 +241,7 @@ export default function StickyProfileSidebar({
               <MessageSquare className="w-3 h-3 text-amber-500 shrink-0" />
               <span className="truncate">Lời Khuyên</span>
             </span>
-            <span className="text-[10px] text-amber-600 dark:text-amber-400 font-mono shrink-0 ml-1">
+            <span className="text-xs text-amber-600 dark:text-amber-400 font-mono shrink-0 ml-1">
               {canMentorship ? "+8 Karma" : "Đã dùng"}
             </span>
           </button>
@@ -263,7 +263,7 @@ export default function StickyProfileSidebar({
         </span>
         <button
           onClick={onOpenAssets}
-          className="text-[11px] text-indigo-400 hover:text-indigo-300 font-medium transition"
+          className="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition"
         >
           Chi tiết &rarr;
         </button>
@@ -271,7 +271,7 @@ export default function StickyProfileSidebar({
 
       <div className="flex items-baseline justify-between bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/60">
         <div>
-          <span className="text-[10.5px] text-slate-400 block font-medium">
+          <span className="text-xs text-slate-400 block font-medium">
             {age < 6 ? "Quỹ Sữa Bỉm (Mẹ Giữ)" : isAdult ? "Tiền Mặt Tự Do" : "Tiền Tiêu Vặt"}
           </span>
           <span className={`text-base font-sans tabular-nums font-extrabold ${displayCash < 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
@@ -280,7 +280,7 @@ export default function StickyProfileSidebar({
         </div>
 
         <div className="text-right">
-          <span className="text-[10.5px] text-slate-400 block font-medium">
+          <span className="text-xs text-slate-400 block font-medium">
             {isAdult ? "Tổng Tài Sản Ròng" : "Quỹ Tín Thác 18t"}
           </span>
           <span className="text-sm font-sans tabular-nums font-bold text-teal-300">
@@ -302,13 +302,13 @@ export default function StickyProfileSidebar({
         <span className="font-bold text-[12px] text-[var(--text-primary)] flex items-center gap-1.5 truncate">
           <Target className="w-3.5 h-3.5 text-amber-500 shrink-0" /> {stageData.title}
         </span>
-        <span className="font-sans tabular-nums text-amber-700 dark:text-amber-300 text-[10px] font-semibold bg-amber-500/15 px-2 py-0.5 rounded-full border border-amber-500/30 shrink-0">
+        <span className="font-sans tabular-nums text-amber-700 dark:text-amber-300 text-xs font-semibold bg-amber-500/15 px-2 py-0.5 rounded-full border border-amber-500/30 shrink-0">
           Còn {Math.max(1, stageData.nextAge - age)} năm
         </span>
       </div>
 
       {/* Compact Milestone Checklist */}
-      <div className="space-y-1 text-[11px]">
+      <div className="space-y-1 text-xs">
         {stageData.milestones.map((m, idx) => (
           <div key={idx} className="flex items-center justify-between text-[var(--text-secondary)] gap-2">
             <span className="flex items-center gap-1.5 truncate">
@@ -319,7 +319,7 @@ export default function StickyProfileSidebar({
                 {m.name}
               </span>
             </span>
-            <span className={`text-[9.5px] font-mono shrink-0 ${m.done ? "text-emerald-600 dark:text-emerald-400 font-bold" : "text-amber-600 dark:text-amber-400/80"}`}>
+            <span className={`text-xs font-mono shrink-0 ${m.done ? "text-emerald-600 dark:text-emerald-400 font-bold" : "text-amber-600 dark:text-amber-400/80"}`}>
               {m.done ? "Đạt" : "Đang làm"}
             </span>
           </div>

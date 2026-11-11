@@ -67,6 +67,9 @@ test('Theme Tokens: --tree-sky-* and --tree-core-* are fully defined across all 
       assert.ok(blockContent.includes('color-scheme: light;'), 'Daylight theme must declare "color-scheme: light;"');
       // Verify daylight core text is dark ink color
       assert.ok(blockContent.includes('--tree-core-text: #1e1b4b;'), 'Daylight theme must have high-contrast dark core text (#1e1b4b)');
+    } else if (theme === 'sepia') {
+      // Sepia = theme SÁNG ấm (giấy ngà), không còn là theme tối kể từ đợt sửa nền 2026-11-11
+      assert.ok(blockContent.includes('color-scheme: light;'), 'Sepia theme must declare "color-scheme: light;" (warm light theme)');
     } else {
       assert.ok(blockContent.includes('color-scheme: dark;'), `Theme "${theme}" must declare "color-scheme: dark;"`);
     }
@@ -262,7 +265,7 @@ test('Age Consistency: Old Age (70+ years) Memory Fading & Hourglass Survival Pi
 
   // 1. Memory fading banner in NarrativeFeed has dual theme styling
   assert.ok(
-    feedContent.includes('text-amber-700 dark:text-amber-300'),
+    feedContent.includes('text-amber-800 dark:text-amber-300'),
     'NarrativeFeed "Trí nhớ mờ dần" banner must use dual-theme amber classes'
   );
 

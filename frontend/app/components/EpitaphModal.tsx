@@ -76,13 +76,13 @@ export default function EpitaphModal({
 
   return (
     <>
-      <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in duration-700">
-        <div className="max-w-md w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
+      <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in duration-700">
+        <div className="max-w-md w-full max-h-[94vh] overflow-y-auto custom-scrollbar bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 sm:p-8 text-center shadow-2xl relative">
           {/* Close / Return Home Button */}
           {onReturnHome && (
             <button
               onClick={onReturnHome}
-              className="absolute top-4 right-4 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition z-20"
+              className="absolute top-4 right-4 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
               title="Trở về Trang Chủ Gia Phả"
             >
               <X className="w-4 h-4" />
@@ -104,7 +104,7 @@ export default function EpitaphModal({
             {name}
           </h2>
           
-          <p className="text-sm font-sans font-medium text-indigo-600 dark:text-indigo-400 mb-6">
+          <p className="text-sm font-sans font-medium text-indigo-800 dark:text-indigo-400 mb-6">
             Hưởng thọ {age} tuổi
           </p>
 
@@ -119,7 +119,7 @@ export default function EpitaphModal({
             </div>
             <div className="text-[var(--text-secondary)] pt-1 flex justify-between items-center">
               <span className="font-sans font-medium">Nghiệp lực tích lũy (Karma):</span>
-              <span className="font-sans tabular-nums text-amber-600 dark:text-amber-400 font-bold">+{karma} Karma</span>
+              <span className="font-sans tabular-nums text-amber-800 dark:text-amber-400 font-bold">+{karma} Karma</span>
             </div>
           </div>
 
@@ -137,9 +137,9 @@ export default function EpitaphModal({
             {/* 15s Death Video Recap Button */}
             <button
               onClick={() => setShowRecapModal(true)}
-              className="w-full py-3 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-sm transition flex items-center justify-center gap-2 shadow-sm active:scale-[0.98]"
+              className="w-full py-3 px-6 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-subtle)] font-bold text-sm transition flex items-center justify-center gap-2 shadow-sm active:scale-[0.98]"
             >
-              <Film className="w-4 h-4 text-amber-400" />
+              <Film className="w-4 h-4 text-amber-800 dark:text-amber-400" />
               <span>Xem Thước Phim Dĩ Vãng (15s Video Recap)</span>
             </button>
 
@@ -166,7 +166,7 @@ export default function EpitaphModal({
             )}
 
             {nirvanaMessage && (
-              <div className="p-3.5 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs text-center font-sans">
+              <div className="p-3.5 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-800 dark:text-amber-300 text-xs text-center font-sans">
                 ✨ {nirvanaMessage}
               </div>
             )}
@@ -175,7 +175,7 @@ export default function EpitaphModal({
               onClick={onEnterRebirthQueue}
               className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm transition flex items-center justify-center gap-2 shadow-md active:scale-[0.98]"
             >
-              <Sparkles className="w-4 h-4 text-amber-200" />
+              <Sparkles className="w-4 h-4 text-amber-800 dark:text-amber-200" />
               <span>Phòng Chờ Chuyển Kiếp (Xổ Số Nhân Phẩm Mới)</span>
             </button>
 
@@ -185,7 +185,7 @@ export default function EpitaphModal({
                 onClick={onReturnHome}
                 className="w-full py-3.5 px-6 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-subtle)] font-bold text-sm transition flex items-center justify-center gap-2 active:scale-[0.98]"
               >
-                <Home className="w-4 h-4 text-indigo-400" />
+                <Home className="w-4 h-4 text-indigo-700 dark:text-indigo-400" />
                 <span>Trở Về Trang Chủ Gia Phả (Nghỉ Ngơi & Tưởng Niệm)</span>
               </button>
             )}
@@ -219,24 +219,24 @@ export default function EpitaphModal({
 
       {/* Nirvana Error Popup Modal */}
       {nirvanaError && (
-        <div className="fixed inset-0 z-[120] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="w-full max-w-sm bg-slate-900 border border-amber-500/50 rounded-2xl p-5 shadow-2xl space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-              <h4 className="font-bold text-sm text-amber-300 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-400" />
+        <div className="fixed inset-0 z-[130] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+          <div className="w-full max-w-sm bg-[var(--bg-card)] text-[var(--text-primary)] border border-amber-500/50 rounded-2xl p-5 shadow-2xl space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
+              <h4 className="font-bold text-sm text-amber-800 dark:text-amber-300 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-800 dark:text-amber-400" />
                 Thông Báo Đắc Đạo
               </h4>
-              <button onClick={() => setNirvanaError(null)} className="text-slate-400 hover:text-white p-1">
+              <button onClick={() => setNirvanaError(null)} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center">
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <p className="text-xs text-slate-300 font-sans leading-relaxed">
+            <p className="text-xs text-[var(--text-primary)] font-sans leading-relaxed">
               {nirvanaError}
             </p>
             <div className="flex justify-end pt-2">
               <button
                 onClick={() => setNirvanaError(null)}
-                className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition"
+                className="px-4 py-2 min-h-[44px] sm:min-h-0 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-semibold transition"
               >
                 Đã hiểu
               </button>

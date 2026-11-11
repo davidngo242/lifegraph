@@ -386,12 +386,12 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-5 bg-black/85 backdrop-blur-xl animate-in fade-in">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-5 bg-black/85 backdrop-blur-xl animate-in fade-in">
       <div className="relative w-full max-w-xl bg-[var(--bg-card)] border-2 border-amber-500/60 rounded-3xl p-5 md:p-6 shadow-2xl flex flex-col overflow-hidden max-h-[95vh] text-[var(--text-primary)]">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition z-20"
+          className="absolute top-4 right-4 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
         >
           <X className="w-4 h-4" />
         </button>
@@ -401,7 +401,7 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
         <div className="absolute bottom-0 right-1/4 w-80 h-32 bg-teal-500/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* Tab Navigation Switcher (Quyết định 4) */}
-        <div className="flex items-center gap-2 mb-4 bg-[var(--bg-card-subtle)] p-1.5 rounded-2xl border border-[var(--border-subtle)] shrink-0">
+        <div className="flex items-center gap-2 mb-4 mr-12 bg-[var(--bg-card-subtle)] p-1.5 rounded-2xl border border-[var(--border-subtle)] shrink-0">
           <button
             onClick={() => setActiveTab('tarot')}
             className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
@@ -411,7 +411,7 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
             }`}
           >
             <span>🎴</span>
-            <span>Thẻ Vận Mệnh Cyber-Tarot</span>
+            <span>Thẻ Vận Mệnh <span className="whitespace-nowrap">Cyber-Tarot</span></span>
           </button>
           <button
             onClick={() => setActiveTab('hall_of_fame')}
@@ -430,17 +430,17 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
         <div ref={cardRef} className="overflow-y-auto pr-1 flex-1 space-y-4">
           {/* Header Info */}
           <div className="text-center">
-            <div className="p-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold text-xs normal-case tracking-normal mb-1.5 inline-block px-4">
+            <div className="p-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-800 dark:text-amber-300 font-bold text-xs normal-case tracking-normal mb-1.5 inline-block px-4">
               👑 {epithet}
             </div>
             <h2 className="text-2xl md:text-3xl font-sans font-bold text-[var(--text-primary)] tracking-tight">
               {name}
             </h2>
             <p className="text-xs text-[var(--text-secondary)] flex items-center justify-center gap-1.5 mt-0.5">
-              <MapPin className="w-3.5 h-3.5 text-rose-500" />
+              <MapPin className="w-3.5 h-3.5 text-rose-700 dark:text-rose-500" />
               <span>{currentCity} ({nationality})</span>
               <span>•</span>
-              <span className="text-amber-700 dark:text-amber-400 font-bold">{deathCause ? `Hưởng thọ ${age} tuổi` : `Đang sống (${age} tuổi)`}</span>
+              <span className="text-amber-800 dark:text-amber-400 font-bold">{deathCause ? `Hưởng thọ ${age} tuổi` : `Đang sống (${age} tuổi)`}</span>
             </p>
           </div>
 
@@ -450,25 +450,25 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
               <div className="grid grid-cols-2 gap-2.5">
                 <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
                   <span className="text-[12px] text-[var(--text-secondary)] block normal-case tracking-normal">Tiền Tích Lũy</span>
-                  <span className="text-sm md:text-base font-bold text-emerald-700 dark:text-emerald-400 font-sans tabular-nums">
+                  <span className="text-sm md:text-base font-bold text-emerald-800 dark:text-emerald-400 font-sans tabular-nums">
                     ${cash.toLocaleString()}
                   </span>
                 </div>
                 <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
                   <span className="text-[12px] text-[var(--text-secondary)] block normal-case tracking-normal">Nghiệp Lực</span>
-                  <span className="text-sm md:text-base font-bold text-amber-700 dark:text-amber-500 font-sans tabular-nums">
+                  <span className="text-sm md:text-base font-bold text-amber-800 dark:text-amber-500 font-sans tabular-nums">
                     +{karma} Karma
                   </span>
                 </div>
                 <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
                   <span className="text-[12px] text-[var(--text-secondary)] block normal-case tracking-normal">Bằng Cấp Kỹ Năng</span>
-                  <span className="text-sm md:text-base font-bold text-sky-700 dark:text-sky-400 font-sans tabular-nums">
+                  <span className="text-sm md:text-base font-bold text-sky-800 dark:text-sky-400 font-sans tabular-nums">
                     ★ {totalSkillsLevel}/12 Cấp
                   </span>
                 </div>
                 <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
                   <span className="text-[12px] text-[var(--text-secondary)] block normal-case tracking-normal">Hậu Duệ Gia Tộc</span>
-                  <span className="text-sm md:text-base font-bold text-rose-700 dark:text-rose-400 font-sans tabular-nums">
+                  <span className="text-sm md:text-base font-bold text-rose-800 dark:text-rose-400 font-sans tabular-nums">
                     {relationships.length} Người
                   </span>
                 </div>
@@ -476,12 +476,12 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
 
               {/* 3 Defining Moments */}
               <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] space-y-2">
-                <div className="text-[12px] font-bold text-amber-700 dark:text-amber-400 normal-case tracking-normal flex items-center gap-1.5">
+                <div className="text-[12px] font-bold text-amber-800 dark:text-amber-400 normal-case tracking-normal flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5" /> Ba Cột Mốc Định Mệnh:
                 </div>
                 {topMoments.map((m, idx) => (
                   <div key={idx} className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs flex items-start gap-2">
-                    <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-700 dark:text-sky-300 font-bold shrink-0 border border-sky-500/30">
+                    <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-800 dark:text-sky-300 font-bold shrink-0 border border-sky-500/30">
                       {m.age}t
                     </span>
                     <span className="text-[var(--text-secondary)] text-[12px] leading-snug">{m.text}</span>
@@ -491,7 +491,7 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
 
               {/* Death / Destiny footer */}
               {deathCause && (
-                <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-300 text-[12px] text-center italic">
+                <div className="p-3 rounded-xl bg-rose-500/15 dark:bg-rose-950/30 border border-rose-500/30 text-rose-800 dark:text-rose-300 text-[12px] text-center italic">
                   "Biến cố cuối cùng: {deathCause}"
                 </div>
               )}
@@ -501,13 +501,13 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
             <div className="space-y-3">
               <div className="p-3 rounded-2xl bg-gradient-to-r from-amber-950/40 via-yellow-950/30 to-slate-900/80 border border-amber-500/30 flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-                    <Crown className="w-4 h-4 text-amber-400" />
+                  <h3 className="text-xs font-bold text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
+                    <Crown className="w-4 h-4 text-amber-800 dark:text-amber-400" />
                     Bảng Vàng Danh Dự Gia Tộc
                   </h3>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Lưu danh sử sách các mốc son chói lọi trong hành trình</p>
+                  <p className="text-xs text-slate-400 mt-0.5">Lưu danh sử sách các mốc son chói lọi trong hành trình</p>
                 </div>
-                <div className="px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold tabular-nums">
+                <div className="px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-800 dark:text-amber-300 text-xs font-bold tabular-nums">
                   {unlockedCount} / {achievements.length} Mở Khóa
                 </div>
               </div>
@@ -526,22 +526,22 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
                       <div className="flex items-center gap-2">
                         <span className="text-xl shrink-0">{ach.icon}</span>
                         <div>
-                          <h4 className={`text-xs font-bold ${ach.isUnlocked ? 'text-amber-200' : 'text-slate-300'}`}>
+                          <h4 className={`text-xs font-bold ${ach.isUnlocked ? 'text-amber-800 dark:text-amber-200' : 'text-slate-300'}`}>
                             {ach.title}
                           </h4>
-                          <span className={`text-[10px] font-medium ${ach.isUnlocked ? 'text-emerald-400' : 'text-slate-400'}`}>
+                          <span className={`text-xs font-medium ${ach.isUnlocked ? 'text-emerald-800 dark:text-emerald-400' : 'text-slate-400'}`}>
                             {ach.progressText}
                           </span>
                         </div>
                       </div>
-                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase shrink-0 ${
-                        ach.isUnlocked ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' : 'bg-slate-800 text-slate-400'
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full uppercase shrink-0 ${
+                        ach.isUnlocked ? 'bg-emerald-500/15 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-500/40' : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)]'
                       }`}>
                         {ach.isUnlocked ? 'Đạt' : 'Chưa'}
                       </span>
                     </div>
 
-                    <p className="text-[11px] text-slate-400 mt-2 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
                       {ach.desc}
                     </p>
 
@@ -569,8 +569,8 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
           >
             {copied ? (
               <>
-                <Check className="w-4 h-4 text-emerald-500" />
-                <span className="text-emerald-600 dark:text-emerald-400">Đã Sao Chép!</span>
+                <Check className="w-4 h-4 text-emerald-700 dark:text-emerald-500" />
+                <span className="text-emerald-800 dark:text-emerald-400">Đã Sao Chép!</span>
               </>
             ) : (
               <>

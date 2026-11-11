@@ -35,32 +35,32 @@ export default function EmergencyRescueModal({
   const isDebtCrisis = cash < 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-lg bg-[var(--bg-card)] border border-rose-500/60 text-[var(--text-primary)] rounded-3xl p-6 md:p-7 shadow-[0_0_40px_rgba(244,63,94,0.2)] overflow-hidden transition-colors duration-200">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+      <div className="relative w-full max-w-lg bg-[var(--bg-card)] border border-rose-500/60 text-[var(--text-primary)] rounded-3xl p-4 sm:p-6 md:p-7 shadow-[0_0_40px_rgba(244,63,94,0.2)] overflow-y-auto max-h-[92vh] transition-colors duration-200">
         {/* Red Alert Ambient Glow */}
         <div className="absolute top-0 right-0 w-72 h-36 bg-rose-500/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-rose-500/30">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border border-rose-500/50 flex items-center justify-center text-rose-400 text-2xl shadow-lg shadow-rose-950/50 animate-pulse shrink-0">
+        <div className="flex items-start sm:items-center justify-between gap-2 pb-4 border-b border-rose-500/30">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border border-rose-500/50 flex items-center justify-center text-rose-700 dark:text-rose-400 text-2xl shadow-lg shadow-rose-950/50 animate-pulse shrink-0">
               🚨
             </div>
             <div>
-              <h2 className="text-base md:text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
+              <h2 className="text-base md:text-lg font-bold text-[var(--text-primary)] flex items-center flex-wrap gap-x-2 gap-y-1">
                 Cấp Cứu Khẩn Cấp Sinh Mệnh
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 animate-pulse">
+                <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-500/40 animate-pulse whitespace-nowrap">
                   CRITICAL
                 </span>
               </h2>
-              <p className="text-xs text-rose-300/80">
+              <p className="text-xs text-rose-800 dark:text-rose-300/80">
                 Chỉ số sinh tồn đang chạm mức nguy hiểm. Hãy hành động để tránh tử vong!
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1.5 rounded-xl hover:bg-[rgba(255,255,255,0.06)] transition"
+            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1.5 rounded-xl hover:bg-[rgba(255,255,255,0.06)] transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
           >
             <X className="w-5 h-5" />
           </button>
@@ -70,13 +70,13 @@ export default function EmergencyRescueModal({
         {isDebtCrisis && (
           <div className="mb-4 p-3 rounded-2xl bg-rose-500/15 border border-rose-500/40 text-rose-800 dark:text-rose-200 text-xs shadow-inner flex items-center justify-between gap-3 animate-pulse">
             <div className="flex items-center gap-2">
-              <AlertOctagon className="w-5 h-5 text-rose-500 shrink-0" />
+              <AlertOctagon className="w-5 h-5 text-rose-700 dark:text-rose-500 shrink-0" />
               <div>
                 <strong className="text-rose-900 dark:text-rose-100 block font-sans">BẪY NỢ NGUY NGẬP (ÂM TIỀN MẶT)</strong>
-                <span>Tài khoản hiện tại: <strong className="font-mono text-rose-700 dark:text-rose-300">-${Math.abs(cash).toLocaleString()}</strong>. Cần giải cứu cấp tốc để tránh phá sản!</span>
+                <span>Tài khoản hiện tại: <strong className="font-mono text-rose-800 dark:text-rose-300">-${Math.abs(cash).toLocaleString()}</strong>. Cần giải cứu cấp tốc để tránh phá sản!</span>
               </div>
             </div>
-            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-800 dark:text-rose-200 font-bold shrink-0">
+            <span className="font-mono text-xs px-2 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-800 dark:text-rose-200 font-bold shrink-0">
               VỠ NỢ
             </span>
           </div>
@@ -87,17 +87,17 @@ export default function EmergencyRescueModal({
           <div
             className={`p-3 rounded-2xl border ${
               isLowVitality
-                ? 'bg-rose-950/40 border-rose-500/50 shadow-inner'
+                ? 'bg-rose-500/15 dark:bg-rose-950/40 border-rose-500/50 shadow-inner'
                 : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)]'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1">
               <span className="text-[var(--text-secondary)] flex items-center gap-1">
-                <HeartPulse className="w-3.5 h-3.5 text-rose-400" /> Sinh Lực
+                <HeartPulse className="w-3.5 h-3.5 text-rose-700 dark:text-rose-400" /> Sinh Lực
               </span>
               <span
                 className={`font-mono font-bold ${
-                  isLowVitality ? 'text-rose-400 animate-pulse' : 'text-[var(--text-primary)]'
+                  isLowVitality ? 'text-rose-700 dark:text-rose-400 animate-pulse' : 'text-[var(--text-primary)]'
                 }`}
               >
                 {vitality}%
@@ -110,7 +110,7 @@ export default function EmergencyRescueModal({
               />
             </div>
             {isLowVitality && (
-              <div className="text-[10px] text-rose-300 font-semibold mt-1">
+              <div className="text-xs text-rose-800 dark:text-rose-300 font-semibold mt-1">
                 ⚠️ Nguy kịch: Có thể trút hơi thở cuối cùng!
               </div>
             )}
@@ -125,11 +125,11 @@ export default function EmergencyRescueModal({
           >
             <div className="flex items-center justify-between text-xs mb-1">
               <span className="text-[var(--text-secondary)] flex items-center gap-1">
-                <Flame className="w-3.5 h-3.5 text-amber-400" /> Kiệt Sức (Burnout)
+                <Flame className="w-3.5 h-3.5 text-amber-800 dark:text-amber-400" /> Kiệt Sức (Burnout)
               </span>
               <span
                 className={`font-mono font-bold ${
-                  isHighBurnout ? 'text-amber-400 animate-pulse' : 'text-[var(--text-primary)]'
+                  isHighBurnout ? 'text-amber-800 dark:text-amber-400 animate-pulse' : 'text-[var(--text-primary)]'
                 }`}
               >
                 {burnout}%
@@ -142,7 +142,7 @@ export default function EmergencyRescueModal({
               />
             </div>
             {isHighBurnout && (
-              <div className="text-[10px] text-amber-300 font-semibold mt-1">
+              <div className="text-xs text-amber-800 dark:text-amber-300 font-semibold mt-1">
                 ⚠️ Khủng hoảng: Tinh thần suy sụp nghiêm trọng!
               </div>
             )}
@@ -152,7 +152,7 @@ export default function EmergencyRescueModal({
         {/* Emergency Interventions */}
         <div className="space-y-2.5 mb-4">
           <div className="text-xs font-bold text-[var(--text-secondary)] flex items-center gap-1.5">
-            <Activity className="w-3.5 h-3.5 text-emerald-400" />
+            <Activity className="w-3.5 h-3.5 text-emerald-800 dark:text-emerald-400" />
             <span>Phương Án Cứu Nguy Cấp Tốc:</span>
           </div>
 
@@ -166,7 +166,7 @@ export default function EmergencyRescueModal({
             className={`w-full p-3.5 rounded-2xl border text-left transition flex items-center justify-between group ${
               actionPoints >= 1
                 ? 'bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/40 hover:border-emerald-500 text-[var(--text-primary)]'
-                : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] text-slate-500 opacity-60 cursor-not-allowed'
+                : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] text-slate-700 dark:text-slate-400 opacity-60 cursor-not-allowed'
             }`}
           >
             <div className="flex items-center gap-3">
@@ -174,18 +174,18 @@ export default function EmergencyRescueModal({
                 🌿
               </div>
               <div>
-                <div className="text-xs md:text-sm font-bold flex items-center gap-2">
+                <div className="text-xs md:text-sm font-bold flex items-center flex-wrap gap-x-2 gap-y-1">
                   <span>Dưỡng Sinh Phục Hồi Toàn Diện</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <span className="text-xs font-mono whitespace-nowrap px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30">
                     1 AP
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-300">
+                <div className="text-xs text-slate-300">
                   Phục hồi sinh lực (+HP) và giải tỏa mức độ Burnout ngay lập tức.
                 </div>
               </div>
             </div>
-            <ChevronRight className="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition-transform shrink-0" />
+            <ChevronRight className="w-4 h-4 text-emerald-800 dark:text-emerald-400 group-hover:translate-x-1 transition-transform shrink-0" />
           </button>
 
           {/* Rescue Option 2: Karma Sanctum Blessings */}
@@ -201,25 +201,25 @@ export default function EmergencyRescueModal({
                 ✨
               </div>
               <div>
-                <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
+                <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center flex-wrap gap-x-2 gap-y-1">
                   <span>Thỉnh Phước Bảo Mạng (Đền Thờ Nghiệp Quả)</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
+                  <span className="text-xs font-mono whitespace-nowrap px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold">
                     0 AP · Dùng Karma
                   </span>
                 </div>
-                <div className="text-[11px] text-[var(--text-secondary)]">
+                <div className="text-xs text-[var(--text-secondary)]">
                   Thỉnh bùa hộ mệnh hoặc phước lành hồi sinh khi cạn kiệt điểm hành động.
                 </div>
               </div>
             </div>
-            <ChevronRight className="w-4 h-4 text-amber-600 dark:text-amber-400 group-hover:translate-x-1 transition-transform shrink-0" />
+            <ChevronRight className="w-4 h-4 text-amber-800 dark:text-amber-400 group-hover:translate-x-1 transition-transform shrink-0" />
           </button>
 
           {/* Rescue Option 3 & 4: Debt Restructuring if in debt */}
           {isDebtCrisis && onDebtRelief && (
             <>
-              <div className="pt-2 text-xs font-bold text-rose-300 flex items-center gap-1.5 border-t border-rose-500/20">
-                <HandCoins className="w-3.5 h-3.5 text-rose-400" />
+              <div className="pt-2 text-xs font-bold text-rose-800 dark:text-rose-300 flex items-center gap-1.5 border-t border-rose-500/20">
+                <HandCoins className="w-3.5 h-3.5 text-rose-700 dark:text-rose-400" />
                 <span>Gói Cứu Trợ Tái Cấu Trúc Nợ:</span>
               </div>
 
@@ -233,22 +233,22 @@ export default function EmergencyRescueModal({
                 className="w-full p-3.5 rounded-2xl bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/50 hover:border-amber-400 text-left transition flex items-center justify-between group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300 shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-800 dark:text-amber-300 shrink-0">
                     <HandCoins className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs md:text-sm font-bold text-amber-200 flex items-center gap-2">
+                    <div className="text-xs md:text-sm font-bold text-amber-800 dark:text-amber-200 flex items-center gap-2">
                       <span>Vay Mềm Thân Tộc (Family Soft Loan)</span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                      <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 font-bold">
                         +$3.000
                       </span>
                     </div>
-                    <div className="text-[11px] text-slate-300">
+                    <div className="text-xs text-slate-300">
                       Huy động người thân hỗ trợ khẩn cấp (+ $3.000 tiền mặt, -10 Hảo cảm gia đình).
                     </div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-amber-400 group-hover:translate-x-1 transition-transform shrink-0" />
+                <ChevronRight className="w-4 h-4 text-amber-800 dark:text-amber-400 group-hover:translate-x-1 transition-transform shrink-0" />
               </button>
 
               {/* Liquidate Personal Items */}
@@ -265,13 +265,13 @@ export default function EmergencyRescueModal({
                     <PackageMinus className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
+                    <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center flex-wrap gap-x-2 gap-y-1">
                       <span>Bán Gấp Đồ Đạc Cá Nhân (Liquidate Items)</span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
+                      <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 font-bold">
                         +$1.200
                       </span>
                     </div>
-                    <div className="text-[11px] text-[var(--text-secondary)]">
+                    <div className="text-xs text-[var(--text-secondary)]">
                       Thanh lý tài sản cá nhân giải vây tức thì (+ $1.200, +10 Căng thẳng Burnout).
                     </div>
                   </div>

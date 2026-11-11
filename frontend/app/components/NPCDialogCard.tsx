@@ -52,10 +52,10 @@ export default function NPCDialogCard({
   const npc = dilemma.active_npc || { name: "Người quen", role: "Nhân vật xã hội", affinity: 50 };
   const affinityColor =
     npc.affinity >= 60
-      ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/30"
+      ? "text-emerald-800 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30"
       : npc.affinity <= -20
-      ? "text-rose-400 bg-rose-500/10 border-rose-500/30"
-      : "text-amber-400 bg-amber-500/10 border-amber-500/30";
+      ? "text-rose-800 dark:text-rose-400 bg-rose-500/10 border-rose-500/30"
+      : "text-amber-800 dark:text-amber-400 bg-amber-500/10 border-amber-500/30";
 
   // If rolling fate dice for persuasion
   if (rollingOption) {
@@ -83,31 +83,31 @@ export default function NPCDialogCard({
     if (costAp >= 2 || text.includes('thuyết phục') || text.includes('ép') || text.includes('thách thức')) {
       return {
         tag: '🎭 Thuyết Phục / Mạo Hiểm',
-        icon: <Dices className="w-3 h-3 text-amber-400" />,
-        color: 'text-amber-300 border-amber-500/40 bg-amber-500/15',
+        icon: <Dices className="w-3 h-3 text-amber-700 dark:text-amber-400" />,
+        color: 'text-amber-800 dark:text-amber-300 border-amber-500/40 bg-amber-500/15',
         needsRoll: true
       };
     }
     if (text.includes('sòng phẳng') || text.includes('tiền') || text.includes('hợp đồng') || text.includes('lợi ích')) {
       return {
         tag: '💼 Sòng Phẳng & Thực Dụng',
-        icon: <Briefcase className="w-3 h-3 text-indigo-400" />,
-        color: 'text-indigo-300 border-indigo-500/40 bg-indigo-500/15',
+        icon: <Briefcase className="w-3 h-3 text-indigo-700 dark:text-indigo-400" />,
+        color: 'text-indigo-800 dark:text-indigo-300 border-indigo-500/40 bg-indigo-500/15',
         needsRoll: false
       };
     }
     if (text.includes('nhượng bộ') || text.includes('rút lui') || text.includes('im lặng') || text.includes('từ chối')) {
       return {
         tag: '🛡️ Thận Trọng & Thăm Dò',
-        icon: <Shield className="w-3 h-3 text-teal-400" />,
-        color: 'text-teal-300 border-teal-500/40 bg-teal-500/15',
+        icon: <Shield className="w-3 h-3 text-teal-700 dark:text-teal-400" />,
+        color: 'text-teal-800 dark:text-teal-300 border-teal-500/40 bg-teal-500/15',
         needsRoll: false
       };
     }
     return {
       tag: '🤝 Chân Thành & Hợp Tác',
-      icon: <Heart className="w-3 h-3 text-rose-400" />,
-      color: 'text-rose-300 border-rose-500/40 bg-rose-500/15',
+      icon: <Heart className="w-3 h-3 text-rose-700 dark:text-rose-400" />,
+      color: 'text-rose-800 dark:text-rose-300 border-rose-500/40 bg-rose-500/15',
       needsRoll: false
     };
   };
@@ -240,7 +240,7 @@ export default function NPCDialogCard({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
                       {idx < 3 && (
-                        <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-700 dark:text-amber-300 font-mono text-[10px] font-bold group-hover:border-indigo-400 shadow-sm transition">
+                        <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-amber-700 dark:text-amber-300 font-mono text-xs font-bold group-hover:border-indigo-400 shadow-sm transition">
                           {idx + 1}
                         </kbd>
                       )}
@@ -350,7 +350,7 @@ export default function NPCDialogCard({
               disabled={isResolving || !customSpeechText.trim() || !!customResult}
               className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition ${
                 isResolving || !customSpeechText.trim() || !!customResult
-                  ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                  ? 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-bold shadow-md shadow-amber-500/25 active:scale-95'
               }`}
             >

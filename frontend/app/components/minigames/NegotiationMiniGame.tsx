@@ -215,12 +215,12 @@ export default function NegotiationMiniGame({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-4 bg-black/90 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-2xl bg-slate-950 border border-amber-500/40 rounded-3xl p-5 md:p-8 shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-4 bg-black/90 backdrop-blur-md animate-in fade-in">
+      <div className="relative w-full max-w-2xl bg-[var(--bg-card)] border border-amber-500/40 rounded-3xl p-5 md:p-8 shadow-2xl flex flex-col overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition z-20"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-slate-400 hover:text-white transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
         >
           <X className="w-4 h-4" />
         </button>
@@ -234,7 +234,7 @@ export default function NegotiationMiniGame({
             <div className="w-16 h-16 rounded-3xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl mb-4 shadow-xl shadow-amber-500/20">
               🤝
             </div>
-            <div className="text-xs font-sans tabular-nums normal-case tracking-wide text-amber-400 font-bold mb-1">
+            <div className="text-xs font-sans tabular-nums normal-case tracking-wide text-amber-800 dark:text-amber-400 font-bold mb-1">
               Thử Thách Thương Trường • {currentCity}
             </div>
             <h2 className="text-2xl font-black text-white tracking-tight mb-2">
@@ -246,14 +246,14 @@ export default function NegotiationMiniGame({
             </p>
 
             <div className="grid grid-cols-2 gap-3 w-full max-w-md mb-6 text-left text-xs">
-              <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
                 <div className="text-[12px] text-slate-400 normal-case font-bold">Thành Công Vang Dội</div>
-                <div className="text-emerald-400 font-bold mt-0.5">Uy Thế ≥ 75% & Hòa Khí {'>'} 30%</div>
+                <div className="text-emerald-800 dark:text-emerald-400 font-bold mt-0.5">Uy Thế ≥ 75% & Hòa Khí {'>'} 30%</div>
                 <div className="text-[12px] text-slate-400 mt-1">↳ Thưởng +$12.000 tiền mặt & Nhận cờ 'Bậc Thầy Đàm Phán'</div>
               </div>
-              <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
                 <div className="text-[12px] text-slate-400 normal-case font-bold">Thất Bại Lật Bàn</div>
-                <div className="text-rose-400 font-bold mt-0.5">Kiên Nhẫn Về 0% Hoặc Bị Ép</div>
+                <div className="text-rose-700 dark:text-rose-400 font-bold mt-0.5">Kiên Nhẫn Về 0% Hoặc Bị Ép</div>
                 <div className="text-[12px] text-slate-400 mt-1">↳ Tăng +15 Burnout và mất cơ hội kinh doanh</div>
               </div>
             </div>
@@ -272,29 +272,29 @@ export default function NegotiationMiniGame({
         {stage === 'playing' && (
           <div className="flex flex-col gap-4">
             {/* Round & Context Banner */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex items-center justify-between gap-2 pr-12 sm:pr-14 pb-3 border-b border-[var(--border-subtle)]">
               <div className="flex items-center gap-2">
-                <span className="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-300 font-sans tabular-nums font-bold flex items-center justify-center text-xs border border-amber-500/40">
+                <span className="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-800 dark:text-amber-300 font-sans tabular-nums font-bold flex items-center justify-center text-xs border border-amber-500/40">
                   {currentRound.round}/3
                 </span>
                 <span className="text-sm font-bold text-white">Vòng {currentRound.round}: Đấu Trí Thương Mại</span>
               </div>
               <span className="text-[12px] font-sans tabular-nums text-slate-400">
-                Địa điểm: <strong className="text-indigo-300">{currentCity}</strong>
+                Địa điểm: <strong className="text-indigo-800 dark:text-indigo-300">{currentCity}</strong>
               </span>
             </div>
 
             {/* Tension Bars */}
-            <div className="grid grid-cols-2 gap-3 p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800">
+            <div className="grid grid-cols-2 gap-3 p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
               {/* My Leverage */}
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-indigo-300 font-bold flex items-center gap-1">
+                  <span className="text-indigo-800 dark:text-indigo-300 font-bold flex items-center gap-1">
                     <Scale className="w-3.5 h-3.5" /> Uy Thế Của Bạn
                   </span>
-                  <span className="font-sans tabular-nums font-bold text-cyan-400">{myLeverage}%</span>
+                  <span className="font-sans tabular-nums font-bold text-cyan-700 dark:text-cyan-400">{myLeverage}%</span>
                 </div>
-                <div className="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden border border-cyan-500/30">
+                <div className="w-full h-2.5 rounded-full bg-[var(--bg-card)] overflow-hidden border border-cyan-500/30">
                   <div
                     className="h-full bg-gradient-to-r from-sky-500 to-cyan-400 transition-all duration-500"
                     style={{ width: `${myLeverage}%` }}
@@ -305,14 +305,14 @@ export default function NegotiationMiniGame({
               {/* Partner Patience */}
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-amber-300 font-bold flex items-center gap-1">
+                  <span className="text-amber-800 dark:text-amber-300 font-bold flex items-center gap-1">
                     <Brain className="w-3.5 h-3.5" /> Kiên Nhẫn Đối Tác
                   </span>
-                  <span className={`font-sans tabular-nums font-bold ${partnerPatience < 25 ? 'text-rose-400 animate-pulse' : 'text-amber-400'}`}>
+                  <span className={`font-sans tabular-nums font-bold ${partnerPatience < 25 ? 'text-rose-700 dark:text-rose-400 animate-pulse' : 'text-amber-800 dark:text-amber-400'}`}>
                     {partnerPatience}%
                   </span>
                 </div>
-                <div className="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden border border-amber-500/30">
+                <div className="w-full h-2.5 rounded-full bg-[var(--bg-card)] overflow-hidden border border-amber-500/30">
                   <div
                     className={`h-full transition-all duration-500 ${
                       partnerPatience < 25 ? 'bg-rose-500' : 'bg-gradient-to-r from-amber-500 to-emerald-400'
@@ -324,7 +324,7 @@ export default function NegotiationMiniGame({
             </div>
 
             {/* Scenario Prompt */}
-            <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200">
+            <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-800 dark:text-amber-200">
               {currentRound.scenario}
             </div>
 
@@ -334,9 +334,9 @@ export default function NegotiationMiniGame({
                 <button
                   key={card.id}
                   onClick={() => handleSelectCard(card)}
-                  className="p-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-amber-500/50 transition-all duration-200 text-left flex items-start gap-3 active:scale-[0.99] group shadow-sm"
+                  className="p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-amber-500/50 transition-all duration-200 text-left flex items-start gap-3 active:scale-[0.99] group shadow-sm"
                 >
-                  <span className="text-2xl shrink-0 p-1 rounded-xl bg-slate-950 border border-slate-800 group-hover:border-amber-500/40">
+                  <span className="text-2xl shrink-0 p-1 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] group-hover:border-amber-500/40">
                     {card.icon}
                   </span>
                   <div className="flex-1">
@@ -345,8 +345,8 @@ export default function NegotiationMiniGame({
                         {card.title}
                       </h4>
                       <div className="flex items-center gap-2 text-[12px] font-sans tabular-nums">
-                        <span className="text-indigo-300">+{card.leverageChange}% Uy thế</span>
-                        <span className={card.patienceImpact >= 0 ? 'text-emerald-400' : 'text-rose-400'}>
+                        <span className="text-indigo-800 dark:text-indigo-300">+{card.leverageChange}% Uy thế</span>
+                        <span className={card.patienceImpact >= 0 ? 'text-emerald-800 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}>
                           {card.patienceImpact >= 0 ? `+${card.patienceImpact}%` : `${card.patienceImpact}%`} Kiên nhẫn
                         </span>
                       </div>
@@ -376,11 +376,11 @@ export default function NegotiationMiniGame({
 
             <div className="text-xs font-sans tabular-nums normal-case tracking-wide font-bold mb-1">
               {finalStatus === 'success' ? (
-                <span className="text-emerald-400">Đại Thắng Thương Trường</span>
+                <span className="text-emerald-800 dark:text-emerald-400">Đại Thắng Thương Trường</span>
               ) : finalStatus === 'fair' ? (
-                <span className="text-amber-400">Thương Lượng Thành Công</span>
+                <span className="text-amber-800 dark:text-amber-400">Thương Lượng Thành Công</span>
               ) : (
-                <span className="text-rose-400">Thương Lượng Đổ Bể</span>
+                <span className="text-rose-700 dark:text-rose-400">Thương Lượng Đổ Bể</span>
               )}
             </div>
 
@@ -391,7 +391,7 @@ export default function NegotiationMiniGame({
               {rewardSummary}
             </p>
 
-            <div className="w-full max-w-md p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-left text-xs space-y-1.5 mb-6">
+            <div className="w-full max-w-md p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-left text-xs space-y-1.5 mb-6">
               <div className="text-[12px] normal-case font-bold text-slate-400 tracking-normal mb-1">Nhật Ký Đấu Trí:</div>
               {logHistory.map((item, idx) => (
                 <div key={idx} className="text-slate-300 text-[12px] font-sans tabular-nums">

@@ -167,12 +167,12 @@ export default function StockTraderMiniGame({
   const maxPrice = Math.max(...priceHistory, 150);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-lg bg-slate-950 border border-cyan-500/40 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+      <div className="relative w-full max-w-lg bg-[var(--bg-card)] border border-cyan-500/40 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition z-20"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-slate-400 hover:text-white hover:bg-[var(--bg-card)] transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
         >
           <X className="w-4 h-4" />
         </button>
@@ -190,7 +190,7 @@ export default function StockTraderMiniGame({
             </div>
 
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-800 dark:text-cyan-300 border border-cyan-500/30">
                 {marketName}
               </span>
             </div>
@@ -201,38 +201,38 @@ export default function StockTraderMiniGame({
             </p>
 
             {/* How to play card */}
-            <div className="w-full bg-slate-900/90 border border-slate-800 rounded-2xl p-4 mb-4 text-left space-y-2.5 text-xs">
-              <div className="font-bold text-cyan-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
+            <div className="w-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl p-4 mb-4 text-left space-y-2.5 text-xs">
+              <div className="font-bold text-cyan-700 dark:text-cyan-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
                 <Sparkles className="w-4 h-4" /> Hướng Dẫn & Thao Tác:
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
-                <div className="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="font-semibold text-emerald-400 flex items-center gap-1.5 mb-1">
+                <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                  <div className="font-semibold text-emerald-800 dark:text-emerald-400 flex items-center gap-1.5 mb-1">
                     Bước 1: Mua Vào (Buy)
                   </div>
                   <span className="text-[12px] text-slate-400">
-                    Bấm nút hoặc phím <strong className="text-amber-300 font-sans tabular-nums">[Space]</strong> khi giá chạm đáy nến.
+                    Bấm nút hoặc phím <strong className="text-amber-800 dark:text-amber-300 font-sans tabular-nums">[Space]</strong> khi giá chạm đáy nến.
                   </span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="font-semibold text-cyan-400 flex items-center gap-1.5 mb-1">
+                <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                  <div className="font-semibold text-cyan-700 dark:text-cyan-400 flex items-center gap-1.5 mb-1">
                     Bước 2: Chốt Lời (Sell)
                   </div>
                   <span className="text-[12px] text-slate-400">
-                    Bấm tiếp <strong className="text-amber-300 font-sans tabular-nums">[Space]</strong> khi giá tăng vọt để bỏ túi lợi nhuận.
+                    Bấm tiếp <strong className="text-amber-800 dark:text-amber-300 font-sans tabular-nums">[Space]</strong> khi giá tăng vọt để bỏ túi lợi nhuận.
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Stakes card */}
-            <div className="w-full bg-slate-900/50 border border-slate-800/80 rounded-2xl p-3 mb-5 text-xs text-left grid grid-cols-2 gap-3">
+            <div className="w-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl p-3 mb-5 text-xs text-left grid grid-cols-2 gap-3">
               <div>
-                <span className="text-emerald-400 font-bold block mb-0.5">🌟 Lợi Nhuận (≥20%):</span>
+                <span className="text-emerald-800 dark:text-emerald-400 font-bold block mb-0.5">🌟 Lợi Nhuận (≥20%):</span>
                 <span className="text-[12px] text-slate-400">Nhận +$15.000 tiền mặt & Cờ &quot;Trực Giác Đầu Cơ&quot;.</span>
               </div>
               <div>
-                <span className="text-rose-400 font-bold block mb-0.5">⚠️ Đu Đỉnh Cắt Lỗ:</span>
+                <span className="text-rose-700 dark:text-rose-400 font-bold block mb-0.5">⚠️ Đu Đỉnh Cắt Lỗ:</span>
                 <span className="text-[12px] text-slate-400">Thất thoát -$4.000 tiền mặt, tăng +20 Burnout.</span>
               </div>
             </div>
@@ -263,14 +263,14 @@ export default function StockTraderMiniGame({
         {stage === 'playing' && (
           <div className="flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3 text-xs">
-              <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 font-medium border border-cyan-500/20">
+            <div className="flex items-center justify-between gap-2 pr-12 sm:pr-14 pb-3 border-b border-[var(--border-subtle)] mb-3 text-xs">
+              <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-800 dark:text-cyan-300 font-medium border border-cyan-500/20">
                 ⚡ Sàn Giao Dịch Chứng Khoán
               </span>
               <div className="flex items-center gap-2 font-sans tabular-nums">
                 <span className="text-slate-400">Thời gian:</span>
                 <span className={`px-2.5 py-0.5 rounded font-bold ${
-                  timeLeft <= 3 ? 'bg-rose-500/20 text-rose-400 animate-pulse' : 'bg-amber-500/20 text-amber-300'
+                  timeLeft <= 3 ? 'bg-rose-500/20 text-rose-700 dark:text-rose-400 animate-pulse' : 'bg-amber-500/20 text-amber-800 dark:text-amber-300'
                 }`}>
                   {timeLeft}s
                 </span>
@@ -278,7 +278,7 @@ export default function StockTraderMiniGame({
             </div>
 
             {/* Live Price Display & P&L */}
-            <div className="flex items-center justify-between bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 mb-3">
+            <div className="flex items-center justify-between bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl p-3.5 mb-3">
               <div>
                 <div className="text-[12px] text-slate-400">GIÁ HIỆN TẠI (TICKER)</div>
                 <div className="text-2xl font-sans tabular-nums font-bold text-white flex items-center gap-1">
@@ -291,7 +291,7 @@ export default function StockTraderMiniGame({
                 <div className="text-right">
                   <div className="text-[12px] text-slate-400">LỢI NHUẬN RÒNG (P&L)</div>
                   <div className={`text-xl font-sans tabular-nums font-bold flex items-center justify-end gap-1 ${
-                    profitPct >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                    profitPct >= 0 ? 'text-emerald-800 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'
                   }`}>
                     {profitPct >= 0 ? '+' : ''}{profitPct}%
                     {profitPct >= 0 ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
@@ -301,7 +301,7 @@ export default function StockTraderMiniGame({
             </div>
 
             {/* Sparkline Canvas Chart */}
-            <div className="h-36 w-full bg-slate-950 rounded-2xl border border-slate-800 p-2 flex items-end gap-1 overflow-hidden relative mb-4">
+            <div className="h-36 w-full bg-[var(--bg-card)] rounded-2xl border border-[var(--border-subtle)] p-2 flex items-end gap-1 overflow-hidden relative mb-4">
               {/* Buy Price Horizontal Marker */}
               {hasBought && (
                 <div
@@ -310,7 +310,7 @@ export default function StockTraderMiniGame({
                     bottom: `${Math.max(5, Math.min(95, ((buyPrice - minPrice) / (maxPrice - minPrice || 1)) * 100))}%`
                   }}
                 >
-                  <span className="absolute right-2 -top-4 text-[12px] font-sans tabular-nums text-amber-300 bg-slate-900/90 px-1 rounded">
+                  <span className="absolute right-2 -top-4 text-[12px] font-sans tabular-nums text-amber-800 dark:text-amber-300 bg-[var(--bg-card-subtle)] px-1 rounded">
                     Giá Mua: ${buyPrice}
                   </span>
                 </div>
@@ -349,7 +349,7 @@ export default function StockTraderMiniGame({
               >
                 <DollarSign className="w-4 h-4" />
                 <span>MUA VÀO TẠI ĐÂY (${currentPrice})</span>
-                <span className="text-[12px] font-sans tabular-nums bg-slate-950/20 px-2 py-0.5 rounded">[Space]</span>
+                <span className="text-[12px] font-sans tabular-nums bg-[var(--bg-card)] px-2 py-0.5 rounded">[Space]</span>
               </button>
             ) : (
               <button
@@ -358,7 +358,7 @@ export default function StockTraderMiniGame({
               >
                 <TrendingUp className="w-4 h-4" />
                 <span>CHỐT LỜI NGAY ({profitPct >= 0 ? `+${profitPct}%` : `${profitPct}%`})</span>
-                <span className="text-[12px] font-sans tabular-nums bg-slate-950/20 px-2 py-0.5 rounded">[Space]</span>
+                <span className="text-[12px] font-sans tabular-nums bg-[var(--bg-card)] px-2 py-0.5 rounded">[Space]</span>
               </button>
             )}
           </div>
@@ -372,10 +372,10 @@ export default function StockTraderMiniGame({
             <div
               className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-3 shadow-lg ${
                 status === 'success'
-                  ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 shadow-emerald-500/20'
+                  ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-800 dark:text-emerald-400 shadow-emerald-500/20'
                   : status === 'fair'
-                  ? 'bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 shadow-cyan-500/20'
-                  : 'bg-rose-500/20 border border-rose-500/40 text-rose-400 shadow-rose-500/20'
+                  ? 'bg-cyan-500/20 border border-cyan-500/40 text-cyan-700 dark:text-cyan-400 shadow-cyan-500/20'
+                  : 'bg-rose-500/20 border border-rose-500/40 text-rose-700 dark:text-rose-400 shadow-rose-500/20'
               }`}
             >
               {status === 'success' ? '🚀' : status === 'fair' ? '📊' : '📉'}
@@ -390,12 +390,12 @@ export default function StockTraderMiniGame({
             </h3>
 
             <div className="font-sans tabular-nums text-sm text-slate-300 mb-3">
-              Hiệu suất thương vụ: <strong className={`font-bold ${profitPct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+              Hiệu suất thương vụ: <strong className={`font-bold ${profitPct >= 0 ? 'text-emerald-800 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}`}>
                 {profitPct >= 0 ? `+${profitPct}%` : `${profitPct}%`}
               </strong>
             </div>
 
-            <p className="text-xs text-slate-300 bg-slate-900 border border-slate-800 rounded-2xl p-3.5 mb-5 max-w-md leading-relaxed">
+            <p className="text-xs text-slate-300 bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl p-3.5 mb-5 max-w-md leading-relaxed">
               {status === 'success'
                 ? "Khả năng nhạy bén giúp bạn bắt trúng đáy nến và bán đúng đỉnh! Nhận +$15.000 lợi nhuận và cờ 'Trực Giác Đầu Cơ'."
                 : status === 'fair'

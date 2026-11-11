@@ -64,19 +64,19 @@ export default function FamilyDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
       <div className="relative w-full max-w-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2.5 rounded-2xl bg-pink-500/20 text-pink-600 dark:text-pink-400 border border-pink-500/30">
+          <div className="p-2.5 rounded-2xl bg-pink-500/20 text-pink-800 dark:text-pink-400 border border-pink-500/30">
             <Users className="w-7 h-7" />
           </div>
           <div>
@@ -92,16 +92,16 @@ export default function FamilyDetailModal({
         {/* Resources Summary */}
         <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] mb-4 text-xs">
           <span className="text-[var(--text-secondary)]">
-            Ngân sách: <strong className="text-emerald-400 font-sans tabular-nums">${cash.toLocaleString()}</strong> | AP hiện có: <strong className="text-amber-400 font-sans tabular-nums">{actionPoints}</strong>
+            Ngân sách: <strong className="text-emerald-800 dark:text-emerald-400 font-sans tabular-nums">${cash.toLocaleString()}</strong> | AP hiện có: <strong className="text-amber-800 dark:text-amber-400 font-sans tabular-nums">{actionPoints}</strong>
           </span>
           <span className="text-[var(--text-secondary)]">
-            Tổng thành viên: <strong className="text-pink-400">{relationships.length} người</strong>
+            Tổng thành viên: <strong className="text-pink-700 dark:text-pink-400">{relationships.length} người</strong>
           </span>
         </div>
 
         {/* Error notification */}
         {errorMsg && (
-          <div className="mb-4 p-3 rounded-xl bg-rose-950/40 border border-rose-500/40 text-rose-300 text-xs flex items-center gap-2">
+          <div className="mb-4 p-3 rounded-xl bg-rose-500/15 dark:bg-rose-950/40 border border-rose-500/40 text-rose-800 dark:text-rose-300 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{errorMsg}</span>
           </div>
@@ -116,8 +116,8 @@ export default function FamilyDetailModal({
             className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] hover:border-pink-500/40 text-left transition active:scale-95 disabled:opacity-40"
           >
             <div className="flex items-center justify-between mb-1">
-              <Gift className="w-4 h-4 text-pink-500" />
-              <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">1 AP</span>
+              <Gift className="w-4 h-4 text-pink-700 dark:text-pink-500" />
+              <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold">1 AP</span>
             </div>
             <div className="text-xs font-bold text-[var(--text-primary)]">Báo Hiếu Cha Mẹ</div>
             <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">Chi $2.000 (Karma +20)</div>
@@ -138,9 +138,9 @@ export default function FamilyDetailModal({
                 {(characterAge ?? 18) < 16 ? (
                   <Lock className="w-4 h-4 text-slate-400" />
                 ) : (
-                  <Heart className="w-4 h-4 text-rose-500" />
+                  <Heart className="w-4 h-4 text-rose-700 dark:text-rose-500" />
                 )}
-                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">1 AP</span>
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold">1 AP</span>
               </div>
               <div className="text-xs font-bold text-[var(--text-primary)]">Hẹn Hò Gặp Gỡ</div>
               <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
@@ -166,9 +166,9 @@ export default function FamilyDetailModal({
                 {(characterAge ?? 18) < 18 ? (
                   <Lock className="w-4 h-4 text-slate-400" />
                 ) : (
-                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <Sparkles className="w-4 h-4 text-amber-700 dark:text-amber-500" />
                 )}
-                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">2 AP</span>
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold">2 AP</span>
               </div>
               <div className="text-xs font-bold text-[var(--text-primary)]">Tổ Chức Hôn Lễ</div>
               <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
@@ -194,9 +194,9 @@ export default function FamilyDetailModal({
                 {(characterAge ?? 18) < 18 ? (
                   <Lock className="w-4 h-4 text-slate-400" />
                 ) : (
-                  <Baby className="w-4 h-4 text-cyan-500" />
+                  <Baby className="w-4 h-4 text-cyan-700 dark:text-cyan-500" />
                 )}
-                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">2 AP</span>
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold">2 AP</span>
               </div>
               <div className="text-xs font-bold text-[var(--text-primary)]">Sinh Con Kế Thừa</div>
               <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
@@ -215,8 +215,8 @@ export default function FamilyDetailModal({
               className="p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] hover:border-pink-500/40 text-left transition active:scale-95 disabled:opacity-40"
             >
               <div className="flex items-center justify-between mb-1">
-                <Sparkles className="w-4 h-4 text-emerald-500" />
-                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">1 AP</span>
+                <Sparkles className="w-4 h-4 text-emerald-700 dark:text-emerald-500" />
+                <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold">1 AP</span>
               </div>
               <div className="text-xs font-bold text-[var(--text-primary)]">Dạy Dỗ Con Cái</div>
               <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">Chi $2.000 (Tình cảm +20)</div>
@@ -227,10 +227,10 @@ export default function FamilyDetailModal({
         {/* Members Roster List */}
         <div className="flex-1 overflow-y-auto space-y-3 pr-1">
           {relationships.length === 0 ? (
-            <div className="text-center py-12 text-slate-500">
-              <Heart className="w-12 h-12 mx-auto mb-2 opacity-30 text-rose-500" />
+            <div className="text-center py-12 text-slate-700 dark:text-slate-400">
+              <Heart className="w-12 h-12 mx-auto mb-2 opacity-30 text-rose-700 dark:text-rose-500" />
               <p className="text-sm font-medium">Chưa có mối quan hệ gắn kết nào.</p>
-              <p className="text-xs text-slate-600 mt-1">Dùng điểm AP để hẹn hò, kết nối hoặc báo hiếu gia đình.</p>
+              <p className="text-xs text-slate-700 dark:text-slate-400 mt-1">Dùng điểm AP để hẹn hò, kết nối hoặc báo hiếu gia đình.</p>
             </div>
           ) : (
             relationships.map(rel => {
@@ -254,8 +254,8 @@ export default function FamilyDetailModal({
                       <div className="flex items-center gap-2 flex-wrap">
                         <h4 className="text-sm font-bold text-[var(--text-primary)]">{rel.name}</h4>
                         <span className={`text-[12px] px-2 py-0.5 rounded-full font-medium ${
-                          rel.type === 'spouse' ? 'bg-pink-500/20 text-pink-300 border border-pink-500/30' :
-                          rel.type === 'child' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' :
+                          rel.type === 'spouse' ? 'bg-pink-500/20 text-pink-800 dark:text-pink-300 border border-pink-500/30' :
+                          rel.type === 'child' ? 'bg-cyan-500/20 text-cyan-800 dark:text-cyan-300 border border-cyan-500/30' :
                           'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)]'
                         }`}>
                           {rel.type === 'spouse' ? 'Bạn Đời (Vợ/Chồng)' :
@@ -271,17 +271,17 @@ export default function FamilyDetailModal({
                         )}
                         {rel.type === 'child' && (
                           (rel.age || 0) < 18 ? (
-                            <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/30">
+                            <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-800 dark:text-rose-300 border border-rose-500/30">
                               🔒 Cầm tù 1 AP của cha mẹ
                             </span>
                           ) : (
-                            <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                            <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30">
                               🎓 Đã trưởng thành (Giải phóng AP)
                             </span>
                           )
                         )}
                         {isDeceased && (
-                          <span className="text-[12px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-500 border border-slate-700">
+                          <span className="text-[12px] px-2 py-0.5 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                             Đã Mất
                           </span>
                         )}

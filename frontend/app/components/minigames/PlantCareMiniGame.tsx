@@ -139,12 +139,12 @@ export default function PlantCareMiniGame({
   const plantColor = plantGrowth >= 70 ? '#10b981' : plantGrowth >= 40 ? '#84cc16' : '#eab308';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-lg bg-slate-950 border border-emerald-500/40 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+      <div className="relative w-full max-w-lg bg-[var(--bg-card)] border border-emerald-500/40 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition z-20"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-slate-400 hover:text-white hover:bg-[var(--bg-card)] transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
         >
           <X className="w-4 h-4" />
         </button>
@@ -162,7 +162,7 @@ export default function PlantCareMiniGame({
             </div>
 
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30">
                 Tuổi Thơ (6–12 Tuổi)
               </span>
             </div>
@@ -173,38 +173,38 @@ export default function PlantCareMiniGame({
             </p>
 
             {/* How to play card */}
-            <div className="w-full bg-slate-900/90 border border-slate-800 rounded-2xl p-4 mb-4 text-left space-y-2.5 text-xs">
-              <div className="font-bold text-emerald-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
+            <div className="w-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl p-4 mb-4 text-left space-y-2.5 text-xs">
+              <div className="font-bold text-emerald-800 dark:text-emerald-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
                 <Sparkles className="w-4 h-4" /> Hướng Dẫn & Thao Tác:
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
-                <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800">
+                <div className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                   <div className="font-semibold text-white flex items-center gap-1.5 mb-0.5">
-                    <Droplets className="w-3.5 h-3.5 text-sky-400" /> Tưới Nước:
+                    <Droplets className="w-3.5 h-3.5 text-sky-700 dark:text-sky-400" /> Tưới Nước:
                   </div>
-                  <span className="text-[12px] text-slate-400">Nhấn nút hoặc bấm <strong className="text-amber-300 font-sans tabular-nums">[Space]</strong> / <strong className="text-amber-300 font-sans tabular-nums">[W]</strong>. Duy trì độ ẩm 35%–75%.</span>
+                  <span className="text-[12px] text-slate-400">Nhấn nút hoặc bấm <strong className="text-amber-800 dark:text-amber-300 font-sans tabular-nums">[Space]</strong> / <strong className="text-amber-800 dark:text-amber-300 font-sans tabular-nums">[W]</strong>. Duy trì độ ẩm 35%–75%.</span>
                 </div>
-                <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800">
+                <div className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                   <div className="font-semibold text-white flex items-center gap-1.5 mb-0.5">
-                    <Sun className="w-3.5 h-3.5 text-amber-400" /> Ánh Sáng:
+                    <Sun className="w-3.5 h-3.5 text-amber-800 dark:text-amber-400" /> Ánh Sáng:
                   </div>
-                  <span className="text-[12px] text-slate-400">Bật/tắt nắng bằng phím <strong className="text-amber-300 font-sans tabular-nums">[S]</strong>. Nắng giúp cây quang hợp lớn nhanh.</span>
+                  <span className="text-[12px] text-slate-400">Bật/tắt nắng bằng phím <strong className="text-amber-800 dark:text-amber-300 font-sans tabular-nums">[S]</strong>. Nắng giúp cây quang hợp lớn nhanh.</span>
                 </div>
               </div>
-              <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 text-[12px] text-slate-300 flex items-center gap-2">
-                <Bug className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+              <div className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[12px] text-slate-300 flex items-center gap-2">
+                <Bug className="w-3.5 h-3.5 text-rose-700 dark:text-rose-400 shrink-0" />
                 <span>Nhấp chuột trực tiếp vào con sâu bọ để bắt sâu bảo vệ tán lá non!</span>
               </div>
             </div>
 
             {/* Stakes card */}
-            <div className="w-full bg-slate-900/50 border border-slate-800/80 rounded-2xl p-3 mb-5 text-xs text-left grid grid-cols-2 gap-3">
+            <div className="w-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl p-3 mb-5 text-xs text-left grid grid-cols-2 gap-3">
               <div>
-                <span className="text-emerald-400 font-bold block mb-0.5">🌟 Thành Công (≥70%):</span>
+                <span className="text-emerald-800 dark:text-emerald-400 font-bold block mb-0.5">🌟 Thành Công (≥70%):</span>
                 <span className="text-[12px] text-slate-400">+15 Sinh lực, +20 Karma, Cờ &quot;Mát Tay Nuôi Dưỡng&quot;.</span>
               </div>
               <div>
-                <span className="text-rose-400 font-bold block mb-0.5">⚠️ Thất Bại (&lt;40%):</span>
+                <span className="text-rose-700 dark:text-rose-400 font-bold block mb-0.5">⚠️ Thất Bại (&lt;40%):</span>
                 <span className="text-[12px] text-slate-400">-5 Sinh lực, cờ thờ ơ vô tâm.</span>
               </div>
             </div>
@@ -232,14 +232,14 @@ export default function PlantCareMiniGame({
         {stage === 'playing' && (
           <div className="flex flex-col">
             {/* Top Timer Bar */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3 text-xs">
-              <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 font-medium border border-emerald-500/20">
+            <div className="flex items-center justify-between gap-2 pr-12 sm:pr-14 pb-3 border-b border-[var(--border-subtle)] mb-3 text-xs">
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 font-medium border border-emerald-500/20">
                 🌱 Vườn Ươm Thiếu Thời
               </span>
               <div className="flex items-center gap-2 font-sans tabular-nums">
                 <span className="text-slate-400">Thời gian:</span>
                 <span className={`px-2.5 py-0.5 rounded font-bold ${
-                  timeLeft <= 4 ? 'bg-rose-500/20 text-rose-400 animate-pulse' : 'bg-amber-500/20 text-amber-300'
+                  timeLeft <= 4 ? 'bg-rose-500/20 text-rose-700 dark:text-rose-400 animate-pulse' : 'bg-amber-500/20 text-amber-800 dark:text-amber-300'
                 }`}>
                   {timeLeft}s
                 </span>
@@ -250,9 +250,9 @@ export default function PlantCareMiniGame({
             <div className="mb-4">
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-slate-400">Độ Lớn Của Cây:</span>
-                <span className="font-sans tabular-nums font-bold text-emerald-400">{Math.round(plantGrowth)}%</span>
+                <span className="font-sans tabular-nums font-bold text-emerald-800 dark:text-emerald-400">{Math.round(plantGrowth)}%</span>
               </div>
-              <div className="h-2.5 w-full bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+              <div className="h-2.5 w-full bg-[var(--bg-card-subtle)] rounded-full overflow-hidden border border-[var(--border-subtle)]">
                 <div
                   className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300"
                   style={{ width: `${plantGrowth}%` }}
@@ -261,13 +261,13 @@ export default function PlantCareMiniGame({
             </div>
 
             {/* Visual Greenhouse Garden Canvas */}
-            <div className="relative h-48 w-full bg-slate-900/90 border border-slate-800 rounded-2xl flex flex-col items-center justify-end p-4 mb-4 overflow-hidden select-none">
+            <div className="relative h-48 w-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl flex flex-col items-center justify-end p-4 mb-4 overflow-hidden select-none">
               {/* Sun Light Element */}
               <div
                 className={`absolute top-3 right-3 p-2 rounded-full border transition-all duration-300 ${
                   sunOn
-                    ? 'bg-amber-500/20 text-amber-400 border-amber-500/40 shadow-[0_0_20px_rgba(245,158,11,0.4)] scale-110'
-                    : 'bg-slate-800 text-slate-500 border-slate-700 opacity-50'
+                    ? 'bg-amber-500/20 text-amber-800 dark:text-amber-400 border-amber-500/40 shadow-[0_0_20px_rgba(245,158,11,0.4)] scale-110'
+                    : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border-[var(--border-subtle)] opacity-50'
                 }`}
               >
                 <Sun className={`w-5 h-5 ${sunOn ? 'animate-spin' : ''}`} style={{ animationDuration: '8s' }} />
@@ -280,7 +280,7 @@ export default function PlantCareMiniGame({
                   onClick={() => handleSquashBug(bug.id)}
                   style={{ top: `${bug.y}%`, left: `${bug.x}%` }}
                   title="Nhấp để bắt sâu!"
-                  className="absolute p-1.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/50 hover:scale-125 transition animate-bounce z-10"
+                  className="absolute p-1.5 rounded-full bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/50 hover:scale-125 transition animate-bounce z-10"
                 >
                   <Bug className="w-4 h-4" />
                 </button>
@@ -302,22 +302,22 @@ export default function PlantCareMiniGame({
               {/* Status Hint overlay */}
               <div className="absolute bottom-2 left-3 text-[12px] text-slate-400">
                 {!isIdealWater ? (
-                  <span className="text-rose-400 font-semibold">⚠️ Độ ẩm không tốt ({Math.round(waterLevel)}%)</span>
+                  <span className="text-rose-700 dark:text-rose-400 font-semibold">⚠️ Độ ẩm không tốt ({Math.round(waterLevel)}%)</span>
                 ) : (
-                  <span className="text-emerald-400 font-semibold">✨ Độ ẩm lý tưởng! Cây đang lớn</span>
+                  <span className="text-emerald-800 dark:text-emerald-400 font-semibold">✨ Độ ẩm lý tưởng! Cây đang lớn</span>
                 )}
               </div>
             </div>
 
             {/* Water Gauge Meter */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-3 mb-4">
+            <div className="bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl p-3 mb-4">
               <div className="flex justify-between items-center text-xs mb-1">
                 <span className="text-slate-400 flex items-center gap-1">
-                  <Droplets className="w-3.5 h-3.5 text-sky-400" /> Độ ẩm đất:
+                  <Droplets className="w-3.5 h-3.5 text-sky-700 dark:text-sky-400" /> Độ ẩm đất:
                 </span>
-                <span className="font-sans tabular-nums font-bold text-sky-400">{Math.round(waterLevel)}%</span>
+                <span className="font-sans tabular-nums font-bold text-sky-700 dark:text-sky-400">{Math.round(waterLevel)}%</span>
               </div>
-              <div className="relative h-2 w-full bg-slate-950 rounded-full overflow-hidden">
+              <div className="relative h-2 w-full bg-[var(--bg-card)] rounded-full overflow-hidden">
                 {/* Ideal Zone background (35% to 75%) */}
                 <div className="absolute top-0 bottom-0 left-[35%] right-[25%] bg-emerald-500/30" />
                 <div
@@ -327,9 +327,9 @@ export default function PlantCareMiniGame({
                   style={{ width: `${waterLevel}%` }}
                 />
               </div>
-              <div className="flex justify-between text-[12px] text-slate-500 mt-1">
+              <div className="flex justify-between text-[12px] text-slate-700 dark:text-slate-400 mt-1">
                 <span>0% (Khô cằn)</span>
-                <span className="text-emerald-400 font-medium">Vùng tốt (35%–75%)</span>
+                <span className="text-emerald-800 dark:text-emerald-400 font-medium">Vùng tốt (35%–75%)</span>
                 <span>100% (Úng nước)</span>
               </div>
             </div>
@@ -338,24 +338,24 @@ export default function PlantCareMiniGame({
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={handleWater}
-                className="py-3 px-4 rounded-xl bg-sky-600/30 hover:bg-sky-600/40 border border-sky-500/50 text-white font-bold text-xs flex items-center justify-center gap-2 active:scale-95 transition shadow-md shadow-sky-950/40"
+                className="py-3 px-4 rounded-xl bg-sky-600/30 hover:bg-sky-600/40 border border-sky-500/50 text-slate-900 dark:text-white font-bold text-xs flex items-center justify-center gap-2 active:scale-95 transition shadow-md shadow-sky-950/40"
               >
-                <Droplets className="w-4 h-4 text-sky-400" />
+                <Droplets className="w-4 h-4 text-sky-700 dark:text-sky-400" />
                 <span>Tưới Nước (+16%)</span>
-                <span className="hidden sm:inline text-[12px] font-sans tabular-nums text-sky-300 bg-sky-950 px-1.5 py-0.5 rounded">[Space]</span>
+                <span className="hidden sm:inline text-[12px] font-sans tabular-nums text-sky-800 dark:text-sky-300 bg-sky-500/15 dark:bg-sky-950 px-1.5 py-0.5 rounded">[Space]</span>
               </button>
 
               <button
                 onClick={() => setSunOn(prev => !prev)}
                 className={`py-3 px-4 rounded-xl border font-bold text-xs flex items-center justify-center gap-2 active:scale-95 transition ${
                   sunOn
-                    ? 'bg-amber-600/30 hover:bg-amber-600/40 border-amber-500/50 text-amber-300'
-                    : 'bg-slate-800 hover:bg-slate-750 border-slate-700 text-slate-300'
+                    ? 'bg-amber-600/30 hover:bg-amber-600/40 border-amber-500/50 text-amber-800 dark:text-amber-300'
+                    : 'bg-[var(--bg-card-subtle)] hover:bg-slate-750 border-[var(--border-subtle)] text-slate-300'
                 }`}
               >
                 <Sun className="w-4 h-4" />
                 <span>Nắng: {sunOn ? 'Đang Bật' : 'Tắt Nắng'}</span>
-                <span className="hidden sm:inline text-[12px] font-sans tabular-nums bg-slate-900 px-1.5 py-0.5 rounded">[S]</span>
+                <span className="hidden sm:inline text-[12px] font-sans tabular-nums bg-[var(--bg-card-subtle)] px-1.5 py-0.5 rounded">[S]</span>
               </button>
             </div>
           </div>
@@ -369,10 +369,10 @@ export default function PlantCareMiniGame({
             <div
               className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-3 shadow-lg ${
                 status === 'success'
-                  ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 shadow-emerald-500/20'
+                  ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-800 dark:text-emerald-400 shadow-emerald-500/20'
                   : status === 'fair'
-                  ? 'bg-amber-500/20 border border-amber-500/40 text-amber-400 shadow-amber-500/20'
-                  : 'bg-rose-500/20 border border-rose-500/40 text-rose-400 shadow-rose-500/20'
+                  ? 'bg-amber-500/20 border border-amber-500/40 text-amber-800 dark:text-amber-400 shadow-amber-500/20'
+                  : 'bg-rose-500/20 border border-rose-500/40 text-rose-700 dark:text-rose-400 shadow-rose-500/20'
               }`}
             >
               {status === 'success' ? '🌺' : status === 'fair' ? '🌿' : '🥀'}
@@ -390,7 +390,7 @@ export default function PlantCareMiniGame({
               Độ lớn cuối cùng: <strong className="text-white font-bold">{Math.round(plantGrowth)}%</strong>
             </div>
 
-            <p className="text-xs text-slate-300 bg-slate-900 border border-slate-800 rounded-2xl p-3.5 mb-5 max-w-md leading-relaxed">
+            <p className="text-xs text-slate-300 bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl p-3.5 mb-5 max-w-md leading-relaxed">
               {status === 'success'
                 ? "Chăm sóc chu đáo giúp mầm cây nở hoa tuyệt đẹp! Bạn nhận được cờ ẩn 'Mát Tay Nuôi Dưỡng', bồi dưỡng tính kiên nhẫn sâu sắc cho cả cuộc đời."
                 : status === 'fair'

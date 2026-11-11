@@ -60,12 +60,20 @@ export default function LifeGraphHomePortal({
 
   const isCharacterAlive = character && !character.is_deceased;
   const eternalKarma = playerAccount?.total_karma ?? 250;
-  const totalGenerations = lineage.length > 0 ? Math.max(...lineage.map(i => i.generation || 1)) : (character?.generation || 1);
-  const nirvanaCount = lineage.filter(i => i.status === 'ascended_nirvana').length;
-  const maxNetWorthEver = lineage.reduce((max, i) => Math.max(max, Number(i.max_net_worth || 0)), 0);
 
-  // Lineage Filter
-  const filteredLineage = lineage.filter((item) => {
+  // Bản ghi MẪU do hệ thống tạo sẵn cho phiên mới (backend gắn is_demo; id founder_gen_1 là fallback cho phiên cũ đã lưu cache).
+  // Chúng chỉ để minh hoạ -> KHÔNG tính vào thống kê thật và luôn gắn nhãn "Gia phả mẫu".
+  const isDemoEntry = (item: any) => item?.is_demo === true || item?.id === 'founder_gen_1';
+  const realLineage = lineage.filter((i) => !isDemoEntry(i));
+  const demoLineage = lineage.filter(isDemoEntry);
+  const hasRealLineage = realLineage.length > 0;
+
+  const totalGenerations = hasRealLineage ? Math.max(...realLineage.map(i => i.generation || 1)) : (character?.generation || 1);
+  const nirvanaCount = realLineage.filter(i => i.status === 'ascended_nirvana').length;
+  const maxNetWorthEver = realLineage.reduce((max, i) => Math.max(max, Number(i.max_net_worth || 0)), 0);
+
+  // Lineage Filter (chỉ trên tiền nhân thật; bản mẫu hiển thị riêng khi chưa có tiền nhân thật)
+  const filteredLineage = realLineage.filter((item) => {
     if (filter === 'nirvana') return item.status === 'ascended_nirvana';
     if (filter === 'deceased') return item.status === 'deceased';
     return true;
@@ -74,15 +82,15 @@ export default function LifeGraphHomePortal({
   // Calculate Dynasty Tier
   const getDynastyTier = () => {
     if (totalGenerations >= 5 || maxNetWorthEver >= 10000000) {
-      return { title: "Thiên Cổ Hào Môn", icon: "👑", color: "text-amber-700 dark:text-amber-300 border-amber-400/40 bg-amber-500/10" };
+      return { title: "Thiên Cổ Hào Môn", icon: "👑", color: "text-amber-800 dark:text-amber-300 border-amber-400/40 bg-amber-500/10" };
     }
     if (totalGenerations >= 3 || maxNetWorthEver >= 2000000) {
-      return { title: "Đại Tộc Danh Gia", icon: "💎", color: "text-amber-700 dark:text-amber-300 border-amber-400/40 bg-amber-500/10" };
+      return { title: "Đại Tộc Danh Gia", icon: "💎", color: "text-amber-800 dark:text-amber-300 border-amber-400/40 bg-amber-500/10" };
     }
     if (totalGenerations >= 2 || maxNetWorthEver >= 300000) {
       return { title: "Thế Gia Thịnh Vượng", icon: "🏙️", color: "text-teal-700 dark:text-teal-300 border-teal-400/40 bg-teal-500/10" };
     }
-    return { title: "Khởi Đầu Bĩ Cực", icon: "🌱", color: "text-[var(--text-secondary)] border-[var(--border-subtle)] bg-[var(--bg-card-subtle)]" };
+    return { title: "Khởi Đầu Hành Trình", icon: "🌱", color: "text-[var(--text-secondary)] border-[var(--border-subtle)] bg-[var(--bg-card-subtle)]" };
   };
   const dynastyTier = getDynastyTier();
 
@@ -120,7 +128,7 @@ export default function LifeGraphHomePortal({
 
             <div className="space-y-1.5 relative z-10">
               <div className="flex items-center justify-center gap-2 flex-wrap">
-                <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/40 font-bold">
+                <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/40 font-bold">
                   Đắc Đạo Niết Bàn Tịch Tịnh
                 </span>
                 <span className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">
@@ -162,7 +170,7 @@ export default function LifeGraphHomePortal({
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
+                  <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold">
                     LifeGraph 2.0 • Điện Thần Luân Hồi
                   </span>
                   <span className={`text-[12px] font-semibold px-2.5 py-0.5 rounded-full border ${dynastyTier.color}`}>
@@ -188,33 +196,39 @@ export default function LifeGraphHomePortal({
                 <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-[var(--text-primary)] mt-1">
                   Đời Thứ {totalGenerations}
                 </div>
-                <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">{lineage.length} tiền nhân lưu danh</div>
+                <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
+                  {hasRealLineage ? `${realLineage.length} tiền nhân lưu danh` : 'Chưa có tiền nhân nào'}
+                </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-amber-400/30 hover:border-amber-400/50 transition shadow-sm">
-                <div className="text-[12px] text-amber-700 dark:text-amber-300 normal-case tracking-normal font-semibold">Đắc Đạo Niết Bàn</div>
-                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-amber-600 dark:text-amber-300 mt-1">
+                <div className="text-[12px] text-amber-800 dark:text-amber-300 normal-case tracking-normal font-semibold">Đắc Đạo Niết Bàn</div>
+                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-amber-800 dark:text-amber-300 mt-1">
                   {nirvanaCount} Tiền Nhân
                 </div>
-                <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">Thoát khỏi trầm luân</div>
+                <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
+                  {nirvanaCount > 0 ? 'Thoát khỏi trầm luân' : 'Đích đến cuối của một dòng họ'}
+                </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-teal-400/30 hover:border-teal-400/50 transition shadow-sm">
                 <div className="text-[12px] text-teal-700 dark:text-teal-300 normal-case tracking-normal font-semibold">Gia Sản Kỷ Lục</div>
-                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-teal-600 dark:text-teal-300 mt-1 truncate">
-                  ${maxNetWorthEver.toLocaleString()}
+                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-teal-700 dark:text-teal-300 mt-1 leading-tight [overflow-wrap:anywhere]">
+                  {hasRealLineage ? `$${maxNetWorthEver.toLocaleString()}` : '—'}
                 </div>
-                <div className="text-[12px] text-[var(--text-secondary)] mt-0.5 truncate">
-                  {formatCurrency(maxNetWorthEver, "Việt Nam").secondaryVnd}
+                <div className="text-[12px] text-[var(--text-secondary)] mt-0.5 [overflow-wrap:anywhere]">
+                  {hasRealLineage ? formatCurrency(maxNetWorthEver, "Việt Nam").secondaryVnd : 'Chưa có kỷ lục'}
                 </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-[var(--bg-card-subtle)] border border-amber-400/30 hover:border-amber-400/50 transition shadow-sm">
-                <div className="text-[12px] text-amber-700 dark:text-amber-300 normal-case tracking-normal font-semibold">Nghiệp Lực Vĩnh Cửu</div>
-                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400 mt-1">
+                <div className="text-[12px] text-amber-800 dark:text-amber-300 normal-case tracking-normal font-semibold">Nghiệp Lực Vĩnh Cửu</div>
+                <div className="text-lg md:text-xl font-bold font-sans tabular-nums text-amber-800 dark:text-amber-400 mt-1">
                   {eternalKarma} Karma
                 </div>
-                <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">Phước đức vĩnh viễn</div>
+                <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
+                  {hasRealLineage ? 'Phước đức vĩnh viễn' : 'Vốn khởi đầu để chọn xuất thân'}
+                </div>
               </div>
             </div>
           </div>
@@ -234,7 +248,7 @@ export default function LifeGraphHomePortal({
                 <span className="text-[12px] font-sans tabular-nums normal-case px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
                   Đang Có Kiếp Sống Diễn Ra
                 </span>
-                <span className="text-xs font-sans tabular-nums font-bold text-amber-700 dark:text-amber-400">
+                <span className="text-xs font-sans tabular-nums font-bold text-amber-800 dark:text-amber-400">
                   Đời Thứ {character.generation || 1}
                 </span>
               </div>
@@ -242,14 +256,14 @@ export default function LifeGraphHomePortal({
                 {character.name} ({character.age ?? 0} Tuổi)
               </h2>
               <p className="text-xs text-[var(--text-secondary)]">
-                Quốc tịch: <strong className="text-[var(--text-primary)]">{character.nationality || "Việt Nam"}</strong> • Sức khỏe: <strong className="text-emerald-600 dark:text-emerald-400">{character.vitality || 80}%</strong> • Khát vọng: <strong className="text-[var(--text-primary)]">{character.life_aspiration || "Đang hành trình"}</strong>
+                Quốc tịch: <strong className="text-[var(--text-primary)]">{character.nationality || "Việt Nam"}</strong> • Sức khỏe: <strong className="text-emerald-700 dark:text-emerald-400">{character.vitality || 80}%</strong> • Khát vọng: <strong className="text-[var(--text-primary)]">{character.life_aspiration || "Đang hành trình"}</strong>
               </p>
             </div>
 
             <div className="shrink-0 w-full md:w-auto flex flex-col sm:flex-row items-center gap-3">
               <button
                 onClick={onEnterGame}
-                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs md:text-sm normal-case tracking-normal flex items-center justify-center gap-2 transition shadow-xl shadow-emerald-600/30 active:scale-95 whitespace-nowrap"
+                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800 hover:from-emerald-600 hover:to-teal-600 text-white font-black text-sm normal-case tracking-normal flex items-center justify-center gap-2 transition shadow-xl shadow-emerald-700/30 active:scale-95 sm:whitespace-nowrap"
               >
                 <Play className="w-4 h-4 fill-white" />
                 <span>Tiếp Tục ({character.name}, {character.age ?? 0}t)</span>
@@ -258,7 +272,7 @@ export default function LifeGraphHomePortal({
 
               <button
                 onClick={onOpenRebirth}
-                className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-amber-400 text-amber-700 dark:text-amber-300 font-bold text-xs normal-case tracking-normal flex items-center justify-center gap-2 transition active:scale-95 shadow-sm whitespace-nowrap"
+                className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-amber-400 text-amber-800 dark:text-amber-300 font-bold text-sm normal-case tracking-normal flex items-center justify-center gap-2 transition active:scale-95 shadow-sm sm:whitespace-nowrap"
               >
                 <RotateCcw className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                 <span>Bắt Đầu Kiếp Mới</span>
@@ -271,15 +285,14 @@ export default function LifeGraphHomePortal({
               <span className="text-[12px] font-sans tabular-nums normal-case px-3 py-1 rounded-full bg-slate-500/15 text-slate-700 dark:text-slate-300 border border-slate-500/30 font-bold tracking-wide">
                 Không Còn Kiếp Nào Đang Sống
               </span>
-              <span className="text-xs font-sans tabular-nums font-bold text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30">
+              <span className="text-xs font-sans tabular-nums font-bold text-amber-800 dark:text-amber-400 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30">
                 Sẵn Sàng Khởi Đầu Kiếp Thứ {totalGenerations + 1}
               </span>
             </div>
 
             <div className="space-y-1.5 max-w-xl">
-              <h2 className="text-2xl md:text-3xl font-black text-[var(--text-primary)] tracking-tight flex items-center justify-center gap-2">
-                <span>🌌</span>
-                <span>Linh Hồn An Trú Cõi Luân Hồi</span>
+              <h2 className="text-2xl md:text-3xl font-black text-[var(--text-primary)] tracking-tight text-balance">
+                <span aria-hidden="true">🌌 </span>Linh Hồn An Trú Cõi Luân Hồi
               </h2>
               <p className="text-xs md:text-sm text-[var(--text-secondary)] font-sans leading-relaxed">
                 Bánh xe luân hồi đang mở lối. Hãy bắt đầu kiếp sống mới để tiếp nối đại nghiệp dòng họ và kiến tạo di sản rực rỡ!
@@ -290,13 +303,13 @@ export default function LifeGraphHomePortal({
             <div className="flex flex-col items-center gap-2.5 w-full max-w-xl pt-1">
               <button
                 onClick={onOpenRebirth}
-                className="w-full px-6 sm:px-10 py-4 md:py-5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black text-sm md:text-base normal-case tracking-normal flex items-center justify-center gap-3 transition-all duration-300 shadow-xl shadow-amber-500/25 hover:scale-[1.01] active:scale-95 border border-amber-300 group whitespace-nowrap"
+                className="w-full px-6 sm:px-10 py-4 md:py-5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black text-sm md:text-base normal-case tracking-normal flex items-center justify-center gap-3 transition-all duration-300 shadow-xl shadow-amber-500/25 hover:scale-[1.01] active:scale-95 border border-amber-300 group"
               >
                 <Sparkles className="w-5 h-5 text-slate-950 fill-slate-950 group-hover:rotate-12 transition shrink-0" />
                 <span>Bắt Đầu Kiếp Mới</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition shrink-0" />
               </button>
-              <p className="text-xs italic text-[var(--text-secondary)] font-medium tracking-wide">
+              <p className="text-xs text-[var(--text-secondary)] font-medium">
                 * Tiêu hao Karma để định đoạt xuất thân & căn cơ kiếp mới
               </p>
             </div>
@@ -311,27 +324,30 @@ export default function LifeGraphHomePortal({
             <div className="flex items-center gap-2">
               <Feather className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <h2 className="text-base font-bold text-[var(--text-primary)] tracking-wide">
-                Gia Phả Tiền Nhân ({lineage.length} Kiếp)
+                {hasRealLineage ? `Gia Phả Tiền Nhân (${realLineage.length} Kiếp)` : 'Gia Phả Tiền Nhân'}
               </h2>
             </div>
 
-            {/* Nút Thắp Hương Tổ Tiên đặt cạnh Tiêu đề gia phả */}
+            {/* Nút Thắp Hương Tổ Tiên đặt cạnh Tiêu đề gia phả (chỉ khi đã có tiền nhân thật) */}
+            {hasRealLineage && (
             <button
               onClick={handleIncenseClick}
               disabled={incenseLoading || incenseOffered}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition active:scale-95 shadow-sm ${
                 incenseOffered
-                  ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40'
-                  : 'bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] text-amber-700 dark:text-amber-300 border border-amber-500/40 hover:border-amber-500/60'
+                  ? 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40'
+                  : 'bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] text-amber-800 dark:text-amber-300 border border-amber-500/40 hover:border-amber-500/60'
               }`}
             >
               <Flame className={`w-3.5 h-3.5 ${incenseOffered ? 'text-amber-600 dark:text-amber-400 animate-bounce' : 'text-amber-600 dark:text-amber-400'}`} />
               <span>{incenseOffered ? 'Đã Dâng Tâm Hương (+Phúc)' : '🕯️ Thắp Hương Tổ Tiên'}</span>
             </button>
+            )}
           </div>
 
-          {/* Filter Pills */}
-          <div className="flex items-center gap-1.5 self-start sm:self-auto">
+          {/* Filter Pills (ẩn khi chưa có tiền nhân thật - chỉ có 0 mục để lọc) */}
+          {hasRealLineage && (
+          <div className="flex items-center gap-1.5 self-start sm:self-auto flex-wrap">
             <button
               onClick={() => setFilter('all')}
               className={`px-3 py-1 rounded-xl text-xs font-semibold transition ${
@@ -340,7 +356,7 @@ export default function LifeGraphHomePortal({
                   : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)]'
               }`}
             >
-              Tất Cả ({lineage.length})
+              Tất Cả ({realLineage.length})
             </button>
 
             <button
@@ -362,15 +378,16 @@ export default function LifeGraphHomePortal({
                   : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)]'
               }`}
             >
-              Viên Tịch ({lineage.length - nirvanaCount})
+              Viên Tịch ({realLineage.length - nirvanaCount})
             </button>
           </div>
+          )}
         </div>
 
         {incenseMessage && (
           <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
             <div className="max-w-sm w-full bg-[var(--bg-card)] border border-amber-500/50 rounded-3xl p-6 text-center shadow-2xl space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 flex items-center justify-center text-2xl mx-auto shadow-md">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 flex items-center justify-center text-2xl mx-auto shadow-md">
                 🪔
               </div>
               <h4 className="font-bold text-sm text-[var(--text-primary)]">Khói Hương Tưởng Nhớ</h4>
@@ -389,50 +406,84 @@ export default function LifeGraphHomePortal({
 
         {/* Lineage Timeline List */}
         <div className="space-y-4">
-          {filteredLineage.length === 0 ? (
-            <div className="text-center p-8 rounded-3xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] text-xs">
+          {/* Empty state cho người mới: giải thích gia phả là gì + ví dụ mẫu có nhãn rõ ràng */}
+          {!hasRealLineage && (
+            <div className="p-5 rounded-3xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)]">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl shrink-0" aria-hidden="true">🌱</span>
+                <div className="space-y-1">
+                  <h3 className="text-sm font-bold text-[var(--text-primary)]">Gia phả của bạn còn trống</h3>
+                  <p className="text-sm leading-relaxed">
+                    Mỗi kiếp sống kết thúc sẽ được ghi danh ở đây: tuổi thọ, gia sản để lại và di huấn.
+                    Con cháu kế thừa một phần di sản, nên mỗi đời đều tiếp nối đời trước.
+                  </p>
+                  {demoLineage.length > 0 && (
+                    <p className="text-sm leading-relaxed">
+                      Bên dưới là một <strong className="text-[var(--text-primary)]">gia phả mẫu</strong> để bạn hình dung. Nó không phải dữ liệu của bạn.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {hasRealLineage && filteredLineage.length === 0 ? (
+            <div className="text-center p-8 rounded-3xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] text-sm">
               Chưa có tiền nhân nào được ghi danh trong mục này.
             </div>
           ) : (
-            filteredLineage.map((item, index) => {
+            (hasRealLineage ? filteredLineage : demoLineage).map((item, index) => {
               const isNirvana = item.status === 'ascended_nirvana';
+              const isDemo = isDemoEntry(item);
               const formattedWorth = formatCurrency(item.max_net_worth || 0, item.nationality || "Việt Nam");
 
               return (
                 <div
                   key={item.id || index}
                   className={`p-5 rounded-3xl border transition-all duration-300 relative overflow-hidden ${
-                    isNirvana
-                      ? 'bg-amber-500/5 border-amber-400/40 shadow-sm'
-                      : 'bg-[var(--bg-card)] border-[var(--border-subtle)] shadow-sm hover:border-slate-400/50'
+                    isDemo
+                      ? 'bg-[var(--bg-card)] border-dashed border-[var(--text-muted)]'
+                      : isNirvana
+                        ? 'bg-amber-500/5 border-amber-400/40 shadow-sm'
+                        : 'bg-[var(--bg-card)] border-[var(--border-subtle)] shadow-sm hover:border-slate-400/50'
                   }`}
                 >
+                  {isDemo && (
+                    <div className="mb-3 flex items-center gap-2 flex-wrap">
+                      <span className="text-[12px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-800 dark:text-indigo-200 border border-indigo-500/40">
+                        Gia phả mẫu · Ví dụ
+                      </span>
+                      <span className="text-[12px] text-[var(--text-secondary)]">
+                        Minh hoạ cách một tiền nhân được ghi danh, không phải dữ liệu của bạn.
+                      </span>
+                    </div>
+                  )}
                   {isNirvana && (
                     <div className="absolute top-0 right-0 w-72 h-36 bg-amber-400/10 rounded-full blur-2xl pointer-events-none" />
                   )}
 
                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                     {/* Left: Generation Avatar & Identity */}
-                    <div className="flex items-start gap-3.5">
+                    <div className="flex items-start gap-3.5 min-w-0">
                       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0 border-2 shadow-sm ${
                         isNirvana
-                          ? 'bg-amber-500/15 border-amber-400/60 text-amber-700 dark:text-amber-300 shadow-amber-500/10'
+                          ? 'bg-amber-500/15 border-amber-400/60 text-amber-800 dark:text-amber-300 shadow-amber-500/10'
                           : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] text-[var(--text-secondary)]'
                       }`}>
                         {isNirvana ? '🕊️' : '🪦'}
                       </div>
 
-                      <div>
+                      <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-base md:text-lg font-bold text-[var(--text-primary)]">
                             {item.name}
                           </span>
-                          <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
+                          <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold">
                             ĐỜI THỨ {item.generation}
                           </span>
                           <span className={`text-[12px] font-medium px-2 py-0.5 rounded-full border ${
                             isNirvana
-                              ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-500/40 font-bold'
+                              ? 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/40 font-bold'
                               : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border-[var(--border-subtle)]'
                           }`}>
                             {isNirvana ? '🕊️ Đắc Đạo Niết Bàn' : '🪦 Viên Tịch'}
@@ -445,25 +496,25 @@ export default function LifeGraphHomePortal({
                           <span>{item.nationality}</span>
                           {item.aspiration_title && (
                             <>
-                              <span>•</span>
-                              <span className="text-teal-600 dark:text-teal-300 font-medium">Khát vọng: {item.aspiration_title}</span>
+                              <span className="hidden sm:inline" aria-hidden="true">•</span>
+                              <span className="basis-full sm:basis-auto text-teal-700 dark:text-teal-300 font-medium">Khát vọng: {item.aspiration_title}</span>
                             </>
                           )}
                         </div>
 
-                        <div className="text-xs text-rose-600 dark:text-rose-400/80 mt-1 italic">
+                        <div className="text-xs text-rose-700 dark:text-rose-300 mt-1 italic">
                           {item.cause_of_passing}
                         </div>
                       </div>
                     </div>
 
                     {/* Right: Net Worth & Residual Blessings */}
-                    <div className="flex md:flex-col items-end justify-between md:justify-start gap-0.5 shrink-0 text-right">
-                      <div className="text-[12px] text-[var(--text-secondary)] normal-case tracking-normal">Gia Sản Để Lại</div>
-                      <div className="text-sm md:text-base font-sans tabular-nums font-bold text-teal-600 dark:text-teal-300">
+                    <div className="flex flex-wrap md:flex-col items-end justify-between md:justify-start gap-x-2 gap-y-0.5 md:shrink-0 text-right">
+                      <div className="text-[12px] text-[var(--text-secondary)] normal-case tracking-normal whitespace-nowrap">Gia Sản Để Lại</div>
+                      <div className="text-sm md:text-base font-sans tabular-nums font-bold text-teal-700 dark:text-teal-300 whitespace-nowrap">
                         {formattedWorth.primary}
                       </div>
-                      <div className="text-[12px] font-sans tabular-nums text-[var(--text-secondary)] opacity-80">
+                      <div className="text-[12px] font-sans tabular-nums text-[var(--text-secondary)] whitespace-nowrap">
                         {formattedWorth.secondaryVnd}
                       </div>
                     </div>
@@ -471,20 +522,20 @@ export default function LifeGraphHomePortal({
 
                   {/* Ancestral Epitaph Quote (Di huấn khắc bia mộ) */}
                   {item.epitaph_quote && (
-                    <div className="mt-3 p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] font-sans italic leading-relaxed tracking-wide">
+                    <div className="mt-3 p-3 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-sm text-[var(--text-secondary)] font-sans italic leading-relaxed">
                       "{item.epitaph_quote}"
                     </div>
                   )}
 
                   {/* Legacy Blessing strip */}
                   {item.blessing && (
-                    <div className="mt-2.5 pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs text-amber-700 dark:text-amber-300 font-medium">
+                    <div className="mt-2.5 pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs text-amber-800 dark:text-amber-300 font-medium">
                       <span className="flex items-center gap-1.5">
                         <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                         <span>Ân đức gia trì: {item.blessing}</span>
                       </span>
-                      <span className="text-[12px] font-sans tabular-nums text-[var(--text-secondary)] opacity-80">
-                        {item.recorded_at ? new Date(item.recorded_at).toLocaleDateString('vi-VN') : ''}
+                      <span className="text-[12px] font-sans tabular-nums text-[var(--text-secondary)]">
+                        {!isDemo && item.recorded_at ? new Date(item.recorded_at).toLocaleDateString('vi-VN') : ''}
                       </span>
                     </div>
                   )}

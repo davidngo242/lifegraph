@@ -242,17 +242,17 @@ export default function DeathRecapVideoModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in">
-      <div className="max-w-2xl w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col items-center">
+    <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in">
+      <div className="max-w-2xl w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-4 sm:p-6 shadow-2xl relative max-h-[94vh] overflow-y-auto flex flex-col items-center">
         {/* Top Control Bar */}
-        <div className="w-full flex items-center justify-between pb-3 border-b border-[var(--border-subtle)] mb-4">
-          <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold text-sm">
+        <div className="w-full flex items-center justify-between gap-2 pb-3 border-b border-[var(--border-subtle)] mb-4">
+          <div className="flex items-center gap-2 min-w-0 text-indigo-800 dark:text-indigo-400 font-semibold text-sm">
             <Film className="w-4 h-4" />
             <span>Thước Phim Dĩ Vãng (15s Death Video Recap)</span>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)] transition"
+            className="p-1.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)] transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
           >
             <X className="w-5 h-5" />
           </button>
@@ -269,11 +269,11 @@ export default function DeathRecapVideoModal({
         </div>
 
         {/* Action Controls */}
-        <div className="w-full mt-4 flex items-center justify-between gap-3">
+        <div className="w-full mt-4 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <button
               onClick={handleRestart}
-              className="p-2.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-subtle)] transition flex items-center gap-1.5 text-xs font-semibold"
+              className="p-2.5 min-h-[44px] sm:min-h-0 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-subtle)] transition flex items-center gap-1.5 text-xs font-semibold"
             >
               <RotateCcw className="w-4 h-4" />
               <span>Phát Lại</span>
@@ -287,7 +287,7 @@ export default function DeathRecapVideoModal({
           <button
             onClick={handleDownloadVideo}
             disabled={isRecording}
-            className={`py-2.5 px-4 rounded-xl text-slate-950 font-black text-xs transition flex items-center gap-2 shadow-lg active:scale-95 ${
+            className={`py-2.5 px-4 min-h-[44px] sm:min-h-0 rounded-xl text-slate-950 font-black text-xs transition flex items-center gap-2 shadow-lg active:scale-95 ${
               isRecording 
                 ? 'bg-rose-600 text-white animate-pulse' 
                 : 'bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 shadow-amber-500/25'

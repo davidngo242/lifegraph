@@ -120,12 +120,12 @@ export default function LogicCircuitMiniGame({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-xl bg-slate-950 border border-sky-500/40 rounded-3xl p-5 md:p-7 shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+      <div className="relative w-full max-w-xl bg-[var(--bg-card)] border border-sky-500/40 rounded-3xl p-5 md:p-7 shadow-2xl flex flex-col overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition z-20"
+          className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-slate-400 hover:text-white hover:bg-[var(--bg-card)] transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
         >
           <X className="w-4 h-4" />
         </button>
@@ -141,7 +141,7 @@ export default function LogicCircuitMiniGame({
             </div>
 
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40 font-bold">
+              <span className="text-[12px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-800 dark:text-sky-300 border border-sky-500/40 font-bold">
                 Kỳ Thi Sát Hạch Cấp {targetLevel}: {targetLevel === 1 ? 'Kỹ Sư Tập Sự' : targetLevel === 2 ? 'Chuyên Gia Thuật Toán' : 'Đại Sư Công Nghệ'}
               </span>
             </div>
@@ -156,16 +156,16 @@ export default function LogicCircuitMiniGame({
             </p>
 
             {/* How to play card */}
-            <div className="w-full bg-slate-900/90 border border-slate-800 rounded-2xl p-4 mb-4 text-left space-y-2 text-xs">
-              <div className="font-bold text-sky-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
+            <div className="w-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl p-4 mb-4 text-left space-y-2 text-xs">
+              <div className="font-bold text-sky-700 dark:text-sky-400 flex items-center gap-1.5 normal-case text-[12px] tracking-normal">
                 <Sparkles className="w-4 h-4" /> Yêu Cầu & Thử Thách Cấp {targetLevel}:
               </div>
               <p className="text-slate-300 text-[12px]">
                 Nhấp vào từng cổng ({gateNames.join(', ')}) để đảo trạng thái (Bật/Tắt). Khi toàn bộ khớp với sơ đồ chuẩn, bóng đèn trung tâm sẽ lập tức phát sáng!
               </p>
               {targetLevel >= 2 && (
-                <div className="p-2 rounded-xl bg-amber-950/40 border border-amber-500/30 text-[12px] text-amber-300 flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
+                <div className="p-2 rounded-xl bg-amber-950/40 border border-amber-500/30 text-[12px] text-amber-800 dark:text-amber-300 flex items-center gap-2">
+                  <ShieldAlert className="w-4 h-4 text-amber-800 dark:text-amber-400 shrink-0" />
                   <span>Cảnh báo cơ chế nâng cao: Có cổng logic nghịch đảo liên kết, bật một cổng có thể ảnh hưởng đến cổng kế bên!</span>
                 </div>
               )}
@@ -191,14 +191,14 @@ export default function LogicCircuitMiniGame({
         {stage === 'playing' && (
           <div className="flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3 text-xs">
-              <span className="px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-300 font-medium border border-sky-500/20 flex items-center gap-1.5">
+            <div className="flex items-center justify-between gap-2 pr-12 sm:pr-14 pb-3 border-b border-[var(--border-subtle)] mb-3 text-xs">
+              <span className="px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-800 dark:text-sky-300 font-medium border border-sky-500/20 flex items-center gap-1.5">
                 <Cpu className="w-3.5 h-3.5" /> Bảng Mạch Cấp {targetLevel} ({totalSwitches} Cổng)
               </span>
               <div className="flex items-center gap-2 font-sans tabular-nums">
                 <span className="text-slate-400">Thời gian:</span>
                 <span className={`px-2.5 py-0.5 rounded font-bold ${
-                  timeLeft <= 4 ? 'bg-rose-500/20 text-rose-400 animate-pulse' : 'bg-amber-500/20 text-amber-300'
+                  timeLeft <= 4 ? 'bg-rose-500/20 text-rose-700 dark:text-rose-400 animate-pulse' : 'bg-amber-500/20 text-amber-800 dark:text-amber-300'
                 }`}>
                   {timeLeft}s
                 </span>
@@ -206,16 +206,16 @@ export default function LogicCircuitMiniGame({
             </div>
 
             {/* Circuit Visualization Arena */}
-            <div className="relative h-40 w-full bg-slate-900/90 border border-slate-800 rounded-2xl flex flex-col items-center justify-center p-4 mb-3 overflow-hidden select-none">
+            <div className="relative h-40 w-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] rounded-2xl flex flex-col items-center justify-center p-4 mb-3 overflow-hidden select-none">
               <div className="flex flex-col items-center z-10 transition-all duration-300">
                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl transition-all duration-300 ${
                   isPowered
                     ? 'bg-amber-400 text-slate-950 shadow-[0_0_35px_#f59e0b] scale-110'
-                    : 'bg-slate-950 text-slate-600 border border-slate-800'
+                    : 'bg-[var(--bg-card)] text-slate-700 dark:text-slate-400 border border-[var(--border-subtle)]'
                 }`}>
                   {isPowered ? '💡' : '🔌'}
                 </div>
-                <span className={`text-[12px] font-sans tabular-nums font-bold mt-2 ${isPowered ? 'text-amber-300 animate-bounce' : 'text-slate-500'}`}>
+                <span className={`text-[12px] font-sans tabular-nums font-bold mt-2 ${isPowered ? 'text-amber-800 dark:text-amber-300 animate-bounce' : 'text-slate-700 dark:text-slate-400'}`}>
                   {isPowered ? "MẠCH ĐÃ THÔNG NGUỒN!" : "ĐANG CHỜ TÍN HIỆU ĐÚNG..."}
                 </span>
               </div>
@@ -225,7 +225,7 @@ export default function LogicCircuitMiniGame({
             {/* Guide hint */}
             <div className="text-[12px] text-slate-400 mb-2.5 text-center">
               Mục tiêu logic: {gateNames.map((name, idx) => (
-                <span key={name} className="font-sans tabular-nums text-sky-300 mr-1.5">
+                <span key={name} className="font-sans tabular-nums text-sky-800 dark:text-sky-300 mr-1.5">
                   [{name}: {targetConfig[idx] ? 'Bật' : 'Tắt'}]
                 </span>
               ))}
@@ -244,13 +244,13 @@ export default function LogicCircuitMiniGame({
                     onClick={() => toggleSwitch(idx)}
                     className={`h-16 md:h-20 rounded-2xl border flex flex-col items-center justify-center gap-0.5 transition-all active:scale-95 ${
                       isOn
-                        ? 'bg-sky-950/80 border-sky-400 shadow-md shadow-sky-950/40 text-sky-300'
-                        : 'bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-700'
+                        ? 'bg-sky-500/15 dark:bg-sky-950/80 border-sky-400 shadow-md shadow-sky-950/40 text-sky-800 dark:text-sky-300'
+                        : 'bg-[var(--bg-card-subtle)] border-[var(--border-subtle)] text-slate-700 dark:text-slate-400 hover:border-[var(--border-highlight)]'
                     }`}
                   >
                     <span className="text-[12px] font-sans tabular-nums font-bold">Cổng {name}</span>
-                    <Zap className={`w-4 h-4 ${isOn ? 'text-sky-400 animate-pulse' : 'text-slate-600'}`} />
-                    <span className={`text-[12px] font-sans tabular-nums font-bold ${isMatching ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    <Zap className={`w-4 h-4 ${isOn ? 'text-sky-700 dark:text-sky-400 animate-pulse' : 'text-slate-700 dark:text-slate-400'}`} />
+                    <span className={`text-[12px] font-sans tabular-nums font-bold ${isMatching ? 'text-emerald-800 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}`}>
                       {isOn ? 'ON' : 'OFF'}
                     </span>
                   </button>
@@ -266,10 +266,10 @@ export default function LogicCircuitMiniGame({
             <div
               className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-3 shadow-lg ${
                 status === 'success'
-                  ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 shadow-emerald-500/20'
+                  ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-800 dark:text-emerald-400 shadow-emerald-500/20'
                   : status === 'fair'
-                  ? 'bg-sky-500/20 border border-sky-500/40 text-sky-400 shadow-sky-500/20'
-                  : 'bg-rose-500/20 border border-rose-500/40 text-rose-400 shadow-rose-500/20'
+                  ? 'bg-sky-500/20 border border-sky-500/40 text-sky-700 dark:text-sky-400 shadow-sky-500/20'
+                  : 'bg-rose-500/20 border border-rose-500/40 text-rose-700 dark:text-rose-400 shadow-rose-500/20'
               }`}
             >
               {status === 'success' ? '💡' : status === 'fair' ? '🔌' : '💥'}

@@ -943,19 +943,20 @@ export default function CulturalLandscapeBackdrop({
               <div className="text-[var(--text-primary)] font-semibold">
                 {landscape.landmark}
               </div>
-              <div className="text-[11px] text-[var(--text-secondary)]">
+              <div className="text-xs text-[var(--text-secondary)]">
                 {landscape.description}
               </div>
-              <div className="text-[10px] text-amber-800 dark:text-amber-400 font-mono italic pt-1 border-t border-[var(--border-subtle)]">
+              <div className="text-xs text-amber-800 dark:text-amber-400 font-mono italic pt-1 border-t border-[var(--border-subtle)]">
                 ✦ {landscape.subLandmarks}
               </div>
             </div>
           }
         >
-          <div className="px-2.5 py-1 rounded-full bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-amber-500/40 text-[10.5px] font-sans text-amber-800 dark:text-amber-300 font-bold flex items-center gap-1.5 shadow-md backdrop-blur-md cursor-help transition-all duration-200 hover:scale-105 active:scale-95 group">
+          <div className="px-2 py-1 md:px-2.5 rounded-full bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-amber-500/40 text-xs font-sans text-amber-800 dark:text-amber-300 font-bold flex items-center gap-1.5 shadow-md backdrop-blur-md cursor-help transition-all duration-200 hover:scale-105 active:scale-95 group">
             <span className="text-xs group-hover:scale-125 transition-transform">{landscape.flag}</span>
-            <span className="truncate max-w-[140px] sm:max-w-[215px]">
-              {landscape.name} • {landscape.landmark.split('&')[0].trim()}
+            <span className="truncate max-w-[96px] md:max-w-[215px]" title={`${landscape.name} • ${landscape.landmark}`}>
+              {landscape.name}
+              <span className="hidden md:inline"> • {landscape.landmark.split('&')[0].trim()}</span>
             </span>
           </div>
         </Tooltip>

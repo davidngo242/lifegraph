@@ -47,6 +47,7 @@ import SpectrumSlider from './components/interactions/SpectrumSlider';
 import IllusionCard from './components/interactions/IllusionCard';
 import TrilemmaCard from './components/interactions/TrilemmaCard';
 import TimeSkipCard from './components/interactions/TimeSkipCard';
+import LoadingStage from './components/LoadingStage';
 
 import { Sparkles, Volume2, VolumeX, ShieldAlert, Cpu, Globe2, AlertTriangle, Activity, Home, Feather, Play, BookOpen, Zap, Clapperboard, ArrowLeft, Heart, Flame } from 'lucide-react';
 
@@ -1519,7 +1520,7 @@ export default function LifeGraphPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] flex flex-col relative selection:bg-amber-900/30 selection:text-amber-100 overflow-x-hidden font-sans transition-colors duration-250">
+    <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] flex flex-col relative selection:bg-amber-900/30 selection:text-amber-100 overflow-x-clip font-sans transition-colors duration-250">
       {/* Cinematic Looping Background with Ken Burns Drift */}
       <CinematicBackground scene={visuals?.visual_vibe?.background_scene || "cyber_dusk"} netWorth={netWorth} housing={character?.housing} />
 
@@ -1737,7 +1738,7 @@ export default function LifeGraphPage() {
           unlockedPerks={playerAccount?.unlocked_perks || []}
           canEnterNirvana={Boolean(
             character?.is_deceased ||
-            (lineage && lineage.length > 0) ||
+            (lineage && lineage.filter((i: any) => !i?.is_demo && i?.id !== 'founder_gen_1').length > 0) ||
             (playerAccount?.reincarnation_count && playerAccount.reincarnation_count > 1)
           )}
           onRebirthComplete={(newChar) => {
@@ -1795,10 +1796,10 @@ export default function LifeGraphPage() {
       )}
 
       {/* Slim Top Navigation */}
-      <header className="border-b border-[var(--border-subtle)] bg-[var(--bg-header)] backdrop-blur-md px-3 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-50 gap-3 max-w-full overflow-visible transition-colors duration-250">
+      <header className="border-b border-[var(--border-subtle)] bg-[var(--bg-header)] backdrop-blur-md px-2 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-50 gap-1.5 sm:gap-3 max-w-full overflow-visible transition-colors duration-250">
         {/* 1. Left Zone: Brand Logo & View Switcher Tabs (Đẩy sát sang trái) */}
-        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-          <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0 shrink-0 sm:shrink">
+          <div className="flex items-center gap-2.5 shrink-0">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 via-amber-600 to-emerald-600 flex items-center justify-center font-black text-slate-950 text-xs shadow-md shadow-amber-500/25 shrink-0">
               LG
             </div>
@@ -1808,21 +1809,21 @@ export default function LifeGraphPage() {
           </div>
 
           {/* View Switcher Pills */}
-          <div className="flex items-center gap-1 bg-[var(--bg-card-subtle)] p-1 rounded-2xl border border-[var(--border-subtle)]">
+          <div className="flex items-center gap-1 bg-[var(--bg-card-subtle)] p-1 rounded-2xl border border-[var(--border-subtle)] shrink-0 sm:shrink">
             <Tooltip
               position="bottom"
               content="Đại sảnh gia phả tiền nhân"
             >
               <button
                 onClick={() => setActiveView('home')}
-                className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
+                className={`min-w-[44px] sm:min-w-0 min-h-[44px] sm:min-h-0 justify-center px-2 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                   activeView === 'home'
                     ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-950 font-bold shadow-md shadow-slate-900/20'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 <Home className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">Trang Chủ</span>
+                <span className="hidden lg:inline whitespace-nowrap">Trang Chủ</span>
               </button>
             </Tooltip>
 
@@ -1833,14 +1834,14 @@ export default function LifeGraphPage() {
               >
                 <button
                   onClick={() => setActiveView('game')}
-                  className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
+                  className={`min-w-[44px] sm:min-w-0 min-h-[44px] sm:min-h-0 justify-center px-2 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                     activeView === 'game'
                       ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-950 font-bold shadow-md shadow-slate-900/20'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
                 >
                   <Play className="w-3.5 h-3.5 fill-current" />
-                  <span className="hidden md:inline">Hành Trình</span>
+                  <span className="hidden lg:inline whitespace-nowrap">Hành Trình</span>
                 </button>
               </Tooltip>
             ) : (
@@ -1850,14 +1851,14 @@ export default function LifeGraphPage() {
               >
                 <button
                   onClick={() => setShowRebirthModal(true)}
-                  className={`px-2.5 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
+                  className={`min-w-[44px] sm:min-w-0 min-h-[44px] sm:min-h-0 justify-center px-2 sm:px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
                     activeView === 'home'
                       ? 'text-[var(--text-secondary)] hover:text-amber-500 hover:bg-[rgba(255,255,255,0.04)]'
                       : 'bg-gradient-to-r from-amber-500 via-amber-600 to-emerald-600 text-slate-950 font-black shadow-md shadow-amber-500/25 hover:opacity-95'
                   }`}
                 >
                   <Sparkles className="w-3.5 h-3.5 text-slate-950" />
-                  <span className="hidden md:inline">Tái Sinh</span>
+                  <span className="hidden lg:inline whitespace-nowrap">Tái Sinh</span>
                 </button>
               </Tooltip>
             )}
@@ -1872,7 +1873,7 @@ export default function LifeGraphPage() {
         />
 
         {/* 3. Right Zone: Consolidated Quick Hub (Đền Thờ · Thông Báo · Thiết Lập) */}
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 shrink-0 sm:shrink">
           {/* Đền Thờ Nghiệp Quả (Karma Sanctum) */}
           <Tooltip
             position="bottom"
@@ -1882,9 +1883,9 @@ export default function LifeGraphPage() {
               onClick={() => setShowKarmaModal(true)}
               className="py-1 px-2.5 sm:px-3 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-amber-400 text-[var(--text-primary)] text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-300 fill-amber-400/30" />
-              <span className="hidden md:inline">Đền Thờ</span>
-              <span className="text-[11px] font-mono font-bold text-amber-700 dark:text-amber-300 px-1.5 py-0.2 rounded bg-amber-500/15 border border-amber-500/30">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-300 fill-amber-400/30 hidden sm:block" />
+              <span className="hidden lg:inline whitespace-nowrap">Đền Thờ</span>
+              <span className="text-xs font-mono font-bold whitespace-nowrap text-amber-800 dark:text-amber-300 px-1.5 py-0.2 rounded bg-amber-500/15 border border-amber-500/30">
                 {playerAccount?.total_karma || 0}
               </span>
             </button>
@@ -1915,7 +1916,7 @@ export default function LifeGraphPage() {
       </header>
 
       {/* Main Container: Dynamic View Router */}
-      <main className="flex-1 max-w-[1720px] w-full mx-auto p-3 md:p-5 z-10 relative">
+      <main className="flex-1 max-w-[1720px] w-full mx-auto p-3 md:p-5 relative">
         {/* 1. Trang Chủ (Home Portal) View - Luôn tích hợp toàn bộ Gia Phả các kiếp */}
         {errorMsg && !character && (
           <div role="alert" className="mb-4 rounded-xl border border-rose-700 bg-slate-900 p-4 text-rose-200 shadow-xl">
@@ -1925,7 +1926,7 @@ export default function LifeGraphPage() {
             </button>
           </div>
         )}
-        {loading && !character && <div role="status" className="p-8 text-center text-slate-300">Đang tải tiến trình đã lưu…</div>}
+        {loading && !character && !errorMsg && <LoadingStage message="Đang tải tiến trình đã lưu…" />}
         {activeView === 'home' && !loading && !errorMsg && (
           <LifeGraphHomePortal
             character={character}

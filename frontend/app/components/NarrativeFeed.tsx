@@ -75,11 +75,11 @@ export default function NarrativeFeed({
 
   const getCategoryIcon = (item: HistoryItem) => {
     const text = `${item.event} ${item.choice || ''}`.toLowerCase();
-    if (text.includes('kỹ năng') || text.includes('thử thách')) return <Award className="w-3.5 h-3.5 text-amber-400" />;
-    if (text.includes('mẹ') || text.includes('cha') || text.includes('con') || text.includes('vợ') || text.includes('gia đình')) return <Heart className="w-3.5 h-3.5 text-pink-400" />;
-    if (text.includes('tài sản') || text.includes('tiền') || text.includes('đầu tư') || text.includes('công sở')) return <Briefcase className="w-3.5 h-3.5 text-sky-400" />;
-    if (text.includes('khủng hoảng') || text.includes('thảm') || text.includes('mất')) return <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />;
-    return <Sparkles className="w-3.5 h-3.5 text-indigo-400" />;
+    if (text.includes('kỹ năng') || text.includes('thử thách')) return <Award className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />;
+    if (text.includes('mẹ') || text.includes('cha') || text.includes('con') || text.includes('vợ') || text.includes('gia đình')) return <Heart className="w-3.5 h-3.5 text-pink-700 dark:text-pink-400" />;
+    if (text.includes('tài sản') || text.includes('tiền') || text.includes('đầu tư') || text.includes('công sở')) return <Briefcase className="w-3.5 h-3.5 text-sky-700 dark:text-sky-400" />;
+    if (text.includes('khủng hoảng') || text.includes('thảm') || text.includes('mất')) return <AlertTriangle className="w-3.5 h-3.5 text-rose-700 dark:text-rose-400" />;
+    return <Sparkles className="w-3.5 h-3.5 text-indigo-700 dark:text-indigo-400" />;
   };
 
   return (
@@ -88,7 +88,7 @@ export default function NarrativeFeed({
       <div className="flex flex-col gap-2.5 pb-3 border-b border-[var(--border-subtle)] mb-2.5 shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+            <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 border border-indigo-500/30">
               <BookOpen className="w-4 h-4" />
             </div>
             <div>
@@ -102,7 +102,7 @@ export default function NarrativeFeed({
           </div>
 
           {isOldAge && (
-            <span className="text-[12px] font-sans px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/30 flex items-center gap-1 animate-pulse">
+            <span className="text-[12px] font-sans px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/30 flex items-center gap-1 animate-pulse">
               <EyeOff className="w-3 h-3" /> Trí nhớ mờ dần
             </span>
           )}
@@ -124,7 +124,7 @@ export default function NarrativeFeed({
             onClick={() => setFilter('milestones')}
             className={`px-2.5 py-1 rounded-xl transition font-medium ${
               filter === 'milestones'
-                ? 'bg-amber-600/30 text-amber-700 dark:text-amber-300 border border-amber-500/50'
+                ? 'bg-amber-600/30 text-amber-800 dark:text-amber-300 border border-amber-500/50'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]'
             }`}
           >
@@ -134,7 +134,7 @@ export default function NarrativeFeed({
             onClick={() => setFilter('career')}
             className={`px-2.5 py-1 rounded-xl transition font-medium ${
               filter === 'career'
-                ? 'bg-sky-600/30 text-sky-700 dark:text-sky-300 border border-sky-500/50'
+                ? 'bg-sky-600/30 text-sky-800 dark:text-sky-300 border border-sky-500/50'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]'
             }`}
           >
@@ -144,7 +144,7 @@ export default function NarrativeFeed({
             onClick={() => setFilter('family')}
             className={`px-2.5 py-1 rounded-xl transition font-medium ${
               filter === 'family'
-                ? 'bg-pink-600/30 text-pink-700 dark:text-pink-300 border border-pink-500/50'
+                ? 'bg-pink-600/30 text-pink-800 dark:text-pink-300 border border-pink-500/50'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]'
             }`}
           >
@@ -168,10 +168,10 @@ export default function NarrativeFeed({
       {/* Narrative Feed Timeline (Newest on top, smooth scroll) */}
       <div className="flex-1 overflow-y-auto space-y-3 pr-1 mb-1 select-text custom-scrollbar">
         {displayHistory.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center text-slate-500 text-xs italic font-sans p-6">
+          <div className="h-full flex flex-col items-center justify-center text-center text-slate-600 dark:text-slate-400 text-xs italic font-sans p-6">
             <BookOpen className="w-8 h-8 opacity-30 mb-2 text-indigo-400" />
             <p>Chưa có ký ức nào trong danh mục này.</p>
-            <p className="text-[12px] text-slate-600 mt-0.5">Tiếp tục hành trình để bồi đắp dòng lịch sử.</p>
+            <p className="text-[12px] text-slate-600 dark:text-slate-400 mt-0.5">Tiếp tục hành trình để bồi đắp dòng lịch sử.</p>
           </div>
         ) : (
           displayHistory.map((item, idx) => {
@@ -209,7 +209,7 @@ export default function NarrativeFeed({
                     <div className="flex items-center gap-1.5">
                       <span className={`text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-md border font-bold ${
                         isLatest 
-                          ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30' 
+                          ? 'bg-amber-500/15 text-amber-800 dark:text-amber-300 border-amber-500/30' 
                           : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-subtle)]'
                       }`}>
                         Tuổi {item.age}
@@ -220,7 +220,7 @@ export default function NarrativeFeed({
                     </div>
 
                     {isLatest && (
-                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold animate-pulse flex items-center gap-1">
+                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 font-bold animate-pulse flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" /> Vừa xong
                       </span>
                     )}
@@ -234,7 +234,7 @@ export default function NarrativeFeed({
                   {/* Choice & Consequence */}
                   {item.choice && (
                     <div className="text-[12px] text-[var(--text-secondary)] bg-[var(--bg-card)] rounded-xl p-2 border border-[var(--border-subtle)] font-sans leading-relaxed">
-                      <span className="text-indigo-500 dark:text-indigo-400 font-sans font-semibold mr-1">
+                      <span className="text-indigo-700 dark:text-indigo-400 font-sans font-semibold mr-1">
                         {item.age === 0 ? '↳ Ký ức đầu đời:' : '↳ Lựa chọn:'}
                       </span>
                       <span>{item.choice}</span>

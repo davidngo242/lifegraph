@@ -146,7 +146,7 @@ interface CharacterHeroBannerProps {
   actionFeedback?: BannerActionFeedback | null;
 }
 
-export default function CharacterHeroBanner({
+function CharacterHeroBannerInner({
   character,
   visuals,
   playerAccount,
@@ -223,6 +223,8 @@ export default function CharacterHeroBanner({
 
   // Dynamic Action Feedback Realtime Overlay
   const [activeFeedback, setActiveFeedback] = useState<BannerActionFeedback | null>(null);
+  // Mobile: thu gọn chip Gen di truyền (hiện 2 chip đầu + nút "+N")
+  const [showAllTraits, setShowAllTraits] = useState(false);
 
   useEffect(() => {
     if (actionFeedback && actionFeedback.timestamp) {
@@ -525,13 +527,13 @@ export default function CharacterHeroBanner({
 
               {/* Critical State Warning Pills (Top-Left of Stage) */}
               {isCriticalVitality && (
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-50/95 dark:bg-rose-950/90 border border-rose-400/60 dark:border-rose-500/60 text-[10px] font-sans text-rose-900 dark:text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
+                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-50/95 dark:bg-rose-950/90 border border-rose-400/60 dark:border-rose-500/60 text-xs font-sans text-rose-900 dark:text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
                   <span>💔 Yếu ớt</span>
                 </div>
               )}
               {isSevereBurnout && (
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-50/95 dark:bg-rose-950/90 border border-rose-400/70 dark:border-rose-500/70 text-[10px] font-sans text-rose-900 dark:text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
+                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-50/95 dark:bg-rose-950/90 border border-rose-400/70 dark:border-rose-500/70 text-xs font-sans text-rose-900 dark:text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping" />
                   <span>⚡ Kiệt sức</span>
                 </div>
@@ -540,7 +542,7 @@ export default function CharacterHeroBanner({
               {/* Top-Right: 360 Fullscreen Studio Trigger */}
               <button
                 onClick={onOpen3DInspector}
-                className="absolute top-2 right-2 p-1.5 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] text-amber-600 dark:text-amber-300 border border-amber-500/30 backdrop-blur-md transition shadow-md z-20 cursor-pointer opacity-85 group-hover:opacity-100"
+                className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-11 h-11 sm:w-auto sm:h-auto flex items-center justify-center sm:p-1.5 rounded-xl bg-white/95 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 text-amber-800 dark:text-amber-300 border border-amber-600/50 dark:border-amber-500/30 backdrop-blur-md transition shadow-md z-20 cursor-pointer opacity-85 group-hover:opacity-100"
                 title="Mở phòng kiểm định 360°"
               >
                 <Maximize2 className="w-3.5 h-3.5" />
@@ -552,7 +554,7 @@ export default function CharacterHeroBanner({
                   e.stopPropagation();
                   onOpenPetSanctuary?.();
                 }}
-                className="absolute bottom-1.5 right-1.5 z-20 px-2 py-0.5 rounded-lg bg-[var(--bg-card)]/90 hover:bg-[var(--bg-card)] border border-amber-500/40 text-amber-700 dark:text-amber-300 font-bold text-[10px] backdrop-blur-md shadow-sm transition active:scale-95 flex items-center gap-1 cursor-pointer pointer-events-auto"
+                className="absolute bottom-1.5 right-1.5 z-20 px-2 py-0.5 rounded-lg bg-white/95 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 border border-amber-600/60 dark:border-amber-500/40 text-amber-900 dark:text-amber-300 font-bold text-xs backdrop-blur-md shadow-sm transition active:scale-95 flex items-center gap-1 cursor-pointer pointer-events-auto"
                 title="Linh Thú Các - Mở cửa tiệm nhận nuôi thú cưng 3D"
               >
                 <span>
@@ -576,11 +578,11 @@ export default function CharacterHeroBanner({
           <div className="flex flex-col gap-1.5 min-w-0">
             {/* Row 1: RPG Level & Generation (Chuyển sang bên nhân vật theo chỉ đạo của Sếp) */}
             <div className="flex items-center gap-2 flex-wrap">
-              <div className="flex items-center gap-1.5 bg-[var(--bg-card-subtle)] px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-sm shrink-0">
-                <span className="text-[11px] font-sans tabular-nums font-black text-amber-500">
+              <div className="flex items-center gap-1.5 bg-[var(--bg-card-subtle)] px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-sm max-w-full flex-wrap">
+                <span className="text-xs font-sans tabular-nums font-black text-amber-800 dark:text-amber-400">
                   Lv.{character.life_level || 1}
                 </span>
-                <span className="text-[10.5px] font-bold text-amber-700 dark:text-amber-200">
+                <span className="text-xs font-bold text-amber-900 dark:text-amber-200">
                   {character.life_level >= 71 ? "Huyền Thoại" :
                    character.life_level >= 46 ? "Tài Phiệt" :
                    character.life_level >= 26 ? "Trụ Cột" :
@@ -593,14 +595,14 @@ export default function CharacterHeroBanner({
                   />
                 </div>
                 {(character.skill_points || 0) > 0 && (
-                  <span className="text-[9px] font-sans tabular-nums font-black px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 animate-bounce">
+                  <span className="text-xs font-sans tabular-nums font-black px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 animate-bounce">
                     +{character.skill_points} SP
                   </span>
                 )}
               </div>
 
               {character.generation && character.generation > 1 && (
-                <span className="text-[10.5px] font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold shadow-sm">
+                <span className="text-xs font-sans tabular-nums px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold shadow-sm">
                   👑 Đời {character.generation}
                 </span>
               )}
@@ -611,7 +613,7 @@ export default function CharacterHeroBanner({
               <h1 className="text-xl md:text-2xl font-black text-[var(--text-primary)] tracking-tight truncate">
                 {character.name || "LifeGraph"}
               </h1>
-              <span className={`text-[10.5px] px-2.5 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-sm ${socialStatus.color}`}>
+              <span className={`text-xs px-2.5 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-sm ${socialStatus.color}`}>
                 <span>{socialStatus.icon}</span>
                 <span>{socialStatus.title}</span>
               </span>
@@ -619,23 +621,23 @@ export default function CharacterHeroBanner({
 
             {/* Row 3: Age, Gender & Nationality Pills */}
             <div className="flex items-center gap-1.5 text-xs flex-wrap">
-              <span className="font-bold text-[var(--text-primary)] bg-[var(--bg-card-subtle)] px-2.5 py-0.5 rounded-lg border border-[var(--border-subtle)] text-[11px] shadow-sm">
+              <span className="font-bold text-[var(--text-primary)] bg-[var(--bg-card-subtle)] px-2.5 py-0.5 rounded-lg border border-[var(--border-subtle)] text-xs shadow-sm">
                 ⏳ {age} Tuổi
               </span>
-              <span className={`font-bold px-2 py-0.5 rounded-lg border text-[11px] flex items-center gap-1 shadow-sm ${
+              <span className={`font-bold px-2 py-0.5 rounded-lg border text-xs flex items-center gap-1 shadow-sm ${
                 character.gender === 'female'
-                  ? 'bg-rose-500/15 border-rose-500/30 text-rose-700 dark:text-rose-300'
+                  ? 'bg-rose-500/15 border-rose-500/30 text-rose-800 dark:text-rose-300'
                   : 'bg-sky-500/15 border-sky-500/30 text-sky-700 dark:text-sky-300'
               }`}>
                 <span>{character.gender === 'female' ? '♀️ Nữ' : '♂️ Nam'}</span>
               </span>
-              <span className="text-[var(--text-secondary)] font-medium text-[11px] px-2 py-0.5 rounded-lg bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+              <span className="hidden sm:inline-flex text-[var(--text-secondary)] font-medium text-xs px-2 py-0.5 rounded-lg bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
                 🌍 {nationality}
               </span>
             </div>
 
             {/* Row 4: Location (Thành phố) */}
-            <div className="flex items-center gap-1.5 text-[11px] text-[var(--text-secondary)] pt-0.5">
+            <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] pt-0.5">
               <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
               <span className="truncate max-w-[220px] sm:max-w-[280px]" title={character.current_city || nationality}>
                 {character.current_city || nationality}
@@ -643,9 +645,9 @@ export default function CharacterHeroBanner({
             </div>
 
             {/* Row 5: Housing (Nhà ở - Xuống dòng riêng biệt theo chỉ đạo của Sếp) */}
-            <div className="flex items-center gap-1.5 text-[11px] pt-0.5">
+            <div className="flex items-center gap-1.5 text-xs pt-0.5">
               <Home className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-              <span className="font-semibold text-amber-700 dark:text-amber-300 truncate max-w-[220px] sm:max-w-[280px]" title={character.housing?.name || 'Phòng trọ / Mái ấm bình dân'}>
+              <span className="font-semibold text-amber-800 dark:text-amber-300 truncate max-w-[220px] sm:max-w-[280px]" title={character.housing?.name || 'Phòng trọ / Mái ấm bình dân'}>
                 {character.housing?.name || 'Phòng trọ / Mái ấm bình dân'}
               </span>
             </div>
@@ -654,17 +656,17 @@ export default function CharacterHeroBanner({
             {(hasGlasses || hasHalo || isWealthy) && (
               <div className="flex items-center gap-1.5 pt-0.5 flex-wrap">
                 {hasGlasses && (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-700 dark:text-cyan-300 font-medium">
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-800 dark:text-cyan-300 font-medium">
                     👓 Kính Cận
                   </span>
                 )}
                 {hasHalo && (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold">
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-800 dark:text-amber-300 font-bold">
                     🪷 Kim Quang
                   </span>
                 )}
                 {isWealthy && (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-700 dark:text-amber-300 font-bold">
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-800 dark:text-amber-300 font-bold">
                     💎 Đại Gia
                   </span>
                 )}
@@ -683,7 +685,7 @@ export default function CharacterHeroBanner({
               <div className="flex items-center justify-between w-full min-w-0">
                 <span className="text-xs font-bold text-slate-900 dark:text-white truncate">{activeFeedback.title}</span>
                 {activeFeedback.delta && (
-                  <span className={`text-[11px] font-sans tabular-nums font-bold px-1.5 py-0.2 rounded border shrink-0 ${feedbackAtmo?.badgeDelta}`}>
+                  <span className={`text-xs font-sans tabular-nums font-bold px-1.5 py-0.2 rounded border shrink-0 ${feedbackAtmo?.badgeDelta}`}>
                     {activeFeedback.delta}
                   </span>
                 )}
@@ -699,12 +701,12 @@ export default function CharacterHeroBanner({
               <Tooltip content={<div className="text-[12px] max-w-xs">{lifeStage.desc}</div>}>
                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] cursor-help transition shadow-xs">
                   <span className="text-xs">{lifeStage.icon}</span>
-                  <span className="text-[11px] font-bold text-[var(--text-primary)] truncate">{lifeStage.stage}</span>
+                  <span className="text-xs font-bold text-[var(--text-primary)] truncate">{lifeStage.stage}</span>
                 </div>
               </Tooltip>
 
               {/* Nghề Nghiệp / Thân Phận */}
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-800 dark:text-sky-200 font-bold text-[11px] shadow-xs">
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-800 dark:text-sky-200 font-bold text-xs shadow-xs">
                 <Briefcase className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
                 <span className="truncate max-w-[130px] sm:max-w-[180px]">
                   {character.occupation || (age < 6 ? "Ấu nhi" : age < 18 ? "Học sinh" : "Lao động tự do")}
@@ -713,13 +715,13 @@ export default function CharacterHeroBanner({
 
               {/* Nhãn đặc thù (Bán Thần, Tâm Nguyện, Thọ) */}
               {character.is_transhuman && (
-                <span className="text-[11px] font-sans px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold animate-pulse">
+                <span className="text-xs font-sans px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-900 dark:text-cyan-300 border border-cyan-600/50 dark:border-cyan-500/40 font-bold animate-pulse">
                   <Cpu className="w-3 h-3 inline mr-1" /> Bán Thần
                 </span>
               )}
 
               {character.active_pledge && (
-                <span className={`text-[10.5px] px-2 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-xs shrink-0 ${
+                <span className={`text-xs px-2 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-xs shrink-0 ${
                   character.active_pledge === 'pledge_wealth'
                     ? 'bg-amber-500/15 text-amber-800 dark:text-amber-300 border-amber-500/40'
                     : character.active_pledge === 'pledge_wellness'
@@ -737,10 +739,10 @@ export default function CharacterHeroBanner({
               {age >= 70 && (
                 <Tooltip content={
                   <div className="text-[12px] max-w-xs leading-relaxed">
-                    <strong className="text-amber-300">⏳ Kỳ Vọng Thọ (Tuổi {age}):</strong> Tỷ lệ vượt qua thử thách sinh mệnh năm nay: <span className="text-amber-300 font-bold">~{survivalRate}%</span>.
+                    <strong className="text-amber-800 dark:text-amber-300">⏳ Kỳ Vọng Thọ (Tuổi {age}):</strong> Tỷ lệ vượt qua thử thách sinh mệnh năm nay: <span className="text-amber-800 dark:text-amber-300 font-bold">~{survivalRate}%</span>.
                   </div>
                 }>
-                  <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-amber-500/40 bg-amber-500/15 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 font-bold flex items-center gap-1 shadow-xs animate-pulse cursor-help">
+                  <span className="text-xs px-2.5 py-0.5 rounded-full border border-amber-500/40 bg-amber-500/15 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 font-bold flex items-center gap-1 shadow-xs animate-pulse cursor-help">
                     <Hourglass className="w-3 h-3 text-amber-600 dark:text-amber-400 animate-[spin_6s_linear_infinite]" />
                     <span>~{survivalRate}% Thọ</span>
                   </span>
@@ -749,7 +751,7 @@ export default function CharacterHeroBanner({
             </div>
 
             {/* Nhóm Phải: Trọng Tâm Sinh Mệnh & Tinh Thần Lạc Quan */}
-            <div className="flex items-center gap-2 flex-wrap shrink-0">
+            <div className="flex items-center gap-2 flex-wrap min-w-0 max-w-full">
               {/* Trọng tâm lứa tuổi */}
               {(() => {
                 const focusText =
@@ -759,8 +761,8 @@ export default function CharacterHeroBanner({
                   age < 60 ? "Trụ cột gia đình & cơ đồ" : "An hưởng tuổi già & truyền thừa";
                 return (
                   <Tooltip content={`Định hướng trọng tâm ở tuổi ${age}`}>
-                    <div className="flex items-center gap-1 text-[11px] text-[var(--text-secondary)] font-medium bg-[var(--bg-card)] px-2.5 py-1 rounded-xl border border-[var(--border-subtle)] shrink-0 cursor-help shadow-xs">
-                      <span className="text-indigo-500 font-bold">🎯 Trọng tâm:</span>
+                    <div className="hidden sm:flex items-center gap-1 text-xs text-[var(--text-secondary)] font-medium bg-[var(--bg-card)] px-2.5 py-1 rounded-xl border border-[var(--border-subtle)] min-w-0 max-w-full cursor-help shadow-xs">
+                      <span className="text-indigo-700 dark:text-indigo-400 font-bold shrink-0">🎯 Trọng tâm:</span>
                       <span className="text-[var(--text-primary)] font-semibold truncate max-w-[160px] sm:max-w-[210px]">
                         {focusText}
                       </span>
@@ -772,13 +774,13 @@ export default function CharacterHeroBanner({
               {/* Tinh thần / Động lực sống */}
               <Tooltip content={<div className="text-[12px]">Động lực sống & Tinh thần ({happiness}%). Trên 75% kích hoạt bứt phá thăng hoa.</div>}>
                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] cursor-help shadow-xs">
-                  <Smile className="w-3.5 h-3.5 text-amber-500" />
-                  <span className="text-[11px] font-medium text-[var(--text-secondary)] hidden sm:inline">Tinh thần:</span>
-                  <span className={`text-[11px] font-sans tabular-nums font-bold ${happiness >= 70 ? 'text-amber-500' : 'text-[var(--text-primary)]'}`}>
+                  <Smile className="w-3.5 h-3.5 text-amber-600 dark:text-amber-500" />
+                  <span className="text-xs font-medium text-[var(--text-secondary)] hidden sm:inline">Tinh thần:</span>
+                  <span className={`text-xs font-sans tabular-nums font-bold ${happiness >= 70 ? 'text-amber-800 dark:text-amber-400' : 'text-[var(--text-primary)]'}`}>
                     {happiness}%
                   </span>
                   {isHappyBuffActive && (
-                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30 font-bold">
+                    <span className="text-xs px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-900 dark:text-amber-300 border border-amber-600/40 dark:border-amber-500/30 font-bold">
                       Buff
                     </span>
                   )}
@@ -793,37 +795,51 @@ export default function CharacterHeroBanner({
             {/* Cột 1 (Trái): Tiềm Năng Bẩm Sinh & Khát Vọng Cuộc Đời */}
             <div className="flex flex-col justify-between gap-2.5 min-w-0">
               {/* Gen di truyền */}
-              <div className="flex items-center gap-1.5 flex-wrap text-[11px]">
-                <span className="text-teal-600 dark:text-teal-400 font-bold flex items-center gap-1 text-[11px] shrink-0">
+              <div className="flex items-center gap-1.5 flex-wrap text-xs">
+                <span className="text-teal-800 dark:text-teal-400 font-bold flex items-center gap-1 text-xs shrink-0">
                   🧬 Gen di truyền:
                 </span>
                 {character.innate_traits && character.innate_traits.length > 0 ? (
-                  character.innate_traits.map((t: string) => {
-                    const ft = formatTrait(t);
-                    return (
-                      <Tooltip
-                        key={t}
-                        content={
-                          <div className="space-y-0.5">
-                            <div className="font-bold text-amber-300 flex items-center gap-1">
-                              <span>{ft.icon}</span>
-                              <span>{ft.name}</span>
+                  <>
+                    {character.innate_traits.map((t: string, idx: number) => {
+                      const ft = formatTrait(t);
+                      // Dưới sm: chỉ hiện 2 chip đầu, còn lại ẩn tới khi bấm "+N"
+                      const collapsedOnMobile = idx >= 2 && !showAllTraits;
+                      return (
+                        <Tooltip
+                          key={t}
+                          content={
+                            <div className="space-y-0.5">
+                              <div className="font-bold text-amber-800 dark:text-amber-300 flex items-center gap-1">
+                                <span>{ft.icon}</span>
+                                <span>{ft.name}</span>
+                              </div>
+                              <div className="text-xs text-slate-700 dark:text-slate-200">{ft.desc}</div>
                             </div>
-                            <div className="text-[11.5px] text-slate-200">{ft.desc}</div>
-                          </div>
-                        }
-                      >
-                        <span
-                          className={`font-semibold px-2 py-0.5 rounded-full border text-[10.5px] flex items-center gap-1 transition cursor-help ${ft.badgeStyle}`}
+                          }
                         >
-                          <span>{ft.icon}</span>
-                          <span>{ft.name}</span>
-                        </span>
-                      </Tooltip>
-                    );
-                  })
+                          <span
+                            className={`font-semibold px-2 py-0.5 rounded-full border text-xs items-center gap-1 transition cursor-help max-w-full min-w-0 ${collapsedOnMobile ? 'hidden sm:flex' : 'flex'} ${ft.badgeStyle}`}
+                          >
+                            <span className="shrink-0">{ft.icon}</span>
+                            <span className="truncate">{ft.name}</span>
+                          </span>
+                        </Tooltip>
+                      );
+                    })}
+                    {character.innate_traits.length > 2 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAllTraits((v) => !v)}
+                        aria-expanded={showAllTraits}
+                        className="sm:hidden min-h-[32px] px-2.5 py-0.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)] transition"
+                      >
+                        {showAllTraits ? 'Thu gọn' : `+${character.innate_traits.length - 2} xem thêm`}
+                      </button>
+                    )}
+                  </>
                 ) : (
-                  <span className="text-[var(--text-secondary)] text-[11px] italic">
+                  <span className="text-[var(--text-secondary)] text-xs italic">
                     Hạt giống tố chất đang chờ thức tỉnh...
                   </span>
                 )}
@@ -837,19 +853,19 @@ export default function CharacterHeroBanner({
                       onOpenAspirationUpgrade?.();
                     }
                   }}
-                  className={`flex items-center justify-between gap-2 text-[11px] transition ${
+                  className={`flex items-center justify-between gap-2 text-xs transition ${
                     aspiration.progress >= 100 || aspiration.is_completed
                       ? 'cursor-pointer hover:bg-amber-500/10 px-2 py-1 rounded-xl border border-amber-500/40 bg-amber-500/5 animate-pulse'
                       : ''
                   }`}
                 >
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="w-5 h-5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 flex items-center justify-center text-xs shrink-0 shadow-xs">
+                    <span className="w-5 h-5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-800 dark:text-amber-300 flex items-center justify-center text-xs shrink-0 shadow-xs">
                       {aspiration.icon || '🎯'}
                     </span>
                     <Tooltip content={aspiration.target_summary || aspiration.title}>
                       <div className="flex items-center gap-1 truncate">
-                        <span className="text-[var(--text-secondary)] text-[10.5px] font-medium hidden sm:inline">Khát vọng:</span>
+                        <span className="text-[var(--text-secondary)] text-xs font-medium hidden sm:inline">Khát vọng:</span>
                         <span className="font-bold text-[var(--text-primary)] text-xs truncate max-w-[130px] sm:max-w-[170px]">
                           {aspiration.title}
                         </span>
@@ -868,11 +884,11 @@ export default function CharacterHeroBanner({
                         style={{ width: `${Math.min(100, aspiration.progress)}%` }}
                       />
                     </div>
-                    <span className="font-sans tabular-nums font-bold text-xs text-amber-500">
+                    <span className="font-sans tabular-nums font-bold text-xs text-amber-800 dark:text-amber-400">
                       {aspiration.progress}%
                     </span>
                     {aspiration.progress >= 100 && (
-                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-bounce shadow-xs">
+                      <span className="text-xs font-bold px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-bounce shadow-xs">
                         Thăng Hạng!
                       </span>
                     )}
@@ -886,14 +902,14 @@ export default function CharacterHeroBanner({
               {/* Sinh Lực (HP) */}
               <div className="flex flex-col gap-1">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-[11.5px] font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5">
                     <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500/20" /> Sinh Lực
                   </span>
                   <div className="flex items-center gap-1.5">
-                    <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${healthStatus.color}`}>
+                    <span className={`text-xs font-bold px-1.5 py-0.2 rounded border ${healthStatus.color}`}>
                       {healthStatus.label}
                     </span>
-                    <span className="text-[11px] font-sans tabular-nums font-extrabold text-[var(--text-primary)]">
+                    <span className="text-xs font-sans tabular-nums font-extrabold text-[var(--text-primary)]">
                       {vitality}<span className="text-[var(--text-muted)] font-normal">/{maxVitality}</span>
                     </span>
                   </div>
@@ -910,14 +926,14 @@ export default function CharacterHeroBanner({
               {/* Căng Thẳng (Stress) */}
               <div className="flex flex-col gap-1">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-[11.5px] font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5">
                     <AlertTriangle className={`w-3.5 h-3.5 ${burnout >= 75 ? 'text-rose-500' : 'text-sky-500'}`} /> Căng Thẳng
                   </span>
                   <div className="flex items-center gap-1.5">
-                    <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${stress.color}`}>
+                    <span className={`text-xs font-bold px-1.5 py-0.2 rounded ${stress.color}`}>
                       {stress.label}
                     </span>
-                    <span className="text-[11px] font-sans tabular-nums font-bold text-[var(--text-primary)]">
+                    <span className="text-xs font-sans tabular-nums font-bold text-[var(--text-primary)]">
                       {burnout}%
                     </span>
                   </div>
@@ -944,3 +960,7 @@ export default function CharacterHeroBanner({
   );
 }
 
+export default function CharacterHeroBanner(props: CharacterHeroBannerProps) {
+  if (!props.character) return null;
+  return <CharacterHeroBannerInner {...props} />;
+}

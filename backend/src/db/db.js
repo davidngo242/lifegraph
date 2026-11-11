@@ -114,6 +114,9 @@ export function getSessionData(sessionId = null) {
         ancestral_lineage: [
           {
             id: "founder_gen_1",
+            // Bản ghi MẪU (ví dụ minh hoạ Gia Phả cho người mới) - KHÔNG phải tiền nhân thật của người chơi.
+            // Frontend dùng cờ này để gắn nhãn "Gia phả mẫu" và loại khỏi số liệu thống kê thật.
+            is_demo: true,
             generation: 1,
             name: "Vũ Chấn Hưng",
             nationality: "Việt Nam",
