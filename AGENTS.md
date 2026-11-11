@@ -44,6 +44,20 @@ flowchart LR
 
 ---
 
+## 2b. Phân Tầng Theo Cỡ Thay Đổi & Hợp Đồng Báo Cáo (Sếp duyệt 2026-11-11)
+
+| Cỡ | Ví dụ | Bắt buộc |
+|---|---|---|
+| XS (1–3 dòng CSS/text) | đổi màu, sửa chữ | Lead tự làm, KHÔNG gọi subagent. Vẫn phải `tsc --noEmit`, `npm run build` và test pass trước khi báo Sếp |
+| S (1–3 file) | sửa 1 component | build + test + 1 Reviewer subagent nhẹ (chỉ đọc diff) |
+| M/L (nhiều file, kiến trúc) | đợt sửa nền | đủ chuỗi BA → UI/UX → Coder → Reviewer → Tester → Doc Writer |
+
+Gate 2 (build + test 100% pass) áp dụng ở MỌI cỡ; chỉ bỏ bắt buộc gọi subagent cho cỡ XS.
+
+**Hợp đồng báo cáo subagent:** Lead là người nắm kết quả rồi báo cáo Sếp. Subagent trả về tối đa 10 dòng (trạng thái, 3–5 ý chính, số liệu then chốt, việc cần Lead quyết, đường dẫn file chi tiết); chi tiết ghi vào `REPORT.md`, không dán log vào hội thoại. Lead tổng hợp thành một báo cáo ngắn cho Sếp. Chi tiết: `.agents/skills/token-efficiency/SKILL.md`.
+
+---
+
 ## 3. Tiêu Chuẩn Giao Diện Bắt Buộc (Daylight & Theme Standards)
 - **Tách biệt OS Dark Mode:** Chỉ Obsidian, Cyberpunk và `.dark` là theme tối: biến thể `dark:` kích hoạt qua `darkMode: ['variant', '&:where([data-theme="obsidian"], [data-theme="obsidian"] *, [data-theme="cyberpunk"], [data-theme="cyberpunk"] *, .dark, .dark *)']` trong `tailwind.config.js` (dạng `selector` cũ chỉ khớp thẻ `<html>`, làm `dark:` chết ở thẻ con). **Sepia là theme SÁNG ấm (giấy ngà)**, dùng bộ adaptor riêng trong `globals.css`, KHÔNG kích hoạt `dark:`. Tuyệt đối không để `dark:` tự kích hoạt khi người dùng đang bật Daylight/Sepia hoặc theo OS dark mode.
 - **Tương phản Ban Ngày:**
