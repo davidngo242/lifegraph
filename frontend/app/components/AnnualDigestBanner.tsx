@@ -73,7 +73,7 @@ export default function AnnualDigestBanner({
 
         <button
           onClick={onClose}
-          className="p-1 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)] transition shrink-0"
+          aria-label="Đóng" className="p-1 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 inline-flex items-center justify-center rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)] transition shrink-0"
           title="Đóng điểm tin năm"
         >
           <X className="w-3.5 h-3.5" />

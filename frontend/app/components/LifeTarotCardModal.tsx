@@ -535,7 +535,7 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
                         </div>
                       </div>
                       <span className={`text-xs font-bold px-2 py-0.5 rounded-full uppercase shrink-0 ${
-                        ach.isUnlocked ? 'bg-emerald-500/15 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-500/40' : 'bg-slate-800 text-slate-400'
+                        ach.isUnlocked ? 'bg-emerald-500/15 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-500/40' : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)]'
                       }`}>
                         {ach.isUnlocked ? 'Đạt' : 'Chưa'}
                       </span>

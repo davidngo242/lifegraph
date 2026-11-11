@@ -391,7 +391,7 @@ Nhằm tối ưu hóa trải nghiệm cho các phiên chơi kéo dài (Long-sess
    * **Tác động công thái học:** Giữ đồng tử ở trạng thái thư giãn tự nhiên, giảm thiểu hiện tượng mỏi cơ mắt khi tập trung đọc chữ và tương tác chỉ số trong thời gian dài.
    * **Môi trường phù hợp:** Phiên chơi hàng ngày, môi trường ánh sáng phòng bình thường hoặc màn hình tấm nền OLED/IPS.
 
-3. 📜 **Sepia Warmth (Đêm ấm cúng — Lọc Ánh Sáng Xanh):**
+3. 📜 **Sepia Warmth (Giấy ngà ấm — theme SÁNG, cập nhật 2026-11-11; không còn là theme tối, không kích hoạt `dark:`):**
    * **Bản sắc:** Tông giấy ngà cổ điển (`#161412`), sắc chữ vàng ấm dịu (`#ebd8be`), viền nâu hổ phách mềm mại (`rgba(235, 216, 190, 0.12)`).
    * **Tác động công thái học:** Cắt giảm tối đa quang phổ ánh sáng xanh bước sóng ngắn (< 450nm) — tác nhân chính gây ức chế Melatonin và mỏi mắt về đêm. Mang lại cảm giác đọc sách bên ánh đèn vàng ấm áp.
    * **Môi trường phù hợp:** Chơi vào ban đêm, trước khi đi ngủ, hoặc người chơi có cơ địa nhạy cảm với ánh sáng màn hình.
@@ -1201,11 +1201,11 @@ Game sở hữu hệ thống đa theme độc lập được quản lý qua `dat
   ```javascript
   /** @type {import('tailwindcss').Config} */
   module.exports = {
-    darkMode: ['selector', '[data-theme="obsidian"], [data-theme="sepia"], [data-theme="cyberpunk"], .dark'],
+    darkMode: ['variant', ['&:where([data-theme="obsidian"], [data-theme="obsidian"] *, [data-theme="cyberpunk"], [data-theme="cyberpunk"] *, .dark, .dark *)']],
     // ...
   };
   ```
-* **Hiệu lực:** Chỉ khi thẻ `<html>` có thuộc tính `data-theme="obsidian"`, `data-theme="sepia"`, `data-theme="cyberpunk"` hoặc class `.dark`, Tailwind mới kích hoạt các class có tiền tố `dark:`. Chế độ Daylight hoàn toàn được cách ly và miễn nhiễm 100% trước thiết lập hệ điều hành người dùng.
+* **Hiệu lực:** Chỉ khi thẻ `<html>` (hoặc tổ tiên) có `data-theme="obsidian"`, `data-theme="cyberpunk"` hoặc class `.dark`, Tailwind mới kích hoạt các class có tiền tố `dark:`. Chế độ Daylight hoàn toàn được cách ly và miễn nhiễm 100% trước thiết lập hệ điều hành người dùng.
 
 ---
 

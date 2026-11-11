@@ -261,7 +261,7 @@ flowchart TD
   - Game quản lý trạng thái theme độc lập qua `data-theme` lưu trong `localStorage ('lifegraph_theme')`.
   - Cấu hình chuẩn trong `frontend/tailwind.config.js`:
     ```javascript
-    darkMode: ['selector', '[data-theme="obsidian"], [data-theme="sepia"], [data-theme="cyberpunk"], .dark'],
+    darkMode: ['variant', ['&:where([data-theme="obsidian"], [data-theme="obsidian"] *, [data-theme="cyberpunk"], [data-theme="cyberpunk"] *, .dark, .dark *)']],
     ```
   - **Mục đích sống còn:** Cách ly hoàn toàn OS Dark Mode của hệ điều hành máy khách (Windows/macOS/iOS/Android). Ngăn chặn tình trạng người dùng bật Dark Mode trên máy thì Tailwind tự động kích hoạt biến thể `dark:` phá vỡ theme Daylight của game.
 

@@ -146,7 +146,7 @@ interface CharacterHeroBannerProps {
   actionFeedback?: BannerActionFeedback | null;
 }
 
-export default function CharacterHeroBanner({
+function CharacterHeroBannerInner({
   character,
   visuals,
   playerAccount,
@@ -960,3 +960,7 @@ export default function CharacterHeroBanner({
   );
 }
 
+export default function CharacterHeroBanner(props: CharacterHeroBannerProps) {
+  if (!props.character) return null;
+  return <CharacterHeroBannerInner {...props} />;
+}

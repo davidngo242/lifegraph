@@ -45,7 +45,7 @@ flowchart LR
 ---
 
 ## 3. Tiêu Chuẩn Giao Diện Bắt Buộc (Daylight & Theme Standards)
-- **Tách biệt OS Dark Mode:** Luôn dùng selector `[data-theme="obsidian"], [data-theme="sepia"], [data-theme="cyberpunk"], .dark` cho dark theme. Tuyệt đối không để `dark:` tự kích hoạt khi người dùng đang bật Daylight Mode.
+- **Tách biệt OS Dark Mode:** Chỉ Obsidian, Cyberpunk và `.dark` là theme tối: biến thể `dark:` kích hoạt qua `darkMode: ['variant', '&:where([data-theme="obsidian"], [data-theme="obsidian"] *, [data-theme="cyberpunk"], [data-theme="cyberpunk"] *, .dark, .dark *)']` trong `tailwind.config.js` (dạng `selector` cũ chỉ khớp thẻ `<html>`, làm `dark:` chết ở thẻ con). **Sepia là theme SÁNG ấm (giấy ngà)**, dùng bộ adaptor riêng trong `globals.css`, KHÔNG kích hoạt `dark:`. Tuyệt đối không để `dark:` tự kích hoạt khi người dùng đang bật Daylight/Sepia hoặc theo OS dark mode.
 - **Tương phản Ban Ngày:**
   - Nền thẻ / Container: Trắng sứ / xám rất nhạt (`bg-white/90`, `bg-slate-50/95`).
   - Chữ tiêu đề: `#0f172a` hoặc `#1e293b` (slate-900 / slate-800) - Tỷ lệ tương phản >= 12:1.

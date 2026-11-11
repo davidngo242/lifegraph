@@ -2018,7 +2018,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                                       className={`px-2.5 py-1 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1 ${
                                         apInvestment === ap
                                           ? 'bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.4)]'
-                                          : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'
+                                          : 'bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)]'
                                       }`}
                                     >
                                       <span>+{ap} AP</span>
@@ -2109,7 +2109,7 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                 </div>
                 <button
                   onClick={() => setShowJournal(false)}
-                  className="p-1.5 rounded-full bg-slate-800 text-slate-400 hover:text-white"
+                  className="p-1.5 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 >
                   <X className="w-4 h-4" />
                 </button>

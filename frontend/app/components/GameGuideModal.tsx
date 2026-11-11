@@ -85,8 +85,8 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                 }`}
               >
                 <span>🧸</span>
-                <span className="hidden xs:inline">Bản Đồ Vui Nhộn</span>
-                <span className="xs:hidden">Dễ Nhất</span>
+                <span className="hidden sm:inline">Bản Đồ Vui Nhộn</span>
+                <span className="sm:hidden">Dễ Nhất</span>
               </button>
               <button
                 onClick={() => setMode('advanced')}
@@ -97,8 +97,8 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
                 }`}
               >
                 <span>📖</span>
-                <span className="hidden xs:inline">RPG Nâng Cao</span>
-                <span className="xs:hidden">Nâng Cao</span>
+                <span className="hidden sm:inline">RPG Nâng Cao</span>
+                <span className="sm:hidden">Nâng Cao</span>
               </button>
             </div>
 

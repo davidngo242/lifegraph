@@ -70,7 +70,7 @@ export default function Tooltip({
           {content}
           {/* Arrow */}
           <div
-            className={`absolute w-2 h-2 bg-[var(--bg-card)] border-[var(--border-subtle)] rotate-45 pointer-events-none ${getArrowClass()}`}
+            className={`absolute w-2 h-2 bg-[var(--bg-popover,var(--bg-card))] border-[var(--border-subtle)] rotate-45 pointer-events-none ${getArrowClass()}`}
           />
         </div>
       )}

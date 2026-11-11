@@ -75,19 +75,19 @@ export default function StickyProfileSidebar({
   const apGainPerYear = vitality >= 70 ? 4 : vitality >= 40 ? 3 : 2;
 
   const getHealthStatus = () => {
-    if (vitality >= 80) return { label: "Sung mãn", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" };
-    if (vitality >= 50) return { label: "Ổn định", color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/30" };
-    if (vitality >= 25) return { label: "Suy yếu", color: "text-amber-400 bg-amber-500/10 border-amber-500/30" };
-    return { label: "Nguy kịch", color: "text-rose-400 bg-rose-500/20 border-rose-500/40 animate-pulse" };
+    if (vitality >= 80) return { label: "Sung mãn", color: "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30" };
+    if (vitality >= 50) return { label: "Ổn định", color: "text-cyan-800 dark:text-cyan-400 bg-cyan-500/10 border-cyan-500/30" };
+    if (vitality >= 25) return { label: "Suy yếu", color: "text-amber-800 dark:text-amber-400 bg-amber-500/10 border-amber-500/30" };
+    return { label: "Nguy kịch", color: "text-rose-700 dark:text-rose-400 bg-rose-500/20 border-rose-500/40 animate-pulse" };
   };
   const healthStatus = getHealthStatus();
 
   // Mental Burnout Status
   const getStress = () => {
-    if (burnout >= 80) return { label: "Nguy cấp", color: "text-rose-400 bg-rose-500/20 border-rose-500/40 animate-pulse" };
-    if (burnout >= 55) return { label: "Căng thẳng", color: "text-orange-400 bg-orange-500/10 border-orange-500/30" };
-    if (burnout >= 30) return { label: "Mệt mỏi", color: "text-amber-400 bg-amber-500/10 border-amber-500/30" };
-    return { label: "Ổn định", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" };
+    if (burnout >= 80) return { label: "Nguy cấp", color: "text-rose-700 dark:text-rose-400 bg-rose-500/20 border-rose-500/40 animate-pulse" };
+    if (burnout >= 55) return { label: "Căng thẳng", color: "text-orange-800 dark:text-orange-400 bg-orange-500/10 border-orange-500/30" };
+    if (burnout >= 30) return { label: "Mệt mỏi", color: "text-amber-800 dark:text-amber-400 bg-amber-500/10 border-amber-500/30" };
+    return { label: "Ổn định", color: "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30" };
   };
   const stress = getStress();
 

@@ -121,7 +121,7 @@ export default function FateDiceCheck({
         {rollState === 'ready' && (
           <button
             onClick={onCancel}
-            className="p-1 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)] transition"
+            aria-label="Hủy" className="p-1 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 inline-flex items-center justify-center rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)] transition"
             title="Đổi ý"
           >
             <X className="w-4 h-4" />

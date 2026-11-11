@@ -131,16 +131,16 @@ export default function UnifiedNotificationCenter({
 
       {/* Flyout Popover Panel */}
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-2xl p-4 sm:p-5 z-[90] animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[80vh] overflow-hidden text-[var(--text-primary)]">
+        <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 max-w-[calc(100vw-1.5rem)] rounded-3xl bg-[var(--bg-popover,var(--bg-card))] border border-[var(--border-subtle)] shadow-2xl p-4 sm:p-5 z-[90] animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[80vh] overflow-hidden text-[var(--text-primary)]">
           {/* Header */}
           <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)] shrink-0">
             <div className="flex items-center gap-2">
               <div className={`p-2 rounded-xl ${
                 criticalIssuesCount > 0
-                  ? 'bg-rose-500/15 text-rose-500 border border-rose-500/30'
+                  ? 'bg-rose-500/15 text-rose-700 dark:text-rose-400 border border-rose-500/30'
                   : hasDilemma
-                  ? 'bg-amber-500/15 text-amber-500 border border-amber-500/30'
-                  : 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30'
+                  ? 'bg-amber-500/15 text-amber-800 dark:text-amber-400 border border-amber-500/30'
+                  : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
               }`}>
                 {criticalIssuesCount > 0 ? (
                   <ShieldAlert className="w-4 h-4" />
