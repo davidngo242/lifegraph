@@ -579,7 +579,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100vw;
   scroll-behavior: smooth;
 }
@@ -588,7 +588,7 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: "Be Vietnam Pro", "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100vw;
   min-height: 100vh;
   min-height: 100dvh;

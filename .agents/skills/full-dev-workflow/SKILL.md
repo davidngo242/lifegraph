@@ -363,3 +363,7 @@ Theo lệnh điều hành trực tiếp của **Sếp**, LifeGraph áp dụng qu
 * **Rễ Gia Đình Tích Hợp Trực Tiếp Trong Đất & Drawer Thứ 4 (`family_roots`):** Kết nối 2 nhánh rễ SVG phát sáng (`family-root-tendrils`) từ gốc Dais tới 2 Nút Rễ Gia Đình tại `(102, 436)` (`Bầu Sữa Mẹ`/`Bữa Cơm`) & `(618, 436)` (`Lời Khuyên` / `Gia Tộc & Gốc Rễ`), liên thông với Drawer trượt `family_roots` chuẩn dual-theme.
 * **Chuẩn Góc Phân Bổ Zero-Overlap:** Nút Đột Phá thiên đỉnh tại `-90°` (`distanceRatio: 0.86`); hai nhánh trên tại `-145°` / `-35°` (`distanceRatio: 0.88`); hai nhánh ngang tại `180°` / `0°` (`0.94`); nhánh cội rễ tại `142°` / `38°` (`0.86`, cách Rễ Gia Đình `>= 115` đơn vị SVG); 4 nút Quý Nhân xếp cung thiên đỉnh `{(255,54), (325,42), (395,42), (465,54)}`; 5 Huyệt Đạo nằm trên cành sạch `{(125,105), (205,132), (360,184), (515,132), (595,105)}`.
 * **Đối Xứng Đáy Canvas:** Huy hiệu Di Sản Văn Hóa neo góc dưới trái (`bottom-3 left-3 sm:left-4 z-30`), Huy hiệu Vòng Vân Gỗ / Mầm Sống Khởi Nguyên neo góc dưới phải (`bottom-3 right-3 sm:right-4 z-30`), Bệ Gốc Dais chỉnh gọn bóng nền (`cy={496}, ry=17`) giữ trọn khoảng sáng đáy cho Linh Thú và huy hiệu.
+
+
+## 11. Đợt Sửa Nền Giao Diện 2026-11-11 (tóm tắt kiến trúc)
+Chi tiết và số liệu: `docs/ui-foundation-fix-2026-11-11.md`. Quy tắc bắt buộc: (1) `dark:` chỉ theo Obsidian/Cyberpunk/`.dark`; Sepia là theme sáng; (2) chữ tối thiểu 12px (`text-xs`); (3) popover dùng `--bg-popover`; (4) Cây Đời mobile dùng danh sách thẻ dọc; (5) modal z-[60], nút đóng 44px; (6) Gate 2 phải chạy `npm run ui:audit` ngoài build/test.

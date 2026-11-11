@@ -1520,7 +1520,7 @@ export default function LifeGraphPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] flex flex-col relative selection:bg-amber-900/30 selection:text-amber-100 overflow-x-hidden font-sans transition-colors duration-250">
+    <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] flex flex-col relative selection:bg-amber-900/30 selection:text-amber-100 overflow-x-clip font-sans transition-colors duration-250">
       {/* Cinematic Looping Background with Ken Burns Drift */}
       <CinematicBackground scene={visuals?.visual_vibe?.background_scene || "cyber_dusk"} netWorth={netWorth} housing={character?.housing} />
 
