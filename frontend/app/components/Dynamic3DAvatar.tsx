@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useMemo, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -31,18 +31,18 @@ function getSkinTone(nationality: string = 'Việt Nam'): string {
     nat.includes('anh') || nat.includes('đức') || nat.includes('pháp') || nat.includes('na uy') ||
     nat.includes('norway') || nat.includes('thụy sĩ') || nat.includes('switzerland')
   ) {
-    return '#fde2d2'; // Fair / Porcelain Rosy Caucasian (như ảnh mẫu Na Uy)
+    return '#f8c7a6'; // Fair warm peach Caucasian
   }
   if (nat.includes('syria') || nat.includes('ấn độ') || nat.includes('india') || nat.includes('ai cập') || nat.includes('egypt')) {
-    return '#b97f57'; // Olive / Middle East / South Asian
+    return '#c68a5c'; // Olive / Middle East / South Asian
   }
   if (nat.includes('somalia') || nat.includes('kenya') || nat.includes('châu phi') || nat.includes('nigeria') || nat.includes('congo') || nat.includes('sudan') || nat.includes('ethiopia') || nat.includes('haiti')) {
-    return '#563520'; // Deep Melanin / African
+    return '#7a4a2c'; // Deep warm Melanin / African
   }
   if (nat.includes('nhật') || nat.includes('japan') || nat.includes('hàn') || nat.includes('korea') || nat.includes('trung') || nat.includes('china') || nat.includes('thái')) {
-    return '#fae1c7'; // East Asian warm porcelain
+    return '#f5c9a0'; // East Asian warm
   }
-  return '#f6d2ad'; // Vietnamese warm golden
+  return '#efba8a'; // Vietnamese warm golden
 }
 
 // Hair Color aging interpolation & cultural nuances
@@ -180,7 +180,9 @@ function ProceduralCharacterMesh({
     return new THREE.MeshStandardMaterial({
       color: effectiveSkin,
       roughness: vitality < 30 ? 0.8 : 0.55,
-      metalness: 0.05,
+      metalness: 0.0,
+      emissive: vitality < 30 ? '#000000' : '#8a3a1a',
+      emissiveIntensity: vitality < 30 ? 0 : 0.14,
     });
   }, [skinColor, vitality]);
 
@@ -204,6 +206,12 @@ function ProceduralCharacterMesh({
     color: '#180a02'
   }), []);
 
+  // Soft, lighter brow colour (hair blended toward skin) so it never reads as a frown
+  const browMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: new THREE.Color(hairColor).lerp(new THREE.Color(skinColor), 0.4),
+    roughness: 0.7,
+  }), [hairColor, skinColor]);
+
   const eyelashMaterial = useMemo(() => new THREE.MeshBasicMaterial({
     color: '#271206'
   }), []);
@@ -217,11 +225,11 @@ function ProceduralCharacterMesh({
   const lipMaterial = useMemo(() => {
     let lipColor = '#e29578';
     if (isBaby || isChild) {
-      lipColor = '#fca5a5';
+      lipColor = '#f87171';
     } else if (isFemale) {
-      lipColor = burnout > 75 ? '#be123c' : '#fb7185';
+      lipColor = burnout > 75 ? '#be123c' : '#f43f5e';
     } else {
-      lipColor = burnout > 80 ? '#7f1d1d' : '#991b1b';
+      lipColor = burnout > 80 ? '#7f1d1d' : '#c2413a';
     }
     return new THREE.MeshStandardMaterial({
       color: lipColor,
@@ -286,32 +294,6 @@ function ProceduralCharacterMesh({
     roughness: 0.4
   }), [isBaby]);
 
-  const holoScreenMaterial = useMemo(() => new THREE.MeshBasicMaterial({
-    color: '#38bdf8',
-    transparent: true,
-    opacity: 0.35,
-    side: THREE.DoubleSide
-  }), []);
-
-  const holoScreenAmberMaterial = useMemo(() => new THREE.MeshBasicMaterial({
-    color: '#fbbf24',
-    transparent: true,
-    opacity: 0.35,
-    side: THREE.DoubleSide
-  }), []);
-
-  const holoGlowCyan = useMemo(() => new THREE.MeshBasicMaterial({
-    color: '#38bdf8',
-    transparent: true,
-    opacity: 0.75
-  }), []);
-
-  const holoGlowAmber = useMemo(() => new THREE.MeshBasicMaterial({
-    color: '#fbbf24',
-    transparent: true,
-    opacity: 0.75
-  }), []);
-
   // Cloth Material based on nationality & status
   const clothMaterial = useMemo(() => {
     const nat = nationality.toLowerCase();
@@ -336,6 +318,12 @@ function ProceduralCharacterMesh({
       metalness: isWealthy ? 0.25 : 0.1,
     });
   }, [isBaby, burnout, isFemale, isWealthy, hasGarland, nationality]);
+
+  // Baby bonnet: clearly different from both hair and swaddle colours
+  const bonnetMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: isFemale ? '#fde68a' : '#bbf7d0',
+    roughness: 0.75,
+  }), [isFemale]);
 
   // Full Body Pants / Trousers Material
   const pantsMaterial = useMemo(() => {
@@ -537,6 +525,17 @@ function ProceduralCharacterMesh({
           <mesh position={[0, 0.02, 0.02]} rotation={[0.1, 0, 0]} material={ribbonMaterial}>
             <torusGeometry args={[0.28, 0.018, 12, 24]} />
           </mesh>
+          {/* Little arms at the sides */}
+          {[-1, 1].map((side) => (
+            <group key={`baby-arm-${side}`} position={[side * 0.31, 0.16, 0.06]} rotation={[0, 0, side * 0.35]}>
+              <mesh position={[0, -0.1, 0]} material={clothMaterial}>
+                <capsuleGeometry args={[0.062, 0.14, 6, 14]} />
+              </mesh>
+              <mesh position={[0, -0.24, 0.02]} material={skinMaterial}>
+                <sphereGeometry args={[0.058, 14, 14]} />
+              </mesh>
+            </group>
+          ))}
           {/* Little Cute Baby Hands resting peacefully on chest */}
           <mesh position={[-0.08, 0.11, 0.24]} material={skinMaterial}>
             <sphereGeometry args={[0.048, 14, 14]} />
@@ -739,83 +738,6 @@ function ProceduralCharacterMesh({
             </mesh>
           </group>
 
-          {/* =========================================================================
-              3D IN-CANVAS HOLOGRAPHIC INTERFACE WINGS (Cánh Màn Hình Ma Pháp HUD Nâng Cao Tầm Ngực)
-              ========================================================================= */}
-          {/* Cánh Trái (Cyan Hologram Console) */}
-          <group position={[-0.42, 0.22, 0.22]} rotation={[0.12, 0.46, -0.06]}>
-            <mesh material={holoScreenMaterial}>
-              <planeGeometry args={[0.40, 0.28]} />
-            </mesh>
-            {/* Glowing Border Frame */}
-            <mesh position={[0, 0.135, 0.002]} material={holoGlowCyan}>
-              <planeGeometry args={[0.39, 0.008]} />
-            </mesh>
-            <mesh position={[0, -0.135, 0.002]} material={holoGlowCyan}>
-              <planeGeometry args={[0.39, 0.008]} />
-            </mesh>
-            <mesh position={[-0.195, 0, 0.002]} material={holoGlowCyan}>
-              <planeGeometry args={[0.008, 0.27]} />
-            </mesh>
-            <mesh position={[0.195, 0, 0.002]} material={holoGlowCyan}>
-              <planeGeometry args={[0.008, 0.27]} />
-            </mesh>
-            {/* Circular Radar / Core HUD */}
-            <mesh position={[-0.08, 0.03, 0.003]} material={holoGlowCyan}>
-              <ringGeometry args={[0.048, 0.058, 20]} />
-            </mesh>
-            {/* Telemetry Stream Lines */}
-            <mesh position={[0.06, 0.05, 0.003]} material={holoGlowCyan}>
-              <planeGeometry args={[0.16, 0.008]} />
-            </mesh>
-            <mesh position={[0.06, 0.02, 0.003]} material={holoGlowCyan}>
-              <planeGeometry args={[0.14, 0.006]} />
-            </mesh>
-            <mesh position={[0, -0.06, 0.003]} material={holoGlowCyan}>
-              <planeGeometry args={[0.30, 0.008]} />
-            </mesh>
-            <mesh position={[-0.04, -0.095, 0.003]} material={holoGlowCyan}>
-              <planeGeometry args={[0.22, 0.006]} />
-            </mesh>
-          </group>
-
-          {/* Cánh Phải (Amber / Gold Hologram Console) */}
-          <group position={[0.42, 0.22, 0.22]} rotation={[0.12, -0.46, 0.06]}>
-            <mesh material={holoScreenAmberMaterial}>
-              <planeGeometry args={[0.40, 0.28]} />
-            </mesh>
-            {/* Glowing Border Frame */}
-            <mesh position={[0, 0.135, 0.002]} material={holoGlowAmber}>
-              <planeGeometry args={[0.39, 0.008]} />
-            </mesh>
-            <mesh position={[0, -0.135, 0.002]} material={holoGlowAmber}>
-              <planeGeometry args={[0.39, 0.008]} />
-            </mesh>
-            <mesh position={[-0.195, 0, 0.002]} material={holoGlowAmber}>
-              <planeGeometry args={[0.008, 0.27]} />
-            </mesh>
-            <mesh position={[0.195, 0, 0.002]} material={holoGlowAmber}>
-              <planeGeometry args={[0.008, 0.27]} />
-            </mesh>
-            {/* Circular Radar / Core HUD */}
-            <mesh position={[0.08, 0.03, 0.003]} material={holoGlowAmber}>
-              <ringGeometry args={[0.048, 0.058, 20]} />
-            </mesh>
-            {/* Telemetry Stream Lines */}
-            <mesh position={[-0.06, 0.05, 0.003]} material={holoGlowAmber}>
-              <planeGeometry args={[0.16, 0.008]} />
-            </mesh>
-            <mesh position={[-0.06, 0.02, 0.003]} material={holoGlowAmber}>
-              <planeGeometry args={[0.14, 0.006]} />
-            </mesh>
-            <mesh position={[0, -0.06, 0.003]} material={holoGlowAmber}>
-              <planeGeometry args={[0.30, 0.008]} />
-            </mesh>
-            <mesh position={[0.04, -0.095, 0.003]} material={holoGlowAmber}>
-              <planeGeometry args={[0.22, 0.006]} />
-            </mesh>
-          </group>
-
           {/* Neck */}
           <mesh position={[0, 0.38, 0]} material={skinMaterial}>
             <cylinderGeometry args={[isFemale ? 0.12 : 0.14, isFemale ? 0.15 : 0.17, 0.22, 24]} />
@@ -915,7 +837,7 @@ function ProceduralCharacterMesh({
           </mesh>
           {/* Upper Eyelash Arc */}
           <mesh position={[0, 0.046, 0.062]} rotation={[0.2, 0, 0.15]} material={eyelashMaterial}>
-            <boxGeometry args={[0.13, 0.022, 0.02]} />
+            <boxGeometry args={[0.13, 0.014, 0.02]} />
           </mesh>
         </group>
 
@@ -945,7 +867,7 @@ function ProceduralCharacterMesh({
           </mesh>
           {/* Upper Eyelash Arc */}
           <mesh position={[0, 0.046, 0.062]} rotation={[0.2, 0, -0.15]} material={eyelashMaterial}>
-            <boxGeometry args={[0.13, 0.022, 0.02]} />
+            <boxGeometry args={[0.13, 0.014, 0.02]} />
           </mesh>
         </group>
 
@@ -962,11 +884,11 @@ function ProceduralCharacterMesh({
         {/* Eyebrows */}
         {!isBaby && (
           <group>
-            <mesh position={[-0.17, 0.22, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? -0.15 : 0.05]} material={hairMaterial}>
-              <boxGeometry args={[isChild ? 0.09 : (isFemale ? 0.13 : 0.14), 0.016, 0.03]} />
+            <mesh position={[-0.17, 0.235, 0.425]} rotation={[0, 0.2, reaction === 'exhausted' ? -0.15 : -0.1]} material={browMaterial}>
+              <boxGeometry args={[isChild ? 0.08 : (isFemale ? 0.11 : 0.12), 0.009, 0.016]} />
             </mesh>
-            <mesh position={[0.17, 0.22, 0.42]} rotation={[0, 0, reaction === 'exhausted' ? 0.15 : -0.05]} material={hairMaterial}>
-              <boxGeometry args={[isChild ? 0.09 : (isFemale ? 0.13 : 0.14), 0.016, 0.03]} />
+            <mesh position={[0.17, 0.235, 0.425]} rotation={[0, -0.2, reaction === 'exhausted' ? 0.15 : 0.1]} material={browMaterial}>
+              <boxGeometry args={[isChild ? 0.08 : (isFemale ? 0.11 : 0.12), 0.009, 0.016]} />
             </mesh>
           </group>
         )}
@@ -1003,9 +925,9 @@ function ProceduralCharacterMesh({
             </mesh>
           </group>
         ) : (
-          <group position={[0, isBaby ? -0.12 : isChild ? -0.15 : -0.18, 0.44]}>
+          <group position={[0, isBaby ? -0.12 : isChild ? -0.15 : -0.18, 0.45]}>
             <mesh ref={mouthRef} rotation={[0, 0, Math.PI]}>
-              <torusGeometry args={[isBaby ? 0.032 : isChild ? 0.034 : (isFemale ? 0.046 : 0.042), 0.009, 8, 16, Math.PI]} />
+              <torusGeometry args={[isBaby ? 0.045 : isChild ? 0.05 : (isFemale ? 0.062 : 0.058), 0.014, 8, 20, Math.PI]} />
               <primitive object={lipMaterial} attach="material" />
             </mesh>
           </group>
@@ -1018,12 +940,16 @@ function ProceduralCharacterMesh({
           {isBaby ? (
             /* Adorable Baby Bonnet with Teddy Bear Ears & Golden Ribbon Trim */
             <group position={[0, 0.06, 0]}>
+              {/* Hair fringe peeking out under the bonnet */}
+              <mesh position={[0, 0.0, 0.40]} scale={[1.5, 0.55, 0.5]} material={hairMaterial}>
+                <sphereGeometry args={[0.13, 16, 12]} />
+              </mesh>
               {/* Bonnet Dome */}
-              <mesh material={clothMaterial}>
+              <mesh material={bonnetMaterial}>
                 <sphereGeometry args={[0.48, 24, 24]} />
               </mesh>
               {/* Soft Bonnet Front Brim */}
-              <mesh position={[0, 0.1, 0.28]} rotation={[0.3, 0, 0]} material={clothMaterial}>
+              <mesh position={[0, 0.1, 0.28]} rotation={[0.3, 0, 0]} material={bonnetMaterial}>
                 <torusGeometry args={[0.38, 0.045, 12, 24]} />
               </mesh>
               {/* Golden Ribbon Brim Trim */}
@@ -1032,7 +958,7 @@ function ProceduralCharacterMesh({
               </mesh>
               {/* Left Bear Ear */}
               <group position={[-0.26, 0.44, 0.08]}>
-                <mesh material={clothMaterial}>
+                <mesh material={bonnetMaterial}>
                   <sphereGeometry args={[0.10, 16, 16]} />
                 </mesh>
                 <mesh position={[0, 0, 0.035]} material={ribbonMaterial}>
@@ -1041,7 +967,7 @@ function ProceduralCharacterMesh({
               </group>
               {/* Right Bear Ear */}
               <group position={[0.26, 0.44, 0.08]}>
-                <mesh material={clothMaterial}>
+                <mesh material={bonnetMaterial}>
                   <sphereGeometry args={[0.10, 16, 16]} />
                 </mesh>
                 <mesh position={[0, 0, 0.035]} material={ribbonMaterial}>
@@ -1264,7 +1190,7 @@ function GoldenMagicDais({
   const verticalBeamMaterial = useMemo(() => new THREE.MeshBasicMaterial({
     color: daisTier >= 5 ? '#67e8f9' : daisTier >= 4 ? '#c084fc' : '#fef08a',
     transparent: true,
-    opacity: daisTier >= 4 ? 0.22 : 0.16,
+    opacity: daisTier >= 4 ? 0.09 : 0.06,
     depthWrite: false,
     side: THREE.DoubleSide,
   }), [daisTier]);
@@ -1301,11 +1227,11 @@ function GoldenMagicDais({
       footAuraRef.current.rotation.y = t * 0.35;
     }
     if (lightBeamsRef.current) {
-      lightBeamsRef.current.position.y = -0.98 + (Math.sin(t * 2.2) * 0.02);
+      lightBeamsRef.current.position.y = Math.sin(t * 2.2) * 0.02;
     }
     if (floatingCrystalsRef.current) {
       floatingCrystalsRef.current.rotation.y = t * 0.35;
-      floatingCrystalsRef.current.position.y = -0.98 + Math.sin(t * 2.5) * 0.035;
+      floatingCrystalsRef.current.position.y = (daisTier === 5 ? 0.30 : 0.26) + Math.sin(t * 2.5) * 0.035;
     }
   });
 
@@ -1453,23 +1379,26 @@ function MoodLighting({ burnout = 0, isMeditating = false }: { burnout: number; 
   return (
     <>
       <ambientLight
-        intensity={isHighBurnout ? 0.32 : isMeditating ? 0.95 : 0.88}
-        color={isHighBurnout ? '#450a0a' : isMeditating ? '#fef3c7' : isModerateBurnout ? '#e2e8f0' : '#fffbeb'}
+        intensity={isHighBurnout ? 0.32 : isMeditating ? 0.8 : 0.7}
+        color={isHighBurnout ? '#450a0a' : isMeditating ? '#fef3c7' : isModerateBurnout ? '#f1e8e0' : '#fff4e6'}
       />
+      {/* Key: warm, front-right, high */}
       <directionalLight
-        position={[2.8, 3.8, 3.2]}
-        intensity={isHighBurnout ? 0.4 : 1.35}
-        color={isHighBurnout ? '#991b1b' : '#fff7ed'}
+        position={[2.8, 3.4, 3.6]}
+        intensity={isHighBurnout ? 0.4 : 1.45}
+        color={isHighBurnout ? '#991b1b' : '#fff1de'}
       />
+      {/* Fill: soft warm-neutral, front-left, low */}
       <directionalLight
-        position={[-3, 1.8, 2]}
-        intensity={isHighBurnout ? 0.2 : 0.6}
-        color={isHighBurnout ? '#7f1d1d' : '#93c5fd'}
+        position={[-3, 0.8, 3]}
+        intensity={isHighBurnout ? 0.2 : 0.7}
+        color={isHighBurnout ? '#7f1d1d' : '#ffe2cf'}
       />
+      {/* Rim: cool edge light from behind */}
       <directionalLight
         position={[0, 3.2, -3.2]}
-        intensity={isHighBurnout ? 1.2 : 1.4}
-        color={isHighBurnout ? '#ef4444' : isMeditating ? '#fbbf24' : '#38bdf8'}
+        intensity={isHighBurnout ? 1.0 : 1.0}
+        color={isHighBurnout ? '#ef4444' : isMeditating ? '#fbbf24' : '#7dd3fc'}
       />
     </>
   );
@@ -2137,6 +2066,18 @@ function Procedural3DPetCompanion({ petType = 'none' }: { petType?: string }) {
   );
 }
 
+// Khung hẹp (mobile) cần lùi camera để bục không bị cắt hai bên: khoảng cách tỉ lệ nghịch với tỉ lệ khung.
+function AdaptiveCamera({ baseZ = 5.4, baseY = 0.42, refAspect = 0.74 }: { baseZ?: number; baseY?: number; refAspect?: number }) {
+  const { camera, size } = useThree();
+  useEffect(() => {
+    const aspect = size.width / Math.max(1, size.height);
+    const factor = Math.min(1.35, Math.max(1, refAspect / Math.max(0.3, aspect)));
+    camera.position.set(0, baseY, baseZ * factor);
+    camera.updateProjectionMatrix();
+  }, [camera, size.width, size.height, baseZ, baseY, refAspect]);
+  return null;
+}
+
 export default function Dynamic3DAvatar({
   nationality = 'Việt Nam',
   gender = 'male',
@@ -2158,10 +2099,11 @@ export default function Dynamic3DAvatar({
   return (
     <div className={`relative flex items-center justify-center overflow-visible ${className}`}>
       <Canvas
-        camera={{ position: [0, 0.05, 4.75], fov: 36 }}
+        camera={{ position: [0, 0.42, 5.4], fov: 36 }}
         className="w-full h-full cursor-grab active:cursor-grabbing overflow-visible"
         gl={{ antialias: true, alpha: true }}
       >
+        <AdaptiveCamera />
         <MoodLighting burnout={burnout} isMeditating={isMeditating} />
 
         {/* Bục Ma Pháp Thăng Hoa Theo Level (Level Dais Progression - Tiếp Đất Vững Vàng) */}
@@ -2188,8 +2130,8 @@ export default function Dynamic3DAvatar({
             enableZoom={true}
             enablePan={false}
             minDistance={1.8}
-            maxDistance={5.2}
-            target={[0, 0.05, 0]}
+            maxDistance={6.4}
+            target={[0, 0.42, 0]}
             maxPolarAngle={Math.PI / 1.7}
             minPolarAngle={Math.PI / 3}
           />

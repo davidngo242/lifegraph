@@ -17,3 +17,6 @@
 - A. Nâng cấp mô hình dựng bằng code: nhiều kiểu tóc theo giới và tuổi, tỷ lệ cơ thể theo tuổi, gỡ tấm kính, mặt biểu cảm, da ấm, ánh sáng 3 điểm, trang phục theo nghề và tài sản. Không thêm asset, nhẹ.
 - B. Thay bằng mô hình GLB/VRM dựng sẵn: đẹp nhất nhưng cần asset có giấy phép, tải nặng hơn, làm lại phần tuỳ biến.
 - C. Avatar minh hoạ 2D theo lớp (layered): nhẹ nhất, mất hiệu ứng 360°.
+
+## Tiến độ (hướng A)
+**Đợt 1 — xong (2026-11-12):** gỡ hai tấm kính; da ấm hơn, ánh sáng 3 điểm; lông mày mảnh, miệng rõ; em bé 0–2 có tay và mũ khác màu tóc; sửa vị trí màn sáng/tinh thể (bệ không còn bị cắt); camera lùi và tự thích ứng theo tỉ lệ khung (mobile hẹp không còn cắt bục). Giới hạn zoom 360° nâng lên 6.4. Mục 1–2–3–8 (đa dạng tóc, tỷ lệ theo tuổi, giới tính, trang phục) thuộc đợt 2.
