@@ -17,3 +17,12 @@
 - A. Nâng cấp mô hình dựng bằng code: nhiều kiểu tóc theo giới và tuổi, tỷ lệ cơ thể theo tuổi, gỡ tấm kính, mặt biểu cảm, da ấm, ánh sáng 3 điểm, trang phục theo nghề và tài sản. Không thêm asset, nhẹ.
 - B. Thay bằng mô hình GLB/VRM dựng sẵn: đẹp nhất nhưng cần asset có giấy phép, tải nặng hơn, làm lại phần tuỳ biến.
 - C. Avatar minh hoạ 2D theo lớp (layered): nhẹ nhất, mất hiệu ứng 360°.
+
+## Tiến độ (hướng A)
+**Đợt 1 — xong (2026-11-12):** gỡ hai tấm kính; da ấm hơn, ánh sáng 3 điểm; lông mày mảnh, miệng rõ; em bé 0–2 có tay và mũ khác màu tóc; sửa vị trí màn sáng/tinh thể (bệ không còn bị cắt); camera lùi và tự thích ứng theo tỉ lệ khung (mobile hẹp không còn cắt bục). Giới hạn zoom 360° nâng lên 6.4. Mục 1–2–3–8 (đa dạng tóc, tỷ lệ theo tuổi, giới tính, trang phục) thuộc đợt 2.
+
+**Đợt 2 — xong (2026-11-12):** tỷ lệ cơ thể theo tuổi (trẻ đầu to thân ngắn, người già còng nhẹ); 6 kiểu tóc nam/nữ chọn theo hash ổn định của quốc tịch, giới tính, nhóm tuổi (`AvatarHair.tsx`, `avatarProfile.ts`); trang phục theo nhóm tuổi và tài sản (cà vạt/dây chuyền/huy chương khi giàu); kính hiện thật cho trait `glasses`. Sau Reviewer: gắn lại `ref` cho tóc (đung đưa), bỏ cúi đầu đôi ở người già, chuẩn hoá tuổi NaN.
+Còn lại (nhỏ): nhãn "Nuôi Pet" che góc dưới khung hero trên mobile; pill "Kéo xoay 360°" che một phần bục trong modal; chưa kiểm tóc đen trên nền tối; material mới chưa `dispose` (như phần còn lại của file).
+
+**Pet + bục — xong (2026-11-12):** viết lại 4 pet (rồng, mèo, cún, hồ ly) tỉ lệ chibi, mắt sống động, chớp mắt, nhìn về nhân vật; hiệu ứng linh vật bằng hệ hạt Points (rồng: tia lửa vàng + vảy; mèo: đồng xu + ánh vàng; cún: cỏ bốn lá + lá; hồ ly: lửa xanh/tím trên 3 đuôi), burst một lần khi pet được trang bị. Bục mới: vòng rune xoay, viền neon, hạt bay lên theo level (tối đa 92 hạt tổng), meditating sáng mạnh hơn. Tôn trọng `prefers-reduced-motion`. Mã nằm ở `AvatarPet3D.tsx`, `AvatarDais.tsx`, `avatarFx.tsx`. Đã xoá `tools/test_chibi_spine_avatars.mjs` (hỏng từ trước).
+Lưu ý: bục và hạt màu vàng nhạt hơi mờ trên nền Daylight/Sepia (chấp nhận được, có thể làm đậm hơn nếu Sếp muốn).

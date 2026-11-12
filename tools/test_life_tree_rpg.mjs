@@ -80,7 +80,11 @@ runTest('ActionPointHub connects onUnlockSkill and onNpcInteract to DynamicLifeT
 // 3. Page.tsx Integration Verification
 const pagePath = path.resolve(rootDir, 'frontend', 'app', 'page.tsx');
 assert.ok(fs.existsSync(pagePath), 'page.tsx must exist');
-const pageSource = fs.readFileSync(pagePath, 'utf8');
+// page.tsx đã được tách: callback ở GameCockpit.tsx, gọi API ở hooks/useGameState.ts.
+const cockpitPath = path.join(path.dirname(pagePath), 'components', 'GameCockpit.tsx');
+const gameStatePath = path.join(path.dirname(pagePath), 'hooks', 'useGameState.ts');
+const readIf = (f) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '');
+const pageSource = fs.readFileSync(pagePath, 'utf8') + readIf(cockpitPath) + readIf(gameStatePath);
 
 runTest('page.tsx provides full Life Tree Loop Callbacks & Zero Detached Footer', () => {
   assert.ok(pageSource.includes('onUnlockSkill={handleUnlockSkill}'), 'Must pass handleUnlockSkill');

@@ -1,3 +1,4 @@
+// Cần backend chạy ở cổng 10000 với ALLOW_RAW_SESSION_ID=1 (server chỉ nhận x-session-id thô khi bật cờ này hoặc NODE_ENV=test).
 // test_gender_and_delayed_consequences.mjs
 const BASE_URL = 'http://localhost:10000';
 const _f = globalThis.fetch;
