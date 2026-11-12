@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { executeProceduralRebirth } from '../engine/rebirthEngine.js';
 import { initializeStartingNpcs } from '../engine/npcEngine.js';
+import { setRngStateResolver, newSeed } from '../engine/rng.js';
 
 const { Pool } = pg;
 
@@ -58,6 +59,12 @@ export function getCurrentSessionId() {
 
 const sessions = new Map();
 
+// Seeded RNG bound to the current session: { seed, n } persists with the session cache.
+setRngStateResolver(() => {
+  const s = sessions.get(getCurrentSessionId());
+  return s ? s.rng : null;
+});
+
 // Tự động load cache từ đĩa khi backend khởi động
 try {
   if (fs.existsSync(CACHE_FILE)) {
@@ -91,10 +98,21 @@ process.on('SIGTERM', () => {
   process.exit(0);
 });
 
+/** Phiên cũ (tạo trước khi có xác thực chữ ký) còn trong cache và chưa được nhận lại bằng token. */
+export function isUnclaimedLegacySession(id) {
+  const s = sessions.get(id);
+  return !!s && !s.claimed;
+}
+export function claimSession(id) {
+  const s = sessions.get(id);
+  if (s) { s.claimed = true; scheduleDiskPersist(); }
+}
+
 export function getSessionData(sessionId = null) {
   const id = sessionId || getCurrentSessionId();
   if (!sessions.has(id)) {
     sessions.set(id, {
+      claimed: true,
       character: null, // New session begins with NULL character so user lands on Home & spins Gacha!
       assets: [],
       relationships: [],
@@ -140,7 +158,11 @@ export function getSessionData(sessionId = null) {
 
 export function seedInitialData(lineageParent = null, karmaPerks = {}) {
   const store = getSessionData();
+  // Each new life gets its own seed (fixed seed only honoured under NODE_ENV=test).
+  const seed = (process.env.NODE_ENV === 'test' && Number.isInteger(karmaPerks?.rng_seed)) ? (karmaPerks.rng_seed >>> 0) : newSeed();
+  store.rng = { seed, n: 0 };
   const freshChar = executeProceduralRebirth(karmaPerks, lineageParent);
+  freshChar.rng_seed = seed;
   store.character = freshChar;
 
   // Assets depending on background
@@ -229,14 +251,17 @@ export async function initDb() {
 
   if (connectionString) {
     try {
-      pool = new Pool({ connectionString, connectionTimeoutMillis: 3000 });
+      pool = new Pool({ connectionString, connectionTimeoutMillis: Number(process.env.DB_CONNECT_TIMEOUT_MS) || 10000 });
       const client = await pool.connect();
       console.log('✅ [Database] Successfully connected to PostgreSQL.');
       client.release();
       // Persist extensible game state without assuming every runtime field is a SQL column.
       await pool.query(fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8'));
-      for (const table of ['characters', 'assets', 'relationships', 'npcs'])
+      for (const table of ['characters', 'assets', 'relationships', 'npcs']) {
         await pool.query(`ALTER TABLE ${table} ADD COLUMN IF NOT EXISTS state JSONB NOT NULL DEFAULT '{}'::jsonb`);
+        // Thứ tự chèn ổn định: kết quả game (RNG có seed) phụ thuộc thứ tự duyệt tài sản/quan hệ/NPC.
+        await pool.query(`ALTER TABLE ${table} ADD COLUMN IF NOT EXISTS seq BIGSERIAL`);
+      }
       await pool.query("ALTER TABLE player_accounts ADD COLUMN IF NOT EXISTS ancestral_lineage JSONB NOT NULL DEFAULT '[]'::jsonb");
       useMock = false;
       return;
@@ -381,12 +406,12 @@ export function ensureCharacterSkills(char) {
 }
 
 const entityTables = new Set(['characters', 'assets', 'relationships', 'npcs']);
-const hydrate = row => row ? { ...row, ...(row.state ?? {}), id: row.id } : null;
+const hydrate = row => { if (!row) return null; const { seq, ...rest } = { ...row, ...(row.state ?? {}), id: row.id }; return rest; };
 async function ownedRows(table, characterId = null) {
   if (!entityTables.has(table)) throw new Error('Invalid entity table');
   const result = table === 'characters'
     ? await pool.query('SELECT * FROM characters WHERE player_account_id = $1 ORDER BY created_at DESC', [getCurrentSessionId()])
-    : await pool.query(`SELECT e.* FROM ${table} e JOIN characters c ON c.id = e.character_id WHERE c.player_account_id = $1 AND e.character_id = $2`, [getCurrentSessionId(), characterId]);
+    : await pool.query(`SELECT e.* FROM ${table} e JOIN characters c ON c.id = e.character_id WHERE c.player_account_id = $1 AND e.character_id = $2 ORDER BY e.seq`, [getCurrentSessionId(), characterId]);
   return result.rows.map(hydrate);
 }
 async function persistEntity(table, id, fields) {
@@ -400,6 +425,8 @@ async function persistEntity(table, id, fields) {
   const entity = { ...hydrate(old.rows[0]), ...fields, id };
   if (table === 'characters') {
     entity.player_account_id = getCurrentSessionId();
+    const rngState = sessions.get(getCurrentSessionId())?.rng;
+    if (rngState) entity.rng_state = { seed: rngState.seed, n: rngState.n || 0 };
     await getPlayerAccount();
     const res = await pool.query(`INSERT INTO characters (id, player_account_id, name, age, state) VALUES ($1,$2,$3,$4,$5)
       ON CONFLICT (id) DO UPDATE SET state = EXCLUDED.state, name = EXCLUDED.name, age = EXCLUDED.age, updated_at = NOW()
@@ -419,7 +446,14 @@ async function persistEntity(table, id, fields) {
 }
 
 export async function getLatestCharacter() {
-  if (!useMock && pool) return ensureCharacterSkills((await ownedRows('characters'))[0] ?? null);
+  if (!useMock && pool) {
+    const latest = (await ownedRows('characters'))[0] ?? null;
+    // Postgres: khôi phục trạng thái RNG sau khi server khởi động lại (RAM đã mất).
+    const store = getSessionData();
+    if (latest?.rng_state && typeof latest.rng_state.seed === 'number' && (!store.rng || store.rng.seed !== latest.rng_state.seed))
+      store.rng = { seed: latest.rng_state.seed, n: latest.rng_state.n || 0 };
+    return ensureCharacterSkills(latest);
+  }
   const c = getSessionData().character;
   return c ? ensureCharacterSkills(structuredClone(c)) : null;
 }

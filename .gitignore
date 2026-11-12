@@ -16,3 +16,9 @@ Thumbs.db
 
 # UI audit output
 tools/ui_audit_out/
+
+# Dữ liệu phiên chơi & khoá cục bộ (không commit)
+backend/data/
+*.exe
+tools/*.exe
+*.tsbuildinfo

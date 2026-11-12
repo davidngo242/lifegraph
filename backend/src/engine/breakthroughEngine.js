@@ -1,3 +1,4 @@
+import { getRandom } from './rng.js';
 // backend/src/engine/breakthroughEngine.js
 import { awardLifeExp } from './rpgProgressionEngine.js';
 
@@ -139,7 +140,7 @@ export function executeBreakthroughAction(character) {
     character.cash = (Number(character.cash) || 0) - action.costCash;
   }
 
-  const roll = Math.random();
+  const roll = getRandom();
   const isSuccess = roll < action.successRate;
   const outcome = isSuccess ? action.successReward : action.failureReward;
 

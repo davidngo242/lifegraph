@@ -1,3 +1,4 @@
+import { getRandom } from './rng.js';
 // Pre-generated Million-Combinatorial Vector Scenario Matrix Bank (LifeGraph V5 & V6)
 // Spans all 5 interaction types: SPECTRUM, ILLUSION, TRILEMMA, TIME_SKIP, STANDARD
 // Categorized by Life Stages with strict Age Gating and Once-in-a-Lifetime guarantees.
@@ -1743,7 +1744,7 @@ export function generateMillionProceduralScenario(character, netWorth, bannedTag
 
   const pool = stageTemplates[stageKey] || stageTemplates.youth;
   // Pick template that doesn't collide with recent tag
-  const selected = pool[Math.floor(Math.random() * pool.length)];
+  const selected = pool[Math.floor(getRandom() * pool.length)];
   const uniqueTag = `dyn_${stageKey}_${age}_${Date.now() % 1000}`;
 
   if (selected.type === "SPECTRUM") {

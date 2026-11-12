@@ -1,3 +1,4 @@
+import { getRandom } from '../engine/rng.js';
 /**
  * LifeGraph 2.0 - Global Country BigData Engine
  * Comprehensive multi-national datasets for Names, Lineage, Currencies, Cities, Family Culture & Asset Markets.
@@ -772,9 +773,9 @@ export function getCountryBigData(countryName = "Việt Nam") {
  */
 export function generateCulturallyAuthenticName(countryName, role = "character", gender = "male", surnameOverride = null) {
   const country = getCountryBigData(countryName);
-  const surname = surnameOverride || country.surnames[Math.floor(Math.random() * country.surnames.length)];
+  const surname = surnameOverride || country.surnames[Math.floor(getRandom() * country.surnames.length)];
   const givenPool = gender === 'female' ? country.female_given_names : country.male_given_names;
-  const given = givenPool[Math.floor(Math.random() * givenPool.length)];
+  const given = givenPool[Math.floor(getRandom() * givenPool.length)];
 
   if (country.name_order === "eastern") {
     // Họ + Tên (Việt Nam)

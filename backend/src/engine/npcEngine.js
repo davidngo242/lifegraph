@@ -1,3 +1,4 @@
+import { getRandom } from './rng.js';
 import crypto from 'crypto';
 
 export function initializeStartingNpcs(character) {
@@ -94,7 +95,7 @@ export function evaluateNpcLongTermArc(character, npcs) {
 
   // 2. Vengeance / Grudge Arc: Former enemy returns
   const enemyNpc = npcs.find(n => n.affinity <= -40 && n.status === "alive");
-  if (enemyNpc && Math.random() < 0.35) {
+  if (enemyNpc && getRandom() < 0.35) {
     return {
       npc: enemyNpc,
       arc_type: "vengeance_confrontation",
@@ -108,7 +109,7 @@ export function evaluateNpcLongTermArc(character, npcs) {
           risk_percent: 60,
           cost_ap: 2,
           effects: {
-            cash_delta: Math.random() > 0.45 ? 40000 : -20000,
+            cash_delta: getRandom() > 0.45 ? 40000 : -20000,
             vitality_delta: -15,
             burnout_delta: 20,
             karma_delta: -5,

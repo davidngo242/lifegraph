@@ -1,0 +1,142 @@
+[
+  {
+    "seed": 1000,
+    "death_age": 76,
+    "death_cause": "Suy đa tạng sau một đợt cảm lạnh mùa đông",
+    "final_cash": 1222,
+    "final_karma": 75
+  },
+  {
+    "seed": 1001,
+    "death_age": 75,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
+    "final_cash": -72878,
+    "final_karma": 70
+  },
+  {
+    "seed": 1002,
+    "death_age": 52,
+    "death_cause": "Biến chứng bất ngờ do thể trạng suy yếu",
+    "final_cash": -20636,
+    "final_karma": 70
+  },
+  {
+    "seed": 1003,
+    "death_age": 74,
+    "death_cause": "Cơn đau thắt ngực cấp tính không kịp cấp cứu",
+    "final_cash": 1520,
+    "final_karma": 75
+  },
+  {
+    "seed": 1004,
+    "death_age": 70,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
+    "final_cash": -59932,
+    "final_karma": 75
+  },
+  {
+    "seed": 1005,
+    "death_age": 70,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
+    "final_cash": -61646,
+    "final_karma": 75
+  },
+  {
+    "seed": 1006,
+    "death_age": 82,
+    "death_cause": "Ngừng tuần hoàn tự nhiên do cạn kiệt sinh lực",
+    "final_cash": 692,
+    "final_karma": 75
+  },
+  {
+    "seed": 1007,
+    "death_age": 70,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
+    "final_cash": -62102,
+    "final_karma": 70
+  },
+  {
+    "seed": 1008,
+    "death_age": 74,
+    "death_cause": "Suy tim do tuổi già và biến chứng mệt mỏi tích tụ",
+    "final_cash": 1056,
+    "final_karma": 70
+  },
+  {
+    "seed": 1009,
+    "death_age": 70,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
+    "final_cash": -57090,
+    "final_karma": 70
+  },
+  {
+    "seed": 1010,
+    "death_age": 70,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
+    "final_cash": -63360,
+    "final_karma": 70
+  },
+  {
+    "seed": 1011,
+    "death_age": 77,
+    "death_cause": "Đột quỵ trong giấc ngủ yên bình",
+    "final_cash": 932,
+    "final_karma": 80
+  },
+  {
+    "seed": 1012,
+    "death_age": 70,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
+    "final_cash": -63485,
+    "final_karma": 75
+  },
+  {
+    "seed": 1013,
+    "death_age": 71,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
+    "final_cash": -58964,
+    "final_karma": 70
+  },
+  {
+    "seed": 1014,
+    "death_age": 76,
+    "death_cause": "Ngừng tuần hoàn tự nhiên do cạn kiệt sinh lực",
+    "final_cash": 1380,
+    "final_karma": 70
+  },
+  {
+    "seed": 1015,
+    "death_age": 70,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
+    "final_cash": -57090,
+    "final_karma": 70
+  },
+  {
+    "seed": 1016,
+    "death_age": 75,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
+    "final_cash": -79091,
+    "final_karma": 70
+  },
+  {
+    "seed": 1017,
+    "death_age": 78,
+    "death_cause": "Ngừng tuần hoàn tự nhiên do cạn kiệt sinh lực",
+    "final_cash": 1350,
+    "final_karma": 70
+  },
+  {
+    "seed": 1018,
+    "death_age": 70,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
+    "final_cash": -57887,
+    "final_karma": 70
+  },
+  {
+    "seed": 1019,
+    "death_age": 70,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
+    "final_cash": -67061,
+    "final_karma": 70
+  }
+]

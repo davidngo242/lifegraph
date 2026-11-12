@@ -1,3 +1,4 @@
+import { getRandom } from '../engine/rng.js';
 import express from 'express';
 import {
   getLatestCharacter,
@@ -21,7 +22,8 @@ import {
   addTotalKarma,
   buyKarmaPerk,
   getAncestralLineage,
-  addAncestralMemorial
+  addAncestralMemorial,
+  getCurrentSessionId
 } from '../db/db.js';
 import {
   SKILL_TREE,
@@ -32,6 +34,8 @@ import {
   interactNpc
 } from '../engine/rpgProgressionEngine.js';
 import { processPassivePhase, calculateMaxVitality } from '../engine/tickEngine.js';
+import { applyDelta } from '../engine/core/stats.js';
+import { deriveMinigameOutcome } from '../engine/core/minigames.js';
 import { getCurrentScenarioForCharacter, interactWithHotspot, resolveMindStageChoice, fulfillCommitment, evaluateCommitments, getNextScenarioAge } from '../engine/scenarioEngine.js';
 import { recordAndCheckCombo, resetAnnualActions } from '../engine/comboActionEngine.js';
 import { executeBreakthroughAction, getBreakthroughForAge } from '../engine/breakthroughEngine.js';
@@ -109,13 +113,12 @@ router.get('/diagnostic', async (req, res) => {
 
 // POST /api/game/auth/handshake - Cấp phát Token có chữ ký Mật mã (Anti-Tampering)
 router.post('/auth/handshake', (req, res) => {
-  const clientProvidedId = req.body?.client_id || req.headers['x-session-id'] || 'user_' + Date.now();
-  const sanitizedId = String(clientProvidedId).replace(/[^a-zA-Z0-9_\-]/g, '').slice(0, 64);
-  const token = signSessionToken(sanitizedId);
+  // Mã phiên do server cấp (lớp 3 trong index.js đã xử lý); client chỉ nhận lại token đã ký.
+  const sessionId = getCurrentSessionId();
   res.json({
     success: true,
-    session_id: sanitizedId,
-    session_token: token,
+    session_id: sessionId,
+    session_token: signSessionToken(sessionId),
     issued_at: new Date().toISOString()
   });
 });
@@ -164,6 +167,7 @@ router.get('/state', async (req, res) => {
     if (!character) {
       return res.json({
         character: null,
+        version: getSessionData().version ?? 0,
         player_account: account,
         visuals: null,
         assets: [],
@@ -286,6 +290,7 @@ router.get('/state', async (req, res) => {
     const aspiration = evaluateAspirationProgress(character, assets, relationships);
 
     res.json({
+      version: getSessionData().version ?? 0,
       character,
       player_account: account,
       visuals,
@@ -931,7 +936,7 @@ const handleHeirRebirth = async (req, res) => {
     const newCharacter = {
       id: childId,
       name: childName,
-      gender: childRecord?.gender || (Math.random() > 0.5 ? "Nam" : "Nữ"),
+      gender: childRecord?.gender || (getRandom() > 0.5 ? "Nam" : "Nữ"),
       nationality: parent.nationality || "Việt Nam",
       country_tier: parent.country_tier || "Tier 2",
       background: `Hậu duệ gia tộc thế hệ ${generation} (Thừa kế từ ${parent.name})`,
@@ -1096,7 +1101,7 @@ router.post('/transhumanism', async (req, res) => {
     }
 
     character.cash -= surgeryCost;
-    const failureRoll = Math.random();
+    const failureRoll = getRandom();
 
     // 50% fatal rejection risk
     if (failureRoll < 0.50) {
@@ -1195,12 +1200,20 @@ router.post('/action/buy-asset', async (req, res) => {
       });
     }
 
-    const actualType = sanitizeString(asset_type || type || 'stocks', 50);
-    const safeName = sanitizeString(name || 'Tài sản', 100);
-    const actualCostAp = Math.max(1, Math.min(4, Math.floor(Number(ap_cost || cost_ap || 1))));
-    const rawCost = Math.max(0, Number(cost) || 0);
-    const actualMaintenance = Math.max(0, Number(maintenance_cost ?? maintenance ?? 0));
-    const actualCashFlow = Math.max(0, Number(annual_cash_flow || cash_flow || 0));
+    // Giá, dòng tiền, phí duy trì và AP lấy từ danh mục thị trường của server; số do client gửi bị bỏ qua.
+    const catalog = getLocalizedMarketAssets(character.nationality, character.current_city);
+    const requestedId = req.body.asset_id || req.body.id;
+    const item = catalog.find(a => requestedId && a.id === requestedId)
+      || catalog.find(a => name && (a.name === name) && (!(asset_type || type) || a.type === (asset_type || type)));
+    if (!item) {
+      return res.status(400).json({ error: 'Tài sản không có trong danh mục thị trường.' });
+    }
+    const actualType = item.type;
+    const safeName = sanitizeString(item.name, 100);
+    const actualCostAp = Math.max(1, Math.min(4, Math.floor(Number(item.ap_cost) || 1)));
+    const rawCost = Math.max(0, Number(item.cost) || 0);
+    const actualMaintenance = Math.max(0, Number(item.maintenance) || 0);
+    const actualCashFlow = Math.max(0, Number(item.cash_flow) || 0);
 
     const financeLevel = character.skills?.finance_market?.level || 0;
     let discountRate = financeLevel === 1 ? 0.10 : financeLevel === 2 ? 0.20 : financeLevel >= 3 ? 0.25 : 0;
@@ -1243,7 +1256,7 @@ router.post('/action/buy-asset', async (req, res) => {
     const history = character.history_log || [];
     history.push({
       age: character.age,
-      event: `Đầu tư mua tài sản: ${name}`,
+      event: `Đầu tư mua tài sản: ${safeName}`,
       choice: `Chi tiêu $${finalCost.toLocaleString()} & ${actualCostAp} AP${discountNote} (Dòng tiền: +$${actualCashFlow.toLocaleString()}/năm)`
     });
     character.history_log = history;
@@ -1685,7 +1698,7 @@ router.post('/action/annual-focus', async (req, res) => {
 
     if (focus_type === 'hustle') {
       if (isAdult) {
-        const bonusCash = Math.round(Math.random() * 3500 + 3500);
+        const bonusCash = Math.round(getRandom() * 3500 + 3500);
         character.cash = (Number(character.cash) || 0) + bonusCash;
         character.burnout = Math.min(100, (character.burnout || 0) + 25);
         message = `Cả năm dốc toàn lực cày cuốc! Thu về +$${bonusCash.toLocaleString()} USD thặng dư, tăng 25 Căng thẳng.`;
@@ -1914,7 +1927,7 @@ router.post('/action/family', async (req, res) => {
       } else {
         const partnerGender = character.gender === 'female' ? 'male' : 'female';
         const name = generateCulturallyAuthenticName(character.nationality, 'partner', partnerGender);
-        const partnerAge = Math.max(16, (character.age || 18) + (Math.floor(Math.random() * 3) - 1));
+        const partnerAge = Math.max(16, (character.age || 18) + (Math.floor(getRandom() * 3) - 1));
         partner = await addRelationship({
           character_id: character.id,
           type: 'partner',
@@ -1960,7 +1973,7 @@ router.post('/action/family', async (req, res) => {
         // If no partner yet, instantly find and marry with culturally authentic identity
         const partnerGender = character.gender === 'female' ? 'male' : 'female';
         const name = generateCulturallyAuthenticName(character.nationality, 'spouse', partnerGender);
-        const partnerAge = Math.max(18, (character.age || 18) + (Math.floor(Math.random() * 5) - 2));
+        const partnerAge = Math.max(18, (character.age || 18) + (Math.floor(getRandom() * 5) - 2));
         partner = await addRelationship({
           character_id: character.id,
           type: 'spouse',
@@ -2011,7 +2024,7 @@ router.post('/action/family', async (req, res) => {
       // Kế thừa Họ cha theo tập tục văn hóa từng quốc gia
       const fatherFullName = character.gender === 'male' ? character.name : (relationships.find(r => r.type === 'spouse')?.name || character.name);
       const fatherSurname = extractFamilySurname(fatherFullName, character.nationality);
-      const childGender = Math.random() < 0.5 ? 'male' : 'female';
+      const childGender = getRandom() < 0.5 ? 'male' : 'female';
       const name = generateCulturallyAuthenticName(character.nationality, 'child', childGender, fatherSurname);
 
       const newChild = await addRelationship({
@@ -2293,6 +2306,9 @@ router.post('/action/debt-relief', async (req, res) => {
     if (!character.hidden_flags) character.hidden_flags = [];
 
     if (relief_type === 'family_soft_loan') {
+      if (character.family_soft_loan_taken || character.hidden_flags.includes('family_soft_loan_taken')) {
+        return res.status(409).json({ error: 'Gia đình đã cho vay một lần trong kiếp này.' });
+      }
       character.cash = Number(character.cash) + 3000;
       character.family_soft_loan_taken = true;
       if (!character.hidden_flags.includes('family_soft_loan_taken')) {
@@ -2375,12 +2391,9 @@ router.post('/action/wellness', async (req, res) => {
       }
 
       character.action_points -= costAP;
-      character.cash -= costCash;
-      const maxV = character.max_vitality || 100;
       const vitGained = Math.round((20 + bonusVit) * wellnessMult);
       const burnoutRelief = Math.round((25 + bonusBurnoutRelief) * wellnessBurnoutMult);
-      character.vitality = Math.min(maxV, character.vitality + vitGained);
-      character.burnout = Math.max(0, character.burnout - burnoutRelief);
+      applyDelta(character, { cash: -costCash, vitality: vitGained, burnout: -burnoutRelief });
       awardLifeExp(character, 30, "Trị liệu y tế phục hồi thể trạng");
 
       const healthPerkMsg = healthLevel > 0 ? ` (Kỹ Năng Sinh Lực Lv${healthLevel} tăng thêm +${bonusVit} HP, -${bonusBurnoutRelief} Burnout)` : '';
@@ -2410,12 +2423,9 @@ router.post('/action/wellness', async (req, res) => {
       }
 
       character.action_points -= costAP;
-      character.cash -= costCash;
       const vitGained = Math.round((15 + bonusVit) * wellnessMult);
       const burnoutRelief = Math.round((35 + bonusBurnoutRelief) * wellnessBurnoutMult);
-      character.burnout = Math.max(0, character.burnout - burnoutRelief);
-      character.vitality = Math.min(character.max_vitality || 100, character.vitality + vitGained);
-      character.karma = Math.min(100, character.karma + 10);
+      applyDelta(character, { cash: -costCash, vitality: vitGained, burnout: -burnoutRelief, karma: 10 });
       awardLifeExp(character, 35, "Khóa tu tĩnh tâm dưỡng sinh");
 
       const healthPerkMsg = healthLevel > 0 ? ` (Kỹ Năng Sinh Lực Lv${healthLevel} tăng thêm +${bonusVit} HP, -${bonusBurnoutRelief} Burnout)` : '';
@@ -2459,7 +2469,7 @@ router.post('/action/overtime', async (req, res) => {
     const hasNegotiation = (character.unlocked_skills || []).includes("negotiation_master");
     const negotiationMultiplier = hasNegotiation ? 1.35 : 1.0; // +35% thặng dư từ Kỹ Năng Đàm Phán Khắc Nghiệt
 
-    const baseEarned = Math.round(1500 + (age * 120) + (Math.random() * 800));
+    const baseEarned = Math.round(1500 + (age * 120) + (getRandom() * 800));
     const hasCodeWhisperer = (character.innate_traits || []).includes("code_whisperer");
     const codeMultiplier = hasCodeWhisperer ? 1.35 : 1.0;
     const isWealthPledge = character.active_pledge === 'pledge_wealth';
@@ -2479,9 +2489,8 @@ router.post('/action/overtime', async (req, res) => {
     }
 
     character.action_points -= 1;
-    character.cash = Number(character.cash) + earnedCash;
-    character.burnout = Math.min(100, character.burnout + burnoutGained);
-    character.vitality = Math.max(10, character.vitality - (healthLevel >= 2 ? 1 : 3));
+    applyDelta(character, { cash: earnedCash, burnout: burnoutGained, vitality: -(healthLevel >= 2 ? 1 : 3) }, { vitalityMin: 10 });
+    if (character.burnout >= 80) character.recent_risk = Math.min(5, (Number(character.recent_risk) || 0) + 1); // overwork raises mortality hazard
 
     // Award Life EXP for grinding hard
     awardLifeExp(character, 40, "Cày việc ngoài giờ thực chiến");
@@ -2520,9 +2529,7 @@ router.post('/action/study', async (req, res) => {
     }
 
     character.action_points -= 1;
-    character.cash -= costCash;
-    character.burnout = Math.max(0, character.burnout - 10);
-    character.karma = Math.min(100, character.karma + 8);
+    applyDelta(character, { cash: -costCash, burnout: -10, karma: 8 });
 
     // Award Life EXP for studying
     awardLifeExp(character, 50, "Nghiên cứu tri thức chuyên sâu");
@@ -2567,14 +2574,13 @@ router.post('/action/network', async (req, res) => {
     }
 
     character.action_points -= 1;
-    character.cash -= costCash;
-    character.karma = Math.min(100, character.karma + 6);
+    applyDelta(character, { cash: -costCash, karma: 6 });
 
     const npcs = await getNpcs(character.id);
     let message = "";
 
-    if (npcs.length > 0 && Math.random() < (socialLevel >= 2 ? 0.80 : 0.65)) {
-      const targetNpc = npcs[Math.floor(Math.random() * npcs.length)];
+    if (npcs.length > 0 && getRandom() < (socialLevel >= 2 ? 0.80 : 0.65)) {
+      const targetNpc = npcs[Math.floor(getRandom() * npcs.length)];
       targetNpc.affinity = Math.min(100, (Number(targetNpc.affinity) || 50) + (socialLevel >= 2 ? 22 : 15));
       await updateRelationship(targetNpc.id, { affinity: targetNpc.affinity });
       message = `Gặp gỡ giao lưu cùng ${targetNpc.name}: Tình bằng hữu thêm gắn kết (+${socialLevel >= 2 ? 22 : 15} Thân thiện)!`;
@@ -2584,8 +2590,8 @@ router.post('/action/network', async (req, res) => {
       const rolePool = socialLevel >= 2 ? vipRoles : normalRoles;
       const newContact = {
         character_id: character.id,
-        name: ["Nguyễn Hoàng", "Trần Thảo", "Vũ Phong", "Phạm Linh", "Đặng Huy", "David Vance", "Alexander Chen"][Math.floor(Math.random() * 7)],
-        role: rolePool[Math.floor(Math.random() * rolePool.length)],
+        name: ["Nguyễn Hoàng", "Trần Thảo", "Vũ Phong", "Phạm Linh", "Đặng Huy", "David Vance", "Alexander Chen"][Math.floor(getRandom() * 7)],
+        role: rolePool[Math.floor(getRandom() * rolePool.length)],
         affinity: socialLevel >= 2 ? 80 : 70,
         status: "alive",
         memory_notes: "Gặp gỡ qua sự kiện giao lưu kết nối doanh nghiệp cấp cao.",
@@ -2631,9 +2637,10 @@ router.post('/action/gamble', async (req, res) => {
     const lossThreshold = financeLevel >= 2 ? 0.45 : financeLevel === 1 ? 0.55 : 0.65;
 
     character.action_points -= 1;
-    character.cash -= costCash;
+    applyDelta(character, { cash: -costCash });
+    character.recent_risk = Math.min(5, (Number(character.recent_risk) || 0) + 1); // gambling raises mortality hazard
 
-    const roll = Math.random();
+    const roll = getRandom();
     let message = "";
     let netGain = -costCash;
 
@@ -2643,15 +2650,14 @@ router.post('/action/gamble', async (req, res) => {
     } else if (roll < 0.94) {
       // 3x win
       const win = financeLevel >= 2 ? 1200 : 900;
-      character.cash += win;
+      applyDelta(character, { cash: win });
       netGain = win - costCash;
       message = `Bắt đúng nhịp sóng nhỏ! Thắng giải thu về +$${win.toLocaleString()}!`;
     } else {
       // JACKPOT 50x
       const jackpot = 15000;
-      character.cash += jackpot;
+      applyDelta(character, { cash: jackpot, karma: -5 });
       netGain = jackpot - costCash;
-      character.karma = Math.max(0, character.karma - 5);
       message = `🎆 TRÚNG ĐỘC ĐẮC! Bánh xe vận may mỉm cười, nhận ngay +$${jackpot.toLocaleString()} tiền mặt!`;
     }
 
@@ -2664,13 +2670,6 @@ router.post('/action/gamble', async (req, res) => {
     character.history_log = history;
     await updateCharacter(character.id, character);
     recordPlayerAction("gamble", character);
-
-    res.json({
-      success: true,
-      message,
-      netGain,
-      character
-    });
 
     res.json({
       success: true,
@@ -2852,12 +2851,13 @@ router.post('/action/minigame-result', async (req, res) => {
   try {
     const minigame_id = req.body.minigame_id || req.body.minigame_type;
     const reportedOutcome = req.body.outcome ?? req.body.status ?? 'fair';
-    const outcome = reportedOutcome === 'fail' ? 'failure' : reportedOutcome;
-    const score = req.body.score || 0;
+    const clientOutcome = reportedOutcome === 'fail' ? 'failure' : reportedOutcome;
+    let outcome = clientOutcome; // advisory; replaced by the server judgement below
+    const score = req.body.score ?? 0;
     let character = await getLivingCharacter(res);
     if (!character) return;
     if (!character || character.is_deceased) return res.status(409).json({ error: 'Không có kiếp sống đang hoạt động.' });
-    if (!['success', 'fair', 'failure'].includes(outcome)) return res.status(400).json({ error: 'Kết quả thử thách không hợp lệ.' });
+    if (!['success', 'fair', 'failure'].includes(clientOutcome)) return res.status(400).json({ error: 'Kết quả thử thách không hợp lệ.' });
     const played = character.completed_minigames ?? [];
     if (!character.pending_skill_exam && played.includes(minigame_id)) return res.status(409).json({ error: 'Thử thách này đã được ghi nhận trong kiếp này.' });
     const history = character.history_log || [];
@@ -2868,7 +2868,9 @@ router.post('/action/minigame-result', async (req, res) => {
     const pendingChallenge = pendingExam ?? character.pending_minigame;
     if (!pendingChallenge || pendingChallenge.id !== req.body.challenge_id || pendingChallenge.minigame_type !== minigame_id)
       return res.status(409).json({ error: 'Kết quả không thuộc thử thách đang hoạt động.' });
-    if (!Number.isFinite(Number(score)) || Number(score) < 0) return res.status(400).json({ error: 'Điểm không hợp lệ.' });
+    if (!Number.isFinite(Number(score)) || Number(score) < -100 || Number(score) > 100000) return res.status(400).json({ error: 'Điểm không hợp lệ.' });
+    const judged = deriveMinigameOutcome(minigame_id, score, clientOutcome);
+    outcome = judged.outcome;
 
     const targetSkillId = req.body.skill_id || pendingExam?.skill_id;
     const hasEncyclopedic = (character.unlocked_skills || []).includes("encyclopedic_brain");
@@ -3067,6 +3069,8 @@ router.post('/action/minigame-result', async (req, res) => {
     res.json({
       success: true,
       outcome,
+      client_outcome: clientOutcome,
+      outcome_adjusted: judged.adjusted,
       feedback,
       character
     });
@@ -3145,7 +3149,7 @@ router.post('/action/rpg-active-perk', async (req, res) => {
     let message = '';
 
     if (perk_type === 'stock_trading') {
-      const isProfit = Math.random() < 0.70;
+      const isProfit = getRandom() < 0.70;
       const amount = Math.round(Math.max(2000, (Number(character.cash) || 5000) * 0.25));
       if (isProfit) {
         character.cash = (Number(character.cash) || 0) + amount;
@@ -3249,7 +3253,7 @@ router.post('/tick', async (req, res) => {
         if (strategyId === "fight") {
           // Aggressive / Assertive Counter Strategy
           const statPower = (character.vitality || 50) + (character.karma || 0) + (character.rpg_skills?.length || 0) * 10;
-          const isSuccess = statPower >= 75 || Math.random() < 0.60;
+          const isSuccess = statPower >= 75 || getRandom() < 0.60;
 
           if (isSuccess) {
             const salvageCash = Math.round(Math.max(2000, character.cash) * 0.10);
@@ -3621,7 +3625,7 @@ router.post('/tick', async (req, res) => {
     const npcArc = evaluateNpcLongTermArc(character, npcs);
     let dilemma = null;
 
-    if (npcArc && Math.random() < 0.40) {
+    if (npcArc && getRandom() < 0.40) {
       dilemma = {
         ...npcArc,
         has_npc_interaction: true,
