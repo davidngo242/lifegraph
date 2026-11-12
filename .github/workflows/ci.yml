@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+        working-directory: backend
+      - run: npm test
+        working-directory: backend
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+      - run: npx tsc --noEmit
+        working-directory: frontend
+      - run: npm run build
+        working-directory: frontend
+
+  integrity:
+    # Test đọc mã nguồn UI + mô phỏng end-to-end qua backend thật (cổng 10000).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+        working-directory: backend
+      - name: Start backend
+        working-directory: backend
+        env:
+          PORT: "10000"
+          ALLOW_RAW_SESSION_ID: "1"
+        run: nohup node src/index.js > ../backend.log 2>&1 &
+      - name: Wait for backend
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf -o /dev/null http://localhost:10000/health && exit 0
+            sleep 1
+          done
+          cat backend.log
+          exit 1
+      - run: node test_daylight_mode_ui_integrity.mjs
+      - run: node test_1000_users_simulation.mjs
+      - run: node test_e2e_full_simulation.mjs
+      - run: node test_gender_and_delayed_consequences.mjs
+      - run: node tools/test_life_tree_rpg.mjs
