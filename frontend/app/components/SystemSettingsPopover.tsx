@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings, Volume2, VolumeX, Music, BookOpen, Keyboard, X, Check } from 'lucide-react';
+import { Settings, Volume2, VolumeX, Music, BookOpen, Keyboard, X, Check, UserRound, LogOut } from 'lucide-react';
 import Tooltip from './Tooltip';
 import type { GameTheme } from './ThemeSwitcher';
 
@@ -11,6 +11,9 @@ interface SystemSettingsPopoverProps {
   audioRef: React.RefObject<HTMLAudioElement>;
   onOpenGuide: () => void;
   onOpenShortcuts: () => void;
+  username?: string;
+  onOpenAccount: () => void;
+  onLogout: () => void;
 }
 
 interface ThemeItem {
@@ -32,7 +35,10 @@ export default function SystemSettingsPopover({
   onTogglePlayAudio,
   audioRef,
   onOpenGuide,
-  onOpenShortcuts
+  onOpenShortcuts,
+  username,
+  onOpenAccount,
+  onLogout
 }: SystemSettingsPopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentTheme, setCurrentTheme] = useState<GameTheme>('daylight');
@@ -137,6 +143,36 @@ export default function SystemSettingsPopover({
             >
               <X className="w-3.5 h-3.5" />
             </button>
+          </div>
+
+          {/* 0. Account */}
+          <div className="space-y-1.5">
+            <div className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">
+              Tài khoản
+            </div>
+            {username ? (
+              <div className="flex items-center gap-2">
+                <div className="flex-1 min-w-0 flex items-center gap-1.5 p-2 min-h-[44px] rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-xs font-semibold text-[var(--text-primary)]">
+                  <UserRound className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-500 shrink-0" />
+                  <span className="truncate">{username}</span>
+                </div>
+                <button
+                  onClick={() => { setIsOpen(false); onLogout(); }}
+                  className="p-2 min-h-[44px] rounded-xl bg-[var(--bg-card-subtle)] hover:bg-rose-500/15 border border-[var(--border-subtle)] hover:border-rose-500/40 text-xs font-semibold text-[var(--text-primary)] flex items-center gap-1.5 transition shrink-0"
+                >
+                  <LogOut className="w-3.5 h-3.5 text-rose-700 dark:text-rose-400 shrink-0" />
+                  <span>Đăng xuất</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setIsOpen(false); onOpenAccount(); }}
+                className="w-full p-2 min-h-[44px] rounded-xl bg-[var(--bg-card-subtle)] hover:bg-amber-500/15 border border-[var(--border-subtle)] hover:border-amber-500/40 text-xs font-semibold text-[var(--text-primary)] flex items-center gap-1.5 transition"
+              >
+                <UserRound className="w-3.5 h-3.5 text-amber-700 dark:text-amber-500 shrink-0" />
+                <span className="truncate">Tài khoản · Đăng nhập / Đăng ký</span>
+              </button>
+            )}
           </div>
 
           {/* 1. Theme Selection */}
