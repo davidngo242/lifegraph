@@ -143,6 +143,7 @@ export async function incense(id, viewerId) {
   const m = mem.memorials.find(x => x.id === id && x.status === 'active');
   if (!m) return { error: 'notfound' };
   if (mem.incense.some(i => i.mid === id && i.aid === viewerId && i.day === day)) return { error: 'duplicate' };
+  mem.incense = mem.incense.filter(i => i.day === day); // chỉ cần dedupe trong ngày: chặn file phình vô hạn
   mem.incense.push({ mid: id, aid: viewerId, day });
   m.incense_count += 1; save();
   return { incense_count: m.incense_count };
