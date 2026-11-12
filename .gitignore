@@ -22,3 +22,4 @@ backend/data/
 *.exe
 tools/*.exe
 *.tsbuildinfo
+.claude/worktrees/
