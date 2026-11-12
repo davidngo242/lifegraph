@@ -92,20 +92,20 @@ Remaining gaps: 185 of 204 `character.<stat> =` write sites in `routes/game.js` 
 
 | Metric | passive | active | greedy |
 |---|---|---|---|
-| Negative final cash | 33.0% | 2.3% | 0.0% |
-| At debt floor (-250k) | 6.7% | 1.0% | 0.0% |
-| Final cash p10 | -55,099 | 292,392 | 478,426 |
-| Final cash median | 30,199 | 1,128,205 | 3,258,989 |
-| Final cash p90 | 58,389 | 1,777,685 | 5,411,394 |
-| Final cash max | 90,869 | 2,765,170 | 7,327,385 |
-| Death age mean | 76.8 | 75.5 | 58.3 |
-| Death age p10 / median / p90 | 72 / 77 / 83 | 67 / 77 / 86 | 39 / 58 / 71 |
-| Death age min / max | 19 / 90 | 20 / 100 | 21 / 76 |
-| Deaths before 40 / before 60 | 1.3% / 1.3% | 4.0% / 10.0% | 10.3% / 56.3% |
+| Negative final cash | 31.7% | 2.0% | 0.0% |
+| At debt floor (-250k) | 5.3% | 1.3% | 0.0% |
+| Final cash p10 | -46,916 | 263,215 | 541,636 |
+| Final cash median | 48,289 | 1,043,140 | 3,189,003 |
+| Final cash p90 | 72,779 | 1,660,447 | 5,411,394 |
+| Final cash max | 111,802 | 3,147,942 | 7,325,390 |
+| Death age mean | 76.8 | 75.6 | 58.8 |
+| Death age p10 / median / p90 | 72 / 77 / 83 | 68 / 77 / 87 | 40 / 58 / 71 |
+| Death age min / max | 19 / 90 | 20 / 95 | 20 / 76 |
+| Deaths before 40 / before 60 | 1.3% / 1.7% | 4.3% / 8.7% | 9.3% / 55.3% |
 | Alive at cap | 0 | 0 | 0 |
-| Cause: reaper | 88.7% | 87.3% | 10.0% |
-| Cause: zero_vitality | 9.3% | 2.7% | 66.3% |
-| Cause: lifestyle | 2.0% | 10.0% | 23.7% |
+| Cause: reaper | 92.0% | 87.7% | 8.7% |
+| Cause: zero_vitality | 6.3% | 2.0% | 68.3% |
+| Cause: lifestyle | 1.7% | 10.3% | 23.0% |
 | Karma p10 / median / p90 | 70 / 70 / 75 | 100 / 100 / 100 | 100 / 100 / 100 |
 | Karma min / max (distinct values) | 70 / 85 (9) | 100 / 100 (1) | 80 / 100 (4) |
 
@@ -114,17 +114,16 @@ Death age by decade (share of lives):
 | Decade | passive | active | greedy |
 |---|---|---|---|
 | 10s | 0.3% | 0.0% | 0.0% |
-| 20s | 0.7% | 2.3% | 4.3% |
-| 30s | 0.3% | 1.7% | 6.0% |
+| 20s | 0.7% | 2.0% | 3.7% |
+| 30s | 0.3% | 2.3% | 5.7% |
 | 40s | 0.0% | 2.3% | 7.0% |
-| 50s | 0.0% | 3.7% | 39.0% |
-| 60s | 0.7% | 1.0% | 11.3% |
-| 70s | 69.7% | 50.7% | 32.3% |
-| 80s | 28.0% | 35.7% | 0.0% |
-| 90s | 0.3% | 2.3% | 0.0% |
-| 100s | 0.0% | 0.3% | 0.0% |
+| 50s | 0.3% | 2.0% | 39.0% |
+| 60s | 0.3% | 2.3% | 10.7% |
+| 70s | 68.0% | 51.0% | 34.0% |
+| 80s | 29.7% | 35.3% | 0.0% |
+| 90s | 0.3% | 2.7% | 0.0% |
 
-Actions per life (mean): active: overtime 65.2, dilemma 61.5, childhood:school_study 27.0, wellness:meditation_retreat 24.6, childhood:teen_part_time 19.7, childhood:eat_grow 15.1, study 7.4, buy-asset 2.9; greedy: dilemma 48.6, childhood:school_study 27.0, childhood:teen_part_time 18.6, buy-asset 16.1, childhood:eat_grow 15.1, wellness:meditation_retreat 13.1, overtime 0.4, childhood:teen_sports 0.3.
+Actions per life (mean): active: overtime 65.2, dilemma 61.7, childhood:school_study 27.0, wellness:meditation_retreat 24.8, childhood:teen_part_time 19.7, childhood:eat_grow 15.1, study 7.4, buy-asset 2.9; greedy: dilemma 49.0, childhood:school_study 27.0, childhood:teen_part_time 18.6, buy-asset 16.2, childhood:eat_grow 15.1, wellness:meditation_retreat 13.3, overtime 0.4, childhood:teen_sports 0.3.
 <!-- policies:end -->
 
 ### Nhận xét nhanh (từ bảng trên)
@@ -165,3 +164,21 @@ Code: `backend/src/engine/core/income.js` (`INCOME_CONFIG` là nơi duy nhất c
 | Chạm sàn nợ -250k | 1,7% / 0,7% / 0,0% | 6,7% / 1,0% / 0,0% | |
 
 Nhận xét: passive nay có trung vị dương nhỏ (~30k) nên tỷ lệ 37x vẫn vượt 10x; kéo xuống < 10x cần passive trung vị > ~110k, tức lương tự do phải vượt chi phí sống rõ rệt, mâu thuẫn với yêu cầu "tự do/thất nghiệp hơi âm". Lỗ hổng còn lại gợi ý Phương án B (giảm lợi suất overtime) để hạ trần active. Tác dụng phụ cần Sếp biết: tuổi chết trung bình của passive (76,8) nay ngang/cao hơn active (75,5) vì passive không còn bị burnout do nợ; 6,7% passive vẫn chạm sàn nợ.
+
+## Addendum 2026-11-12 (c): phuong an B (overtime diminishing returns) + reviewer minors
+
+- Overtime payout multiplier (`overtimeMultiplier` in `backend/src/engine/core/income.js`, `OVERTIME_CONFIG`): 1st AP of the year 100%, 2nd 60%, 3rd+ 35%; burnout >= 70 at the time of the action x0.5 (multiplicative). Counter `character.overtime_year_count`, incremented in `/action/overtime`, reset to 0 in `processPassivePhase` on year advance. Response adds `overtimeMultiplier`. Cash still goes through `applyDelta`.
+- Housing: `resolveHousingTier()` maps object tier, number, or legacy string ids (villa 4, manor 5, luxury/townhouse 3, rental/apartment 2, slum/shared 1, unknown 1). Used by the wage/living-cost model and by `antiLoopEngine` (renting = no ownership flag and tier < 3).
+- Retirees: `INCOME_CONFIG.pensionFloor` 0.45 -> 0.75. Living cost is 60-68% of the reference wage in housing tiers 1-2; the weakest case (freelance, tier 2) earns 0.67 x 1.384 x 0.75 = 0.695 >= 0.68, so a retiree with no assets nets >= 0 there. Tiers 3-5 still run a deficit in retirement (intended: upgrading housing needs assets).
+- Tests: strict expected values restored in `api.test.js` (4606 = 1000 + 3000 + 3906 - 3300), `infancy_pediatric_scenarios.test.js` (500 + 871 - 40 rent-hike shock - 21 clinic fee), `rpg_progression.test.js` (35960). Golden lives regenerated (pension change is intentional).
+
+Before (section b, income model A) vs after (300 lives, seeds 50000..50299):
+
+| Metric | Before | After | Target |
+|---|---|---|---|
+| Passive negative final cash | 33.0% | 31.7% | < 35% met |
+| Active deaths before 60 | 10.0% | 8.7% | <= 12% met |
+| Death age median active / greedy | 77 / 58 | 77 / 58 | greedy earlier: met |
+| Final cash median passive / active | 30,199 / 1,128,205 (37.4x) | 48,289 / 1,043,140 (21.6x) | < 10x MISSED |
+
+Honest note: the median ratio improved from 37x to 21.6x but misses the <10x goal. Active income comes mostly from assets (compound yield), not overtime (overtime is ~65 AP per life), so diminishing returns on overtime alone cannot close the gap; closing it needs asset-yield damping or a higher passive wage.

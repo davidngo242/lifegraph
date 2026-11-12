@@ -167,6 +167,9 @@ test('a trust fund is released once when advancing through adulthood', async () 
 test('invested_ap boosts rewards, mitigates risks and appends strategic log note', async () => {
   await seed('qa_invested_ap', {
     age: 22,
+    nationality: 'Việt Nam',
+    occupation: 'Lao động tự do',
+    housing: { tier: 1 },
     cash: 1000,
     vitality: 80,
     burnout: 20,
@@ -216,8 +219,9 @@ test('invested_ap boosts rewards, mitigates risks and appends strategic log note
 
   assert.equal(res.status, 200);
   const char = res.data.character;
-  const wageNet = (res.data.passiveSummary?.wageIncome || 0) - (res.data.passiveSummary?.livingCost || 0);
-  assert.equal(char.cash, 4000 + wageNet); // 1000 + 3000 (boosted by 2 invested AP) + adult wage - living cost
+  assert.equal(res.data.passiveSummary.wageIncome, 3906); // age 23, freelance, Việt Nam (T2)
+  assert.equal(res.data.passiveSummary.livingCost, 3300); // housing tier 1
+  assert.equal(char.cash, 4606); // 1000 + 3000 (boosted by 2 invested AP) + (3906 - 3300)
   assert.equal(char.karma, 66);
   assert.equal(char.vitality, 72);
   assert.equal(char.burnout, 21); // 20 + 10 (mitigated) - 4 (annual passive) - 5 (1 unused AP)

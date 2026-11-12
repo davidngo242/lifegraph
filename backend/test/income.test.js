@@ -59,3 +59,12 @@ test('debt floor still applies when living cost exceeds wage', async () => {
   if (c.is_deceased) return;
   assert.ok(c.cash >= CASH_FLOOR);
 });
+
+test("retiree with no assets nets >= 0 at ages 66..100 (pension floor covers living cost)", () => {
+  for (const tier of [1, 2]) for (const ct of ["T1", "T2", "T3"]) for (const occ of ["Kỹ sư", "Lao động tự do", "Giảng viên", ""]) {
+    for (let a = 66; a <= 100; a += 4) {
+      const r = computeAnnualIncome({ age: a, occupation: occ, housingTier: tier, countryTier: ct });
+      assert.ok(r.net >= 0, `age ${a} ${ct} ${occ} tier${tier} net ${r.net}`);
+    }
+  }
+});
