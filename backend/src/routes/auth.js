@@ -164,4 +164,5 @@ router.post('/link-guest', requireAccount, async (req, res) => {
   }
 });
 
+export { requireAccount };
 export default router;

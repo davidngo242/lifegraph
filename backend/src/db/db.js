@@ -7,6 +7,7 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { executeProceduralRebirth } from '../engine/rebirthEngine.js';
 import { initializeStartingNpcs } from '../engine/npcEngine.js';
 import { setRngStateResolver, newSeed } from '../engine/rng.js';
+import { SHARED_LINEAGE_SCHEMA } from './sharedLineageSchema.js';
 
 const { Pool } = pg;
 
@@ -360,6 +361,9 @@ export function seedInitialData(lineageParent = null, karmaPerks = {}) {
   return freshChar;
 }
 
+/** Cho sharedLineageStore: pool Postgres (null ở chế độ bộ nhớ) và thư mục dữ liệu. */
+export function getStorageHandle() { return { pool: useMock ? null : pool, dataDir: DATA_DIR }; }
+
 export async function initDb() {
   const connectionString = process.env.DATABASE_URL;
 
@@ -388,6 +392,7 @@ export async function initDb() {
         token_epoch INT NOT NULL DEFAULT 0,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )`);
+      await pool.query(SHARED_LINEAGE_SCHEMA);
       useMock = false;
       return;
     } catch (err) {

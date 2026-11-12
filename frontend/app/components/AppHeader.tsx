@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Home, Play, Sparkles } from 'lucide-react';
 import Tooltip from './Tooltip';
 import HeaderMacroWeather from './HeaderMacroWeather';
@@ -19,6 +19,11 @@ export default function AppHeader(props: any) {
   } = props;
   const account = useAccount();
   const [showAccountModal, setShowAccountModal] = useState(false);
+  useEffect(() => { // cho phép Bia Tưởng Niệm chung (khách) mở hộp thoại tài khoản
+    const open = () => setShowAccountModal(true);
+    window.addEventListener('lifegraph:open-account', open);
+    return () => window.removeEventListener('lifegraph:open-account', open);
+  }, []);
   return (
   <>
   <header className="border-b border-[var(--border-subtle)] bg-[var(--bg-header)] backdrop-blur-md px-2 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-50 gap-1.5 sm:gap-3 max-w-full overflow-visible transition-colors duration-250">
