@@ -68,6 +68,7 @@ import {
 
 import crypto from 'node:crypto';
 import { sessionMutations } from '../middleware/sessionMutations.js';
+import { recordWhatIfSnapshot } from './whatif.js';
 
 const router = express.Router();
 router.use(sessionMutations);
@@ -3649,6 +3650,7 @@ router.post('/tick', async (req, res) => {
     const visuals = generateCharacterVisuals(character, assets);
     const totalAssets = assets.reduce((sum, a) => sum + Number(a.current_value || 0), 0);
     const netWorth = (Number(character.cash) || 0) + totalAssets;
+    await recordWhatIfSnapshot(character, assets, relationships, npcs, getSessionData().rng); // Nếu như…: không tiêu RNG
     const aspiration = evaluateAspirationProgress(character, assets, relationships);
 
     res.json({
