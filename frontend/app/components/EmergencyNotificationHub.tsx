@@ -13,6 +13,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import Tooltip from './Tooltip';
+import ModalShell from './ModalShell';
 
 export interface EmergencyAlert {
   id: string;
@@ -89,7 +90,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
 
       {/* POPUP MODAL DIALOG (Thay vì thông báo lơ lửng trên web) */}
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-in fade-in">
+        <ModalShell label="Trung tâm thông báo khẩn cấp" className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-in fade-in">
           <div className="relative w-full max-w-lg bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col max-h-[88vh] overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between pb-3.5 border-b border-[var(--border-subtle)]">
@@ -124,7 +125,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
                 </div>
               </div>
 
-              <button
+              <button aria-label="Đóng"
                 onClick={() => setIsOpen(false)}
                 className="p-1.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)] transition"
               >
@@ -215,7 +216,7 @@ export default function EmergencyNotificationHub({ alerts, onDismiss }: Emergenc
               </button>
             </div>
           </div>
-        </div>
+        </ModalShell>
       )}
     </>
   );

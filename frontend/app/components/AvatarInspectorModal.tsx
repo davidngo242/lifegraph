@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import type { AvatarReactionType } from './Dynamic3DAvatar';
 import { X, Sparkles, Eye, Sliders, Layers, RotateCcw, Activity, ShieldCheck, Heart } from 'lucide-react';
+import ModalShell from './ModalShell';
 
 const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
@@ -50,10 +51,10 @@ export default function AvatarInspectorModal({
   const activeReaction = inspectorReaction || defaultReaction;
 
   return (
-    <div className="fixed inset-0 z-[60] bg-black/85 backdrop-blur-xl flex items-center justify-center p-3 sm:p-5 animate-in fade-in select-none">
+    <ModalShell label="Phòng kiểm định nhân vật" className="fixed inset-0 z-[60] bg-black/85 backdrop-blur-xl flex items-center justify-center p-3 sm:p-5 animate-in fade-in select-none" onClose={onClose}>
       <div className="max-w-4xl w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 sm:p-6 shadow-2xl relative flex flex-col gap-4 max-h-[92vh] overflow-y-auto custom-scrollbar">
         {/* Close Button */}
-        <button
+        <button aria-label="Đóng"
           onClick={() => {
             setInspectorReaction(null);
             onClose();
@@ -222,6 +223,6 @@ export default function AvatarInspectorModal({
           </div>
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }

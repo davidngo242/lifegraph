@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Keyboard, X, Sparkles, Zap, Play, Volume2, BookOpen, Film, AlertTriangle } from 'lucide-react';
+import ModalShell from './ModalShell';
 
 interface KeyboardShortcutsModalProps {
   isOpen: boolean;
@@ -75,7 +76,7 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShor
   ];
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
+    <ModalShell label="Phím tắt" className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in" onClose={onClose}>
       <div className="relative w-full max-w-xl max-h-[92vh] flex flex-col bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-4 sm:p-6 md:p-7 shadow-2xl overflow-hidden transition-colors duration-200">
         {/* Ambient Glow */}
         <div className="absolute top-0 right-0 w-64 h-32 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -97,7 +98,7 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShor
               </p>
             </div>
           </div>
-          <button
+          <button aria-label="Đóng"
             onClick={onClose}
             className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1.5 rounded-xl hover:bg-[rgba(255,255,255,0.06)] transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
           >
@@ -136,6 +137,6 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShor
           </span>
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }

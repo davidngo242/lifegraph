@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { formatTrait, getCountryFlag, getCountryTierBadge } from '../utils/traitUtils';
 import Tooltip from './Tooltip';
+import ModalShell from './ModalShell';
 
 interface RebirthGachaModalProps {
   karma: number;
@@ -232,12 +233,13 @@ export default function RebirthGachaModal({
 
   // 2. Main Rebirth Gacha Wheel & Karma Shop
   return (
-    <div className="fixed inset-0 z-[60] bg-black/60 dark:bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">
+    <ModalShell label="Tái sinh" className="fixed inset-0 z-[60] bg-black/60 dark:bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">
       <div className="max-w-xl w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-3xl p-5 md:p-7 shadow-2xl relative overflow-hidden flex flex-col max-h-[95vh] overflow-y-auto custom-scrollbar transition-colors duration-200">
         {onClose && (
           <button
             onClick={onClose}
             className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] transition z-10 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
+            aria-label="Đóng"
           >
             <X className="w-5 h-5" />
           </button>
@@ -629,6 +631,7 @@ export default function RebirthGachaModal({
                   type="button"
                   onClick={() => setShowTraitPicker(false)}
                   className="p-1 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
+                  aria-label="Đóng"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -913,7 +916,7 @@ export default function RebirthGachaModal({
           </div>
         )}
       </div>
-    </div>
+    </ModalShell>
   );
 }
 

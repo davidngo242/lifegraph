@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { formatCurrency } from '../utils/currencyUtils';
 import Tooltip from './Tooltip';
+import ModalShell from './ModalShell';
 
 interface Asset {
   id: string;
@@ -220,10 +221,10 @@ export default function AssetDetailModal({
     : marketAssets.filter(a => a.tier === selectedTierFilter);
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+    <ModalShell label="Chi tiết tài sản" className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-4 bg-black/85 backdrop-blur-md animate-in fade-in" onClose={onClose}>
       <div className="relative w-full max-w-4xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 md:p-6 shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
         {/* Close Button */}
-        <button
+        <button aria-label="Đóng"
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
         >
@@ -627,6 +628,6 @@ export default function AssetDetailModal({
           )}
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }

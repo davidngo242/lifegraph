@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Heart, Users, Baby, Gift, Sparkles, X, AlertCircle, Lock } from 'lucide-react';
+import ModalShell from './ModalShell';
 
 interface Relationship {
   id: string;
@@ -64,10 +65,10 @@ export default function FamilyDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <ModalShell label="Chi tiết gia đình" className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md" onClose={onClose}>
       <div className="relative w-full max-w-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
         {/* Close Button */}
-        <button
+        <button aria-label="Đóng"
           onClick={onClose}
           className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
         >
@@ -310,7 +311,7 @@ export default function FamilyDetailModal({
           )}
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }
 

@@ -14,6 +14,7 @@ import {
   ArrowRight,
   ShieldCheck
 } from 'lucide-react';
+import ModalShell from '../ModalShell';
 
 interface SurvivalCrisisMiniGameProps {
   nationality?: string;
@@ -175,12 +176,13 @@ export default function SurvivalCrisisMiniGame({
   const activeCheckpoint = checkpoints[Math.min(currentStep, checkpoints.length - 1)];
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-4 bg-black/90 backdrop-blur-md animate-in fade-in">
+    <ModalShell label="Minigame khủng hoảng sinh tồn" className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-4 bg-black/90 backdrop-blur-md animate-in fade-in">
       <div className="relative w-full max-w-2xl bg-[var(--bg-card)] border border-rose-500/40 rounded-3xl p-5 md:p-8 shadow-2xl flex flex-col overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-slate-400 hover:text-white transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
+          aria-label="Đóng"
         >
           <X className="w-4 h-4" />
         </button>
@@ -372,7 +374,7 @@ export default function SurvivalCrisisMiniGame({
           </div>
         )}
       </div>
-    </div>
+    </ModalShell>
   );
 }
 

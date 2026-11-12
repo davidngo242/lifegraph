@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { ChevronLeft, Film, Sparkles, Compass, Clapperboard, MousePointerClick } from 'lucide-react';
 import InteractiveScene2D from './InteractiveScene2D';
 import Tooltip from './Tooltip';
+import ModalShell from './ModalShell';
 
 interface CinemaDecisionRoomModalProps {
   isOpen: boolean;
@@ -36,7 +37,7 @@ export default function CinemaDecisionRoomModal({
     /fever|river|crisis|sinh tử|nguy cấp|đuối nước|cứu hộ/i.test(activeScenario?.arc_id || '');
 
   const modal = (
-    <div className="fixed inset-0 z-[60] bg-[var(--bg-canvas)] flex flex-col justify-between overflow-hidden animate-in fade-in duration-300 select-none">
+    <ModalShell label="Phòng quyết định điện ảnh" className="fixed inset-0 z-[60] bg-[var(--bg-canvas)] flex flex-col justify-between overflow-hidden animate-in fade-in duration-300 select-none">
       {/* =========================================================================
           1. TOP CINEMATIC 21:9 LETTERBOX BAR (Hollywood Production Header)
           ========================================================================= */}
@@ -207,7 +208,7 @@ export default function CinemaDecisionRoomModal({
           ))}
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 
   // Render qua portal để thoát khỏi stacking-context của <main> (z-10), nếu không header sticky z-50 sẽ đè lên modal.

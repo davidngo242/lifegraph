@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { X, Sparkles, Check, Heart, Shield, ArrowRight, Award } from 'lucide-react';
 import { soundFx } from '../utils/soundEffects';
+import ModalShell from './ModalShell';
 
 export interface PetCatalogItem {
   id: string;
@@ -156,7 +157,7 @@ export default function PetSanctuaryModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <ModalShell label="Thánh địa linh thú" className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200" onClose={onClose}>
       <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-2xl p-4 sm:p-6 text-[var(--text-primary)]">
         {/* Top Header */}
         <div className="flex items-start sm:items-center justify-between gap-2 pb-4 border-b border-[var(--border-subtle)]">
@@ -182,6 +183,7 @@ export default function PetSanctuaryModal({
           <button
             onClick={onClose}
             className="p-2 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
+            aria-label="Đóng"
           >
             <X className="w-5 h-5" />
           </button>
@@ -359,6 +361,6 @@ export default function PetSanctuaryModal({
           Linh thú 3D được hiển thị trực tiếp trong phòng diễn võ và xoay cùng nhân vật khi kiểm định 360°.
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }

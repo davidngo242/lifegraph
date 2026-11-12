@@ -17,6 +17,7 @@ import {
   Lightbulb,
   Coins
 } from 'lucide-react';
+import ModalShell from './ModalShell';
 
 interface GameGuideModalProps {
   isOpen: boolean;
@@ -32,10 +33,7 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
-      onClick={onClose}
-    >
+    <ModalShell label="Hướng dẫn trò chơi" className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-in fade-in duration-200" onClose={onClose} onClick={onClose}>
       <div 
         className="relative w-full max-w-4xl max-h-[92vh] bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl shadow-2xl flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
@@ -639,6 +637,6 @@ export default function GameGuideModal({ isOpen, onClose }: GameGuideModalProps)
         </div>
 
       </div>
-    </div>
+    </ModalShell>
   );
 }

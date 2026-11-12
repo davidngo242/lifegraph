@@ -913,3 +913,18 @@ button { white-space: normal; overflow-wrap: anywhere; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+/* Entrance animations (thay plugin tailwindcss-animate bị thiếu).
+   Dùng thuộc tính riêng `scale`/`translate` để không đè `transform` của Tailwind (vd. -translate-x-1/2). */
+@keyframes lf-enter {
+  from { opacity: var(--lf-o, 1); scale: var(--lf-s, 1); translate: var(--lf-x, 0) var(--lf-y, 0); }
+  to   { opacity: 1; scale: 1; translate: 0 0; }
+}
+.animate-in { animation: lf-enter 0.2s ease-out both; }
+.fade-in { --lf-o: 0; }
+.zoom-in-95 { --lf-s: 0.95; }
+.slide-in-from-top-1 { --lf-y: -0.25rem; }
+.slide-in-from-top-2 { --lf-y: -0.5rem; }
+.slide-in-from-top-3 { --lf-y: -0.75rem; }
+.slide-in-from-bottom-2 { --lf-y: 0.5rem; }
+.slide-in-from-right { --lf-x: 1rem; }

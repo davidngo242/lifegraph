@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Play, Pause, RotateCcw, Download, Film, X, Sparkles } from 'lucide-react';
+import ModalShell from './ModalShell';
 
 interface DeathRecapModalProps {
   characterName: string;
@@ -242,7 +243,7 @@ export default function DeathRecapVideoModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in">
+    <ModalShell label="Thước phim dĩ vãng" className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in">
       <div className="max-w-2xl w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-4 sm:p-6 shadow-2xl relative max-h-[94vh] overflow-y-auto flex flex-col items-center">
         {/* Top Control Bar */}
         <div className="w-full flex items-center justify-between gap-2 pb-3 border-b border-[var(--border-subtle)] mb-4">
@@ -250,7 +251,7 @@ export default function DeathRecapVideoModal({
             <Film className="w-4 h-4" />
             <span>Thước Phim Dĩ Vãng (15s Death Video Recap)</span>
           </div>
-          <button
+          <button aria-label="Đóng"
             onClick={onClose}
             className="p-1.5 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)] transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
           >
@@ -298,7 +299,7 @@ export default function DeathRecapVideoModal({
           </button>
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 
 interface TooltipProps {
   content: React.ReactNode;
@@ -18,6 +18,25 @@ export default function Tooltip({
   className = ''
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const tipId = useId();
+  const hideTimer = useRef<number>();
+  useEffect(() => () => window.clearTimeout(hideTimer.current), []);
+
+  // Cảm ứng: chạm vào để mở, chạm ra ngoài hoặc sau 4 giây thì đóng.
+  useEffect(() => {
+    if (!isVisible) return;
+    const close = (e: Event) => {
+      if (!rootRef.current?.contains(e.target as Node)) setIsVisible(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsVisible(false); };
+    document.addEventListener('pointerdown', close);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', close);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [isVisible]);
 
   const getPositionClass = () => {
     if (position === 'bottom') {
@@ -56,8 +75,16 @@ export default function Tooltip({
   return (
     <div
       className={`relative ${isFullWidth ? 'flex w-full' : 'inline-flex'} items-center ${className}`}
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
+      ref={rootRef}
+      aria-describedby={isVisible && content ? tipId : undefined}
+      onPointerEnter={(e) => { if (e.pointerType === 'mouse') setIsVisible(true); }}
+      onPointerLeave={(e) => { if (e.pointerType === 'mouse') setIsVisible(false); }}
+      onPointerUp={(e) => {
+        if (e.pointerType === 'mouse' || !content) return;
+        setIsVisible(true);
+        window.clearTimeout(hideTimer.current);
+        hideTimer.current = window.setTimeout(() => setIsVisible(false), 4000);
+      }}
       onFocus={() => setIsVisible(true)}
       onBlur={() => setIsVisible(false)}
     >
@@ -65,6 +92,7 @@ export default function Tooltip({
       {isVisible && content && (
         <div
           role="tooltip"
+          id={tipId}
           className={`absolute z-[9999] ${getPositionClass()} px-3 py-2 text-[12px] leading-snug font-sans text-[var(--text-primary)] bg-[var(--bg-popover,var(--bg-card))] border border-[var(--border-subtle)] rounded-xl shadow-[0_10px_35px_rgba(0,0,0,0.35)] backdrop-blur-xl pointer-events-none whitespace-normal min-w-[150px] max-w-[280px] animate-in fade-in zoom-in-95 duration-150`}
         >
           {content}

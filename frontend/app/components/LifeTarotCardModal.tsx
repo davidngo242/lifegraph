@@ -3,6 +3,7 @@
 import React, { useRef, useState } from 'react';
 import { Sparkles, Download, Copy, Check, X, Award, Skull, ShieldCheck, Heart, MapPin, Zap, Trophy, Crown, Flame, Star, BookOpen, Users, Compass } from 'lucide-react';
 import { formatCurrency } from '../utils/currencyUtils';
+import ModalShell from './ModalShell';
 
 interface LifeTarotCardModalProps {
   character: any;
@@ -386,12 +387,13 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-5 bg-black/85 backdrop-blur-xl animate-in fade-in">
+    <ModalShell label="Thẻ bài cuộc đời" className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-5 bg-black/85 backdrop-blur-xl animate-in fade-in" onClose={onClose}>
       <div className="relative w-full max-w-xl bg-[var(--bg-card)] border-2 border-amber-500/60 rounded-3xl p-5 md:p-6 shadow-2xl flex flex-col overflow-hidden max-h-[95vh] text-[var(--text-primary)]">
         {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
+          aria-label="Đóng"
         >
           <X className="w-4 h-4" />
         </button>
@@ -590,6 +592,6 @@ ${achievements.map(a => `  ${a.isUnlocked ? '✅' : '⏳'} ${a.icon} ${a.title} 
           </button>
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }

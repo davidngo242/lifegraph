@@ -17,6 +17,7 @@ import {
   X
 } from 'lucide-react';
 import { formatCurrency } from '../../utils/currencyUtils';
+import ModalShell from '../ModalShell';
 
 export interface YearEndReflectionModalProps {
   isOpen: boolean;
@@ -76,7 +77,7 @@ export default function YearEndReflectionModal({
   };
 
   const modal = (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-xl animate-in fade-in duration-300">
+    <ModalShell label="Tổng kết cuối năm" className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-xl animate-in fade-in duration-300">
       {/* Background radial glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center">
         <div className="w-[600px] h-[600px] rounded-full bg-gradient-to-r from-amber-500/15 via-rose-500/10 to-indigo-500/15 blur-3xl animate-pulse" />
@@ -109,6 +110,7 @@ export default function YearEndReflectionModal({
               onClick={onClose}
               disabled={isAdvancing}
               className="p-1.5 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
+              aria-label="Đóng"
               title="Đóng cửa sổ"
             >
               <X className="w-4 h-4" />
@@ -322,7 +324,7 @@ export default function YearEndReflectionModal({
           </div>
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 
   // Render qua portal để thoát khỏi stacking-context của <main> (z-10), nếu không header sticky z-50 sẽ đè lên modal.

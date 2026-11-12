@@ -20,6 +20,7 @@ import {
 import SkillTreeTab, { DEFAULT_TREE } from './rpg/SkillTreeTab';
 import { SKILL_BRANCHES } from './SkillSelectorModal';
 import Tooltip from './Tooltip';
+import ModalShell from './ModalShell';
 
 interface SkillTreeModalProps {
   character: any;
@@ -51,7 +52,7 @@ export default function SkillTreeModal({
   const currentCertBranch = SKILL_BRANCHES.find(b => b.id === selectedCertBranch) || SKILL_BRANCHES[0];
 
   return (
-    <div className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-md flex items-center justify-center p-3 md:p-6 animate-in fade-in duration-200">
+    <ModalShell label="Cây kỹ năng" className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-md flex items-center justify-center p-3 md:p-6 animate-in fade-in duration-200" onClose={onClose}>
       <div className="max-w-4xl w-full max-h-[92vh] bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[var(--text-primary)] transition-colors">
         
         {/* Modal Top Header Bar */}
@@ -215,6 +216,6 @@ export default function SkillTreeModal({
           )}
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }
