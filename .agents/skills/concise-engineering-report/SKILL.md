@@ -30,11 +30,12 @@ Tổng hợp, không sao chép báo cáo của từng agent. Đọc REPORT.md ch
 Trạng thái: Hoàn thành / Chưa hoàn thành / Bị chặn
 Đã thực hiện: (thay đổi quan trọng)
 Kiểm thử: build · unit/integration/e2e · số thực
-Tồn đọng: (chỉ việc thật sự cần lưu ý, kể cả lỗi có từ trước)
+Vướng mắc / Cần Sếp chốt: (mỗi mục 1 dòng + đề xuất của Lead; "không có" nếu trống)
 Git: commit / push / nhánh
-Tiếp theo: (chỉ khi cần người dùng duyệt/hành động)
+Tiếp theo: (việc Lead sẽ làm ngay, hoặc hành động cần Sếp; luôn có)
 ```
-Độ dài: việc thường ~100–150 từ; phức tạp tối đa ~250 từ; không cố độn cho đủ. Sự cố nghiêm trọng: được dài hơn để đủ thông tin. Bỏ mục trống.
+Lỗi/rủi ro còn tồn tại luôn nằm trong "Vướng mắc"; không giấu để báo cáo đẹp. Sếp phải đọc xong là biết: đã xong gì, đang vướng gì, cần mình làm gì.
+Độ dài: việc thường ~100–150 từ; phức tạp tối đa ~250 từ; không cố độn cho đủ. Sự cố nghiêm trọng: được dài hơn để đủ thông tin. Không bỏ mục "Vướng mắc" và "Tiếp theo".
 
 ## 6. Tiết kiệm context
 Dùng `tail`/`grep` có giới hạn, không cat log lớn; ưu tiên số đo hơn ảnh; đọc file lớn bằng offset/limit; không đọc lại điều đã biết.

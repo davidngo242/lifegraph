@@ -408,7 +408,8 @@ test('Cultural Landscape Backdrop: Panoramic silhouettes, national landmarks & s
 // SUITE 6: Zero-Overlap Tree Spatial Geometry & Unified All-in-One Cockpit Audit
 // ============================================================================
 test('Zero-Overlap Layout: Action node separation, clear zenith sky, family root conduits & bottom symmetry', () => {
-  const treeContent = readFile('frontend/app/components/rpg/DynamicLifeTree.tsx');
+  // Dữ liệu node (angleDeg...) nằm ở lifeTreeNodes.ts sau khi tách khỏi DynamicLifeTree.tsx
+  const treeContent = readFile('frontend/app/components/rpg/DynamicLifeTree.tsx') + readFile('frontend/app/components/rpg/lifeTreeNodes.ts');
   const backdropContent = readFile('frontend/app/components/rpg/CulturalLandscapeBackdrop.tsx');
   const pageContent = readFile('frontend/app/page.tsx');
 

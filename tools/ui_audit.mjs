@@ -324,6 +324,7 @@ for (const vp of VIEWPORTS) {
       };
       rec.smallFontTop = topGroups(m.smallFont, (i) => `${i.t}|${i.fs}`, 15);
       rec.contrastWorst = m.contrast.filter((i) => !i.grad).sort((a, b) => a.cr - b.cr).slice(0, 25);
+      rec.contrastGradientItems = m.contrast.filter((i) => i.grad).sort((x, y) => x.cr - y.cr).slice(0, 10);
       rec.vertical = m.vertical.slice(0, 20);
       rec.hitAreaTop = mobile ? topGroups(m.hit, (i) => `${i.tag}|${i.t}|${i.w}x${i.h}`, 20) : [];
       rec.consoleErrors = errs.slice(0, 20);
@@ -382,6 +383,7 @@ lines.push('', '## Vuot nguong' + (STRICT ? ' (--strict: exit 1)' : ' (canh bao)
 lines.push(violations.length ? violations.map((v) => `- ${v}`).join('\n') : '- Khong co.');
 for (const r of results.filter((x) => !x.failed)) {
   lines.push('', `## ${r.theme} @ ${r.viewport}`);
+  if (r.contrastGradientItems && r.contrastGradientItems.length) lines.push('', '**Chu tren nen gradient (xem anh de xac nhan)**', '', ...r.contrastGradientItems.map((i) => `- ${i.cr}:1 "${i.t}" ${i.fs}px ${i.fg} tren ${i.bg} @(${i.x},${i.y})`));
   if (r.contrastWorst.length) lines.push('', '**Tuong phan thap nhat**', '', ...r.contrastWorst.slice(0, 10).map((i) => `- ${i.cr}:1 "${i.t}" ${i.fs}px ${i.fg} tren ${i.bg}`));
   if (r.vertical.length) lines.push('', '**Chu xep doc / bi cat**', '', ...r.vertical.slice(0, 10).map((i) => `- [${i.kind}] <${i.tag}> ${i.w}x${i.h} "${i.t}" @(${i.x},${i.y})`));
   if (r.smallFontTop.length) lines.push('', '**Font < 12px (top)**', '', ...r.smallFontTop.slice(0, 8).map((i) => `- ${i.fs}px x${i.count} "${i.t}"`));

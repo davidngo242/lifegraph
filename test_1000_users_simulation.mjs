@@ -300,7 +300,8 @@ test('1,000-User Game Engine Simulation: All 1,000 trajectories simulate lifecyc
 test('1,000-User Cultural Landscape: All 1,000 users across 14 nations map to dedicated iconic silhouettes', () => {
   const users = generate1000Users();
   const backdropSource = readFile('frontend/app/components/rpg/CulturalLandscapeBackdrop.tsx');
-  const treeSource = readFile('frontend/app/components/rpg/DynamicLifeTree.tsx');
+  // Dữ liệu node (angleDeg...) nằm ở lifeTreeNodes.ts sau khi tách khỏi DynamicLifeTree.tsx
+  const treeSource = readFile('frontend/app/components/rpg/DynamicLifeTree.tsx') + readFile('frontend/app/components/rpg/lifeTreeNodes.ts');
 
   // Verify country mapping logic across all 14 LifeGraph nations
   const countryDist = {};

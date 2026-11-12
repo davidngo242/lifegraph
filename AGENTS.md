@@ -63,7 +63,7 @@ Làm nhiều, báo cáo ít. Chi tiết: `.agents/skills/concise-engineering-rep
 * **Không** báo: chạy/xong lệnh nền, chờ Reviewer/Tester, "đang kiểm tra lại", "chưa commit vì đang chờ", "giờ em làm bước X", lặp lại tiến độ cũ. Khi chờ agent: im lặng, kết thúc lượt, đợi thông báo.
 * **Chỉ** nói giữa chừng khi có blocker, cần quyết định, rủi ro quan trọng; tối đa 1 câu.
 * Subagent: Reviewer chỉ nêu Critical/Major/Minor kèm `file:dòng`; Tester nêu tổng/pass/fail/skip, lỗi thật, lỗi mới hay có từ trước (có bằng chứng); Developer nêu hạng mục, file, kết quả, vấn đề còn lại. Tối đa 10 dòng, chi tiết vào REPORT.md. Không cắt thông tin lỗi.
-* Báo cáo cuối **một** bản: Trạng thái · Đã thực hiện · Kiểm thử (số thực) · Tồn đọng · Git · Tiếp theo (chỉ khi cần Sếp duyệt). Việc thường ~100–150 từ, phức tạp ≤ ~250 từ; sự cố nghiêm trọng được dài hơn.
+* Báo cáo cuối **một** bản, luôn đủ 6 mục: Trạng thái · Đã thực hiện · Kiểm thử (số thực) · **Vướng mắc / Cần Sếp chốt** (kèm đề xuất của Lead, ghi "không có" nếu trống) · Git · **Tiếp theo** (việc Lead sẽ làm ngay, hoặc hành động cần Sếp). Việc thường ~100–150 từ, phức tạp ≤ ~250 từ; sự cố nghiêm trọng được dài hơn.
 * Quy định này không thay thế 3 chốt chặn: không bỏ review/test, không che lỗi hay cảnh báo.
 
 ---

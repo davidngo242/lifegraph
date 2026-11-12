@@ -14,3 +14,9 @@
 ## Còn lại
 - Tách `DynamicLifeTree.tsx` (~3,6k dòng) và `page.tsx` (~2,1k dòng).
 - Hook Stop nằm ngoài repo.
+
+## Bổ sung
+- Tách dữ liệu node Cây Đời ra `components/rpg/lifeTreeNodes.ts` (`buildLifeTreeNodes`, chuyển nguyên văn; `DynamicLifeTree.tsx` 3,6k → 3,15k dòng). Hai test đọc chuỗi nguồn nay đọc cả file mới.
+- Ba chữ trên nền gradient ở Obsidian/Cyberpunk ("LG", "Lên Lớp 1", "Vòng Đời & Hành Động") là chữ tối #020617 trên nút gradient vàng/xanh; ảnh chụp xác nhận đọc rõ. Cảnh báo nhầm.
+- Mẫu báo cáo cuối nay luôn có "Vướng mắc / Cần Sếp chốt" và "Tiếp theo" (xem `AGENTS.md` mục 2c).
+- Không tách `page.tsx`: toàn state và handler đan xen, tách thủ công dễ gây lỗi; nên làm cùng một đợt refactor có kiểm thử riêng.
