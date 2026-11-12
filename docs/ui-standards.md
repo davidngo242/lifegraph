@@ -101,6 +101,8 @@ stateDiagram-v2
 
 ## 3. Hệ Thống Thanh Lệnh HUD & Trạng Thái Nguy Cấp (CommandBarHUD & Emergency SOS)
 
+> **Đã gỡ (2026-11-12):** component này không còn được render trong ứng dụng và đã bị xoá khỏi mã nguồn; mô tả dưới đây chỉ còn giá trị lịch sử. Phím tắt hiện nằm ở `KeyboardShortcutsModal`, thông báo ở `UnifiedNotificationCenter`, thiết lập ở `SystemSettingsPopover`.
+
 Thanh công cụ `CommandBarHUD` đóng vai trò là bảng điều khiển gắn cố định (Sticky Cockpit Bar) trên buồng lái, giúp người chơi phản xạ nhanh mà không che khuất màn hình chơi.
 
 ### 3.1. Bố Cục Phân Vùng Lệnh (Command Bar Layout)
@@ -1296,8 +1298,8 @@ Nhằm xóa bỏ hoàn toàn hiện tượng chữ đồng màu, chìm màu ho�
 6. **`GameGuideModal.tsx`**: Cẩm nang sinh mệnh 2 chế độ (Mode 1: Bản đồ vui nhộn 4 đồ chơi AP/HP/Burnout/Tiền; Mode 2: RPG 3 Trụ Cột, 4 Quý Nhân, Tích Sản).
 7. **`AvatarInspectorModal.tsx`**: Khung soi chiếu 3D Avatar, tải khung xương mượt mà không nhấp nháy, bảng tâm trạng và nút biểu cảm.
 8. **`LifeTarotCardModal.tsx`**: Thẻ bài Định Mệnh Tarot, 4 chỉ số sinh mệnh, dấu ấn cuộc đời và phòng vinh danh Hall of Fame.
-9. **`AncestralMemorialModal.tsx`**: Bia tưởng niệm tổ tiên, bộ lọc nhánh phả hệ, văn bia tiền nhân.
-10. **`AncestralFamilyTree.tsx`**: Cây gia phả tương tác, thẻ tổ tiên, đền thờ cội nguồn.
+9. ~~**`AncestralMemorialModal.tsx`**~~ (đã gỡ 2026-11-12): Bia tưởng niệm tổ tiên, bộ lọc nhánh phả hệ, văn bia tiền nhân.
+10. ~~**`AncestralFamilyTree.tsx`**~~ (đã gỡ 2026-11-12): Cây gia phả tương tác, thẻ tổ tiên, đền thờ cội nguồn.
 11. **`EpitaphModal.tsx`**: Văn bia khi nhân vật quy tiên, biểu tượng đầu lâu huyền bí, nguyên nhân tử vong và nút hồi hương luân hồi.
 12. **`EmergencyRescueModal.tsx`**: Hộp thoại cứu hộ khủng hoảng nợ và sức khỏe khẩn cấp SOS.
 13. **`YearEndReflectionModal.tsx`**: Nghi thức chiêm nghiệm cuối năm, 3 lời thệ nguyện đầu năm 1 chạm (Tích sản, Dưỡng sinh, Nhân mạch).

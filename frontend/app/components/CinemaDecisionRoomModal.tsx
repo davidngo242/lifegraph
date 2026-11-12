@@ -37,7 +37,7 @@ export default function CinemaDecisionRoomModal({
     /fever|river|crisis|sinh tử|nguy cấp|đuối nước|cứu hộ/i.test(activeScenario?.arc_id || '');
 
   const modal = (
-    <ModalShell label="Phòng quyết định điện ảnh" className="fixed inset-0 z-[60] bg-[var(--bg-canvas)] flex flex-col justify-between overflow-hidden animate-in fade-in duration-300 select-none">
+    <ModalShell label="Phòng quyết định điện ảnh" onClose={onClose} className="fixed inset-0 z-[60] bg-[var(--bg-canvas)] flex flex-col justify-between overflow-hidden animate-in fade-in duration-300 select-none">
       {/* =========================================================================
           1. TOP CINEMATIC 21:9 LETTERBOX BAR (Hollywood Production Header)
           ========================================================================= */}

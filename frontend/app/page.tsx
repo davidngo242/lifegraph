@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import StatBar from './components/StatBar';
 import NarrativeFeed from './components/NarrativeFeed';
 import EventCard from './components/EventCard';
 import NPCDialogCard from './components/NPCDialogCard';
@@ -32,12 +31,10 @@ import YearEndReflectionModal from './components/rpg/YearEndReflectionModal';
 import type { AvatarReactionType } from './components/Dynamic3DAvatar';
 import AspirationUpgradeModal from './components/AspirationUpgradeModal';
 import LifeGraphHomePortal from './components/LifeGraphHomePortal';
-import AncestralMemorialModal from './components/AncestralMemorialModal';
 import LifeTarotCardModal from './components/LifeTarotCardModal';
 import GameGuideModal from './components/GameGuideModal';
 import Tooltip from './components/Tooltip';
 import IncomingNpcEventModal from './components/IncomingNpcEventModal';
-import CommandBarHUD from './components/CommandBarHUD';
 import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 import EmergencyRescueModal from './components/EmergencyRescueModal';
 import { soundFx } from './utils/soundEffects';

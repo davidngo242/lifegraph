@@ -25,7 +25,6 @@ import {
   Globe2
 } from 'lucide-react';
 import { formatCurrency } from '../utils/currencyUtils';
-import AncestralFamilyTree from './AncestralFamilyTree';
 
 interface LifeGraphHomePortalProps {
   character?: any;
