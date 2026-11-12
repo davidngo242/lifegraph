@@ -17,6 +17,7 @@ import {
 import Tooltip from './Tooltip';
 import { formatTrait } from '../utils/traitUtils';
 import SidekickPetCompanion from './SidekickPetCompanion';
+import { ALL_UNLOCKED, UNLOCK_HINTS, type Unlocks } from '../lib/unlocks';
 
 const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
@@ -144,6 +145,7 @@ interface CharacterHeroBannerProps {
   onOpen3DInspector: () => void;
   onOpenPetSanctuary?: () => void;
   actionFeedback?: BannerActionFeedback | null;
+  unlocks?: Unlocks;
 }
 
 function CharacterHeroBannerInner({
@@ -157,7 +159,8 @@ function CharacterHeroBannerInner({
   isFastForwarding = false,
   onOpen3DInspector,
   onOpenPetSanctuary,
-  actionFeedback = null
+  actionFeedback = null,
+  unlocks = ALL_UNLOCKED
 }: CharacterHeroBannerProps) {
   if (!character) return null;
 
@@ -549,6 +552,7 @@ function CharacterHeroBannerInner({
               </button>
 
               {/* Bottom-Right: 3D Pet Sanctuary Trigger Button */}
+              {unlocks.pets ? (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -571,6 +575,9 @@ function CharacterHeroBannerInner({
                     : 'Nuôi Pet'}
                 </span>
               </button>
+              ) : (
+                <span role="note" className="absolute bottom-1.5 right-1.5 z-20 px-2 py-0.5 rounded-lg bg-white/95 dark:bg-slate-900/90 border border-slate-400/70 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold text-xs">{UNLOCK_HINTS.rebirth}</span>
+              )}
             </div>
           </div>
 
@@ -846,7 +853,7 @@ function CharacterHeroBannerInner({
               </div>
 
               {/* Khát vọng cuộc đời (Life Aspiration Hub) */}
-              {aspiration && (
+              {unlocks.aspiration && aspiration && (
                 <div
                   onClick={() => {
                     if (aspiration.progress >= 100 || aspiration.is_completed) {

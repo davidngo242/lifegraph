@@ -5,6 +5,7 @@ import CharacterHeroBanner from './CharacterHeroBanner';
 import ActionPointHub from './ActionPointHub';
 import MultiTabSidebar from './MultiTabSidebar';
 import type { GameState } from '../hooks/useGameState';
+import { getUnlocks } from '../lib/unlocks';
 
 // Game Cockpit (hero banner + 2-column stage/sidebar grid), extracted from page.tsx
 export default function GameCockpit({ g, netWorth }: { g: GameState; netWorth: number }) {
@@ -16,8 +17,9 @@ export default function GameCockpit({ g, netWorth }: { g: GameState; netWorth: n
     setIsYearEndModalOpen, launchMiniGame, handleChildhoodAction, handleFastForwardToSchool, handleAnnualFocus,
     handleFamilyMeal, handleFamilyMentorship, handleOvertime, handleStudy, handleWellness, handleGamble,
     handleNetworkAction, handleSmartYearAdvance, handleUnlockSkill, handleNpcInteract, handleBreakthroughAction,
-    handleRpgActivePerk, handleSeniorAction, handleDebtRelief, handleHealthCheckup,
+    handleRpgActivePerk, handleSeniorAction, handleDebtRelief, handleHealthCheckup, lineage,
   } = g;
+  const unlocks = getUnlocks(character, playerAccount, lineage);
   return (
     <>
   {/* Character Top Hero Banner (Spanning all 3 columns / 12 cols) */}
@@ -33,6 +35,7 @@ export default function GameCockpit({ g, netWorth }: { g: GameState; netWorth: n
     isFastForwarding={loading}
     onOpen3DInspector={() => setShow3DInspectorModal(true)}
     onOpenPetSanctuary={() => setShowPetSanctuaryModal(true)}
+    unlocks={unlocks}
   />
 
 
@@ -92,6 +95,7 @@ export default function GameCockpit({ g, netWorth }: { g: GameState; netWorth: n
               isPledging={isPledging}
               hiddenFlags={character.hidden_flags || []}
               isLoading={loading}
+              unlocks={unlocks}
             />
           </div>
         )}
@@ -124,6 +128,7 @@ export default function GameCockpit({ g, netWorth }: { g: GameState; netWorth: n
         onNpcInteract={handleNpcInteract}
         onOpenTarotCardModal={() => setShowTarotCardModal(true)}
         isLoading={loading}
+        unlocks={unlocks}
       />
     </div>
   </div>
