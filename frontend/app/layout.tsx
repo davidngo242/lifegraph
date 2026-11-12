@@ -37,13 +37,25 @@ export default function RootLayout({
                   if (typeof window !== 'undefined') {
                     var savedTheme = localStorage.getItem('lifegraph_theme') || 'daylight';
                     document.documentElement.setAttribute('data-theme', savedTheme);
-                    var sid = localStorage.getItem('lifegraph_session_id');
-                    if (!sid) {
-                      sid = 'user_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 9);
-                      localStorage.setItem('lifegraph_session_id', sid);
-                    }
+                    var sid = localStorage.getItem('lifegraph_session_id') || '';
                     var origFetch = window.fetch;
+                    var ready = localStorage.getItem('lifegraph_session_token') ? Promise.resolve() : null;
+                    function bootstrap() {
+                      if (!ready) {
+                        ready = origFetch('/api/game/auth/handshake', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-session-id': sid }, body: '{}' })
+                          .then(function(r) { var t = r.headers.get('x-session-token'); var id = r.headers.get('x-session-id'); if (t) localStorage.setItem('lifegraph_session_token', t); if (id) localStorage.setItem('lifegraph_session_id', id); })
+                          .catch(function() { ready = null; });
+                      }
+                      return ready;
+                    }
+
                     window.fetch = function(input, init) {
+                      var self = this;
+                      var isApi = typeof input === 'string' ? input.indexOf('/api/game/') === 0 : true;
+                      return (isApi ? bootstrap() : Promise.resolve()).then(function() { return send(self, input, init); });
+                    };
+                    function send(self, input, init) {
+                      sid = localStorage.getItem('lifegraph_session_id') || sid;
                       var headers = new Headers((init && init.headers) || {});
                       var token = localStorage.getItem('lifegraph_session_token');
                       if (token && !headers.has('x-session-token')) {
@@ -53,12 +65,14 @@ export default function RootLayout({
                         headers.set('x-session-id', sid);
                       }
                       var nextInit = Object.assign({}, init, { headers: headers });
-                      return origFetch.call(this, input, nextInit).then(function(res) {
+                      return origFetch.call(self, input, nextInit).then(function(res) {
                         try {
                           var newToken = res.headers.get('x-session-token');
                           if (newToken) {
                             localStorage.setItem('lifegraph_session_token', newToken);
                           }
+                          var newId = res.headers.get('x-session-id');
+                          if (newId) localStorage.setItem('lifegraph_session_id', newId);
                         } catch (e) {}
                         return res;
                       });

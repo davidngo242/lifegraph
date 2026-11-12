@@ -350,3 +350,30 @@ test('Cycle 5: Country Big Data: Syria & Expanded Vietnam', async () => {
   assert.ok(vietnam.assets.g3_suburban_land.includes('Sầu Riêng'));
   assert.ok(vietnam.assets.p1_rental_condo.includes('Nghỉ Dưỡng Biển'));
 });
+
+test('auth: raw unknown session id is rejected, server mints a signed one (production mode)', async () => {
+  const prev = process.env.NODE_ENV; process.env.NODE_ENV = 'production';
+  try {
+    const r = await fetch(`${base}/auth/handshake`, { method: 'POST', headers: { 'x-session-id': 'attacker_guess', 'Content-Type': 'application/json' }, body: '{}' });
+    assert.equal(r.status, 200);
+    const body = await r.json();
+    assert.notEqual(body.session_id, 'attacker_guess');
+    assert.match(body.session_id, /^g_[a-f0-9]{32}$/);
+    assert.ok(r.headers.get('x-session-token').startsWith(body.session_id));
+    const r2 = await fetch(`${base}/auth/handshake`, { method: 'POST', headers: { 'x-session-token': r.headers.get('x-session-token'), 'Content-Type': 'application/json' }, body: '{}' });
+    assert.equal((await r2.json()).session_id, body.session_id);
+  } finally { process.env.NODE_ENV = prev; }
+});
+
+test('auth: legacy cached session is claimed exactly once, then raw id is refused', async () => {
+  const prev = process.env.NODE_ENV; process.env.NODE_ENV = 'production';
+  try {
+    const legacy = 'user_legacy_cached_1';
+    db.getSessionData(legacy).claimed = false;
+    const hs = id => fetch(`${base}/auth/handshake`, { method: 'POST', headers: { 'x-session-id': id, 'Content-Type': 'application/json' }, body: '{}' }).then(async r => ({ body: await r.json(), token: r.headers.get('x-session-token') }));
+    const first = await hs(legacy);
+    assert.equal(first.body.session_id, legacy);
+    const second = await hs(legacy);
+    assert.notEqual(second.body.session_id, legacy);
+  } finally { process.env.NODE_ENV = prev; }
+});

@@ -21,7 +21,8 @@ import {
   addTotalKarma,
   buyKarmaPerk,
   getAncestralLineage,
-  addAncestralMemorial
+  addAncestralMemorial,
+  getCurrentSessionId
 } from '../db/db.js';
 import {
   SKILL_TREE,
@@ -109,13 +110,12 @@ router.get('/diagnostic', async (req, res) => {
 
 // POST /api/game/auth/handshake - Cấp phát Token có chữ ký Mật mã (Anti-Tampering)
 router.post('/auth/handshake', (req, res) => {
-  const clientProvidedId = req.body?.client_id || req.headers['x-session-id'] || 'user_' + Date.now();
-  const sanitizedId = String(clientProvidedId).replace(/[^a-zA-Z0-9_\-]/g, '').slice(0, 64);
-  const token = signSessionToken(sanitizedId);
+  // Mã phiên do server cấp (lớp 3 trong index.js đã xử lý); client chỉ nhận lại token đã ký.
+  const sessionId = getCurrentSessionId();
   res.json({
     success: true,
-    session_id: sanitizedId,
-    session_token: token,
+    session_id: sessionId,
+    session_token: signSessionToken(sessionId),
     issued_at: new Date().toISOString()
   });
 });

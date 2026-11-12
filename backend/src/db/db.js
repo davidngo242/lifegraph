@@ -91,10 +91,21 @@ process.on('SIGTERM', () => {
   process.exit(0);
 });
 
+/** Phiên cũ (tạo trước khi có xác thực chữ ký) còn trong cache và chưa được nhận lại bằng token. */
+export function isUnclaimedLegacySession(id) {
+  const s = sessions.get(id);
+  return !!s && !s.claimed;
+}
+export function claimSession(id) {
+  const s = sessions.get(id);
+  if (s) { s.claimed = true; scheduleDiskPersist(); }
+}
+
 export function getSessionData(sessionId = null) {
   const id = sessionId || getCurrentSessionId();
   if (!sessions.has(id)) {
     sessions.set(id, {
+      claimed: true,
       character: null, // New session begins with NULL character so user lands on Home & spins Gacha!
       assets: [],
       relationships: [],
