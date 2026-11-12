@@ -153,3 +153,13 @@ test('legacy claim (postgres): an unclaimed player_accounts row is claimable exa
     } finally { process.env.NODE_ENV = prev; }
   } finally { await client.query('DELETE FROM player_accounts WHERE id=$1', [legacy]); await client.end(); }
 });
+
+test('login: per-IP cap stops username spraying; oversized username rejected; accounts.json is 0600', async () => {
+  const hit = (u) => fetch(root + A + '/login', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-forwarded-for': '203.0.113.77' }, body: JSON.stringify({ username: u, password: 'whatever12' }) }).then(r => r.status);
+  assert.equal(await hit('x'.repeat(65)), 400);
+  const statuses = [];
+  for (let i = 0; i < 62; i++) statuses.push(await hit(`spray_${process.pid}_${i}`));
+  assert.ok(statuses.slice(0, 59).every(s => s === 401));
+  assert.equal(statuses[61], 429);
+  if (process.platform !== 'win32' && !usePg) assert.equal(fs.statSync(path.join(directory, 'accounts.json')).mode & 0o777, 0o600);
+});

@@ -146,6 +146,7 @@ function saveAccountsToDisk() {
   fs.mkdirSync(DATA_DIR, { recursive: true });
   const temporary = ACCOUNTS_FILE + '.tmp';
   fs.writeFileSync(temporary, JSON.stringify(Array.from(accountsMap.values())), { encoding: 'utf-8', mode: 0o600 });
+  fs.chmodSync(temporary, 0o600);
   fs.renameSync(temporary, ACCOUNTS_FILE);
 }
 loadAccountsFromDisk();

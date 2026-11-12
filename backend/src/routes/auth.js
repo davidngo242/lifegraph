@@ -16,6 +16,7 @@ const USERNAME_RE = /^[\p{L}\p{N}_.-]{3,32}$/u;
 const PASSWORD_MIN = 8;
 const PASSWORD_MAX = 128; // chặn mật khẩu khổng lồ làm nghẽn scrypt
 const LOGIN_MAX_PER_MIN = 10;
+const LOGIN_MAX_PER_IP_PER_MIN = 60; // chặn rải nhiều tên để vắt kiệt scrypt
 const REGISTER_MAX_PER_MIN = 20;
 const GENERIC_LOGIN_ERROR = 'Sai tên đăng nhập hoặc mật khẩu.';
 const DUMMY_SALT = crypto.randomBytes(16).toString('hex');
@@ -97,8 +98,12 @@ router.post('/login', async (req, res) => {
   try {
     const username = normalizeUsername(req.body?.username);
     const password = req.body?.password;
-    if (!username || typeof password !== 'string' || !password || password.length > PASSWORD_MAX) {
+    if (!username || username.length > 64 || typeof password !== 'string' || !password || password.length > PASSWORD_MAX) {
       return res.status(400).json({ error: 'Cần nhập tên đăng nhập và mật khẩu.' });
+    }
+    if (!checkRateLimit('loginip_' + clientIp(req), LOGIN_MAX_PER_IP_PER_MIN, 60000)) {
+      logSecurityIncident('LOGIN_RATE_LIMITED', { ip: hashIp(clientIp(req)) });
+      return res.status(429).json({ error: 'Quá nhiều lần thử, vui lòng thử lại sau ít phút.', retryAfterSeconds: 60 });
     }
     // Giới hạn theo IP + tên đăng nhập; tính cả lần đúng để không lộ mật khẩu qua việc bị khoá.
     if (!checkRateLimit(`login_${clientIp(req)}_${username}`, LOGIN_MAX_PER_MIN, 60000)) {
