@@ -74,7 +74,7 @@ test('surrender and minigames do not award the same event twice', async () => {
   await seed('qa_mini', { age: 20 });
   const challenge = await request('qa_mini', '/action/minigame-start', { minigame_type: 'stock_trader_20yo' });
   assert.equal(challenge.status, 200);
-  const input = { minigame_id: 'stock_trader_20yo', outcome: 'success', challenge_id: challenge.data.challenge.id };
+  const input = { minigame_id: 'stock_trader_20yo', outcome: 'success', score: 100, challenge_id: challenge.data.challenge.id };
   assert.equal((await request('qa_mini', '/action/minigame-result', input)).status, 200);
   assert.equal((await request('qa_mini', '/action/minigame-result', input)).status, 409);
 });

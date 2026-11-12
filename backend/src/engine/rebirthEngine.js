@@ -809,7 +809,7 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
     cash: householdContext.annual_allowance, // Starting allowance based on family status
     family_endowment: startingEndowment, // Family wealth waiting for adulthood
     burnout: 0,
-    karma: 100 + (traits.reduce((sum, t) => sum + (t.effects?.starting_karma || 0), 0)),
+    karma: 50 + (traits.reduce((sum, t) => sum + (t.effects?.starting_karma || 0), 0)),
     action_points: 3 + (traits.reduce((sum, t) => sum + (t.effects?.bonus_ap || 0), 0)),
     skills: {
       tech_logic: { level: 0, name: "Trí Tuệ & Công Nghệ" },

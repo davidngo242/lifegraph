@@ -55,3 +55,29 @@ Final cash: median -59565, p10 -72035, p90 1160, max 9200.
 - Death age is almost deterministic: p10 70 to p90 77, min 68; no early or very late deaths under passive play.
 - Zero-vitality dominates: 53.8% of deaths come from vitality<=0 rather than the reaper roll.
 - Karma is saturated: final karma takes only 100 (capped at 100) under this policy, so it carries no signal.
+
+## Addendum 2026-11-12 (GD2+3 minimal-risk slice)
+
+Changes (all in `backend/`): shared stat bounds `src/engine/core/stats.js` (`applyDelta`, `clampStat`, `CASH_FLOOR = -250000`); lifestyle mortality `lifestyleHazard()` in `tickEngine.js`; starting in-life karma 100 -> 50 and a passive-karma ceiling of 70 for childhood chronicle events; server-judged minigames `src/engine/core/minigames.js`; `version` + `x-state-version` optimistic concurrency in `middleware/sessionMutations.js`.
+
+Rules:
+- Debt floor: cash never goes below -250,000. First time it lands on the floor: flag `bankruptcy_floor`, history entry "Phá sản" and `passiveSummary.bankruptcyNotice`. Flag clears when cash > 0.
+- Lifestyle mortality (ages 18..69, rolled each passive year, before the old-age reaper): p = 0.0004 + burnout (>=90: +0.006, >=75: +0.002) + vitality (<30: +0.008, <50: +0.003) + debt stress (cash < -5k: +0.002, < -50k: +0.004) + 0.006 x `recent_risk` (0..5; gamble and overtime at burnout >= 80 add 1, decays 1/yr); capped at 0.08, halved with longevity traits. Causes: "Tai biến do kiệt sức kéo dài", "Tai nạn từ lối sống mạo hiểm", etc.
+- Karma: starts at 50 (+ trait bonus). Passive childhood events can raise it only up to 70; beyond that choices must do it. Rebirth karma harvest (`residual_karma`, 20% of final karma) halves as a consequence; revisit if the economy of Eternal Karma needs it back.
+- Minigames: final outcome = worse of client claim and the score-implied rating (thresholds per game in `MINIGAME_THRESHOLDS`, lowest honest client score). Missing score = 0. Unknown minigames keep legacy behaviour. Response adds `client_outcome`, `outcome_adjusted`. Negative scores (stock profit %) now accepted (>= -100).
+- Concurrency: every successful POST bumps `version` and returns it; `/state` returns it; request header `x-state-version` mismatch gives 409 `{error, current_version}`; no header = no check.
+
+Before (1000 lives, passive) vs after (300 lives, same seeds 50000..50299 prefix):
+
+| Metric | Before | After |
+|---|---|---|
+| Deaths before 40 / before 60 | 0.0% / 0.0% | 2.0% / 5.0% |
+| Death age min | 68 | 19 |
+| Lifestyle-caused deaths | 0 | 11.0% (all before 70) |
+| Min final cash | -9,223,246 | -250,000 |
+| Lives below -1,000,000 | 10 | 0 |
+| Negative final cash share | 81.7% | 81.3% (unchanged: the passive policy has no income) |
+| Final karma values | only 100 | spread 70..100 (no longer saturated) |
+| Zero-vitality share of deaths | 53.8% | 48.3% |
+
+Remaining gaps: 185 of 204 `character.<stat> =` write sites in `routes/game.js` still hand-roll clamps (19 migrated across overtime, study, wellness, network, gamble; `processPassivePhase` migrated for karma/burnout/vitality/cash floor); negative-cash share needs an income model (GD3); one test flake seen once before changes (a single failure on the first run, not reproduced).

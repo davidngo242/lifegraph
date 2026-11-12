@@ -2,6 +2,7 @@ import { getRandom } from './rng.js';
 import { updateAsset, updateRelationship } from '../db/db.js';
 import { generatePassiveChildhoodEvent } from './rebirthEngine.js';
 import { getCountryBigData } from '../data/countryBigData.js';
+import { clampStat, CASH_FLOOR, BANKRUPT_FLAG } from './core/stats.js';
 
 // Calculate maximum vitality cap based on biological age
 // If Transhumanism surgery was successful, decay is frozen until transhuman_frozen_until_age
@@ -76,6 +77,30 @@ export function evaluateReaperRoll(age, currentVitality, hasTranscendence = fals
   return { died: false };
 }
 
+// Lifestyle-dependent mortality before the reaper window (ages 18..69). Annual hazard grows with chronic burnout,
+// sustained low vitality and recent risky actions (gamble / overwork, tracked in character.recent_risk, decays 1/yr).
+export function lifestyleHazard(age, { vitality = 100, burnout = 0, recent_risk = 0, cash = 0 } = {}, mitigated = false) {
+  if (age < 18) return { p: 0 };
+  let p = 0.0004;
+  if (burnout >= 90) p += 0.006; else if (burnout >= 75) p += 0.002;
+  if (vitality < 30) p += 0.008; else if (vitality < 50) p += 0.003;
+  if (cash < -50000) p += 0.004; else if (cash < -5000) p += 0.002; // chronic financial stress
+  const risk = Math.max(0, Math.min(5, Number(recent_risk) || 0));
+  p += 0.006 * risk;
+  if (mitigated) p *= 0.5;
+  p = Math.min(0.08, p);
+  let cause = 'Biến chứng bất ngờ do thể trạng suy yếu';
+  if (risk >= 2) cause = 'Tai nạn từ lối sống mạo hiểm';
+  else if (burnout >= 75) cause = 'Tai biến do kiệt sức kéo dài';
+  else if (vitality < 50) cause = 'Suy kiệt thể chất do sức khỏe yếu kéo dài';
+  return { p, cause };
+}
+const PASSIVE_KARMA_CEILING = 70;
+export const LIFESTYLE_DEATH_CAUSES = [
+  'Biến chứng bất ngờ do thể trạng suy yếu', 'Tai nạn từ lối sống mạo hiểm',
+  'Tai biến do kiệt sức kéo dài', 'Suy kiệt thể chất do sức khỏe yếu kéo dài'
+];
+
 export async function processPassivePhase(character, assets, relationships) {
   let { vitality, cash, burnout, karma, hidden_flags, age } = character;
   const flagsSet = new Set(Array.isArray(hidden_flags) ? hidden_flags : []);
@@ -120,6 +145,17 @@ export async function processPassivePhase(character, assets, relationships) {
     };
   }
 
+  // 2b. Lifestyle mortality before the reaper window (uses last year's burnout / vitality / risky actions)
+  if (age < 70) {
+    const hz = lifestyleHazard(age, { vitality, burnout, cash, recent_risk: character.recent_risk }, hasTranscendence || traits.includes('longevity_ancestry'));
+    if (hz.p > 0 && getRandom() < hz.p) {
+      return {
+        updatedCharacter: { ...character, age, vitality: 0, max_vitality: maxVitality, is_deceased: true, death_cause: hz.cause, death_age: age },
+        passiveSummary: { died: true, cause: hz.cause, ageReached: age, lifestyle: true }
+      };
+    }
+  }
+
   // 3. Wealth & Asset Accounting
   const totalAssetValue = assets.reduce((sum, a) => sum + Number(a.current_value || 0), 0);
   const netWorth = (Number(cash) || 0) + totalAssetValue;
@@ -144,7 +180,7 @@ export async function processPassivePhase(character, assets, relationships) {
       const penalty = Math.round(netWorth * baseRatio);
       cash -= penalty;
       vitality = Math.max(10, vitality - (hasDragonProtection ? 10 : 15));
-      burnout = Math.min(100, burnout + (hasDragonProtection ? 15 : 25));
+      burnout = clampStat('burnout', burnout + (hasDragonProtection ? 15 : 25));
       flagsSet.add("survived_global_calamity");
       macroCalamityNotice = hasDragonProtection
         ? "⚠️ THẢM HỌA VĨ MÔ TOÀN CẦU KÍCH HOẠT: Khủng hoảng chạm đáy đã làm bốc hơi 14% tài sản (Ấu Long Luân Hồi che chở giảm 30% tổn thất!)."
@@ -233,12 +269,12 @@ export async function processPassivePhase(character, assets, relationships) {
       const rawLoss = Math.round(cash * 0.12);
       const cashLoss = hasDragonProtection ? Math.round(rawLoss * 0.7) : rawLoss;
       cash = Math.max(0, cash - cashLoss);
-      burnout = Math.min(100, burnout + (hasDragonProtection ? 6 : 10));
+      burnout = clampStat('burnout', burnout + (hasDragonProtection ? 6 : 10));
       macroShockNotice = `🔥 BIẾN CỐ VĨ MÔ: Bão giá & lạm phát phi mã làm sức mua tiền mặt sụt giảm $${cashLoss.toLocaleString()}${dragonTag}!`;
     } else {
       macroShockType = 'macro_tech_layoff_wave';
       flagsSet.add("macro_tech_layoff_wave");
-      burnout = Math.min(100, burnout + (hasDragonProtection ? 12 : 18));
+      burnout = clampStat('burnout', burnout + (hasDragonProtection ? 12 : 18));
       vitality = Math.max(10, vitality - (hasDragonProtection ? 5 : 8));
       macroShockNotice = `⚡ BIẾN CỐ VĨ MÔ: Làn sóng sa thải AI quét qua thị trường việc làm, tăng áp lực công việc khốc liệt${dragonTag}!`;
     }
@@ -317,13 +353,13 @@ export async function processPassivePhase(character, assets, relationships) {
   }
 
   if (traits.includes('resilient_spirit')) {
-    burnout = Math.max(0, burnout - 4);
+    burnout = clampStat('burnout', burnout - 4);
   }
 
   // 6.5 Equipped Guardian Pet Passive Perks
   let petNotice = null;
   if (equippedPet === 'puppy') {
-    burnout = Math.max(0, burnout - 8);
+    burnout = clampStat('burnout', burnout - 8);
     for (const rel of relationships) {
       if (rel.status !== 'deceased') {
         rel.affection_level = Math.min(100, (Number(rel.affection_level) || 50) + 3);
@@ -342,7 +378,7 @@ export async function processPassivePhase(character, assets, relationships) {
     character.charm = Math.min(100, (Number(character.charm) || 50) + 5);
     petNotice = "🦊 Hồ Ly Cửu Vĩ: Vầng sáng mê hoặc quyến rũ (+5 Sức hút Charm, tăng cơ duyên quý nhân).";
   } else if (equippedPet === 'dragon') {
-    karma = Math.min(100, (Number(karma) || 50) + 10);
+    karma = clampStat('karma', (Number(karma) || 50) + 10);
     vitality = Math.min(maxVitality, vitality + 3);
     flagsSet.add("dragon_celestial_shield");
     petNotice = "🐉 Ấu Long Luân Hồi: Ngâm vang hộ mệnh trên đỉnh Thần Mộc (+10 Karma, +3 HP, giảm 30% sát thương biến cố).";
@@ -370,7 +406,7 @@ export async function processPassivePhase(character, assets, relationships) {
           const clinicFee = Math.round(35 * (countryData?.healthcare?.clinic_cost_factor || 1.0));
           const paidFee = cash > 0 ? Math.min(cash, clinicFee) : 0;
           cash -= paidFee;
-          karma = Math.min(100, (Number(karma) || 50) + 5);
+          karma = clampStat('karma', (Number(karma) || 50) + 5);
           rel.affection_level = Math.min(100, (Number(rel.affection_level) || 50) + 6);
           childHealthEvents.push(`🏥 Con của bạn (${rel.name}, ${rel.age} tuổi) bị sốt mọc răng/nhiễm lạnh. Bạn đã tận tình mua thuốc men chăm sóc ($${paidFee}), con đã bình phục an toàn (+5 Karma, +6 Hảo cảm).`);
         }
@@ -474,17 +510,17 @@ export async function processPassivePhase(character, assets, relationships) {
 
   // Skill: Encyclopedic Brain annual karma buff (+25 Karma/yr)
   if (hasEncyclopedic) {
-    karma = Math.min(100, (Number(karma) || 50) + 25);
+    karma = clampStat('karma', (Number(karma) || 50) + 25);
   }
 
   // Trinity Resonance: Scholarly Dynasty (+15 Karma/yr)
   if (hasScholarlyDynasty) {
-    karma = Math.min(100, (Number(karma) || 50) + 15);
+    karma = clampStat('karma', (Number(karma) || 50) + 15);
   }
 
   // Trinity Resonance: Trinity Perfection (+25 Karma/yr)
   if (hasTrinityPerfection) {
-    karma = Math.min(100, (Number(karma) || 50) + 25);
+    karma = clampStat('karma', (Number(karma) || 50) + 25);
   }
 
   // Net Passive Flow: Asset Yield + Capital Engine - Asset Maintenance - Family Upkeep
@@ -503,7 +539,7 @@ export async function processPassivePhase(character, assets, relationships) {
 
   if (age >= 18 && cash < 0) {
     const interest = Math.round(Math.abs(cash) * 0.045);
-    cash -= interest;
+    cash = clampStat('cash', cash - interest);
     const debtRatio = Math.min(30, Math.ceil(Math.abs(cash) / 2500));
     burnoutChange += (12 + debtRatio);
     flagsSet.add("high_debt");
@@ -512,6 +548,18 @@ export async function processPassivePhase(character, assets, relationships) {
     if (flagsSet.has("high_debt") && cash > 3000) {
       flagsSet.delete("high_debt");
     }
+  }
+
+  // Runaway-debt cap: debt never goes below CASH_FLOOR; hitting it is a one-time "bankruptcy" event
+  cash = clampStat('cash', cash);
+  let bankruptcyNotice = null;
+  if (cash <= CASH_FLOOR) {
+    if (!flagsSet.has(BANKRUPT_FLAG)) {
+      flagsSet.add(BANKRUPT_FLAG);
+      bankruptcyNotice = `🏚️ Phá sản: nợ chạm trần $${Math.abs(CASH_FLOOR).toLocaleString()}, chủ nợ đóng băng tài khoản (nợ không tăng thêm).`;
+    }
+  } else if (cash > 0) {
+    flagsSet.delete(BANKRUPT_FLAG);
   }
 
   // Skill: Stoic Mind - Reduces burnout gain by 40%
@@ -536,7 +584,7 @@ export async function processPassivePhase(character, assets, relationships) {
       if (familySupport) {
         if (cash >= clinicCost) cash -= clinicCost;
         vitalityChange += 2;
-        karma = Math.min(100, (Number(karma) || 50) + 5);
+        karma = clampStat('karma', (Number(karma) || 50) + 5);
         childhoodHealthCrisisNotice = `🏥 Sức khỏe ấu thơ: Năm ${age} tuổi, bạn trải qua cơn sốt co giật cấp tính. Nhờ gia đình tận tình chạy chữa và trạm xá tiếp ứng kịp thời ($${clinicCost}), bạn đã an toàn vượt qua nghịch cảnh.`;
       } else {
         // Severe untreated childhood illness in strained conditions
@@ -552,9 +600,9 @@ export async function processPassivePhase(character, assets, relationships) {
     vitalityChange -= 2;
   }
 
-  burnout = Math.max(0, Math.min(100, burnout + burnoutChange));
+  burnout = clampStat('burnout', burnout + burnoutChange);
   // Vitality is strictly capped by maxVitality!
-  vitality = Math.max(0, Math.min(maxVitality, vitality + vitalityChange));
+  vitality = clampStat('vitality', vitality + vitalityChange, { maxVitality });
 
   // If vitality hits 0, character dies
   if (vitality <= 0) {
@@ -606,11 +654,11 @@ export async function processPassivePhase(character, assets, relationships) {
     : null;
 
   if (unusedAP > 0) {
-    vitality = Math.min(maxVitality, vitality + unusedApVitalityGain);
-    burnout = Math.max(0, burnout - unusedApBurnoutRelief);
+    vitality = clampStat('vitality', vitality + unusedApVitalityGain, { maxVitality });
+    burnout = clampStat('burnout', burnout - unusedApBurnoutRelief);
   }
   if (isWellnessPledge) {
-    burnout = Math.max(0, burnout - 8); // Kháng 30% Burnout thụ động thường niên
+    burnout = clampStat('burnout', burnout - 8); // Kháng 30% Burnout thụ động thường niên
   }
 
   // Base AP = 3
@@ -658,7 +706,9 @@ export async function processPassivePhase(character, assets, relationships) {
         cash = (Number(cash) || 0) + childhoodPassiveEvent.effects.cash_delta;
       }
       if (childhoodPassiveEvent.effects.karma_delta) {
-        karma = Math.min(100, Math.max(0, karma + childhoodPassiveEvent.effects.karma_delta));
+        // Passive chronicle events can lift karma only up to a ceiling: going beyond it must come from the player's choices
+        const kd = childhoodPassiveEvent.effects.karma_delta;
+        karma = clampStat('karma', kd > 0 ? Math.min(karma + kd, Math.max(karma, PASSIVE_KARMA_CEILING)) : karma + kd);
       }
       if (childhoodPassiveEvent.effects.vitality_delta) {
         vitality = Math.min(maxVitality, Math.max(10, vitality + childhoodPassiveEvent.effects.vitality_delta));
@@ -686,7 +736,11 @@ export async function processPassivePhase(character, assets, relationships) {
       active_pledge: activePledge,
       hidden_flags: Array.from(flagsSet),
       global_indices: globalIndices,
-      timeline_snapshots: timelineSnapshots
+      timeline_snapshots: timelineSnapshots,
+      recent_risk: Math.max(0, (Number(character.recent_risk) || 0) - 1),
+      history_log: bankruptcyNotice
+        ? [...(Array.isArray(character.history_log) ? character.history_log : []), { age, event: 'Phá sản', choice: bankruptcyNotice }]
+        : character.history_log
     },
     passiveSummary: {
       netPassiveFlow,
@@ -702,6 +756,7 @@ export async function processPassivePhase(character, assets, relationships) {
       macroCalamityNotice,
       macroShockNotice,
       macroShockType,
+      bankruptcyNotice,
       maxVitality,
       globalIndices,
       unused_ap_converted: unusedAP,
@@ -734,6 +789,7 @@ export async function processPassivePhase(character, assets, relationships) {
         },
         childhood_event: childhoodPassiveEvent,
         family_events: [
+          ...(bankruptcyNotice ? [bankruptcyNotice] : []),
           ...(convertedApNotice ? [convertedApNotice] : []),
           ...(childhoodHealthCrisisNotice ? [childhoodHealthCrisisNotice] : []),
           ...(petNotice ? [petNotice] : []),

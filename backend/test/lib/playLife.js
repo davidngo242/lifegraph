@@ -41,11 +41,16 @@ const REAPER_CAUSES = [
   'Cơn đau thắt ngực cấp tính không kịp cấp cứu',
   'Ngừng tuần hoàn tự nhiên do cạn kiệt sinh lực'
 ];
-/** zero_vitality (tickEngine vitality<=0), reaper (probabilistic roll), alive (age cap), other. */
+const LIFESTYLE_CAUSES = [
+  'Biến chứng bất ngờ do thể trạng suy yếu', 'Tai nạn từ lối sống mạo hiểm',
+  'Tai biến do kiệt sức kéo dài', 'Suy kiệt thể chất do sức khỏe yếu kéo dài'
+];
+/** zero_vitality (tickEngine vitality<=0), reaper (probabilistic roll), lifestyle (pre-70 hazard), alive (age cap), other. */
 export function classifyDeath(life) {
   if (!life.is_deceased) return 'alive';
   const c = life.death_cause || '';
   if (c.startsWith('Kiệt quệ sinh lực') || c.startsWith('Biến chứng viêm phổi')) return 'zero_vitality';
   if (REAPER_CAUSES.includes(c)) return 'reaper';
+  if (LIFESTYLE_CAUSES.includes(c)) return 'lifestyle';
   return 'other';
 }

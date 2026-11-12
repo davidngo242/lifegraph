@@ -21,8 +21,17 @@ export function sessionMutations(req, res, next) {
       if (receipt.fingerprint !== fingerprint) return res.status(409).json({ error: 'Mã hành động đã dùng cho yêu cầu khác.' });
       return res.json(receipt.body);
     }
+    // Optimistic concurrency: x-state-version is optional (absent = no check, backward compatible).
+    const sent = req.get('x-state-version');
+    if (sent !== undefined && sent !== '' && Number(sent) !== (store.version ?? 0)) {
+      return res.status(409).json({ error: 'Trạng thái đã thay đổi ở nơi khác. Hãy tải lại.', current_version: store.version ?? 0 });
+    }
     const json = res.json.bind(res);
     res.json = body => {
+      if (res.statusCode < 400 && !res.headersSent) {
+        store.version = (store.version ?? 0) + 1;      // every successful POST bumps the session version
+        if (body && typeof body === 'object' && !Array.isArray(body)) body = { ...body, version: store.version };
+      }
       if (key && /^[a-zA-Z0-9_-]{8,100}$/.test(key) && res.statusCode < 400) {
         store.actionReceipts ??= [];
         store.actionReceipts.push({ key, fingerprint, body: structuredClone(body) });

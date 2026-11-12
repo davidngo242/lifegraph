@@ -34,6 +34,8 @@ import {
   interactNpc
 } from '../engine/rpgProgressionEngine.js';
 import { processPassivePhase, calculateMaxVitality } from '../engine/tickEngine.js';
+import { applyDelta } from '../engine/core/stats.js';
+import { deriveMinigameOutcome } from '../engine/core/minigames.js';
 import { getCurrentScenarioForCharacter, interactWithHotspot, resolveMindStageChoice, fulfillCommitment, evaluateCommitments, getNextScenarioAge } from '../engine/scenarioEngine.js';
 import { recordAndCheckCombo, resetAnnualActions } from '../engine/comboActionEngine.js';
 import { executeBreakthroughAction, getBreakthroughForAge } from '../engine/breakthroughEngine.js';
@@ -165,6 +167,7 @@ router.get('/state', async (req, res) => {
     if (!character) {
       return res.json({
         character: null,
+        version: getSessionData().version ?? 0,
         player_account: account,
         visuals: null,
         assets: [],
@@ -287,6 +290,7 @@ router.get('/state', async (req, res) => {
     const aspiration = evaluateAspirationProgress(character, assets, relationships);
 
     res.json({
+      version: getSessionData().version ?? 0,
       character,
       player_account: account,
       visuals,
@@ -2376,12 +2380,9 @@ router.post('/action/wellness', async (req, res) => {
       }
 
       character.action_points -= costAP;
-      character.cash -= costCash;
-      const maxV = character.max_vitality || 100;
       const vitGained = Math.round((20 + bonusVit) * wellnessMult);
       const burnoutRelief = Math.round((25 + bonusBurnoutRelief) * wellnessBurnoutMult);
-      character.vitality = Math.min(maxV, character.vitality + vitGained);
-      character.burnout = Math.max(0, character.burnout - burnoutRelief);
+      applyDelta(character, { cash: -costCash, vitality: vitGained, burnout: -burnoutRelief });
       awardLifeExp(character, 30, "Trị liệu y tế phục hồi thể trạng");
 
       const healthPerkMsg = healthLevel > 0 ? ` (Kỹ Năng Sinh Lực Lv${healthLevel} tăng thêm +${bonusVit} HP, -${bonusBurnoutRelief} Burnout)` : '';
@@ -2411,12 +2412,9 @@ router.post('/action/wellness', async (req, res) => {
       }
 
       character.action_points -= costAP;
-      character.cash -= costCash;
       const vitGained = Math.round((15 + bonusVit) * wellnessMult);
       const burnoutRelief = Math.round((35 + bonusBurnoutRelief) * wellnessBurnoutMult);
-      character.burnout = Math.max(0, character.burnout - burnoutRelief);
-      character.vitality = Math.min(character.max_vitality || 100, character.vitality + vitGained);
-      character.karma = Math.min(100, character.karma + 10);
+      applyDelta(character, { cash: -costCash, vitality: vitGained, burnout: -burnoutRelief, karma: 10 });
       awardLifeExp(character, 35, "Khóa tu tĩnh tâm dưỡng sinh");
 
       const healthPerkMsg = healthLevel > 0 ? ` (Kỹ Năng Sinh Lực Lv${healthLevel} tăng thêm +${bonusVit} HP, -${bonusBurnoutRelief} Burnout)` : '';
@@ -2480,9 +2478,8 @@ router.post('/action/overtime', async (req, res) => {
     }
 
     character.action_points -= 1;
-    character.cash = Number(character.cash) + earnedCash;
-    character.burnout = Math.min(100, character.burnout + burnoutGained);
-    character.vitality = Math.max(10, character.vitality - (healthLevel >= 2 ? 1 : 3));
+    applyDelta(character, { cash: earnedCash, burnout: burnoutGained, vitality: -(healthLevel >= 2 ? 1 : 3) }, { vitalityMin: 10 });
+    if (character.burnout >= 80) character.recent_risk = Math.min(5, (Number(character.recent_risk) || 0) + 1); // overwork raises mortality hazard
 
     // Award Life EXP for grinding hard
     awardLifeExp(character, 40, "Cày việc ngoài giờ thực chiến");
@@ -2521,9 +2518,7 @@ router.post('/action/study', async (req, res) => {
     }
 
     character.action_points -= 1;
-    character.cash -= costCash;
-    character.burnout = Math.max(0, character.burnout - 10);
-    character.karma = Math.min(100, character.karma + 8);
+    applyDelta(character, { cash: -costCash, burnout: -10, karma: 8 });
 
     // Award Life EXP for studying
     awardLifeExp(character, 50, "Nghiên cứu tri thức chuyên sâu");
@@ -2568,8 +2563,7 @@ router.post('/action/network', async (req, res) => {
     }
 
     character.action_points -= 1;
-    character.cash -= costCash;
-    character.karma = Math.min(100, character.karma + 6);
+    applyDelta(character, { cash: -costCash, karma: 6 });
 
     const npcs = await getNpcs(character.id);
     let message = "";
@@ -2632,7 +2626,8 @@ router.post('/action/gamble', async (req, res) => {
     const lossThreshold = financeLevel >= 2 ? 0.45 : financeLevel === 1 ? 0.55 : 0.65;
 
     character.action_points -= 1;
-    character.cash -= costCash;
+    applyDelta(character, { cash: -costCash });
+    character.recent_risk = Math.min(5, (Number(character.recent_risk) || 0) + 1); // gambling raises mortality hazard
 
     const roll = getRandom();
     let message = "";
@@ -2644,15 +2639,14 @@ router.post('/action/gamble', async (req, res) => {
     } else if (roll < 0.94) {
       // 3x win
       const win = financeLevel >= 2 ? 1200 : 900;
-      character.cash += win;
+      applyDelta(character, { cash: win });
       netGain = win - costCash;
       message = `Bắt đúng nhịp sóng nhỏ! Thắng giải thu về +$${win.toLocaleString()}!`;
     } else {
       // JACKPOT 50x
       const jackpot = 15000;
-      character.cash += jackpot;
+      applyDelta(character, { cash: jackpot, karma: -5 });
       netGain = jackpot - costCash;
-      character.karma = Math.max(0, character.karma - 5);
       message = `🎆 TRÚNG ĐỘC ĐẮC! Bánh xe vận may mỉm cười, nhận ngay +$${jackpot.toLocaleString()} tiền mặt!`;
     }
 
@@ -2665,13 +2659,6 @@ router.post('/action/gamble', async (req, res) => {
     character.history_log = history;
     await updateCharacter(character.id, character);
     recordPlayerAction("gamble", character);
-
-    res.json({
-      success: true,
-      message,
-      netGain,
-      character
-    });
 
     res.json({
       success: true,
@@ -2853,12 +2840,13 @@ router.post('/action/minigame-result', async (req, res) => {
   try {
     const minigame_id = req.body.minigame_id || req.body.minigame_type;
     const reportedOutcome = req.body.outcome ?? req.body.status ?? 'fair';
-    const outcome = reportedOutcome === 'fail' ? 'failure' : reportedOutcome;
-    const score = req.body.score || 0;
+    const clientOutcome = reportedOutcome === 'fail' ? 'failure' : reportedOutcome;
+    let outcome = clientOutcome; // advisory; replaced by the server judgement below
+    const score = req.body.score ?? 0;
     let character = await getLivingCharacter(res);
     if (!character) return;
     if (!character || character.is_deceased) return res.status(409).json({ error: 'Không có kiếp sống đang hoạt động.' });
-    if (!['success', 'fair', 'failure'].includes(outcome)) return res.status(400).json({ error: 'Kết quả thử thách không hợp lệ.' });
+    if (!['success', 'fair', 'failure'].includes(clientOutcome)) return res.status(400).json({ error: 'Kết quả thử thách không hợp lệ.' });
     const played = character.completed_minigames ?? [];
     if (!character.pending_skill_exam && played.includes(minigame_id)) return res.status(409).json({ error: 'Thử thách này đã được ghi nhận trong kiếp này.' });
     const history = character.history_log || [];
@@ -2869,7 +2857,9 @@ router.post('/action/minigame-result', async (req, res) => {
     const pendingChallenge = pendingExam ?? character.pending_minigame;
     if (!pendingChallenge || pendingChallenge.id !== req.body.challenge_id || pendingChallenge.minigame_type !== minigame_id)
       return res.status(409).json({ error: 'Kết quả không thuộc thử thách đang hoạt động.' });
-    if (!Number.isFinite(Number(score)) || Number(score) < 0) return res.status(400).json({ error: 'Điểm không hợp lệ.' });
+    if (!Number.isFinite(Number(score)) || Number(score) < -100 || Number(score) > 100000) return res.status(400).json({ error: 'Điểm không hợp lệ.' });
+    const judged = deriveMinigameOutcome(minigame_id, score, clientOutcome);
+    outcome = judged.outcome;
 
     const targetSkillId = req.body.skill_id || pendingExam?.skill_id;
     const hasEncyclopedic = (character.unlocked_skills || []).includes("encyclopedic_brain");
@@ -3068,6 +3058,8 @@ router.post('/action/minigame-result', async (req, res) => {
     res.json({
       success: true,
       outcome,
+      client_outcome: clientOutcome,
+      outcome_adjusted: judged.adjusted,
       feedback,
       character
     });
