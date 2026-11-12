@@ -90,3 +90,23 @@ test('state version: returned by /state, bumped per successful POST, 409 on stal
   const failed = await request('rules_ver', '/action/overtime', {}, { 'x-state-version': String(v0 + 2) });
   assert.ok([200, 400].includes(failed.status));
 });
+
+test('buy-asset: server prices from the market catalog, client cost/cash_flow are ignored', async () => {
+  await seed('qa_buy_cheat', { age: 30, cash: 5000, action_points: 3 });
+  const forged = await request('qa_buy_cheat', '/action/buy-asset', { asset_id: 'm1_savings', name: 'x', type: 'savings', cost: 1, annual_cash_flow: 999999999, ap_cost: 1 });
+  assert.equal(forged.status, 200, JSON.stringify(forged.data));
+  const bought = forged.data.assets.find(a => a.annual_cash_flow !== undefined && a.current_value === 800);
+  assert.ok(bought, 'asset must be valued at catalog price 800');
+  assert.ok(bought.annual_cash_flow < 1000, 'cash flow must come from catalog');
+  assert.ok(forged.data.character.cash <= 5000 - 800 * 0.5, 'catalog cost must be charged');
+  const unknown = await request('qa_buy_cheat', '/action/buy-asset', { name: 'Máy in tiền', type: 'stocks', cost: 1, annual_cash_flow: 1e9 });
+  assert.equal(unknown.status, 400);
+});
+
+test('debt-relief: family soft loan can only be taken once per life', async () => {
+  await seed('qa_soft_loan', { age: 30, cash: -5000 });
+  const first = await request('qa_soft_loan', '/action/debt-relief', { relief_type: 'family_soft_loan' });
+  assert.equal(first.status, 200, JSON.stringify(first.data));
+  const second = await request('qa_soft_loan', '/action/debt-relief', { relief_type: 'family_soft_loan' });
+  assert.equal(second.status, 409);
+});

@@ -1200,12 +1200,20 @@ router.post('/action/buy-asset', async (req, res) => {
       });
     }
 
-    const actualType = sanitizeString(asset_type || type || 'stocks', 50);
-    const safeName = sanitizeString(name || 'Tài sản', 100);
-    const actualCostAp = Math.max(1, Math.min(4, Math.floor(Number(ap_cost || cost_ap || 1))));
-    const rawCost = Math.max(0, Number(cost) || 0);
-    const actualMaintenance = Math.max(0, Number(maintenance_cost ?? maintenance ?? 0));
-    const actualCashFlow = Math.max(0, Number(annual_cash_flow || cash_flow || 0));
+    // Giá, dòng tiền, phí duy trì và AP lấy từ danh mục thị trường của server; số do client gửi bị bỏ qua.
+    const catalog = getLocalizedMarketAssets(character.nationality, character.current_city);
+    const requestedId = req.body.asset_id || req.body.id;
+    const item = catalog.find(a => requestedId && a.id === requestedId)
+      || catalog.find(a => name && (a.name === name) && (!(asset_type || type) || a.type === (asset_type || type)));
+    if (!item) {
+      return res.status(400).json({ error: 'Tài sản không có trong danh mục thị trường.' });
+    }
+    const actualType = item.type;
+    const safeName = sanitizeString(item.name, 100);
+    const actualCostAp = Math.max(1, Math.min(4, Math.floor(Number(item.ap_cost) || 1)));
+    const rawCost = Math.max(0, Number(item.cost) || 0);
+    const actualMaintenance = Math.max(0, Number(item.maintenance) || 0);
+    const actualCashFlow = Math.max(0, Number(item.cash_flow) || 0);
 
     const financeLevel = character.skills?.finance_market?.level || 0;
     let discountRate = financeLevel === 1 ? 0.10 : financeLevel === 2 ? 0.20 : financeLevel >= 3 ? 0.25 : 0;
@@ -1248,7 +1256,7 @@ router.post('/action/buy-asset', async (req, res) => {
     const history = character.history_log || [];
     history.push({
       age: character.age,
-      event: `Đầu tư mua tài sản: ${name}`,
+      event: `Đầu tư mua tài sản: ${safeName}`,
       choice: `Chi tiêu $${finalCost.toLocaleString()} & ${actualCostAp} AP${discountNote} (Dòng tiền: +$${actualCashFlow.toLocaleString()}/năm)`
     });
     character.history_log = history;
@@ -2298,6 +2306,9 @@ router.post('/action/debt-relief', async (req, res) => {
     if (!character.hidden_flags) character.hidden_flags = [];
 
     if (relief_type === 'family_soft_loan') {
+      if (character.family_soft_loan_taken || character.hidden_flags.includes('family_soft_loan_taken')) {
+        return res.status(409).json({ error: 'Gia đình đã cho vay một lần trong kiếp này.' });
+      }
       character.cash = Number(character.cash) + 3000;
       character.family_soft_loan_taken = true;
       if (!character.hidden_flags.includes('family_soft_loan_taken')) {
