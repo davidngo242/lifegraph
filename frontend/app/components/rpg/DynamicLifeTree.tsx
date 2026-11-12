@@ -996,7 +996,7 @@ export default function DynamicLifeTree({
                     ? 'Thần Mộc tiêu hao sinh lực: Nhựa sống luân chuyển chậm, nên nghỉ ngơi.'
                     : 'Thần Mộc sung mãn: Linh khí ngọc bích dồi dào!'}
                 </div>
-                <div className="text-xs text-emerald-700 dark:text-emerald-400 font-mono">
+                <div className="text-xs text-emerald-700 dark:text-emerald-400 tabular-nums">
                   Sinh lực: {vitalityVal}% · Căng thẳng: {burnout}%
                 </div>
               </div>
@@ -1034,7 +1034,7 @@ export default function DynamicLifeTree({
           <Tooltip content="Điểm Hành Động (Action Points): Năng lượng sinh tồn dùng để thực hiện các bước ngoặt cuộc đời trong năm nay.">
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--bg-card-subtle)] border border-amber-500/40 text-xs font-semibold text-amber-700 dark:text-amber-400 shadow-sm cursor-help">
               <Zap className="w-3.5 h-3.5 fill-amber-400 text-amber-500 dark:text-amber-400 animate-pulse" />
-              <span className="font-mono font-bold text-sm">{actionPoints}</span>
+              <span className="tabular-nums font-bold text-sm">{actionPoints}</span>
               <span className="text-[var(--text-secondary)] text-xs">/ {totalAp} AP</span>
             </div>
           </Tooltip>
@@ -1105,7 +1105,7 @@ export default function DynamicLifeTree({
                         ? `Cột Mốc Tuổi ${characterAge + 1}`
                         : `Sang Tuổi ${characterAge + 1}`}
                     </span>
-                    <kbd className="font-mono text-xs bg-slate-900/10 dark:bg-black/35 px-1.5 py-0.2 rounded font-bold hidden sm:inline">
+                    <kbd className="font-mono text-xs bg-slate-900/10 dark:bg-black/35 px-1.5 py-0.5 rounded font-bold hidden sm:inline">
                       Space
                     </kbd>
                   </button>
@@ -1120,7 +1120,7 @@ export default function DynamicLifeTree({
       {/* UNIFIED 4-PILLAR LENS BAR (HỢP NHẤT 4 TRỤ CỘT TRÊN ĐỈNH ĐẠI THỤ) */}
       {/* ========================================================================= */}
       <div className="flex items-center justify-between gap-2 flex-wrap relative z-20">
-        <div className="flex items-center gap-1 p-1 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] shadow-inner flex-wrap">
+        <div className="flex items-center gap-1 p-1 rounded-2xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] shadow-inner flex-nowrap overflow-x-auto max-w-full [&>*]:shrink-0 [&>*]:whitespace-nowrap sm:flex-wrap sm:overflow-visible">
           <button
             type="button"
             onClick={() => setTreeViewMode('life_actions')}
@@ -1145,12 +1145,12 @@ export default function DynamicLifeTree({
             }`}
           >
             <span>🔮 Nhánh Kỹ Năng</span>
-            <span className={`text-xs font-mono ${treeViewMode === 'skill_tree' ? 'text-slate-300 dark:text-slate-600' : 'text-[var(--text-secondary)]'}`}>
-              · Lv.{character?.life_level || 1} ({character?.unlocked_skills?.length || 0} TC)
+            <span className={`hidden sm:inline text-xs tabular-nums ${treeViewMode === 'skill_tree' ? 'text-slate-300 dark:text-slate-600' : 'text-[var(--text-secondary)]'}`}>
+              · Lv.{character?.life_level || 1} · {character?.unlocked_skills?.length || 0} kỹ năng
             </span>
             {(character?.skill_points || 0) > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 text-xs font-mono font-black animate-pulse">
-                +{character.skill_points} SP
+              <span className="px-1.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-xs tabular-nums font-black">
+                +{character.skill_points} điểm
               </span>
             )}
           </button>
@@ -1181,7 +1181,7 @@ export default function DynamicLifeTree({
             }`}
           >
             <span>👥 Nhân Mạch Quý Nhân</span>
-            <span className={`px-1.5 py-0.2 rounded-full text-xs font-mono font-bold border ${
+            <span className={`px-1.5 py-0.5 rounded-full text-xs tabular-nums font-bold border ${
               treeViewMode === 'social_links'
                 ? 'bg-sky-700/40 border-white/40'
                 : 'bg-sky-500/15 text-sky-700 dark:text-sky-300 border-sky-500/35'
@@ -1200,7 +1200,7 @@ export default function DynamicLifeTree({
             }`}
           >
             <span>🏡 Gốc Rễ Gia Đình</span>
-            <span className={`px-1.5 py-0.2 rounded-full text-xs font-mono font-bold border ${
+            <span className={`px-1.5 py-0.5 rounded-full text-xs tabular-nums font-bold border ${
               treeViewMode === 'family_roots'
                 ? 'bg-slate-900/15 border-slate-900/25 text-slate-950'
                 : isParentsDeceased
@@ -1222,7 +1222,7 @@ export default function DynamicLifeTree({
           >
             <span>🪙</span>
             <span className="text-amber-700 dark:text-amber-400">Cành Hoàng Kim</span>
-            <span className="text-emerald-700 dark:text-emerald-400 font-mono">{formattedCash.primary}</span>
+            <span className="text-emerald-700 dark:text-emerald-400 tabular-nums">{formattedCash.primary}</span>
             <span className="text-[var(--text-secondary)] text-xs font-sans">• {assets.length} TS</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 opacity-70 group-hover:opacity-100 transition" />
           </button>
@@ -1241,18 +1241,18 @@ export default function DynamicLifeTree({
           {hasActiveEvent && (
             <div className="px-3.5 py-2 rounded-2xl bg-rose-50/95 dark:bg-rose-950/85 border border-rose-400/70 dark:border-rose-500/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-sm">
               <div className="min-w-0">
-                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-rose-800 dark:text-rose-300 uppercase tracking-wider">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-rose-800 dark:text-rose-300 uppercase tracking-wide">
                   <span className="relative flex h-2 w-2 shrink-0">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-600 dark:bg-rose-400" />
                   </span>
                   <span>Biến Cố Định Mệnh • Tuổi {characterAge}</span>
                 </div>
-                <div className="text-xs font-bold text-rose-950 dark:text-rose-100 truncate">
+                <div className="text-sm font-bold text-rose-950 dark:text-rose-100 line-clamp-2">
                   {activeEventData?.title}
                 </div>
                 {activeEventData?.description && (
-                  <div className="text-xs text-rose-900/80 dark:text-rose-200/85 line-clamp-1">
+                  <div className="text-xs text-rose-900 dark:text-rose-200 line-clamp-2">
                     {activeEventData.description}
                   </div>
                 )}
@@ -1264,7 +1264,7 @@ export default function DynamicLifeTree({
                   className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-rose-500 dark:hover:bg-rose-400 dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow transition active:scale-95 shrink-0 cursor-pointer"
                 >
                   <Clapperboard className="w-3.5 h-3.5" />
-                  <span>Kịch Bản Điện Ảnh 21:9</span>
+                  <span>Đối Mặt Biến Cố</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -1598,7 +1598,7 @@ export default function DynamicLifeTree({
                   <span>{currentSeason.name} • {seasonClimate.title}</span>
                 </div>
                 <div className="text-[var(--text-primary)]">{seasonClimate.desc}</div>
-                <div className="text-xs text-[var(--text-secondary)] font-mono">
+                <div className="text-xs text-[var(--text-secondary)] tabular-nums">
                   Quốc gia: {nationality} ({isTropicalCountry ? 'Nhiệt đới / Á nhiệt đới' : 'Ôn đới / Hàn đới'})
                 </div>
                 <div className="text-xs text-emerald-700 dark:text-emerald-300 font-medium">Nhấp để lắng nghe phong linh bốn mùa</div>
@@ -1640,7 +1640,7 @@ export default function DynamicLifeTree({
                      equippedPet === 'fox' ? '+5 Sức hút Charm, tăng cơ duyên gặp gỡ quý nhân' :
                      '+10 Karma, +3 HP, giảm 30% tổn thất từ biến cố vĩ mô'}
                   </div>
-                  <div className="text-xs text-amber-700 dark:text-amber-400 font-mono">Nhấp để vuốt ve & nghe tiếng kêu!</div>
+                  <div className="text-xs text-amber-700 dark:text-amber-400 tabular-nums">Nhấp để vuốt ve & nghe tiếng kêu!</div>
                 </div>
               }
             >
@@ -2906,12 +2906,12 @@ export default function DynamicLifeTree({
                     <div className="flex items-center gap-1.5 font-bold text-amber-700 dark:text-amber-300">
                       <span>{acupoint.icon}</span>
                       <span>Huyệt Đạo: {acupoint.name}</span>
-                      <span className="text-xs px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+                      <span className="text-xs px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
                         {acupoint.branch}
                       </span>
                     </div>
                     <div className="text-[var(--text-primary)]">{acupoint.desc}</div>
-                    <div className="text-xs font-mono">
+                    <div className="text-xs tabular-nums">
                       {isUnlocked ? (
                         <span className="text-emerald-700 dark:text-emerald-400 font-bold">✓ Đã đả thông kinh mạch</span>
                       ) : canUnlock ? (
@@ -2977,12 +2977,12 @@ export default function DynamicLifeTree({
                     <div className="flex items-center gap-1.5 font-bold text-sky-700 dark:text-sky-300">
                       <span>{npc.avatar || '🕊️'}</span>
                       <span>{npc.name}</span>
-                      <span className="text-xs px-1.5 py-0.2 rounded bg-sky-500/15 text-sky-800 dark:text-sky-200 border border-sky-400/35">
+                      <span className="text-xs px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-800 dark:text-sky-200 border border-sky-400/35">
                         Link Lv.{linkLvl}
                       </span>
                     </div>
                     <div className="text-[var(--text-primary)] text-xs">{npc.role || pos.branchName}</div>
-                    <div className="text-xs text-amber-700 dark:text-amber-300 font-mono">
+                    <div className="text-xs text-amber-700 dark:text-amber-300 tabular-nums">
                       Hảo cảm: {npc.affinity || 50}/100 • {isHighAffinity ? 'Đặc quyền Mượn Lực khả dụng!' : 'Cần bồi đắp thêm'}
                     </div>
                     <div className="text-xs text-emerald-700 dark:text-emerald-300">Nhấp để mở tương tác quý nhân</div>
@@ -3024,7 +3024,7 @@ export default function DynamicLifeTree({
                   ? 'Chạm vào lõi để khép lại một năm, đúc kết hành trình và gieo mầm tâm nguyện cho năm mới!'
                   : 'Bản thể hội tụ năng lượng sống, định hình các lựa chọn thường niên.'}
               </div>
-              <div className="text-xs text-amber-600 dark:text-amber-400 font-mono">
+              <div className="text-xs text-amber-800 dark:text-amber-400 tabular-nums">
                 {actionPoints > 0 ? `Khả dụng: ${actionPoints}/${totalAp} AP` : 'Đã tiêu hao hết năng lượng năm nay'}
               </div>
             </div>
@@ -3068,7 +3068,7 @@ export default function DynamicLifeTree({
             }`}>
               {actionPoints > 0 ? `${actionPoints} AP` : '✨ Giao Thừa'}
             </div>
-            <div className={`text-xs md:text-xs font-mono mt-0.5 opacity-90 truncate max-w-[72px] md:max-w-[92px] ${
+            <div className={`text-xs md:text-xs tabular-nums mt-0.5 opacity-90 truncate max-w-[72px] md:max-w-[92px] ${
               actionPoints === 0 ? 'text-amber-800 dark:text-amber-200 font-bold' : 'text-emerald-700 dark:text-emerald-300'
             }`}>
               {actionPoints === 0 ? 'Gieo Mầm →' : STAGE_META[growthStage].label}
@@ -3106,7 +3106,7 @@ export default function DynamicLifeTree({
                     <div className="flex items-center gap-1.5 font-bold text-amber-700 dark:text-amber-300">
                       <span>{node.icon}</span>
                       <span>{node.title}</span>
-                      <span className="text-xs px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-mono font-bold">
+                      <span className="text-xs px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 tabular-nums font-bold">
                         {node.apCost} AP
                       </span>
                     </div>
@@ -3146,7 +3146,7 @@ export default function DynamicLifeTree({
                     <div className="text-xs font-bold text-slate-900 dark:text-white whitespace-normal leading-tight max-w-[110px] xl:max-w-[185px]">
                       {node.title}
                     </div>
-                    <div className={`text-xs font-mono mt-0.5 whitespace-normal leading-tight max-w-[110px] xl:max-w-[185px] ${
+                    <div className={`text-xs tabular-nums mt-0.5 whitespace-normal leading-tight max-w-[110px] xl:max-w-[185px] ${
                       node.isBreakthrough
                         ? 'text-amber-800 dark:text-amber-300 font-black tracking-wider animate-pulse drop-shadow'
                         : 'text-slate-600 dark:text-slate-200'
@@ -3156,7 +3156,7 @@ export default function DynamicLifeTree({
                   </div>
 
                   {/* Dewdrop AP Cost Badge */}
-                  <span className="text-xs font-mono px-1.5 py-0.5 rounded-full bg-amber-100 dark:bg-black/60 text-amber-900 dark:text-amber-300 border border-amber-400/40 shrink-0 font-bold shadow-sm">
+                  <span className="text-xs tabular-nums px-1.5 py-0.5 rounded-full bg-amber-100 dark:bg-black/60 text-amber-900 dark:text-amber-300 border border-amber-400/40 shrink-0 font-bold shadow-sm">
                     {node.apCost} AP
                   </span>
                 </button>
@@ -3193,7 +3193,7 @@ export default function DynamicLifeTree({
               >
                 <Utensils className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
                 <span>{characterAge <= 5 ? 'Bầu Sữa Mẹ' : 'Bữa Cơm'}</span>
-                <span className="hidden md:inline text-xs font-mono px-1.5 py-0.2 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30">
+                <span className="hidden md:inline text-xs tabular-nums px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30">
                   +10 HP
                 </span>
               </button>
@@ -3236,7 +3236,7 @@ export default function DynamicLifeTree({
               >
                 <MessageSquare className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
                 <span>Lời Khuyên</span>
-                <span className="hidden md:inline text-xs font-mono px-1.5 py-0.2 rounded-full bg-indigo-500/15 text-indigo-800 dark:text-indigo-300 border border-indigo-500/30">
+                <span className="hidden md:inline text-xs tabular-nums px-1.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-800 dark:text-indigo-300 border border-indigo-500/30">
                   +8 Karma
                 </span>
               </button>
@@ -3301,8 +3301,8 @@ export default function DynamicLifeTree({
                 <div>
                   <h4 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                     <span>Nhánh Kỹ Năng Cuộc Đời</span>
-                    <span className="px-2 py-0.2 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-xs font-mono font-bold">
-                      {character?.skill_points || 0} SP
+                    <span className="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-xs tabular-nums font-bold">
+                      {character?.skill_points || 0} điểm
                     </span>
                   </h4>
                   <p className="text-xs text-[var(--text-secondary)]">
@@ -3343,7 +3343,7 @@ export default function DynamicLifeTree({
                 <div>
                   <h4 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                     <span>Nhân Mạch Quý Nhân (Social Links)</span>
-                    <span className="px-2 py-0.2 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-500/30 text-xs font-mono font-bold">
+                    <span className="px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-500/30 text-xs tabular-nums font-bold">
                       {character?.social_links?.length || 4} Quý Nhân
                     </span>
                   </h4>
@@ -3385,7 +3385,7 @@ export default function DynamicLifeTree({
                 <div>
                   <h4 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                     <span>Gốc Rễ Gia Đình &amp; Cội Nguồn</span>
-                    <span className={`px-2 py-0.2 rounded-full text-xs font-bold border ${
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-bold border ${
                       isParentsDeceased
                         ? 'text-rose-800 dark:text-rose-300 bg-rose-100 dark:bg-rose-950/60 border-rose-400/40'
                         : 'text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/60 border-emerald-400/40'
@@ -3456,7 +3456,7 @@ export default function DynamicLifeTree({
                       <Utensils className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                       <span>{characterAge <= 5 ? 'Bầu Sữa Mẹ' : 'Bữa Cơm'}</span>
                     </span>
-                    <span className="text-xs font-mono text-emerald-700 dark:text-emerald-300">+10 HP</span>
+                    <span className="text-xs tabular-nums text-emerald-700 dark:text-emerald-300">+10 HP</span>
                   </button>
                 )}
 
@@ -3475,7 +3475,7 @@ export default function DynamicLifeTree({
                       <MessageSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                       <span>Lời Khuyên</span>
                     </span>
-                    <span className="text-xs font-mono text-indigo-800 dark:text-indigo-300">
+                    <span className="text-xs tabular-nums text-indigo-800 dark:text-indigo-300">
                       {canMentor ? '+8 Karma' : 'Đã dùng'}
                     </span>
                   </button>
@@ -3492,7 +3492,7 @@ export default function DynamicLifeTree({
                       <Stethoscope className="w-4 h-4 text-teal-600 dark:text-teal-400" />
                       <span>Khám Tổng Quát</span>
                     </span>
-                    <span className="text-xs font-mono text-teal-800 dark:text-teal-300">+20 HP</span>
+                    <span className="text-xs tabular-nums text-teal-800 dark:text-teal-300">+20 HP</span>
                   </button>
                 )}
 
@@ -3599,7 +3599,7 @@ export default function DynamicLifeTree({
                   <span className="block text-[13px] font-bold text-slate-900 dark:text-white leading-snug whitespace-normal break-words">
                     {node.title}
                   </span>
-                  <span className={`block text-xs font-mono mt-0.5 leading-snug whitespace-normal break-words ${
+                  <span className={`block text-xs tabular-nums mt-0.5 leading-snug whitespace-normal break-words ${
                     node.isBreakthrough
                       ? 'text-amber-800 dark:text-amber-300 font-black tracking-wide'
                       : 'text-slate-700 dark:text-slate-200'
@@ -3609,7 +3609,7 @@ export default function DynamicLifeTree({
                 </span>
                 <span
                   title={canAfford ? undefined : `Cần ${node.apCost} AP, hiện còn ${actionPoints} AP`}
-                  className={`text-xs font-mono px-2 py-1 rounded-full border shrink-0 font-bold shadow-sm whitespace-nowrap ${
+                  className={`text-xs tabular-nums px-2 py-1 rounded-full border shrink-0 font-bold shadow-sm whitespace-nowrap ${
                     canAfford
                       ? 'bg-amber-100 dark:bg-black/60 text-amber-900 dark:text-amber-300 border-amber-400/40'
                       : 'bg-rose-100 dark:bg-rose-950 text-rose-900 dark:text-rose-200 border-rose-500/70'

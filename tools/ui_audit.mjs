@@ -113,16 +113,20 @@ function measureInPage({ mobile }) {
   const blend = (f, bg) => ({ r: f.r * f.a + bg.r * (1 - f.a), g: f.g * f.a + bg.g * (1 - f.a), b: f.b * f.a + bg.b * (1 - f.a), a: 1 });
   // Han che: bo qua background-image/gradient (chi dung background-color). Dem so phan tu gap gradient/anh de canh bao.
   let bgImageSeen = 0;
+  let lastSawImg = false;
   const bgOf = (el) => {
     const layers = [];
     let sawImg = false;
+    let selfImg = false;
     for (let e = el; e; e = e.parentElement) {
       const cs = getComputedStyle(e);
-      if (cs.backgroundImage && cs.backgroundImage !== 'none') sawImg = true;
+      if (cs.backgroundImage && cs.backgroundImage !== 'none') { sawImg = true; if (!layers.some((l) => l.a >= 0.5)) selfImg = true; }
       const c = parse(cs.backgroundColor);
       if (c && c.a > 0) { layers.push(c); if (c.a >= 1) break; }
     }
     if (sawImg) bgImageSeen++;
+    // Chi tinh la 'nen gradient' khi anh nam giua chu va lop mau nen dac (>=0.5); the trong suot nam tren gradient cua trang van duoc do binh thuong.
+    lastSawImg = selfImg;
     let base = { r: 255, g: 255, b: 255, a: 1 };
     for (let i = layers.length - 1; i >= 0; i--) base = blend(layers[i], base);
     return base;
@@ -181,7 +185,7 @@ function measureInPage({ mobile }) {
     const L1 = lum(fg), L2 = lum(bg);
     const cr = (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
     const big = fs >= 24 || (fs >= 18.66 && +cs.fontWeight >= 700);
-    if (cr < (big ? 3 : 4.5)) contrast.push({ t: t.slice(0, 40), cr: +cr.toFixed(2), fs: +fs.toFixed(1), fg: hex(fg), bg: hex(bg), x: Math.round(r.x), y: Math.round(r.y + scrollY) });
+    if (cr < (big ? 3 : 4.5)) contrast.push({ t: t.slice(0, 40), cr: +cr.toFixed(2), fs: +fs.toFixed(1), fg: hex(fg), bg: hex(bg), grad: lastSawImg, x: Math.round(r.x), y: Math.round(r.y + scrollY) });
   }
 
   // (4) phan tu cao > 6x rong co text > 3 ky tu, + tu bi bam xuong dong giua chu (chu xep doc / bi cat)
@@ -312,13 +316,15 @@ for (const vp of VIEWPORTS) {
       rec.counts = {
         overflow: m.overflow.has ? 1 : 0,
         smallFont: m.smallFont.length,
-        contrast: m.contrast.length,
+        contrast: m.contrast.filter((i) => !i.grad).length,
+        contrastGradient: m.contrast.filter((i) => i.grad).length,
         vertical: m.vertical.length,
         hitArea: mobile ? m.hit.length : null,
         consoleErrors: errs.length,
       };
       rec.smallFontTop = topGroups(m.smallFont, (i) => `${i.t}|${i.fs}`, 15);
-      rec.contrastWorst = m.contrast.sort((a, b) => a.cr - b.cr).slice(0, 25);
+      rec.contrastWorst = m.contrast.filter((i) => !i.grad).sort((a, b) => a.cr - b.cr).slice(0, 25);
+      rec.contrastGradientItems = m.contrast.filter((i) => i.grad).sort((x, y) => x.cr - y.cr).slice(0, 10);
       rec.vertical = m.vertical.slice(0, 20);
       rec.hitAreaTop = mobile ? topGroups(m.hit, (i) => `${i.tag}|${i.t}|${i.w}x${i.h}`, 20) : [];
       rec.consoleErrors = errs.slice(0, 20);
@@ -371,12 +377,13 @@ lines.push('| Theme | Viewport | overflow-x | font<12px | contrast<AA | text doc
 for (const r of results) {
   if (r.failed) { lines.push(`| ${r.theme} | ${r.viewport} | - | - | - | - | - | - | LOI: ${r.entryError || r.error} |`); continue; }
   const c = r.counts;
-  lines.push(`| ${r.theme} | ${r.viewport} | ${c.overflow ? 'CO (+' + r.overflow.excess + 'px)' : '0'} | ${c.smallFont} | ${c.contrast} | ${c.vertical} | ${fmt(c.hitArea)} | ${c.consoleErrors} | ${r.themeApplied ? '' : 'data-theme=' + r.dataTheme} |`);
+  lines.push(`| ${r.theme} | ${r.viewport} | ${c.overflow ? 'CO (+' + r.overflow.excess + 'px)' : '0'} | ${c.smallFont} | ${c.contrast} | ${c.vertical} | ${fmt(c.hitArea)} | ${c.consoleErrors} | ${[r.themeApplied ? '' : 'data-theme=' + r.dataTheme, c.contrastGradient ? c.contrastGradient + ' text tren nen gradient (can nhin anh)' : ''].filter(Boolean).join('; ')} |`);
 }
 lines.push('', '## Vuot nguong' + (STRICT ? ' (--strict: exit 1)' : ' (canh bao)'), '');
 lines.push(violations.length ? violations.map((v) => `- ${v}`).join('\n') : '- Khong co.');
 for (const r of results.filter((x) => !x.failed)) {
   lines.push('', `## ${r.theme} @ ${r.viewport}`);
+  if (r.contrastGradientItems && r.contrastGradientItems.length) lines.push('', '**Chu tren nen gradient (xem anh de xac nhan)**', '', ...r.contrastGradientItems.map((i) => `- ${i.cr}:1 "${i.t}" ${i.fs}px ${i.fg} tren ${i.bg} @(${i.x},${i.y})`));
   if (r.contrastWorst.length) lines.push('', '**Tuong phan thap nhat**', '', ...r.contrastWorst.slice(0, 10).map((i) => `- ${i.cr}:1 "${i.t}" ${i.fs}px ${i.fg} tren ${i.bg}`));
   if (r.vertical.length) lines.push('', '**Chu xep doc / bi cat**', '', ...r.vertical.slice(0, 10).map((i) => `- [${i.kind}] <${i.tag}> ${i.w}x${i.h} "${i.t}" @(${i.x},${i.y})`));
   if (r.smallFontTop.length) lines.push('', '**Font < 12px (top)**', '', ...r.smallFontTop.slice(0, 8).map((i) => `- ${i.fs}px x${i.count} "${i.t}"`));

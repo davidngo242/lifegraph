@@ -58,7 +58,17 @@ Gate 2 (build + test 100% pass) áp dụng ở MỌI cỡ; chỉ bỏ bắt bu�
 
 ---
 
-## 2c. Nguyên Tắc Ứng Xử Khi Viết Code (Sếp duyệt 2026-11-12)
+## 2c. Chuẩn Giao Tiếp Ngắn Gọn (Sếp duyệt 2026-11-12)
+Làm nhiều, báo cáo ít. Chi tiết: `.agents/skills/concise-engineering-report/SKILL.md`.
+* **Không** báo: chạy/xong lệnh nền, chờ Reviewer/Tester, "đang kiểm tra lại", "chưa commit vì đang chờ", "giờ em làm bước X", lặp lại tiến độ cũ. Khi chờ agent: im lặng, kết thúc lượt, đợi thông báo.
+* **Chỉ** nói giữa chừng khi có blocker, cần quyết định, rủi ro quan trọng; tối đa 1 câu.
+* Subagent: Reviewer chỉ nêu Critical/Major/Minor kèm `file:dòng`; Tester nêu tổng/pass/fail/skip, lỗi thật, lỗi mới hay có từ trước (có bằng chứng); Developer nêu hạng mục, file, kết quả, vấn đề còn lại. Tối đa 10 dòng, chi tiết vào REPORT.md. Không cắt thông tin lỗi.
+* Báo cáo cuối **một** bản, luôn đủ 6 mục: Trạng thái · Đã thực hiện · Kiểm thử (số thực) · **Vướng mắc / Cần Sếp chốt** (kèm đề xuất của Lead, ghi "không có" nếu trống) · Git · **Tiếp theo** (việc Lead sẽ làm ngay, hoặc hành động cần Sếp). Việc thường ~100–150 từ, phức tạp ≤ ~250 từ; sự cố nghiêm trọng được dài hơn.
+* Quy định này không thay thế 3 chốt chặn: không bỏ review/test, không che lỗi hay cảnh báo.
+
+---
+
+## 2d. Nguyên Tắc Ứng Xử Khi Viết Code (Sếp duyệt 2026-11-12)
 
 1. **Nghĩ trước khi code:** nêu giả định; nếu yêu cầu mơ hồ hoặc có nhiều cách hiểu thì hỏi hoặc trình bày các phương án, không âm thầm chọn một.
 2. **Đổi gọn, đúng phạm vi:** mỗi dòng thay đổi phải truy được về yêu cầu của Sếp. Không "cải thiện" code, comment hay định dạng ở kế bên; code chết có sẵn thì báo, không tự xoá. Chỉ dọn phần thừa do chính thay đổi của mình tạo ra.

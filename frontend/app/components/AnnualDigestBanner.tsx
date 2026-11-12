@@ -118,12 +118,12 @@ export default function AnnualDigestBanner({
             <div className="font-semibold text-amber-800 dark:text-amber-300 flex items-center gap-1.5 flex-wrap">
               <span>{digest.childhood_event.title}</span>
               {digest.childhood_event.effects?.cash_delta && (
-                <span className="text-[12px] font-sans tabular-nums px-1 py-0.2 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
+                <span className="text-[12px] font-sans tabular-nums px-1 py-0.5 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
                   +{digest.childhood_event.effects.cash_delta} USD
                 </span>
               )}
               {digest.childhood_event.effects?.karma_delta && (
-                <span className="text-[12px] font-sans tabular-nums px-1 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold">
+                <span className="text-[12px] font-sans tabular-nums px-1 py-0.5 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold">
                   +{digest.childhood_event.effects.karma_delta} Karma
                 </span>
               )}

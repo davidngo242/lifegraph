@@ -133,6 +133,8 @@ NEXT_PUBLIC_API_URL=/api/game
     * **5 Giai Đoạn Đời:** Ấu thơ (0-5t), Học đường (6-17t), Lập nghiệp (18-35t), Trụ cột gia tộc (36-55t), Hoàng hôn & Luân hồi (56+t).
 
 ### 8. Thanh Điều Khiển HUD & Hệ Thống Cứu Hộ Khẩn Cấp (CommandBarHUD & Emergency SOS)
+
+> **Đã gỡ (2026-11-12):** component này không còn được render trong ứng dụng và đã bị xoá khỏi mã nguồn; mô tả dưới đây chỉ còn giá trị lịch sử. Phím tắt hiện nằm ở `KeyboardShortcutsModal`, thông báo ở `UnifiedNotificationCenter`, thiết lập ở `SystemSettingsPopover`.
 * 🎛️ **Thanh Lệnh HUD Cố Định (Sticky Cockpit Command Bar):** Tọa lạc ngay dưới thanh điều hướng chính, tích hợp công cụ chuyển đổi nhanh 1-chạm giữa Buồng Lái Kiếp Sống (*RPG Simulation View*) và Cây Gia Phả Tiền Nhân (*Family Lineage Portal*).
 * 🎬 **Lối Tắt Phòng Quyết Định 21:9 Cinema (`[D]`):** Mở không gian toàn cảnh Ultra-wide điện ảnh đối mặt ngã rẽ cuộc đời mà không bị che khuất bởi các thanh công cụ phụ.
 * 🚨 **Trung Tâm Cấp Cứu Khẩn Cấp Sinh Mệnh (Emergency Rescue Engine):** Tự động giám sát hai ngưỡng sinh tồn cốt tử: **Sinh Lực (Vitality < 30%)** hoặc **Kiệt Sức (Burnout > 75%)**.

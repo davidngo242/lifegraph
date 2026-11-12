@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { formatCurrency } from '../utils/currencyUtils';
 import Tooltip from './Tooltip';
+import ModalShell from './ModalShell';
 
 interface Asset {
   id: string;
@@ -222,10 +223,10 @@ export default function AssetDetailModal({
     : marketAssets.filter(a => a.tier === selectedTierFilter);
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+    <ModalShell label="Chi tiết tài sản" className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-4 bg-black/85 backdrop-blur-md animate-in fade-in" onClose={onClose}>
       <div className="relative w-full max-w-4xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 md:p-6 shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
         {/* Close Button */}
-        <button
+        <button aria-label="Đóng"
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
         >
@@ -473,10 +474,10 @@ export default function AssetDetailModal({
                       >
                         <h4 className="text-xs md:text-sm font-semibold text-[var(--text-primary)] truncate cursor-help">{item.name}</h4>
                       </Tooltip>
-                      <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-800 dark:text-indigo-300 border border-indigo-500/30">
+                      <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-indigo-500/15 text-indigo-800 dark:text-indigo-300 border border-indigo-500/30">
                         {item.tier_label}
                       </span>
-                      <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30">
+                      <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30">
                         {item.ap_cost} AP
                       </span>
                     </div>
@@ -568,14 +569,14 @@ export default function AssetDetailModal({
                     >
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
+                          <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                             Cấp {ht.tier}
                           </span>
                           <Tooltip content={ht.name} position="top" className="min-w-0">
                             <h4 className="text-xs md:text-sm font-semibold text-[var(--text-primary)] truncate cursor-help">{ht.name}</h4>
                           </Tooltip>
                           {isCurrent && (
-                            <span className="text-[12px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40">
+                            <span className="text-[12px] font-bold px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40">
                               Đang Ở
                             </span>
                           )}
@@ -629,6 +630,6 @@ export default function AssetDetailModal({
           )}
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }

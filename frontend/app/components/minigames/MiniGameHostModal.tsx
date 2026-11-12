@@ -158,7 +158,7 @@ export default function MiniGameHostModal({
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 font-bold text-amber-800 dark:text-amber-300 truncate">
                 <span>{info.title}</span>
-                <span className="text-xs px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-200 border border-amber-500/30">
+                <span className="text-xs px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-800 dark:text-amber-200 border border-amber-500/30">
                   Cột Mốc Thực Chiến
                 </span>
               </div>

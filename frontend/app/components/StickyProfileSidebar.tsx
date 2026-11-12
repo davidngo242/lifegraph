@@ -192,7 +192,7 @@ export default function StickyProfileSidebar({
             </Tooltip>
           );
         })()}
-        <span className={`shrink-0 text-xs font-sans px-1.5 py-0.2 rounded font-semibold ${
+        <span className={`shrink-0 text-xs font-sans px-1.5 py-0.5 rounded font-semibold ${
           isParentsDeceased
             ? 'bg-rose-950/50 text-rose-300 border border-rose-800/60'
             : 'bg-emerald-950/50 text-emerald-300 border border-emerald-800/60'

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { HeartPulse, Activity, Flame, ChevronRight, X, AlertOctagon, HandCoins, PackageMinus } from 'lucide-react';
+import ModalShell from './ModalShell';
 
 interface EmergencyRescueModalProps {
   isOpen: boolean;
@@ -35,7 +36,7 @@ export default function EmergencyRescueModal({
   const isDebtCrisis = cash < 0;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+    <ModalShell label="Cấp cứu khẩn cấp" onClose={onClose} className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
       <div className="relative w-full max-w-lg bg-[var(--bg-card)] border border-rose-500/60 text-[var(--text-primary)] rounded-3xl p-4 sm:p-6 md:p-7 shadow-[0_0_40px_rgba(244,63,94,0.2)] overflow-y-auto max-h-[92vh] transition-colors duration-200">
         {/* Red Alert Ambient Glow */}
         <div className="absolute top-0 right-0 w-72 h-36 bg-rose-500/15 rounded-full blur-3xl pointer-events-none" />
@@ -58,7 +59,7 @@ export default function EmergencyRescueModal({
               </p>
             </div>
           </div>
-          <button
+          <button aria-label="Đóng"
             onClick={onClose}
             className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1.5 rounded-xl hover:bg-[rgba(255,255,255,0.06)] transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
           >
@@ -292,6 +293,6 @@ export default function EmergencyRescueModal({
           </button>
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }

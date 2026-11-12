@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Sparkles, ShieldCheck, HeartPulse, Flame, X, CheckCircle2, AlertCircle, ArrowRight, RefreshCw, Award } from 'lucide-react';
+import ModalShell from './ModalShell';
 
 interface KarmaSanctumModalProps {
   karma: number;
@@ -44,10 +45,10 @@ export default function KarmaSanctumModal({
   const lifetimeStats = playerAccount?.lifetime_stats || {};
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+    <ModalShell label="Thánh đường nghiệp" className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in" onClose={onClose}>
       <div className="relative w-full max-w-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
         {/* Close Button */}
-        <button
+        <button aria-label="Đóng"
           onClick={onClose}
           className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
         >
@@ -228,7 +229,7 @@ export default function KarmaSanctumModal({
           </div>
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }
 

@@ -17,6 +17,7 @@ import {
   X
 } from 'lucide-react';
 import { formatCurrency } from '../../utils/currencyUtils';
+import ModalShell from '../ModalShell';
 import WhatIfPanel from '../WhatIfModal';
 
 export interface YearEndReflectionModalProps {
@@ -77,7 +78,7 @@ export default function YearEndReflectionModal({
   };
 
   const modal = (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-xl animate-in fade-in duration-300">
+    <ModalShell label="Tổng kết cuối năm" className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-xl animate-in fade-in duration-300">
       {/* Background radial glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center">
         <div className="w-[600px] h-[600px] rounded-full bg-gradient-to-r from-amber-500/15 via-rose-500/10 to-indigo-500/15 blur-3xl animate-pulse" />
@@ -110,6 +111,7 @@ export default function YearEndReflectionModal({
               onClick={onClose}
               disabled={isAdvancing}
               className="p-1.5 rounded-xl bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
+              aria-label="Đóng"
               title="Đóng cửa sổ"
             >
               <X className="w-4 h-4" />
@@ -133,7 +135,7 @@ export default function YearEndReflectionModal({
                   <Activity className="w-3.5 h-3.5" />
                   <span>Dưỡng Sinh Cuối Năm</span>
                 </span>
-                <span className="font-mono text-xs px-1.5 py-0.2 rounded bg-emerald-500/20 border border-emerald-500/40">
+                <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40">
                   {unusedAP} AP dư
                 </span>
               </div>
@@ -238,7 +240,7 @@ export default function YearEndReflectionModal({
                 <span className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-base group-hover:scale-110 transition-transform">
                   📈
                 </span>
-                <span className="text-xs font-mono px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold">
+                <span className="text-xs font-mono px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold">
                   +15% Thu nhập
                 </span>
               </div>
@@ -271,7 +273,7 @@ export default function YearEndReflectionModal({
                 <span className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-base group-hover:scale-110 transition-transform">
                   🧘
                 </span>
-                <span className="text-xs font-mono px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 font-bold">
+                <span className="text-xs font-mono px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 font-bold">
                   Kháng Stress
                 </span>
               </div>
@@ -304,7 +306,7 @@ export default function YearEndReflectionModal({
                 <span className="w-8 h-8 rounded-xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-base group-hover:scale-110 transition-transform">
                   🤝
                 </span>
-                <span className="text-xs font-mono px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-800 dark:text-sky-300 border border-sky-500/30 font-bold">
+                <span className="text-xs font-mono px-1.5 py-0.5 rounded-full bg-sky-500/20 text-sky-800 dark:text-sky-300 border border-sky-500/30 font-bold">
                   x2 Quý Nhân
                 </span>
               </div>
@@ -324,7 +326,7 @@ export default function YearEndReflectionModal({
           </div>
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 
   // Render qua portal để thoát khỏi stacking-context của <main> (z-10), nếu không header sticky z-50 sẽ đè lên modal.

@@ -67,6 +67,8 @@ flowchart TD
 
 ## 4. Thanh Điều Khiển Trung Tâm (CommandBarHUD)
 
+> **Đã gỡ (2026-11-12):** component này không còn được render trong ứng dụng và đã bị xoá khỏi mã nguồn; mô tả dưới đây chỉ còn giá trị lịch sử. Phím tắt hiện nằm ở `KeyboardShortcutsModal`, thông báo ở `UnifiedNotificationCenter`, thiết lập ở `SystemSettingsPopover`.
+
 Thanh công cụ `CommandBarHUD` được ghim cố định ở vị trí `sticky top-[53px]` ngay dưới thanh điều hướng chính, chia làm 3 phân khu rõ rệt:
 
 ```text
@@ -145,6 +147,8 @@ Hệ thống phím tắt được nhúng trực tiếp vào các component giao 
 - Các lựa chọn đối thoại và thương lượng với NPC được gắn phím <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd> cho phép phản hồi thần tốc.
 
 ### 6.5. Điều Khiển Âm Thanh (AudioVolumeControl)
+
+> **Đã gỡ (2026-11-12):** component này không còn được render trong ứng dụng và đã bị xoá khỏi mã nguồn; mô tả dưới đây chỉ còn giá trị lịch sử. Phím tắt hiện nằm ở `KeyboardShortcutsModal`, thông báo ở `UnifiedNotificationCenter`, thiết lập ở `SystemSettingsPopover`.
 - Tooltip và nút nhạc nền hiển thị huy hiệu <kbd>M</kbd> nhắc nhở người chơi có thể tắt/bật âm thanh bất cứ lúc nào.
 
 ### 6.6. Phòng Quyết Định Điện Ảnh 21:9 (InteractiveScene2D)

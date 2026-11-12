@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, DollarSign, CheckCircle2, AlertTriangle, ArrowRight, Play, X, Sparkles } from 'lucide-react';
+import ModalShell from '../ModalShell';
 
 interface StockTraderMiniGameProps {
   nationality?: string;
@@ -167,12 +168,13 @@ export default function StockTraderMiniGame({
   const maxPrice = Math.max(...priceHistory, 150);
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+    <ModalShell label="Minigame giao dịch chứng khoán" className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
       <div className="relative w-full max-w-lg bg-[var(--bg-card)] border border-cyan-500/40 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-slate-400 hover:text-white hover:bg-[var(--bg-card)] transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
+          aria-label="Đóng"
         >
           <X className="w-4 h-4" />
         </button>
@@ -413,7 +415,7 @@ export default function StockTraderMiniGame({
           </div>
         )}
       </div>
-    </div>
+    </ModalShell>
   );
 }
 

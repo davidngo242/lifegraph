@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Award, Sparkles, X, ChevronRight, Play, Flame, MapPin, Zap, CheckCircle2, Lock, BookOpen, Star, AlertCircle } from 'lucide-react';
 import { MiniGameType } from './minigames/MiniGameHostModal';
+import ModalShell from './ModalShell';
 
 export interface SkillBranch {
   id: string;
@@ -218,12 +219,13 @@ export default function SkillSelectorModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-5 bg-black/85 backdrop-blur-md animate-in fade-in">
+    <ModalShell label="Chọn kỹ năng" className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-5 bg-black/85 backdrop-blur-md animate-in fade-in" onClose={onClose}>
       <div className="relative w-full max-w-4xl bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 md:p-7 shadow-2xl flex flex-col overflow-hidden max-h-[92vh]">
         {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
+          aria-label="Đóng"
         >
           <X className="w-4 h-4" />
         </button>
@@ -444,7 +446,7 @@ export default function SkillSelectorModal({
           <span>Vượt qua kỳ sát hạch (Mini-Game) sẽ nhận bằng cấp và kích hoạt quyền lợi vĩnh viễn suốt kiếp sống.</span>
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }
 

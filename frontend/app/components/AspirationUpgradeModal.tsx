@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Target, Sparkles, Award, ArrowRight, X, CheckCircle, ShieldAlert, Trophy } from 'lucide-react';
+import ModalShell from './ModalShell';
 
 interface UpgradeOption {
   id: string;
@@ -101,7 +102,7 @@ export default function AspirationUpgradeModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+    <ModalShell label="Nâng cấp khát vọng" className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200" onClose={onClose}>
       <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
         {/* Modal Header */}
         <div className="p-5 bg-[var(--bg-card-subtle)] border-b border-[var(--border-subtle)] flex items-start justify-between relative">
@@ -124,7 +125,7 @@ export default function AspirationUpgradeModal({
             </div>
           </div>
 
-          <button
+          <button aria-label="Đóng"
             onClick={onClose}
             className="p-1.5 rounded-xl bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-subtle)] transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
           >
@@ -235,7 +236,7 @@ export default function AspirationUpgradeModal({
           </button>
         </div>
       </div>
-    </div>
+    </ModalShell>
   );
 }
 

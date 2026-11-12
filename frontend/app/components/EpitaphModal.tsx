@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Skull, Sparkles, UserCheck, RotateCcw, Film, Home, X, Layers, AlertTriangle } from 'lucide-react';
 import DeathRecapVideoModal from './DeathRecapVideoModal';
 import LifeTarotCardModal from './LifeTarotCardModal';
+import ModalShell from './ModalShell';
 
 interface EpitaphModalProps {
   name: string;
@@ -76,11 +77,11 @@ export default function EpitaphModal({
 
   return (
     <>
-      <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in duration-700">
+      <ModalShell label="Bia mộ" className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in duration-700">
         <div className="max-w-md w-full max-h-[94vh] overflow-y-auto custom-scrollbar bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-5 sm:p-8 text-center shadow-2xl relative">
           {/* Close / Return Home Button */}
           {onReturnHome && (
-            <button
+            <button aria-label="Đóng"
               onClick={onReturnHome}
               className="absolute top-4 right-4 p-2 rounded-full bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition z-20 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center"
               title="Trở về Trang Chủ Gia Phả"
@@ -191,7 +192,7 @@ export default function EpitaphModal({
             )}
           </div>
         </div>
-      </div>
+      </ModalShell>
 
       {/* Render 15s Death Video Modal if opened */}
       {showRecapModal && (
@@ -219,14 +220,14 @@ export default function EpitaphModal({
 
       {/* Nirvana Error Popup Modal */}
       {nirvanaError && (
-        <div className="fixed inset-0 z-[130] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+        <ModalShell label="Thông báo đắc đạo" className="fixed inset-0 z-[130] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in" onClose={() => setNirvanaError(null)}>
           <div className="w-full max-w-sm bg-[var(--bg-card)] text-[var(--text-primary)] border border-amber-500/50 rounded-2xl p-5 shadow-2xl space-y-3">
             <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
               <h4 className="font-bold text-sm text-amber-800 dark:text-amber-300 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-800 dark:text-amber-400" />
                 Thông Báo Đắc Đạo
               </h4>
-              <button onClick={() => setNirvanaError(null)} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center">
+              <button aria-label="Đóng" onClick={() => setNirvanaError(null)} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 shrink-0 inline-flex items-center justify-center">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -242,7 +243,7 @@ export default function EpitaphModal({
               </button>
             </div>
           </div>
-        </div>
+        </ModalShell>
       )}
     </>
   );
