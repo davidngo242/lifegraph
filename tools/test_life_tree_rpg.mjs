@@ -53,7 +53,7 @@ runTest('DynamicLifeTree features 4 Sacred Pillars + Integrated Family Root Cond
   assert.ok(lifeTreeSource.includes('Cành Hoàng Kim'), 'Must render Wealth Pillar');
   assert.ok(lifeTreeSource.includes('Gốc Rễ Gia Đình'), 'Must render Family Roots Pillar');
   assert.ok(lifeTreeSource.includes('family-root-tendrils'), 'Must anchor SVG root tendrils to trunk');
-  assert.ok(lifeTreeSource.includes('Kịch Bản Điện Ảnh 21:9'), 'Must integrate active scenario CTA inside Life Tree');
+  assert.ok(lifeTreeSource.includes('Đối Mặt Biến Cố'), 'Must integrate active scenario CTA inside Life Tree');
   assert.ok(lifeTreeSource.includes('onAdvanceYear'), 'Must unify year advancement inside Life Tree');
 });
 
