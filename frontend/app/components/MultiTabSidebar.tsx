@@ -69,7 +69,9 @@ export default function MultiTabSidebar({
   isLoading = false,
   unlocks = ALL_UNLOCKED
 }: MultiTabSidebarProps) {
-  const [activeTab, setActiveTab] = useState<SidebarTab>('journal');
+  const [requestedTab, setActiveTab] = useState<SidebarTab>('journal');
+  // Tab Tài Sản bị khoá (vd. nhân vật mới là trẻ em) thì quay về Nhật Ký, tránh panel trống.
+  const activeTab: SidebarTab = requestedTab === 'assets' && !unlocks.assets ? 'journal' : requestedTab;
   const [interactingNpcId, setInteractingNpcId] = useState<string | null>(null);
 
   if (!character) return null;
