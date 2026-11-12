@@ -353,6 +353,7 @@ export function useGameState() {
   // Strategic AP Hub Actions
   const handleBuyAsset = async (item: any) => {
     const data = await apiPost<GameStateResponse>('/action/buy-asset', {
+      asset_id: item.id,
       name: item.name,
       type: item.type,
       cost: item.cost,
