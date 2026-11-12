@@ -832,7 +832,7 @@ function CharacterHeroBannerInner({
                         type="button"
                         onClick={() => setShowAllTraits((v) => !v)}
                         aria-expanded={showAllTraits}
-                        className="sm:hidden min-h-[32px] px-2.5 py-0.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)] transition"
+                        className="sm:hidden min-h-[44px] px-2.5 py-0.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)] transition"
                       >
                         {showAllTraits ? 'Thu gọn' : `+${character.innate_traits.length - 2} xem thêm`}
                       </button>
