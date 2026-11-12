@@ -48,4 +48,4 @@ Nguyên tắc: **Lead là người nắm kết quả rồi báo cáo Sếp**. Su
 Ghi vào báo cáo cuối: số subagent, token mỗi agent, số ảnh đã đọc, số lượt Lead. Đặt ngân sách trước (ví dụ đợt L <= 1M token subagent) và dừng giao thêm khi vượt 80%.
 
 ## 6. Áp dụng cho dự án khác
-Sao chép thư mục này vào `.agents/skills/` (hoặc `~/.claude/skills/token-efficiency/` để dùng mọi dự án), bỏ phần số liệu LifeGraph ở đầu, giữ mục 1–5.
+Trong repo này, `.claude/skills/token-efficiency` và `.claude/skills/full-dev-workflow` là symlink tới `.agents/skills/` để Claude Code tự nạp (chỉ 2 skill này; các skill thiết kế dài dòng khác cố ý KHÔNG nạp tự động để tiết kiệm token). Sao chép thư mục này vào `.agents/skills/` (hoặc `~/.claude/skills/token-efficiency/` để dùng mọi dự án), bỏ phần số liệu LifeGraph ở đầu, giữ mục 1–5.
