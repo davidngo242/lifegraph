@@ -21,3 +21,4 @@ tools/ui_audit_out/
 backend/data/
 *.exe
 tools/*.exe
+*.tsbuildinfo
