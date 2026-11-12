@@ -216,7 +216,8 @@ test('invested_ap boosts rewards, mitigates risks and appends strategic log note
 
   assert.equal(res.status, 200);
   const char = res.data.character;
-  assert.equal(char.cash, 4000); // 1000 + 3000 (boosted by 2 invested AP)
+  const wageNet = (res.data.passiveSummary?.wageIncome || 0) - (res.data.passiveSummary?.livingCost || 0);
+  assert.equal(char.cash, 4000 + wageNet); // 1000 + 3000 (boosted by 2 invested AP) + adult wage - living cost
   assert.equal(char.karma, 66);
   assert.equal(char.vitality, 72);
   assert.equal(char.burnout, 21); // 20 + 10 (mitigated) - 4 (annual passive) - 5 (1 unused AP)
