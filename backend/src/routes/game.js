@@ -35,6 +35,7 @@ import {
 } from '../engine/rpgProgressionEngine.js';
 import { processPassivePhase, calculateMaxVitality } from '../engine/tickEngine.js';
 import { applyDelta } from '../engine/core/stats.js';
+import { overtimeMultiplier } from '../engine/core/income.js';
 import { deriveMinigameOutcome } from '../engine/core/minigames.js';
 import { getCurrentScenarioForCharacter, interactWithHotspot, resolveMindStageChoice, fulfillCommitment, evaluateCommitments, getNextScenarioAge } from '../engine/scenarioEngine.js';
 import { recordAndCheckCombo, resetAnnualActions } from '../engine/comboActionEngine.js';
@@ -2474,7 +2475,8 @@ router.post('/action/overtime', async (req, res) => {
     const codeMultiplier = hasCodeWhisperer ? 1.35 : 1.0;
     const isWealthPledge = character.active_pledge === 'pledge_wealth';
     const pledgeWealthMultiplier = isWealthPledge ? 1.15 : 1.0;
-    const earnedCash = Math.round(baseEarned * techMultiplier * negotiationMultiplier * codeMultiplier * pledgeWealthMultiplier);
+    const overtimeMult = overtimeMultiplier(character.overtime_year_count, character.burnout);
+    const earnedCash = Math.round(baseEarned * techMultiplier * negotiationMultiplier * codeMultiplier * pledgeWealthMultiplier * overtimeMult);
 
     const healthLevel = character.skills?.resilience_health?.level || 0;
     const burnoutReduction = healthLevel * 0.2; // 20% burnout reduction per level
@@ -2489,6 +2491,7 @@ router.post('/action/overtime', async (req, res) => {
     }
 
     character.action_points -= 1;
+    character.overtime_year_count = (Number(character.overtime_year_count) || 0) + 1; // reset on year advance in processPassivePhase
     applyDelta(character, { cash: earnedCash, burnout: burnoutGained, vitality: -(healthLevel >= 2 ? 1 : 3) }, { vitalityMin: 10 });
     if (character.burnout >= 80) character.recent_risk = Math.min(5, (Number(character.recent_risk) || 0) + 1); // overwork raises mortality hazard
 
@@ -2511,6 +2514,7 @@ router.post('/action/overtime', async (req, res) => {
       success: true,
       message: `Cày thêm việc thành công! Thu về ngay +$${earnedCash.toLocaleString()} tiền mặt${techBonusNote} (Burnout +${burnoutGained}).`,
       earnedCash,
+      overtimeMultiplier: overtimeMult,
       character
     });
   } catch (err) {
