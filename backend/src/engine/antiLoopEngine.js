@@ -1,3 +1,4 @@
+import { resolveHousingTier } from './core/income.js';
 // Anti-Loop & Vector Similarity Matrix Engine (LifeGraph V5 & V6)
 // Provides < 100ms retrieval and maintains 15-tag contextual window & Delayed Domino Fuses
 // Enforces Once-in-a-Lifetime guarantees and age-bracket filtering
@@ -56,7 +57,7 @@ export function filterViableScenarios(scenarioMatrix, character) {
                               flags.has("ai_startup_venture") || flags.has("tech_startup_joined");
 
   const isRenting = !flags.has("owns_house") && !flags.has("owns_villa") && 
-                    character.housing !== 'villa' && character.housing !== 'luxury_apartment';
+                    resolveHousingTier(character.housing) < 3;
 
   const hasInvestments = (Array.isArray(character.assets) && character.assets.some(a => a.type === 'stock' || a.type === 'crypto' || a.type === 'business')) ||
                          (character.cash >= 20000000);

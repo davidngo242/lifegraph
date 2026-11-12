@@ -3,118 +3,118 @@
     "seed": 1000,
     "death_age": 76,
     "death_cause": "Suy đa tạng sau một đợt cảm lạnh mùa đông",
-    "final_cash": 60601,
+    "final_cash": 70546,
     "final_karma": 75
   },
   {
     "seed": 1001,
     "death_age": 79,
     "death_cause": "Suy tim do tuổi già và biến chứng mệt mỏi tích tụ",
-    "final_cash": 60569,
+    "final_cash": 81716,
     "final_karma": 70
   },
   {
     "seed": 1002,
     "death_age": 79,
     "death_cause": "Suy tim do tuổi già và biến chứng mệt mỏi tích tụ",
-    "final_cash": 34934,
+    "final_cash": 49469,
     "final_karma": 70
   },
   {
     "seed": 1003,
     "death_age": 74,
     "death_cause": "Cơn đau thắt ngực cấp tính không kịp cấp cứu",
-    "final_cash": 62909,
+    "final_cash": 69794,
     "final_karma": 75
   },
   {
     "seed": 1004,
     "death_age": 74,
     "death_cause": "Đột quỵ trong giấc ngủ yên bình",
-    "final_cash": 41539,
+    "final_cash": 48424,
     "final_karma": 75
   },
   {
     "seed": 1005,
     "death_age": 82,
     "death_cause": "Đột quỵ trong giấc ngủ yên bình",
-    "final_cash": 30075,
+    "final_cash": 49200,
     "final_karma": 75
   },
   {
     "seed": 1006,
     "death_age": 82,
     "death_cause": "Ngừng tuần hoàn tự nhiên do cạn kiệt sinh lực",
-    "final_cash": 54041,
+    "final_cash": 73166,
     "final_karma": 75
   },
   {
     "seed": 1007,
     "death_age": 86,
     "death_cause": "Suy tim do tuổi già và biến chứng mệt mỏi tích tụ",
-    "final_cash": 6447,
+    "final_cash": 22517,
     "final_karma": 70
   },
   {
     "seed": 1008,
     "death_age": 74,
     "death_cause": "Suy tim do tuổi già và biến chứng mệt mỏi tích tụ",
-    "final_cash": 62445,
+    "final_cash": 69330,
     "final_karma": 70
   },
   {
     "seed": 1009,
     "death_age": 72,
     "death_cause": "Đột quỵ trong giấc ngủ yên bình",
-    "final_cash": 44729,
+    "final_cash": 48554,
     "final_karma": 70
   },
   {
     "seed": 1010,
     "death_age": 74,
     "death_cause": "Đột quỵ trong giấc ngủ yên bình",
-    "final_cash": 41099,
+    "final_cash": 47984,
     "final_karma": 70
   },
   {
     "seed": 1011,
     "death_age": 77,
     "death_cause": "Đột quỵ trong giấc ngủ yên bình",
-    "final_cash": 59306,
+    "final_cash": 70781,
     "final_karma": 80
   },
   {
     "seed": 1012,
     "death_age": 81,
     "death_cause": "Đột quỵ trong giấc ngủ yên bình",
-    "final_cash": 31250,
+    "final_cash": 48845,
     "final_karma": 75
   },
   {
     "seed": 1013,
     "death_age": 81,
     "death_cause": "Suy tim do tuổi già và biến chứng mệt mỏi tích tụ",
-    "final_cash": 56935,
+    "final_cash": 82534,
     "final_karma": 70
   },
   {
     "seed": 1014,
     "death_age": 76,
     "death_cause": "Ngừng tuần hoàn tự nhiên do cạn kiệt sinh lực",
-    "final_cash": 60759,
+    "final_cash": 70704,
     "final_karma": 70
   },
   {
     "seed": 1015,
     "death_age": 85,
     "death_cause": "Suy đa tạng sau một đợt cảm lạnh mùa đông",
-    "final_cash": 26464,
+    "final_cash": 50179,
     "final_karma": 70
   },
   {
     "seed": 1016,
-    "death_age": 79,
-    "death_cause": "Ngừng tuần hoàn tự nhiên do cạn kiệt sinh lực",
+    "death_age": 78,
+    "death_cause": "Kiệt quệ sinh lực hoàn toàn (Vitality = 0)",
     "final_cash": -250000,
     "final_karma": 70
   },
@@ -122,21 +122,21 @@
     "seed": 1017,
     "death_age": 78,
     "death_cause": "Ngừng tuần hoàn tự nhiên do cạn kiệt sinh lực",
-    "final_cash": 58719,
+    "final_cash": 71724,
     "final_karma": 70
   },
   {
     "seed": 1018,
     "death_age": 73,
     "death_cause": "Suy tim do tuổi già và biến chứng mệt mỏi tích tụ",
-    "final_cash": 43214,
+    "final_cash": 48569,
     "final_karma": 70
   },
   {
     "seed": 1019,
-    "death_age": 79,
-    "death_cause": "Ngừng tuần hoàn tự nhiên do cạn kiệt sinh lực",
-    "final_cash": -36107,
+    "death_age": 81,
+    "death_cause": "Suy đa tạng sau một đợt cảm lạnh mùa đông",
+    "final_cash": -12999,
     "final_karma": 70
   }
 ]

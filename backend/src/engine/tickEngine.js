@@ -3,7 +3,7 @@ import { updateAsset, updateRelationship } from '../db/db.js';
 import { generatePassiveChildhoodEvent } from './rebirthEngine.js';
 import { getCountryBigData } from '../data/countryBigData.js';
 import { clampStat, applyDelta, CASH_FLOOR, BANKRUPT_FLAG } from './core/stats.js';
-import { computeAnnualIncome } from './core/income.js';
+import { computeAnnualIncome, resolveHousingTier } from './core/income.js';
 
 // Calculate maximum vitality cap based on biological age
 // If Transhumanism surgery was successful, decay is frozen until transhuman_frozen_until_age
@@ -527,7 +527,7 @@ export async function processPassivePhase(character, assets, relationships) {
   // Net Passive Flow: Asset Yield + Capital Engine - Asset Maintenance - Family Upkeep
   // Plus Phuong an A: adult base wage (occupation / nationality / age / burnout) minus living cost (housing tier)
   const income = computeAnnualIncome({
-    age, occupation: character.occupation, housingTier: character.housing?.tier,
+    age, occupation: character.occupation, housingTier: resolveHousingTier(character.housing),
     burnout, countryTier: countryData?.tier || character.country_tier
   });
   const netPassiveFlow = totalAssetIncome + capitalEngineBonus - totalAssetMaintenance - totalRelationshipCost + income.net;
@@ -744,6 +744,7 @@ export async function processPassivePhase(character, assets, relationships) {
       global_indices: globalIndices,
       timeline_snapshots: timelineSnapshots,
       recent_risk: Math.max(0, (Number(character.recent_risk) || 0) - 1),
+      overtime_year_count: 0, // diminishing-returns counter resets each year
       history_log: bankruptcyNotice
         ? [...(Array.isArray(character.history_log) ? character.history_log : []), { age, event: 'Phá sản', choice: bankruptcyNotice }]
         : character.history_log

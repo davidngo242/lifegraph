@@ -42,6 +42,7 @@ import SkillTreeTab from './SkillTreeTab';
 import SocialLinksTab from './SocialLinksTab';
 import CulturalLandscapeBackdrop from './CulturalLandscapeBackdrop';
 import { soundFx } from '../../utils/soundEffects';
+import { ALL_UNLOCKED, UNLOCK_HINTS, type Unlocks } from '../../lib/unlocks';
 
 export interface LifeTreeNode {
   id: string;
@@ -109,6 +110,7 @@ export interface DynamicLifeTreeProps {
   isNextAgeMilestone?: boolean;
   isPledging?: boolean;
   isLoading?: boolean;
+  unlocks?: Unlocks;
 }
 
 export default function DynamicLifeTree({
@@ -148,7 +150,8 @@ export default function DynamicLifeTree({
   annualDigest,
   isNextAgeMilestone = false,
   isPledging = false,
-  isLoading = false
+  isLoading = false,
+  unlocks = ALL_UNLOCKED
 }: DynamicLifeTreeProps) {
   const [treeViewMode, setTreeViewMode] = useState<'life_actions' | 'skill_tree' | 'social_links' | 'family_roots'>('life_actions');
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
@@ -433,7 +436,7 @@ export default function DynamicLifeTree({
         }
       ];
 
-      if (breakthroughAction) {
+      if (breakthroughAction && unlocks.breakthrough) {
         nodes.push({
           id: 'breakthrough',
           title: breakthroughAction.title,
@@ -553,7 +556,7 @@ export default function DynamicLifeTree({
         }
       ];
 
-      if (breakthroughAction) {
+      if (breakthroughAction && unlocks.breakthrough) {
         nodes.push({
           id: 'breakthrough',
           title: breakthroughAction.title,
@@ -756,7 +759,7 @@ export default function DynamicLifeTree({
       }
     ];
 
-    if (breakthroughAction) {
+    if (breakthroughAction && unlocks.breakthrough) {
       adultNodes.push({
         id: 'breakthrough',
         title: breakthroughAction.title,
@@ -1131,6 +1134,7 @@ export default function DynamicLifeTree({
             <span>Vòng Đời &amp; Hành Động</span>
           </button>
 
+          {unlocks.skillTree ? (
           <button
             type="button"
             onClick={() => setTreeViewMode('skill_tree')}
@@ -1150,6 +1154,9 @@ export default function DynamicLifeTree({
               </span>
             )}
           </button>
+          ) : (
+            <span role="note" className="px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)]">{UNLOCK_HINTS.rebirth}</span>
+          )}
 
           {onRpgActivePerk && character?.unlocked_skills?.includes('stock_trading') && (
             <Tooltip content="Lướt sóng cổ phiếu (1 AP): Chớp cơ hội thị trường sinh lời">
@@ -1206,6 +1213,7 @@ export default function DynamicLifeTree({
         </div>
 
         {/* Wealth Pillar Shortcut */}
+        {unlocks.assets ? (
         <Tooltip position="bottom" align="right" content="Mở Sổ Vàng Tài Sản & Đầu Tư BĐS (Cành Hoàng Kim)">
           <button
             type="button"
@@ -1219,6 +1227,9 @@ export default function DynamicLifeTree({
             <ArrowUpRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 opacity-70 group-hover:opacity-100 transition" />
           </button>
         </Tooltip>
+        ) : (
+          <span role="note" className="px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)] shrink-0">{UNLOCK_HINTS.adult}</span>
+        )}
       </div>
 
       {/* ========================================================================= */}
@@ -1613,7 +1624,7 @@ export default function DynamicLifeTree({
         {/* SPIRIT GUARDIAN PET CONTROLS (GÓC TRÊN PHẢI CANVAS - CÂN XỨNG) */}
         {/* ========================================================================= */}
         <div className="absolute top-3 right-3 sm:right-4 z-25 pointer-events-auto flex items-center gap-1.5">
-          {equippedPet !== 'none' ? (
+          {!unlocks.pets ? null : equippedPet !== 'none' ? (
             <Tooltip
               position="bottom"
               align="right"
