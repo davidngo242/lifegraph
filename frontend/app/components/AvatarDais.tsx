@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { FxParticles, FxEmit, useAssets, usePrefersReducedMotion } from './avatarFx';
@@ -103,6 +103,19 @@ export default function GoldenMagicDais({
   const medTarget = useRef(isMeditating);
   medTarget.current = isMeditating;
   const reducedRef = usePrefersReducedMotion();
+  // Theme sáng (Daylight/Sepia): viền/halo vàng nhạt bị chìm trên nền sáng → dùng hổ phách đậm hơn.
+  const [lightTheme, setLightTheme] = useState(false);
+  useEffect(() => {
+    const read = () => {
+      const t = document.documentElement.getAttribute('data-theme');
+      const dark = t === 'obsidian' || t === 'cyberpunk' || document.documentElement.classList.contains('dark');
+      setLightTheme(!dark);
+    };
+    read();
+    const mo = new MutationObserver(read);
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+    return () => mo.disconnect();
+  }, []);
 
   // Level Progression Tiers (Giữ vững cốt cách Hoàng Kim Sang Trọng, tăng dần hiệu ứng thần thoại theo cấp)
   const daisTier = level >= 71 ? 5 : level >= 46 ? 4 : level >= 26 ? 3 : level >= 11 ? 2 : 1;
@@ -191,6 +204,11 @@ export default function GoldenMagicDais({
       }),
     [A.haloTex]
   );
+  // Cập nhật màu theo theme (không tạo lại material)
+  React.useEffect(() => {
+    A.rimMat.color.set(lightTheme ? '#b45309' : '#fde68a');
+    haloMat.color.set(lightTheme ? '#d97706' : '#ffffff');
+  }, [lightTheme, A.rimMat, haloMat]);
   React.useEffect(
     () => () => {
       haloMat.dispose();

@@ -530,13 +530,13 @@ function CharacterHeroBannerInner({
 
               {/* Critical State Warning Pills (Top-Left of Stage) */}
               {isCriticalVitality && (
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-50/95 dark:bg-rose-950/90 border border-rose-400/60 dark:border-rose-500/60 text-xs font-sans text-rose-900 dark:text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
+                <div className="absolute bottom-2 left-2 z-20 px-2 py-0.5 rounded-full bg-rose-50/95 dark:bg-rose-950/90 border border-rose-400/60 dark:border-rose-500/60 text-xs font-sans text-rose-900 dark:text-rose-300 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
                   <span>💔 Yếu ớt</span>
                 </div>
               )}
               {isSevereBurnout && (
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose-50/95 dark:bg-rose-950/90 border border-rose-400/70 dark:border-rose-500/70 text-xs font-sans text-rose-900 dark:text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
+                <div className="absolute bottom-9 left-2 z-20 px-2 py-0.5 rounded-full bg-rose-50/95 dark:bg-rose-950/90 border border-rose-400/70 dark:border-rose-500/70 text-xs font-sans text-rose-900 dark:text-rose-200 font-bold animate-pulse flex items-center gap-1 shadow-lg z-20">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping" />
                   <span>⚡ Kiệt sức</span>
                 </div>
@@ -558,7 +558,7 @@ function CharacterHeroBannerInner({
                   e.stopPropagation();
                   onOpenPetSanctuary?.();
                 }}
-                className="absolute bottom-1.5 right-1.5 z-20 px-2 py-0.5 rounded-lg bg-white/95 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 border border-amber-600/60 dark:border-amber-500/40 text-amber-900 dark:text-amber-300 font-bold text-xs backdrop-blur-md shadow-sm transition active:scale-95 flex items-center gap-1 cursor-pointer pointer-events-auto"
+                className="absolute top-1.5 left-1.5 z-20 px-2 py-0.5 rounded-lg bg-white/95 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 border border-amber-600/60 dark:border-amber-500/40 text-amber-900 dark:text-amber-300 font-bold text-xs backdrop-blur-md shadow-sm transition active:scale-95 flex items-center gap-1 cursor-pointer pointer-events-auto"
                 title="Linh Thú Các - Mở cửa tiệm nhận nuôi thú cưng 3D"
               >
                 <span>
@@ -576,7 +576,7 @@ function CharacterHeroBannerInner({
                 </span>
               </button>
               ) : (
-                <span role="note" className="absolute bottom-1.5 right-1.5 z-20 px-2 py-0.5 rounded-lg bg-white/95 dark:bg-slate-900/90 border border-slate-400/70 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold text-xs">{UNLOCK_HINTS.rebirth}</span>
+                <span role="note" className="absolute top-1.5 left-1.5 z-20 px-2 py-0.5 rounded-lg bg-white/95 dark:bg-slate-900/90 border border-slate-400/70 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold text-xs">{UNLOCK_HINTS.rebirth}</span>
               )}
             </div>
           </div>
