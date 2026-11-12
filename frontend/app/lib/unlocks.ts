@@ -46,7 +46,8 @@ export function getUnlocks(character: any, account: any, lineage: any[] = []): U
     pets: veteran,
     skillTree: veteran,
     aspiration: veteran,
-    breakthrough: late,
+    // Đột Phá là các cột mốc theo tuổi từ lúc mới sinh (không phải tính năng cuối đời): luôn mở.
+    breakthrough: true,
     transhumanism: late,
   };
 }
