@@ -17,6 +17,7 @@ import {
   X
 } from 'lucide-react';
 import { formatCurrency } from '../../utils/currencyUtils';
+import WhatIfPanel from '../WhatIfModal';
 
 export interface YearEndReflectionModalProps {
   isOpen: boolean;
@@ -205,6 +206,7 @@ export default function YearEndReflectionModal({
           </div>
         </div>
 
+        <WhatIfPanel nationality={character.nationality} />
         {/* SECTION 3: GIEO MẦM TÂM NGUYỆN NĂM MỚI (1-CLICK PLEDGE) */}
         <div className="flex flex-col gap-3 pt-2">
           <div className="flex items-center justify-between">
