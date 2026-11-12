@@ -11,6 +11,7 @@ import { overtimeMultiplier } from '../engine/core/income.js';
 import { getRandom } from '../engine/rng.js';
 import { runInSandbox } from '../engine/sandbox.js';
 import { checkRateLimit } from '../security/securityEngine.js';
+import { sessionMutations } from '../middleware/sessionMutations.js';
 
 export const WHATIF_MAX_USES = 3;
 export const WHATIF_ACTIONS = ['study', 'overtime', 'wellness', 'network'];
@@ -139,6 +140,9 @@ export async function runWhatIf(snap, action, years) {
 }
 
 const router = express.Router();
+// Serialize with /tick & /action/* of the same session (and replay x-action-id): otherwise a concurrent tick's
+// whole-character write can revert whatif_uses, and parallel POSTs can all read the same counter (> 3 uses).
+router.use(sessionMutations);
 
 router.get('/', async (req, res) => {
   try {

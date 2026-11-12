@@ -41,7 +41,7 @@ const realState = session => db.sessionContext.run({ sessionId: session }, async
     rng: { ...db.getSessionData().rng }
   };
 });
-const strip = r => { const { uses_left, ...rest } = r; return rest; };
+const strip = r => { const { uses_left, version, ...rest } = r; return rest; };
 
 test('snapshots: capped at ~10 years, never in public API responses', async () => {
   const last = await live('wi_snap', 4242, 13);
@@ -122,4 +122,25 @@ test('adult overtime branch earns more cash than baseline and the lines stay ali
   assert.equal(r.status, 200);
   assert.ok(r.data.summary.cash_delta > 0, `cash_delta=${r.data.summary.cash_delta}`);
   assert.deepEqual(r.data.alt.timeline.map(p => p.age), r.data.baseline.timeline.map(p => p.age));
+});
+
+test('concurrency: parallel what-ifs + ticks + other sessions never exceed 3 uses, leak sandbox mode, or move the real rng', async () => {
+  await live('wi_race', 123, 6);
+  await live('wi_other', 456, 6);
+  const age = (await api('wi_race', '/state')).data.character.age;
+  const otherBefore = await realState('wi_other');
+  const rs = await Promise.all([
+    ...Array.from({ length: 6 }, () => api('wi_race', '/whatif', { from_age: age, alt_action: 'study', years: 5 })),
+    api('wi_race', '/tick', { advance_only: true }),
+    api('wi_other', '/tick', { advance_only: true }),
+    api('wi_other', '/tick', { advance_only: true })
+  ]);
+  const ok = rs.slice(0, 6).filter(r => r.status === 200).length;
+  assert.equal(ok, 3, `exactly 3 what-ifs may succeed, got ${ok}`);
+  assert.equal(rs[6].status, 200); assert.equal(rs[7].status, 200); assert.equal(rs[8].status, 200);
+  assert.equal((await realState('wi_race')).uses, 3, 'a concurrent tick must not revert the use counter');
+  const other = await realState('wi_other');
+  assert.equal(other.character.age, otherBefore.character.age + 2, 'other session ticks were not blocked by sandbox mode');
+  assert.equal(other.uses, 0);
+  assert.ok(!db.sessionContext.getStore?.()); // no ambient context leaked into the test process
 });

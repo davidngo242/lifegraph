@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X, GitBranch } from 'lucide-react';
 import { formatCurrency } from '../utils/currencyUtils';
@@ -39,6 +39,26 @@ export default function WhatIfPanel({ nationality }: { nationality?: string }) {
   const [action, setAction] = useState<WhatIfAction>('study');
   const [years, setYears] = useState(3);
 
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const root = dialogRef.current;
+    root?.querySelector<HTMLElement>('button')?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { e.stopPropagation(); setOpen(false); return; }
+      if (e.key !== 'Tab' || !root) return;
+      const f = Array.from(root.querySelectorAll<HTMLElement>('button:not([disabled]), select, [href]'));
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    document.addEventListener('keydown', onKey, true);
+    const trigger = triggerRef.current;
+    return () => { document.removeEventListener('keydown', onKey, true); trigger?.focus(); };
+  }, [open]);
+
   const openModal = () => { setOpen(true); clear(); load(); };
   const ages = info?.ages ?? [];
   const chosen = fromAge ?? (ages.length ? ages[Math.max(0, ages.length - 3)] : null);
@@ -48,7 +68,7 @@ export default function WhatIfPanel({ nationality }: { nationality?: string }) {
   const lineSummary = (l: WhatIfLine) => l.death ? `Mất lúc ${l.death.age} tuổi` : 'Còn sống';
 
   const modal = open && (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-xl" role="dialog" aria-modal="true" aria-label="Nếu như">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-xl" role="dialog" aria-modal="true" aria-label="Nếu như" ref={dialogRef}>
       <div className="relative w-full max-w-2xl bg-[var(--bg-card)] border border-amber-500/40 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col gap-4 max-h-[92vh] overflow-y-auto text-[var(--text-primary)]">
         <div className="flex items-start justify-between gap-2">
           <div>
@@ -96,7 +116,7 @@ export default function WhatIfPanel({ nationality }: { nationality?: string }) {
               </select>
             </label>
             <button type="button" disabled={loading || noLeft || chosen === null} onClick={() => chosen !== null && run(chosen, action, years)}
-              className="min-h-[44px] rounded-xl font-bold text-sm bg-amber-600 hover:bg-amber-700 text-white disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2">
+              className="min-h-[44px] rounded-xl font-bold text-sm bg-amber-700 hover:bg-amber-800 text-white disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2">
               <GitBranch className="w-4 h-4" />
               {loading ? 'Đang dựng nhánh…' : noLeft ? 'Hết lượt cho kiếp này' : 'Xem hai dòng đời'}
             </button>
@@ -150,7 +170,7 @@ export default function WhatIfPanel({ nationality }: { nationality?: string }) {
 
   return (
     <>
-      <button type="button" onClick={openModal}
+      <button type="button" onClick={openModal} ref={triggerRef}
         className="min-h-[44px] rounded-xl border border-amber-600/50 bg-amber-500/15 hover:bg-amber-500/25 text-amber-900 dark:text-amber-300 font-bold text-sm px-4 inline-flex items-center justify-center gap-2">
         <GitBranch className="w-4 h-4" /> Nếu như… bạn chọn khác?
       </button>

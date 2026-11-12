@@ -764,6 +764,7 @@ export async function saveWhatIfSnapshot(characterId, age, snap) {
       ON CONFLICT (character_id, age) DO UPDATE SET snap = EXCLUDED.snap`, [characterId, sid, age, JSON.stringify(snap)]);
     await pool.query(`DELETE FROM whatif_snapshots WHERE character_id = $1 AND age NOT IN
       (SELECT age FROM whatif_snapshots WHERE character_id = $1 ORDER BY age DESC LIMIT $2)`, [characterId, WHATIF_KEEP_YEARS]);
+    await pool.query('DELETE FROM whatif_snapshots WHERE player_account_id = $1 AND character_id <> $2', [sid, characterId]); // past lives
     return;
   }
   const store = getSessionData();
