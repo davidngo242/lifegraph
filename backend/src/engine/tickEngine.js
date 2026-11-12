@@ -1,3 +1,4 @@
+import { getRandom } from './rng.js';
 import { updateAsset, updateRelationship } from '../db/db.js';
 import { generatePassiveChildhoodEvent } from './rebirthEngine.js';
 import { getCountryBigData } from '../data/countryBigData.js';
@@ -56,7 +57,7 @@ export function evaluateReaperRoll(age, currentVitality, hasTranscendence = fals
     deathProbability *= 0.50;
   }
 
-  const roll = Math.random();
+  const roll = getRandom();
   if (roll < deathProbability) {
     const causes = [
       "Suy tim do tuổi già và biến chứng mệt mỏi tích tụ",
@@ -67,7 +68,7 @@ export function evaluateReaperRoll(age, currentVitality, hasTranscendence = fals
     ];
     return {
       died: true,
-      cause: causes[Math.floor(Math.random() * causes.length)],
+      cause: causes[Math.floor(getRandom() * causes.length)],
       finalAge: age
     };
   }
@@ -129,9 +130,9 @@ export async function processPassivePhase(character, assets, relationships) {
 
   if (netWorth > 1000000) {
     // Large capital operations subtly perturb global balance
-    const ecoShift = (Math.random() * 4) - 2.5; // slight drag
-    const socShift = (Math.random() * 4) - 2.5;
-    const envShift = (Math.random() * 4) - 3.0; // industrial footprint
+    const ecoShift = (getRandom() * 4) - 2.5; // slight drag
+    const socShift = (getRandom() * 4) - 2.5;
+    const envShift = (getRandom() * 4) - 3.0; // industrial footprint
 
     globalIndices.economy = Math.max(10, Math.min(100, Math.round(globalIndices.economy + ecoShift)));
     globalIndices.social = Math.max(10, Math.min(100, Math.round(globalIndices.social + socShift)));
@@ -158,13 +159,13 @@ export async function processPassivePhase(character, assets, relationships) {
   // 5. Wealth Sink Mechanics (> 10 Million USD)
   let wealthDrainNotice = null;
   if (netWorth > 10000000) {
-    const drainRatio = 0.15 + (Math.random() * 0.15);
+    const drainRatio = 0.15 + (getRandom() * 0.15);
     const drainAmount = Math.round(netWorth * drainRatio);
 
-    if (Math.random() < 0.35) {
+    if (getRandom() < 0.35) {
       flagsSet.add("antitrust_investigation");
       wealthDrainNotice = `Bị thanh tra đặc biệt & chế tài chống độc quyền: Bị phạt và phong tỏa $${drainAmount.toLocaleString()}`;
-    } else if (Math.random() < 0.65) {
+    } else if (getRandom() < 0.65) {
       flagsSet.add("hyper_inflation_target");
       wealthDrainNotice = `Lạm phát phi mã và sụp đổ thị trường tài sản: Thâm hụt $${drainAmount.toLocaleString()}`;
     } else {
@@ -186,9 +187,9 @@ export async function processPassivePhase(character, assets, relationships) {
   // 5.5 Macro Economic Shocks (Quyết định 3: Biến cố vĩ mô ngẫu nhiên)
   let macroShockNotice = null;
   let macroShockType = null;
-  if (age >= 22 && !macroCalamityNotice && !wealthDrainNotice && process.env.NODE_ENV !== 'test' && Math.random() < 0.15) {
+  if (age >= 22 && !macroCalamityNotice && !wealthDrainNotice && process.env.NODE_ENV !== 'test' && getRandom() < 0.15) {
     const shockTypes = ['bubble', 'crash', 'inflation', 'layoff'];
-    const selected = shockTypes[Math.floor(Math.random() * shockTypes.length)];
+    const selected = shockTypes[Math.floor(getRandom() * shockTypes.length)];
     const dragonTag = hasDragonProtection ? " (Ấu Long che chở giảm 30% chấn động)" : "";
 
     if (selected === 'bubble') {
@@ -255,7 +256,7 @@ export async function processPassivePhase(character, assets, relationships) {
     totalAssetIncome += effectiveCashFlow;
 
     totalAssetMaintenance += Number(asset.maintenance_cost_per_tick || asset.maintenance_cost || 0);
-    const macroRate = ((econIndex - 50) / 250) + ((Math.random() * 0.08) - 0.03);
+    const macroRate = ((econIndex - 50) / 250) + ((getRandom() * 0.08) - 0.03);
     const newValue = Math.max(0, Math.round(asset.current_value * (1 + macroRate)));
     try {
       await updateAsset(asset.id, { current_value: newValue });
@@ -365,7 +366,7 @@ export async function processPassivePhase(character, assets, relationships) {
       // Child Fever Risk (age < 10)
       if (rel.type === 'child' && rel.age < 10) {
         const feverRisk = isTier3Country ? 0.28 : 0.18;
-        if (Math.random() < feverRisk) {
+        if (getRandom() < feverRisk) {
           const clinicFee = Math.round(35 * (countryData?.healthcare?.clinic_cost_factor || 1.0));
           const paidFee = cash > 0 ? Math.min(cash, clinicFee) : 0;
           cash -= paidFee;
@@ -378,7 +379,7 @@ export async function processPassivePhase(character, assets, relationships) {
       // Elderly parent natural passing
       if ((rel.type === 'parent' || rel.type === 'father' || rel.type === 'mother') && rel.age > 75) {
         const mortalityChance = Math.min(0.85, (rel.age - 75) * 0.045);
-        if (Math.random() < mortalityChance) {
+        if (getRandom() < mortalityChance) {
           rel.status = 'deceased';
           rel.death_age = rel.age;
           flagsSet.add("parent_passed_away");
@@ -428,7 +429,7 @@ export async function processPassivePhase(character, assets, relationships) {
     if (hh.father_name && hh.father_status !== 'deceased') {
       if (hh.father_age > 75) {
         const fatherMortality = Math.min(0.85, (hh.father_age - 75) * 0.05);
-        if (Math.random() < fatherMortality) {
+        if (getRandom() < fatherMortality) {
           hh.father_status = 'deceased';
           hh.father_death_age = hh.father_age;
           flagsSet.add('father_passed_away');
@@ -441,7 +442,7 @@ export async function processPassivePhase(character, assets, relationships) {
     if (hh.mother_name && hh.mother_status !== 'deceased') {
       if (hh.mother_age > 75) {
         const motherMortality = Math.min(0.85, (hh.mother_age - 75) * 0.05);
-        if (Math.random() < motherMortality) {
+        if (getRandom() < motherMortality) {
           hh.mother_status = 'deceased';
           hh.mother_death_age = hh.mother_age;
           flagsSet.add('mother_passed_away');
@@ -527,7 +528,7 @@ export async function processPassivePhase(character, assets, relationships) {
   let childhoodHealthCrisisNotice = null;
   if (age < 6 && (hasVulnerableGenetics || isTier3Country)) {
     const feverTriggerChance = hasVulnerableGenetics ? 0.35 : 0.20;
-    if (Math.random() < feverTriggerChance) {
+    if (getRandom() < feverTriggerChance) {
       flagsSet.add("childhood_fever_experienced");
       const clinicCost = Math.round(40 * (countryData?.healthcare?.clinic_cost_factor || 1.0));
       const familySupport = (character.household?.annual_allowance || 0) > 0 || cash >= clinicCost || (character.family_background && character.family_background !== 'poor');

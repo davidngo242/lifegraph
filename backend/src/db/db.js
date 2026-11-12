@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { executeProceduralRebirth } from '../engine/rebirthEngine.js';
 import { initializeStartingNpcs } from '../engine/npcEngine.js';
+import { setRngStateResolver, newSeed } from '../engine/rng.js';
 
 const { Pool } = pg;
 
@@ -57,6 +58,12 @@ export function getCurrentSessionId() {
 }
 
 const sessions = new Map();
+
+// Seeded RNG bound to the current session: { seed, n } persists with the session cache.
+setRngStateResolver(() => {
+  const s = sessions.get(getCurrentSessionId());
+  return s ? s.rng : null;
+});
 
 // Tự động load cache từ đĩa khi backend khởi động
 try {
@@ -151,7 +158,11 @@ export function getSessionData(sessionId = null) {
 
 export function seedInitialData(lineageParent = null, karmaPerks = {}) {
   const store = getSessionData();
+  // Each new life gets its own seed (fixed seed only honoured under NODE_ENV=test).
+  const seed = (process.env.NODE_ENV === 'test' && Number.isInteger(karmaPerks?.rng_seed)) ? (karmaPerks.rng_seed >>> 0) : newSeed();
+  store.rng = { seed, n: 0 };
   const freshChar = executeProceduralRebirth(karmaPerks, lineageParent);
+  freshChar.rng_seed = seed;
   store.character = freshChar;
 
   // Assets depending on background

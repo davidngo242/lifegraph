@@ -1,3 +1,4 @@
+import { getRandom } from './rng.js';
 import crypto from 'crypto';
 import { getCountryBigData, generateCulturallyAuthenticName, extractFamilySurname } from '../data/countryBigData.js';
 
@@ -497,7 +498,7 @@ export const NAMES_BY_COUNTRY = {
 };
 
 export function generateLocalizedName(countryName = "Việt Nam", lineageParent = null, gender = null) {
-  const chosenGender = gender || (Math.random() < 0.5 ? 'male' : 'female');
+  const chosenGender = gender || (getRandom() < 0.5 ? 'male' : 'female');
   let surname = null;
   if (lineageParent && lineageParent.name) {
     surname = extractFamilySurname(lineageParent.name, countryName);
@@ -511,12 +512,12 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
 
   // 1. Roll Nationality Tier
   let countryTier = "T2";
-  const tierRoll = Math.random();
+  const tierRoll = getRandom();
 
   if (isHungryGhost) {
     countryTier = "T3";
   } else if (karmaPerks.lock_t1_t2) {
-    countryTier = Math.random() < 0.35 ? "T1" : "T2";
+    countryTier = getRandom() < 0.35 ? "T1" : "T2";
   } else {
     if (tierRoll < 0.15) countryTier = "T1";
     else if (tierRoll < 0.75) countryTier = "T2";
@@ -535,10 +536,10 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
 
   if (!chosenCountry) {
     const countryList = COUNTRIES[countryTier] || COUNTRIES.T3;
-    chosenCountry = countryList[Math.floor(Math.random() * countryList.length)];
+    chosenCountry = countryList[Math.floor(getRandom() * countryList.length)];
   }
   const cities = chosenCountry.cities || [`Thủ đô ${chosenCountry.name}`];
-  const chosenCity = cities[Math.floor(Math.random() * cities.length)];
+  const chosenCity = cities[Math.floor(getRandom() * cities.length)];
 
   // 2. Roll Family Background
   let chosenBackground = FAMILY_BACKGROUNDS[2]; // Default poor
@@ -561,9 +562,9 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
       chosenBackground = FAMILY_BACKGROUNDS[2];
     }
   } else if (karmaPerks.golden_cradle || karmaPerks.guarantee_middle_class) {
-    chosenBackground = Math.random() < 0.2 ? FAMILY_BACKGROUNDS[0] : FAMILY_BACKGROUNDS[1];
+    chosenBackground = getRandom() < 0.2 ? FAMILY_BACKGROUNDS[0] : FAMILY_BACKGROUNDS[1];
   } else {
-    const bgRoll = Math.random();
+    const bgRoll = getRandom();
     let cumulative = 0;
     for (const bg of FAMILY_BACKGROUNDS) {
       cumulative += bg.prob;
@@ -613,7 +614,7 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
   if (lineageParent && lineageParent.innate_traits && lineageParent.innate_traits.length > 0 && traits.length === 0) {
     const parentPrimaryId = lineageParent.innate_traits[0];
     const parentTrait = GENETICS_BIGDATA.find(g => g.id === parentPrimaryId);
-    if (parentTrait && Math.random() < 0.65) {
+    if (parentTrait && getRandom() < 0.65) {
       traits.push(parentTrait);
     }
   }
@@ -621,28 +622,28 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
   // C. Primary Core Trait (Positive / Talent)
   const positivePool = GENETICS_BIGDATA.filter(t => t.category !== 'curse' && !traits.some(x => x.id === t.id));
   if (traits.length === 0) {
-    const primary = positivePool[Math.floor(Math.random() * positivePool.length)];
+    const primary = positivePool[Math.floor(getRandom() * positivePool.length)];
     traits.push(primary);
   }
 
   // D. Secondary Trait (Complementary Trait)
   const remainingPositive = positivePool.filter(t => !traits.some(x => x.id === t.id));
   if (traits.length < 2 && remainingPositive.length > 0) {
-    const secondary = remainingPositive[Math.floor(Math.random() * remainingPositive.length)];
+    const secondary = remainingPositive[Math.floor(getRandom() * remainingPositive.length)];
     traits.push(secondary);
   }
 
   // E. Tertiary Genetic Feature: 30% chance Drawback (Curse) or 10% chance Rare Mutation
-  const rollTertiary = Math.random();
+  const rollTertiary = getRandom();
   if (rollTertiary < 0.30) {
     const curses = GENETICS_BIGDATA.filter(t => t.category === 'curse' && !traits.some(x => x.id === t.id));
     if (curses.length > 0) {
-      traits.push(curses[Math.floor(Math.random() * curses.length)]);
+      traits.push(curses[Math.floor(getRandom() * curses.length)]);
     }
   } else if (rollTertiary > 0.90) {
     const rareMutations = GENETICS_BIGDATA.filter(t => t.category === 'rare' && !traits.some(x => x.id === t.id));
     if (rareMutations.length > 0) {
-      traits.push(rareMutations[Math.floor(Math.random() * rareMutations.length)]);
+      traits.push(rareMutations[Math.floor(getRandom() * rareMutations.length)]);
     }
   }
 
@@ -651,7 +652,7 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
     ? karmaPerks.preferred_gender
     : (karmaPerks.gender === 'male' || karmaPerks.gender === 'female')
     ? karmaPerks.gender
-    : (Math.random() < 0.5 ? 'male' : 'female');
+    : (getRandom() < 0.5 ? 'male' : 'female');
   const gender = chosenGender;
   let householdContext = null;
   let characterName = "";
@@ -682,7 +683,7 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
     let motherSurname = extractFamilySurname(motherName, chosenCountry.name);
     if (motherSurname === childSurname && countryData.surnames.length > 1) {
       const otherSurnames = countryData.surnames.filter(s => s !== childSurname);
-      const chosenMaidenSurname = otherSurnames[Math.floor(Math.random() * otherSurnames.length)];
+      const chosenMaidenSurname = otherSurnames[Math.floor(getRandom() * otherSurnames.length)];
       motherName = generateCulturallyAuthenticName(chosenCountry.name, 'mother', 'female', chosenMaidenSurname);
     }
 
@@ -1218,7 +1219,7 @@ export function generatePassiveChildhoodEvent(character) {
     }
   ];
 
-  const picked = householdPool[Math.floor(Math.random() * householdPool.length)];
+  const picked = householdPool[Math.floor(getRandom() * householdPool.length)];
   return {
     type: "household_chronicle",
     title: picked.title,
