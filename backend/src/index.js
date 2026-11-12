@@ -112,6 +112,10 @@ app.use((req, res, next) => {
       claimSession(rawId);
       logGuestEvent('legacy_claimed', { session: rawId.slice(0, 12), ip: ipHash });
     } else {
+      if (process.env.NODE_ENV !== 'test' && !checkRateLimit('mint_' + (req.ip || 'unknown'), 30, 60000)) {
+        logGuestEvent('mint_rate_limited', { ip: ipHash });
+        return res.status(429).json({ error: 'Quá nhiều phiên mới từ cùng địa chỉ, vui lòng thử lại sau.', retryAfterSeconds: 30 });
+      }
       sessionId = mintSessionId();
       isCryptographicallyVerified = true;
       logGuestEvent(rawId ? 'raw_id_rejected_new_minted' : 'guest_created', {
