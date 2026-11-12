@@ -58,6 +58,16 @@ Gate 2 (build + test 100% pass) áp dụng ở MỌI cỡ; chỉ bỏ bắt bu�
 
 ---
 
+## 2c. Chuẩn Giao Tiếp Ngắn Gọn (Sếp duyệt 2026-11-12)
+Làm nhiều, báo cáo ít. Chi tiết: `.agents/skills/concise-engineering-report/SKILL.md`.
+* **Không** báo: chạy/xong lệnh nền, chờ Reviewer/Tester, "đang kiểm tra lại", "chưa commit vì đang chờ", "giờ em làm bước X", lặp lại tiến độ cũ. Khi chờ agent: im lặng, kết thúc lượt, đợi thông báo.
+* **Chỉ** nói giữa chừng khi có blocker, cần quyết định, rủi ro quan trọng; tối đa 1 câu.
+* Subagent: Reviewer chỉ nêu Critical/Major/Minor kèm `file:dòng`; Tester nêu tổng/pass/fail/skip, lỗi thật, lỗi mới hay có từ trước (có bằng chứng); Developer nêu hạng mục, file, kết quả, vấn đề còn lại. Tối đa 10 dòng, chi tiết vào REPORT.md. Không cắt thông tin lỗi.
+* Báo cáo cuối **một** bản: Trạng thái · Đã thực hiện · Kiểm thử (số thực) · Tồn đọng · Git · Tiếp theo (chỉ khi cần Sếp duyệt). Việc thường ~100–150 từ, phức tạp ≤ ~250 từ; sự cố nghiêm trọng được dài hơn.
+* Quy định này không thay thế 3 chốt chặn: không bỏ review/test, không che lỗi hay cảnh báo.
+
+---
+
 ## 3. Tiêu Chuẩn Giao Diện Bắt Buộc (Daylight & Theme Standards)
 - **Tách biệt OS Dark Mode:** Chỉ Obsidian, Cyberpunk và `.dark` là theme tối: biến thể `dark:` kích hoạt qua `darkMode: ['variant', '&:where([data-theme="obsidian"], [data-theme="obsidian"] *, [data-theme="cyberpunk"], [data-theme="cyberpunk"] *, .dark, .dark *)']` trong `tailwind.config.js` (dạng `selector` cũ chỉ khớp thẻ `<html>`, làm `dark:` chết ở thẻ con). **Sepia là theme SÁNG ấm (giấy ngà)**, dùng bộ adaptor riêng trong `globals.css`, KHÔNG kích hoạt `dark:`. Tuyệt đối không để `dark:` tự kích hoạt khi người dùng đang bật Daylight/Sepia hoặc theo OS dark mode.
 - **Tương phản Ban Ngày:**
