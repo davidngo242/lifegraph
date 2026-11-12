@@ -27,6 +27,7 @@ import LoadingStage from './components/LoadingStage';
 import AppHeader from './components/AppHeader';
 import HeirNoticeModal from './components/HeirNoticeModal';
 import TranshumanBanner from './components/TranshumanBanner';
+import { getUnlocks } from './lib/unlocks';
 import GameCockpit from './components/GameCockpit';
 import { useGameState } from './hooks/useGameState';
 import { useGameHotkeys } from './hooks/useGameHotkeys';
@@ -325,7 +326,7 @@ export default function LifeGraphPage() {
         {activeView === 'game' && (
           <>
             {/* Transhumanism Surgery Banner */}
-            {canTranshuman && <TranshumanBanner loading={loading} onSurgery={handleTranshumanismSurgery} />}
+            {canTranshuman && getUnlocks(character, playerAccount, lineage).transhumanism && <TranshumanBanner loading={loading} onSurgery={handleTranshumanismSurgery} />}
             <GameCockpit g={g} netWorth={netWorth} />
           </>
         )}
