@@ -288,7 +288,7 @@ test('Passive family healthcare: triggers fever event for young child (rel.type 
       store.relationships = [childRel];
 
       const { updatedCharacter, passiveSummary } = await processPassivePhase(parentCharacter, [], [childRel]);
-      assert.ok(updatedCharacter.cash < 500); // clinic fee paid
+      assert.ok(updatedCharacter.cash < 500 + passiveSummary.netPassiveFlow); // clinic fee paid (on top of wage - living cost)
       assert.equal(updatedCharacter.karma, 55); // 50 + 5
       assert.equal(childRel.affection_level, 56); // 50 + 6
       assert.ok(passiveSummary.annual_digest.family_events.some(e => e.includes('Con của bạn (Bé Bắp, 4 tuổi) bị sốt mọc răng/nhiễm lạnh')));

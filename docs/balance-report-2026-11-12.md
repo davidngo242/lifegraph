@@ -92,20 +92,20 @@ Remaining gaps: 185 of 204 `character.<stat> =` write sites in `routes/game.js` 
 
 | Metric | passive | active | greedy |
 |---|---|---|---|
-| Negative final cash | 81.3% | 2.0% | 0.3% |
-| At debt floor (-250k) | 1.7% | 0.7% | 0.0% |
-| Final cash p10 | -70,574 | 247,507 | 484,491 |
-| Final cash median | -58,964 | 1,024,257 | 3,080,666 |
-| Final cash p90 | 1,120 | 1,652,909 | 5,228,978 |
-| Final cash max | 7,600 | 3,085,655 | 7,354,112 |
-| Death age mean | 70.6 | 75.4 | 58.3 |
-| Death age p10 / median / p90 | 69 / 70 / 78 | 60 / 77 / 87 | 41 / 58 / 71 |
-| Death age min / max | 19 / 90 | 20 / 95 | 21 / 75 |
-| Deaths before 40 / before 60 | 2.0% / 5.0% | 4.0% / 10.0% | 9.0% / 59.0% |
+| Negative final cash | 33.0% | 2.3% | 0.0% |
+| At debt floor (-250k) | 6.7% | 1.0% | 0.0% |
+| Final cash p10 | -55,099 | 292,392 | 478,426 |
+| Final cash median | 30,199 | 1,128,205 | 3,258,989 |
+| Final cash p90 | 58,389 | 1,777,685 | 5,411,394 |
+| Final cash max | 90,869 | 2,765,170 | 7,327,385 |
+| Death age mean | 76.8 | 75.5 | 58.3 |
+| Death age p10 / median / p90 | 72 / 77 / 83 | 67 / 77 / 86 | 39 / 58 / 71 |
+| Death age min / max | 19 / 90 | 20 / 100 | 21 / 76 |
+| Deaths before 40 / before 60 | 1.3% / 1.3% | 4.0% / 10.0% | 10.3% / 56.3% |
 | Alive at cap | 0 | 0 | 0 |
-| Cause: zero_vitality | 48.3% | 3.3% | 69.0% |
-| Cause: reaper | 40.7% | 85.3% | 8.0% |
-| Cause: lifestyle | 11.0% | 11.3% | 23.0% |
+| Cause: reaper | 88.7% | 87.3% | 10.0% |
+| Cause: zero_vitality | 9.3% | 2.7% | 66.3% |
+| Cause: lifestyle | 2.0% | 10.0% | 23.7% |
 | Karma p10 / median / p90 | 70 / 70 / 75 | 100 / 100 / 100 | 100 / 100 / 100 |
 | Karma min / max (distinct values) | 70 / 85 (9) | 100 / 100 (1) | 80 / 100 (4) |
 
@@ -114,16 +114,17 @@ Death age by decade (share of lives):
 | Decade | passive | active | greedy |
 |---|---|---|---|
 | 10s | 0.3% | 0.0% | 0.0% |
-| 20s | 0.3% | 2.3% | 5.0% |
-| 30s | 1.3% | 1.7% | 4.0% |
-| 40s | 1.0% | 2.0% | 6.3% |
-| 50s | 2.0% | 4.0% | 43.7% |
-| 60s | 6.7% | 2.0% | 11.7% |
-| 70s | 81.3% | 49.7% | 29.3% |
-| 80s | 6.7% | 34.7% | 0.0% |
-| 90s | 0.3% | 3.7% | 0.0% |
+| 20s | 0.7% | 2.3% | 4.3% |
+| 30s | 0.3% | 1.7% | 6.0% |
+| 40s | 0.0% | 2.3% | 7.0% |
+| 50s | 0.0% | 3.7% | 39.0% |
+| 60s | 0.7% | 1.0% | 11.3% |
+| 70s | 69.7% | 50.7% | 32.3% |
+| 80s | 28.0% | 35.7% | 0.0% |
+| 90s | 0.3% | 2.3% | 0.0% |
+| 100s | 0.0% | 0.3% | 0.0% |
 
-Actions per life (mean): active: overtime 64.6, dilemma 61.4, childhood:school_study 27.0, wellness:meditation_retreat 24.6, childhood:teen_part_time 19.7, childhood:eat_grow 15.1, study 7.4, buy-asset 2.9; greedy: dilemma 48.5, childhood:school_study 27.0, childhood:teen_part_time 18.6, buy-asset 16.2, childhood:eat_grow 15.1, wellness:meditation_retreat 13.0, overtime 0.6, childhood:teen_sports 0.3.
+Actions per life (mean): active: overtime 65.2, dilemma 61.5, childhood:school_study 27.0, wellness:meditation_retreat 24.6, childhood:teen_part_time 19.7, childhood:eat_grow 15.1, study 7.4, buy-asset 2.9; greedy: dilemma 48.6, childhood:school_study 27.0, childhood:teen_part_time 18.6, buy-asset 16.1, childhood:eat_grow 15.1, wellness:meditation_retreat 13.1, overtime 0.4, childhood:teen_sports 0.3.
 <!-- policies:end -->
 
 ### Nhận xét nhanh (từ bảng trên)
@@ -142,3 +143,25 @@ Actions per life (mean): active: overtime 64.6, dilemma 61.4, childhood:school_s
 **Phương án C — Lưới an sinh thay vì lãi kép thuần.** Giữ lãi nợ 4,5%/năm nhưng khi cash < 0 và tuổi >= 18 thì có trợ cấp tối thiểu (ví dụ $1.500/năm, tối đa 5 năm/đời) hoặc khoanh nợ khi vượt -50k; đồng thời giới hạn `family_soft_loan` 1 lần/đời. Kỳ vọng: giảm số đời chạm sàn -250k (hiện 1,7% passive) và đóng lỗ vay lặp; tác động lên median nhỏ. Thay đổi nhỏ nhất, phù hợp nếu Sếp muốn giữ cảm giác "khó nghèo".
 
 Gợi ý thứ tự: A trước (sửa nguyên nhân gốc), đo lại bằng `node tools/balance_policies.mjs 300 --write`; sau đó cân nhắc B nếu khoảng cách passive/active vẫn > 10 lần. Mục tiêu đo đề xuất: passive tiền âm khi chết < 30%, active/passive median tài sản < 10 lần, greedy vẫn chết sớm hơn active.
+
+
+## Addendum 2026-11-12 (c): Phương án A đã triển khai (lương nền + chi phí sống)
+
+Code: `backend/src/engine/core/income.js` (`INCOME_CONFIG` là nơi duy nhất chứa hằng số, `computeAnnualIncome()` thuần), gọi trong `processPassivePhase` (`tickEngine.js`); tiền đi qua `applyDelta` nên trần nợ -250k vẫn áp dụng. Tuổi < 18: không lương, không chi phí sống.
+- Lương năm = lương tham chiếu theo hạng quốc gia (T1 8.000 / T2 5.500 / T3 3.500) x hệ số nghề (`character.occupation`; kỹ sư/khởi nghiệp 1,5; giảng viên 1,1; NCS 0,85; thừa kế 0,8; mặc định "Lao động tự do" 0,67, nhãn học sinh còn sót lại ở tuổi trưởng thành cũng tính là tự do) x tăng theo tuổi (+1,2%/năm từ 18, trần ở 50) x 0,6 khi burnout >= 75 x co dần sau 65 (-10%/năm, sàn lương hưu 45%).
+- Chi phí sống = 60/68/75/80% lương tham chiếu theo `housing.tier` 1/2/3/4+ (mặc định tier 1).
+- Hiển thị cộng thêm (không đổi field cũ): `passiveSummary.wageIncome`, `passiveSummary.livingCost`, `annual_digest.cash_flow.wage`, `annual_digest.cash_flow.living_cost`. `netPassiveFlow` / `cash_flow.net_change` nay đã gồm lương trừ chi phí sống; `totalPassiveCost` giữ nguyên định nghĩa cũ.
+- Test mới: `backend/test/income.test.js`; golden `golden_lives.json` cập nhật (chỉ đổi `final_cash`, `death_age`, `death_cause`: hết vòng xoáy nợ nên ít chết do Vitality = 0 hơn, nhiều người sống tới ngưỡng reaper hơn).
+
+300 sống mỗi chính sách, seed 50000..50299 (`node tools/balance_policies.mjs 300 --write`):
+
+| Chỉ số | Trước (passive / active / greedy) | Sau (passive / active / greedy) | Mục tiêu |
+|---|---|---|---|
+| Tiền âm khi chết | 81,3% / 2,0% / 0,3% | 33,0% / 2,3% / 0,0% | passive < 35%: ĐẠT |
+| Tiền cuối trung vị | -58.964 / 1.024.257 / 3.080.666 | 30.199 / 1.128.205 / 3.258.989 | |
+| Tỷ lệ trung vị active / passive | không xác định (passive âm) | 37,4x | < 10x: CHƯA ĐẠT |
+| Tuổi chết trung bình | 70,6 / 75,4 / 58,3 | 76,8 / 75,5 / 58,3 | greedy chết sớm hơn active: ĐẠT |
+| Chết trước 60 | 5,0% / 10,0% / 59,0% | 1,3% / 10,0% / 56,3% | active <= 12%: ĐẠT |
+| Chạm sàn nợ -250k | 1,7% / 0,7% / 0,0% | 6,7% / 1,0% / 0,0% | |
+
+Nhận xét: passive nay có trung vị dương nhỏ (~30k) nên tỷ lệ 37x vẫn vượt 10x; kéo xuống < 10x cần passive trung vị > ~110k, tức lương tự do phải vượt chi phí sống rõ rệt, mâu thuẫn với yêu cầu "tự do/thất nghiệp hơi âm". Lỗ hổng còn lại gợi ý Phương án B (giảm lợi suất overtime) để hạ trần active. Tác dụng phụ cần Sếp biết: tuổi chết trung bình của passive (76,8) nay ngang/cao hơn active (75,5) vì passive không còn bị burnout do nợ; 6,7% passive vẫn chạm sàn nợ.

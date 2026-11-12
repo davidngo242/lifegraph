@@ -2,7 +2,8 @@ import { getRandom } from './rng.js';
 import { updateAsset, updateRelationship } from '../db/db.js';
 import { generatePassiveChildhoodEvent } from './rebirthEngine.js';
 import { getCountryBigData } from '../data/countryBigData.js';
-import { clampStat, CASH_FLOOR, BANKRUPT_FLAG } from './core/stats.js';
+import { clampStat, applyDelta, CASH_FLOOR, BANKRUPT_FLAG } from './core/stats.js';
+import { computeAnnualIncome } from './core/income.js';
 
 // Calculate maximum vitality cap based on biological age
 // If Transhumanism surgery was successful, decay is frozen until transhuman_frozen_until_age
@@ -524,8 +525,13 @@ export async function processPassivePhase(character, assets, relationships) {
   }
 
   // Net Passive Flow: Asset Yield + Capital Engine - Asset Maintenance - Family Upkeep
-  const netPassiveFlow = totalAssetIncome + capitalEngineBonus - totalAssetMaintenance - totalRelationshipCost;
-  cash += netPassiveFlow;
+  // Plus Phuong an A: adult base wage (occupation / nationality / age / burnout) minus living cost (housing tier)
+  const income = computeAnnualIncome({
+    age, occupation: character.occupation, housingTier: character.housing?.tier,
+    burnout, countryTier: countryData?.tier || character.country_tier
+  });
+  const netPassiveFlow = totalAssetIncome + capitalEngineBonus - totalAssetMaintenance - totalRelationshipCost + income.net;
+  cash = applyDelta({ cash }, { cash: netPassiveFlow }).character.cash; // shared debt floor
 
   // MINOR SHIELD: Minors (< 18) are protected from negative cash / personal debt
   if (age < 18) {
@@ -748,6 +754,8 @@ export async function processPassivePhase(character, assets, relationships) {
       totalAssetIncome,
       assetMaintenance: totalAssetMaintenance,
       relationshipCost: totalRelationshipCost,
+      wageIncome: income.wage,
+      livingCost: income.livingCost,
       newlyAdultChildrenCount,
       burnoutDelta: burnoutChange,
       vitalityDelta: vitalityChange,
@@ -785,6 +793,8 @@ export async function processPassivePhase(character, assets, relationships) {
           capital_engine_bonus: capitalEngineBonus,
           maintenance: totalAssetMaintenance,
           family_cost: totalRelationshipCost,
+          wage: income.wage,
+          living_cost: income.livingCost,
           net_change: netPassiveFlow
         },
         childhood_event: childhoodPassiveEvent,
