@@ -32,6 +32,7 @@ export default function AccountModal({ isOpen, onClose, hasGuestCharacter, onSub
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [conflict, setConflict] = useState<LinkConflict | null>(null);
+  const [confirmLogin, setConfirmLogin] = useState(false); // login would replace the guest game held in this browser
   const dialogRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLInputElement>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
@@ -47,10 +48,16 @@ export default function AccountModal({ isOpen, onClose, hasGuestCharacter, onSub
   useEffect(() => {
     if (!isOpen) return;
     returnFocus.current = document.activeElement as HTMLElement | null;
-    setError(''); setPassword(''); setShowPw(false); setConflict(null);
+    setError(''); setPassword(''); setShowPw(false); setConflict(null); setConfirmLogin(false);
     const t = window.setTimeout(() => userRef.current?.focus(), 0);
     return () => { window.clearTimeout(t); returnFocus.current?.focus?.(); };
   }, [isOpen]);
+
+  // Views swap without unmounting the dialog: move focus to the new view's primary action (a11y).
+  useEffect(() => {
+    if (!isOpen || (!conflict && !confirmLogin)) return;
+    dialogRef.current?.querySelector<HTMLElement>('[data-autofocus]')?.focus();
+  }, [isOpen, conflict, confirmLogin]);
 
   if (!isOpen || typeof document === 'undefined') return null;
 
@@ -71,6 +78,11 @@ export default function AccountModal({ isOpen, onClose, hasGuestCharacter, onSub
     else setError(r.error || 'Có lỗi xảy ra. Vui lòng thử lại.');
   };
 
+  const doSubmit = async () => {
+    setBusy(true); setError('');
+    try { handleResult(await onSubmit(mode, username.trim(), password, hasGuestCharacter)); } finally { setBusy(false); }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (busy) return;
@@ -78,8 +90,9 @@ export default function AccountModal({ isOpen, onClose, hasGuestCharacter, onSub
     if (!name) { setError('Vui lòng nhập tên đăng nhập.'); userRef.current?.focus(); return; }
     if (!password) { setError('Vui lòng nhập mật khẩu.'); return; }
     if (mode === 'register' && password.length < 8) { setError('Mật khẩu phải có ít nhất 8 ký tự.'); return; }
-    setBusy(true); setError('');
-    try { handleResult(await onSubmit(mode, name, password, hasGuestCharacter)); } finally { setBusy(false); }
+    // Logging in switches this browser to the account's game; the guest game would be orphaned. Ask first.
+    if (mode === 'login' && hasGuestCharacter) { setConfirmLogin(true); return; }
+    await doSubmit();
   };
 
   const resolve = async (replace: boolean) => {
@@ -113,7 +126,7 @@ export default function AccountModal({ isOpen, onClose, hasGuestCharacter, onSub
         <div className="flex items-center justify-between gap-2">
           <h2 id="account-modal-title" className="flex items-center gap-2 text-base font-extrabold">
             <UserRound className="w-5 h-5 text-amber-700 dark:text-amber-400" aria-hidden="true" />
-            {conflict ? 'Tài khoản đã có tiến trình' : 'Tài khoản'}
+            {conflict ? 'Tài khoản đã có tiến trình' : confirmLogin ? 'Rời cuộc đời khách?' : 'Tài khoản'}
           </h2>
           <button
             type="button"
@@ -125,7 +138,21 @@ export default function AccountModal({ isOpen, onClose, hasGuestCharacter, onSub
           </button>
         </div>
 
-        {conflict ? (
+        {confirmLogin && !conflict ? (
+          <div className="flex flex-col gap-3">
+            <div className="flex gap-2 rounded-xl border border-amber-700/40 bg-amber-500/10 p-3 text-sm text-[var(--text-primary)]">
+              <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0 text-amber-800 dark:text-amber-400" aria-hidden="true" />
+              <p>Bạn đang có một cuộc đời khách chưa lưu vào tài khoản. Đăng nhập sẽ chuyển sang cuộc đời của tài khoản và cuộc đời khách này sẽ không còn truy cập được trên trình duyệt này. Muốn giữ nó, hãy chọn &quot;Đăng ký&quot; tài khoản mới thay vì đăng nhập.</p>
+            </div>
+            {error && <p role="alert" className="rounded-lg border border-rose-700/40 bg-rose-500/10 px-3 py-2 text-sm font-medium text-rose-800 dark:text-rose-300">{error}</p>}
+            <button type="button" data-autofocus className={primaryBtn} disabled={busy} onClick={() => { void doSubmit(); }}>
+              {busy ? 'Đang xử lý…' : 'Vẫn đăng nhập, bỏ cuộc đời khách'}
+            </button>
+            <button type="button" className={secondaryBtn} disabled={busy} onClick={() => { setConfirmLogin(false); setError(''); }}>
+              Quay lại
+            </button>
+          </div>
+        ) : conflict ? (
           <div className="flex flex-col gap-3">
             <div className="flex gap-2 rounded-xl border border-amber-700/40 bg-amber-500/10 p-3 text-sm text-[var(--text-primary)]">
               <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0 text-amber-800 dark:text-amber-400" aria-hidden="true" />
@@ -136,7 +163,7 @@ export default function AccountModal({ isOpen, onClose, hasGuestCharacter, onSub
               </p>
             </div>
             {error && <p role="alert" className="rounded-lg border border-rose-700/40 bg-rose-500/10 px-3 py-2 text-sm font-medium text-rose-800 dark:text-rose-300">{error}</p>}
-            <button type="button" className={primaryBtn} disabled={busy} onClick={() => resolve(false)}>
+            <button type="button" data-autofocus className={primaryBtn} disabled={busy} onClick={() => resolve(false)}>
               {busy ? 'Đang xử lý…' : 'Giữ cuộc đời của tài khoản'}
             </button>
             {conflict.canReplace && (
