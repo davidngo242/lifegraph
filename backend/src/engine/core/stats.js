@@ -36,6 +36,20 @@ export function applyDelta(character, deltas = {}, opts = {}) {
   return { character, bankrupt };
 }
 
+/** Set one stat to an absolute value (resets, starter packs, death) within the shared bounds. */
+export function setStat(character, stat, value, opts = {}) {
+  character[stat] = clampStat(stat, value, { maxVitality: opts.maxVitality ?? character.max_vitality ?? 100, vitalityMin: opts.vitalityMin ?? 0 });
+  if (stat === 'cash') noteBankruptcy(character);
+  return character;
+}
+
+/** Pay up to `amount` out of positive cash (never creates new debt). Returns the amount actually paid. */
+export function spendCapped(character, amount) {
+  const paid = Math.min(Math.max(0, num(amount)), Math.max(0, num(character.cash)));
+  applyDelta(character, { cash: -paid });
+  return paid;
+}
+
 /** If cash sits on the floor, set the flag and log a one-time history note. Returns true when newly triggered. */
 export function noteBankruptcy(character) {
   const flags = Array.isArray(character.hidden_flags) ? character.hidden_flags : (character.hidden_flags = []);
