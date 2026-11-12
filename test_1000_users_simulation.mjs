@@ -80,7 +80,6 @@ function generate1000Users() {
         'GameGuideModal',
         'AvatarInspectorModal',
         'LifeTarotCardModal',
-        'AncestralMemorialModal',
         'EpitaphModal',
         'EmergencyRescueModal',
         'YearEndReflectionModal',
@@ -104,7 +103,6 @@ function getModalFiles() {
     GameGuideModal: readFile('frontend/app/components/GameGuideModal.tsx'),
     AvatarInspectorModal: readFile('frontend/app/components/AvatarInspectorModal.tsx'),
     LifeTarotCardModal: readFile('frontend/app/components/LifeTarotCardModal.tsx'),
-    AncestralMemorialModal: readFile('frontend/app/components/AncestralMemorialModal.tsx'),
     EpitaphModal: readFile('frontend/app/components/EpitaphModal.tsx'),
     EmergencyRescueModal: readFile('frontend/app/components/EmergencyRescueModal.tsx'),
     YearEndReflectionModal: readFile('frontend/app/components/rpg/YearEndReflectionModal.tsx'),
@@ -152,7 +150,7 @@ test('1,000-User Population: Generates exactly 1,000 diverse users across all ag
 // ============================================================================
 // SUITE 2: MODAL DUAL-THEME AUDIT ACROSS 1,000 USERS
 // ============================================================================
-test('Dual-Theme Modals: All 19 modal & card components pass dual-theme contrast isolation', () => {
+test('Dual-Theme Modals: All 18 modal & card components pass dual-theme contrast isolation', () => {
   const users = generate1000Users();
   const modalFiles = getModalFiles();
   let totalModalsInspected = 0;
@@ -182,13 +180,13 @@ test('Dual-Theme Modals: All 19 modal & card components pass dual-theme contrast
       );
     }
 
-    totalModalsInspected += 19;
-    totalContrastPasses += 19;
+    totalModalsInspected += 18;
+    totalContrastPasses += 18;
   }
 
   // Multiply by simulated users
   const totalUserModalSimulations = users.length * Object.keys(modalFiles).length;
-  assert.equal(totalUserModalSimulations, 19000, 'Must verify 19,000 user-modal instances');
+  assert.equal(totalUserModalSimulations, 18000, 'Must verify 18,000 user-modal instances');
 });
 
 // ============================================================================
@@ -208,7 +206,6 @@ test('Daylight Contrast: 400 Daylight users experience zero monochromatic or was
     'GameGuideModal',
     'AvatarInspectorModal',
     'LifeTarotCardModal',
-    'AncestralMemorialModal',
     'EpitaphModal',
     'EmergencyRescueModal',
     'YearEndReflectionModal',

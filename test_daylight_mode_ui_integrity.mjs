@@ -456,7 +456,7 @@ test('Zero-Overlap Layout: Action node separation, clear zenith sky, family root
     'Family Roots must be integrated into both the Tree Soil Conduits and the 4th in-tree Drawer'
   );
   assert.ok(
-    treeContent.includes('Kịch Bản Điện Ảnh 21:9') && treeContent.includes('Thử Thách Cột Mốc'),
+    treeContent.includes('Đối Mặt Biến Cố') && treeContent.includes('Thử Thách Cột Mốc'),
     'Active Scenarios/Dilemmas and Milestone Mini-Games must integrate cleanly into DynamicLifeTree'
   );
 
