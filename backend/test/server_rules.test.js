@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'lifegraph-rules-'));
 process.env.NODE_ENV = 'test'; process.env.LIFEGRAPH_DATA_DIR = directory;
-process.env.DATABASE_URL = ''; process.env.GEMINI_API_KEY = '';
+process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || ''; process.env.GEMINI_API_KEY = '';
 const { app } = await import('../src/index.js');
 const db = await import('../src/db/db.js');
 const { deriveMinigameOutcome } = await import('../src/engine/core/minigames.js');

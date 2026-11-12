@@ -4,6 +4,7 @@ import { recordAndCheckCombo, resetAnnualActions } from '../src/engine/comboActi
 import { getBreakthroughForAge, executeBreakthroughAction } from '../src/engine/breakthroughEngine.js';
 import { evaluateIncomingNpcEvent } from '../src/engine/incomingSocialEngine.js';
 import { processPassivePhase } from '../src/engine/tickEngine.js';
+import { setRngStateResolver } from '../src/engine/rng.js';
 
 test('Combo Engine: records actions and triggers Thân Tâm Khang Kiện combo', () => {
   const character = {
@@ -81,7 +82,11 @@ test('Incoming Social Engine: generates valid NPC event with options and effects
   }
 });
 
-test('Dynamic AP Economy: unused AP converts to vitality gain, burnout relief and converted_ap_notice', async () => {
+test('Dynamic AP Economy: unused AP converts to vitality gain, burnout relief and converted_ap_notice', async (t) => {
+  // Cố định seed: pha cuối năm có sự kiện ngẫu nhiên (vd. cha/mẹ qua đời) làm test chập chờn khi không seed.
+  const rngState = { seed: 2, n: 0 };
+  setRngStateResolver(() => rngState);
+  t.after(() => setRngStateResolver(null));
   const character = {
     age: 25,
     cash: 5000,

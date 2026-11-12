@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'lifegraph-golden-'));
 process.env.NODE_ENV = 'test'; process.env.LIFEGRAPH_DATA_DIR = directory;
-process.env.DATABASE_URL = ''; process.env.GEMINI_API_KEY = '';
+process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || ''; process.env.GEMINI_API_KEY = '';
 const { app } = await import('../src/index.js');
 const db = await import('../src/db/db.js');
 const { makeClient, playLife } = await import('./lib/playLife.js');

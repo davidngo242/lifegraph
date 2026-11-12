@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'lifegraph-test-'));
 process.env.NODE_ENV = 'test'; process.env.LIFEGRAPH_DATA_DIR = directory;
-process.env.DATABASE_URL = ''; process.env.GEMINI_API_KEY = '';
+process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || ''; process.env.GEMINI_API_KEY = '';
 const { app } = await import('../src/index.js');
 const db = await import('../src/db/db.js');
 let server, base;
@@ -84,6 +84,8 @@ test('inheritance conserves net estate and does not return parent assets after r
   await db.sessionContext.run({ sessionId: 'qa_heir' }, async () => {
     db.getSessionData().assets = [];
     db.getSessionData().relationships = [];
+    for (const a of await db.getAssets(parent.id)) await db.deleteAsset(a.id);
+    for (const r of await db.getRelationships(parent.id)) await db.updateRelationship(r.id, { type: 'acquaintance', status: 'deceased' });
     await db.addAsset({ character_id: parent.id, name: 'Factory', type: 'business', current_value: 100000 });
     await db.addRelationship({ character_id: parent.id, name: 'Child', type: 'child', age: 30, status: 'alive' });
   });
@@ -180,6 +182,10 @@ test('invested_ap boosts rewards, mitigates risks and appends strategic log note
       store.assets = [];
       store.relationships = [];
     }
+    // Chế độ Postgres: xoá tài sản qua tầng DB (RAM không phải nguồn dữ liệu).
+    const ch = await db.getLatestCharacter();
+    for (const a of await db.getAssets(ch.id)) await db.deleteAsset(a.id);
+    for (const r of await db.getRelationships(ch.id)) await db.updateRelationship(r.id, { type: 'acquaintance', monthly_cost: 0, monthly_upkeep: 0 });
   });
 
   const customDilemma = {
