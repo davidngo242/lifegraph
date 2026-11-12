@@ -1,3 +1,4 @@
+import { getRandom } from '../engine/rng.js';
 import express from 'express';
 import {
   getLatestCharacter,
@@ -21,7 +22,8 @@ import {
   addTotalKarma,
   buyKarmaPerk,
   getAncestralLineage,
-  addAncestralMemorial
+  addAncestralMemorial,
+  getCurrentSessionId
 } from '../db/db.js';
 import {
   SKILL_TREE,
@@ -32,6 +34,9 @@ import {
   interactNpc
 } from '../engine/rpgProgressionEngine.js';
 import { processPassivePhase, calculateMaxVitality } from '../engine/tickEngine.js';
+import { applyDelta, setStat, spendCapped } from '../engine/core/stats.js';
+import { overtimeMultiplier } from '../engine/core/income.js';
+import { deriveMinigameOutcome } from '../engine/core/minigames.js';
 import { getCurrentScenarioForCharacter, interactWithHotspot, resolveMindStageChoice, fulfillCommitment, evaluateCommitments, getNextScenarioAge } from '../engine/scenarioEngine.js';
 import { recordAndCheckCombo, resetAnnualActions } from '../engine/comboActionEngine.js';
 import { executeBreakthroughAction, getBreakthroughForAge } from '../engine/breakthroughEngine.js';
@@ -63,6 +68,7 @@ import {
 
 import crypto from 'node:crypto';
 import { sessionMutations } from '../middleware/sessionMutations.js';
+import { recordWhatIfSnapshot } from './whatif.js';
 
 const router = express.Router();
 router.use(sessionMutations);
@@ -109,13 +115,12 @@ router.get('/diagnostic', async (req, res) => {
 
 // POST /api/game/auth/handshake - Cấp phát Token có chữ ký Mật mã (Anti-Tampering)
 router.post('/auth/handshake', (req, res) => {
-  const clientProvidedId = req.body?.client_id || req.headers['x-session-id'] || 'user_' + Date.now();
-  const sanitizedId = String(clientProvidedId).replace(/[^a-zA-Z0-9_\-]/g, '').slice(0, 64);
-  const token = signSessionToken(sanitizedId);
+  // Mã phiên do server cấp (lớp 3 trong index.js đã xử lý); client chỉ nhận lại token đã ký.
+  const sessionId = getCurrentSessionId();
   res.json({
     success: true,
-    session_id: sanitizedId,
-    session_token: token,
+    session_id: sessionId,
+    session_token: signSessionToken(sessionId),
     issued_at: new Date().toISOString()
   });
 });
@@ -164,6 +169,7 @@ router.get('/state', async (req, res) => {
     if (!character) {
       return res.json({
         character: null,
+        version: getSessionData().version ?? 0,
         player_account: account,
         visuals: null,
         assets: [],
@@ -244,7 +250,7 @@ router.get('/state', async (req, res) => {
       }
       // If cash was pushed into artificial negative deficit by the old Trilemma bug, heal it with fellowship stipend
       if (Number(character.cash) < 0) {
-        character.cash = 3500;
+        setStat(character, 'cash', 3500);
         stateNeedsUpdate = true;
       }
     } else if (flags.includes('bigtech_lead_eng')) {
@@ -286,6 +292,7 @@ router.get('/state', async (req, res) => {
     const aspiration = evaluateAspirationProgress(character, assets, relationships);
 
     res.json({
+      version: getSessionData().version ?? 0,
       character,
       player_account: account,
       visuals,
@@ -349,8 +356,8 @@ router.post('/start', async (req, res) => {
     // Apply Contemporary Reality Starter Pack Customization (BẮT ĐẦU TỪ 0 TUỔI)
     if (starter_pack === 'genz_startup') {
       character.age = 0;
-      character.cash = 50;
-      character.burnout = 0;
+      setStat(character, 'cash', 50);
+      setStat(character, 'burnout', 0);
       if (!character.skills) character.skills = {};
       if (!character.skills.tech_logic) character.skills.tech_logic = { level: 0, name: "Trí Tuệ & Công Nghệ" };
       character.skills.tech_logic.level = 1;
@@ -367,7 +374,7 @@ router.post('/start', async (req, res) => {
       await updateCharacter(character.id, character);
     } else if (starter_pack === 'crazy_rich') {
       character.age = 0;
-      character.cash = 250;
+      setStat(character, 'cash', 250);
       character.family_endowment = 250000;
       if (!character.skills) character.skills = {};
       if (!character.skills.finance_market) character.skills.finance_market = { level: 0, name: "Tài Chính & Thương Trường" };
@@ -385,8 +392,8 @@ router.post('/start', async (req, res) => {
       await updateCharacter(character.id, character);
     } else if (starter_pack === 'street_hustler') {
       character.age = 0;
-      character.cash = 25;
-      character.vitality = 95;
+      setStat(character, 'cash', 25);
+      setStat(character, 'vitality', 95);
       if (!character.skills) character.skills = {};
       if (!character.skills.resilience_health) character.skills.resilience_health = { level: 0, name: "Sinh Lực & Khắc Kỷ" };
       character.skills.resilience_health.level = 1;
@@ -437,9 +444,9 @@ router.post('/childhood-fastforward', async (req, res) => {
 
     for (const choice of milestone_choices) {
       if (choice.effects) {
-        if (choice.effects.vitality_delta) character.vitality = Math.min(100, character.vitality + choice.effects.vitality_delta);
-        if (choice.effects.burnout_delta) character.burnout = Math.min(100, character.burnout + choice.effects.burnout_delta);
-        if (choice.effects.karma_delta) character.karma = Math.min(100, character.karma + choice.effects.karma_delta);
+        if (choice.effects.vitality_delta) applyDelta(character, { vitality: choice.effects.vitality_delta });
+        if (choice.effects.burnout_delta) applyDelta(character, { burnout: choice.effects.burnout_delta });
+        if (choice.effects.karma_delta) applyDelta(character, { karma: choice.effects.karma_delta });
         if (choice.effects.add_flags) choice.effects.add_flags.forEach(f => flagSet.add(f));
         if (choice.effects.add_personality_flag) personalitySet.add(choice.effects.add_personality_flag);
       }
@@ -467,8 +474,8 @@ router.post('/childhood-fastforward', async (req, res) => {
         event: "Rời Lớp Mầm Non & Ngóng Trông Bàn Gỗ",
         choice: "Mẹ dắt tay lội mưa dầm mua cho đôi ủng cao su và cặp sách mới; đêm trước ngày tựu trường thao thức chờ trời sáng."
       });
-      character.vitality = Math.min(100, (character.vitality || 80) + 15);
-      character.karma = Math.min(100, (character.karma || 100) + 15);
+      applyDelta(character, { vitality: 15 });
+      applyDelta(character, { karma: 15 });
       flagSet.add("cherished_childhood");
     }
     const finalAge = Math.max(6, Math.min(18, Number(target_age) || 6));
@@ -480,14 +487,14 @@ router.post('/childhood-fastforward', async (req, res) => {
 
     if (finalAge >= 18) {
       // UNLOCK PERSONAL CASH AT AGE 18!
-      character.cash = Number(character.family_endowment || 0);
+      setStat(character, 'cash', Number(character.family_endowment || 0));
       character.family_endowment = 0;
       if (!character.occupation || character.occupation === "Trẻ mầm non" || character.occupation === "Học sinh tiểu học") {
         character.occupation = "Lao động tự do";
       }
     } else {
       // Retain family endowment safely until age 18, provide living allowance
-      character.cash = Math.max(150, character.household?.annual_allowance || 200);
+      setStat(character, 'cash', Math.max(150, character.household?.annual_allowance || 200));
       if (finalAge >= 6 && finalAge < 12) {
         character.occupation = "Học sinh tiểu học";
       } else if (finalAge >= 12 && finalAge < 16) {
@@ -694,9 +701,9 @@ router.post('/lineage/incense', async (req, res) => {
     let account = await getPlayerAccount();
 
     if (character && !character.is_deceased) {
-      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 10);
-      character.burnout = Math.max(0, (character.burnout || 0) - 10);
-      character.karma = Math.min(100, (character.karma || 80) + 5);
+      applyDelta(character, { vitality: 10 });
+      applyDelta(character, { burnout: -10 });
+      applyDelta(character, { karma: 5 });
 
       const history = character.history_log || [];
       history.push({
@@ -931,7 +938,7 @@ const handleHeirRebirth = async (req, res) => {
     const newCharacter = {
       id: childId,
       name: childName,
-      gender: childRecord?.gender || (Math.random() > 0.5 ? "Nam" : "Nữ"),
+      gender: childRecord?.gender || (getRandom() > 0.5 ? "Nam" : "Nữ"),
       nationality: parent.nationality || "Việt Nam",
       country_tier: parent.country_tier || "Tier 2",
       background: `Hậu duệ gia tộc thế hệ ${generation} (Thừa kế từ ${parent.name})`,
@@ -1095,12 +1102,12 @@ router.post('/transhumanism', async (req, res) => {
       return res.status(400).json({ error: "Không đủ tiền mặt: Cần tối thiểu $8.000.000 tiền mặt để chi trả đường dây y tế ngầm." });
     }
 
-    character.cash -= surgeryCost;
-    const failureRoll = Math.random();
+    applyDelta(character, { cash: -surgeryCost });
+    const failureRoll = getRandom();
 
     // 50% fatal rejection risk
     if (failureRoll < 0.50) {
-      character.vitality = 0;
+      setStat(character, 'vitality', 0);
       character.is_deceased = true;
       character.death_cause = "Đột tử do sốc phản vệ và đào thải tế bào cấy ghép y tế ngầm";
       character.death_age = character.age;
@@ -1121,8 +1128,8 @@ router.post('/transhumanism', async (req, res) => {
     character.is_transhuman = true;
     character.transhuman_frozen_until_age = character.age + 10;
     character.max_vitality = 90;
-    character.vitality = 90;
-    character.burnout = Math.max(0, character.burnout - 30);
+    setStat(character, 'vitality', 90);
+    applyDelta(character, { burnout: -30 });
     character.hidden_flags = [...(character.hidden_flags || []), "transhuman_cybernetic"];
 
     await updateCharacter(character.id, character);
@@ -1195,12 +1202,20 @@ router.post('/action/buy-asset', async (req, res) => {
       });
     }
 
-    const actualType = sanitizeString(asset_type || type || 'stocks', 50);
-    const safeName = sanitizeString(name || 'Tài sản', 100);
-    const actualCostAp = Math.max(1, Math.min(4, Math.floor(Number(ap_cost || cost_ap || 1))));
-    const rawCost = Math.max(0, Number(cost) || 0);
-    const actualMaintenance = Math.max(0, Number(maintenance_cost ?? maintenance ?? 0));
-    const actualCashFlow = Math.max(0, Number(annual_cash_flow || cash_flow || 0));
+    // Giá, dòng tiền, phí duy trì và AP lấy từ danh mục thị trường của server; số do client gửi bị bỏ qua.
+    const catalog = getLocalizedMarketAssets(character.nationality, character.current_city);
+    const requestedId = req.body.asset_id || req.body.id;
+    const item = catalog.find(a => requestedId && a.id === requestedId)
+      || catalog.find(a => name && (a.name === name) && (!(asset_type || type) || a.type === (asset_type || type)));
+    if (!item) {
+      return res.status(400).json({ error: 'Tài sản không có trong danh mục thị trường.' });
+    }
+    const actualType = item.type;
+    const safeName = sanitizeString(item.name, 100);
+    const actualCostAp = Math.max(1, Math.min(4, Math.floor(Number(item.ap_cost) || 1)));
+    const rawCost = Math.max(0, Number(item.cost) || 0);
+    const actualMaintenance = Math.max(0, Number(item.maintenance) || 0);
+    const actualCashFlow = Math.max(0, Number(item.cash_flow) || 0);
 
     const financeLevel = character.skills?.finance_market?.level || 0;
     let discountRate = financeLevel === 1 ? 0.10 : financeLevel === 2 ? 0.20 : financeLevel >= 3 ? 0.25 : 0;
@@ -1222,7 +1237,7 @@ router.post('/action/buy-asset', async (req, res) => {
     }
 
     character.action_points -= actualCostAp;
-    character.cash -= finalCost;
+    applyDelta(character, { cash: -finalCost });
 
     // Award Life EXP for strategic investment
     awardLifeExp(character, 80, `Đầu tư tài sản: ${safeName}`);
@@ -1243,7 +1258,7 @@ router.post('/action/buy-asset', async (req, res) => {
     const history = character.history_log || [];
     history.push({
       age: character.age,
-      event: `Đầu tư mua tài sản: ${name}`,
+      event: `Đầu tư mua tài sản: ${safeName}`,
       choice: `Chi tiêu $${finalCost.toLocaleString()} & ${actualCostAp} AP${discountNote} (Dòng tiền: +$${actualCashFlow.toLocaleString()}/năm)`
     });
     character.history_log = history;
@@ -1374,7 +1389,7 @@ router.post('/pets/buy', async (req, res) => {
       if ((character.cash || 0) < pet.cost) {
         return res.status(400).json({ error: `Không đủ tiền mặt để nhận nuôi ${pet.name} (cần $${pet.cost.toLocaleString()}).` });
       }
-      character.cash -= pet.cost;
+      applyDelta(character, { cash: -pet.cost });
     }
 
     character.owned_pets.push(petId);
@@ -1485,7 +1500,7 @@ router.post('/action/upgrade-housing', async (req, res) => {
       if ((Number(character.cash) || 0) < buyPrice) {
         return res.status(400).json({ error: `Không đủ tiền mặt để mua nhà mới! (Cần $${buyPrice.toLocaleString()})` });
       }
-      character.cash -= buyPrice;
+      applyDelta(character, { cash: -buyPrice });
     }
 
     character.housing = {
@@ -1494,7 +1509,7 @@ router.post('/action/upgrade-housing', async (req, res) => {
       status: buyPrice > 0 ? "owned" : "rented"
     };
 
-    character.burnout = Math.max(0, (character.burnout || 0) - (targetHousing.happiness_bonus || 10));
+    applyDelta(character, { burnout: -(targetHousing.happiness_bonus || 10) });
 
     const history = character.history_log || [];
     history.push({
@@ -1536,15 +1551,15 @@ router.post(['/action/childhood', '/child-action'], async (req, res) => {
 
     // 0-5 tuổi
     if (action_id === 'eat_grow') {
-      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 15);
+      applyDelta(character, { vitality: 15 });
       flags.add("well_nourished");
       feedback = "Ăn dặm ngon miệng & ngủ đủ giấc! Cơ thể khỏe khoắn, tăng đề kháng (+15 Sức khỏe).";
     } else if (action_id === 'sunbath') {
-      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 5);
+      applyDelta(character, { vitality: 5 });
       flags.add("sunbath_immunity");
       feedback = "Tắm nắng sớm tiếp nhận vitamin D tự nhiên! Da dẻ hồng hào, tăng sức đề kháng (+5 Sức khỏe).";
     } else if (action_id === 'toy_brain') {
-      character.karma = Math.min(100, (character.karma || 100) + 10);
+      applyDelta(character, { karma: 10 });
       flags.add("early_curiosity");
       feedback = "Khám phá đồ chơi xếp hình trí tuệ! Kích thích tư duy sơ khai (+10 Karma).";
     } else if (action_id === 'toddler_walk') {
@@ -1552,22 +1567,22 @@ router.post(['/action/childhood', '/child-action'], async (req, res) => {
       flags.add("toddler_mobility");
       feedback = "Tập chập chững bước đi và bập bẹ gọi cha mẹ! Nhận được tràng pháo tay cổ vũ (+3 Max HP).";
     } else if (action_id === 'cuddle_parents') {
-      character.burnout = 0;
-      character.karma = Math.min(100, (character.karma || 100) + 15);
+      setStat(character, 'burnout', 0);
+      applyDelta(character, { karma: 15 });
       feedback = "Làm nũng trong vòng tay ấm áp của mẹ cha! Cảm nhận tình thương vô điều kiện (+15 Karma).";
     } else if (action_id === 'thoi_noi_book') {
-      character.karma = Math.min(100, (character.karma || 100) + 15);
+      applyDelta(character, { karma: 15 });
       flags.add("first_birthday_chosen");
       flags.add("thoi_noi_hoc_thuat");
       feedback = "Lễ Thôi Nôi 1 Tuổi: Bàn tay bé xíu vươn ra bốc Sách Bút & Thước Kẻ! Cả họ tấm tắc khen ngợi mầm non đỗ đạt, công danh sáng lạn (+15 Karma tri thức).";
     } else if (action_id === 'thoi_noi_coin') {
       const luckyMoney = 100;
-      character.cash = (Number(character.cash) || 0) + luckyMoney;
+      applyDelta(character, { cash: luckyMoney });
       flags.add("first_birthday_chosen");
       flags.add("thoi_noi_kinh_doanh");
       feedback = `Lễ Thôi Nôi 1 Tuổi: Em bé nhoẻn miệng cười bốc xấp Tiền Vàng & Bàn Tính! Cha mẹ mừng rỡ, họ hàng lì xì thêm +$${luckyMoney} vào quỹ bỉm sữa (+Trực giác thương trường).`;
     } else if (action_id === 'thoi_noi_toy') {
-      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 15);
+      applyDelta(character, { vitality: 15 });
       character.max_vitality = Math.min(100, (character.max_vitality || 90) + 3);
       flags.add("first_birthday_chosen");
       flags.add("thoi_noi_the_thao");
@@ -1575,69 +1590,69 @@ router.post(['/action/childhood', '/child-action'], async (req, res) => {
     } 
     // 6-12 tuổi
     else if (action_id === 'school_study') {
-      character.karma = Math.min(100, (character.karma || 100) + 12);
+      applyDelta(character, { karma: 12 });
       flags.add("diligent_pupil");
       feedback = "Chăm ngoan nghe giảng ở lớp! Thầy cô khen ngợi, nhận cờ 'Học Sinh Chăm Ngoan' (+12 Karma).";
     } else if (action_id === 'help_chores') {
       const pocketMoney = 25;
-      character.cash = (Number(character.cash) || 0) + pocketMoney;
-      character.karma = Math.min(100, (character.karma || 100) + 8);
+      applyDelta(character, { cash: pocketMoney });
+      applyDelta(character, { karma: 8 });
       flags.add("family_helper");
       feedback = `Quét nhà, rửa bát phụ cha mẹ! Được thưởng +$${pocketMoney} tiền tiêu vặt bỏ heo đất (+8 Karma).`;
     } else if (action_id === 'play_friends') {
-      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 10);
-      character.burnout = Math.max(0, (character.burnout || 0) - 20);
+      applyDelta(character, { vitality: 10 });
+      applyDelta(character, { burnout: -20 });
       feedback = "Chơi đuổi bắt và đá bóng rộn rã cùng bạn bè trang lứa! Tinh thần sảng khoái (-20 Stress).";
     } else if (action_id === 'explore_nature') {
-      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 8);
-      character.karma = Math.min(100, (character.karma || 100) + 8);
+      applyDelta(character, { vitality: 8 });
+      applyDelta(character, { karma: 8 });
       flags.add("nature_lover");
       feedback = "Khám phá thế giới tự nhiên, bắt bướm trồng cây! Nuôi dưỡng tình yêu sinh thái (+8 Sinh lực, +8 Karma).";
     }
     // 13-17 tuổi (Thiếu niên)
     else if (action_id === 'teen_part_time') {
       const pocketMoney = 100;
-      character.cash = (Number(character.cash) || 0) + pocketMoney;
-      character.karma = Math.min(100, (character.karma || 100) + 5);
+      applyDelta(character, { cash: pocketMoney });
+      applyDelta(character, { karma: 5 });
       flags.add("teen_work_ethic");
       feedback = `Làm thêm phụ việc quán xá ngoài giờ học! Kiếm được +$${pocketMoney} tiền túi, học cách tự lập dòng tiền (+5 Karma).`;
     } else if (action_id === 'teen_sports') {
-      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 12);
-      character.burnout = Math.max(0, (character.burnout || 0) - 20);
+      applyDelta(character, { vitality: 12 });
+      applyDelta(character, { burnout: -20 });
       flags.add("athletic_youth");
       feedback = "Tập luyện thể thao tuổi dậy thì! Chiều cao và thể lực phát triển vượt trội (+12 Thể chất, -20 Stress).";
     } else if (action_id === 'teen_online_sales') {
       const profit = 150;
-      character.cash = (Number(character.cash) || 0) + profit;
+      applyDelta(character, { cash: profit });
       flags.add("young_entrepreneur");
       feedback = `Tập tành kinh doanh phụ kiện online! Thu về +$${profit} tiền vốn tích lũy, trui rèn kỹ năng thương trường sớm.`;
     }
     // Hành động bẩm sinh / thần đồng (Prodigy actions)
     else if (action_id === 'prodigy_trade') {
       const earnings = 60;
-      character.cash = (Number(character.cash) || 0) + earnings;
+      applyDelta(character, { cash: earnings });
       flags.add("young_entrepreneur");
       feedback = `Trổ tài buôn bán truyện tranh cũ và đồ chơi! Thu về +$${earnings} tiền túi, nhận cờ 'Thương Nhân Nhí'.`;
     } else if (action_id === 'prodigy_math_infant') {
-      character.karma = Math.min(100, (character.karma || 100) + 10);
+      applyDelta(character, { karma: 10 });
       flags.add("early_logic");
       feedback = "Nhận biết các khối hình và màu sắc chuẩn xác từ khi còn trong nôi! Não bộ phản xạ vượt trội (+10 Karma).";
     } else if (action_id === 'prodigy_math') {
-      character.karma = Math.min(100, (character.karma || 100) + 18);
+      applyDelta(character, { karma: 18 });
       flags.add("math_prodigy");
       feedback = "Giải đề thi cờ thế và toán học nâng cao! Nhận học bổng khen thưởng tuổi thơ (+18 Karma).";
     } else if (action_id === 'prodigy_art_infant') {
-      character.burnout = 0;
-      character.karma = Math.min(100, (character.karma || 100) + 10);
+      setStat(character, 'burnout', 0);
+      applyDelta(character, { karma: 10 });
       flags.add("early_art");
       feedback = "Nghịch màu bằng ngón tay bé xíu, reo vui trước những mảng màu rực rỡ! Kích hoạt cảm thụ nghệ thuật sớm (+10 Karma).";
     } else if (action_id === 'prodigy_art') {
-      character.burnout = 0;
-      character.karma = Math.min(100, (character.karma || 100) + 15);
+      setStat(character, 'burnout', 0);
+      applyDelta(character, { karma: 15 });
       flags.add("artistic_child");
       feedback = "Sáng tác bức tranh rực rỡ sắc màu cuộc sống! Được thầy cô đem đi triển lãm tranh thiếu nhi (+15 Karma).";
     } else {
-      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 5);
+      applyDelta(character, { vitality: 5 });
       feedback = "Một ngày ấu thơ trôi qua êm đềm dưới mái ấm gia đình.";
     }
 
@@ -1685,37 +1700,36 @@ router.post('/action/annual-focus', async (req, res) => {
 
     if (focus_type === 'hustle') {
       if (isAdult) {
-        const bonusCash = Math.round(Math.random() * 3500 + 3500);
-        character.cash = (Number(character.cash) || 0) + bonusCash;
-        character.burnout = Math.min(100, (character.burnout || 0) + 25);
+        const bonusCash = Math.round(getRandom() * 3500 + 3500);
+        applyDelta(character, { cash: bonusCash });
+        applyDelta(character, { burnout: 25 });
         message = `Cả năm dốc toàn lực cày cuốc! Thu về +$${bonusCash.toLocaleString()} USD thặng dư, tăng 25 Căng thẳng.`;
       } else if (isTeen) {
         const pocketMoney = 250;
-        character.cash = (Number(character.cash) || 0) + pocketMoney;
-        character.burnout = Math.min(100, (character.burnout || 0) + 15);
+        applyDelta(character, { cash: pocketMoney });
+        applyDelta(character, { burnout: 15 });
         message = `Chăm chỉ phụ việc & làm thêm suốt cả năm! Tích lũy được +$${pocketMoney} tiền túi, rèn tính tự lập.`;
       } else {
-        character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 15);
-        character.burnout = Math.max(0, (character.burnout || 0) - 20);
+        applyDelta(character, { vitality: 15 });
+        applyDelta(character, { burnout: -20 });
         message = "Một năm năng động thể thao và chạy nhảy cùng bè bạn! Thể lực tăng vọt (+15 Sinh lực, -20 Stress).";
       }
     } else if (focus_type === 'study') {
-      if (isAdult && character.cash >= 800) character.cash -= 800;
-      character.karma = Math.min(100, (character.karma || 100) + 22);
-      character.burnout = Math.min(100, (character.burnout || 0) + 10);
+      if (isAdult && character.cash >= 800) applyDelta(character, { cash: -800 });
+      applyDelta(character, { karma: 22 });
+      applyDelta(character, { burnout: 10 });
       message = isAdult
         ? "Đầu tư cả năm trau dồi tri thức & thi chứng chỉ chuyên môn (-$800, +22 Karma tri thức)!"
         : "Chuyên tâm đèn sách suốt cả năm học! Đạt thành tích xuất sắc đứng đầu lớp (+22 Karma học vấn).";
     } else if (focus_type === 'wellness') {
-      const healVitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 25);
-      character.vitality = healVitality;
-      character.burnout = Math.max(0, (character.burnout || 0) - 45);
-      if (isAdult && character.cash >= 600) character.cash -= 600;
+      applyDelta(character, { vitality: 25 });
+      applyDelta(character, { burnout: -45 });
+      if (isAdult && character.cash >= 600) applyDelta(character, { cash: -600 });
       message = isAdult
         ? "Dành trọn năm dưỡng sinh, nghỉ ngơi trị liệu và gắn kết mái ấm (-$600, hồi phục +25 Sinh lực, giảm 45 Stress)!"
         : "Một năm bình yên bên gia đình và bạn bè, thanh lọc mọi áp lực trường lớp (+25 Sinh lực, giảm 45 Stress).";
     } else {
-      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 10);
+      applyDelta(character, { vitality: 10 });
       message = "Một năm trôi qua bình dị và thuận hòa.";
     }
 
@@ -1764,16 +1778,16 @@ router.post('/action/custom-resolve', async (req, res) => {
     // Apply stat deltas
     if (resolution.effects) {
       if (resolution.effects.cash_delta) {
-        character.cash = (Number(character.cash) || 0) + resolution.effects.cash_delta;
+        applyDelta(character, { cash: resolution.effects.cash_delta });
       }
       if (resolution.effects.vitality_delta) {
-        character.vitality = Math.max(0, Math.min(character.max_vitality || 100, (character.vitality || 0) + resolution.effects.vitality_delta));
+        applyDelta(character, { vitality: resolution.effects.vitality_delta });
       }
       if (resolution.effects.burnout_delta) {
-        character.burnout = Math.max(0, Math.min(100, (character.burnout || 0) + resolution.effects.burnout_delta));
+        applyDelta(character, { burnout: resolution.effects.burnout_delta });
       }
       if (resolution.effects.karma_delta) {
-        character.karma = Math.max(0, Math.min(100, (character.karma || 0) + resolution.effects.karma_delta));
+        applyDelta(character, { karma: resolution.effects.karma_delta });
       }
     }
 
@@ -1856,7 +1870,7 @@ router.post('/action/sell-asset', async (req, res) => {
 
     const saleAmount = Math.max(0, Number(targetAsset.current_value) || 0);
     character.action_points -= validCostAp;
-    character.cash = (Number(character.cash) || 0) + saleAmount;
+    applyDelta(character, { cash: saleAmount });
 
     await deleteAsset(safeAssetId);
 
@@ -1904,8 +1918,8 @@ router.post('/action/family', async (req, res) => {
       }
 
       character.action_points -= costAP;
-      character.cash -= costCash;
-      character.burnout = Math.max(0, character.burnout - 15);
+      applyDelta(character, { cash: -costCash });
+      applyDelta(character, { burnout: -15 });
 
       let partner = relationships.find(r => r.type === 'partner' || r.type === 'spouse');
       if (partner) {
@@ -1914,7 +1928,7 @@ router.post('/action/family', async (req, res) => {
       } else {
         const partnerGender = character.gender === 'female' ? 'male' : 'female';
         const name = generateCulturallyAuthenticName(character.nationality, 'partner', partnerGender);
-        const partnerAge = Math.max(16, (character.age || 18) + (Math.floor(Math.random() * 3) - 1));
+        const partnerAge = Math.max(16, (character.age || 18) + (Math.floor(getRandom() * 3) - 1));
         partner = await addRelationship({
           character_id: character.id,
           type: 'partner',
@@ -1960,7 +1974,7 @@ router.post('/action/family', async (req, res) => {
         // If no partner yet, instantly find and marry with culturally authentic identity
         const partnerGender = character.gender === 'female' ? 'male' : 'female';
         const name = generateCulturallyAuthenticName(character.nationality, 'spouse', partnerGender);
-        const partnerAge = Math.max(18, (character.age || 18) + (Math.floor(Math.random() * 5) - 2));
+        const partnerAge = Math.max(18, (character.age || 18) + (Math.floor(getRandom() * 5) - 2));
         partner = await addRelationship({
           character_id: character.id,
           type: 'spouse',
@@ -1975,9 +1989,9 @@ router.post('/action/family', async (req, res) => {
       }
 
       character.action_points -= costAP;
-      character.cash -= costCash;
-      character.karma = Math.min(100, character.karma + 25);
-      character.burnout = Math.max(0, character.burnout - 20);
+      applyDelta(character, { cash: -costCash });
+      applyDelta(character, { karma: 25 });
+      applyDelta(character, { burnout: -20 });
 
       history.push({
         age: character.age,
@@ -2011,7 +2025,7 @@ router.post('/action/family', async (req, res) => {
       // Kế thừa Họ cha theo tập tục văn hóa từng quốc gia
       const fatherFullName = character.gender === 'male' ? character.name : (relationships.find(r => r.type === 'spouse')?.name || character.name);
       const fatherSurname = extractFamilySurname(fatherFullName, character.nationality);
-      const childGender = Math.random() < 0.5 ? 'male' : 'female';
+      const childGender = getRandom() < 0.5 ? 'male' : 'female';
       const name = generateCulturallyAuthenticName(character.nationality, 'child', childGender, fatherSurname);
 
       const newChild = await addRelationship({
@@ -2026,9 +2040,9 @@ router.post('/action/family', async (req, res) => {
       });
 
       character.action_points -= costAP;
-      character.cash -= costCash;
-      character.karma = Math.min(100, character.karma + 30);
-      character.burnout = Math.min(100, character.burnout + 10);
+      applyDelta(character, { cash: -costCash });
+      applyDelta(character, { karma: 30 });
+      applyDelta(character, { burnout: 10 });
 
       history.push({
         age: character.age,
@@ -2055,9 +2069,9 @@ router.post('/action/family', async (req, res) => {
       }
 
       character.action_points -= costAP;
-      character.cash -= costCash;
-      character.karma = Math.min(100, character.karma + 20);
-      character.burnout = Math.max(0, character.burnout - 20);
+      applyDelta(character, { cash: -costCash });
+      applyDelta(character, { karma: 20 });
+      applyDelta(character, { burnout: -20 });
 
       const parents = relationships.filter(r => r.type === 'parent' || r.type === 'father' || r.type === 'mother');
       for (const parent of parents) {
@@ -2091,8 +2105,8 @@ router.post('/action/family', async (req, res) => {
       }
 
       character.household.family_mentorship_used = character.age;
-      character.burnout = Math.max(0, (character.burnout || 0) - 10);
-      character.karma = Math.min(100, (character.karma || 50) + 8);
+      applyDelta(character, { burnout: -10 });
+      applyDelta(character, { karma: 8 });
       const flags = new Set(character.hidden_flags || []);
       flags.add("family_guidance_received");
       character.hidden_flags = Array.from(flags);
@@ -2123,10 +2137,10 @@ router.post('/action/family', async (req, res) => {
         return res.status(400).json({ error: "Năm nay bạn đã dùng bữa cơm gia đình rồi. Hãy đợi sang tuổi tiếp theo!" });
       }
 
-      character.burnout = Math.max(0, (character.burnout || 0) - 15);
-      character.karma = Math.min(100, (character.karma || 50) + 5);
+      applyDelta(character, { burnout: -15 });
+      applyDelta(character, { karma: 5 });
       if (character.age < 6) {
-        character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 0) + 10);
+        applyDelta(character, { vitality: 10 });
       }
       character.household.family_meals_available = 0;
 
@@ -2176,7 +2190,7 @@ router.post('/action/senior', async (req, res) => {
       }
 
       character.action_points -= costAP;
-      character.karma = Math.min(100, (Number(character.karma) || 0) + 25);
+      applyDelta(character, { karma: 25 });
       character.written_memoir = true;
       if (!character.hidden_flags.includes('written_memoir')) {
         character.hidden_flags.push('written_memoir');
@@ -2204,7 +2218,7 @@ router.post('/action/senior', async (req, res) => {
       }
 
       character.action_points -= costAP;
-      character.karma = Math.min(100, (Number(character.karma) || 0) + 10);
+      applyDelta(character, { karma: 10 });
       character.mentored_heir = true;
       if (!character.hidden_flags.includes('mentored_heir')) {
         character.hidden_flags.push('mentored_heir');
@@ -2249,7 +2263,7 @@ router.post('/action/senior', async (req, res) => {
       }
 
       character.action_points -= costAP;
-      character.cash -= costCash;
+      applyDelta(character, { cash: -costCash });
       character.early_will_established = true;
       if (!character.hidden_flags.includes('early_will_established')) {
         character.hidden_flags.push('early_will_established');
@@ -2293,7 +2307,10 @@ router.post('/action/debt-relief', async (req, res) => {
     if (!character.hidden_flags) character.hidden_flags = [];
 
     if (relief_type === 'family_soft_loan') {
-      character.cash = Number(character.cash) + 3000;
+      if (character.family_soft_loan_taken || character.hidden_flags.includes('family_soft_loan_taken')) {
+        return res.status(409).json({ error: 'Gia đình đã cho vay một lần trong kiếp này.' });
+      }
+      applyDelta(character, { cash: 3000 });
       character.family_soft_loan_taken = true;
       if (!character.hidden_flags.includes('family_soft_loan_taken')) {
         character.hidden_flags.push('family_soft_loan_taken');
@@ -2328,8 +2345,8 @@ router.post('/action/debt-relief', async (req, res) => {
     }
 
     if (relief_type === 'liquidate_personal_items') {
-      character.cash = Number(character.cash) + 1200;
-      character.burnout = Math.min(100, (Number(character.burnout) || 0) + 10);
+      applyDelta(character, { cash: 1200 });
+      applyDelta(character, { burnout: 10 });
 
       history.push({
         age: character.age,
@@ -2375,12 +2392,9 @@ router.post('/action/wellness', async (req, res) => {
       }
 
       character.action_points -= costAP;
-      character.cash -= costCash;
-      const maxV = character.max_vitality || 100;
       const vitGained = Math.round((20 + bonusVit) * wellnessMult);
       const burnoutRelief = Math.round((25 + bonusBurnoutRelief) * wellnessBurnoutMult);
-      character.vitality = Math.min(maxV, character.vitality + vitGained);
-      character.burnout = Math.max(0, character.burnout - burnoutRelief);
+      applyDelta(character, { cash: -costCash, vitality: vitGained, burnout: -burnoutRelief });
       awardLifeExp(character, 30, "Trị liệu y tế phục hồi thể trạng");
 
       const healthPerkMsg = healthLevel > 0 ? ` (Kỹ Năng Sinh Lực Lv${healthLevel} tăng thêm +${bonusVit} HP, -${bonusBurnoutRelief} Burnout)` : '';
@@ -2410,12 +2424,9 @@ router.post('/action/wellness', async (req, res) => {
       }
 
       character.action_points -= costAP;
-      character.cash -= costCash;
       const vitGained = Math.round((15 + bonusVit) * wellnessMult);
       const burnoutRelief = Math.round((35 + bonusBurnoutRelief) * wellnessBurnoutMult);
-      character.burnout = Math.max(0, character.burnout - burnoutRelief);
-      character.vitality = Math.min(character.max_vitality || 100, character.vitality + vitGained);
-      character.karma = Math.min(100, character.karma + 10);
+      applyDelta(character, { cash: -costCash, vitality: vitGained, burnout: -burnoutRelief, karma: 10 });
       awardLifeExp(character, 35, "Khóa tu tĩnh tâm dưỡng sinh");
 
       const healthPerkMsg = healthLevel > 0 ? ` (Kỹ Năng Sinh Lực Lv${healthLevel} tăng thêm +${bonusVit} HP, -${bonusBurnoutRelief} Burnout)` : '';
@@ -2459,12 +2470,13 @@ router.post('/action/overtime', async (req, res) => {
     const hasNegotiation = (character.unlocked_skills || []).includes("negotiation_master");
     const negotiationMultiplier = hasNegotiation ? 1.35 : 1.0; // +35% thặng dư từ Kỹ Năng Đàm Phán Khắc Nghiệt
 
-    const baseEarned = Math.round(1500 + (age * 120) + (Math.random() * 800));
+    const baseEarned = Math.round(1500 + (age * 120) + (getRandom() * 800));
     const hasCodeWhisperer = (character.innate_traits || []).includes("code_whisperer");
     const codeMultiplier = hasCodeWhisperer ? 1.35 : 1.0;
     const isWealthPledge = character.active_pledge === 'pledge_wealth';
     const pledgeWealthMultiplier = isWealthPledge ? 1.15 : 1.0;
-    const earnedCash = Math.round(baseEarned * techMultiplier * negotiationMultiplier * codeMultiplier * pledgeWealthMultiplier);
+    const overtimeMult = overtimeMultiplier(character.overtime_year_count, character.burnout);
+    const earnedCash = Math.round(baseEarned * techMultiplier * negotiationMultiplier * codeMultiplier * pledgeWealthMultiplier * overtimeMult);
 
     const healthLevel = character.skills?.resilience_health?.level || 0;
     const burnoutReduction = healthLevel * 0.2; // 20% burnout reduction per level
@@ -2479,9 +2491,9 @@ router.post('/action/overtime', async (req, res) => {
     }
 
     character.action_points -= 1;
-    character.cash = Number(character.cash) + earnedCash;
-    character.burnout = Math.min(100, character.burnout + burnoutGained);
-    character.vitality = Math.max(10, character.vitality - (healthLevel >= 2 ? 1 : 3));
+    character.overtime_year_count = (Number(character.overtime_year_count) || 0) + 1; // reset on year advance in processPassivePhase
+    applyDelta(character, { cash: earnedCash, burnout: burnoutGained, vitality: -(healthLevel >= 2 ? 1 : 3) }, { vitalityMin: 10 });
+    if (character.burnout >= 80) character.recent_risk = Math.min(5, (Number(character.recent_risk) || 0) + 1); // overwork raises mortality hazard
 
     // Award Life EXP for grinding hard
     awardLifeExp(character, 40, "Cày việc ngoài giờ thực chiến");
@@ -2502,6 +2514,7 @@ router.post('/action/overtime', async (req, res) => {
       success: true,
       message: `Cày thêm việc thành công! Thu về ngay +$${earnedCash.toLocaleString()} tiền mặt${techBonusNote} (Burnout +${burnoutGained}).`,
       earnedCash,
+      overtimeMultiplier: overtimeMult,
       character
     });
   } catch (err) {
@@ -2520,9 +2533,7 @@ router.post('/action/study', async (req, res) => {
     }
 
     character.action_points -= 1;
-    character.cash -= costCash;
-    character.burnout = Math.max(0, character.burnout - 10);
-    character.karma = Math.min(100, character.karma + 8);
+    applyDelta(character, { cash: -costCash, burnout: -10, karma: 8 });
 
     // Award Life EXP for studying
     awardLifeExp(character, 50, "Nghiên cứu tri thức chuyên sâu");
@@ -2567,14 +2578,13 @@ router.post('/action/network', async (req, res) => {
     }
 
     character.action_points -= 1;
-    character.cash -= costCash;
-    character.karma = Math.min(100, character.karma + 6);
+    applyDelta(character, { cash: -costCash, karma: 6 });
 
     const npcs = await getNpcs(character.id);
     let message = "";
 
-    if (npcs.length > 0 && Math.random() < (socialLevel >= 2 ? 0.80 : 0.65)) {
-      const targetNpc = npcs[Math.floor(Math.random() * npcs.length)];
+    if (npcs.length > 0 && getRandom() < (socialLevel >= 2 ? 0.80 : 0.65)) {
+      const targetNpc = npcs[Math.floor(getRandom() * npcs.length)];
       targetNpc.affinity = Math.min(100, (Number(targetNpc.affinity) || 50) + (socialLevel >= 2 ? 22 : 15));
       await updateRelationship(targetNpc.id, { affinity: targetNpc.affinity });
       message = `Gặp gỡ giao lưu cùng ${targetNpc.name}: Tình bằng hữu thêm gắn kết (+${socialLevel >= 2 ? 22 : 15} Thân thiện)!`;
@@ -2584,8 +2594,8 @@ router.post('/action/network', async (req, res) => {
       const rolePool = socialLevel >= 2 ? vipRoles : normalRoles;
       const newContact = {
         character_id: character.id,
-        name: ["Nguyễn Hoàng", "Trần Thảo", "Vũ Phong", "Phạm Linh", "Đặng Huy", "David Vance", "Alexander Chen"][Math.floor(Math.random() * 7)],
-        role: rolePool[Math.floor(Math.random() * rolePool.length)],
+        name: ["Nguyễn Hoàng", "Trần Thảo", "Vũ Phong", "Phạm Linh", "Đặng Huy", "David Vance", "Alexander Chen"][Math.floor(getRandom() * 7)],
+        role: rolePool[Math.floor(getRandom() * rolePool.length)],
         affinity: socialLevel >= 2 ? 80 : 70,
         status: "alive",
         memory_notes: "Gặp gỡ qua sự kiện giao lưu kết nối doanh nghiệp cấp cao.",
@@ -2631,9 +2641,10 @@ router.post('/action/gamble', async (req, res) => {
     const lossThreshold = financeLevel >= 2 ? 0.45 : financeLevel === 1 ? 0.55 : 0.65;
 
     character.action_points -= 1;
-    character.cash -= costCash;
+    applyDelta(character, { cash: -costCash });
+    character.recent_risk = Math.min(5, (Number(character.recent_risk) || 0) + 1); // gambling raises mortality hazard
 
-    const roll = Math.random();
+    const roll = getRandom();
     let message = "";
     let netGain = -costCash;
 
@@ -2643,15 +2654,14 @@ router.post('/action/gamble', async (req, res) => {
     } else if (roll < 0.94) {
       // 3x win
       const win = financeLevel >= 2 ? 1200 : 900;
-      character.cash += win;
+      applyDelta(character, { cash: win });
       netGain = win - costCash;
       message = `Bắt đúng nhịp sóng nhỏ! Thắng giải thu về +$${win.toLocaleString()}!`;
     } else {
       // JACKPOT 50x
       const jackpot = 15000;
-      character.cash += jackpot;
+      applyDelta(character, { cash: jackpot, karma: -5 });
       netGain = jackpot - costCash;
-      character.karma = Math.max(0, character.karma - 5);
       message = `🎆 TRÚNG ĐỘC ĐẮC! Bánh xe vận may mỉm cười, nhận ngay +$${jackpot.toLocaleString()} tiền mặt!`;
     }
 
@@ -2664,13 +2674,6 @@ router.post('/action/gamble', async (req, res) => {
     character.history_log = history;
     await updateCharacter(character.id, character);
     recordPlayerAction("gamble", character);
-
-    res.json({
-      success: true,
-      message,
-      netGain,
-      character
-    });
 
     res.json({
       success: true,
@@ -2696,8 +2699,8 @@ router.post('/blessing', async (req, res) => {
         return res.status(400).json({ error: `Không đủ Nghiệp Lực! Cần tối thiểu ${cost} Karma vĩnh cửu.` });
       }
       await updatePlayerAccount({ total_karma: account.total_karma - cost });
-      character.vitality = Math.min(character.max_vitality || 100, character.vitality + 25);
-      character.burnout = Math.max(0, character.burnout - 35);
+      applyDelta(character, { vitality: 25 });
+      applyDelta(character, { burnout: -35 });
 
       const history = character.history_log || [];
       history.push({
@@ -2722,7 +2725,7 @@ router.post('/blessing', async (req, res) => {
         return res.status(400).json({ error: `Không đủ Nghiệp Lực! Cần tối thiểu ${cost} Karma vĩnh cửu.` });
       }
       await updatePlayerAccount({ total_karma: account.total_karma - cost });
-      character.karma = Math.min(100, character.karma + 20);
+      applyDelta(character, { karma: 20 });
 
       const flags = new Set(character.hidden_flags || []);
       flags.add("ancestral_protection");
@@ -2788,7 +2791,7 @@ router.post('/action/skill-train', async (req, res) => {
 
     // Deduct 1 AP and tuition fee
     character.action_points -= 1;
-    character.cash = Math.max(0, (Number(character.cash) || 0) - tuitionFee);
+    spendCapped(character, tuitionFee);
 
     const minigameType = getExamMinigameType(skill_id, character.age);
 
@@ -2852,12 +2855,13 @@ router.post('/action/minigame-result', async (req, res) => {
   try {
     const minigame_id = req.body.minigame_id || req.body.minigame_type;
     const reportedOutcome = req.body.outcome ?? req.body.status ?? 'fair';
-    const outcome = reportedOutcome === 'fail' ? 'failure' : reportedOutcome;
-    const score = req.body.score || 0;
+    const clientOutcome = reportedOutcome === 'fail' ? 'failure' : reportedOutcome;
+    let outcome = clientOutcome; // advisory; replaced by the server judgement below
+    const score = req.body.score ?? 0;
     let character = await getLivingCharacter(res);
     if (!character) return;
     if (!character || character.is_deceased) return res.status(409).json({ error: 'Không có kiếp sống đang hoạt động.' });
-    if (!['success', 'fair', 'failure'].includes(outcome)) return res.status(400).json({ error: 'Kết quả thử thách không hợp lệ.' });
+    if (!['success', 'fair', 'failure'].includes(clientOutcome)) return res.status(400).json({ error: 'Kết quả thử thách không hợp lệ.' });
     const played = character.completed_minigames ?? [];
     if (!character.pending_skill_exam && played.includes(minigame_id)) return res.status(409).json({ error: 'Thử thách này đã được ghi nhận trong kiếp này.' });
     const history = character.history_log || [];
@@ -2868,7 +2872,9 @@ router.post('/action/minigame-result', async (req, res) => {
     const pendingChallenge = pendingExam ?? character.pending_minigame;
     if (!pendingChallenge || pendingChallenge.id !== req.body.challenge_id || pendingChallenge.minigame_type !== minigame_id)
       return res.status(409).json({ error: 'Kết quả không thuộc thử thách đang hoạt động.' });
-    if (!Number.isFinite(Number(score)) || Number(score) < 0) return res.status(400).json({ error: 'Điểm không hợp lệ.' });
+    if (!Number.isFinite(Number(score)) || Number(score) < -100 || Number(score) > 100000) return res.status(400).json({ error: 'Điểm không hợp lệ.' });
+    const judged = deriveMinigameOutcome(minigame_id, score, clientOutcome);
+    outcome = judged.outcome;
 
     const targetSkillId = req.body.skill_id || pendingExam?.skill_id;
     const hasEncyclopedic = (character.unlocked_skills || []).includes("encyclopedic_brain");
@@ -2894,11 +2900,11 @@ router.post('/action/minigame-result', async (req, res) => {
         // Permanent milestone bonuses
         if (activeSkillId === 'resilience_health' && targetLevel === 3) {
           character.max_vitality = Math.min(125, (character.max_vitality || 100) + 15);
-          character.vitality = Math.min(character.max_vitality, character.vitality + 15);
+          applyDelta(character, { vitality: 15 });
         }
 
         const karmaGain = effectiveOutcome === 'success' ? 18 : 10;
-        character.karma = Math.min(100, (character.karma || 100) + karmaGain);
+        applyDelta(character, { karma: karmaGain });
 
         // Synergy with Aspiration
         if (character.aspiration) {
@@ -2915,136 +2921,136 @@ router.post('/action/minigame-result', async (req, res) => {
         const encyclopedicNote = (hasEncyclopedic && outcome !== 'success') ? ' 🌟 [Bách Khoa Toàn Thư Auto-Pass]' : '';
         feedback = `🎉 THI ĐỖ SÁT HẠCH! Bạn đã chính thức đạt chứng chỉ [${def?.name || activeSkillId} - ${levelCfg?.title || 'Cấp ' + targetLevel}]! Mở khóa vĩnh viễn: ${levelCfg?.perk_title || ''}${encyclopedicNote} (+${karmaGain} Karma).`;
       } else {
-        character.burnout = Math.min(100, (character.burnout || 0) + 10);
+        applyDelta(character, { burnout: 10 });
         feedback = `Thi trượt sát hạch [${def?.name || activeSkillId} - Cấp ${targetLevel}]! Thiếu chút may mắn và sự tập trung (+10 Burnout). Hãy ôn luyện và thi lại sau.`;
       }
 
       character.pending_skill_exam = null;
     } else if (minigame_id === 'plant_care_6yo') {
       if (outcome === 'success') {
-        character.vitality = Math.min(100, character.vitality + 15);
-        character.karma = Math.min(100, character.karma + 20);
+        applyDelta(character, { vitality: 15 });
+        applyDelta(character, { karma: 20 });
         flags.add("green_thumb");
         feedback = "Hạt mầm đầu đời đơm hoa xanh mướt! Bạn học được tính kiên nhẫn và sự trân trọng sự sống (+15 Sức sống, +20 Karma).";
       } else if (outcome === 'fair') {
-        character.vitality = Math.min(100, character.vitality + 8);
-        character.karma = Math.min(100, character.karma + 10);
+        applyDelta(character, { vitality: 8 });
+        applyDelta(character, { karma: 10 });
         flags.add("patient_learner");
         feedback = "Mầm cây xanh tốt vừa độ dù gặp chút sâu rầy. Bạn rèn luyện đức tính nhẫn nại (+8 Sức sống, +10 Karma).";
       } else {
-        character.vitality = Math.max(10, character.vitality - 5);
-        character.karma = Math.max(0, character.karma - 5);
+        applyDelta(character, { vitality: -5 }, { vitalityMin: 10 });
+        applyDelta(character, { karma: -5 });
         flags.add("neglectful_past");
         feedback = "Mầm cây bị héo úng vì thiếu kiên nhẫn. Một bài học sâu sắc về sự thờ ơ (-5 Sức sống).";
       }
     } else if (minigame_id === 'logic_circuit_6yo') {
       if (outcome === 'success') {
-        character.karma = Math.min(100, character.karma + 20);
+        applyDelta(character, { karma: 20 });
         flags.add("logic_genius");
         feedback = "Thắp sáng vi mạch robot thành công! Bạn nhận cờ 'Thiên Tài Logic' (+20 Karma, tăng hiệu quả học tập và công nghệ).";
       } else if (outcome === 'fair') {
-        character.karma = Math.min(100, character.karma + 10);
+        applyDelta(character, { karma: 10 });
         flags.add("logical_mind");
         feedback = "Nắm bắt được tư duy thuật toán cơ bản (+10 Karma).";
       } else {
-        character.vitality = Math.max(10, character.vitality - 5);
+        applyDelta(character, { vitality: -5 }, { vitalityMin: 10 });
         feedback = "Đoản mạch vì sơ suất đấu dây. Rèn luyện thêm tính kiên nhẫn (-5 Sinh lực).";
       }
     } else if (minigame_id === 'stock_trader_20yo') {
       if (outcome === 'success') {
         const profit = 15000;
-        character.cash = (Number(character.cash) || 0) + profit;
+        applyDelta(character, { cash: profit });
         flags.add("trader_instinct");
         feedback = `Chốt lời đỉnh sóng thị trường công nghệ ngoạn mục! Lợi nhuận ròng +$${profit.toLocaleString()}, nhận cờ Trực Giác Đầu Cơ.`;
       } else if (outcome === 'fair') {
         const profit = 5000;
-        character.cash = (Number(character.cash) || 0) + profit;
-        character.burnout = Math.max(0, character.burnout - 5);
+        applyDelta(character, { cash: profit });
+        applyDelta(character, { burnout: -5 });
         flags.add("prudent_investor");
         feedback = `Giao dịch bảo toàn vốn thận trọng! Thu về +$${profit.toLocaleString()} lợi nhuận an toàn.`;
       } else {
         const loss = Math.min(Math.max(2000, Number(character.cash)), 5000);
-        character.cash = Math.max(0, (Number(character.cash) || 0) - loss);
-        character.burnout = Math.min(100, character.burnout + 20);
+        spendCapped(character, loss);
+        applyDelta(character, { burnout: 20 });
         flags.add("market_scarred");
         feedback = `Đu đỉnh cắt lỗ thê thảm! Mất -$${loss.toLocaleString()} và tăng +20 Burnout. Bài học xương máu nơi thương trường.`;
       }
     } else if (minigame_id === 'life_tightrope_35yo') {
       if (outcome === 'success') {
-        character.burnout = Math.max(0, character.burnout - 40);
-        character.karma = Math.min(100, character.karma + 10);
+        applyDelta(character, { burnout: -40 });
+        applyDelta(character, { karma: 10 });
         flags.add("master_of_balance");
         feedback = "Giữ thăng bằng xuất sắc giữa giông bão sự nghiệp và mái ấm gia đình! Thanh lọc -40 Burnout (+10 Karma).";
       } else if (outcome === 'fair') {
-        character.burnout = Math.max(0, character.burnout - 20);
+        applyDelta(character, { burnout: -20 });
         flags.add("resilient_balancer");
         feedback = "Vượt qua chòng chành giữa hai ngả đường đời. Giữ được hòa khí cơ bản (-20 Burnout).";
       } else {
-        character.burnout = Math.min(100, character.burnout + 25);
-        character.vitality = Math.max(10, character.vitality - 5);
+        applyDelta(character, { burnout: 25 });
+        applyDelta(character, { vitality: -5 }, { vitalityMin: 10 });
         feedback = "Mất thăng bằng cuộc đời! Áp lực công việc đè nát sự bình yên gia đạo (+25 Burnout, -5 Sức sống).";
       }
     } else if (minigame_id === 'cardio_beat_55yo') {
       if (outcome === 'success') {
         character.max_vitality = Math.min(100, (character.max_vitality || 80) + 10);
-        character.vitality = Math.min(character.max_vitality, character.vitality + 15);
+        applyDelta(character, { vitality: 15 });
         flags.add("cardio_iron_heart");
         feedback = "Điều hòa nhịp tim và huyết áp thành công vượt qua cơn thắt ngực! (+10 Max Vitality, +15 Sức sống).";
       } else if (outcome === 'fair') {
         character.max_vitality = Math.min(100, (character.max_vitality || 80) + 5);
-        character.vitality = Math.min(character.max_vitality, character.vitality + 8);
+        applyDelta(character, { vitality: 8 });
         flags.add("steady_pulse");
         feedback = "Kiểm soát được huyết áp tạm ổn sau cơn hồi hộp. Tăng thêm tuổi thọ an nhàn (+5 Max Vitality).";
       } else {
-        character.vitality = Math.max(10, character.vitality - 12);
-        character.burnout = Math.min(100, character.burnout + 15);
-        character.cash = Math.max(0, (Number(character.cash) || 0) - 2000);
+        applyDelta(character, { vitality: -12 }, { vitalityMin: 10 });
+        applyDelta(character, { burnout: 15 });
+        spendCapped(character, 2000);
         feedback = "Cơn co thắt lồng ngực cấp cứu khẩn cấp! (-12 Sức sống, -$2.000 viện phí).";
       }
     } else if (minigame_id === 'memory_mosaic_75yo') {
       if (outcome === 'success') {
-        character.karma = Math.min(100, character.karma + 35);
-        character.vitality = Math.min(character.max_vitality || 60, character.vitality + 10);
+        applyDelta(character, { karma: 35 });
+        applyDelta(character, { vitality: 10 });
         flags.add("lucid_mind");
         feedback = "Tìm lại trọn vẹn những mảnh ghép ký ức tươi đẹp cả đời! Tâm trí hoàn toàn minh mẫn (+35 Karma).";
       } else if (outcome === 'fair') {
-        character.karma = Math.min(100, character.karma + 20);
-        character.vitality = Math.min(character.max_vitality || 60, character.vitality + 5);
+        applyDelta(character, { karma: 20 });
+        applyDelta(character, { vitality: 5 });
         flags.add("warm_memories");
         feedback = "Nhớ lại được những nụ cười thân thương bên người thân (+20 Karma).";
       } else {
-        character.vitality = Math.max(10, character.vitality - 8);
+        applyDelta(character, { vitality: -8 }, { vitalityMin: 10 });
         feedback = "Những mảnh ký ức dần tan thành làn sương trắng. Bình thản chấp nhận quy luật vô thường (-8 Sức sống).";
       }
     } else if (minigame_id === 'negotiation_duel') {
       if (outcome === 'success') {
         const bonusCash = 12000;
-        character.cash = (Number(character.cash) || 0) + bonusCash;
-        character.karma = Math.min(100, (character.karma || 100) + 15);
+        applyDelta(character, { cash: bonusCash });
+        applyDelta(character, { karma: 15 });
         flags.add("master_negotiator");
         feedback = `Thắng lợi vang dội trên bàn thương lượng! Nhận hoa hồng +$${bonusCash.toLocaleString()}, +15 Karma và nhận cờ 'Bậc Thầy Đàm Phán'.`;
       } else if (outcome === 'fair') {
         const bonusCash = 4000;
-        character.cash = (Number(character.cash) || 0) + bonusCash;
+        applyDelta(character, { cash: bonusCash });
         flags.add("prudent_negotiator");
         feedback = `Thỏa thuận đôi bên cùng có lợi thành công. Thu về +$${bonusCash.toLocaleString()} và giữ vững uy tín đối tác.`;
       } else {
-        character.burnout = Math.min(100, (character.burnout || 0) + 15);
+        applyDelta(character, { burnout: 15 });
         feedback = `Đàm phán đổ vỡ vì bị đối tác ép giá. Tăng +15 Burnout và tổn hại uy tín thương trường.`;
       }
     } else if (minigame_id === 'survival_escape') {
       if (outcome === 'success') {
-        character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 20);
-        character.karma = Math.min(100, (character.karma || 100) + 25);
+        applyDelta(character, { vitality: 20 });
+        applyDelta(character, { karma: 25 });
         flags.add("survival_expert");
         feedback = `Chiến dịch sơ tán gia đình thành công ngoạn mục! Bảo vệ trọn vẹn người thân (+20 Sức sống, +25 Karma, nhận cờ 'Chuyên Gia Sinh Tồn').`;
       } else if (outcome === 'fair') {
-        character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 10);
-        character.karma = Math.min(100, (character.karma || 100) + 10);
+        applyDelta(character, { vitality: 10 });
+        applyDelta(character, { karma: 10 });
         feedback = `Đưa được gia đình đến vùng cứu trợ an toàn dù xây xát nhẹ (+10 Sức sống, +10 Karma).`;
       } else {
-        character.vitality = Math.max(10, (character.vitality || 80) - 15);
-        character.cash = Math.max(0, (Number(character.cash) || 0) - 3000);
+        applyDelta(character, { vitality: -15 }, { vitalityMin: 10 });
+        spendCapped(character, 3000);
         feedback = `Mắc kẹt giữa tâm chấn biến cố! Tổn thất -$3.000 nhu yếu phẩm dự trữ và bị thương (-15 Sức sống).`;
       }
     }
@@ -3067,6 +3073,8 @@ router.post('/action/minigame-result', async (req, res) => {
     res.json({
       success: true,
       outcome,
+      client_outcome: clientOutcome,
+      outcome_adjusted: judged.adjusted,
       feedback,
       character
     });
@@ -3145,25 +3153,25 @@ router.post('/action/rpg-active-perk', async (req, res) => {
     let message = '';
 
     if (perk_type === 'stock_trading') {
-      const isProfit = Math.random() < 0.70;
+      const isProfit = getRandom() < 0.70;
       const amount = Math.round(Math.max(2000, (Number(character.cash) || 5000) * 0.25));
       if (isProfit) {
-        character.cash = (Number(character.cash) || 0) + amount;
+        applyDelta(character, { cash: amount });
         message = `Lướt sóng cổ phiếu thành công! Nhận thặng dư +${amount.toLocaleString()}.`;
       } else {
-        character.cash = Math.max(0, (Number(character.cash) || 0) - Math.round(amount * 0.4));
+        spendCapped(character, Math.round(amount * 0.4));
         message = `Thị trường điều chỉnh nhẹ, cắt lỗ an toàn -${Math.round(amount * 0.4).toLocaleString()}.`;
       }
       awardLifeExp(character, 45, 'Lướt sóng thị trường vốn');
     } else if (perk_type === 'zen_meditation') {
-      character.burnout = Math.max(0, (character.burnout || 0) - 45);
-      character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 15);
-      character.karma = Math.min(100, (character.karma || 100) + 15);
+      applyDelta(character, { burnout: -45 });
+      applyDelta(character, { vitality: 15 });
+      applyDelta(character, { karma: 15 });
       message = 'Thiền định siêu việt: Tâm thức thanh lọc tuyệt đối, xóa sạch 45% Stress, hồi phục 15 HP.';
       awardLifeExp(character, 40, 'Thiền định giác ngộ');
     } else if (perk_type === 'vip_networking') {
-      character.cash = Math.max(0, (Number(character.cash) || 0) - 1500);
-      character.karma = Math.min(100, (character.karma || 100) + 20);
+      spendCapped(character, 1500);
+      applyDelta(character, { karma: 20 });
       message = 'Dự tiệc Networking thượng lưu: Gặp gỡ các nhà đầu tư lớn, mở rộng mạng lưới uy tín (+20 Karma).';
       awardLifeExp(character, 50, 'Mạng lưới thượng lưu VIP');
     }
@@ -3233,9 +3241,9 @@ router.post('/tick', async (req, res) => {
         const burnoutGained = Math.round(workRatio * 30) - 5;
         const vitalityLoss = Math.round(workRatio * 15);
 
-        character.cash = Number(character.cash) + cashGained;
-        character.burnout = Math.max(0, Math.min(100, character.burnout + burnoutGained));
-        character.vitality = Math.max(10, character.vitality - vitalityLoss);
+        applyDelta(character, { cash: cashGained });
+        applyDelta(character, { burnout: burnoutGained });
+        applyDelta(character, { vitality: -vitalityLoss }, { vitalityMin: 10 });
 
         lastChoiceOutcome = `Đánh đổi phân bổ: ${Math.round(workRatio * 100)}% Phải / ${Math.round(familyRatio * 100)}% Trái`;
         historyLog.push({
@@ -3249,29 +3257,29 @@ router.post('/tick', async (req, res) => {
         if (strategyId === "fight") {
           // Aggressive / Assertive Counter Strategy
           const statPower = (character.vitality || 50) + (character.karma || 0) + (character.rpg_skills?.length || 0) * 10;
-          const isSuccess = statPower >= 75 || Math.random() < 0.60;
+          const isSuccess = statPower >= 75 || getRandom() < 0.60;
 
           if (isSuccess) {
             const salvageCash = Math.round(Math.max(2000, character.cash) * 0.10);
-            character.cash += salvageCash;
-            character.karma = Math.min(100, character.karma + 15);
+            applyDelta(character, { cash: salvageCash });
+            applyDelta(character, { karma: 15 });
             character.rpg_exp = (character.rpg_exp || 0) + 25;
             if (!character.hidden_flags) character.hidden_flags = [];
             character.hidden_flags.push("courageous_fighter");
             lastChoiceOutcome = `Quyết liệt đấu tranh: Bạn dũng cảm đối diện nghịch cảnh, đòi lại công bằng danh dự (+${salvageCash.toLocaleString('vi-VN')}₫, +25 EXP RPG, +15 Karma).`;
           } else {
             const legalLoss = Math.round(Math.max(4000, character.cash) * 0.18);
-            character.cash = Math.max(0, character.cash - legalLoss);
-            character.vitality = Math.max(10, character.vitality - 5);
-            character.karma = Math.min(100, character.karma + 10);
+            spendCapped(character, legalLoss);
+            applyDelta(character, { vitality: -5 }, { vitalityMin: 10 });
+            applyDelta(character, { karma: 10 });
             lastChoiceOutcome = `Quyết liệt đấu tranh: Dù tốn phí tổn đối đầu (-${legalLoss.toLocaleString('vi-VN')}₫), bạn đã tôi luyện ý chí kiên định (+10 Karma).`;
           }
         } else if (strategyId === "pivot") {
           // Adaptive Pivot Strategy: Turn crisis into catalyst
           const pivotCost = Math.round(Math.max(2000, character.cash) * 0.08);
-          character.cash = Math.max(0, character.cash - pivotCost);
-          character.vitality = Math.max(10, character.vitality - 8);
-          character.burnout = Math.min(100, (character.burnout || 0) + 8);
+          spendCapped(character, pivotCost);
+          applyDelta(character, { vitality: -8 }, { vitalityMin: 10 });
+          applyDelta(character, { burnout: 8 });
           character.rpg_exp = (character.rpg_exp || 0) + 35;
           if (!character.hidden_flags) character.hidden_flags = [];
           character.hidden_flags.push("crisis_pivot_survivor");
@@ -3280,9 +3288,9 @@ router.post('/tick', async (req, res) => {
           // Endure / Preserve Strength Strategy
           const drain = previous_dilemma.illusion_data?.drain_ratio || 0.15;
           const lossAmount = Math.round(Math.max(3000, character.cash) * drain);
-          character.cash = Math.max(0, character.cash - lossAmount);
+          spendCapped(character, lossAmount);
           const karmaReward = previous_dilemma.illusion_data?.karma_gain || 25;
-          character.karma = Math.min(100, character.karma + karmaReward);
+          applyDelta(character, { karma: karmaReward });
           lastChoiceOutcome = previous_dilemma.illusion_data?.button_text ? 
             `${previous_dilemma.illusion_data.button_text} (+${karmaReward} Karma)` : 
             `Nhẫn nhịn bảo toàn lực lượng, tích lũy bài học kinh nghiệm sâu sắc (+${karmaReward} Karma).`;
@@ -3308,10 +3316,10 @@ router.post('/tick', async (req, res) => {
           if (effects.burnout_delta && effects.burnout_delta > 0) effects.burnout_delta = Math.round(effects.burnout_delta * 0.5);
         }
 
-        character.cash = Number(character.cash) + Number(effects.cash_delta || 0);
-        character.vitality = Math.max(10, Math.min(100, character.vitality + Number(effects.vitality_delta || 0)));
-        character.burnout = Math.max(0, Math.min(100, character.burnout + Number(effects.burnout_delta || 0)));
-        character.karma = Math.max(0, Math.min(100, character.karma + Number(effects.karma_delta || 0)));
+        applyDelta(character, { cash: Number(effects.cash_delta || 0) });
+        applyDelta(character, { vitality: Number(effects.vitality_delta || 0) }, { vitalityMin: 10 });
+        applyDelta(character, { burnout: Number(effects.burnout_delta || 0) });
+        applyDelta(character, { karma: Number(effects.karma_delta || 0) });
 
         if (effects.new_city) character.current_city = effects.new_city;
         if (effects.new_housing) character.housing = effects.new_housing;
@@ -3362,35 +3370,35 @@ router.post('/tick', async (req, res) => {
 
         if (isInfant) {
           if (strategy === 'relax') {
-            character.karma = Math.min(100, (character.karma || 100) + 15);
-            character.burnout = 0;
+            applyDelta(character, { karma: 15 });
+            setStat(character, 'burnout', 0);
             lastChoiceOutcome = `Trôi qua ${yearsJump} năm tuổi thơ ấm áp trong tình yêu thương của cha mẹ (+15 Karma)`;
           } else {
-            character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 15);
+            applyDelta(character, { vitality: 15 });
             character.max_vitality = Math.min(100, (character.max_vitality || 90) + 3);
             lastChoiceOutcome = `Ăn ngoan ngủ đẫy giấc suốt ${yearsJump} năm đầu đời, lớn nhanh như thổi (+15 Sinh lực, +3 Max HP)`;
           }
         } else if (isMinor) {
           if (strategy === 'relax') {
-            character.vitality = Math.min(character.max_vitality || 100, (character.vitality || 80) + 15);
-            character.burnout = Math.max(0, (character.burnout || 0) - 35);
-            character.karma = Math.min(100, (character.karma || 100) + 10);
+            applyDelta(character, { vitality: 15 });
+            applyDelta(character, { burnout: -35 });
+            applyDelta(character, { karma: 10 });
             lastChoiceOutcome = `Tận hưởng ${yearsJump} năm học trò năng động bên bạn bè trang lứa (+15 Sinh lực, -35 Stress)`;
           } else {
-            character.karma = Math.min(100, (character.karma || 100) + 15);
-            character.burnout = Math.max(0, (character.burnout || 0) - 15);
+            applyDelta(character, { karma: 15 });
+            applyDelta(character, { burnout: -15 });
             lastChoiceOutcome = `Chuyên tâm học hành đèn sách suốt ${yearsJump} năm, gặt hái thành tích xuất sắc (+15 Karma tri thức)`;
           }
         } else {
           if (strategy === 'relax') {
-            character.burnout = Math.max(0, character.burnout - 40);
-            character.vitality = Math.min(character.max_vitality || 100, character.vitality + 15);
-            character.karma = Math.min(100, character.karma + 15);
-            character.cash += (skip.yearly_income_save || 1500) * yearsJump;
+            applyDelta(character, { burnout: -40 });
+            applyDelta(character, { vitality: 15 });
+            applyDelta(character, { karma: 15 });
+            applyDelta(character, { cash: (skip.yearly_income_save || 1500) * yearsJump });
             lastChoiceOutcome = `Dành ${yearsJump} năm tĩnh tâm dưỡng sức, bồi đắp mái ấm (-40 Burnout, +15 Sinh lực)`;
           } else {
-            character.cash += (skip.yearly_income_save || 3000) * yearsJump;
-            character.burnout = Math.max(0, character.burnout - (skip.burnout_decay || 20));
+            applyDelta(character, { cash: (skip.yearly_income_save || 3000) * yearsJump });
+            applyDelta(character, { burnout: -((skip.burnout_decay || 20)) });
             lastChoiceOutcome = `Chuyên tâm cày việc và tích lũy chuyên môn (+${((skip.yearly_income_save || 3000) * yearsJump).toLocaleString()} USD)`;
           }
         }
@@ -3437,13 +3445,13 @@ router.post('/tick', async (req, res) => {
               }
             }
 
-            character.cash = Number(character.cash) + Number(effects.cash_delta || 0);
-            character.burnout = Math.max(0, Math.min(100, Number(character.burnout) + Number(effects.burnout_delta || 0)));
-            character.karma = Math.max(0, Math.min(100, Number(character.karma) + Number(effects.karma_delta || 0)));
+            applyDelta(character, { cash: Number(effects.cash_delta || 0) });
+            applyDelta(character, { burnout: Number(effects.burnout_delta || 0) });
+            applyDelta(character, { karma: Number(effects.karma_delta || 0) });
             character.action_points -= costAP;
 
             const curMax = calculateMaxVitality(character.age, character.transhuman_frozen_until_age);
-            character.vitality = Math.max(0, Math.min(curMax, Number(character.vitality) + Number(effects.vitality_delta || 0)));
+            applyDelta(character, { vitality: Number(effects.vitality_delta || 0) }, { maxVitality: curMax });
 
             const flagSet = new Set(character.hidden_flags || []);
             if (effects.add_flags) effects.add_flags.forEach(f => flagSet.add(f));
@@ -3499,17 +3507,17 @@ router.post('/tick', async (req, res) => {
       dominoTriggered.forEach(d => {
         if (d.flag && !character.hidden_flags.includes(d.flag)) character.hidden_flags.push(d.flag);
         if (d.cash_delta) {
-          character.cash = Math.max(0, Number(character.cash || 0) + Number(d.cash_delta));
+          if (Number(d.cash_delta) < 0) spendCapped(character, -Number(d.cash_delta)); else applyDelta(character, { cash: Number(d.cash_delta) });
         }
         if (d.vitality_delta) {
           const curMax = calculateMaxVitality(character.age, character.transhuman_frozen_until_age);
-          character.vitality = Math.max(10, Math.min(curMax, (character.vitality || 80) + Number(d.vitality_delta)));
+          applyDelta(character, { vitality: Number(d.vitality_delta) }, { maxVitality: curMax, vitalityMin: 10 });
         }
         if (d.burnout_delta) {
-          character.burnout = Math.max(0, Math.min(100, (character.burnout || 0) + Number(d.burnout_delta)));
+          applyDelta(character, { burnout: Number(d.burnout_delta) });
         }
         if (d.karma_delta) {
-          character.karma = Math.max(0, Math.min(100, (character.karma || 80) + Number(d.karma_delta)));
+          applyDelta(character, { karma: Number(d.karma_delta) });
         }
         if (d.occupation) {
           character.occupation = d.occupation;
@@ -3540,7 +3548,7 @@ router.post('/tick', async (req, res) => {
     // Tự động giải ngân quỹ bảo trợ gia đình khi tròn 18 tuổi
     if (character.age >= 18 && Number(character.family_endowment ?? 0) > 0) {
       const endowment = Number(character.family_endowment || 0);
-      character.cash = Number(character.cash || 0) + endowment;
+      applyDelta(character, { cash: endowment });
       character.family_endowment = 0;
       const history = character.history_log || [];
       history.push({
@@ -3621,7 +3629,7 @@ router.post('/tick', async (req, res) => {
     const npcArc = evaluateNpcLongTermArc(character, npcs);
     let dilemma = null;
 
-    if (npcArc && Math.random() < 0.40) {
+    if (npcArc && getRandom() < 0.40) {
       dilemma = {
         ...npcArc,
         has_npc_interaction: true,
@@ -3642,6 +3650,7 @@ router.post('/tick', async (req, res) => {
     const visuals = generateCharacterVisuals(character, assets);
     const totalAssets = assets.reduce((sum, a) => sum + Number(a.current_value || 0), 0);
     const netWorth = (Number(character.cash) || 0) + totalAssets;
+    await recordWhatIfSnapshot(character, assets, relationships, npcs, getSessionData().rng); // Nếu như…: không tiêu RNG
     const aspiration = evaluateAspirationProgress(character, assets, relationships);
 
     res.json({

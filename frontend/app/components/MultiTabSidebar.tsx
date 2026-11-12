@@ -23,6 +23,8 @@ import NarrativeFeed from './NarrativeFeed';
 import Tooltip from './Tooltip';
 import { formatCurrency } from '../utils/currencyUtils';
 
+import { ALL_UNLOCKED, UNLOCK_HINTS, type Unlocks } from '../lib/unlocks';
+
 export type SidebarTab = 'journal' | 'social' | 'assets' | 'achievements';
 
 interface MultiTabSidebarProps {
@@ -47,6 +49,7 @@ interface MultiTabSidebarProps {
   onNpcInteract?: (npcId: string, actionType: 'socialize' | 'gift' | 'request_favor') => Promise<void>;
   onOpenTarotCardModal?: () => void;
   isLoading?: boolean;
+  unlocks?: Unlocks;
 }
 
 export default function MultiTabSidebar({
@@ -63,9 +66,12 @@ export default function MultiTabSidebar({
   onFamilyMentorship,
   onNpcInteract,
   onOpenTarotCardModal,
-  isLoading = false
+  isLoading = false,
+  unlocks = ALL_UNLOCKED
 }: MultiTabSidebarProps) {
-  const [activeTab, setActiveTab] = useState<SidebarTab>('journal');
+  const [requestedTab, setActiveTab] = useState<SidebarTab>('journal');
+  // Tab Tài Sản bị khoá (vd. nhân vật mới là trẻ em) thì quay về Nhật Ký, tránh panel trống.
+  const activeTab: SidebarTab = requestedTab === 'assets' && !unlocks.assets ? 'journal' : requestedTab;
   const [interactingNpcId, setInteractingNpcId] = useState<string | null>(null);
 
   if (!character) return null;
@@ -133,17 +139,21 @@ export default function MultiTabSidebar({
           <span className="whitespace-nowrap leading-tight">Nhân Mạch</span>
         </button>
 
-        <button
-          onClick={() => setActiveTab('assets')}
-          className={`flex-1 min-w-0 min-h-[44px] sm:min-h-0 py-1.5 px-1 sm:px-2 rounded-xl text-xs sm:text-xs font-semibold flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 transition ${
-            activeTab === 'assets'
-              ? 'bg-[var(--bg-card)] text-emerald-800 dark:text-emerald-400 font-bold border border-[var(--border-subtle)] shadow-sm'
-              : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-          }`}
-        >
-          <Building2 className="w-3.5 h-3.5 shrink-0" />
-          <span className="whitespace-nowrap leading-tight">Tài Sản</span>
-        </button>
+        {unlocks.assets ? (
+          <button
+            onClick={() => setActiveTab('assets')}
+            className={`flex-1 min-w-0 min-h-[44px] sm:min-h-0 py-1.5 px-1 sm:px-2 rounded-xl text-xs sm:text-xs font-semibold flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 transition ${
+              activeTab === 'assets'
+                ? 'bg-[var(--bg-card)] text-emerald-800 dark:text-emerald-400 font-bold border border-[var(--border-subtle)] shadow-sm'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+            }`}
+          >
+            <Building2 className="w-3.5 h-3.5 shrink-0" />
+            <span className="whitespace-nowrap leading-tight">Tài Sản</span>
+          </button>
+        ) : (
+          <span role="note" className="flex-1 min-w-0 min-h-[44px] sm:min-h-0 py-1.5 px-1 sm:px-2 text-xs font-medium text-[var(--text-secondary)] flex items-center justify-center text-center leading-tight">{UNLOCK_HINTS.adult}</span>
+        )}
 
         <button
           onClick={() => setActiveTab('achievements')}
@@ -350,7 +360,7 @@ export default function MultiTabSidebar({
         )}
 
         {/* TAB 3: TÀI SẢN & DANH MỤC */}
-        {activeTab === 'assets' && (
+        {activeTab === 'assets' && unlocks.assets && (
           <div className="flex-1 overflow-y-auto space-y-4 pr-1 custom-scrollbar">
             {/* Net Worth Summary Card */}
             <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-[var(--bg-card-subtle)] to-[var(--bg-card-subtle)] border border-emerald-500/30 text-xs space-y-3">

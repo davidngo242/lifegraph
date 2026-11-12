@@ -1,3 +1,4 @@
+import { getRandom } from '../engine/rng.js';
 /**
  * realWorldSyncService.js
  * LifeGraph V10 - Real-World Data Sync (Đồng Bộ Thế Giới Thực)
@@ -103,7 +104,7 @@ async function refreshRealWorldData() {
     }
 
     // Refresh live market indices (simulate slight real drift based on time)
-    const drift = (Math.random() * 0.4 - 0.2);
+    const drift = (getRandom() * 0.4 - 0.2);
     cacheStore.marketIndices.vnIndex.change = +(cacheStore.marketIndices.vnIndex.change + drift).toFixed(2);
     cacheStore.marketIndices.dowJones.change = +(cacheStore.marketIndices.dowJones.change + drift).toFixed(2);
     cacheStore.marketIndices.btc.change = +(cacheStore.marketIndices.btc.change + drift * 2).toFixed(2);

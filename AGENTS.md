@@ -68,6 +68,17 @@ Làm nhiều, báo cáo ít. Chi tiết: `.agents/skills/concise-engineering-rep
 
 ---
 
+## 2d. Nguyên Tắc Ứng Xử Khi Viết Code (Sếp duyệt 2026-11-12)
+
+1. **Nghĩ trước khi code:** nêu giả định; nếu yêu cầu mơ hồ hoặc có nhiều cách hiểu thì hỏi hoặc trình bày các phương án, không âm thầm chọn một.
+2. **Đổi gọn, đúng phạm vi:** mỗi dòng thay đổi phải truy được về yêu cầu của Sếp. Không "cải thiện" code, comment hay định dạng ở kế bên; code chết có sẵn thì báo, không tự xoá. Chỉ dọn phần thừa do chính thay đổi của mình tạo ra.
+3. **Giữ tối giản:** không thêm tính năng, lớp trừu tượng hay cấu hình chưa được yêu cầu.
+4. **Đặt mục tiêu kiểm chứng được:** sửa lỗi thì viết test tái hiện trước rồi mới sửa; refactor thì test phải pass cả trước và sau. Việc nhiều bước thì nêu kế hoạch ngắn, mỗi bước kèm cách kiểm tra.
+
+(Nguồn ý tưởng: bộ nguyên tắc công khai của cộng đồng; nội dung trên là diễn đạt lại.)
+
+---
+
 ## 3. Tiêu Chuẩn Giao Diện Bắt Buộc (Daylight & Theme Standards)
 - **Tách biệt OS Dark Mode:** Chỉ Obsidian, Cyberpunk và `.dark` là theme tối: biến thể `dark:` kích hoạt qua `darkMode: ['variant', '&:where([data-theme="obsidian"], [data-theme="obsidian"] *, [data-theme="cyberpunk"], [data-theme="cyberpunk"] *, .dark, .dark *)']` trong `tailwind.config.js` (dạng `selector` cũ chỉ khớp thẻ `<html>`, làm `dark:` chết ở thẻ con). **Sepia là theme SÁNG ấm (giấy ngà)**, dùng bộ adaptor riêng trong `globals.css`, KHÔNG kích hoạt `dark:`. Tuyệt đối không để `dark:` tự kích hoạt khi người dùng đang bật Daylight/Sepia hoặc theo OS dark mode.
 - **Tương phản Ban Ngày:**

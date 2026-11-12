@@ -288,7 +288,7 @@ test('Passive family healthcare: triggers fever event for young child (rel.type 
       store.relationships = [childRel];
 
       const { updatedCharacter, passiveSummary } = await processPassivePhase(parentCharacter, [], [childRel]);
-      assert.ok(updatedCharacter.cash < 500); // clinic fee paid
+      assert.equal(updatedCharacter.cash, 500 + 871 - 40 - 21); // net 871 (wage 4171 - living 3300, age 29, T2, tier 1); mocked random 0.05 also triggers a rent-hike shock (8% of 500 = 40) and the child clinic fee round(35 * 0.6) = 21
       assert.equal(updatedCharacter.karma, 55); // 50 + 5
       assert.equal(childRel.affection_level, 56); // 50 + 6
       assert.ok(passiveSummary.annual_digest.family_events.some(e => e.includes('Con của bạn (Bé Bắp, 4 tuổi) bị sốt mọc răng/nhiễm lạnh')));

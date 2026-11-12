@@ -1,3 +1,4 @@
+import { getRandom } from './rng.js';
 import crypto from 'crypto';
 import {
   stateToVector,
@@ -79,15 +80,15 @@ function retrieveVectorScenario(character, netWorth) {
   // Turn 5: Cooldown / Time-Skip (Peaceful reflection & consequence settling)
   let preferredType = "STANDARD";
   if (cycleTurn === 1 || cycleTurn === 2) {
-    preferredType = Math.random() < 0.45 ? "SPECTRUM" : "STANDARD";
+    preferredType = getRandom() < 0.45 ? "SPECTRUM" : "STANDARD";
   } else if (cycleTurn === 3) {
     // Diversify Tension Phase: don't force only ILLUSION, allow variety
-    const tensionRand = Math.random();
+    const tensionRand = getRandom();
     preferredType = tensionRand < 0.35 ? "ILLUSION" : tensionRand < 0.70 ? "SPECTRUM" : "STANDARD";
   } else if (cycleTurn === 4 && turnsSinceMajor >= 3 && (character.age || 0) >= 18) {
     preferredType = "TRILEMMA";
   } else if (cycleTurn === 5) {
-    preferredType = Math.random() < 0.55 ? "TIME_SKIP" : "STANDARD";
+    preferredType = getRandom() < 0.55 ? "TIME_SKIP" : "STANDARD";
   }
 
   // Filter out invalid age, recent tags, or once-in-a-lifetime duplicates
@@ -102,7 +103,7 @@ function retrieveVectorScenario(character, netWorth) {
     for (const item of candidates) {
       const baseSim = calculateCosineSimilarity(charVector, item.target_vector);
       // Slight jitter prevents deterministic locks when vectors are close
-      const jitter = (Math.random() * 0.10) - 0.05;
+      const jitter = (getRandom() * 0.10) - 0.05;
       let finalScore = baseSim + jitter;
 
       // A. Sine Wave Pacing affinity

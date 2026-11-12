@@ -1,15 +1,16 @@
+import { getRandom } from './rng.js';
 // backend/src/engine/incomingSocialEngine.js
 
 export function evaluateIncomingNpcEvent(character, relationships = []) {
   if (!character || character.age < 6 || character.is_deceased) return null;
 
   // 35% chance an NPC reaches out at the start of a year
-  if (Math.random() > 0.40) return null;
+  if (getRandom() > 0.40) return null;
 
   const validContacts = (relationships || []).filter(r => r.status !== 'deceased');
   if (validContacts.length === 0) return null;
 
-  const contact = validContacts[Math.floor(Math.random() * validContacts.length)];
+  const contact = validContacts[Math.floor(getRandom() * validContacts.length)];
   const contactName = contact.name || "Người quen";
   const contactType = contact.type || "friend";
   const age = character.age || 0;
@@ -100,7 +101,7 @@ export function evaluateIncomingNpcEvent(character, relationships = []) {
         hint: 'Cơ hội nhận lợi tức 70% hoặc bài học kinh doanh (+30 EXP).',
         effect(char) {
           char.cash = (Number(char.cash) || 0) - 1500;
-          const won = Math.random() < 0.65;
+          const won = getRandom() < 0.65;
           if (won) {
             char.cash += 3500;
             return `Dự án kinh doanh cùng ${contactName} có lãi lớn! Nhận về $3,500 lợi nhuận.`;

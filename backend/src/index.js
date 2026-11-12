@@ -2,12 +2,18 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import gameRoutes from './routes/game.js';
-import { initDb, sessionContext } from './db/db.js';
+import authRoutes from './routes/auth.js';
+import sharedLineageRoutes from './routes/shared_lineage.js';
+import whatifRoutes from './routes/whatif.js';
+import { initDb, sessionContext, claimLegacySession } from './db/db.js';
 import {
   signSessionToken,
   verifySessionToken,
   checkRateLimit,
-  logSecurityIncident
+  logSecurityIncident,
+  mintSessionId,
+  logGuestEvent,
+  hashIp
 } from './security/securityEngine.js';
 
 dotenv.config();
@@ -85,33 +91,53 @@ app.use((req, res, next) => {
 // =========================================================================
 // LAYER 3: CRYPTOGRAPHIC SESSION ISOLATION & HMAC SIGNATURE VERIFICATION
 // =========================================================================
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   const rawToken = req.headers['x-session-token'] || req.headers['x-session-id'] || req.query.session_id;
 
-  let sessionId = 'default';
+  let sessionId = null;
   let isCryptographicallyVerified = false;
+  const allowRaw = process.env.NODE_ENV === 'test' || process.env.ALLOW_RAW_SESSION_ID === '1';
+  const ipHash = hashIp(req.ip || 'unknown');
 
-  if (rawToken) {
-    const verifiedId = verifySessionToken(rawToken);
-    if (verifiedId) {
-      sessionId = verifiedId;
+  const verifiedId = rawToken ? verifySessionToken(rawToken) : null;
+  if (verifiedId) {
+    sessionId = verifiedId;
+    isCryptographicallyVerified = true;
+  } else {
+    const rawId = String(req.headers['x-session-id'] || req.query.session_id || rawToken || '')
+      .replace(/[^a-zA-Z0-9_\-]/g, '').slice(0, 64);
+    if (rawId && allowRaw) {
+      sessionId = rawId;
+    } else if (rawId && await claimLegacySession(rawId)) {
+      // Người chơi cũ: nhận lại đúng phiên (cache hoặc Postgres) MỘT LẦN, sau đó chỉ vào bằng token có chữ ký.
+      sessionId = rawId;
       isCryptographicallyVerified = true;
+      logGuestEvent('legacy_claimed', { session: rawId.slice(0, 12), ip: ipHash });
     } else {
-      // Nếu là raw ID chưa ký (phiên khởi tạo từ client mới), làm sạch ký tự an toàn
-      sessionId = String(rawToken).replace(/[^a-zA-Z0-9_\-]/g, '').slice(0, 64) || 'user_' + Date.now();
+      if (process.env.NODE_ENV !== 'test' && !checkRateLimit('mint_' + (req.ip || 'unknown'), 30, 60000)) {
+        logGuestEvent('mint_rate_limited', { ip: ipHash });
+        return res.status(429).json({ error: 'Quá nhiều phiên mới từ cùng địa chỉ, vui lòng thử lại sau.', retryAfterSeconds: 30 });
+      }
+      sessionId = mintSessionId();
+      isCryptographicallyVerified = true;
+      logGuestEvent(rawId ? 'raw_id_rejected_new_minted' : 'guest_created', {
+        session: sessionId.slice(0, 10), ip: ipHash, ua: String(req.headers['user-agent'] || '').slice(0, 80)
+      });
     }
   }
 
-  // Tự động cấp/làm mới signed token kèm chữ ký HMAC trả về cho client
-  const signedToken = signSessionToken(sessionId);
-  res.setHeader('x-session-token', signedToken);
+  res.setHeader('x-session-token', signSessionToken(sessionId));
+  res.setHeader('x-session-id', sessionId);
 
   sessionContext.run({ sessionId, isCryptographicallyVerified }, () => {
     next();
   });
 });
 
-// Routes
+// Routes (tài khoản gắn trước để không đi qua middleware ghi trạng thái game)
+app.use('/api/game/account-auth', authRoutes);
+app.use('/api/game/shared-lineage', sharedLineageRoutes);
+app.use('/api/game/whatif', whatifRoutes); // trước gameRoutes: không đi qua hàng đợi/phiên bản ghi
 app.use('/api/game', gameRoutes);
 
 app.get('/health', (req, res) => {

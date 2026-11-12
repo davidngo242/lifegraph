@@ -66,6 +66,7 @@ interface AssetDetailModalProps {
   actionPoints: number;
   character?: any;
   onBuyAsset: (assetData: {
+    id?: string;
     name: string;
     type: string;
     cost: number;
@@ -160,6 +161,7 @@ export default function AssetDetailModal({
       setSuccessMsg(null);
       setLoadingId(item.id);
       await onBuyAsset({
+        id: item.id,
         name: item.name,
         type: item.type,
         cost: item.cost,

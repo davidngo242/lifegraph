@@ -139,7 +139,8 @@ test('RPG Engine: Passive Tick wirings (Capital Engine, Stoic Mind, Encyclopedic
   const { updatedCharacter, passiveSummary } = await processPassivePhase(character, assets, relationships);
 
   // Capital Engine: +$25,000 passive yield
-  assert.equal(updatedCharacter.cash, 35000); // 10000 + 25000
+  assert.equal(passiveSummary.wageIncome, 4260); assert.equal(passiveSummary.livingCost, 3300); // age 31 freelance, default T2, housing tier 1
+  assert.equal(updatedCharacter.cash, 35960); // 10000 + 25000 + (4260 - 3300)
   assert.equal(passiveSummary.annual_digest.cash_flow.capital_engine_bonus, 25000);
 
   // Encyclopedic Brain: +25 Karma annual buff

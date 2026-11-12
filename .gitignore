@@ -17,7 +17,9 @@ Thumbs.db
 # UI audit output
 tools/ui_audit_out/
 
-# Generated at runtime / build
-backend/data/sessions_cache.json
-backend/data/*.tmp
-frontend/tsconfig.tsbuildinfo
+# Dữ liệu phiên chơi & khoá cục bộ (không commit)
+backend/data/
+*.exe
+tools/*.exe
+*.tsbuildinfo
+.claude/worktrees/

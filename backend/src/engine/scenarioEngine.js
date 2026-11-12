@@ -1,3 +1,4 @@
+import { getRandom } from './rng.js';
 // backend/src/engine/scenarioEngine.js
 import fs from 'fs';
 import path from 'path';
@@ -307,7 +308,7 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
 
   if (choice.check) {
     const dc = Number(choice.check.target_dc ?? 12) + (missingCount * 2);
-    const d20 = Math.floor(Math.random() * 20) + 1;
+    const d20 = Math.floor(getRandom() * 20) + 1;
     const normalize = t => typeof t === 'string' ? t.toLowerCase().replace(/[\s-]+/g, '_').trim() : '';
     const traits = new Set((character.innate_traits ?? []).map(normalize));
     const traitBonus = [...new Set((choice.check.bonus_traits ?? []).map(normalize))].filter(t => traits.has(t)).length * 2;

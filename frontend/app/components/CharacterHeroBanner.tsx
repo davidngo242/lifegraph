@@ -17,6 +17,7 @@ import {
 import Tooltip from './Tooltip';
 import { formatTrait } from '../utils/traitUtils';
 import SidekickPetCompanion from './SidekickPetCompanion';
+import { ALL_UNLOCKED, UNLOCK_HINTS, type Unlocks } from '../lib/unlocks';
 
 const Dynamic3DAvatar = dynamic(() => import('./Safe3DAvatar'), {
   ssr: false,
@@ -144,6 +145,7 @@ interface CharacterHeroBannerProps {
   onOpen3DInspector: () => void;
   onOpenPetSanctuary?: () => void;
   actionFeedback?: BannerActionFeedback | null;
+  unlocks?: Unlocks;
 }
 
 function CharacterHeroBannerInner({
@@ -157,7 +159,8 @@ function CharacterHeroBannerInner({
   isFastForwarding = false,
   onOpen3DInspector,
   onOpenPetSanctuary,
-  actionFeedback = null
+  actionFeedback = null,
+  unlocks = ALL_UNLOCKED
 }: CharacterHeroBannerProps) {
   if (!character) return null;
 
@@ -446,7 +449,7 @@ function CharacterHeroBannerInner({
 
       {/* Pulsing Celestial Moon/Sun with Orbital Ring & 3D Parallax Shift */}
       <div
-        className="absolute top-2 right-12 md:right-28 z-0 opacity-60 md:opacity-35 pointer-events-none select-none transition-transform duration-200"
+        className="absolute top-2 right-12 md:right-28 pointer-events-none select-none transition-transform duration-200"
         style={{ transform: `translate(${tilt.px * 24}px, ${tilt.py * 16}px)` }}
       >
         <div className={`w-28 h-28 md:w-36 md:h-36 rounded-full ${env.celestialGlow} blur-2xl animate-pulse`} />
@@ -549,6 +552,7 @@ function CharacterHeroBannerInner({
               </button>
 
               {/* Bottom-Right: 3D Pet Sanctuary Trigger Button */}
+              {unlocks.pets ? (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -571,6 +575,9 @@ function CharacterHeroBannerInner({
                     : 'Nuôi Pet'}
                 </span>
               </button>
+              ) : (
+                <span role="note" className="absolute bottom-1.5 right-1.5 z-20 px-2 py-0.5 rounded-lg bg-white/95 dark:bg-slate-900/90 border border-slate-400/70 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold text-xs">{UNLOCK_HINTS.rebirth}</span>
+              )}
             </div>
           </div>
 
@@ -595,8 +602,8 @@ function CharacterHeroBannerInner({
                   />
                 </div>
                 {(character.skill_points || 0) > 0 && (
-                  <span className="text-xs font-sans tabular-nums font-black px-1.5 py-0.5 rounded bg-amber-500 text-slate-950">
-                    +{character.skill_points} điểm
+                  <span className="text-xs font-sans tabular-nums font-black px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 animate-bounce">
+                    +{character.skill_points} SP
                   </span>
                 )}
               </div>
@@ -610,7 +617,7 @@ function CharacterHeroBannerInner({
 
             {/* Row 2: Name & Social Class Badge */}
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-lg sm:text-xl md:text-2xl font-black text-[var(--text-primary)] tracking-tight leading-tight break-words line-clamp-2 min-w-0">
+              <h1 className="text-xl md:text-2xl font-black text-[var(--text-primary)] tracking-tight truncate">
                 {character.name || "LifeGraph"}
               </h1>
               <span className={`text-xs px-2.5 py-0.5 rounded-full border font-bold flex items-center gap-1 shadow-sm ${socialStatus.color}`}>
@@ -621,27 +628,33 @@ function CharacterHeroBannerInner({
 
             {/* Row 3: Age, Gender & Nationality Pills */}
             <div className="flex items-center gap-1.5 text-xs flex-wrap">
-              <span className="font-bold text-[var(--text-primary)] tabular-nums">{age} tuổi</span>
-              <span aria-hidden className="text-[var(--text-secondary)]">·</span>
-              <span className={`font-bold ${character.gender === 'female' ? 'text-rose-800 dark:text-rose-300' : 'text-sky-800 dark:text-sky-300'}`}>
-                {character.gender === 'female' ? 'Nữ' : 'Nam'}
+              <span className="font-bold text-[var(--text-primary)] bg-[var(--bg-card-subtle)] px-2.5 py-0.5 rounded-lg border border-[var(--border-subtle)] text-xs shadow-sm">
+                ⏳ {age} Tuổi
               </span>
-              <span aria-hidden className="text-[var(--text-secondary)]">·</span>
-              <span className="text-[var(--text-secondary)] font-medium">{nationality}</span>
+              <span className={`font-bold px-2 py-0.5 rounded-lg border text-xs flex items-center gap-1 shadow-sm ${
+                character.gender === 'female'
+                  ? 'bg-rose-500/15 border-rose-500/30 text-rose-800 dark:text-rose-300'
+                  : 'bg-sky-500/15 border-sky-500/30 text-sky-700 dark:text-sky-300'
+              }`}>
+                <span>{character.gender === 'female' ? '♀️ Nữ' : '♂️ Nam'}</span>
+              </span>
+              <span className="hidden sm:inline-flex text-[var(--text-secondary)] font-medium text-xs px-2 py-0.5 rounded-lg bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)]">
+                🌍 {nationality}
+              </span>
             </div>
 
             {/* Row 4: Location (Thành phố) */}
-            <div className="flex items-start gap-1.5 text-xs text-[var(--text-secondary)] pt-0.5">
-              <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-px" />
-              <span className="line-clamp-2 break-words min-w-0" title={character.current_city || nationality}>
+            <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] pt-0.5">
+              <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+              <span className="truncate max-w-[220px] sm:max-w-[280px]" title={character.current_city || nationality}>
                 {character.current_city || nationality}
               </span>
             </div>
 
             {/* Row 5: Housing (Nhà ở - Xuống dòng riêng biệt theo chỉ đạo của Sếp) */}
-            <div className="flex items-start gap-1.5 text-xs pt-0.5">
-              <Home className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-px" />
-              <span className="font-semibold text-amber-800 dark:text-amber-300 line-clamp-2 break-words min-w-0" title={character.housing?.name || 'Phòng trọ / Mái ấm bình dân'}>
+            <div className="flex items-center gap-1.5 text-xs pt-0.5">
+              <Home className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+              <span className="font-semibold text-amber-800 dark:text-amber-300 truncate max-w-[220px] sm:max-w-[280px]" title={character.housing?.name || 'Phòng trọ / Mái ấm bình dân'}>
                 {character.housing?.name || 'Phòng trọ / Mái ấm bình dân'}
               </span>
             </div>
@@ -679,7 +692,7 @@ function CharacterHeroBannerInner({
               <div className="flex items-center justify-between w-full min-w-0">
                 <span className="text-xs font-bold text-slate-900 dark:text-white truncate">{activeFeedback.title}</span>
                 {activeFeedback.delta && (
-                  <span className={`text-xs font-sans tabular-nums font-bold px-1.5 py-0.5 rounded border shrink-0 ${feedbackAtmo?.badgeDelta}`}>
+                  <span className={`text-xs font-sans tabular-nums font-bold px-1.5 py-0.2 rounded border shrink-0 ${feedbackAtmo?.badgeDelta}`}>
                     {activeFeedback.delta}
                   </span>
                 )}
@@ -693,7 +706,7 @@ function CharacterHeroBannerInner({
             <div className="flex items-center gap-1.5 flex-wrap">
               {/* Life Stage Pill */}
               <Tooltip content={<div className="text-[12px] max-w-xs">{lifeStage.desc}</div>}>
-                <div className="flex items-center gap-1.5 px-1 py-1 cursor-help">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-subtle)] border border-[var(--border-subtle)] cursor-help transition shadow-xs">
                   <span className="text-xs">{lifeStage.icon}</span>
                   <span className="text-xs font-bold text-[var(--text-primary)] truncate">{lifeStage.stage}</span>
                 </div>
@@ -755,7 +768,7 @@ function CharacterHeroBannerInner({
                   age < 60 ? "Trụ cột gia đình & cơ đồ" : "An hưởng tuổi già & truyền thừa";
                 return (
                   <Tooltip content={`Định hướng trọng tâm ở tuổi ${age}`}>
-                    <div className="hidden sm:flex items-center gap-1 text-xs text-[var(--text-secondary)] font-medium px-1 py-1 min-w-0 max-w-full cursor-help">
+                    <div className="hidden sm:flex items-center gap-1 text-xs text-[var(--text-secondary)] font-medium bg-[var(--bg-card)] px-2.5 py-1 rounded-xl border border-[var(--border-subtle)] min-w-0 max-w-full cursor-help shadow-xs">
                       <span className="text-indigo-700 dark:text-indigo-400 font-bold shrink-0">🎯 Trọng tâm:</span>
                       <span className="text-[var(--text-primary)] font-semibold truncate max-w-[160px] sm:max-w-[210px]">
                         {focusText}
@@ -767,14 +780,14 @@ function CharacterHeroBannerInner({
 
               {/* Tinh thần / Động lực sống */}
               <Tooltip content={<div className="text-[12px]">Động lực sống & Tinh thần ({happiness}%). Trên 75% kích hoạt bứt phá thăng hoa.</div>}>
-                <div className="flex items-center gap-1.5 px-1 py-1 cursor-help">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] cursor-help shadow-xs">
                   <Smile className="w-3.5 h-3.5 text-amber-600 dark:text-amber-500" />
                   <span className="text-xs font-medium text-[var(--text-secondary)] hidden sm:inline">Tinh thần:</span>
                   <span className={`text-xs font-sans tabular-nums font-bold ${happiness >= 70 ? 'text-amber-800 dark:text-amber-400' : 'text-[var(--text-primary)]'}`}>
                     {happiness}%
                   </span>
                   {isHappyBuffActive && (
-                    <span className="text-xs px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-900 dark:text-amber-300 border border-amber-600/40 dark:border-amber-500/30 font-bold">
+                    <span className="text-xs px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-900 dark:text-amber-300 border border-amber-600/40 dark:border-amber-500/30 font-bold">
                       Buff
                     </span>
                   )}
@@ -826,7 +839,7 @@ function CharacterHeroBannerInner({
                         type="button"
                         onClick={() => setShowAllTraits((v) => !v)}
                         aria-expanded={showAllTraits}
-                        className="sm:hidden min-h-[44px] px-3 py-0.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)] transition"
+                        className="sm:hidden min-h-[44px] px-2.5 py-0.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)] transition"
                       >
                         {showAllTraits ? 'Thu gọn' : `+${character.innate_traits.length - 2} xem thêm`}
                       </button>
@@ -840,7 +853,7 @@ function CharacterHeroBannerInner({
               </div>
 
               {/* Khát vọng cuộc đời (Life Aspiration Hub) */}
-              {aspiration && (
+              {unlocks.aspiration && aspiration && (
                 <div
                   onClick={() => {
                     if (aspiration.progress >= 100 || aspiration.is_completed) {
@@ -882,7 +895,7 @@ function CharacterHeroBannerInner({
                       {aspiration.progress}%
                     </span>
                     {aspiration.progress >= 100 && (
-                      <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black animate-bounce shadow-xs">
+                      <span className="text-xs font-bold px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black animate-bounce shadow-xs">
                         Thăng Hạng!
                       </span>
                     )}
@@ -900,7 +913,7 @@ function CharacterHeroBannerInner({
                     <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500/20" /> Sinh Lực
                   </span>
                   <div className="flex items-center gap-1.5">
-                    <span className={`text-xs font-bold px-1.5 py-0.5 rounded border ${healthStatus.color}`}>
+                    <span className={`text-xs font-bold px-1.5 py-0.2 rounded border ${healthStatus.color}`}>
                       {healthStatus.label}
                     </span>
                     <span className="text-xs font-sans tabular-nums font-extrabold text-[var(--text-primary)]">
@@ -924,7 +937,7 @@ function CharacterHeroBannerInner({
                     <AlertTriangle className={`w-3.5 h-3.5 ${burnout >= 75 ? 'text-rose-500' : 'text-sky-500'}`} /> Căng Thẳng
                   </span>
                   <div className="flex items-center gap-1.5">
-                    <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${stress.color}`}>
+                    <span className={`text-xs font-bold px-1.5 py-0.2 rounded ${stress.color}`}>
                       {stress.label}
                     </span>
                     <span className="text-xs font-sans tabular-nums font-bold text-[var(--text-primary)]">

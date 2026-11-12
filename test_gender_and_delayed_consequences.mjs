@@ -1,5 +1,7 @@
 // test_gender_and_delayed_consequences.mjs
 const BASE_URL = 'http://localhost:10000';
+const _f = globalThis.fetch;
+globalThis.fetch = (u, o = {}) => _f(u, { ...o, headers: { 'x-session-id': 'gender_test_sess', ...(o.headers || {}) } });
 
 async function test() {
   console.log('=== TEST 1: Rebirth with Female Preference ===');

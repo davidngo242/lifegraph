@@ -1,3 +1,4 @@
+import { getRandom } from './rng.js';
 /**
  * openTextResolutionEngine.js
  * LifeGraph V10 - Open-Text Resolution Engine (Hành Động Tự Do & AI Phán Xử)
@@ -96,7 +97,7 @@ export async function resolveCustomAction({ character, dilemma, userActionText }
   // 2. Check Criminal / Violent Recklessness
   for (const pattern of CRIME_PATTERNS) {
     if (pattern.test(text)) {
-      const isLucky = Math.random() < 0.25;
+      const isLucky = getRandom() < 0.25;
       if (isLucky) {
         return {
           success: true,
@@ -161,7 +162,7 @@ export async function resolveCustomAction({ character, dilemma, userActionText }
   if (text.length > 80) feasibilityScore += 5;
   feasibilityScore = Math.min(95, Math.max(25, feasibilityScore));
 
-  const roll = Math.random() * 100;
+  const roll = getRandom() * 100;
   const isSuccess = roll <= feasibilityScore;
 
   if (isSuccess) {

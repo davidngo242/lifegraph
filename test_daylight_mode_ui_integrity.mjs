@@ -408,8 +408,7 @@ test('Cultural Landscape Backdrop: Panoramic silhouettes, national landmarks & s
 // SUITE 6: Zero-Overlap Tree Spatial Geometry & Unified All-in-One Cockpit Audit
 // ============================================================================
 test('Zero-Overlap Layout: Action node separation, clear zenith sky, family root conduits & bottom symmetry', () => {
-  // Dữ liệu node (angleDeg...) nằm ở lifeTreeNodes.ts sau khi tách khỏi DynamicLifeTree.tsx
-  const treeContent = readFile('frontend/app/components/rpg/DynamicLifeTree.tsx') + readFile('frontend/app/components/rpg/lifeTreeNodes.ts');
+  const treeContent = readFile('frontend/app/components/rpg/DynamicLifeTree.tsx');
   const backdropContent = readFile('frontend/app/components/rpg/CulturalLandscapeBackdrop.tsx');
   const pageContent = readFile('frontend/app/page.tsx');
 
@@ -457,7 +456,7 @@ test('Zero-Overlap Layout: Action node separation, clear zenith sky, family root
     'Family Roots must be integrated into both the Tree Soil Conduits and the 4th in-tree Drawer'
   );
   assert.ok(
-    treeContent.includes('Đối Mặt Biến Cố') && treeContent.includes('Thử Thách Cột Mốc'),
+    treeContent.includes('Kịch Bản Điện Ảnh 21:9') && treeContent.includes('Thử Thách Cột Mốc'),
     'Active Scenarios/Dilemmas and Milestone Mini-Games must integrate cleanly into DynamicLifeTree'
   );
 

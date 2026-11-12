@@ -1,0 +1,27 @@
+# Danh sách từ cấm cơ bản (tiếng Việt + tiếng Anh), mỗi dòng một cụm; so khớp sau khi bỏ dấu, hạ chữ thường, bỏ ký tự phân cách.
+# Dòng bắt đầu bằng # là chú thích. Mở rộng tại đây; không cần sửa code.
+# Tiền tố ! = cụm "mạnh": còn bị chặn khi người dùng chèn dấu chấm/khoảng trắng giữa chữ (d.u m.a).
+!du ma
+!dit me
+!dit con me
+dm
+dmm
+vcl
+vkl
+cac
+lon
+buoi
+con di
+thang cho
+con cho
+do cho
+mat day
+oc cho
+suc vat
+khon nan
+!fuck
+shit
+bitch
+cunt
+asshole
+nigger

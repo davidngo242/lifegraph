@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'lifegraph-test-'));
 process.env.NODE_ENV = 'test'; process.env.LIFEGRAPH_DATA_DIR = directory;
-process.env.DATABASE_URL = ''; process.env.GEMINI_API_KEY = '';
+process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || ''; process.env.GEMINI_API_KEY = '';
 const { app } = await import('../src/index.js');
 const db = await import('../src/db/db.js');
 let server, base;
@@ -74,7 +74,7 @@ test('surrender and minigames do not award the same event twice', async () => {
   await seed('qa_mini', { age: 20 });
   const challenge = await request('qa_mini', '/action/minigame-start', { minigame_type: 'stock_trader_20yo' });
   assert.equal(challenge.status, 200);
-  const input = { minigame_id: 'stock_trader_20yo', outcome: 'success', challenge_id: challenge.data.challenge.id };
+  const input = { minigame_id: 'stock_trader_20yo', outcome: 'success', score: 100, challenge_id: challenge.data.challenge.id };
   assert.equal((await request('qa_mini', '/action/minigame-result', input)).status, 200);
   assert.equal((await request('qa_mini', '/action/minigame-result', input)).status, 409);
 });
@@ -84,6 +84,8 @@ test('inheritance conserves net estate and does not return parent assets after r
   await db.sessionContext.run({ sessionId: 'qa_heir' }, async () => {
     db.getSessionData().assets = [];
     db.getSessionData().relationships = [];
+    for (const a of await db.getAssets(parent.id)) await db.deleteAsset(a.id);
+    for (const r of await db.getRelationships(parent.id)) await db.updateRelationship(r.id, { type: 'acquaintance', status: 'deceased' });
     await db.addAsset({ character_id: parent.id, name: 'Factory', type: 'business', current_value: 100000 });
     await db.addRelationship({ character_id: parent.id, name: 'Child', type: 'child', age: 30, status: 'alive' });
   });
@@ -165,6 +167,9 @@ test('a trust fund is released once when advancing through adulthood', async () 
 test('invested_ap boosts rewards, mitigates risks and appends strategic log note', async () => {
   await seed('qa_invested_ap', {
     age: 22,
+    nationality: 'Việt Nam',
+    occupation: 'Lao động tự do',
+    housing: { tier: 1 },
     cash: 1000,
     vitality: 80,
     burnout: 20,
@@ -180,6 +185,10 @@ test('invested_ap boosts rewards, mitigates risks and appends strategic log note
       store.assets = [];
       store.relationships = [];
     }
+    // Chế độ Postgres: xoá tài sản qua tầng DB (RAM không phải nguồn dữ liệu).
+    const ch = await db.getLatestCharacter();
+    for (const a of await db.getAssets(ch.id)) await db.deleteAsset(a.id);
+    for (const r of await db.getRelationships(ch.id)) await db.updateRelationship(r.id, { type: 'acquaintance', monthly_cost: 0, monthly_upkeep: 0 });
   });
 
   const customDilemma = {
@@ -210,7 +219,9 @@ test('invested_ap boosts rewards, mitigates risks and appends strategic log note
 
   assert.equal(res.status, 200);
   const char = res.data.character;
-  assert.equal(char.cash, 4000); // 1000 + 3000 (boosted by 2 invested AP)
+  assert.equal(res.data.passiveSummary.wageIncome, 3906); // age 23, freelance, Việt Nam (T2)
+  assert.equal(res.data.passiveSummary.livingCost, 3300); // housing tier 1
+  assert.equal(char.cash, 4606); // 1000 + 3000 (boosted by 2 invested AP) + (3906 - 3300)
   assert.equal(char.karma, 66);
   assert.equal(char.vitality, 72);
   assert.equal(char.burnout, 21); // 20 + 10 (mitigated) - 4 (annual passive) - 5 (1 unused AP)
@@ -349,4 +360,31 @@ test('Cycle 5: Country Big Data: Syria & Expanded Vietnam', async () => {
   assert.ok(vietnam.assets.g2_franchise_cafe.includes('Cà Phê Muối'));
   assert.ok(vietnam.assets.g3_suburban_land.includes('Sầu Riêng'));
   assert.ok(vietnam.assets.p1_rental_condo.includes('Nghỉ Dưỡng Biển'));
+});
+
+test('auth: raw unknown session id is rejected, server mints a signed one (production mode)', async () => {
+  const prev = process.env.NODE_ENV; process.env.NODE_ENV = 'production';
+  try {
+    const r = await fetch(`${base}/auth/handshake`, { method: 'POST', headers: { 'x-session-id': 'attacker_guess', 'Content-Type': 'application/json' }, body: '{}' });
+    assert.equal(r.status, 200);
+    const body = await r.json();
+    assert.notEqual(body.session_id, 'attacker_guess');
+    assert.match(body.session_id, /^g_[a-f0-9]{32}$/);
+    assert.ok(r.headers.get('x-session-token').startsWith(body.session_id));
+    const r2 = await fetch(`${base}/auth/handshake`, { method: 'POST', headers: { 'x-session-token': r.headers.get('x-session-token'), 'Content-Type': 'application/json' }, body: '{}' });
+    assert.equal((await r2.json()).session_id, body.session_id);
+  } finally { process.env.NODE_ENV = prev; }
+});
+
+test('auth: legacy cached session is claimed exactly once, then raw id is refused', async () => {
+  const prev = process.env.NODE_ENV; process.env.NODE_ENV = 'production';
+  try {
+    const legacy = 'user_legacy_cached_1';
+    db.getSessionData(legacy).claimed = false;
+    const hs = id => fetch(`${base}/auth/handshake`, { method: 'POST', headers: { 'x-session-id': id, 'Content-Type': 'application/json' }, body: '{}' }).then(async r => ({ body: await r.json(), token: r.headers.get('x-session-token') }));
+    const first = await hs(legacy);
+    assert.equal(first.body.session_id, legacy);
+    const second = await hs(legacy);
+    assert.notEqual(second.body.session_id, legacy);
+  } finally { process.env.NODE_ENV = prev; }
 });

@@ -1,7 +1,32 @@
 import crypto from 'crypto';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-// Secret key for HMAC signing (sử dụng biến môi trường hoặc tự sinh an toàn)
-const SERVER_SECRET = process.env.SESSION_SECRET || 'lifegraph_quantum_security_key_2026_super_safe';
+// Khoá HMAC: ưu tiên biến môi trường SESSION_SECRET. Nếu thiếu, tự sinh ngẫu nhiên và lưu vào
+// DATA_DIR/.session_secret (0600, đã gitignore) để token sống qua restart. KHÔNG còn khoá mặc định trong code.
+const DATA_DIR = process.env.LIFEGRAPH_DATA_DIR || path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../data');
+function resolveSecret() {
+  if (process.env.SESSION_SECRET && process.env.SESSION_SECRET.length >= 16) return { value: process.env.SESSION_SECRET, source: 'env' };
+  const file = path.join(DATA_DIR, '.session_secret');
+  try {
+    const existing = fs.readFileSync(file, 'utf8').trim();
+    if (existing.length >= 32) return { value: existing, source: 'file' };
+  } catch {}
+  const generated = crypto.randomBytes(48).toString('hex');
+  try {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+    fs.writeFileSync(file, generated, { mode: 0o600 });
+  } catch {}
+  return { value: generated, source: 'generated' };
+}
+const SECRET = resolveSecret();
+const SERVER_SECRET = SECRET.value;
+export const SESSION_SECRET_SOURCE = SECRET.source;
+if (SECRET.source !== 'env' && process.env.NODE_ENV === 'production') {
+  console.warn('⚠️ [Bảo mật] SESSION_SECRET chưa đặt trong môi trường; đang dùng khoá tự sinh. Hãy đặt SESSION_SECRET (>=16 ký tự).');
+}
+const TOKEN_MAX_AGE_MS = 180 * 24 * 3600 * 1000;
 
 // =========================================================================
 // 1. CRYPTOGRAPHIC SESSION SIGNING (HMAC-SHA256)
@@ -43,7 +68,14 @@ export function verifySessionToken(token) {
     return null; // Chữ ký giả mạo!
   }
 
+  const issuedAt = Number(timestampStr);
+  if (!Number.isFinite(issuedAt) || Date.now() - issuedAt > TOKEN_MAX_AGE_MS) return null;
   return rawId;
+}
+
+/** Sinh mã phiên mới từ nguồn ngẫu nhiên an toàn (server cấp, không tin mã do client tự sinh). */
+export function mintSessionId() {
+  return 'g_' + crypto.randomUUID().replace(/-/g, '');
 }
 
 // =========================================================================
@@ -145,4 +177,47 @@ export function logSecurityIncident(type, details) {
 
 export function getSecurityAuditLogs() {
   return [...securityAuditLogs];
+}
+
+// =========================================================================
+// 6. GUEST LOG (nhật ký khách: tạo phiên mới / nhận lại phiên cũ / từ chối)
+// =========================================================================
+const guestLogs = [];
+export function logGuestEvent(kind, details = {}) {
+  const record = { at: new Date().toISOString(), kind, ...details };
+  guestLogs.push(record);
+  if (guestLogs.length > 1000) guestLogs.shift();
+  if (process.env.NODE_ENV !== 'test') console.log('[guest]', JSON.stringify(record));
+}
+export function getGuestLogs() {
+  return [...guestLogs];
+}
+export function hashIp(ip) {
+  return crypto.createHash('sha256').update(String(ip) + SERVER_SECRET).digest('hex').slice(0, 12);
+}
+
+// =========================================================================
+// 7. ACCOUNT TOKEN (đăng nhập tài khoản; tách miền ký với token phiên)
+// =========================================================================
+const ACCOUNT_TOKEN_MAX_AGE_MS = 30 * 24 * 3600 * 1000;
+const accountMac = payload => crypto.createHmac('sha256', SERVER_SECRET).update('account|' + payload).digest('hex');
+
+/** Token: <accountId>.<epoch>.<timestamp>.<hmac>. `epoch` tăng khi đăng xuất để thu hồi token cũ. */
+export function signAccountToken(accountId, epoch = 0) {
+  const payload = `${accountId}.${epoch}.${Date.now()}`;
+  return `${payload}.${accountMac(payload)}`;
+}
+
+/** @returns {{accountId: string, epoch: number} | null} */
+export function verifyAccountToken(token) {
+  if (!token || typeof token !== 'string') return null;
+  const parts = token.split('.');
+  if (parts.length !== 4) return null;
+  const [accountId, epochStr, timestampStr, signature] = parts;
+  const expected = Buffer.from(accountMac(`${accountId}.${epochStr}.${timestampStr}`));
+  const given = Buffer.from(signature);
+  if (given.length !== expected.length || !crypto.timingSafeEqual(given, expected)) return null;
+  const issuedAt = Number(timestampStr);
+  if (!Number.isFinite(issuedAt) || Date.now() - issuedAt > ACCOUNT_TOKEN_MAX_AGE_MS) return null;
+  return { accountId, epoch: Number(epochStr) || 0 };
 }
