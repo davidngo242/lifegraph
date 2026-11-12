@@ -1,3 +1,5 @@
+import { sandboxContext } from './sandbox.js';
+
 // Seeded, deterministic RNG (mulberry32). Counter-based: state = seed + n * GAMMA,
 // so persisting { seed, n } is enough to resume the exact stream after a restart.
 const GAMMA = 0x6D2B79F5;
@@ -28,7 +30,8 @@ export function newSeed() {
 
 /** Drop-in replacement for Math.random(): seeded per session when a life is active. */
 export function getRandom() {
-  const st = resolver ? resolver() : null;
+  const sb = sandboxContext.getStore();
+  const st = sb ? sb.rng : (resolver ? resolver() : null); // "Nếu như…" sandbox stream wins over the session's
   if (!st || typeof st.seed !== 'number') return Math.random(); // no context: unseeded fallback
   const rng = createRng(st.seed, st.n || 0);
   const v = rng.next();

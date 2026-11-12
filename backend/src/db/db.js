@@ -7,6 +7,7 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { executeProceduralRebirth } from '../engine/rebirthEngine.js';
 import { initializeStartingNpcs } from '../engine/npcEngine.js';
 import { setRngStateResolver, newSeed } from '../engine/rng.js';
+import { assertNotSandbox, inSandbox } from '../engine/sandbox.js';
 
 const { Pool } = pg;
 
@@ -388,6 +389,13 @@ export async function initDb() {
         token_epoch INT NOT NULL DEFAULT 0,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )`);
+      await pool.query(`CREATE TABLE IF NOT EXISTS whatif_snapshots (
+        character_id TEXT NOT NULL,
+        player_account_id VARCHAR(100) NOT NULL,
+        age INT NOT NULL,
+        snap JSONB NOT NULL,
+        PRIMARY KEY (character_id, age)
+      )`);
       useMock = false;
       return;
     } catch (err) {
@@ -424,6 +432,7 @@ export async function getPlayerAccount() {
 }
 
 export async function updatePlayerAccount(fields) {
+  assertNotSandbox('updatePlayerAccount');
   if (useMock || !pool) {
     const store = getSessionData();
     store.playerAccount = { ...store.playerAccount, ...fields };
@@ -452,6 +461,7 @@ export async function updatePlayerAccount(fields) {
 }
 
 export async function addTotalKarma(deltaKarma) {
+  assertNotSandbox('addTotalKarma');
   const account = await getPlayerAccount();
   const newKarma = Math.max(0, (account.total_karma || 0) + deltaKarma);
   return updatePlayerAccount({ total_karma: newKarma });
@@ -584,6 +594,7 @@ export async function getLatestCharacter() {
 }
 
 export async function updateCharacter(id, fields) {
+  assertNotSandbox('updateCharacter');
   if (!useMock && pool) return persistEntity('characters', id, fields);
   const store = getSessionData();
   store.character = store.character?.id === id ? { ...store.character, ...fields, id } : { ...fields, id };
@@ -597,6 +608,7 @@ export async function getAssets(characterId) {
 }
 
 export async function updateAsset(id, fields) {
+  if (inSandbox()) return { ...fields, id }; // Nếu như…: mô phỏng, không ghi
   if (!useMock && pool) return persistEntity('assets', id, fields);
   const entity = getSessionData().assets.find(e => e.id === id);
   if (!entity) throw new Error('Không tìm thấy đối tượng thuộc phiên này.');
@@ -604,6 +616,7 @@ export async function updateAsset(id, fields) {
 }
 
 export async function addAsset(fields) {
+  assertNotSandbox('addAsset');
   const entity = { ...fields, id: fields.id ?? crypto.randomUUID() };
   if (!useMock && pool) return persistEntity('assets', entity.id, entity);
   const store = getSessionData();
@@ -613,6 +626,7 @@ export async function addAsset(fields) {
 }
 
 export async function deleteAsset(id) {
+  assertNotSandbox('deleteAsset');
   if (!useMock && pool) {
     const res = await pool.query(`DELETE FROM assets a USING characters c WHERE a.id=$1 AND c.id=a.character_id AND c.player_account_id=$2 RETURNING a.*`, [id, getCurrentSessionId()]);
     return hydrate(res.rows[0]);
@@ -624,6 +638,7 @@ export async function deleteAsset(id) {
 }
 
 export async function addRelationship(fields) {
+  assertNotSandbox('addRelationship');
   const entity = { ...fields, id: fields.id ?? crypto.randomUUID() };
   if (!useMock && pool) return persistEntity('relationships', entity.id, entity);
   const store = getSessionData();
@@ -633,6 +648,7 @@ export async function addRelationship(fields) {
 }
 
 export async function updateRelationship(id, fields) {
+  if (inSandbox()) return { ...fields, id }; // Nếu như…: mô phỏng, không ghi
   if (!useMock && pool) return persistEntity('relationships', id, fields);
   const entity = getSessionData().relationships.find(e => e.id === id);
   if (!entity) throw new Error('Không tìm thấy đối tượng thuộc phiên này.');
@@ -650,6 +666,7 @@ export async function getNpcs(characterId) {
 }
 
 export async function addNpc(fields) {
+  assertNotSandbox('addNpc');
   const entity = { ...fields, id: fields.id ?? crypto.randomUUID() };
   if (!useMock && pool) return persistEntity('npcs', entity.id, entity);
   const store = getSessionData();
@@ -659,6 +676,7 @@ export async function addNpc(fields) {
 }
 
 export async function updateNpc(id, fields) {
+  assertNotSandbox('updateNpc');
   if (!useMock && pool) return persistEntity('npcs', id, fields);
   const entity = getSessionData().npcs.find(e => e.id === id);
   if (!entity) throw new Error('Không tìm thấy đối tượng thuộc phiên này.');
@@ -666,6 +684,7 @@ export async function updateNpc(id, fields) {
 }
 
 export async function cacheTickEvent(characterId, tickNumber, eventData) {
+  assertNotSandbox('cacheTickEvent');
   if (useMock || !pool) {
     const store = getSessionData();
     store.tickEvents.push({
@@ -730,5 +749,43 @@ export async function startNewRebirthGame(karmaPerks = {}, lineageParent = null)
 
 export async function resetGame() {
   return seedInitialData();
+}
+
+// =========================================================================
+// "NẾU NHƯ…" SNAPSHOTS: compact per-year copies of the living character (last N years, never in public API).
+// Mock mode: session RAM (+ disk cache). Postgres: table whatif_snapshots.
+// =========================================================================
+export const WHATIF_KEEP_YEARS = 10;
+export async function saveWhatIfSnapshot(characterId, age, snap) {
+  assertNotSandbox('saveWhatIfSnapshot');
+  if (!useMock && pool) {
+    const sid = getCurrentSessionId();
+    await pool.query(`INSERT INTO whatif_snapshots (character_id, player_account_id, age, snap) VALUES ($1,$2,$3,$4)
+      ON CONFLICT (character_id, age) DO UPDATE SET snap = EXCLUDED.snap`, [characterId, sid, age, JSON.stringify(snap)]);
+    await pool.query(`DELETE FROM whatif_snapshots WHERE character_id = $1 AND age NOT IN
+      (SELECT age FROM whatif_snapshots WHERE character_id = $1 ORDER BY age DESC LIMIT $2)`, [characterId, WHATIF_KEEP_YEARS]);
+    return;
+  }
+  const store = getSessionData();
+  const rest = (store.whatif_snaps || []).filter(s => s.character_id === characterId && s.age !== age);
+  rest.push({ character_id: characterId, age, snap });
+  rest.sort((a, b) => a.age - b.age);
+  store.whatif_snaps = rest.slice(-WHATIF_KEEP_YEARS);
+  scheduleDiskPersist();
+}
+export async function listWhatIfAges(characterId) {
+  if (!useMock && pool) {
+    const r = await pool.query('SELECT age FROM whatif_snapshots WHERE character_id = $1 AND player_account_id = $2 ORDER BY age', [characterId, getCurrentSessionId()]);
+    return r.rows.map(x => x.age);
+  }
+  return (getSessionData().whatif_snaps || []).filter(s => s.character_id === characterId).map(s => s.age);
+}
+export async function loadWhatIfSnapshot(characterId, age) {
+  if (!useMock && pool) {
+    const r = await pool.query('SELECT snap FROM whatif_snapshots WHERE character_id = $1 AND player_account_id = $2 AND age = $3', [characterId, getCurrentSessionId(), age]);
+    return r.rows[0]?.snap ?? null;
+  }
+  const hit = (getSessionData().whatif_snaps || []).find(s => s.character_id === characterId && s.age === age);
+  return hit ? structuredClone(hit.snap) : null;
 }
 
