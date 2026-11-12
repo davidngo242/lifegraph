@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { formatCurrency } from '../utils/currencyUtils';
 import AncestralFamilyTree from './AncestralFamilyTree';
+import { SharedLineageHallButton, SharedLineagePublish } from './SharedLineageModal';
 
 interface LifeGraphHomePortalProps {
   character?: any;
@@ -343,6 +344,7 @@ export default function LifeGraphHomePortal({
               <span>{incenseOffered ? 'Đã Dâng Tâm Hương (+Phúc)' : '🕯️ Thắp Hương Tổ Tiên'}</span>
             </button>
             )}
+            <SharedLineageHallButton />
           </div>
 
           {/* Filter Pills (ẩn khi chưa có tiền nhân thật - chỉ có 0 mục để lọc) */}
@@ -526,6 +528,8 @@ export default function LifeGraphHomePortal({
                       "{item.epitaph_quote}"
                     </div>
                   )}
+
+                  {!isDemo && <SharedLineagePublish memorialId={item.id} defaultEpitaph={item.epitaph_quote} />}
 
                   {/* Legacy Blessing strip */}
                   {item.blessing && (
