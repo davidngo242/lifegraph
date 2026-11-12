@@ -122,3 +122,40 @@ async function request<T>(method: 'GET' | 'POST', path: string, body: unknown, o
 
 export const apiGet = <T = GameStateResponse>(path: string, opts: ApiOptions = {}) => request<T>('GET', path, undefined, opts);
 export const apiPost = <T = GameStateResponse>(path: string, body?: unknown, opts: ApiOptions = {}) => request<T>('POST', path, body, opts);
+
+// ---- Account (login/register) client. Endpoints: /api/game/account-auth/* (docs/accounts-backend-2026-11-12.md) ----
+export const ACCOUNT_BASE = '/api/game/account-auth';
+export const LS_ACCOUNT_TOKEN = 'lifegraph_account_token';
+export const LS_ACCOUNT_NAME = 'lifegraph_account_name';
+export const LS_SESSION_TOKEN = 'lifegraph_session_token';
+export const LS_SESSION_ID = 'lifegraph_session_id';
+
+export interface AccountAuthResponse { username: string; session_id: string; session_token: string; account_token: string; linked?: boolean }
+export interface GuestSession { token: string; id: string }
+
+const lsGet = (k: string) => { try { return localStorage.getItem(k) || ''; } catch { return ''; } };
+const lsSet = (k: string, v: string) => { try { if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch { /* storage blocked */ } };
+
+export const getAccountToken = () => lsGet(LS_ACCOUNT_TOKEN);
+export const getAccountName = () => lsGet(LS_ACCOUNT_NAME);
+export const readGuestSession = (): GuestSession => ({ token: lsGet(LS_SESSION_TOKEN), id: lsGet(LS_SESSION_ID) });
+/** Same keys layout.tsx bootstraps with; empty values clear them so the next load handshakes a fresh guest. */
+export const writeGameSession = (s: GuestSession) => { lsSet(LS_SESSION_TOKEN, s.token); lsSet(LS_SESSION_ID, s.id); };
+export const storeAccount = (token: string, name: string) => { lsSet(LS_ACCOUNT_TOKEN, token); lsSet(LS_ACCOUNT_NAME, name); };
+
+/** Calls an account-auth endpoint. Never throws on HTTP errors: returns { status, data } (status 0 = network failure). */
+export async function accountCall<T = any>(
+  path: string, method: 'GET' | 'POST', body?: unknown, extraHeaders: Record<string, string> = {},
+): Promise<{ status: number; data: T & { error?: string } }> {
+  const headers: Record<string, string> = { ...extraHeaders };
+  const token = getAccountToken();
+  if (token && !headers['x-account-token']) headers['x-account-token'] = token;
+  if (method === 'POST') headers['Content-Type'] = 'application/json';
+  try {
+    const res = await fetch(`${ACCOUNT_BASE}${path}`, { method, headers, body: method === 'POST' ? JSON.stringify(body ?? {}) : undefined });
+    const data = await res.json().catch(() => ({}));
+    return { status: res.status, data };
+  } catch {
+    return { status: 0, data: { error: 'Không kết nối được máy chủ. Vui lòng kiểm tra mạng và thử lại.' } as any };
+  }
+}

@@ -1,11 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Home, Play, Sparkles } from 'lucide-react';
 import Tooltip from './Tooltip';
 import HeaderMacroWeather from './HeaderMacroWeather';
 import UnifiedNotificationCenter from './UnifiedNotificationCenter';
 import SystemSettingsPopover from './SystemSettingsPopover';
+import AccountModal from './AccountModal';
+import { useAccount } from '../hooks/useAccount';
 
 // Slim top navigation (extracted from page.tsx)
 export default function AppHeader(props: any) {
@@ -15,7 +17,10 @@ export default function AppHeader(props: any) {
     setShowEmergencyModal, handleWellness, setShowAssetModal, isPlayingAudio, toggleAudio, audioRef,
     setShowGuideModal, setShowShortcutsModal,
   } = props;
+  const account = useAccount();
+  const [showAccountModal, setShowAccountModal] = useState(false);
   return (
+  <>
   <header className="border-b border-[var(--border-subtle)] bg-[var(--bg-header)] backdrop-blur-md px-2 sm:px-4 md:px-6 py-2.5 flex items-center justify-between sticky top-0 z-50 gap-1.5 sm:gap-3 max-w-full overflow-visible transition-colors duration-250">
     {/* 1. Left Zone: Brand Logo & View Switcher Tabs (Đẩy sát sang trái) */}
     <div className="flex items-center gap-2 sm:gap-4 min-w-0 shrink-0 sm:shrink">
@@ -131,8 +136,20 @@ export default function AppHeader(props: any) {
         audioRef={audioRef}
         onOpenGuide={() => setShowGuideModal(true)}
         onOpenShortcuts={() => setShowShortcutsModal(true)}
+        username={account.username}
+        onOpenAccount={() => setShowAccountModal(true)}
+        onLogout={account.logout}
       />
     </div>
   </header>
+  <AccountModal
+    isOpen={showAccountModal}
+    onClose={() => setShowAccountModal(false)}
+    hasGuestCharacter={!!character && !account.username}
+    onSubmit={account.submit}
+    onResolveConflict={account.resolveConflict}
+    onCancelConflict={account.cancelConflict}
+  />
+  </>
   );
 }
