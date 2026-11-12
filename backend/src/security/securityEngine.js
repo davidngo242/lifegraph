@@ -195,3 +195,29 @@ export function getGuestLogs() {
 export function hashIp(ip) {
   return crypto.createHash('sha256').update(String(ip) + SERVER_SECRET).digest('hex').slice(0, 12);
 }
+
+// =========================================================================
+// 7. ACCOUNT TOKEN (đăng nhập tài khoản; tách miền ký với token phiên)
+// =========================================================================
+const ACCOUNT_TOKEN_MAX_AGE_MS = 30 * 24 * 3600 * 1000;
+const accountMac = payload => crypto.createHmac('sha256', SERVER_SECRET).update('account|' + payload).digest('hex');
+
+/** Token: <accountId>.<epoch>.<timestamp>.<hmac>. `epoch` tăng khi đăng xuất để thu hồi token cũ. */
+export function signAccountToken(accountId, epoch = 0) {
+  const payload = `${accountId}.${epoch}.${Date.now()}`;
+  return `${payload}.${accountMac(payload)}`;
+}
+
+/** @returns {{accountId: string, epoch: number} | null} */
+export function verifyAccountToken(token) {
+  if (!token || typeof token !== 'string') return null;
+  const parts = token.split('.');
+  if (parts.length !== 4) return null;
+  const [accountId, epochStr, timestampStr, signature] = parts;
+  const expected = Buffer.from(accountMac(`${accountId}.${epochStr}.${timestampStr}`));
+  const given = Buffer.from(signature);
+  if (given.length !== expected.length || !crypto.timingSafeEqual(given, expected)) return null;
+  const issuedAt = Number(timestampStr);
+  if (!Number.isFinite(issuedAt) || Date.now() - issuedAt > ACCOUNT_TOKEN_MAX_AGE_MS) return null;
+  return { accountId, epoch: Number(epochStr) || 0 };
+}

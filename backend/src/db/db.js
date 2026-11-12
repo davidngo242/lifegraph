@@ -108,6 +108,120 @@ export function claimSession(id) {
   if (s) { s.claimed = true; scheduleDiskPersist(); }
 }
 
+/**
+ * Nhận lại phiên cũ (id thô, chưa có chữ ký) đúng MỘT LẦN.
+ * Cache file: dùng cờ `claimed`. Postgres: một câu UPDATE nguyên tử trên player_accounts.claimed
+ * (id do server cấp 'g_...' không bao giờ là phiên cũ).
+ */
+export async function claimLegacySession(id) {
+  if (isUnclaimedLegacySession(id)) { claimSession(id); return true; }
+  if (useMock || !pool || !id || id.startsWith('g_')) return false;
+  try {
+    const res = await pool.query('UPDATE player_accounts SET claimed = TRUE WHERE id = $1 AND claimed = FALSE RETURNING id', [id]);
+    return res.rowCount === 1;
+  } catch (err) {
+    console.error('Error claiming legacy session:', err.message);
+    return false;
+  }
+}
+
+// =========================================================================
+// ACCOUNTS (tên đăng nhập + mật khẩu -> session_id ổn định)
+// Postgres: bảng accounts. Chế độ bộ nhớ: accounts.json trong DATA_DIR (tách khỏi sessions_cache.json).
+// =========================================================================
+const ACCOUNTS_FILE = path.join(DATA_DIR, 'accounts.json');
+let accountsMap = new Map(); // id -> account
+
+function loadAccountsFromDisk() {
+  accountsMap = new Map();
+  try {
+    if (!fs.existsSync(ACCOUNTS_FILE)) return;
+    const parsed = JSON.parse(fs.readFileSync(ACCOUNTS_FILE, 'utf-8'));
+    if (Array.isArray(parsed)) for (const a of parsed) accountsMap.set(a.id, a);
+  } catch (err) {
+    console.warn('[Accounts] Không đọc được accounts.json:', err.message);
+  }
+}
+function saveAccountsToDisk() {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+  const temporary = ACCOUNTS_FILE + '.tmp';
+  fs.writeFileSync(temporary, JSON.stringify(Array.from(accountsMap.values())), { encoding: 'utf-8', mode: 0o600 });
+  fs.chmodSync(temporary, 0o600);
+  fs.renameSync(temporary, ACCOUNTS_FILE);
+}
+loadAccountsFromDisk();
+/** Chỉ dùng cho test: đọc lại accounts.json từ đĩa. */
+export async function reloadAccountsForTest() { loadAccountsFromDisk(); }
+
+const normalizeAccountRow = r => r && ({
+  id: r.id, username: r.username, pass_hash: r.pass_hash, salt: r.salt, session_id: r.session_id,
+  created_at: r.created_at instanceof Date ? r.created_at.toISOString() : r.created_at,
+  token_epoch: Number(r.token_epoch) || 0
+});
+
+/** @returns {Promise<object|null>} null nếu tên đã tồn tại. */
+export async function createAccount({ username, passHash, salt, sessionId }) {
+  const account = { id: 'acc_' + crypto.randomUUID().replace(/-/g, ''), username, pass_hash: passHash, salt, session_id: sessionId, created_at: new Date().toISOString(), token_epoch: 0 };
+  if (!useMock && pool) {
+    try {
+      await pool.query('INSERT INTO accounts (id, username, pass_hash, salt, session_id, created_at) VALUES ($1,$2,$3,$4,$5,$6)',
+        [account.id, account.username, account.pass_hash, account.salt, account.session_id, account.created_at]);
+      return account;
+    } catch (err) {
+      if (err.code === '23505') return null;
+      throw err;
+    }
+  }
+  for (const a of accountsMap.values()) if (a.username === username) return null;
+  accountsMap.set(account.id, account);
+  saveAccountsToDisk();
+  return { ...account };
+}
+
+async function findAccount(column, value) {
+  if (!useMock && pool) {
+    const res = await pool.query(`SELECT * FROM accounts WHERE ${column} = $1`, [value]);
+    return normalizeAccountRow(res.rows[0]) ?? null;
+  }
+  for (const a of accountsMap.values()) if (a[column] === value) return { ...a };
+  return null;
+}
+export const getAccountByUsername = username => findAccount('username', username);
+export const getAccountById = id => findAccount('id', id);
+export const getAccountBySessionId = sessionId => findAccount('session_id', sessionId);
+
+export async function setAccountSession(accountId, sessionId) {
+  if (!useMock && pool) {
+    try {
+      const res = await pool.query('UPDATE accounts SET session_id = $1 WHERE id = $2', [sessionId, accountId]);
+      return res.rowCount === 1;
+    } catch (err) {
+      if (err.code === '23505') return false;
+      throw err;
+    }
+  }
+  const a = accountsMap.get(accountId);
+  if (!a) return false;
+  for (const o of accountsMap.values()) if (o.id !== accountId && o.session_id === sessionId) return false;
+  a.session_id = sessionId; saveAccountsToDisk();
+  return true;
+}
+
+/** Tăng epoch để thu hồi mọi account token đã cấp (đăng xuất). */
+export async function bumpAccountEpoch(accountId) {
+  if (!useMock && pool) {
+    await pool.query('UPDATE accounts SET token_epoch = token_epoch + 1 WHERE id = $1', [accountId]);
+    return;
+  }
+  const a = accountsMap.get(accountId);
+  if (a) { a.token_epoch = (a.token_epoch || 0) + 1; saveAccountsToDisk(); }
+}
+
+/** Phiên (của chính id đó) đã có nhân vật chưa. */
+export function sessionHasCharacter(sessionId) {
+  return sessionContext.run({ sessionId }, async () => !!(await getLatestCharacter()));
+}
+
 export function getSessionData(sessionId = null) {
   const id = sessionId || getCurrentSessionId();
   if (!sessions.has(id)) {
@@ -263,6 +377,17 @@ export async function initDb() {
         await pool.query(`ALTER TABLE ${table} ADD COLUMN IF NOT EXISTS seq BIGSERIAL`);
       }
       await pool.query("ALTER TABLE player_accounts ADD COLUMN IF NOT EXISTS ancestral_lineage JSONB NOT NULL DEFAULT '[]'::jsonb");
+      // claimed=false (mặc định cho hàng có sẵn) = phiên cũ chưa được nhận lại bằng token ký.
+      await pool.query('ALTER TABLE player_accounts ADD COLUMN IF NOT EXISTS claimed BOOLEAN NOT NULL DEFAULT FALSE');
+      await pool.query(`CREATE TABLE IF NOT EXISTS accounts (
+        id VARCHAR(100) PRIMARY KEY,
+        username VARCHAR(64) NOT NULL UNIQUE,
+        pass_hash TEXT NOT NULL,
+        salt TEXT NOT NULL,
+        session_id VARCHAR(100) NOT NULL UNIQUE,
+        token_epoch INT NOT NULL DEFAULT 0,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )`);
       useMock = false;
       return;
     } catch (err) {
@@ -285,7 +410,7 @@ export async function getPlayerAccount() {
     if (res.rows.length === 0) {
       const store = getSessionData();
       await pool.query(
-        'INSERT INTO player_accounts (id, total_karma, unlocked_perks, reincarnation_count, lifetime_stats) VALUES ($1, $2, $3, $4, $5)',
+        'INSERT INTO player_accounts (id, total_karma, unlocked_perks, reincarnation_count, lifetime_stats, claimed) VALUES ($1, $2, $3, $4, $5, TRUE)',
         [getCurrentSessionId(), store.playerAccount.total_karma, JSON.stringify(store.playerAccount.unlocked_perks), store.playerAccount.reincarnation_count, JSON.stringify(store.playerAccount.lifetime_stats)]
       );
       return { ...store.playerAccount };

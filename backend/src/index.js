@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import gameRoutes from './routes/game.js';
-import { initDb, sessionContext, isUnclaimedLegacySession, claimSession } from './db/db.js';
+import authRoutes from './routes/auth.js';
+import { initDb, sessionContext, claimLegacySession } from './db/db.js';
 import {
   signSessionToken,
   verifySessionToken,
@@ -88,7 +89,7 @@ app.use((req, res, next) => {
 // =========================================================================
 // LAYER 3: CRYPTOGRAPHIC SESSION ISOLATION & HMAC SIGNATURE VERIFICATION
 // =========================================================================
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   const rawToken = req.headers['x-session-token'] || req.headers['x-session-id'] || req.query.session_id;
 
   let sessionId = null;
@@ -105,11 +106,10 @@ app.use((req, res, next) => {
       .replace(/[^a-zA-Z0-9_\-]/g, '').slice(0, 64);
     if (rawId && allowRaw) {
       sessionId = rawId;
-    } else if (rawId && isUnclaimedLegacySession(rawId)) {
-      // Người chơi cũ: nhận lại đúng phiên trong cache MỘT LẦN, sau đó chỉ vào bằng token có chữ ký.
+    } else if (rawId && await claimLegacySession(rawId)) {
+      // Người chơi cũ: nhận lại đúng phiên (cache hoặc Postgres) MỘT LẦN, sau đó chỉ vào bằng token có chữ ký.
       sessionId = rawId;
       isCryptographicallyVerified = true;
-      claimSession(rawId);
       logGuestEvent('legacy_claimed', { session: rawId.slice(0, 12), ip: ipHash });
     } else {
       if (process.env.NODE_ENV !== 'test' && !checkRateLimit('mint_' + (req.ip || 'unknown'), 30, 60000)) {
@@ -132,7 +132,8 @@ app.use((req, res, next) => {
   });
 });
 
-// Routes
+// Routes (tài khoản gắn trước để không đi qua middleware ghi trạng thái game)
+app.use('/api/game/account-auth', authRoutes);
 app.use('/api/game', gameRoutes);
 
 app.get('/health', (req, res) => {
