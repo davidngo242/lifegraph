@@ -1881,11 +1881,12 @@ export default function LifeGraphPage() {
           >
             <button
               onClick={() => setShowKarmaModal(true)}
+              aria-label={`Đền Thờ Nghiệp Quả: ${playerAccount?.total_karma || 0} điểm phước`}
               className="py-1 px-2.5 sm:px-3 rounded-xl bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:border-amber-400 text-[var(--text-primary)] text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-300 fill-amber-400/30 hidden sm:block" />
+              <Sparkles aria-hidden className="w-3.5 h-3.5 shrink-0 text-amber-600 dark:text-amber-300 fill-amber-400/30" />
               <span className="hidden lg:inline whitespace-nowrap">Đền Thờ</span>
-              <span className="text-xs font-mono font-bold whitespace-nowrap text-amber-800 dark:text-amber-300 px-1.5 py-0.2 rounded bg-amber-500/15 border border-amber-500/30">
+              <span className="text-xs tabular-nums font-bold whitespace-nowrap text-amber-800 dark:text-amber-300 px-1.5 py-0.5 rounded bg-amber-500/15 border border-amber-500/30">
                 {playerAccount?.total_karma || 0}
               </span>
             </button>

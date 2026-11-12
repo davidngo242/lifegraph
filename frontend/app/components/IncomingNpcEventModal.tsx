@@ -65,7 +65,7 @@ export default function IncomingNpcEventModal({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-base font-black text-[var(--text-primary)]">{event.npcName}</span>
-                <span className="text-xs font-bold px-2 py-0.2 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30">
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30">
                   {event.npcRole}
                 </span>
               </div>

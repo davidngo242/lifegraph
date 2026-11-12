@@ -197,7 +197,7 @@ export default function NPCDialogCard({
           <div className="min-w-0">
             <div className="text-[12px] font-sans text-[var(--text-secondary)] truncate">{npc.role}</div>
             <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] truncate">{npc.name}</div>
-            <span className={`text-[12px] font-sans px-2 py-0.2 rounded-md border inline-block mt-0.5 ${affinityColor}`}>
+            <span className={`text-[12px] font-sans px-2 py-0.5 rounded-md border inline-block mt-0.5 ${affinityColor}`}>
               Thiện cảm: <span className="font-sans tabular-nums">{npc.affinity > 0 ? `+${npc.affinity}` : npc.affinity}%</span>
             </span>
           </div>

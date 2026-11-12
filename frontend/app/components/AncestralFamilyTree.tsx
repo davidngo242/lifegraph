@@ -138,7 +138,7 @@ export default function AncestralFamilyTree({
                           <span className="text-sm md:text-base font-black text-[var(--text-primary)] break-words">
                             {ancestor.name}
                           </span>
-                          <span className="text-xs font-sans tabular-nums px-2 py-0.2 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 font-bold">
+                          <span className="text-xs font-sans tabular-nums px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 font-bold">
                             Đời thứ {ancestor.generation}
                           </span>
                         </div>
@@ -196,7 +196,7 @@ export default function AncestralFamilyTree({
                     <span className="text-base font-black text-[var(--text-primary)]">
                       {currentCharacter.name}
                     </span>
-                    <span className="text-xs font-sans tabular-nums px-2 py-0.2 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-400/50 font-bold">
+                    <span className="text-xs font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-400/50 font-bold">
                       Đời Hiện Tại · {currentCharacter.generation || (lineage.length + 1)}
                     </span>
                   </div>

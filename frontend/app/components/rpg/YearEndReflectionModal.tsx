@@ -132,7 +132,7 @@ export default function YearEndReflectionModal({
                   <Activity className="w-3.5 h-3.5" />
                   <span>Dưỡng Sinh Cuối Năm</span>
                 </span>
-                <span className="font-mono text-xs px-1.5 py-0.2 rounded bg-emerald-500/20 border border-emerald-500/40">
+                <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40">
                   {unusedAP} AP dư
                 </span>
               </div>
@@ -236,7 +236,7 @@ export default function YearEndReflectionModal({
                 <span className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-base group-hover:scale-110 transition-transform">
                   📈
                 </span>
-                <span className="text-xs font-mono px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold">
+                <span className="text-xs font-mono px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold">
                   +15% Thu nhập
                 </span>
               </div>
@@ -269,7 +269,7 @@ export default function YearEndReflectionModal({
                 <span className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-base group-hover:scale-110 transition-transform">
                   🧘
                 </span>
-                <span className="text-xs font-mono px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 font-bold">
+                <span className="text-xs font-mono px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 font-bold">
                   Kháng Stress
                 </span>
               </div>
@@ -302,7 +302,7 @@ export default function YearEndReflectionModal({
                 <span className="w-8 h-8 rounded-xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-base group-hover:scale-110 transition-transform">
                   🤝
                 </span>
-                <span className="text-xs font-mono px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-800 dark:text-sky-300 border border-sky-500/30 font-bold">
+                <span className="text-xs font-mono px-1.5 py-0.5 rounded-full bg-sky-500/20 text-sky-800 dark:text-sky-300 border border-sky-500/30 font-bold">
                   x2 Quý Nhân
                 </span>
               </div>

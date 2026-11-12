@@ -149,7 +149,7 @@ export default function TimeSkipCard({ dilemma, characterAge = 20, onContinue, i
       </div>
 
       <div className="text-center text-xs text-[var(--text-secondary)] font-sans mt-2">
-        Nhấn phím <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card-subtle)] text-[var(--text-primary)] font-mono border border-[var(--border-subtle)]">1</kbd> hoặc <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card-subtle)] text-[var(--text-primary)] font-mono border border-[var(--border-subtle)]">2</kbd> để chọn đường hướng, hoặc <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card-subtle)] text-[var(--text-primary)] font-mono border border-[var(--border-subtle)]">Space</kbd> để tiếp tục nhanh.
+        Nhấn phím <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card-subtle)] text-[var(--text-primary)] font-mono border border-[var(--border-subtle)]">1</kbd> hoặc <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card-subtle)] text-[var(--text-primary)] font-mono border border-[var(--border-subtle)]">2</kbd> để chọn đường hướng, hoặc <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card-subtle)] text-[var(--text-primary)] font-mono border border-[var(--border-subtle)]">Space</kbd> để tiếp tục nhanh.
       </div>
     </div>
   );

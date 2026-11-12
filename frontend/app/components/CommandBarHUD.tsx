@@ -95,7 +95,7 @@ export default function CommandBarHUD({
               <div className="p-0.5">
                 <div className="font-bold text-amber-800 dark:text-amber-300 text-xs flex items-center gap-1">
                   <span>🎬 Phòng Quyết Định 21:9</span>
-                  <kbd className="px-1 py-0.2 rounded bg-[var(--bg-card)] text-xs text-[var(--text-secondary)] border border-[var(--border-subtle)]">[D]</kbd>
+                  <kbd className="px-1 py-0.5 rounded bg-[var(--bg-card)] text-xs text-[var(--text-secondary)] border border-[var(--border-subtle)]">[D]</kbd>
                 </div>
                 <div className="text-xs text-[var(--text-secondary)]">
                   Mở không gian đối diện ngã rẽ cuộc đời ở định dạng điện ảnh toàn cảnh 21:9.
@@ -110,7 +110,7 @@ export default function CommandBarHUD({
             >
               <Film className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               <span className="hidden md:inline">Phòng Điện Ảnh</span>
-              <kbd className="px-1.5 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-mono text-amber-800 dark:text-amber-400 font-bold">
+              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-mono text-amber-800 dark:text-amber-400 font-bold">
                 D
               </kbd>
             </button>
@@ -152,7 +152,7 @@ export default function CommandBarHUD({
               </span>
             </div>
 
-            <span className="text-xs font-mono px-1 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 ml-1">
+            <span className="text-xs font-mono px-1 py-0.5 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 ml-1">
               ?
             </span>
           </button>
@@ -193,7 +193,7 @@ export default function CommandBarHUD({
               >
                 <HeartPulse className="w-3.5 h-3.5 animate-bounce" />
                 <span className="tracking-wide">CẤP CỨU KHẨN CẤP</span>
-                <span className="text-xs font-mono px-1.5 py-0.2 rounded bg-rose-950/80 text-rose-200 border border-rose-400/50">
+                <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-rose-950/80 text-rose-200 border border-rose-400/50">
                   {vitality < 30 ? `HP ${vitality}%` : `Burnout ${burnout}%`}
                 </span>
               </button>

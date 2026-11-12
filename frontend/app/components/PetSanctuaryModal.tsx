@@ -256,7 +256,7 @@ export default function PetSanctuaryModal({
 
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className={`text-xs font-bold px-2 py-0.2 rounded-full border ${getRarityBadge(pet.rarity)}`}>
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${getRarityBadge(pet.rarity)}`}>
                           {pet.rarityLabel}
                         </span>
                         <span className="text-xs text-[var(--text-secondary)] italic">

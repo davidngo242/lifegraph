@@ -121,7 +121,7 @@ export default function UnifiedNotificationCenter({
             {criticalIssuesCount > 0
               ? `Báo Động (${criticalIssuesCount})`
               : hasDilemma
-              ? <>Biến Cố<span className="hidden sm:inline"> 21:9</span></>
+              ? 'Biến Cố'
               : totalBadges > 0
               ? `Thông Báo (${totalBadges})`
               : 'Bình yên'}
@@ -325,7 +325,7 @@ export default function UnifiedNotificationCenter({
                     }}
                     className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 hover:from-rose-500 hover:to-amber-400 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg shadow-rose-950/40 transition active:scale-95 animate-pulse"
                   >
-                    <span>Vào Kịch Bản Điện Ảnh 21:9</span>
+                    <span>Đối Mặt Biến Cố</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 )}

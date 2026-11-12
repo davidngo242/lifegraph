@@ -107,7 +107,7 @@ export default function SystemSettingsPopover({
           onClick={() => setIsOpen(!isOpen)}
           aria-expanded={isOpen}
           aria-label="Cài đặt hệ thống"
-          className={`py-1 px-2.5 sm:px-3 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm ${
+          className={`min-w-[44px] justify-center py-1 px-2.5 sm:px-3 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm ${
             isOpen
               ? 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/60 shadow-amber-500/10'
               : 'bg-[var(--bg-card-subtle)] hover:bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'

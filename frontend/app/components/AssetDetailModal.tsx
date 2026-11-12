@@ -471,10 +471,10 @@ export default function AssetDetailModal({
                       >
                         <h4 className="text-xs md:text-sm font-semibold text-[var(--text-primary)] truncate cursor-help">{item.name}</h4>
                       </Tooltip>
-                      <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-800 dark:text-indigo-300 border border-indigo-500/30">
+                      <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-indigo-500/15 text-indigo-800 dark:text-indigo-300 border border-indigo-500/30">
                         {item.tier_label}
                       </span>
-                      <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30">
+                      <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30">
                         {item.ap_cost} AP
                       </span>
                     </div>
@@ -566,14 +566,14 @@ export default function AssetDetailModal({
                     >
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.2 rounded bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
+                          <span className="text-[12px] font-sans tabular-nums px-1.5 py-0.5 rounded bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                             Cấp {ht.tier}
                           </span>
                           <Tooltip content={ht.name} position="top" className="min-w-0">
                             <h4 className="text-xs md:text-sm font-semibold text-[var(--text-primary)] truncate cursor-help">{ht.name}</h4>
                           </Tooltip>
                           {isCurrent && (
-                            <span className="text-[12px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40">
+                            <span className="text-[12px] font-bold px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40">
                               Đang Ở
                             </span>
                           )}

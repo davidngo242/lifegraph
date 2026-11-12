@@ -83,7 +83,7 @@ export default function NarrativeFeed({
   };
 
   return (
-    <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-4 md:p-5 shadow-xl backdrop-blur-xl flex flex-col h-auto max-h-[520px] lg:max-h-none lg:h-[calc(100vh-6.5rem)] lg:sticky top-20 overflow-hidden transition-colors duration-200">
+    <div className="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-3xl p-4 md:p-5 shadow-xl backdrop-blur-xl flex flex-col h-auto max-h-[520px] lg:max-h-[calc(100vh-6.5rem)] lg:sticky top-20 overflow-hidden transition-colors duration-200">
       {/* Header: Replaced redundant age badge with Timeline Progress and Filters */}
       <div className="flex flex-col gap-2.5 pb-3 border-b border-[var(--border-subtle)] mb-2.5 shrink-0">
         <div className="flex items-center justify-between">
@@ -220,7 +220,7 @@ export default function NarrativeFeed({
                     </div>
 
                     {isLatest && (
-                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 font-bold animate-pulse flex items-center gap-1">
+                      <span className="text-[12px] font-sans tabular-nums px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 font-bold flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" /> Vừa xong
                       </span>
                     )}

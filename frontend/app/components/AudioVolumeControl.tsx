@@ -34,7 +34,7 @@ export default function AudioVolumeControl({ isPlaying, onTogglePlay, audioRef }
               <span className="flex items-center gap-1">
                 <Music className="w-3.5 h-3.5" /> {isPlaying ? `Nhạc Nền Đang Phát (${volume}%)` : "Nhạc Nền Tắt"}
               </span>
-              <kbd className="px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/40 text-xs font-mono font-bold">
+              <kbd className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/40 text-xs font-mono font-bold">
                 M
               </kbd>
             </div>
@@ -66,7 +66,7 @@ export default function AudioVolumeControl({ isPlaying, onTogglePlay, audioRef }
             <span className="hidden sm:inline font-medium text-[12px]">
               {isPlaying ? `${volume}%` : 'Nhạc Tắt'}
             </span>
-            <kbd className="hidden lg:inline text-xs font-mono px-1 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)] font-bold ml-0.5">
+            <kbd className="hidden lg:inline text-xs font-mono px-1 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)] font-bold ml-0.5">
               M
             </kbd>
           </button>

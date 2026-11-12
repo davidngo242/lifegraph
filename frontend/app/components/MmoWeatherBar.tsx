@@ -82,7 +82,7 @@ export default function MmoWeatherBar({
 
       {/* Middle: Global Breaking News / MMO Ticker */}
       <div className="flex-1 min-w-0 flex items-center gap-2 px-2 overflow-hidden">
-        <span className="text-[12px] font-sans tabular-nums normal-case px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-500 dark:text-indigo-300 border border-indigo-500/30 font-bold shrink-0 flex items-center gap-1">
+        <span className="text-[12px] font-sans tabular-nums normal-case px-1.5 py-0.5 rounded bg-indigo-500/15 text-indigo-500 dark:text-indigo-300 border border-indigo-500/30 font-bold shrink-0 flex items-center gap-1">
           <Radio className="w-2.5 h-2.5 animate-pulse text-rose-500" /> Thị Trường
         </span>
         <Tooltip

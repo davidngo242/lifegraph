@@ -342,11 +342,11 @@ export default function SkillTreeTab({
                     </span>
                   </div>
                   {res.isActive ? (
-                    <span className="text-xs px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 font-bold shrink-0">
+                    <span className="text-xs px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 font-bold shrink-0">
                       ✓ Sẵn Sàng
                     </span>
                   ) : (
-                    <span className="text-xs font-sans tabular-nums px-1.5 py-0.2 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border border-[var(--border-subtle)] shrink-0">
+                    <span className="text-xs font-sans tabular-nums px-1.5 py-0.5 rounded-full bg-[var(--bg-card-subtle)] text-[var(--text-secondary)] border border-[var(--border-subtle)] shrink-0">
                       {res.progress}
                     </span>
                   )}
