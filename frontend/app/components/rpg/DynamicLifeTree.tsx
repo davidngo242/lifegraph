@@ -2484,15 +2484,17 @@ export default function DynamicLifeTree({
                       onUnlockSkill(acupoint.id);
                     }
                   }}
-                  className={`relative before:absolute before:-inset-2 before:content-[''] w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs transition-all duration-300 shadow-xl border ${
+                  className="group relative before:absolute before:-inset-2 before:content-[''] flex items-center justify-center min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 rounded-full enabled:cursor-pointer disabled:cursor-not-allowed"
+                >
+                  <span className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs transition-all duration-300 shadow-xl border ${
                     isUnlocked
                       ? 'bg-emerald-100 dark:bg-emerald-950/90 border-emerald-500 dark:border-emerald-400 text-emerald-900 dark:text-emerald-200 ring-2 ring-emerald-400/50 shadow-emerald-500/40'
                       : canUnlock
-                      ? 'bg-amber-500 border-amber-300 text-slate-950 ring-2 ring-amber-400/60 animate-pulse hover:scale-125 cursor-pointer font-bold'
-                      : 'bg-slate-100 dark:bg-slate-900/70 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 cursor-not-allowed opacity-75'
-                  }`}
-                >
+                      ? 'bg-amber-500 border-amber-300 text-slate-950 ring-2 ring-amber-400/60 animate-pulse group-hover:scale-125 font-bold'
+                      : 'bg-slate-100 dark:bg-slate-900/70 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 opacity-75'
+                  }`}>
                   {acupoint.icon}
+                  </span>
                 </button>
               </Tooltip>
             </div>
@@ -2547,15 +2549,17 @@ export default function DynamicLifeTree({
                     soundFx.playBirdChirp();
                     setTreeViewMode('social_links');
                   }}
-                  className={`relative before:absolute before:-inset-2 before:content-[''] w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs transition-all duration-300 shadow-xl border cursor-pointer hover:scale-125 ${
+                  className="group relative before:absolute before:-inset-2 before:content-[''] flex items-center justify-center min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 rounded-full enabled:cursor-pointer disabled:cursor-not-allowed"
+                >
+                  <span className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs transition-all duration-300 shadow-xl border group-hover:scale-125 ${
                     linkLvl >= 4
                       ? 'bg-amber-100 dark:bg-gradient-to-br dark:from-amber-500/30 dark:to-yellow-600/40 border-amber-500 dark:border-amber-400 text-amber-900 dark:text-amber-200 ring-2 ring-amber-400/70 shadow-amber-500/50 animate-pulse'
                       : linkLvl >= 2
                       ? 'bg-sky-100 dark:bg-sky-950/80 border-sky-400 text-sky-800 dark:text-sky-200 ring-1 ring-sky-400/50 shadow-sky-500/40'
-                      : 'bg-slate-100 dark:bg-slate-900/80 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-sky-400'
-                  }`}
-                >
+                      : 'bg-slate-100 dark:bg-slate-900/80 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 group-hover:border-sky-400'
+                  }`}>
                   {npc.avatar || (idx === 0 ? '🦉' : idx === 1 ? '🦅' : idx === 2 ? '🐺' : '🕊️')}
+                  </span>
                 </button>
               </Tooltip>
             </div>

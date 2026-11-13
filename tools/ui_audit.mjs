@@ -246,6 +246,7 @@ const SCENARIOS = {
       { age: 28, focus: 'health' }, { age: 29, focus: 'experience' },
     ],
     doors: { cuoi_som: false },
+    whatif_log: [{ age: 26, label: 'chăm học hơn' }, { age: 28, label: 'làm thêm giờ' }],
     history_log: [{ age: 22, event: '[Cột Mốc] Tốt nghiệp đại học' }, { age: 28, event: '[Cột Mốc] Mua căn nhà đầu tiên' }],
     hidden_flags: ['written_memoir'],
   },

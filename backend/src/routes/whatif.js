@@ -16,6 +16,8 @@ import { sessionMutations } from '../middleware/sessionMutations.js';
 export const WHATIF_MAX_USES = 3;
 export const WHATIF_ACTIONS = ['study', 'overtime', 'wellness', 'network'];
 export const WHATIF_MAX_YEARS = 10;
+export const WHATIF_LOG_MAX = 10;
+const WHATIF_ACTION_LABEL = { study: 'chăm học hơn', overtime: 'làm thêm giờ', wellness: 'chăm sức khỏe hơn', network: 'mở rộng quan hệ' };
 const ACTIONS_PER_YEAR = 2;      // AP spent on the alternative habit each simulated year (bounded by real AP)
 const AGE_CAP = 130;
 const BULKY = ['history_log', 'timeline_snapshots'];
@@ -171,7 +173,10 @@ router.post('/', async (req, res) => {
 
     const result = await runWhatIf(snap, alt_action, years);
     // The only write: the per-life use counter (a sandbox result never changes state or rng).
-    await updateCharacter(character.id, { whatif_uses: used + 1 });
+    // whatif_log [{age, label}] (max 10) only feeds the Life Tree's ghost branches; limits above are unchanged.
+    const log = Array.isArray(character.whatif_log) ? character.whatif_log : [];
+    const whatif_log = [...log, { age: from_age, label: WHATIF_ACTION_LABEL[alt_action] }].slice(-WHATIF_LOG_MAX);
+    await updateCharacter(character.id, { whatif_uses: used + 1, whatif_log });
     res.json({ success: true, ...result, uses_left: WHATIF_MAX_USES - used - 1 });
   } catch (err) {
     res.status(500).json({ error: 'Mô phỏng "Nếu như…" thất bại', message: err.message });
