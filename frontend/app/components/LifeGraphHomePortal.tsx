@@ -116,6 +116,12 @@ export default function LifeGraphHomePortal({
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6 animate-in fade-in duration-300 pb-16">
+      {/* 0. CHẾ ĐỘ MỚI: MỘT ĐỜI (thử nghiệm, tách khỏi nhân vật chính) */}
+      <a href="/mot-doi" className="flex items-center justify-between gap-3 min-h-[56px] px-5 py-3 rounded-2xl border-2 border-emerald-700 bg-[var(--bg-card)] text-[var(--text-primary)] hover:bg-[var(--bg-card-subtle)] transition">
+        <span><strong className="block text-base">Thử chế độ mới: Một Đời</strong><span className="text-[12px] text-[var(--text-secondary)] normal-case tracking-normal">Sống trọn một đời ở làng hậu chiến trong 15 phút, mỗi lựa chọn khắc lên văn bia.</span></span>
+        <span aria-hidden className="text-xl">→</span>
+      </a>
+
       {/* 1. NIRVANA SOLACE POPUP MODAL (IF PLAYER JUST ATTAINED NIRVANA) */}
       {nirvanaBanner && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">

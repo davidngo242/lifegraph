@@ -5,6 +5,7 @@ import gameRoutes from './routes/game.js';
 import authRoutes from './routes/auth.js';
 import sharedLineageRoutes from './routes/shared_lineage.js';
 import whatifRoutes from './routes/whatif.js';
+import motDoiRoutes from './routes/mot_doi.js';
 import { initDb, sessionContext, claimLegacySession } from './db/db.js';
 import {
   signSessionToken,
@@ -137,6 +138,7 @@ app.use(async (req, res, next) => {
 // Routes (tài khoản gắn trước để không đi qua middleware ghi trạng thái game)
 app.use('/api/game/account-auth', authRoutes);
 app.use('/api/game/shared-lineage', sharedLineageRoutes);
+app.use('/api/game/mot-doi', motDoiRoutes); // chế độ thử nghiệm, chạy trong bộ nhớ
 app.use('/api/game/whatif', whatifRoutes); // trước gameRoutes: không đi qua hàng đợi/phiên bản ghi
 app.use('/api/game', gameRoutes);
 
