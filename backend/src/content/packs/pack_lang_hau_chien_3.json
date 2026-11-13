@@ -16,6 +16,11 @@
         "max_age": 26,
         "era": [
           "lang_hau_chien"
+        ],
+        "family_state": [
+          "no_nan",
+          "con_nuoi",
+          "cha_me_ly_tan"
         ]
       },
       "weight": 4,
@@ -1712,7 +1717,11 @@
         ],
         "requires_npc": {
           "role": "friend"
-        }
+        },
+        "family_state": [
+          "binh_thuong",
+          "con_nuoi"
+        ]
       },
       "weight": 5,
       "cooldown_years": 12,

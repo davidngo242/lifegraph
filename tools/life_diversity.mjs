@@ -97,3 +97,15 @@ console.log(`scenarios met by 100% of lives: ${everyone}; by >=50%: ${Object.val
 const hist = Object.entries(counts).map(([id, n]) => [id, Math.round(100 * n / LIVES)]).sort((x, y) => y[1] - x[1]);
 console.log('met-by-share buckets (% of lives): ' + [[90, 101], [70, 90], [40, 70], [10, 40], [0, 10]].map(([lo, hi]) => `${lo}-${Math.min(hi, 100)}%: ${hist.filter(([, p]) => p >= lo && p < hi).length}`).join('  '));
 if (process.argv.includes('--list')) console.log(hist.map(([id, p]) => `${id}:${p}%`).join(' '));
+
+// Stories met per decade (min over lives = "no empty decade" check) and, with --ages, per-age coverage + top story.
+const decades = [...Array(9)].map((_, d) => d);
+const perDecade = lives.map(l => decades.map(d => Object.keys(l.byAge).filter(a => Math.floor(a / 10) === d).length));
+console.log('stories per decade 0-9..80-89 (min/mean over lives): ' + decades.map(d => `${d * 10}s ${Math.min(...perDecade.map(r => r[d]))}/${(perDecade.reduce((s, r) => s + r[d], 0) / lives.length).toFixed(1)}`).join('  '));
+const gt90 = Object.values(counts).filter(n => n >= 0.9 * LIVES).length, lt40 = Object.values(counts).filter(n => n < 0.4 * LIVES).length, nd = Object.keys(counts).length;
+console.log(`share of distinct scenarios met by >=90% of lives: ${(100 * gt90 / nd).toFixed(0)}% (${gt90}/${nd}); by <40%: ${(100 * lt40 / nd).toFixed(0)}% (${lt40}/${nd})`);
+if (process.argv.includes('--ages')) for (let a = 0; a <= MAX_AGE; a++) {
+  const c = {}; let n = 0; for (const l of lives) if (l.byAge[a]) { c[l.byAge[a]] = (c[l.byAge[a]] ?? 0) + 1; n++; }
+  const top = Object.entries(c).sort((x, y) => y[1] - x[1])[0];
+  console.log(`age ${a}: ${(100 * n / LIVES).toFixed(0)}% lives have a scenario, ${Object.keys(c).length} distinct, top ${top?.[0]} ${top ? Math.round(100 * top[1] / n) : 0}%`);
+}

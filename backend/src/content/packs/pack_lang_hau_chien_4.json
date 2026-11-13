@@ -19,7 +19,12 @@
         "max_age": 70,
         "requires_npc": {
           "role": "family"
-        }
+        },
+        "family_state": [
+          "con_nuoi",
+          "cha_me_ly_tan",
+          "no_nan"
+        ]
       },
       "weight": 3,
       "cooldown_years": 15,
@@ -165,7 +170,11 @@
         "max_age": 80,
         "requires_npc": {
           "role": "friend"
-        }
+        },
+        "family_state": [
+          "binh_thuong",
+          "danh_gia"
+        ]
       },
       "weight": 3,
       "cooldown_years": 12,
@@ -302,7 +311,12 @@
           "lang_hau_chien"
         ],
         "min_age": 62,
-        "max_age": 80
+        "max_age": 80,
+        "family_state": [
+          "no_nan",
+          "con_nuoi",
+          "danh_gia"
+        ]
       },
       "weight": 2,
       "cooldown_years": 20,
@@ -438,7 +452,8 @@
         "max_age": 80,
         "requires_npc": {
           "role": "rival"
-        }
+        },
+        "fate_thread": "cha_giau_no"
       },
       "weight": 3,
       "cooldown_years": 15,
@@ -598,7 +613,12 @@
         "max_age": 85,
         "requires_npc": {
           "role": "family"
-        }
+        },
+        "family_state": [
+          "no_nan",
+          "danh_gia",
+          "cha_me_ly_tan"
+        ]
       },
       "weight": 2,
       "cooldown_years": 8,
@@ -724,7 +744,8 @@
         "max_age": 85,
         "requires_npc": {
           "role": "love"
-        }
+        },
+        "fate_thread": "nguoi_thuong_that_lac"
       },
       "weight": 3,
       "cooldown_years": 15,
