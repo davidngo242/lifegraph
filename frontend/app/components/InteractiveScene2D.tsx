@@ -64,6 +64,7 @@ interface ScenarioChoice {
   description: string;
   knowledge_requirements?: string[];
   cost_ap?: number;
+  irreversible?: boolean;
   check?: {
     type: string;
     stat: string;
@@ -1931,6 +1932,14 @@ export default function InteractiveScene2D({ onScenarioResolved, onAdvanceYear, 
                               Phím {idx + 1}
                             </span>
                             <span className="font-bold text-sm text-white">{cleanChoiceTitle}</span>
+                            {choice.irreversible && (
+                              <span
+                                title="Lựa chọn này đóng một cánh cửa vĩnh viễn"
+                                className="text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-950 text-rose-100 border border-rose-400/70"
+                              >
+                                Không quay đầu
+                              </span>
+                            )}
                             {isUnderUncertainty ? (
                               <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-amber-950/90 text-amber-300 border border-amber-500/50 flex items-center gap-1 font-semibold">
                                 <Zap className="w-3 h-3 text-amber-400" />

@@ -59,8 +59,17 @@ function validateStoryletFields(sc, scPath, errors) {
   if (sc.weight !== undefined && !(Number.isFinite(sc.weight) && sc.weight > 0)) errors.push(`${scPath}: weight must be a positive number.`);
   if (sc.cooldown_years !== undefined && !(Number.isInteger(sc.cooldown_years) && sc.cooldown_years >= 0)) errors.push(`${scPath}: cooldown_years must be a non-negative integer.`);
   if (sc.group !== undefined && typeof sc.group !== 'string') errors.push(`${scPath}: group must be a string.`);
-  for (const k of ['locks', 'unlocks'])
-    if (sc[k] !== undefined && !strArray(sc[k])) errors.push(`${scPath}: ${k} must be a string array.`);
+  validateDoorFields(sc, scPath, errors);
+}
+
+/** Door fields share one shape on a scenario and on a choice: locks, unlocks, persist_doors (string[]), door_labels ({id: label}), irreversible (boolean, choice only). */
+function validateDoorFields(obj, path, errors) {
+  for (const k of ['locks', 'unlocks', 'persist_doors'])
+    if (obj[k] !== undefined && !(Array.isArray(obj[k]) && obj[k].every(x => typeof x === 'string'))) errors.push(`${path}: ${k} must be a string array.`);
+  const dl = obj.door_labels;
+  if (dl !== undefined && (!dl || typeof dl !== 'object' || Array.isArray(dl) || !Object.values(dl).every(v => typeof v === 'string' && v.trim() && v.length <= 60)))
+    errors.push(`${path}: door_labels must map door ids to non-empty labels (<= 60 chars).`);
+  if (obj.irreversible !== undefined && typeof obj.irreversible !== 'boolean') errors.push(`${path}: irreversible must be a boolean.`);
 }
 
 export function validateContentPack(pack) {
@@ -129,6 +138,7 @@ export function validateContentPack(pack) {
           choice.knowledge_requirements.forEach(k => allKnowledgeRequired.add(k));
         }
 
+        validateDoorFields(choice, choicePath, errors);
         if (!Number.isInteger(choice.cost_ap ?? 0) || (choice.cost_ap ?? 0) < 0) errors.push(`${choicePath}: Invalid AP cost.`);
         for (const [tier, outcome] of Object.entries(choice.outcomes ?? {})) {
           if (outcome.stat_deltas) errors.push(`${choicePath}.${tier}: Use effects with *_delta keys, not stat_deltas.`);
