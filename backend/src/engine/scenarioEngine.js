@@ -1,4 +1,6 @@
-import { getRandom } from './rng.js';
+import { getRandom, createRng } from './rng.js';
+import { lifeSeedOf } from './lifeSeed.js';
+import { castRemembers, addCastMemory } from './npcEngine.js';
 // backend/src/engine/scenarioEngine.js
 import fs from 'fs';
 import path from 'path';
@@ -59,30 +61,110 @@ function isResolved(character, scenario) {
     scenario.choices.some(choice => flags.has(`choice:${choice.id}`));
 }
 
-export function getCurrentScenarioForCharacter(character) {
-  if (!character || character.is_deceased) return null;
-  if (!scenarioIndex.size) loadAllContentPacks();
-  const age = Number(character.age ?? 0);
+function effectiveFlags(character) {
   const flags = new Set(character.hidden_flags ?? []);
   // Older builds wrote this career flag for every childhood outcome.
   if (!character.scenario_resolutions?.scenario_career_crossroads_28 &&
       !scenarioIndex.get('scenario_career_crossroads_28')?.choices.some(c => flags.has(`choice:${c.id}`))) {
     flags.delete('career_crossroads_resolved');
   }
-  const eligible = [...scenarioIndex.values()].filter(sc =>
-    age >= (sc.prerequisites?.min_age ?? 0) && age <= (sc.prerequisites?.max_age ?? 120) &&
-    (sc.prerequisites?.required_flags ?? []).every(f => flags.has(f)) &&
-    !(sc.prerequisites?.excluded_flags ?? []).some(f => flags.has(f)) && !isResolved(character, sc));
-  const pinned = [...flags].find(f => typeof f === 'string' && f.startsWith('active_scenario:'))?.slice(16);
-  eligible.sort((a, b) => Number(b.id === pinned) - Number(a.id === pinned) ||
-    (b.priority ?? 0) - (a.priority ?? 0) || a.id.localeCompare(b.id));
-  if (eligible.length) {
-    return personalizeScenario(eligible[0], character);
-  }
+  return flags;
+}
+
+export function getCurrentScenarioForCharacter(character) {
+  if (!character || character.is_deceased) return null;
+  if (!scenarioIndex.size) loadAllContentPacks();
+  const flags = effectiveFlags(character);
+  const eligible = eligibleScenarios(character, flags);
+  const picked = pickScenario(eligible, character, flags);
+  if (picked) return personalizeScenario(picked, character);
   if (character.active_dilemma && !character.active_dilemma.is_resolved) {
     return adaptDilemmaToScenario(character.active_dilemma, character);
   }
   return null;
+}
+
+// ---- Storylet selection (emergent life) ------------------------------------------------------
+const ROLE_ALIASES = { 'địch_thủ': 'rival', 'người_thầy': 'mentor', 'người_thương': 'love', 'chủ_nợ': 'creditor_or_benefactor', 'ân_nhân': 'creditor_or_benefactor' };
+const MUST_WIN_PRIORITY = 90;
+const COOLDOWN_DECAY = 0.1;
+
+const castNpc = (character, role) => (character.cast ?? []).find(n => n.role === (ROLE_ALIASES[role] ?? role));
+function qualityOf(character, flags, key) {
+  if (key === 'debt') return (Number(character.cash ?? 0) < 0 ? 1 : 0) + (flags.has('high_debt') ? 1 : 0);
+  return Number(character[key]) || 0;
+}
+
+/** Optional storylet prerequisites. Packs that do not use them are always satisfied. */
+function meetsStoryletPrereqs(sc, character, flags) {
+  const p = sc.prerequisites ?? {};
+  const seed = lifeSeedOf(character);
+  if (p.era && !p.era.includes(seed.era)) return false;
+  if (p.fate_thread && p.fate_thread !== seed.fate_thread) return false;
+  if (p.requires_npc) {
+    const npc = castNpc(character, p.requires_npc.role);
+    if (!npc || (p.requires_npc.memory_has && !castRemembers(npc, p.requires_npc.memory_has))) return false;
+  }
+  for (const [key, min] of Object.entries(p.min_quality ?? {})) if (qualityOf(character, flags, key) < min) return false;
+  return true;
+}
+
+function eligibleScenarios(character, flags) {
+  const age = Number(character.age ?? 0);
+  return [...scenarioIndex.values()].filter(sc =>
+    age >= (sc.prerequisites?.min_age ?? 0) && age <= (sc.prerequisites?.max_age ?? 120) &&
+    (sc.prerequisites?.required_flags ?? []).every(f => flags.has(f)) &&
+    !(sc.prerequisites?.excluded_flags ?? []).some(f => flags.has(f)) && !isResolved(character, sc) &&
+    meetsStoryletPrereqs(sc, character, flags));
+}
+
+function contextBoost(sc, character) {
+  const p = sc.prerequisites ?? {};
+  return (p.fate_thread ? 1 : 0) + (p.requires_npc ? 1 : 0) + (p.era ? 0.5 : 0);
+}
+
+function repeatDecay(sc, character) {
+  const cooldown = sc.cooldown_years ?? 0;
+  if (!cooldown) return 1;
+  const group = sc.group ?? sc.id;
+  const age = Number(character.age ?? 0);
+  const recent = (character.scenario_seen ?? []).some(s => s.group === group && age - s.age < cooldown);
+  return recent ? COOLDOWN_DECAY : 1;
+}
+
+const fnv = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
+
+/**
+ * Pinned scenarios and priority >= 90 milestones win exactly as before. Otherwise a weighted draw:
+ * score = weight * (1 + context_boost) * repeat_decay. The draw uses the seeded RNG (createRng) keyed by
+ * (life seed, age, resolved count) so repeated reads of the same state (GET /scenario/current, then resolve)
+ * agree with each other and never consume the shared RNG stream.
+ */
+function pickScenario(eligible, character, flags) {
+  if (!eligible.length) return null;
+  const pinned = [...flags].find(f => typeof f === 'string' && f.startsWith('active_scenario:'))?.slice(16);
+  const byPriority = [...eligible].sort((a, b) => Number(b.id === pinned) - Number(a.id === pinned) ||
+    (b.priority ?? 0) - (a.priority ?? 0) || a.id.localeCompare(b.id));
+  const top = byPriority[0];
+  if (top.id === pinned || (top.priority ?? 0) >= MUST_WIN_PRIORITY || eligible.length === 1) return top;
+  const scored = byPriority.map(sc => ({ sc, weight: Math.max(0, (sc.weight ?? 1) * (1 + contextBoost(sc, character)) * repeatDecay(sc, character)) }));
+  const total = scored.reduce((s, x) => s + x.weight, 0);
+  if (!(total > 0)) return top;
+  const base = Number.isInteger(character.rng_seed) ? character.rng_seed >>> 0 : fnv(String(character.id ?? ''));
+  const key = fnv(`${Number(character.age ?? 0)}|${Object.keys(character.scenario_resolutions ?? {}).length}`);
+  let r = createRng((base ^ key) >>> 0).next() * total;
+  for (const x of scored) { r -= x.weight; if (r < 0) return x.sc; }
+  return scored.at(-1).sc;
+}
+
+/** Test/tool hook: add a validated pack to the in-memory index (reset by loadAllContentPacks). */
+export function registerContentPack(pack) {
+  const validation = validateContentPack(pack);
+  if (!validation.valid) throw new Error(`Invalid content pack: ${validation.errors.join(' | ')}`);
+  if (!scenarioIndex.size) loadAllContentPacks();
+  loadedPacks.push(pack);
+  pack.scenarios.forEach(sc => scenarioIndex.set(sc.id, { ...sc, pack_id: pack.pack_id, pack_name: pack.name }));
+  return validation;
 }
 
 export function adaptDilemmaToScenario(dilemma, character) {
@@ -154,8 +236,11 @@ export function adaptDilemmaToScenario(dilemma, character) {
 
 export function getNextScenarioAge(character) {
   if (!character || character.is_deceased) return null;
+  // Existence check only: never draws, so peeking ahead cannot change which storylet is picked later.
+  const hasDilemma = character.active_dilemma && !character.active_dilemma.is_resolved;
   for (let age = Number(character.age ?? 0) + 1; age <= 120; age++) {
-    if (getCurrentScenarioForCharacter({ ...character, age })) return age;
+    const future = { ...character, age };
+    if (eligibleScenarios(future, effectiveFlags(future)).length || hasDilemma) return age;
   }
   return null;
 }
@@ -410,6 +495,15 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
   character.hidden_flags = [...flags];
 
   const narration = outcome.narration ?? choice.description;
+  // Emergent life bookkeeping: cooldown memory, doors, NPC memories (all optional pack fields).
+  character.scenario_seen = [...(character.scenario_seen ?? []), { id: scenario.id, group: scenario.group ?? scenario.id, age: character.age ?? 0 }].slice(-40);
+  if (scenario.locks?.length || scenario.unlocks?.length) {
+    character.doors = { ...(character.doors ?? {}) };
+    for (const d of scenario.locks ?? []) character.doors[d] = false;
+    for (const d of scenario.unlocks ?? []) character.doors[d] = true;
+  }
+  for (const m of outcome.npc_memory ?? []) addCastMemory(character, m.role, m);
+
   character.history_log ??= [];
   character.history_log.push({
     age: character.age ?? 0,

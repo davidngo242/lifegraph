@@ -32,6 +32,8 @@ import {
 import { MiniGameType } from './minigames/MiniGameHostModal';
 import Tooltip from './Tooltip';
 import DynamicLifeTree from './rpg/DynamicLifeTree';
+import YearFocusPicker from './YearFocusPicker';
+import type { YearFocus } from '../lib/lifeTreeNodes';
 import { ALL_UNLOCKED, type Unlocks } from '../lib/unlocks';
 
 export interface ActionPointHubProps {
@@ -82,6 +84,9 @@ export interface ActionPointHubProps {
   hiddenFlags?: string[];
   isLoading: boolean;
   unlocks?: Unlocks;
+  showYearFocusPicker?: boolean;
+  yearFocusHint?: string | null;
+  onChooseYearFocus?: (focus: YearFocus) => void;
 }
 
 export default function ActionPointHub({
@@ -131,7 +136,10 @@ export default function ActionPointHub({
   onOpenPetSanctuary,
   hiddenFlags = [],
   isLoading,
-  unlocks = ALL_UNLOCKED
+  unlocks = ALL_UNLOCKED,
+  showYearFocusPicker = false,
+  yearFocusHint,
+  onChooseYearFocus
 }: ActionPointHubProps) {
   const [actionNotice, setActionNotice] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [activeButton, setActiveButton] = useState<string | null>(null);
@@ -189,6 +197,10 @@ export default function ActionPointHub({
           )}
           <span>{actionNotice.text}</span>
         </div>
+      )}
+
+      {showYearFocusPicker && onChooseYearFocus && (
+        <YearFocusPicker onChoose={onChooseYearFocus} hint={yearFocusHint} disabled={isLoading} />
       )}
 
       {/* DYNAMIC UNIFIED LIFE TREE: SOLE & COMPREHENSIVE LIVING STAGE */}

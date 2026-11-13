@@ -1,0 +1,30 @@
+{
+  "dictionary": "cast_roles",
+  "version": 1,
+  "values": [
+    { "id": "mentor", "label": "Người dìu dắt", "weight": 1,
+      "traits": ["nghiêm khắc", "kiên nhẫn", "kín tiếng"],
+      "goals": ["thấy bạn thành tài", "truyền nghề trước khi quá muộn"],
+      "secrets": ["từng thất bại vì chính lựa chọn mà mình khuyên bạn tránh", "đang giấu bệnh"] },
+    { "id": "rival", "label": "Địch thủ", "weight": 1,
+      "traits": ["hiếu thắng", "sĩ diện", "tính toán"],
+      "goals": ["vượt mặt bạn trước mắt cả làng", "giữ vị thế được cha mẹ kỳ vọng"],
+      "secrets": ["thực ra ngưỡng mộ bạn", "mang một món nợ không dám nói"] },
+    { "id": "love", "label": "Người thương", "weight": 1,
+      "traits": ["dịu dàng", "bướng bỉnh", "lặng lẽ"],
+      "goals": ["có một mái nhà yên ổn", "được tự quyết đời mình"],
+      "secrets": ["từng có một lời hứa với người khác", "sợ phải rời quê"] },
+    { "id": "creditor_or_benefactor", "label": "Chủ nợ hoặc ân nhân", "weight": 1,
+      "traits": ["sòng phẳng", "rộng rãi nhưng khó đoán", "nhớ dai"],
+      "goals": ["đòi lại điều mình đã bỏ ra", "tìm người xứng đáng để giúp"],
+      "secrets": ["có việc cần bạn làm đổi lại", "từng mắc nợ chính gia đình bạn"] },
+    { "id": "friend", "label": "Bạn", "weight": 1,
+      "traits": ["thẳng tính", "hay đùa", "trung thành"],
+      "goals": ["được rời làng đi thử vận", "ở lại chăm cha mẹ già"],
+      "secrets": ["ghen với bạn nhưng chưa bao giờ nói", "từng nói dối giúp bạn một lần"] },
+    { "id": "family", "label": "Người thân", "weight": 1,
+      "traits": ["lo xa", "cả nể", "cứng đầu"],
+      "goals": ["giữ cho nhà không tan", "thấy con cháu yên bề gia thất"],
+      "secrets": ["giấu một khoản tiền dành cho bạn", "giấu tin một người thân đã mất"] }
+  ]
+}

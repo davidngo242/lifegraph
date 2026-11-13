@@ -15,9 +15,15 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShor
   const shortcuts = [
     {
       key: 'Space',
-      description: 'Bước sang năm tiếp theo / tiếp tục nhanh tiến trình',
+      description: 'Khép năm / tiếp tục (từ 6 tuổi cần chọn trọng tâm năm trước)',
       category: 'Điều Khiển Lượt',
       badgeColor: 'border-emerald-500/40 text-emerald-800 dark:text-emerald-300 bg-emerald-500/10'
+    },
+    {
+      key: '1-5',
+      description: 'Chọn trọng tâm năm khi bộ chọn đang hiện (Sự nghiệp, Gia đình, Sức khỏe, Học hỏi, Trải nghiệm)',
+      category: 'Nhịp Năm',
+      badgeColor: 'border-amber-500/40 text-amber-800 dark:text-amber-300 bg-amber-500/10'
     },
     {
       key: '1',

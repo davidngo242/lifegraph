@@ -3,6 +3,7 @@
 // Global keyboard shortcuts, extracted verbatim from app/page.tsx (GĐ4).
 import { useEffect } from 'react';
 import type { GameState } from './useGameState';
+import { YEAR_FOCUSES } from '../lib/lifeTreeNodes';
 
 export function useGameHotkeys(g: GameState) {
   const {
@@ -13,7 +14,8 @@ export function useGameHotkeys(g: GameState) {
     setShowShortcutsModal, setShowGuideModal, setShowCinemaDecisionModal, setShowEmergencyModal, setShowAssetModal,
     setShowFamilyModal, setShowKarmaModal, setShowTarotCardModal, setShowSkillSelector, setShowAspirationUpgradeModal,
     setShow3DInspectorModal, setShowPetSanctuaryModal, setActiveView, toggleAudio, handleTimeSkipContinue,
-    handleSmartYearAdvance, handleTrilemmaSelect, handleSelectChoice,
+    requestYearAdvance, handleTrilemmaSelect, handleSelectChoice,
+    showYearFocusPicker, handleChooseYearFocus,
   } = g;
 
   useEffect(() => {
@@ -137,8 +139,16 @@ export function useGameHotkeys(g: GameState) {
         if (dilemma?.interaction_type === 'TIME_SKIP') {
           handleTimeSkipContinue('accumulate');
         } else {
-          handleSmartYearAdvance();
+          // Age >= 6 needs a year focus first; requestYearAdvance shows the hint instead of advancing.
+          requestYearAdvance();
         }
+        return;
+      }
+
+      // 7b. 1-5: choose the year focus first (takes priority over dilemma 1-3 until chosen)
+      if (showYearFocusPicker && ['1', '2', '3', '4', '5'].includes(key)) {
+        e.preventDefault();
+        handleChooseYearFocus(YEAR_FOCUSES[parseInt(key, 10) - 1]);
         return;
       }
 
@@ -179,6 +189,6 @@ export function useGameHotkeys(g: GameState) {
     character, activeView, dilemma, loading, isPlayingAudio, showRebirthModal, showAssetModal, showFamilyModal,
     showKarmaModal, showSkillSelector, showTarotCardModal, showGuideModal, showCinemaDecisionModal,
     showAspirationUpgradeModal, show3DInspectorModal, showPetSanctuaryModal, showShortcutsModal, showEmergencyModal,
-    activeMiniGame, heirNotice, incomingNpcEvent, showEpitaphModal
+    activeMiniGame, heirNotice, incomingNpcEvent, showEpitaphModal, showYearFocusPicker, requestYearAdvance
   ]);
 }

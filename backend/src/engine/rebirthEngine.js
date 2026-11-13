@@ -1,5 +1,7 @@
 import { getRandom } from './rng.js';
 import crypto from 'crypto';
+import { drawLifeSeed } from './lifeSeed.js';
+import { generateCast } from './npcEngine.js';
 import { getCountryBigData, generateCulturallyAuthenticName, extractFamilySurname } from '../data/countryBigData.js';
 
 // Country Tier Distribution: T1 (15%), T2 (60%), T3 (25%)
@@ -756,9 +758,15 @@ export function executeProceduralRebirth(karmaPerks = {}, lineageParent = null) 
     : (isHungryGhost ? 0 : chosenBackground.starting_endowment);
 
   const charId = crypto.randomUUID();
+  // Emergent life: seed + cast are drawn last so the stream used above is unchanged up to here.
+  const life_seed = drawLifeSeed();
+  const cast = generateCast(life_seed);
 
   return {
     id: charId,
+    life_seed,
+    cast,
+    year_focus: null,
     name,
     gender: gender,
     age: 0,

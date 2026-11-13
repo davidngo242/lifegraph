@@ -35,9 +35,22 @@
               "max_age": { "type": "integer" },
               "required_flags": { "type": "array", "items": { "type": "string" } },
               "excluded_flags": { "type": "array", "items": { "type": "string" } },
-              "required_knowledge": { "type": "array", "items": { "type": "string" } }
+              "required_knowledge": { "type": "array", "items": { "type": "string" } },
+              "era": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+              "fate_thread": { "type": "string" },
+              "requires_npc": {
+                "type": "object",
+                "required": ["role"],
+                "properties": { "role": { "type": "string" }, "memory_has": { "type": "string" } }
+              },
+              "min_quality": { "type": "object", "additionalProperties": { "type": "number" } }
             }
           },
+          "weight": { "type": "number", "exclusiveMinimum": 0 },
+          "cooldown_years": { "type": "integer", "minimum": 0 },
+          "group": { "type": "string" },
+          "locks": { "type": "array", "items": { "type": "string" } },
+          "unlocks": { "type": "array", "items": { "type": "string" } },
           "scenes": {
             "type": "array",
             "items": {

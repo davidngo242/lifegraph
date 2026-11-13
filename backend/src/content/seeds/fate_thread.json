@@ -1,0 +1,14 @@
+{
+  "dictionary": "fate_thread",
+  "version": 1,
+  "values": [
+    { "id": "cha_giau_no", "label": "Cha giấu món nợ máu", "weight": 2,
+      "cast_secret": { "role": "family", "secret": "giấu một món nợ máu từ trước khi bạn chào đời" } },
+    { "id": "tai_nang_yeu_menh", "label": "Tài năng yểu mệnh", "weight": 1,
+      "cast_secret": { "role": "mentor", "secret": "biết tài năng của bạn đi kèm một cái giá về tuổi thọ" } },
+    { "id": "nguoi_thuong_that_lac", "label": "Người thương thất lạc", "weight": 1,
+      "cast_secret": { "role": "love", "secret": "từng bị buộc rời đi và vẫn chờ một lời giải thích" } },
+    { "id": "di_san_bi_mat", "label": "Di sản bí mật của dòng họ", "weight": 1,
+      "cast_secret": { "role": "creditor_or_benefactor", "secret": "giữ một di vật của dòng họ bạn mà chưa ai biết" } }
+  ]
+}
