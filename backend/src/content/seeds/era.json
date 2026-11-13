@@ -1,0 +1,24 @@
+{
+  "dictionary": "era",
+  "version": 1,
+  "values": [
+    {
+      "id": "lang_hau_chien",
+      "label": "Làng hậu chiến",
+      "weight": 3,
+      "names": {
+        "surnames": ["Nguyễn", "Trần", "Lê", "Phạm", "Võ", "Đặng"],
+        "given": ["Tám", "Bảy", "Hạnh", "Lụa", "Sáu", "Thìn", "Mận", "Cúc", "Bền", "Khoa"]
+      }
+    },
+    {
+      "id": "any",
+      "label": "Không gắn thời đại",
+      "weight": 1,
+      "names": {
+        "surnames": ["Nguyễn", "Trần", "Lê", "Hoàng", "Phan", "Bùi"],
+        "given": ["Minh", "Lan", "Hùng", "Mai", "Quân", "Thảo", "Nam", "Yến", "Đức", "Hà"]
+      }
+    }
+  ]
+}

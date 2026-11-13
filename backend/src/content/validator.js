@@ -1,5 +1,68 @@
 // backend/src/content/validator.js
 
+const SEED_DICTIONARIES = ['era', 'family_state', 'fate_thread', 'temperament', 'cast_roles'];
+
+/** Validate the life-seed dictionaries (content/seeds/*.json). `dicts` is an array of parsed files. */
+export function validateSeedDictionaries(dicts) {
+  const errors = [];
+  const byName = {};
+  for (const d of Array.isArray(dicts) ? dicts : []) {
+    const path = `Seed[${d?.dictionary ?? 'unnamed'}]`;
+    if (!d || !SEED_DICTIONARIES.includes(d.dictionary)) { errors.push(`${path}: Unknown dictionary name.`); continue; }
+    if (byName[d.dictionary]) errors.push(`${path}: Duplicate dictionary.`);
+    byName[d.dictionary] = d;
+    if (!Array.isArray(d.values) || d.values.length === 0) { errors.push(`${path}: values must be a non-empty array.`); continue; }
+    const ids = new Set();
+    d.values.forEach((v, i) => {
+      if (!v?.id || typeof v.id !== 'string') errors.push(`${path}.values[${i}]: Missing id.`);
+      else if (ids.has(v.id)) errors.push(`${path}.values[${i}]: Duplicate id '${v.id}'.`);
+      else ids.add(v.id);
+      if (!v?.label) errors.push(`${path}.values[${i}]: Missing label.`);
+      if (!(Number(v?.weight) > 0)) errors.push(`${path}.values[${i}]: weight must be a positive number.`);
+    });
+  }
+  for (const name of SEED_DICTIONARIES) if (!byName[name]) errors.push(`Missing seed dictionary '${name}'.`);
+  if (byName.era) {
+    for (const required of ['any', 'lang_hau_chien'])
+      if (!byName.era.values?.some(v => v.id === required)) errors.push(`Seed[era]: must contain '${required}'.`);
+    for (const v of byName.era.values ?? []) {
+      if (!Array.isArray(v.names?.surnames) || !v.names.surnames.length || !Array.isArray(v.names?.given) || !v.names.given.length)
+        errors.push(`Seed[era].${v.id}: names.surnames and names.given are required.`);
+    }
+  }
+  const roles = new Set((byName.cast_roles?.values ?? []).map(v => v.id));
+  for (const v of byName.cast_roles?.values ?? []) {
+    for (const k of ['traits', 'goals', 'secrets'])
+      if (!Array.isArray(v[k]) || !v[k].length) errors.push(`Seed[cast_roles].${v.id}: ${k} must be a non-empty array.`);
+  }
+  for (const v of byName.fate_thread?.values ?? []) {
+    if (v.cast_secret && (!roles.has(v.cast_secret.role) || !v.cast_secret.secret))
+      errors.push(`Seed[fate_thread].${v.id}: cast_secret needs a known role and a secret.`);
+  }
+  return { valid: errors.length === 0, errors };
+}
+
+/** Optional storylet fields: era, requires_npc, fate_thread, min_quality, weight, cooldown_years, group, locks, unlocks. */
+function validateStoryletFields(sc, scPath, errors) {
+  const p = sc.prerequisites ?? {};
+  const strArray = v => Array.isArray(v) && v.every(x => typeof x === 'string');
+  if (p.era !== undefined && !(strArray(p.era) && p.era.length)) errors.push(`${scPath}: prerequisites.era must be a non-empty string array.`);
+  if (p.fate_thread !== undefined && typeof p.fate_thread !== 'string') errors.push(`${scPath}: prerequisites.fate_thread must be a string.`);
+  if (p.requires_npc !== undefined) {
+    const r = p.requires_npc;
+    if (!r || typeof r !== 'object' || typeof r.role !== 'string' || (r.memory_has !== undefined && typeof r.memory_has !== 'string'))
+      errors.push(`${scPath}: prerequisites.requires_npc must be {role: string, memory_has?: string}.`);
+  }
+  const mq = p.min_quality;
+  if (mq !== undefined && (!mq || typeof mq !== 'object' || Array.isArray(mq) || !Object.values(mq).every(Number.isFinite)))
+    errors.push(`${scPath}: prerequisites.min_quality must map names to numbers.`);
+  if (sc.weight !== undefined && !(Number.isFinite(sc.weight) && sc.weight > 0)) errors.push(`${scPath}: weight must be a positive number.`);
+  if (sc.cooldown_years !== undefined && !(Number.isInteger(sc.cooldown_years) && sc.cooldown_years >= 0)) errors.push(`${scPath}: cooldown_years must be a non-negative integer.`);
+  if (sc.group !== undefined && typeof sc.group !== 'string') errors.push(`${scPath}: group must be a string.`);
+  for (const k of ['locks', 'unlocks'])
+    if (sc[k] !== undefined && !strArray(sc[k])) errors.push(`${scPath}: ${k} must be a string array.`);
+}
+
 export function validateContentPack(pack) {
   const errors = [];
   const warnings = [];
@@ -29,6 +92,7 @@ export function validateContentPack(pack) {
     else scenarioIds.add(sc.id);
 
     if (!sc.title) errors.push(`${scPath}: Missing title.`);
+    validateStoryletFields(sc, scPath, errors);
     if (!Array.isArray(sc.scenes) || sc.scenes.length === 0) {
       errors.push(`${scPath}: Must have at least one 2D scene.`);
     } else {

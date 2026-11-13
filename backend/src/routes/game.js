@@ -45,7 +45,9 @@ import { compileSystemPrompt } from '../engine/promptCompiler.js';
 import { generateDilemma } from '../engine/aiGameMaster.js';
 import { getChildhoodMilestones, generateLocalizedName, NAMES_BY_COUNTRY } from '../engine/rebirthEngine.js';
 import { generateCharacterVisuals } from '../engine/avatarEngine.js';
-import { evaluateNpcLongTermArc } from '../engine/npcEngine.js';
+import { evaluateNpcLongTermArc, generateCast } from '../engine/npcEngine.js';
+import { drawLifeSeed, lifeSeedOf } from '../engine/lifeSeed.js';
+import { YEAR_FOCUSES, composeYearJournal } from '../engine/yearJournal.js';
 import { checkDelayedDominoFuses, updateEventTagWindow, recordExperiencedScenario } from '../engine/antiLoopEngine.js';
 import { evaluateAspirationProgress, assignInitialAspiration, ASPIRATIONS } from '../engine/aspirationEngine.js';
 import { getLocalizedMarketAssets, HOUSING_TIERS } from '../engine/assetMarketEngine.js';
@@ -935,8 +937,13 @@ const handleHeirRebirth = async (req, res) => {
     const generation = (parent.generation || 1) + 1;
     const isAdult = childAge >= 18;
 
+    // Emergent life: the heir keeps the family's era but draws a fresh seed and a new cast.
+    const heirSeed = { ...drawLifeSeed(), era: lifeSeedOf(parent).era };
     const newCharacter = {
       id: childId,
+      life_seed: heirSeed,
+      cast: generateCast(heirSeed),
+      year_focus: null,
       name: childName,
       gender: childRecord?.gender || (getRandom() > 0.5 ? "Nam" : "Nữ"),
       nationality: parent.nationality || "Việt Nam",
@@ -3582,6 +3589,12 @@ router.post('/tick', async (req, res) => {
       character.history_log = history;
     }
 
+    // Close the year: one-line journal from this year's events, then clear the year focus.
+    character.year_journal = composeYearJournal(character);
+    character.year_log_cursor = (character.history_log ?? []).length;
+    character.year_focus = null;
+    if (passiveSummary?.annual_digest) passiveSummary.annual_digest.journal_line = character.year_journal;
+
     // Check if character died during passive phase or Reaper roll
     if (character.is_deceased) {
       await updateCharacter(character.id, character);
@@ -3788,6 +3801,23 @@ router.post('/scenario/transition', async (req, res) => {
     await updateCharacter(character.id, character);
     res.json({ success: true, current_scene_id: character.current_scene_id });
   } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+// POST /api/game/year/focus - choose this year's focus (null clears). /tick never requires it.
+router.post('/year/focus', async (req, res) => {
+  try {
+    const { focus } = req.body ?? {};
+    if (focus !== null && !YEAR_FOCUSES.includes(focus)) {
+      return res.status(400).json({ error: `Trọng tâm năm không hợp lệ. Chọn một trong: ${YEAR_FOCUSES.join(', ')}.` });
+    }
+    const character = await getLivingCharacter(res);
+    if (!character) return;
+    character.year_focus = focus;
+    const saved = await updateCharacter(character.id, character);
+    res.json({ success: true, character: saved });
+  } catch (err) {
+    res.status(500).json({ error: 'Không đặt được trọng tâm năm', message: err.message });
+  }
 });
 
 export default router;

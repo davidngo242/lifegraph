@@ -1,0 +1,9 @@
+{
+  "dictionary": "temperament",
+  "version": 1,
+  "values": [
+    { "id": "nong", "label": "Nóng", "weight": 1 },
+    { "id": "tram", "label": "Trầm", "weight": 1 },
+    { "id": "to_mo", "label": "Tò mò", "weight": 1 }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "dictionary": "family_state",
+  "version": 1,
+  "values": [
+    { "id": "no_nan", "label": "Nợ nần", "weight": 2 },
+    { "id": "danh_gia", "label": "Danh gia", "weight": 1 },
+    { "id": "con_nuoi", "label": "Con nuôi", "weight": 1 },
+    { "id": "cha_me_ly_tan", "label": "Cha mẹ ly tán", "weight": 1 },
+    { "id": "binh_thuong", "label": "Gia cảnh bình thường", "weight": 3 }
+  ]
+}
