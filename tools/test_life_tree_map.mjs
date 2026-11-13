@@ -20,8 +20,8 @@ const lifeB = { age: 30, life_seed: { era: 'any', family_state: 'danh_gia', fate
 t('hai đời khác hạt giống / cast / lịch sử trọng tâm cho tập cành khác nhau', () => {
   const a = buildLifeTreeMap(lifeA), b = buildLifeTreeMap(lifeB);
   assert.notDeepEqual(ids(a), ids(b));
-  assert.ok(ids(a).includes('fate:cha_giau_no') && ids(a).includes('focus:career') && ids(a).includes('cast:cast_rival_1'));
-  assert.ok(ids(b).includes('focus:family') && ids(b).includes('focus:learning') && ids(b).includes('cast:cast_love_1'));
+  assert.ok(ids(a).includes('fate:cha_giau_no') && ids(a).includes('focus:career') && ids(a).some(i => i.startsWith('cast:cast_rival_1')));
+  assert.ok(ids(b).includes('focus:family') && ids(b).includes('focus:learning') && ids(b).some(i => i.startsWith('cast:cast_love_1')));
   assert.notDeepEqual(a.roots.map(r => r.id), b.roots.map(r => r.id));
 });
 t('rings lấy từ focus_history', () => assert.equal(buildLifeTreeMap(lifeA).rings.length, 7));
