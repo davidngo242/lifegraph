@@ -85,10 +85,9 @@ Mỗi năm có tối đa 3 bước, tổng khoảng 20–40 giây:
 
 Quy tắc cho Space:
 - **Space chỉ còn nghĩa "khép năm"** sau khi đã chọn trọng tâm. Chưa chọn trọng tâm thì Space không sang năm mà gợi ý chọn.
-- Có **chế độ "Trôi năm"** (tuỳ chọn, mặc định tắt): cho người quen chơi sang năm nhanh, nhưng mỗi 5 năm game **dừng lại** nếu có biến cố nóng. Cảnh báo rõ rằng trôi năm làm nhân vật tự chọn theo `temperament`.
 - Hành động trong năm giới hạn bằng AP như hiện tại, nên chọn việc này là bỏ việc kia.
 
-Nút "sang năm không chọn" cũ được giữ làm đường tắt của "Trôi năm", không xoá hẳn để không phá người chơi cũ.
+Không có chế độ trôi năm: Sếp đã quyết bỏ hẳn (2026-11-13). Nút "sang năm không chọn" cũ bị gỡ khi Đợt 2 xong.
 
 ## 6. Cây Sinh Mệnh sống (xử lý P3, liên kết với Sếp yêu cầu)
 
@@ -172,12 +171,13 @@ Dùng `tools/balance_policies.mjs` mở rộng, mô phỏng 300 đời mỗi ki�
 | Giọng văn AI không hợp | Sếp duyệt mẫu ở Đợt 0 trước khi sinh hàng loạt |
 | Test vàng vỡ | Tái sinh có chủ đích, so sánh trước/sau, ghi trong PR |
 | Cây quá tải thị giác | Giới hạn tối đa 6 cành chính hiện cùng lúc; luật "tối đa 3 nút hành động" ở màn hình chính |
-| Người chơi quen Space nhanh thấy phiền | Chế độ "Trôi năm" tuỳ chọn |
+| Người chơi quen Space nhanh thấy phiền | Nhịp năm chỉ 20–40 giây; chọn trọng tâm bằng phím 1–5 |
 | Phạm vi quá lớn | Chỉ làm một thời đại; chưa đạt mục 9 thì không mở rộng |
 
-## 11. Việc cần Sếp quyết
+## 11. Quyết định của Sếp (2026-11-13)
 
-1. Duyệt hướng và lộ trình ở mục 8.
-2. Thời đại thử nghiệm đầu tiên: làng hậu chiến (đề xuất) hay thời đại khác?
-3. "Trôi năm": giữ làm tuỳ chọn mặc định tắt (đề xuất) hay bỏ hẳn?
-4. Cho phép em viết mẫu 5 mẩu truyện ở Đợt 0 để Sếp chấm giọng văn trước khi làm tiếp?
+1. Duyệt hướng và lộ trình mục 8.
+2. Thời đại thử: làng hậu chiến.
+3. Bỏ hẳn "Trôi năm".
+4. Em viết 5 mẩu truyện mẫu để Sếp chấm giọng văn: `docs/emergent-life-samples-2026-11-13.md`.
+5. Kiểm thử giai đoạn này chỉ ở mức cơ bản (build, test hiện có, test mới cho phần mới); chưa chạy 10 vòng.
