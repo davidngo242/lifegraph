@@ -43,14 +43,20 @@
                 "required": ["role"],
                 "properties": { "role": { "type": "string" }, "memory_has": { "type": "string" } }
               },
+              "family_state": { "type": "array", "items": { "type": "string" } },
+              "doors_closed": { "type": "array", "items": { "type": "string" } },
+              "doors_open": { "type": "array", "items": { "type": "string" } },
               "min_quality": { "type": "object", "additionalProperties": { "type": "number" } }
             }
           },
           "weight": { "type": "number", "exclusiveMinimum": 0 },
           "cooldown_years": { "type": "integer", "minimum": 0 },
           "group": { "type": "string" },
+          "yields_to_group": { "type": "string" },
           "locks": { "type": "array", "items": { "type": "string" } },
           "unlocks": { "type": "array", "items": { "type": "string" } },
+          "persist_doors": { "type": "array", "items": { "type": "string" } },
+          "door_labels": { "type": "object", "additionalProperties": { "type": "string", "maxLength": 60 } },
           "scenes": {
             "type": "array",
             "items": {
@@ -117,6 +123,11 @@
                   "items": { "type": "string" }
                 },
                 "cost_ap": { "type": "integer" },
+                "irreversible": { "type": "boolean" },
+                "locks": { "type": "array", "items": { "type": "string" } },
+                "unlocks": { "type": "array", "items": { "type": "string" } },
+                "persist_doors": { "type": "array", "items": { "type": "string" } },
+                "door_labels": { "type": "object", "additionalProperties": { "type": "string", "maxLength": 60 } },
                 "check": {
                   "type": "object",
                   "properties": {

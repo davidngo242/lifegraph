@@ -165,6 +165,7 @@
         }
       ],
       "priority": 100,
+      "yields_to_group": "hoa_giai",
       "completion_flag": "legacy_resolved",
       "knowledge_labels": {
         "estate_tax_planning_wisdom": {

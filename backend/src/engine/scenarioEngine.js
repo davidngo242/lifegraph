@@ -1,6 +1,7 @@
 import { getRandom, createRng } from './rng.js';
 import { lifeSeedOf } from './lifeSeed.js';
 import { castRemembers, addCastMemory } from './npcEngine.js';
+import { applyDoors, normalizeDoors } from './worldMemory.js';
 // backend/src/engine/scenarioEngine.js
 import fs from 'fs';
 import path from 'path';
@@ -105,6 +106,12 @@ function meetsStoryletPrereqs(sc, character, flags) {
     const npc = castNpc(character, p.requires_npc.role);
     if (!npc || (p.requires_npc.memory_has && !castRemembers(npc, p.requires_npc.memory_has))) return false;
   }
+  if (Array.isArray(p.family_state) && p.family_state.length && !p.family_state.includes(seed.family_state)) return false;
+  if (p.doors_closed?.length || p.doors_open?.length) {
+    const doors = normalizeDoors(character.doors);
+    if (!(p.doors_closed ?? []).every(id => doors[id]?.open === false)) return false;
+    if (!(p.doors_open ?? []).every(id => doors[id]?.open === true)) return false;
+  }
   for (const [key, min] of Object.entries(p.min_quality ?? {})) if (qualityOf(character, flags, key) < min) return false;
   return true;
 }
@@ -132,6 +139,17 @@ function repeatDecay(sc, character) {
   return recent ? COOLDOWN_DECAY : 1;
 }
 
+const YIELD_YEARS = 12;
+/** True when a priority>=90 milestone with yields_to_group has already seen that group within the last 12 years. */
+function milestoneYields(sc, character) {
+  const group = sc.yields_to_group;
+  if (!group) return false;
+  const age = Number(character.age ?? 0);
+  const within = a => Number.isFinite(a) && age - a <= YIELD_YEARS;
+  if ((character.scenario_seen ?? []).some(s => s.group === group && within(s.age))) return true;
+  return (character.history_log ?? []).some(e => e?.scenario_id && (scenarioIndex.get(e.scenario_id)?.group ?? e.scenario_id) === group && within(e.age));
+}
+
 const fnv = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
 
 /**
@@ -146,7 +164,9 @@ function pickScenario(eligible, character, flags) {
   const byPriority = [...eligible].sort((a, b) => Number(b.id === pinned) - Number(a.id === pinned) ||
     (b.priority ?? 0) - (a.priority ?? 0) || a.id.localeCompare(b.id));
   const top = byPriority[0];
-  if (top.id === pinned || (top.priority ?? 0) >= MUST_WIN_PRIORITY || eligible.length === 1) return top;
+  if (eligible.length === 1) return top;
+  const forced = byPriority.find(sc => sc.id === pinned || ((sc.priority ?? 0) >= MUST_WIN_PRIORITY && !milestoneYields(sc, character)));
+  if (forced) return forced;
   const scored = byPriority.map(sc => ({ sc, weight: Math.max(0, (sc.weight ?? 1) * (1 + contextBoost(sc, character)) * repeatDecay(sc, character)) }));
   const total = scored.reduce((s, x) => s + x.weight, 0);
   if (!(total > 0)) return top;
@@ -245,9 +265,27 @@ export function getNextScenarioAge(character) {
   return null;
 }
 
+// ---- Name placeholders: {mentor} {rival} {love} {creditor_or_benefactor} {friend} {family} ----------
+export const NAME_PLACEHOLDERS = { mentor: 'người thầy', rival: 'kẻ đối đầu', love: 'người thương', creditor_or_benefactor: 'người chủ nợ', friend: 'người bạn', family: 'người thân' };
+const cleanName = n => String(n ?? '').replace(/[\u0000-\u001f\u007f{}<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 60);
+
+/** Replace known {role} tokens in one string; unknown braces stay untouched. Never throws. */
+export function fillNames(text, character) {
+  if (typeof text !== 'string' || !text.includes('{')) return text;
+  return text.replace(/\{(mentor|rival|love|creditor_or_benefactor|friend|family)\}/g, (_, role) =>
+    cleanName((Array.isArray(character?.cast) ? character.cast : []).find(n => n?.role === role)?.name) || NAME_PLACEHOLDERS[role]);
+}
+
+function fillNamesDeep(value, character) {
+  if (typeof value === 'string') return fillNames(value, character);
+  if (Array.isArray(value)) return value.map(v => fillNamesDeep(v, character));
+  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, fillNamesDeep(v, character)]));
+  return value;
+}
+
 function personalizeScenario(scenario, character) {
   if (!scenario || !character) return scenario;
-  const cloned = JSON.parse(JSON.stringify(scenario));
+  const cloned = structuredClone(scenario); // cast names are filled last so legacy An/Mai replacements never rewrite them
   const charName = character.name ?? 'Nhân vật';
   const isFemale = (character.gender === 'female' || character.gender === 'Nữ');
 
@@ -289,7 +327,7 @@ function personalizeScenario(scenario, character) {
     });
   });
 
-  return cloned;
+  return fillNamesDeep(cloned, character);
 }
 
 function living(character) {
@@ -348,7 +386,7 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
     }
   }
 
-  const scenario = scenarioId ? (getScenarioById(scenarioId) || getCurrentScenarioForCharacter(character)) : getCurrentScenarioForCharacter(character);
+  const scenario = scenarioId ? (fillNamesDeep(getScenarioById(scenarioId), character) || getCurrentScenarioForCharacter(character)) : getCurrentScenarioForCharacter(character);
   if (!scenario) throw new Error('Không tìm thấy kịch bản khả dụng.');
 
   // 0. Handle Postpone / Continue Observing
@@ -497,11 +535,7 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
   const narration = outcome.narration ?? choice.description;
   // Emergent life bookkeeping: cooldown memory, doors, NPC memories (all optional pack fields).
   character.scenario_seen = [...(character.scenario_seen ?? []), { id: scenario.id, group: scenario.group ?? scenario.id, age: character.age ?? 0 }].slice(-40);
-  if (scenario.locks?.length || scenario.unlocks?.length) {
-    character.doors = { ...(character.doors ?? {}) };
-    for (const d of scenario.locks ?? []) character.doors[d] = false;
-    for (const d of scenario.unlocks ?? []) character.doors[d] = true;
-  }
+  applyDoors(character, scenario, choice);
   for (const m of outcome.npc_memory ?? []) addCastMemory(character, m.role, m);
 
   character.history_log ??= [];
