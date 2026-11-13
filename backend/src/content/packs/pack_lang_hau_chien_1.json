@@ -16,6 +16,11 @@
         "max_age": 10,
         "era": [
           "lang_hau_chien"
+        ],
+        "family_state": [
+          "binh_thuong",
+          "no_nan",
+          "cha_me_ly_tan"
         ]
       },
       "weight": 2,
@@ -438,6 +443,11 @@
         "max_age": 9,
         "era": [
           "lang_hau_chien"
+        ],
+        "family_state": [
+          "no_nan",
+          "con_nuoi",
+          "cha_me_ly_tan"
         ]
       },
       "weight": 1,
@@ -555,6 +565,10 @@
         "max_age": 10,
         "era": [
           "lang_hau_chien"
+        ],
+        "family_state": [
+          "binh_thuong",
+          "danh_gia"
         ]
       },
       "weight": 1,
@@ -688,6 +702,10 @@
         "max_age": 15,
         "era": [
           "lang_hau_chien"
+        ],
+        "family_state": [
+          "binh_thuong",
+          "cha_me_ly_tan"
         ]
       },
       "weight": 1,
@@ -961,7 +979,8 @@
         "max_age": 17,
         "era": [
           "lang_hau_chien"
-        ]
+        ],
+        "fate_thread": "cha_giau_no"
       },
       "weight": 2,
       "cooldown_years": 10,
@@ -1095,6 +1114,10 @@
         "max_age": 18,
         "era": [
           "lang_hau_chien"
+        ],
+        "family_state": [
+          "binh_thuong",
+          "cha_me_ly_tan"
         ]
       },
       "weight": 2,
@@ -1237,7 +1260,11 @@
         ],
         "requires_npc": {
           "role": "mentor"
-        }
+        },
+        "family_state": [
+          "danh_gia",
+          "binh_thuong"
+        ]
       },
       "weight": 3,
       "cooldown_years": 10,
@@ -1380,7 +1407,11 @@
         ],
         "requires_npc": {
           "role": "love"
-        }
+        },
+        "family_state": [
+          "binh_thuong",
+          "danh_gia"
+        ]
       },
       "weight": 1,
       "cooldown_years": 4,
@@ -1519,7 +1550,12 @@
         ],
         "requires_npc": {
           "role": "love"
-        }
+        },
+        "family_state": [
+          "no_nan",
+          "con_nuoi",
+          "cha_me_ly_tan"
+        ]
       },
       "weight": 3,
       "cooldown_years": 8,
@@ -2102,6 +2138,10 @@
         "max_age": 45,
         "era": [
           "lang_hau_chien"
+        ],
+        "family_state": [
+          "binh_thuong",
+          "danh_gia"
         ]
       },
       "weight": 1,
@@ -2361,6 +2401,11 @@
         "max_age": 40,
         "era": [
           "lang_hau_chien"
+        ],
+        "family_state": [
+          "no_nan",
+          "con_nuoi",
+          "cha_me_ly_tan"
         ]
       },
       "weight": 1,
@@ -2631,6 +2676,11 @@
         "max_age": 45,
         "era": [
           "lang_hau_chien"
+        ],
+        "family_state": [
+          "con_nuoi",
+          "cha_me_ly_tan",
+          "danh_gia"
         ]
       },
       "weight": 2,
@@ -2891,6 +2941,10 @@
         "max_age": 55,
         "era": [
           "lang_hau_chien"
+        ],
+        "family_state": [
+          "danh_gia",
+          "binh_thuong"
         ]
       },
       "weight": 1,
@@ -3012,6 +3066,10 @@
         "max_age": 65,
         "era": [
           "lang_hau_chien"
+        ],
+        "family_state": [
+          "no_nan",
+          "danh_gia"
         ]
       },
       "weight": 1,
@@ -3135,7 +3193,11 @@
         ],
         "requires_npc": {
           "role": "family"
-        }
+        },
+        "family_state": [
+          "binh_thuong",
+          "con_nuoi"
+        ]
       },
       "weight": 2,
       "cooldown_years": 8,
@@ -3259,7 +3321,11 @@
         ],
         "requires_npc": {
           "role": "family"
-        }
+        },
+        "family_state": [
+          "binh_thuong",
+          "cha_me_ly_tan"
+        ]
       },
       "weight": 3,
       "cooldown_years": 20,

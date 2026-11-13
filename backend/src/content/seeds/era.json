@@ -15,6 +15,7 @@
       "id": "any",
       "label": "Không gắn thời đại",
       "weight": 1,
+      "drawable": false,
       "names": {
         "surnames": ["Nguyễn", "Trần", "Lê", "Hoàng", "Phan", "Bùi"],
         "given": ["Minh", "Lan", "Hùng", "Mai", "Quân", "Thảo", "Nam", "Yến", "Đức", "Hà"]
