@@ -51,7 +51,7 @@ export function collectInheritedKnowledge(parent) {
     if (f.startsWith('legacy:') && f.length > 7) out.add(f.slice(7));
     else if (LEGACY_FLAG_KNOWLEDGE[f]) out.add(LEGACY_FLAG_KNOWLEDGE[f]);
   }
-  return [...out];
+  return [...out].filter(k => typeof k === 'string' && k).map(k => k.slice(0, 60)).slice(-32);
 }
 
 /** Build the child's world_memory from the parent life and attach it to the (already generated) new character. Mutates `child`. */
@@ -82,7 +82,7 @@ export function applyWorldMemory(child, parent) {
     bloodline_id: prev.bloodline_id ?? parent.id,
     generation: generation + 1,
     npc_memories: memories.slice(-WORLD_NPC_MEMORY_MAX),
-    doors,
+    doors: Object.fromEntries(Object.entries(doors).slice(-40)),
     inherited_knowledge: knowledge
   };
   child.world_memory = world;
