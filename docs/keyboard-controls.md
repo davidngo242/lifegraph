@@ -18,7 +18,8 @@ Trong các tựa game mô phỏng cuộc đời dạng lượt (Turn-based Life 
 
 | Phím | Tên Thao Tác | Phân Loại | Ngữ Cảnh Hoạt Động | Điều Kiện Ràng Buộc | Mã Màu Ký Hiệu |
 | :---: | :--- | :--- | :--- | :--- | :--- |
-| <kbd>Space</kbd> | **Bước Sang Năm Mới / Tiếp Tục** | Tiến Trình | Buồng Lái Kiếp Sống (`activeView === 'game'`) | Nhân vật còn sống, không có modal che phủ, không gõ phím | Xanh ngọc lục bảo (`emerald`) |
+| <kbd>Space</kbd> | **Khép Năm / Tiếp Tục** | Tiến Trình | Buồng Lái Kiếp Sống (`activeView === 'game'`) | Nhân vật còn sống, không có modal che phủ, không gõ phím. Từ 6 tuổi chỉ khép năm khi đã chọn trọng tâm năm; chưa chọn thì Space chỉ nhắc và đưa tiêu điểm về bộ chọn | Xanh ngọc lục bảo (`emerald`) |
+| <kbd>1</kbd>–<kbd>5</kbd> | **Chọn Trọng Tâm Năm** | Nhịp Năm | Buồng Lái Kiếp Sống, bộ chọn trọng tâm đang hiện | Từ 6 tuổi, chưa chọn trọng tâm, không có biến cố chờ (1 Sự nghiệp, 2 Gia đình, 3 Sức khỏe, 4 Học hỏi, 5 Trải nghiệm). Khi có biến cố thì 1–3 chọn phương án | Vàng hổ phách (`amber`) |
 | <kbd>1</kbd> | **Chọn Lựa Chọn 1** | Quyết Định | Ngã rẽ / Đối thoại / Tam giác / Mind Stage 21:9 | Có biến cố đang chờ lựa chọn phương án | Vàng hổ phách (`amber`) |
 | <kbd>2</kbd> | **Chọn Lựa Chọn 2** | Quyết Định | Ngã rẽ / Đối thoại / Tam giác / Mind Stage 21:9 | Có biến cố đang chờ lựa chọn phương án | Vàng hổ phách (`amber`) |
 | <kbd>3</kbd> | **Chọn Lựa Chọn 3** | Quyết Định | Tam giác nghịch lý / Mind Stage 21:9 | Có ít nhất 3 lựa chọn khả dụng | Vàng hổ phách (`amber`) |
@@ -58,7 +59,8 @@ flowchart TD
     N -- "Đúng" --> O["Chặn phím hành động lượt chơi"]
     N -- "Không" --> P{"Phím nhấn là gì?"}
     
-    P -- "Phím Space" --> Q["Bước sang năm tiếp theo / TimeSkip Continue"]
+    P -- "Phím Space" --> Q["TimeSkip Continue, hoặc khép năm nếu đã có trọng tâm (dưới 6 tuổi không cần); chưa có thì nhắc chọn"]
+    P -- "Phím 1-5 (bộ chọn hiện, không biến cố)" --> R2["POST /year/focus"]
     P -- "Phím 1, 2, 3" --> R["handleSelectChoice / handleTrilemmaSelect theo index"]
     P -- "Phím khác" --> S["Không xử lý"]
 ```
@@ -73,7 +75,7 @@ Thanh công cụ `CommandBarHUD` được ghim cố định ở vị trí `stick
 
 ```text
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ [👁️ Chế Độ Xem Nhanh]  [🎬 Phòng Điện Ảnh D]  │  [⌨️ Phím Tắt: [1][2][3] | [Space] ?]  │  [🚨 CẤP CỨU KHẨN CẤP HP 24%] │
+│ [👁️ Chế Độ Xem Nhanh]  [🎬 Phòng Điện Ảnh D]  │  [⌨️ Phím Tắt: [1-5] | [Space] khép năm ?]  │  [🚨 CẤP CỨU KHẨN CẤP HP 24%] │
 │          (Vùng Trái - Góc Nhìn)                │          (Vùng Giữa - Phím Tắt)       │         (Vùng Phải - Cứu Nguy)         │
 └───────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -86,7 +88,7 @@ Thanh công cụ `CommandBarHUD` được ghim cố định ở vị trí `stick
   - Mở không gian toàn cảnh rạp chiếu bóng tỷ lệ 21:9 giúp người chơi tập trung tối đa vào bối cảnh kịch tính của ngã rẽ cuộc đời.
 
 ### 4.2. Vùng Giữa — Cụm Phím Tắt Nóng (Hotkey Affordance Hub)
-- Tích hợp sẵn các huy hiệu phím <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd>, <kbd>Space</kbd> và <kbd>?</kbd>.
+- Tích hợp sẵn các huy hiệu phím <kbd>1</kbd>–<kbd>5</kbd>, <kbd>Space</kbd> (khép năm) và <kbd>?</kbd>.
 - Khi người dùng nhấp vào cụm này, hệ thống mở modal `KeyboardShortcutsModal` liệt kê đầy đủ hướng dẫn tra cứu phím tắt.
 
 ### 4.3. Vùng Phải — Nút Cấp Cứu Khẩn Cấp (Emergency Rescue SOS)

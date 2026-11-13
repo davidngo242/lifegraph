@@ -16,6 +16,7 @@ export interface AnnualDigestData {
     net_change: number;
   };
   family_events: string[];
+  journal_line?: string;
   childhood_event?: {
     type: string;
     title: string;
@@ -84,6 +85,13 @@ export default function AnnualDigestBanner({
       <div className="text-xs font-bold text-[var(--text-primary)] leading-snug">
         {digest.headline}
       </div>
+
+      {/* Server-composed year journal line (absent for old saves) */}
+      {digest.journal_line && (
+        <div className="text-xs italic text-[var(--text-secondary)] leading-snug border-l-2 border-amber-500/60 pl-2">
+          {digest.journal_line}
+        </div>
+      )}
 
       {/* Milestone Game Button */}
       {digest.milestone_challenge && (
