@@ -285,7 +285,7 @@ function fillNamesDeep(value, character) {
 
 function personalizeScenario(scenario, character) {
   if (!scenario || !character) return scenario;
-  const cloned = fillNamesDeep(scenario, character);
+  const cloned = structuredClone(scenario); // cast names are filled last so legacy An/Mai replacements never rewrite them
   const charName = character.name ?? 'Nhân vật';
   const isFemale = (character.gender === 'female' || character.gender === 'Nữ');
 
@@ -327,7 +327,7 @@ function personalizeScenario(scenario, character) {
     });
   });
 
-  return cloned;
+  return fillNamesDeep(cloned, character);
 }
 
 function living(character) {

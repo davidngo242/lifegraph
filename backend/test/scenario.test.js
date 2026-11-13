@@ -10,6 +10,7 @@ const pin = sc => ({ ...fixture(sc.prerequisites.min_age), hidden_flags: [`activ
 
 test('all packs validate; every declared outcome changes the expected stats across every generated input case', () => {
   for (const p of packs) assert.equal(validateContentPack(p).valid, true, p.pack_id);
+  assert.ok(scenarios.length > 0, 'at least one scenario is loaded');
   const random = Math.random;
   let count = 0;
   try {
