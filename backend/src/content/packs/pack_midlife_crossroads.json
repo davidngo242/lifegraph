@@ -181,6 +181,7 @@
         }
       ],
       "priority": 100,
+      "yields_to_group": "tết_nhà",
       "completion_flag": "midlife_resolved",
       "knowledge_labels": {
         "joint_venture_expansion_data": {

@@ -463,6 +463,7 @@
         }
       ],
       "priority": 100,
+      "yields_to_group": "hôn_nhân",
       "completion_flag": "career_crossroads_resolved"
     }
   ]

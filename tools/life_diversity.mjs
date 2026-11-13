@@ -18,12 +18,15 @@ process.env.NODE_ENV = 'test';
 process.env.LIFEGRAPH_DATA_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'lifegraph-diversity-'));
 process.env.DATABASE_URL = ''; process.env.GEMINI_API_KEY = '';
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..', 'backend', 'src');
-const { setRngStateResolver } = await import(`${root}/engine/rng.js`);
+const { setRngStateResolver, createRng } = await import(`${root}/engine/rng.js`);
 const { executeProceduralRebirth } = await import(`${root}/engine/rebirthEngine.js`);
 const { getCurrentScenarioForCharacter, resolveMindStageChoice, registerContentPack } = await import(`${root}/engine/scenarioEngine.js`);
 
 const arg = (name, dflt) => { const i = process.argv.indexOf(name); return i < 0 ? dflt : process.argv[i + 1]; };
 const LIVES = Number(arg('--lives', 300));
+const FORCE_ERA = arg('--era', null); // e.g. lang_hau_chien: measure one era's content (the seed dictionary also draws era 'any', which has no storylets yet)
+const POLICY = arg('--policy', 'random'); // random = like a player (random choice per scenario); first = always choice 0
+const mix = n => { let h = (n + 0x9E3779B9) >>> 0; h = Math.imul(h ^ (h >>> 16), 0x85EBCA6B); h = Math.imul(h ^ (h >>> 13), 0xC2B2AE35); return (h ^ (h >>> 16)) >>> 0; };
 const MAX_AGE = 90;
 
 if (process.argv.includes('--demo-pack')) {
@@ -47,28 +50,34 @@ if (process.argv.includes('--demo-pack')) {
 
 const lives = [];
 for (let i = 0; i < LIVES; i++) {
-  const state = { seed: 100000 + i, n: 0 };
+  const state = { seed: mix(i + 1), n: 0 }; // well-mixed seeds: consecutive integers give correlated mulberry streams
   setRngStateResolver(() => state);
   const c = executeProceduralRebirth({}, null);
   c.rng_seed = state.seed;
+  if (FORCE_ERA) c.life_seed = { ...c.life_seed, era: FORCE_ERA };
   const byAge = {};
   for (c.age = 0; c.age <= MAX_AGE; c.age++) {
     c.action_points = 10;
     const sc = getCurrentScenarioForCharacter(c);
     if (!sc || sc.id.startsWith('dilemma')) continue;
     byAge[c.age] = sc.id;
-    resolveMindStageChoice(c, sc.choices[0].id, 0, [], sc.id);
+    const pick = POLICY === 'first' ? 0 : Math.floor(createRng(mix(state.seed ^ c.age)).next() * sc.choices.length);
+    resolveMindStageChoice(c, sc.choices[pick].id, 0, [], sc.id);
   }
   lives.push({ byAge, ids: new Set(Object.values(byAge)), seed: c.life_seed });
 }
 
 let jac = 0, same = 0, sharedAges = 0, pairs = 0;
+const perEra = {}; // pairs of lives of the SAME era (the fair comparison: era-less lives can only meet the old fixed packs)
 for (let a = 0; a < lives.length; a++) for (let b = a + 1; b < lives.length; b++) {
   const A = lives[a], B = lives[b];
   const inter = [...A.ids].filter(id => B.ids.has(id)).length;
   const union = A.ids.size + B.ids.size - inter;
   jac += union ? inter / union : 1; pairs++;
-  for (const age of Object.keys(A.byAge)) if (age in B.byAge) { sharedAges++; if (A.byAge[age] === B.byAge[age]) same++; }
+  let sa = 0, sm = 0;
+  for (const age of Object.keys(A.byAge)) if (age in B.byAge) { sa++; if (A.byAge[age] === B.byAge[age]) sm++; }
+  sharedAges += sa; same += sm;
+  if (A.seed.era === B.seed.era) { const e = (perEra[A.seed.era] ??= { j: 0, sa: 0, sm: 0, p: 0 }); e.j += union ? inter / union : 1; e.sa += sa; e.sm += sm; e.p++; }
 }
 const counts = {}; let total = 0;
 for (const l of lives) for (const id of l.ids) { counts[id] = (counts[id] ?? 0) + 1; total++; }
@@ -79,3 +88,12 @@ console.log(`distinct life seeds: ${new Set(lives.map(l => JSON.stringify(l.seed
 console.log(`mean scenario-id overlap between two lives (Jaccard): ${(100 * jac / pairs).toFixed(1)}%   [target < 40%]`);
 console.log(`same scenario at the same age (among ages both lives met one): ${(100 * same / (sharedAges || 1)).toFixed(1)}%   [target <= 30%]`);
 console.log(`largest single-scenario share of encounters: ${topId} ${(100 * topN / total).toFixed(1)}%   [target <= 8%]`);
+
+const eraLives = {}; for (const l of lives) { const e = (eraLives[l.seed.era] ??= { n: 0, met: 0 }); e.n++; e.met += l.ids.size; }
+for (const [era, e] of Object.entries(perEra)) console.log(`  era ${era}: ${eraLives[era].n} lives, ${(eraLives[era].met / eraLives[era].n).toFixed(1)} scenarios/life, Jaccard ${(100 * e.j / e.p).toFixed(1)}%, same-age ${(100 * e.sm / (e.sa || 1)).toFixed(1)}%`);
+const everyone = Object.entries(counts).filter(([, n]) => n === LIVES).length;
+console.log(`scenarios met by 100% of lives: ${everyone}; by >=50%: ${Object.values(counts).filter(n => n >= LIVES / 2).length}; distinct scenarios seen: ${Object.keys(counts).length}; policy=${POLICY}`);
+
+const hist = Object.entries(counts).map(([id, n]) => [id, Math.round(100 * n / LIVES)]).sort((x, y) => y[1] - x[1]);
+console.log('met-by-share buckets (% of lives): ' + [[90, 101], [70, 90], [40, 70], [10, 40], [0, 10]].map(([lo, hi]) => `${lo}-${Math.min(hi, 100)}%: ${hist.filter(([, p]) => p >= lo && p < hi).length}`).join('  '));
+if (process.argv.includes('--list')) console.log(hist.map(([id, p]) => `${id}:${p}%`).join(' '));
