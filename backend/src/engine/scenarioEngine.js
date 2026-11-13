@@ -1,6 +1,7 @@
 import { getRandom, createRng } from './rng.js';
 import { lifeSeedOf } from './lifeSeed.js';
 import { castRemembers, addCastMemory } from './npcEngine.js';
+import { applyDoors } from './worldMemory.js';
 // backend/src/engine/scenarioEngine.js
 import fs from 'fs';
 import path from 'path';
@@ -497,11 +498,7 @@ export function resolveMindStageChoice(character, choiceId, apInvestment = 0, np
   const narration = outcome.narration ?? choice.description;
   // Emergent life bookkeeping: cooldown memory, doors, NPC memories (all optional pack fields).
   character.scenario_seen = [...(character.scenario_seen ?? []), { id: scenario.id, group: scenario.group ?? scenario.id, age: character.age ?? 0 }].slice(-40);
-  if (scenario.locks?.length || scenario.unlocks?.length) {
-    character.doors = { ...(character.doors ?? {}) };
-    for (const d of scenario.locks ?? []) character.doors[d] = false;
-    for (const d of scenario.unlocks ?? []) character.doors[d] = true;
-  }
+  applyDoors(character, scenario, choice);
   for (const m of outcome.npc_memory ?? []) addCastMemory(character, m.role, m);
 
   character.history_log ??= [];

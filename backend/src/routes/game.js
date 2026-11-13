@@ -46,6 +46,7 @@ import { generateDilemma } from '../engine/aiGameMaster.js';
 import { getChildhoodMilestones, generateLocalizedName, NAMES_BY_COUNTRY } from '../engine/rebirthEngine.js';
 import { generateCharacterVisuals } from '../engine/avatarEngine.js';
 import { evaluateNpcLongTermArc, generateCast } from '../engine/npcEngine.js';
+import { applyWorldMemory, buildEpitaphSummary } from '../engine/worldMemory.js';
 import { drawLifeSeed, lifeSeedOf } from '../engine/lifeSeed.js';
 import { YEAR_FOCUSES, composeYearJournal, recordFocusHistory } from '../engine/yearJournal.js';
 import { checkDelayedDominoFuses, updateEventTagWindow, recordExperiencedScenario } from '../engine/antiLoopEngine.js';
@@ -990,6 +991,8 @@ const handleHeirRebirth = async (req, res) => {
       global_indices: parent.global_indices || { economy: 65, social: 65, environment: 65 }
     };
 
+    applyWorldMemory(newCharacter, parent); // NPC grudges/debts, persistent doors, inherited knowledge (same bloodline)
+
     // 4. Save to Database
     await updateCharacter(newCharacter.id, newCharacter);
     
@@ -1051,7 +1054,7 @@ const handleHeirRebirth = async (req, res) => {
       cash: Number(parent.cash || 0),
       karma: parent.karma || 100,
       aspiration_title: parent.life_aspiration || "Gia Đạo Viên Mãn",
-      epitaph_quote: parent.epitaph || `Dày công gầy dựng cơ đồ đời ${parent.generation || 1}, trao truyền ngọn lửa cho hậu duệ.`,
+      epitaph_quote: parent.epitaph || buildEpitaphSummary(parent) || `Dày công gầy dựng cơ đồ đời ${parent.generation || 1}, trao truyền ngọn lửa cho hậu duệ.`,
       blessing: `Để lại cơ nghiệp ${(inheritedNetWorth).toLocaleString()} và phúc đức tổ tông.`
     });
 
@@ -1081,7 +1084,8 @@ const handleHeirRebirth = async (req, res) => {
         has_early_will: hasEarlyWill,
         inherited_amount: inheritedNetWorth,
         enemies_count: enemiesCount,
-        allies_count: alliesCount
+        allies_count: alliesCount,
+        epitaph_summary: buildEpitaphSummary(parent)
       }
     });
   } catch (err) {

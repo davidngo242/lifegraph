@@ -7,6 +7,7 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { executeProceduralRebirth } from '../engine/rebirthEngine.js';
 import { initializeStartingNpcs } from '../engine/npcEngine.js';
 import { setRngStateResolver, newSeed } from '../engine/rng.js';
+import { applyWorldMemory } from '../engine/worldMemory.js';
 import { SHARED_LINEAGE_SCHEMA } from './sharedLineageSchema.js';
 import { assertNotSandbox, inSandbox } from '../engine/sandbox.js';
 
@@ -736,6 +737,7 @@ export async function startNewRebirthGame(karmaPerks = {}, lineageParent = null)
   });
 
   const freshChar = seedInitialData(lineageParent, karmaPerks);
+  if (lineageParent) applyWorldMemory(freshChar, lineageParent); // same bloodline: NPC grudges/debts, persistent doors, inherited knowledge
   const store = getSessionData();
   if (!useMock && pool) {
     await updateCharacter(freshChar.id, freshChar);

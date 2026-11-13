@@ -79,16 +79,16 @@ export function generateCast(lifeSeed) {
 }
 
 /** Append a memory to the first cast member with that role; keep at most CAST_MEMORY_MAX by folding old ones into a summary. */
-export function addCastMemory(character, role, { tag, text = '' }, age = character.age ?? 0) {
+export function addCastMemory(character, role, { tag, text = '', persist }, age = character.age ?? 0) {
   const npc = (character.cast ?? []).find(n => n.role === role);
   if (!npc || !tag) return null;
   npc.memory ??= [];
-  npc.memory.push({ age, tag, text });
+  npc.memory.push(persist ? { age, tag, text, persist: true } : { age, tag, text });
   while (npc.memory.length > CAST_MEMORY_MAX) {
     const [a, b, ...rest] = npc.memory;
     const tags = [...new Set([...(a.tags ?? [a.tag]), ...(b.tags ?? [b.tag])])];
     const count = (a.count ?? 1) + (b.count ?? 1);
-    npc.memory = [{ age: b.age, tag: 'tom_tat', tags, count, text: `Nhiều chuyện cũ (${count} việc): ${tags.join(', ')}` }, ...rest];
+    npc.memory = [{ age: b.age, tag: 'tom_tat', tags, count, ...((a.persist || b.persist) ? { persist: true } : {}), text: `Nhiều chuyện cũ (${count} việc): ${tags.join(', ')}` }, ...rest];
   }
   return npc;
 }
