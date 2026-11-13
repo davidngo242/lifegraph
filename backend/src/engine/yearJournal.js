@@ -32,3 +32,13 @@ export function composeYearJournal(character) {
   const tail = events.length ? `: ${events.join('; ')}` : ' và một năm trôi qua êm đềm';
   return `Năm ${age} tuổi, ${focus}${tail}.`;
 }
+
+export const FOCUS_HISTORY_MAX = 120;
+
+/** Append {age, focus} for the year being closed (no-op without a valid focus). Capped at FOCUS_HISTORY_MAX. */
+export function recordFocusHistory(character) {
+  if (!YEAR_FOCUSES.includes(character.year_focus)) return;
+  const list = Array.isArray(character.focus_history) ? character.focus_history : [];
+  list.push({ age: character.age ?? 0, focus: character.year_focus });
+  character.focus_history = list.slice(-FOCUS_HISTORY_MAX);
+}

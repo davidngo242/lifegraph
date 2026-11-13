@@ -158,3 +158,17 @@ test('POST /year/focus validates the enum; /tick needs no focus, writes the jour
   assert.equal(t2.status, 200);
   assert.match(t2.data.passiveSummary.annual_digest.journal_line, /^Năm \d+ tuổi, bạn để năm tháng trôi/);
 });
+
+test('/tick appends focus_history {age, focus} only for years that had a focus, capped at 120', async () => {
+  const session = 'focus_hist_s'; await start(session, 78);
+  await api(session, '/year/focus', { focus: 'learning' });
+  const t = await api(session, '/tick', { advance_only: true });
+  const h = t.data.character.focus_history;
+  assert.equal(h.length, 1); assert.equal(h[0].focus, 'learning'); assert.equal(h[0].age, t.data.character.age);
+  const t2 = await api(session, '/tick', { advance_only: true });   // no focus: nothing appended
+  assert.equal(t2.data.character.focus_history.length, 1);
+  const { recordFocusHistory, FOCUS_HISTORY_MAX } = await import('../src/engine/yearJournal.js');
+  const c = { age: 1, year_focus: 'career', focus_history: Array.from({ length: FOCUS_HISTORY_MAX }, (_, i) => ({ age: i, focus: 'health' })) };
+  recordFocusHistory(c);
+  assert.equal(c.focus_history.length, FOCUS_HISTORY_MAX); assert.equal(c.focus_history.at(-1).focus, 'career');
+});
