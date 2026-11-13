@@ -41,3 +41,15 @@ test('Một Đời: lựa chọn sai và gọi khi chưa có chương bị từ 
   await call('motdoi_bad', '/start', {});
   assert.equal((await call('motdoi_bad', '/choose', { choice_id: 'khong_co' })).status, 400);
 });
+
+test('Một Đời: chọn đúng chương (scenario_id lệch bị từ chối), đời kết thúc không chọn thêm được, không tạo nhân vật game chính', async () => {
+  const s = 'motdoi_guard';
+  const r = await call(s, '/start', {});
+  assert.equal((await call(s, '/choose', { choice_id: r.data.scenario.choices[0].id, scenario_id: 'chuong_cu' })).status, 409);
+  let v = r;
+  for (let i = 0; i < 80 && v.data.status === 'playing'; i++) v = await call(s, '/choose', { choice_id: v.data.scenario.choices[0].id, scenario_id: v.data.scenario.id });
+  assert.equal(v.data.status, 'ended');
+  assert.equal((await call(s, '/choose', { choice_id: 'x' })).status, 409);
+  const main = await db.sessionContext.run({ sessionId: s }, () => db.getLatestCharacter());
+  assert.equal(main, null);
+});

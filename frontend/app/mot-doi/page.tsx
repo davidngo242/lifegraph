@@ -28,24 +28,28 @@ export default function MotDoiPage() {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
+  const lock = useRef(false);
 
   const run = useCallback(async (fn: () => Promise<View>) => {
-    setBusy(true); setError('');
+    if (lock.current) return;
+    lock.current = true; setBusy(true); setError('');
     try { setView(await fn()); topRef.current?.scrollIntoView({ block: 'start' }); }
     catch (e: any) { setError(e?.message || 'Có lỗi, thử lại sau nhé.'); }
-    finally { setBusy(false); }
+    finally { lock.current = false; setBusy(false); }
   }, []);
 
   useEffect(() => { run(() => apiGet<View>('/mot-doi/state')); }, [run]);
 
   const start = () => { setLastResult(null); run(() => apiPost<View>('/mot-doi/start', {})); };
   const choose = useCallback((id: string) => {
-    if (busy) return;
-    run(async () => { const v = await apiPost<View>('/mot-doi/choose', { choice_id: id }); setLastResult(v.result ?? null); return v; });
-  }, [busy, run]);
+    const scenarioId = view?.scenario?.id;
+    run(async () => { const v = await apiPost<View>('/mot-doi/choose', { choice_id: id, scenario_id: scenarioId }); setLastResult(v.result ?? null); return v; });
+  }, [view, run]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      const el = e.target as HTMLElement | null;
+      if (e.repeat || e.ctrlKey || e.metaKey || e.altKey || el?.closest('input,textarea,select,[contenteditable]')) return;
       const n = Number(e.key);
       const choices = view?.scenario?.choices;
       if (view?.status === 'playing' && choices && n >= 1 && n <= choices.length) choose(choices[n - 1].id);
@@ -70,10 +74,10 @@ export default function MotDoiPage() {
       <div className="mx-auto w-full max-w-2xl px-4 py-6 sm:py-10 space-y-5">
         <header className="flex items-center justify-between gap-3">
           <a href="/" className="inline-flex items-center min-h-[44px] text-sm font-semibold text-[var(--text-secondary)] underline underline-offset-4">← Về LifeGraph</a>
-          <span className="text-[12px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300">Chế độ thử nghiệm</span>
+          <span className="text-[12px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-900/40 dark:text-amber-200 dark:border-amber-700">Chế độ thử nghiệm</span>
         </header>
 
-        {error && <div role="alert" className="rounded-xl border border-rose-300 bg-rose-50 text-rose-900 px-4 py-3 text-sm font-medium">{error}</div>}
+        {error && <div role="alert" className="rounded-xl border border-rose-300 bg-rose-50 text-rose-900 dark:border-rose-700 dark:bg-rose-950 dark:text-rose-200 px-4 py-3 text-sm font-medium">{error}</div>}
 
         {(!view || view.status === 'none') && (
           <section className={`${card} text-center space-y-5 py-10`}>
@@ -127,9 +131,9 @@ export default function MotDoiPage() {
               <div className="space-y-2 pt-1">
                 {view.scenario.choices.map((ch, i) => (
                   <button key={ch.id} onClick={() => choose(ch.id)} disabled={busy}
-                    className="w-full text-left min-h-[56px] px-4 py-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-card-subtle)] hover:border-emerald-700 hover:bg-[var(--bg-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700 disabled:opacity-60 transition">
+                    className="w-full text-left min-h-[56px] px-4 py-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-card-subtle)] hover:border-emerald-700 dark:hover:border-emerald-400 hover:bg-[var(--bg-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700 disabled:opacity-60 transition">
                     <span className="font-bold">{i + 1}. {ch.title}</span>
-                    {ch.irreversible && <span className="ml-2 text-[12px] font-bold text-rose-800">🔒 Không quay đầu</span>}
+                    {ch.irreversible && <span className="ml-2 text-[12px] font-bold text-rose-800 dark:text-rose-300">🔒 Không quay đầu</span>}
                     {ch.hint && <span className="block text-sm text-[var(--text-secondary)] mt-0.5">{ch.hint}</span>}
                   </button>
                 ))}
@@ -166,7 +170,7 @@ export default function MotDoiPage() {
               )}
               <div className="flex flex-wrap justify-center gap-3 pt-2">
                 <button className={btnPrimary} onClick={share}>{copied ? 'Đã sao chép' : 'Chép văn bia để chia sẻ'}</button>
-                <button className="min-h-[48px] px-6 rounded-xl border-2 border-emerald-800 text-emerald-900 font-bold bg-transparent" onClick={start} disabled={busy}>Sống một đời khác</button>
+                <button className="min-h-[48px] px-6 rounded-xl border-2 border-emerald-800 text-emerald-900 dark:border-emerald-400 dark:text-emerald-300 font-bold bg-transparent" onClick={start} disabled={busy}>Sống một đời khác</button>
               </div>
             </section>
             <details className={card}>

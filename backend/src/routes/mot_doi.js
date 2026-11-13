@@ -60,7 +60,7 @@ function advance(s) {
     s.skipped.push(yearLine(c.age));
   }
   s.ended = true;
-  c.death_age = Math.min(c.age, s.lifespan);
+  c.death_age = Math.max(START_AGE, Math.min(c.age, s.lifespan));
 }
 
 function view(s) {
@@ -89,7 +89,12 @@ function view(s) {
   };
 }
 
-function getSession(req) { const s = sessions.get(getCurrentSessionId()); if (s) s.touched = Date.now(); return s; }
+function getSession(req) {
+  const id = getCurrentSessionId();
+  const s = sessions.get(id);
+  if (s) { s.touched = Date.now(); sessions.delete(id); sessions.set(id, s); } // LRU: phiên đang chơi xếp cuối, không bị đẩy ra trước
+  return s;
+}
 
 router.post('/start', (req, res) => {
   try {
@@ -107,6 +112,7 @@ router.post('/start', (req, res) => {
       advance(sess);
       return sess;
     });
+    sessions.delete(getCurrentSessionId());
     sessions.set(getCurrentSessionId(), s);
     res.json({ success: true, ...view(s) });
   } catch (err) {
@@ -123,6 +129,7 @@ router.get('/state', (req, res) => {
 router.post('/choose', (req, res) => {
   const s = getSession(req);
   if (!s || !s.pending) return res.status(409).json({ error: 'Chưa có chương nào đang chờ. Hãy mở một đời mới.' });
+  if (req.body?.scenario_id && req.body.scenario_id !== s.pending.id) return res.status(409).json({ error: 'Chương này đã qua, hãy tải lại.' });
   const choiceId = String(req.body?.choice_id ?? '');
   if (!s.pending.choices.some(ch => ch.id === choiceId)) return res.status(400).json({ error: 'Lựa chọn không hợp lệ.' });
   try {
