@@ -11,6 +11,7 @@ import type { AnnualDigestData } from '../components/AnnualDigestBanner';
 import type { AvatarReactionType } from '../components/Dynamic3DAvatar';
 import type { BannerActionFeedback } from '../components/CharacterHeroBanner';
 import { soundFx } from '../utils/soundEffects';
+import { normalizeYearFocus, YEAR_FOCUS_META, type YearFocus } from '../lib/lifeTreeNodes';
 
 type Feedback = Omit<BannerActionFeedback, 'timestamp'>;
 
@@ -85,6 +86,7 @@ export function useGameState() {
   const [incomingNpcEvent, setIncomingNpcEvent] = useState<any>(null);
   const [isYearEndModalOpen, setIsYearEndModalOpen] = useState<boolean>(false);
   const [isPledging, setIsPledging] = useState<boolean>(false);
+  const [focusHint, setFocusHint] = useState<string | null>(null);
 
   const triggerAvatarReaction = (reactionType: AvatarReactionType, durationMs: number = 3200) => {
     setAvatarReaction(reactionType);
@@ -135,7 +137,7 @@ export function useGameState() {
       if (data.incoming_npc_event !== undefined) setIncomingNpcEvent(data.incoming_npc_event);
       if (data.scenario !== undefined) setActiveScenario(data.scenario);
       if (data.aspiration) setAspiration(data.aspiration);
-      if (data.passiveSummary?.annual_digest) setAnnualDigest(data.passiveSummary.annual_digest);
+      { const d = data.passiveSummary?.annual_digest || data.annual_digest; if (d) setAnnualDigest(d); }
 
       // Natural Game Flow: If no character exists or character is dead, default to Home Portal
       if (!data.character || data.character?.is_deceased) {
@@ -211,7 +213,7 @@ export function useGameState() {
       }
       if (data.scenario !== undefined) setActiveScenario(data.scenario);
       if (data.aspiration) setAspiration(data.aspiration);
-      if (data.passiveSummary?.annual_digest) setAnnualDigest(data.passiveSummary.annual_digest);
+      { const d = data.passiveSummary?.annual_digest || data.annual_digest; if (d) setAnnualDigest(d); }
     } catch (err: any) {
       console.error("Interaction submission error:", err);
       setErrorMsg(err.message || "Lỗi xử lý lượt chơi.");
@@ -283,6 +285,46 @@ export function useGameState() {
     } else {
       await handleQuickYearAdvance();
     }
+  };
+
+  // Year rhythm (Đợt 2): from age 6 the player picks a focus before the year can close.
+  const yearFocus = normalizeYearFocus(character?.year_focus);
+  const needsYearFocus = Boolean(character && !character.is_deceased && (character.age || 0) >= 6 && !yearFocus);
+  const showYearFocusPicker = needsYearFocus && !dilemma;
+
+  useEffect(() => {
+    if (!needsYearFocus) setFocusHint(null);
+  }, [needsYearFocus]);
+
+  const handleChooseYearFocus = async (focus: YearFocus) => {
+    setFocusHint(null);
+    setLoading(true);
+    setErrorMsg(null);
+    try {
+      const data = await apiPost<GameStateResponse>('/year/focus', { focus }, { errorKeys: ['error', 'message'], fallback: "Không chọn được trọng tâm năm." });
+      if (data.character) setCharacter(data.character);
+      triggerBannerFeedback({
+        type: 'milestone',
+        title: `Trọng tâm năm: ${YEAR_FOCUS_META[focus].label}`,
+        subtitle: YEAR_FOCUS_META[focus].hint,
+        delta: 'Nút hành động đã đổi theo trọng tâm',
+        icon: YEAR_FOCUS_META[focus].icon
+      });
+    } catch (err: any) {
+      setErrorMsg(err.message || "Không chọn được trọng tâm năm.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Single entry for "close the year" (Space + buttons): never skips the focus step at age >= 6.
+  const requestYearAdvance = () => {
+    if (needsYearFocus) {
+      setFocusHint('Hãy chọn trọng tâm năm (phím 1-5) trước khi khép năm.');
+      setTimeout(() => document.getElementById('year-focus-picker')?.querySelector<HTMLButtonElement>('button')?.focus(), 0);
+      return;
+    }
+    return handleSmartYearAdvance();
   };
 
   // Reincarnation / Generation Continuity
@@ -882,6 +924,7 @@ export function useGameState() {
     handleAnnualFocus, handleCustomResolve, handleBlessing, handleSurrenderAndRebirth, handleRegisterSkillExam,
     launchMiniGame, handleMiniGameComplete, handleUnlockSkill, handleNpcInteract, handleUpgradeAspiration,
     handleOfferIncense, handleDismissAlert,
+    yearFocus, needsYearFocus, showYearFocusPicker, focusHint, handleChooseYearFocus, requestYearAdvance,
   };
 }
 

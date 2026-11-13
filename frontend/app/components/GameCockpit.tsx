@@ -18,6 +18,7 @@ export default function GameCockpit({ g, netWorth }: { g: GameState; netWorth: n
     handleFamilyMeal, handleFamilyMentorship, handleOvertime, handleStudy, handleWellness, handleGamble,
     handleNetworkAction, handleSmartYearAdvance, handleUnlockSkill, handleNpcInteract, handleBreakthroughAction,
     handleRpgActivePerk, handleSeniorAction, handleDebtRelief, handleHealthCheckup, lineage,
+    showYearFocusPicker, needsYearFocus, focusHint, handleChooseYearFocus, requestYearAdvance,
   } = g;
   const unlocks = getUnlocks(character, playerAccount, lineage);
   return (
@@ -74,8 +75,8 @@ export default function GameCockpit({ g, netWorth }: { g: GameState; netWorth: n
               onWellness={handleWellness}
               onGamble={handleGamble}
               onNetwork={handleNetworkAction}
-              onTimeSkip={handleSmartYearAdvance}
-              onOpenYearEndReflection={() => setIsYearEndModalOpen(true)}
+              onTimeSkip={requestYearAdvance}
+              onOpenYearEndReflection={() => (needsYearFocus ? requestYearAdvance() : setIsYearEndModalOpen(true))}
               onOpenPetSanctuary={() => setShowPetSanctuaryModal(true)}
               onOpenSkillHub={() => setShowSkillSelector(true)}
               onLaunchMiniGame={(type) => launchMiniGame(type)}
@@ -96,6 +97,9 @@ export default function GameCockpit({ g, netWorth }: { g: GameState; netWorth: n
               hiddenFlags={character.hidden_flags || []}
               isLoading={loading}
               unlocks={unlocks}
+              showYearFocusPicker={showYearFocusPicker}
+              yearFocusHint={focusHint}
+              onChooseYearFocus={handleChooseYearFocus}
             />
           </div>
         )}
