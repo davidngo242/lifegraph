@@ -15,14 +15,18 @@ export interface MapBranch {
   memory: number;   // memory entries (cast) or years of focus (focus branches)
   lastAge: number | null;
 }
-export interface MapFruit { id: string; label: string; age: number | null }
+/** branchId: id of the branch the fruit hangs on; null = on the trunk (no matching branch). */
+export interface MapFruit { id: string; label: string; age: number | null; branchId: string | null }
 export interface MapCut { id: string; label: string; age: number | null }
+/** A recorded "Nếu như…" run (character.whatif_log): a ghost branch at that age. */
+export interface MapGhost { id: string; age: number; label: string }
 export interface MapRing { age: number; focus: string }
-export interface LifeTreeMap { roots: MapRoot[]; branches: MapBranch[]; fruits: MapFruit[]; cuts: MapCut[]; rings: MapRing[] }
+export interface LifeTreeMap { roots: MapRoot[]; branches: MapBranch[]; fruits: MapFruit[]; cuts: MapCut[]; rings: MapRing[]; ghosts: MapGhost[] }
 
 export const MAX_MAIN_BRANCHES = 6;
 export const WITHER_AFTER_YEARS = 8;
 const MAX_FRUITS = 12;
+const MAX_GHOSTS = 10;
 
 export const FOCUS_LABEL: Record<string, string> = {
   career: 'Sự nghiệp', family: 'Gia đình', health: 'Sức khỏe', learning: 'Học hỏi', experience: 'Trải nghiệm'
@@ -57,6 +61,19 @@ const FLAG_FRUIT: Record<string, string> = {
 };
 
 const humanize = (id: string) => id.replace(/[_:]+/g, ' ').trim();
+// Raw door keys / labels ("cuoi_som", "cuoi som") -> readable text. Known keys get proper diacritics.
+const DOOR_LABEL: Record<string, string> = { cuoi_som: 'Cưới sớm' };
+const capitalize = (s: string) => { const [first, ...rest] = Array.from(s); return first ? first.toLocaleUpperCase('vi') + rest.join('') : s; };
+export const humanizeLabel = (raw: string) => capitalize(raw.replace(/_+/g, ' ').replace(/\s+/g, ' ').trim());
+// Undated milestone flags hang on the branch of this focus (when it exists).
+const FLAG_FOCUS: Record<string, string> = {
+  written_memoir: 'learning', mentored_heir: 'family', early_will_established: 'family',
+  heir_of_fortune: 'family', street_smart: 'experience', diligent_scholar_combo: 'learning'
+};
+const MILESTONE_FOCUS_WORDS: Array<[string, RegExp]> = [
+  ['career', /sự nghiệp|công việc|nghề|thăng chức|kinh doanh/i], ['family', /gia đình|con cái|hôn nhân|cưới/i],
+  ['health', /sức khỏe|bệnh|thể chất/i], ['learning', /học|trường|tri thức/i], ['experience', /trải nghiệm|phiêu lưu|du lịch/i]
+];
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 const arr = (v: unknown): any[] => (Array.isArray(v) ? v : []);
@@ -136,20 +153,37 @@ export function buildLifeTreeMap(character: any): LifeTreeMap {
     .slice(0, MAX_MAIN_BRANCHES)
     .sort((a, b) => a.id.localeCompare(b.id));
 
-  // Fruits: dated milestones from history_log, undated known flags, cast memories.
+  // Fruits: dated milestones from history_log, undated known flags, cast memories. Each hangs on a branch (by kind) or the trunk (null).
+  const has = (id: string) => branches.some(b => b.id === id);
+  const fateId = branches.find(b => b.kind === 'fate')?.id ?? null;
+  const focusBranch = (focus: string | undefined) => (focus && has(`focus:${focus}`) ? `focus:${focus}` : null);
+  const focusAt = (a: number | null) => {
+    if (a === null) return undefined;
+    const past = rings.filter(r => r.age <= a);
+    return (past.length ? past[past.length - 1] : undefined)?.focus;
+  };
   const fruits: MapFruit[] = [];
   arr(c.history_log).forEach((h, i) => {
     if (h && typeof h.event === 'string' && /cột mốc/i.test(h.event)) {
-      fruits.push({ id: `history:${i}`, label: h.event.replace(/^\s*\[[^\]]*\]\s*/, '').trim(), age: num(h.age) });
+      const fAge = num(h.age);
+      const byWord = MILESTONE_FOCUS_WORDS.find(([, re]) => re.test(h.event))?.[0];
+      fruits.push({
+        id: `history:${i}`, label: h.event.replace(/^\s*\[[^\]]*\]\s*/, '').trim(), age: fAge,
+        branchId: focusBranch(byWord) ?? focusBranch(focusAt(fAge)) ?? fateId
+      });
     }
   });
-  for (const flag of arr(c.hidden_flags)) if (typeof flag === 'string' && FLAG_FRUIT[flag]) fruits.push({ id: `flag:${flag}`, label: FLAG_FRUIT[flag], age: null });
-  for (const npc of cast) {
+  for (const flag of arr(c.hidden_flags)) if (typeof flag === 'string' && FLAG_FRUIT[flag]) fruits.push({ id: `flag:${flag}`, label: FLAG_FRUIT[flag], age: null, branchId: focusBranch(FLAG_FOCUS[flag]) ?? fateId });
+  cast.forEach((npc, npcIdx) => {
+    const castId = `cast:${npc.id ?? String(npc.role ?? '')}:${npcIdx}`;
     memoryInfo(npc).entries.forEach((m, i) => {
       if (m.tag === 'tom_tat') return;
-      fruits.push({ id: `memory:${npc.id ?? npc.role}:${i}`, label: `${npc.name ?? ROLE_LABEL[npc.role] ?? 'Người quen'}: ${m.text || humanize(String(m.tag ?? ''))}`, age: num(m.age) });
+      fruits.push({
+        id: `memory:${npc.id ?? npc.role}:${i}`, label: `${npc.name ?? ROLE_LABEL[npc.role] ?? 'Người quen'}: ${m.text || humanize(String(m.tag ?? ''))}`,
+        age: num(m.age), branchId: has(castId) ? castId : fateId
+      });
     });
-  }
+  });
   fruits.sort((a, b) => (a.age ?? Infinity) - (b.age ?? Infinity));
 
   // Cuts: closed doors (false, or {open:false, age?}). Doors that never existed -> none.
@@ -158,11 +192,17 @@ export function buildLifeTreeMap(character: any): LifeTreeMap {
   if (doors && typeof doors === 'object' && !Array.isArray(doors)) {
     for (const [name, v] of Object.entries(doors)) {
       const closed = v === false || (v && typeof v === 'object' && (v as any).open === false);
-      if (closed) cuts.push({ id: `door:${name}`, label: (v as any)?.label ?? humanize(name), age: num((v as any)?.age) });
+      if (closed) cuts.push({ id: `door:${name}`, label: humanizeLabel(typeof (v as any)?.label === 'string' && (v as any).label.trim() ? (v as any).label : (DOOR_LABEL[name] ?? name)), age: num((v as any)?.age) });
     }
   }
 
-  return { roots, branches, fruits: fruits.slice(-MAX_FRUITS), cuts, rings };
+  // Ghost branches: one per recorded "Nếu như…" run (tolerates absence).
+  const ghosts: MapGhost[] = arr(c.whatif_log)
+    .filter(w => w && num(w.age) !== null)
+    .slice(-MAX_GHOSTS)
+    .map((w, i) => ({ id: `whatif:${i}`, age: w.age as number, label: typeof w.label === 'string' && w.label.trim() ? humanizeLabel(w.label) : 'Hướng khác' }));
+
+  return { roots, branches, fruits: fruits.slice(-MAX_FRUITS), cuts, rings, ghosts };
 }
 
 const SEASON_WORDS: Array<[SeasonId, RegExp]> = [
