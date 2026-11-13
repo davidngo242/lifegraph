@@ -844,7 +844,8 @@
         ],
         "requires_npc": {
           "role": "mentor"
-        }
+        },
+        "fate_thread": "tai_nang_yeu_menh"
       },
       "weight": 2,
       "cooldown_years": 6,
@@ -1259,7 +1260,8 @@
         ],
         "requires_npc": {
           "role": "love"
-        }
+        },
+        "fate_thread": "nguoi_thuong_that_lac"
       },
       "weight": 3,
       "cooldown_years": 10,

@@ -80,7 +80,7 @@ test('life_seed and cast: same rng_seed reproduces them, different seeds vary, s
     assert.equal(c.year_focus, null);
   }
   assert.ok(seeds.size >= 10, `only ${seeds.size} distinct seeds in 25 lives`);
-  assert.ok(eras.has('lang_hau_chien') && eras.has('any'));
+  assert.ok(eras.has('lang_hau_chien') && !eras.has('any'), 'new lives never draw era any');
   const reread = (await api('seed_a', '/state')).data;
   assert.deepEqual((reread.character ?? reread).life_seed, a.life_seed, 'life_seed persists in the stored character');
 });

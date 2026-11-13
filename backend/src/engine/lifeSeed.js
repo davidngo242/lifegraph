@@ -5,7 +5,7 @@ import { loadSeedDictionaries, pickWeighted } from '../content/seeds.js';
 export function drawLifeSeed(rand = getRandom) {
   const d = loadSeedDictionaries();
   return {
-    era: pickWeighted(d.era, rand).id,
+    era: pickWeighted(d.era.filter(e => e.drawable !== false), rand).id, // 'any' stays valid for legacy characters, never drawn for new lives
     family_state: pickWeighted(d.family_state, rand).id,
     fate_thread: pickWeighted(d.fate_thread, rand).id,
     temperament: pickWeighted(d.temperament, rand).id

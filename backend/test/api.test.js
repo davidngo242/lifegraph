@@ -123,7 +123,7 @@ test('commitment action without a living character returns a clear error', async
 });
 
 test('the post-scenario journey fulfills a promise, advances years, and opens school', async () => {
-  await seed('qa_journey', { age: 0, action_points: 3 });
+  await seed('qa_journey', { age: 0, action_points: 3, life_seed: null }); // legacy character: no era storylets
   const initial = await request('qa_journey', '/scenario/current');
   const resolved = await request('qa_journey', '/scenario/resolve-mindstage', {
     scenario_id: initial.data.scenario.id, choice_id: 'CHOICE_FIRST_STEPS' });
