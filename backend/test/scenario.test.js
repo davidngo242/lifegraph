@@ -8,7 +8,7 @@ const scenarios = packs.flatMap(p => p.scenarios);
 const fixture = age => ({ id: 'fixture', name: 'QA', age, cash: 1000, vitality: 60, max_vitality: 100, burnout: 40, karma: 50, action_points: 10, hidden_flags: [], knowledge_base: [], innate_traits: [] });
 const pin = sc => ({ ...fixture(sc.prerequisites.min_age), hidden_flags: [`active_scenario:${sc.id}`] });
 
-test('all packs validate; every declared outcome changes the expected stats across 2,640 input cases', () => {
+test('all packs validate; every declared outcome changes the expected stats across 11,640 input cases', () => {
   for (const p of packs) assert.equal(validateContentPack(p).valid, true, p.pack_id);
   const random = Math.random;
   let count = 0;
@@ -34,7 +34,7 @@ test('all packs validate; every declared outcome changes the expected stats acro
       assert.deepEqual(c, state, 'retry cannot reapply money, AP, promises, or history');
       count++;
     }
-    assert.equal(count, 2640);
+    assert.equal(count, 11640);
   } finally { Math.random = random; }
 });
 
