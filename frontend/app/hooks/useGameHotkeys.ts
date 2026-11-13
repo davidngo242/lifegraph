@@ -145,8 +145,8 @@ export function useGameHotkeys(g: GameState) {
         return;
       }
 
-      // 7b. 1-5: choose the year focus while the picker is visible (no dilemma pending)
-      if (showYearFocusPicker && !dilemma && ['1', '2', '3', '4', '5'].includes(key)) {
+      // 7b. 1-5: choose the year focus first (takes priority over dilemma 1-3 until chosen)
+      if (showYearFocusPicker && ['1', '2', '3', '4', '5'].includes(key)) {
         e.preventDefault();
         handleChooseYearFocus(YEAR_FOCUSES[parseInt(key, 10) - 1]);
         return;

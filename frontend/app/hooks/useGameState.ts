@@ -290,7 +290,7 @@ export function useGameState() {
   // Year rhythm (Đợt 2): from age 6 the player picks a focus before the year can close.
   const yearFocus = normalizeYearFocus(character?.year_focus);
   const needsYearFocus = Boolean(character && !character.is_deceased && (character.age || 0) >= 6 && !yearFocus);
-  const showYearFocusPicker = needsYearFocus && !dilemma;
+  const showYearFocusPicker = needsYearFocus; // focus is chosen before the year's dilemma
 
   useEffect(() => {
     if (!needsYearFocus) setFocusHint(null);
