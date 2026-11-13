@@ -75,6 +75,7 @@ const VIEWPORTS = String(flags.viewports || '360x800,390x844,768x1024,1440x900')
   return { width: +m[1], height: +m[2], name: `${m[1]}x${m[2]}` };
 });
 const ENTRY_TIMEOUT = Number(flags['entry-timeout'] || 120000);
+const SCENARIO = String(flags.scenario || 'none'); // none | tree30 | picker12 (ghi de character trong phan hoi API, khong dong backend)
 const MOBILE_MAX_W = 767; // viewport < 768 = mobile (kiem tra hit-area)
 
 // Nguong --strict. Mac dinh: overflow=0, contrast<AA (Ban Ngay)=0, console error=0; con lai chi canh bao.
@@ -223,7 +224,96 @@ function measureInPage({ mobile }) {
   };
 }
 
-// ---------- Helpers ----------
+// ---------- Kich ban seed (tuy chon) ----------
+// Backend khong co endpoint ghi nhan vat, nen chan phan hoi /api/game/** va vá `character` phia trinh duyet.
+const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
+const SCENARIOS = {
+  // Tuoi 30: life_seed + cast co ky uc + focus_history 10 nam + 1 cua da dong + trong tam dang chon (cay hien nut theo trong tam)
+  tree30: {
+    age: 30, year_focus: 'career',
+    life_seed: { era: 'lang_hau_chien', family_state: 'no_nan', fate_thread: 'cha_giau_no', temperament: 'nong' },
+    cast: [
+      { id: 'cast_mentor_1', role: 'mentor', name: 'Bảy Thủy', memory: [{ age: 24, tag: 'day_nghe', text: 'dạy nghề' }, { age: 27, tag: 'cuu_giup', text: 'cứu giúp lúc khó' }] },
+      { id: 'cast_rival_1', role: 'rival', name: 'Sáu Hộ', memory: [{ age: 25, tag: 'bi_phan_boi', text: 'bị phản bội' }] },
+      { id: 'cast_love_1', role: 'love', name: 'Lụa', memory: [{ age: 20, tag: 'gap_go', text: 'gặp gỡ' }] },
+      { id: 'cast_family_1', role: 'family', name: 'Mẹ Tám', memory: [{ age: 29, tag: 'bua_com', text: 'bữa cơm gia đình' }] },
+      { id: 'cast_creditor_or_benefactor_1', role: 'creditor_or_benefactor', stance: 'creditor', name: 'Thìn', memory: [] },
+    ],
+    focus_history: [
+      ...[20, 21, 22, 23].map((age) => ({ age, focus: 'career' })),
+      ...[24, 25].map((age) => ({ age, focus: 'learning' })),
+      ...[26, 27].map((age) => ({ age, focus: 'family' })),
+      { age: 28, focus: 'health' }, { age: 29, focus: 'experience' },
+    ],
+    doors: { cuoi_som: false },
+    history_log: [{ age: 22, event: '[Cột Mốc] Tốt nghiệp đại học' }, { age: 28, event: '[Cột Mốc] Mua căn nhà đầu tiên' }],
+    hidden_flags: ['written_memoir'],
+  },
+  // Tuoi 12, chua chon trong tam -> bo chon YearFocusPicker hien
+  picker12: { age: 12, year_focus: null },
+};
+async function installScenario(page, name) {
+  const seed = SCENARIOS[name];
+  if (!seed) return;
+  await page.route('**/api/game/**', async (route) => {
+    let res;
+    try { res = await route.fetch(); } catch { return route.continue(); }
+    const ct = res.headers()['content-type'] || '';
+    if (!ct.includes('json')) return route.fulfill({ response: res });
+    let body;
+    try { body = await res.json(); } catch { return route.fulfill({ response: res }); }
+    if (body && body.character && typeof body.character === 'object' && !body.character.is_deceased) {
+      body.character = { ...body.character, ...JSON.parse(JSON.stringify(seed)) };
+    }
+    return route.fulfill({ response: res, json: body });
+  });
+}
+
+// Fail-fast: neu backend khong tra loi thi dung ngay (truoc day 'vao game' treo den het ENTRY_TIMEOUT cho moi viewport).
+async function preflight() {
+  const u = URL_.replace(/\/+$/, '') + '/api/game/state';
+  try {
+    const r = await fetch(u, { signal: AbortSignal.timeout(Math.min(ENTRY_TIMEOUT, 90000)) });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+  } catch (e) {
+    console.error(`Preflight that bai: GET ${u} -> ${e.message}.\nBackend chua chay hoac frontend khong tro duoc toi no. Chay backend (cd backend && PORT=3001 npm start) va dat BACKEND_URL (mac dinh http://localhost:3001) khi chay 'next dev|start'.`);
+    process.exit(3);
+  }
+}
+
+// Do rieng cho lop ban do cay (SVG): audit chung khong do chu SVG (mau chu la `fill`, co halo), nen do thang tren man hinh.
+function measureMapLayer() {
+  const layer = document.querySelector('.life-tree-map-layer');
+  const out = { present: !!layer, labels: [], small: [], clipped: [], overlaps: [], pickerBtns: [], cards: [] };
+  if (layer) {
+    const svg = layer.ownerSVGElement;
+    const sr = svg.getBoundingClientRect();
+    const scale = svg.getScreenCTM() ? svg.getScreenCTM().a : 1;
+    const btns = [...document.querySelectorAll('button, [role="button"]')].map((b) => ({ b, r: b.getBoundingClientRect() })).filter((x) => x.r.width > 0 && x.r.height > 0 && sr.left < x.r.right && sr.right > x.r.left && sr.top < x.r.bottom && sr.bottom > x.r.top);
+    layer.querySelectorAll('text').forEach((t) => {
+      const r = t.getBoundingClientRect();
+      if (r.width < 1 || getComputedStyle(t).display === 'none') return; // nhan an theo breakpoint
+      const fs = parseFloat(getComputedStyle(t).fontSize) * scale;
+      const item = { t: t.textContent.trim().slice(0, 40), fs: +fs.toFixed(1), x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height) };
+      out.labels.push(item);
+      if (fs < 12) out.small.push(item);
+      if (r.left < sr.left - 1 || r.right > sr.right + 1 || r.top < sr.top - 1 || r.bottom > sr.bottom + 1) out.clipped.push(item);
+      for (const { b, r: br } of btns) {
+        const ix = Math.min(r.right, br.right) - Math.max(r.left, br.left);
+        const iy = Math.min(r.bottom, br.bottom) - Math.max(r.top, br.top);
+        if (ix > 2 && iy > 2 && ix * iy > 0.15 * r.width * r.height) out.overlaps.push({ ...item, btn: (b.innerText || b.getAttribute('aria-label') || '').trim().replace(/\s+/g, ' ').slice(0, 30), btnRect: [Math.round(br.left), Math.round(br.top), Math.round(br.right), Math.round(br.bottom)] });
+      }
+    });
+  }
+  document.querySelectorAll('#year-focus-picker button').forEach((b) => { const r = b.getBoundingClientRect(); out.pickerBtns.push({ t: b.innerText.trim().replace(/\s+/g, ' '), w: Math.round(r.width), h: Math.round(r.height), fs: parseFloat(getComputedStyle(b).fontSize) }); });
+  document.querySelectorAll('details[aria-label="Mạch truyện"] > div > div').forEach((c) => {
+    const r = c.getBoundingClientRect();
+    const cs = getComputedStyle(c);
+    if (r.height > 0) out.cards.push({ t: c.innerText.trim().replace(/\s+/g, ' ').slice(0, 40), h: Math.round(r.height), w: Math.round(r.width), sw: c.scrollWidth - c.clientWidth, cls: c.className.includes('rounded') ? 'card' : 'head' });
+  });
+  return out;
+}
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const topGroups = (arr, keyFn, n = 15) => {
   const m = new Map();
@@ -276,6 +366,7 @@ async function closeSettings(page) {
 
 // ---------- Main ----------
 fs.mkdirSync(path.join(OUT, 'shots'), { recursive: true });
+await preflight();
 const started = new Date();
 const results = [];
 const browser = await chromium.launch({ headless: !flags.headed });
@@ -284,6 +375,7 @@ for (const vp of VIEWPORTS) {
   const mobile = vp.width <= MOBILE_MAX_W;
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, deviceScaleFactor: 1 });
   const page = await ctx.newPage();
+  await installScenario(page, SCENARIO);
   let errs = [];
   page.on('console', (m) => { if (m.type() === 'error') errs.push(m.text().slice(0, 200)); });
   page.on('pageerror', (e) => errs.push('PAGEERROR ' + String(e.message).slice(0, 200)));
@@ -305,9 +397,21 @@ for (const vp of VIEWPORTS) {
       rec.themeVia = await setTheme(page, theme);
       await sleep(900);
       const m = await page.evaluate(measureInPage, { mobile });
-      const base = `${theme.id}_${vp.name}`;
+      const base = `${SCENARIO === 'none' ? '' : SCENARIO + '_'}${theme.id}_${vp.name}`;
       await page.screenshot({ path: path.join(OUT, 'shots', `${base}_viewport.png`) }).catch(() => {});
       await page.screenshot({ path: path.join(OUT, 'shots', `${base}_full.png`), fullPage: true, timeout: 60000 }).catch((e) => { rec.fullShotError = String(e.message).split('\n')[0]; });
+      if (SCENARIO !== 'none') {
+        rec.mapLayer = await page.evaluate(measureMapLayer);
+        for (const [key, sel] of [['tree', 'svg:has(.life-tree-map-layer)'], ['picker', '#year-focus-picker'], ['cards', 'details[aria-label="Mạch truyện"]']]) {
+          const el = page.locator(sel).first();
+          if (await el.count() && await el.isVisible().catch(() => false)) {
+            await el.scrollIntoViewIfNeeded().catch(() => {});
+            await el.screenshot({ path: path.join(OUT, 'shots', `${base}_${key}.png`), timeout: 20000 }).catch(() => {});
+          }
+        }
+        const ml = rec.mapLayer;
+        console.log(`    [map] layer=${ml.present} labels=${ml.labels.length} fs<12=${ml.small.length} clipped=${ml.clipped.length} overlap-btn=${ml.overlaps.length} picker-btns=${ml.pickerBtns.length} (min h ${Math.min(...ml.pickerBtns.map((b) => b.h), 999)}) cards=${ml.cards.length}`);
+      }
       rec.dataTheme = m.dataTheme;
       rec.themeApplied = m.dataTheme === theme.id;
       rec.textNodes = m.textNodes;
