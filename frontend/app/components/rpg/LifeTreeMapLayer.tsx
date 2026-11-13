@@ -86,20 +86,48 @@ export function LifeTreeMapLayer({ map, centerX, centerY, baseRadius }: LayerPro
         );
       })}
 
-      {/* Fruits: gắn lần lượt lên các cành (không có cành thì dọc hai bên thân) */}
-      {map.fruits.map((f, i) => {
-        const n = geo.length;
-        const p = n
-          ? bezier(geo[i % n], Math.min(0.85, 0.4 + 0.12 * Math.floor(i / n)))
-          : { x: centerX + (i % 2 === 0 ? -34 : 34), y: centerY + 20 + 18 * Math.floor(i / 2) };
+      {/* Ghosts: nhánh "Nếu như…" đã thử, nét đứt mờ gần thân, không đổi gì ở đời thật */}
+      {map.ghosts.map((gh, i) => {
+        const side = i % 2 === 0 ? -1 : 1;
+        const y0 = centerY + 12 - 13 * Math.floor(i / 2);
+        const x1 = centerX + side * (54 + 5 * (i % 3));
+        const d = `M ${centerX + side * 4} ${y0} Q ${centerX + side * 30} ${y0 - 4} ${x1} ${y0 - 20}`;
+        const text = `Nhánh nếu như: ${gh.label}${ageText(gh.age)}`;
         return (
-          <g key={f.id} data-fruit={f.id} pointerEvents="auto" tabIndex={0} role="img" aria-label={`${f.label}${ageText(f.age)}`}>
-            <title>{`${f.label}${ageText(f.age)}`}</title>
-            <circle cx={p.x} cy={p.y} r={6.5} fill="#fbbf24" stroke="#78350f" strokeWidth={1.8} />
-            <circle cx={p.x - 2} cy={p.y - 2} r={1.6} fill="#fffbeb" />
+          <g key={gh.id} data-ghost={gh.id} pointerEvents="auto" tabIndex={0} role="img" aria-label={text}>
+            <title>{text}</title>
+            <path d={d} fill="none" stroke="transparent" strokeWidth={16} strokeLinecap="round" />
+            <path d={d} fill="none" stroke="#0f172a" strokeOpacity={0.55} strokeWidth={5.5} strokeLinecap="round" />
+            <path d={d} fill="none" stroke="#c4b5fd" strokeOpacity={0.9} strokeWidth={2.5} strokeLinecap="round" strokeDasharray="5 5" />
+            <circle cx={x1} cy={y0 - 20} r={3.5} fill="none" stroke="#c4b5fd" strokeWidth={2} strokeDasharray="2 2" />
           </g>
         );
       })}
+
+      {/* Fruits: treo trên cành của chính nó (branchId); không có cành thì dọc hai bên thân */}
+      {(() => {
+        const perBranch: Record<string, number> = {};
+        let trunkIdx = 0;
+        return map.fruits.map(f => {
+          const g = f.branchId ? geo.find(x => x.b.id === f.branchId) : undefined;
+          let p: { x: number; y: number };
+          if (g) {
+            const k = perBranch[g.b.id] ?? 0;
+            perBranch[g.b.id] = k + 1;
+            p = bezier(g, Math.min(0.85, 0.4 + 0.12 * k));
+          } else {
+            p = { x: centerX + (trunkIdx % 2 === 0 ? -34 : 34), y: centerY + 20 + 18 * Math.floor(trunkIdx / 2) };
+            trunkIdx++;
+          }
+          return (
+            <g key={f.id} data-fruit={f.id} data-branch-id={f.branchId ?? 'trunk'} pointerEvents="auto" tabIndex={0} role="img" aria-label={`${f.label}${ageText(f.age)}`}>
+              <title>{`${f.label}${ageText(f.age)}`}</title>
+              <circle cx={p.x} cy={p.y} r={6.5} fill="#fbbf24" stroke="#78350f" strokeWidth={1.8} />
+              <circle cx={p.x - 2} cy={p.y - 2} r={1.6} fill="#fffbeb" />
+            </g>
+          );
+        });
+      })()}
 
       {/* Cuts: cửa đã đóng, vết cắt đỏ trên thân */}
       {map.cuts.map((c, i) => {
@@ -122,8 +150,8 @@ export function LifeTreeMapLayer({ map, centerX, centerY, baseRadius }: LayerPro
 interface CardsProps { map: LifeTreeMap }
 
 export function LifeTreeMapCards({ map }: CardsProps) {
-  const { roots, branches, fruits, cuts, rings } = map;
-  if (!roots.length && !branches.length && !fruits.length && !cuts.length && !rings.length) return null;
+  const { roots, branches, fruits, cuts, rings, ghosts } = map;
+  if (!roots.length && !branches.length && !fruits.length && !cuts.length && !rings.length && !ghosts.length) return null;
   const focusCount: Record<string, number> = {};
   for (const r of rings) focusCount[r.focus] = (focusCount[r.focus] ?? 0) + 1;
   const card = 'rounded-2xl border border-slate-300 bg-white/90 dark:border-white/15 dark:bg-slate-900/80 px-3 py-2 min-h-[44px] flex flex-col justify-center';
@@ -159,6 +187,10 @@ export function LifeTreeMapCards({ map }: CardsProps) {
             </div>
             <div className={`${sub} mt-1`}>{b.memory} dấu ấn{b.lastAge !== null ? `, gần nhất lúc ${b.lastAge} tuổi` : ''}</div>
           </div>
+        ))}
+        {ghosts.length > 0 && <div className={head}>Nhánh nếu như</div>}
+        {ghosts.map(g => (
+          <div key={g.id} className={card} data-ghost={g.id}><div className={sub}>👻 Nhánh nếu như: {g.label}{ageText(g.age)}</div></div>
         ))}
         {fruits.length > 0 && <div className={head}>Quả đã chín</div>}
         {fruits.map(f => (

@@ -34,7 +34,7 @@ async function live(session, seed, years) {
 }
 const realState = session => db.sessionContext.run({ sessionId: session }, async () => {
   const c = await db.getLatestCharacter();
-  const { whatif_uses, ...rest } = c;
+  const { whatif_uses, whatif_log, ...rest } = c;
   return {
     character: rest, uses: whatif_uses ?? 0,
     assets: await db.getAssets(c.id), relationships: await db.getRelationships(c.id), npcs: await db.getNpcs(c.id),
@@ -106,6 +106,9 @@ test('validation, missing snapshot and 3 uses per life', async () => {
   }
   const fourth = await api('wi_limit', '/whatif', { from_age: age, alt_action: 'study', years: 2 });
   assert.equal(fourth.status, 403); assert.equal(fourth.data.uses_left, 0);
+  const log = (await api('wi_limit', '/state')).data.character.whatif_log;
+  assert.deepEqual(log.map(l => l.age), [age, age, age], 'one {age,label} per successful run, none for refused ones');
+  assert.ok(log.every(l => typeof l.label === 'string' && l.label));
 });
 
 test('what-if is rate limited per session', async () => {
