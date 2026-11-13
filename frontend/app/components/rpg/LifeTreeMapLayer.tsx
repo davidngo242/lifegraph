@@ -52,9 +52,9 @@ export function LifeTreeMapLayer({ map, centerX, centerY, baseRadius }: LayerPro
 
       {/* Rings: một vòng mỗi năm, màu theo trọng tâm, chồng lên vòng vân sẵn có */}
       <g className="focus-rings">
-        {map.rings.filter(r => r.age >= 1 && r.age <= MAX_RING_AGE && FOCUS_COLOR[r.focus]).map(r => (
+        {map.rings.filter(r => r.age >= 1 && r.age <= MAX_RING_AGE && FOCUS_COLOR[r.focus]).map((r, ri) => (
           <ellipse
-            key={`focus-ring-${r.age}`}
+            key={`focus-ring-${ri}-${r.age}`}
             cx={centerX} cy={486} rx={6 + (r.age - 1) * 1.4} ry={1.6 + (r.age - 1) * 0.28}
             fill="none" stroke={FOCUS_COLOR[r.focus]} strokeWidth={1.6} strokeOpacity={0.95} pointerEvents="stroke"
           >
@@ -70,7 +70,7 @@ export function LifeTreeMapLayer({ map, centerX, centerY, baseRadius }: LayerPro
         const d = `M ${centerX} ${originY} Q ${g.cx} ${g.cy} ${g.ex} ${g.ey}`;
         const width = 2.5 + 4.5 * g.b.strength;
         return (
-          <g key={g.b.id} data-branch={g.b.id} data-state={g.b.state} pointerEvents="auto">
+          <g key={g.b.id} data-branch={g.b.id} data-state={g.b.state} pointerEvents="auto" tabIndex={0} role="img" aria-label={`${g.b.label}: ${g.b.state === 'withered' ? 'đã héo' : 'đang lớn'}, ${g.b.memory} dấu ấn`}>
             <title>{`${g.b.label}: ${withered ? 'đã héo, lâu rồi bị bỏ rơi' : 'đang lớn'}, ${g.b.memory} dấu ấn`}</title>
             <path d={d} fill="none" stroke="#0f172a" strokeOpacity={0.55} strokeWidth={width + 3} strokeLinecap="round" />
             <path d={d} fill="none" stroke={color} strokeWidth={width} strokeLinecap="round" strokeDasharray={withered ? '2 7' : undefined} strokeOpacity={withered ? 0.9 : 1} />
@@ -89,7 +89,7 @@ export function LifeTreeMapLayer({ map, centerX, centerY, baseRadius }: LayerPro
           ? bezier(geo[i % n], Math.min(0.85, 0.4 + 0.12 * Math.floor(i / n)))
           : { x: centerX + (i % 2 === 0 ? -34 : 34), y: centerY + 20 + 18 * Math.floor(i / 2) };
         return (
-          <g key={f.id} data-fruit={f.id} pointerEvents="auto">
+          <g key={f.id} data-fruit={f.id} pointerEvents="auto" tabIndex={0} role="img" aria-label={`${f.label}${ageText(f.age)}`}>
             <title>{`${f.label}${ageText(f.age)}`}</title>
             <circle cx={p.x} cy={p.y} r={6.5} fill="#fbbf24" stroke="#78350f" strokeWidth={1.8} />
             <circle cx={p.x - 2} cy={p.y - 2} r={1.6} fill="#fffbeb" />
@@ -103,7 +103,7 @@ export function LifeTreeMapLayer({ map, centerX, centerY, baseRadius }: LayerPro
         const y = centerY + 70 + 22 * Math.floor(i / 2);
         const x = centerX + side * 46;
         return (
-          <g key={c.id} data-cut={c.id} pointerEvents="auto">
+          <g key={c.id} data-cut={c.id} pointerEvents="auto" tabIndex={0} role="img" aria-label={`Bạn đã chọn ${c.label}${ageText(c.age)}`}>
             <title>{`Bạn đã chọn ${c.label}${ageText(c.age)}`}</title>
             <line x1={centerX + side * 22} y1={y} x2={x} y2={y - 6} stroke="#451a03" strokeWidth={5} strokeLinecap="round" />
             <line x1={x - 7} y1={y - 13} x2={x + 7} y2={y + 1} stroke="#fecdd3" strokeWidth={4.5} strokeLinecap="round" />

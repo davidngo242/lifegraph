@@ -98,7 +98,7 @@ export function buildLifeTreeMap(character: any): LifeTreeMap {
   const mk = (id: string, kind: BranchKind, label: string, count: number, lastAge: number | null, base: number, step: number): MapBranch => ({
     id, kind, label, memory: count, lastAge,
     strength: clamp01(base + step * count),
-    state: age - (lastAge ?? 0) > WITHER_AFTER_YEARS ? 'withered' : 'growing'
+    state: lastAge != null && age - lastAge > WITHER_AFTER_YEARS ? 'withered' : 'growing'
   });
 
   // Fate thread: always a branch when the seed has one.
@@ -119,14 +119,15 @@ export function buildLifeTreeMap(character: any): LifeTreeMap {
   }
 
   // Cast branches: only people who already share a memory with the player.
-  for (const npc of cast) {
+  for (let npcIdx = 0; npcIdx < cast.length; npcIdx++) {
+    const npc = cast[npcIdx];
     const info = memoryInfo(npc);
     if (info.count === 0) continue;
     const role = String(npc.role ?? '');
     const kind = ROLE_KIND[role];
     if (!kind) continue;
     const roleLabel = role === 'creditor_or_benefactor' ? (npc.stance === 'benefactor' ? 'Ân nhân' : 'Chủ nợ') : (ROLE_LABEL[role] ?? humanize(role));
-    candidates.push(mk(`cast:${npc.id ?? role}`, kind, `${roleLabel}${npc.name ? ` ${npc.name}` : ''}`, info.count, info.lastAge, 0.25, 0.15));
+    candidates.push(mk(`cast:${npc.id ?? role}:${npcIdx}`, kind, `${roleLabel}${npc.name ? ` ${npc.name}` : ''}`, info.count, info.lastAge, 0.25, 0.15));
   }
 
   // Max 6 main branches: fate first, then the strongest; stable by id.
@@ -165,8 +166,8 @@ export function buildLifeTreeMap(character: any): LifeTreeMap {
 }
 
 const SEASON_WORDS: Array<[SeasonId, RegExp]> = [
-  ['winter', /tang|qua đời|mất|chết|bệnh|nợ|phá sản|ly tán|chia ly|thất nghiệp|kiệt sức/i],
-  ['spring', /chào đời|sinh con|cưới|kết hôn|nhận nuôi|mừng|đỗ|bắt đầu|nảy mầm|tìm thấy/i],
+  ['winter', /tang lễ|đám tang|qua đời|\bchết\b|mất (?:cha|mẹ|chồng|vợ|con|người thân)|phá sản|ly tán|chia ly|thất nghiệp|kiệt sức|lâm bệnh/i],
+  ['spring', /chào đời|sinh con|đám cưới|kết hôn|nhận nuôi|thi đỗ|đỗ đại học|nảy mầm/i],
   ['summer', /thăng chức|tăng lương|thành đạt|giàu|thành công|khởi nghiệp|vượt/i],
   ['autumn', /nghỉ hưu|hồi ký|di chúc|thu hoạch|trưởng thành|về già/i]
 ];

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Sparkles,
   Zap,
@@ -245,7 +245,7 @@ export default function DynamicLifeTree({
   // Mùa theo biến cố của năm vừa khép (nhật ký năm); không rõ thì quay về age % 4
   const eventSeasonId = seasonFromLatestEvent(character, annualDigest?.journal_line);
   const currentSeason = SEASONS.find(s => s.id === eventSeasonId) ?? SEASONS[seasonIndex];
-  const lifeMap = buildLifeTreeMap(character);
+  const lifeMap = useMemo(() => buildLifeTreeMap(character), [character]);
 
   // Country climate check (Việt Nam, Đông Nam Á & Vùng Nhiệt Đới vs Ôn đới)
   const isTropicalCountry = ['Việt Nam', 'Vietnam', 'Thailand', 'Thái Lan', 'Indonesia', 'Philippines', 'Singapore', 'Malaysia', 'Ấn Độ', 'India', 'Brazil', 'Somalia', 'Haiti'].some(c => 
