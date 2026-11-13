@@ -56,6 +56,9 @@ function validateStoryletFields(sc, scPath, errors) {
   const mq = p.min_quality;
   if (mq !== undefined && (!mq || typeof mq !== 'object' || Array.isArray(mq) || !Object.values(mq).every(Number.isFinite)))
     errors.push(`${scPath}: prerequisites.min_quality must map names to numbers.`);
+  for (const k of ['family_state', 'doors_closed', 'doors_open'])
+    if (p[k] !== undefined && !strArray(p[k])) errors.push(`${scPath}: prerequisites.${k} must be a string array.`);
+  if (sc.yields_to_group !== undefined && (typeof sc.yields_to_group !== 'string' || !sc.yields_to_group)) errors.push(`${scPath}: yields_to_group must be a non-empty string.`);
   if (sc.weight !== undefined && !(Number.isFinite(sc.weight) && sc.weight > 0)) errors.push(`${scPath}: weight must be a positive number.`);
   if (sc.cooldown_years !== undefined && !(Number.isInteger(sc.cooldown_years) && sc.cooldown_years >= 0)) errors.push(`${scPath}: cooldown_years must be a non-negative integer.`);
   if (sc.group !== undefined && typeof sc.group !== 'string') errors.push(`${scPath}: group must be a string.`);
@@ -70,6 +73,19 @@ function validateDoorFields(obj, path, errors) {
   if (dl !== undefined && (!dl || typeof dl !== 'object' || Array.isArray(dl) || !Object.values(dl).every(v => typeof v === 'string' && v.trim() && v.length <= 60)))
     errors.push(`${path}: door_labels must map door ids to non-empty labels (<= 60 chars).`);
   if (obj.irreversible !== undefined && typeof obj.irreversible !== 'boolean') errors.push(`${path}: irreversible must be a boolean.`);
+}
+
+const KNOWN_PLACEHOLDERS = new Set(['mentor', 'rival', 'love', 'creditor_or_benefactor', 'friend', 'family']);
+/** Warn (never error) on {tokens} that are not a known name placeholder. */
+function warnUnknownPlaceholders(node, path, warnings) {
+  const unknown = new Set();
+  const walk = v => {
+    if (typeof v === 'string') { for (const m of v.matchAll(/\{([^{}\s]*)\}/g)) if (!KNOWN_PLACEHOLDERS.has(m[1])) unknown.add(m[0]); }
+    else if (Array.isArray(v)) v.forEach(walk);
+    else if (v && typeof v === 'object') Object.values(v).forEach(walk);
+  };
+  walk(node);
+  if (unknown.size) warnings.push(`${path}: unknown placeholder(s) ${[...unknown].join(', ')} (known: ${[...KNOWN_PLACEHOLDERS].map(k => `{${k}}`).join(' ')}).`);
 }
 
 export function validateContentPack(pack) {
@@ -102,6 +118,7 @@ export function validateContentPack(pack) {
 
     if (!sc.title) errors.push(`${scPath}: Missing title.`);
     validateStoryletFields(sc, scPath, errors);
+    warnUnknownPlaceholders(sc, scPath, warnings);
     if (!Array.isArray(sc.scenes) || sc.scenes.length === 0) {
       errors.push(`${scPath}: Must have at least one 2D scene.`);
     } else {
