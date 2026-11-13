@@ -16,6 +16,7 @@ const KIND_ICON: Record<BranchKind, string> = {
 };
 // Slots chọn nằm giữa các góc nút hành động hiện có (180, 142, 35/38, 0, -35, -90, -145).
 const BRANCH_SLOT_DEG = [-118, -62, 160, 18, -165, 100];
+const TOP_SLOTS = 2; // hai slot đầu của BRANCH_SLOT_DEG (-118, -62) nằm sát nút đột phá phía trên
 const MAX_RING_AGE = 45; // trùng vòng vân gỗ sẵn có ở bệ gốc
 
 const ageText = (age: number | null) => (age === null ? '' : ` (${age} tuổi)`);
@@ -44,7 +45,7 @@ export function LifeTreeMapLayer({ map, centerX, centerY, baseRadius }: LayerPro
     <g className="life-tree-map-layer" aria-label="Bản đồ câu chuyện của đời này">
       {/* Roots: nhãn gắn hạt giống, cạnh hai rễ gia đình */}
       {map.roots.map((r, i) => (
-        <text key={r.id} x={i % 2 === 0 ? 190 : 530} y={i < 2 ? 448 : 466} textAnchor="middle" style={haloText} pointerEvents="auto">
+        <text key={r.id} className="max-xl:hidden" x={i % 2 === 0 ? 250 : 470} y={i < 2 ? 448 : 466} textAnchor="middle" style={haloText} pointerEvents="auto">
           <title>{`Rễ: ${r.label}`}</title>
           {`Rễ · ${short(r.label, 22)}`}
         </text>
@@ -64,7 +65,7 @@ export function LifeTreeMapLayer({ map, centerX, centerY, baseRadius }: LayerPro
       </g>
 
       {/* Branches */}
-      {geo.map(g => {
+      {geo.map((g, i) => {
         const withered = g.b.state === 'withered';
         const color = withered ? WITHERED_COLOR : KIND_COLOR[g.b.kind];
         const d = `M ${centerX} ${originY} Q ${g.cx} ${g.cy} ${g.ex} ${g.ey}`;
@@ -75,9 +76,12 @@ export function LifeTreeMapLayer({ map, centerX, centerY, baseRadius }: LayerPro
             <path d={d} fill="none" stroke="#0f172a" strokeOpacity={0.55} strokeWidth={width + 3} strokeLinecap="round" />
             <path d={d} fill="none" stroke={color} strokeWidth={width} strokeLinecap="round" strokeDasharray={withered ? '2 7' : undefined} strokeOpacity={withered ? 0.9 : 1} />
             <circle cx={g.ex} cy={g.ey} r={withered ? 4 : 5 + 3 * g.b.strength} fill={color} stroke="#0f172a" strokeWidth={1.5} />
-            <text x={g.ex} y={g.ey + (g.ey > centerY ? 20 : -12)} textAnchor="middle" style={haloText}>
-              {`${KIND_ICON[g.b.kind]} ${short(g.b.label)}${withered ? ' (héo)' : ''}`}
-            </text>
+            {/* Hai cành phía trên nằm dưới thẻ "Đột phá" và sát "Đèn Sách" (đo ở 1280/1440): không vẽ nhãn, tên đầy đủ ở tooltip và thẻ Mạch truyện */}
+            {i >= TOP_SLOTS && (
+              <text className="max-xl:hidden" x={g.ex} y={g.ey + (g.ey > centerY ? 20 : -12)} textAnchor="middle" style={haloText}>
+                {`${KIND_ICON[g.b.kind]} ${short(g.b.label)}${withered ? ' (héo)' : ''}`}
+              </text>
+            )}
           </g>
         );
       })}
@@ -127,7 +131,7 @@ export function LifeTreeMapCards({ map }: CardsProps) {
   const sub = 'text-xs text-slate-700 dark:text-slate-200 leading-snug break-words';
   const head = 'text-xs font-black uppercase tracking-wide text-slate-700 dark:text-slate-200 mt-1';
   return (
-    <details open className="md:hidden rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-canvas)] p-2" aria-label="Mạch truyện">
+    <details open className="xl:hidden rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-canvas)] p-2" aria-label="Mạch truyện">
       <summary className="min-h-[44px] flex items-center px-2 text-sm font-black text-slate-900 dark:text-white cursor-pointer select-none">
         Mạch truyện của đời này
       </summary>
