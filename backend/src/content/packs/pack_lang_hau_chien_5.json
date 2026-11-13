@@ -1,0 +1,2739 @@
+{
+  "pack_id": "pack_lang_hau_chien_5",
+  "name": "Làng Hậu Chiến: Đợt 5 (giữa đời và những năm cuối, 20 mẩu truyện)",
+  "version": "1.0.0",
+  "description": "Tuổi 38-49 (sổ nợ, cưới con gái, mái nhà cũ, cơn ho đầu, hội đình), tuổi 66-77 (làng đổi thay, chia ruộng, bạn cũ, cháu ở xa, di vật, điều giữ kín) và tuổi 76-90 (giường bệnh, lời chưa nói, vụ gặt ký ức, bị quên, giao nhà). Toàn bộ mẩu có điều kiện; bốn cặp biến thể loại trừ nhau.",
+  "scenarios": [
+    {
+      "id": "lhc5_so_no_cuoi_nam",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 3,
+      "title": "Sổ Nợ Cuối Năm",
+      "description": "Cuối năm, cuốn sổ nợ nằm trên mặt bàn, bìa mềm đi vì nước mắm và mồ hôi tay. Cộng lại, con số vẫn y như năm ngoái, chỉ người đọc nó là già thêm một tuổi. Ngoài sân, hàng xóm đang phơi lá dong gói bánh.",
+      "location_id": "village_home",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 38,
+        "max_age": 46,
+        "family_state": [
+          "no_nan"
+        ]
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "so_no_cuoi_nam",
+      "scenes": [
+        {
+          "id": "lhc5_so_no_cuoi_nam_scene",
+          "name": "Sổ Nợ Cuối Năm",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "lhc5_so_no_cuoi_nam_hs1",
+              "label": "Cuốn sổ bìa mềm",
+              "icon": "book",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Cuốn sổ",
+                "text": "Mỗi dòng một chữ ký, một ngày hẹn, một lần bạn đã gật đầu.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_so_no_cuoi_nam_hs2",
+              "label": "Chum gạo gần cạn",
+              "icon": "alert",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Chum gạo",
+                "text": "Tiếng gáo cạo đáy chum nghe như tiếng ai thở dài.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_so_no_cuoi_nam_hs3",
+              "label": "Dải lá dong ngoài sân",
+              "icon": "heart",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Lá dong",
+                "text": "Nhà nào cũng gói bánh. Nhà bạn chưa quyết là gói hay không.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Cuối năm, cuốn sổ nợ nằm trên mặt bàn, bìa mềm đi vì nước mắm và mồ hôi tay. Cộng lại, con số vẫn y như năm ngoái, chỉ người đọc nó là già thêm một tuổi. Ngoài sân, hàng xóm đang phơi lá dong gói bánh.",
+          "rational": "Bán con heo nái đi, trả được nửa. Tết có thể thiếu, nợ thì không.",
+          "empathy": "Con cái không nhớ con số, chỉ nhớ nhà có bánh hay không.",
+          "instinct": "Đừng đếm nữa. Có gì dùng nấy."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_01_A",
+          "title": "Bán con heo nái, trả bớt nợ trước Tết",
+          "stance": "LÝ TRÍ",
+          "description": "Nợ vơi, chuồng trống.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Con heo bị dắt đi lúc sương còn đọng, tiếng ụt ịt xa dần sau bờ tre. Sổ nợ gạch đi mấy dòng, chuồng thì trống đến hết mùa sau. Cả nhà ăn Tết mà không ai nhắc đến mùi cám.",
+              "effects": {
+                "cash_delta": 80,
+                "karma_delta": -2,
+                "burnout_delta": 4
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_01_B",
+          "title": "Vẫn gói bánh, vay thêm để con có cái Tết",
+          "stance": "TRÁI TIM",
+          "description": "Giữ cho con một năm đủ đầy.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Nồi bánh sôi suốt đêm, bọn trẻ thức canh, mặt đứa nào cũng hồng lên vì lửa. Bạn ngồi sau bếp, nhớ thêm một dòng vào cuốn sổ mà không dám ghi.",
+              "effects": {
+                "cash_delta": -150,
+                "karma_delta": 5,
+                "burnout_delta": 6
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_01_C",
+          "title": "Đóng sổ, đi làm thuê xa qua Tết",
+          "stance": "BẢN NĂNG",
+          "description": "Bỏ nhà để trả nợ.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn xách bao tải ra bến xe lúc trời chưa sáng. Tiền công về nhà được nhiều, mà đứa nhỏ lần đầu hỏi: bố có phải khách không. Bạn không trả lời được.",
+              "effects": {
+                "cash_delta": 200,
+                "karma_delta": -4,
+                "burnout_delta": 10,
+                "vitality_delta": -3
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_sinh_le_con_gai",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 3,
+      "title": "Sính Lễ Con Gái",
+      "description": "Nhà trai sang xem mặt, mang theo một cặp gà và hỏi về sính lễ. Trong nhà chỉ còn tấm lụa của bà để lại và một khoản nợ chưa ráo mực. {family} ngồi góc bếp, không dám nhìn ai.",
+      "location_id": "village_home",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 40,
+        "max_age": 47,
+        "family_state": [
+          "no_nan",
+          "con_nuoi",
+          "cha_me_ly_tan"
+        ]
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "dam_cuoi_con",
+      "scenes": [
+        {
+          "id": "lhc5_sinh_le_con_gai_scene",
+          "name": "Sính Lễ Con Gái",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "lhc5_sinh_le_con_gai_hs1",
+              "label": "Cặp gà nhà trai mang sang",
+              "icon": "users",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Cặp gà",
+                "text": "Hai con gà trống mào đỏ, cột chân bằng sợi dây còn mới.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_sinh_le_con_gai_hs2",
+              "label": "Tấm lụa của bà",
+              "icon": "heart",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Tấm lụa",
+                "text": "Gấp mười năm trong rương, lúc mở ra vẫn thơm mùi long não.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            },
+            {
+              "id": "lhc5_sinh_le_con_gai_hs3",
+              "label": "{family} ngồi góc bếp",
+              "icon": "users",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Người nhà",
+                "text": "Một bàn tay xoa mãi vạt áo, như thể lau được chuyện nghèo.",
+                "cost_ap": 0
+              },
+              "npc_role": "family"
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Nhà trai sang xem mặt, mang theo một cặp gà và hỏi về sính lễ. Trong nhà chỉ còn tấm lụa của bà để lại và một khoản nợ chưa ráo mực. {family} ngồi góc bếp, không dám nhìn ai.",
+          "rational": "Nói thật ngay từ đầu. Sính lễ vay mượn sẽ thành nợ của đôi trẻ.",
+          "empathy": "Con gái chỉ cưới một lần, bà ngoại sẽ muốn tấm lụa đi cùng cháu.",
+          "instinct": "Đừng để nhà trai khinh. Lo xong rồi tính."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_02_A",
+          "title": "Đem tấm lụa của bà làm lễ",
+          "stance": "TRÁI TIM",
+          "description": "Cho con thứ quý nhất còn lại.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Nhà trai mở tấm lụa ra dưới ánh đèn dầu, im một lúc rồi gật đầu. Đêm đó bạn mở rương, chỉ còn mùi long não và mảnh giấy lót. {family} khóc nhỏ, không rõ vì con gái hay vì tấm lụa.",
+              "effects": {
+                "cash_delta": -100,
+                "karma_delta": 6,
+                "burnout_delta": 3
+              },
+              "npc_memory": [
+                {
+                  "role": "family",
+                  "tag": "đã_hy_sinh_kỷ_vật",
+                  "text": "Đem tấm lụa của bà làm sính lễ cho con."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "LHC5_02_B",
+          "title": "Nói thật nhà nghèo, xin cưới giản dị",
+          "stance": "LÝ TRÍ",
+          "description": "Giữ tự trọng, chịu mất mặt.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn nói chậm, nhìn thẳng vào ông bố nhà trai. Ông ấy hút xong điếu thuốc rồi bảo cứ cưới nhỏ cũng được. Nhưng suốt buổi, bạn nghe tiếng mình nói còn vang trong tai.",
+              "effects": {
+                "karma_delta": 4,
+                "burnout_delta": 4
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_02_C",
+          "title": "Vay chủ nợ cho đủ mâm, trả dần",
+          "stance": "BẢN NĂNG",
+          "description": "Giữ thể diện bằng một món nợ mới.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Mâm cỗ đầy, tiếng cười rộn, không ai biết tờ giấy vay gấp trong túi áo bạn. Đám cưới xong, nợ nằm lại sau cánh cửa, đợi từng vụ gặt.",
+              "effects": {
+                "cash_delta": -200,
+                "karma_delta": -3,
+                "burnout_delta": 8
+              },
+              "npc_memory": [
+                {
+                  "role": "creditor_or_benefactor",
+                  "tag": "debt",
+                  "text": "Vay thêm để lo cưới cho con."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_mam_co_con_gai",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 3,
+      "title": "Mâm Cỗ Con Gái",
+      "description": "Nhà trai sang xem mặt, cặp gà đã được buộc dưới gốc cau. Trong nhà đủ lụa, đủ gạo, câu hỏi là lo đến mức nào. Cả xóm sẽ nhớ mâm cỗ này lâu hơn tên cô dâu.",
+      "location_id": "village_home",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 40,
+        "max_age": 47,
+        "family_state": [
+          "binh_thuong",
+          "danh_gia"
+        ]
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "dam_cuoi_con",
+      "scenes": [
+        {
+          "id": "lhc5_mam_co_con_gai_scene",
+          "name": "Mâm Cỗ Con Gái",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "lhc5_mam_co_con_gai_hs1",
+              "label": "Cặp gà dưới gốc cau",
+              "icon": "users",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Cặp gà",
+                "text": "Hai con gà trống mào đỏ, nhìn hai bên như đang đợi lời hỏi.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_mam_co_con_gai_hs2",
+              "label": "Mâm cỗ chưa dọn",
+              "icon": "coffee",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Mâm cỗ",
+                "text": "Xôi gấc, giò, nem rán. Bạn nhẩm tên từng người sẽ ngồi ăn.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            },
+            {
+              "id": "lhc5_mam_co_con_gai_hs3",
+              "label": "Con gái ngồi sau cánh cửa",
+              "icon": "heart",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Cô con gái",
+                "text": "Nó nghe hết, và đang giả vờ vá áo.",
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Nhà trai sang xem mặt, cặp gà đã được buộc dưới gốc cau. Trong nhà đủ lụa, đủ gạo, câu hỏi là lo đến mức nào. Cả xóm sẽ nhớ mâm cỗ này lâu hơn tên cô dâu.",
+          "rational": "Lo vừa phải. Mâm cao không làm hôn nhân bền hơn.",
+          "empathy": "Con gái muốn nhìn thấy cha mẹ cười trong ngày ấy.",
+          "instinct": "Cho cả làng biết nhà mình có phúc."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_03_A",
+          "title": "Làm cỗ to, mời cả xóm",
+          "stance": "BẢN NĂNG",
+          "description": "Một ngày để mọi người nhớ.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Nồi xôi thổi ba lần, người ăn xong còn xin thêm. Đến chiều bạn thấy con gái cười thật sự, trước khi về nhà chồng. Sáng hôm sau, cái sân chỉ còn lá chuối và tiếng quạ.",
+              "effects": {
+                "cash_delta": -150,
+                "karma_delta": 5,
+                "burnout_delta": -3
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_03_B",
+          "title": "Làm vừa đủ, để dành tiền cho đôi trẻ dựng nhà",
+          "stance": "LÝ TRÍ",
+          "description": "Bớt tiếng khen, thêm mái nhà.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Mâm cỗ gọn, khách ra về sớm, có người nói nhỏ rằng nhà này tính toán. Hai tháng sau đôi trẻ dựng được gian bếp, bạn đứng nhìn mái tranh mới và chẳng thấy tiếc mâm cỗ.",
+              "effects": {
+                "cash_delta": 60,
+                "karma_delta": 1,
+                "burnout_delta": 2
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_03_C",
+          "title": "Để con tự quyết cách tổ chức, bạn chỉ cầm tiền",
+          "stance": "TRÁI TIM",
+          "description": "Nhường lại cái ngày của nó.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Con gái chọn cưới sớm, chỉ hai mâm, khách là người nó thật lòng quý. Bạn ngồi bàn cuối, thấy mình ít nói hơn mọi lần, và thấy con lớn thật rồi.",
+              "effects": {
+                "cash_delta": -60,
+                "karma_delta": 4,
+                "burnout_delta": -4
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_mai_nha_nguoi_khac",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 3,
+      "title": "Mái Nhà Người Khác",
+      "description": "Mười năm sau ngày mất nhà, bạn lại đi ngang ngõ cũ. Mái ngói đã thay, cây cau bị chặt, ai đó trồng cây hồng trước cổng. {creditor_or_benefactor} đang bán lại căn nhà, và nhận ra bạn đứng ngoài hàng rào.",
+      "location_id": "village_alley",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 39,
+        "max_age": 47,
+        "doors_open": [
+          "l3_mat_nha"
+        ],
+        "requires_npc": {
+          "role": "creditor_or_benefactor"
+        }
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "mai_nha",
+      "scenes": [
+        {
+          "id": "lhc5_mai_nha_nguoi_khac_scene",
+          "name": "Mái Nhà Người Khác",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "lhc5_mai_nha_nguoi_khac_hs1",
+              "label": "Cây hồng trước cổng",
+              "icon": "sparkles",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Cây hồng",
+                "text": "Người ta trồng sau cái ngày bạn đi. Quả đỏ, lá thưa.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_mai_nha_nguoi_khac_hs2",
+              "label": "Vết khắc chiều cao trên khung cửa",
+              "icon": "heart",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Khung cửa",
+                "text": "Vẫn còn ba vạch, vạch cao nhất là của đứa lớn.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            },
+            {
+              "id": "lhc5_mai_nha_nguoi_khac_hs3",
+              "label": "{creditor_or_benefactor} mở cổng",
+              "icon": "ledger",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Chủ nhà",
+                "text": "Ông ấy không nói giá ngay. Ông ấy hỏi bạn có muốn vào xem không.",
+                "cost_ap": 0
+              },
+              "npc_role": "creditor_or_benefactor"
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Mười năm sau ngày mất nhà, bạn lại đi ngang ngõ cũ. Mái ngói đã thay, cây cau bị chặt, ai đó trồng cây hồng trước cổng. {creditor_or_benefactor} đang bán lại căn nhà, và nhận ra bạn đứng ngoài hàng rào.",
+          "rational": "Mua lại thì sạch nợ cảm xúc, nhưng giá này là cả đời gom.",
+          "empathy": "Không phải gạch ngói, mà là mấy vạch trên khung cửa.",
+          "instinct": "Quay đi. Có những cái cửa không nên mở lần hai."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_04_A",
+          "title": "Dồn hết vốn mua lại căn nhà cũ",
+          "stance": "TRÁI TIM",
+          "description": "Đưa các con về chỗ có ba vạch chiều cao.",
+          "cost_ap": 0,
+          "irreversible": true,
+          "locks": [
+            "l5_nha_moi_noi_khac"
+          ],
+          "unlocks": [
+            "l5_ve_nha_cu"
+          ],
+          "door_labels": {
+            "l5_ve_nha_cu": "Đã mua lại căn nhà cũ",
+            "l5_nha_moi_noi_khac": "Dựng nhà ở nơi khác"
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Giấy tờ ký xong lúc nắng gắt. Bạn bước vào nhà, ngửi thấy mùi ẩm lạ, và vẫn không muốn đi ra. Tiền tích cóp nhiều năm hết ngay trong buổi sáng.",
+              "effects": {
+                "cash_delta": -250,
+                "karma_delta": 5,
+                "burnout_delta": 6
+              },
+              "npc_memory": [
+                {
+                  "role": "creditor_or_benefactor",
+                  "tag": "đã_được_trả_nợ",
+                  "text": "Bán lại căn nhà cho bạn sau mười năm."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "LHC5_04_B",
+          "title": "Xin chủ nhà cho vào xem lần cuối, rồi thôi",
+          "stance": "LÝ TRÍ",
+          "description": "Nhìn một lần để đóng lại.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn đứng trong gian giữa, thấy mình nhỏ hơn hồi trước. Ông chủ nhà rót nước không nói gì. Lúc ra cổng, bạn tự thấy nhẹ, lại tự thấy mình vừa bỏ mặc một thứ gì.",
+              "effects": {
+                "karma_delta": 2,
+                "burnout_delta": -5
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_04_C",
+          "title": "Không vào, mua mảnh đất trống cạnh đê dựng nhà mới",
+          "stance": "BẢN NĂNG",
+          "description": "Bỏ quá khứ, làm lại từ cái cột đầu tiên.",
+          "cost_ap": 0,
+          "locks": [
+            "l5_ve_nha_cu"
+          ],
+          "unlocks": [
+            "l5_nha_moi_noi_khac"
+          ],
+          "door_labels": {
+            "l5_ve_nha_cu": "Đã mua lại căn nhà cũ",
+            "l5_nha_moi_noi_khac": "Dựng nhà ở nơi khác"
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Bạn đóng cột đầu tiên lúc trời đổ mưa phùn, người làng thôi không hỏi sao nhà bạn không phải nhà cũ. Căn nhà mới nhỏ hơn, nhưng không có vạch nào trên khung cửa nhắc bạn điều gì.",
+              "effects": {
+                "cash_delta": -120,
+                "karma_delta": -2,
+                "burnout_delta": 4,
+                "vitality_delta": -2
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_con_ho_dau_tien",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 3,
+      "title": "Cơn Ho Đầu Tiên",
+      "description": "Đêm nay bạn ho đến mức làm thức cả nhà, và trên vạt áo có một vệt đỏ nhỏ. {mentor} từng bảo tài năng của bạn đi kèm một cái giá, bạn cứ nghĩ đó là câu nói cho vui. Sáng mai là phiên chợ lớn, bạn đã hứa có mặt.",
+      "location_id": "village_home",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 41,
+        "max_age": 48,
+        "fate_thread": "tai_nang_yeu_menh",
+        "requires_npc": {
+          "role": "mentor"
+        }
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "suc_khoe",
+      "scenes": [
+        {
+          "id": "lhc5_con_ho_dau_tien_scene",
+          "name": "Cơn Ho Đầu Tiên",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "lhc5_con_ho_dau_tien_hs1",
+              "label": "Vệt đỏ trên vạt áo",
+              "icon": "alert",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Vạt áo",
+                "text": "Nhỏ như hạt gạo, nhưng bạn nhìn nó lâu hơn nhìn bất cứ gì khác.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_con_ho_dau_tien_hs2",
+              "label": "Ấm thuốc nam cạn nước",
+              "icon": "tool",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Ấm thuốc",
+                "text": "Bà hàng xóm sắc hộ từ hôm trước, bạn chưa uống hết một thang.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_con_ho_dau_tien_hs3",
+              "label": "Thư cũ của {mentor}",
+              "icon": "book",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Lá thư",
+                "text": "Nét chữ run: đừng đốt hết mình cho một việc, kẻo không còn gì cho người.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              },
+              "npc_role": "mentor"
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Đêm nay bạn ho đến mức làm thức cả nhà, và trên vạt áo có một vệt đỏ nhỏ. {mentor} từng bảo tài năng của bạn đi kèm một cái giá, bạn cứ nghĩ đó là câu nói cho vui. Sáng mai là phiên chợ lớn, bạn đã hứa có mặt.",
+          "rational": "Nghỉ ngơi, khám trên huyện. Phiên chợ năm nào chẳng còn.",
+          "empathy": "Người nhà cần bạn khoẻ hơn cần bạn nổi tiếng.",
+          "instinct": "Đừng nói với ai. Đã biết thì phải chạy nhanh hơn."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_05_A",
+          "title": "Bỏ phiên chợ, lên huyện khám ngay",
+          "stance": "LÝ TRÍ",
+          "description": "Chịu mất một mối làm ăn.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn ngồi xe thồ trên đường đất, mỗi xóc là một cơn ho. Thầy thuốc bảo còn sớm nếu biết nghỉ. Mối hàng lớn sang tay người khác, bạn nhìn bóng họ khuất nhỏ dần mà không đuổi.",
+              "effects": {
+                "cash_delta": -150,
+                "karma_delta": 2,
+                "burnout_delta": -6,
+                "vitality_delta": 3
+              },
+              "npc_memory": [
+                {
+                  "role": "mentor",
+                  "tag": "đã_nghe_lời_muộn",
+                  "text": "Bạn nghe lời dặn, bỏ phiên chợ để lo thân."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "LHC5_05_B",
+          "title": "Vẫn đi chợ, uống thuốc nam, giấu vệt đỏ",
+          "stance": "BẢN NĂNG",
+          "description": "Đánh cược thêm vài năm nữa.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Phiên chợ ấy bạn bán chạy nhất năm. Chiều về, bạn phải dựa tường nghỉ trước khi bước qua cổng. Không ai thấy, trừ con chó nằm ở ngưỡng cửa.",
+              "effects": {
+                "cash_delta": 220,
+                "karma_delta": -3,
+                "burnout_delta": 8,
+                "vitality_delta": -8
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_05_C",
+          "title": "Kể hết cho người nhà, nhờ họ chia việc",
+          "stance": "TRÁI TIM",
+          "description": "Nhận mình không bất tử.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn nói khẽ, như nói chuyện của người khác. Không ai khóc ngay. Đứa lớn lẳng lặng nhận việc gánh nước, đứa nhỏ rửa bát không cần ai bảo. Từ hôm đó, nhà biết nghe tiếng ho của bạn.",
+              "effects": {
+                "cash_delta": -60,
+                "karma_delta": 5,
+                "burnout_delta": -5,
+                "vitality_delta": -2
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_ve_dinh_lang_nguoi_di",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 3,
+      "title": "Về Đình Làng Sau Hai Chục Năm",
+      "description": "Bạn đã rời làng từ năm mười bảy, giờ về dự hội đình lần đầu sau hai chục năm. Sân đình vẫn thế, chỉ người ngồi đó đã hoá thành những ông bà bạn từng gọi bằng anh chị. Có tiếng gọi tên bạn từ chiếu bên kia, giọng quen mà khuôn mặt thì lạ.",
+      "location_id": "village_communal_house",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 42,
+        "max_age": 49,
+        "doors_open": [
+          "l2_roi_lang"
+        ]
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "ngay_hoi_quay_ve",
+      "scenes": [
+        {
+          "id": "lhc5_ve_dinh_lang_nguoi_di_scene",
+          "name": "Về Đình Làng Sau Hai Chục Năm",
+          "background_theme": "garden_peaceful",
+          "hotspots": [
+            {
+              "id": "lhc5_ve_dinh_lang_nguoi_di_hs1",
+              "label": "Cây đa đầu đình",
+              "icon": "sparkles",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Cây đa",
+                "text": "Rễ vươn thêm ra mặt sân, như đưa tay đón người về.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_ve_dinh_lang_nguoi_di_hs2",
+              "label": "Chiếu trà bên kia sân",
+              "icon": "coffee",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Chiếu trà",
+                "text": "Người xưa ngồi xếp bằng, chia nhau một đĩa kẹo lạc.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            },
+            {
+              "id": "lhc5_ve_dinh_lang_nguoi_di_hs3",
+              "label": "Bàn thờ thành hoàng",
+              "icon": "heart",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Bàn thờ",
+                "text": "Hương mới thắp, tàn cũ chưa kịp rơi.",
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Bạn đã rời làng từ năm mười bảy, giờ về dự hội đình lần đầu sau hai chục năm. Sân đình vẫn thế, chỉ người ngồi đó đã hoá thành những ông bà bạn từng gọi bằng anh chị. Có tiếng gọi tên bạn từ chiếu bên kia, giọng quen mà khuôn mặt thì lạ.",
+          "rational": "Về rồi thì về cho trọn, đừng đứng ngoài nhìn.",
+          "empathy": "Họ nhớ bạn nhiều hơn bạn đoán.",
+          "instinct": "Ngồi xuống đi, cái ngượng sẽ qua trong một chén trà."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_06_A",
+          "title": "Ngồi xuống chiếu, kể chuyện hai chục năm",
+          "stance": "TRÁI TIM",
+          "description": "Làm khách một buổi, làm người nhà một buổi.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Câu chuyện của bạn dài quá, ai cũng cắt ngang để hỏi thêm. Đến lúc trống đình đổi hồi, đĩa kẹo lạc đã hết và bạn thấy mình nói nhiều hơn cả năm trước cộng lại.",
+              "effects": {
+                "cash_delta": -30,
+                "karma_delta": 5,
+                "burnout_delta": -8
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_06_B",
+          "title": "Góp tiền tu sửa mái đình",
+          "stance": "LÝ TRÍ",
+          "description": "Để lại dấu mình ở nơi đã bỏ.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Người giữ đình ghi tên bạn lên tấm bảng gỗ, nét chữ xiêu vẹo. Bạn đứng nhìn lâu hơn cần thiết, và hiểu mình đang mua một chỗ để được nhớ.",
+              "effects": {
+                "cash_delta": -120,
+                "karma_delta": 4,
+                "burnout_delta": -2
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_06_C",
+          "title": "Dự lễ rồi về trước khi trời tối",
+          "stance": "BẢN NĂNG",
+          "description": "Giữ khoảng cách để khỏi tiếc.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn ra đến đầu làng thì nghe tiếng trống nổi lên lần nữa. Xe lăn bánh, sau lưng chỉ còn một đám bụi và mùi hương, mà bạn mang theo cả tuần.",
+              "effects": {
+                "karma_delta": -2,
+                "burnout_delta": 2
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_nguoi_o_lai_don_nguoi_ve",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 3,
+      "title": "Người Ở Lại Đón Người Về",
+      "description": "Hội đình năm nay đông bất thường vì nhiều người đi xa rủ nhau về. Bạn là kẻ chưa từng rời làng, nên được nhờ đứng đón khách ở cổng. Họ chào bạn bằng giọng lạ, hỏi có nhớ họ không, và bạn thấy mình hơi giống cây đa.",
+      "location_id": "village_communal_house",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 42,
+        "max_age": 49,
+        "doors_open": [
+          "l2_o_lai_lang"
+        ]
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "ngay_hoi_quay_ve",
+      "scenes": [
+        {
+          "id": "lhc5_nguoi_o_lai_don_nguoi_ve_scene",
+          "name": "Người Ở Lại Đón Người Về",
+          "background_theme": "garden_peaceful",
+          "hotspots": [
+            {
+              "id": "lhc5_nguoi_o_lai_don_nguoi_ve_hs1",
+              "label": "Cổng đình đầy xe",
+              "icon": "users",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Cổng đình",
+                "text": "Xe đạp, xe thồ, có cả một chiếc ô tô nhỏ đậu lệch bên bờ ruộng.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_nguoi_o_lai_don_nguoi_ve_hs2",
+              "label": "Quầy nước chè bạn trông",
+              "icon": "coffee",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Quầy chè",
+                "text": "Có người trả tiền gấp đôi, nói cứ giữ lại, như thể chè quê đáng giá hơn thế.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            },
+            {
+              "id": "lhc5_nguoi_o_lai_don_nguoi_ve_hs3",
+              "label": "Người khách xa cứ ngoái nhìn ruộng",
+              "icon": "heart",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Người khách",
+                "text": "Họ hỏi thửa nào là nhà ai, như thể muốn thuộc lại bản đồ.",
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Hội đình năm nay đông bất thường vì nhiều người đi xa rủ nhau về. Bạn là kẻ chưa từng rời làng, nên được nhờ đứng đón khách ở cổng. Họ chào bạn bằng giọng lạ, hỏi có nhớ họ không, và bạn thấy mình hơi giống cây đa.",
+          "rational": "Đón cho chu đáo, nhưng đừng để mình thành người phục vụ.",
+          "empathy": "Ai cũng muốn được thấy làng vẫn còn người đợi.",
+          "instinct": "Hỏi họ vì sao đi, vì sao về, đừng giả vờ không tò mò."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_07_A",
+          "title": "Dẫn khách đi một vòng làng, chỉ từng thửa ruộng",
+          "stance": "TRÁI TIM",
+          "description": "Bỏ một ngày làm đồng để làm người dẫn đường.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Chân bạn mỏi, đồng ruộng thì đứng đợi. Nhưng khi người khách dừng lại ở bờ ao cũ, nói tôi từng ngã ở đây, bạn biết mình vừa giữ được một mảnh ký ức của ai đó.",
+              "effects": {
+                "cash_delta": -60,
+                "karma_delta": 6,
+                "burnout_delta": 2,
+                "vitality_delta": -2
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_07_B",
+          "title": "Nhận tiền chè, bán thêm đặc sản làng",
+          "stance": "LÝ TRÍ",
+          "description": "Làm ăn trong ngày hội.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Hôm ấy bạn bán sạch ba mẻ bánh gai. Chiều xuống, tiền đầy túi, mà nghe mơ hồ trong lời khách: chúng tôi tưởng quê vẫn như xưa, ai ngờ có người bán cả quê.",
+              "effects": {
+                "cash_delta": 140,
+                "karma_delta": -3,
+                "burnout_delta": 4
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_07_C",
+          "title": "Hỏi thẳng một người xưa: sao hồi đó bỏ đi mà không chào?",
+          "stance": "BẢN NĂNG",
+          "description": "Đòi một câu trả lời cũ.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Người ấy khựng lại, rồi nói vì xấu hổ. Bạn nghĩ mười năm nay mình giận oan, hoặc không oan, không phân biệt nổi. Cả hai đứng im bên cái chum nước, nhìn lá rơi.",
+              "effects": {
+                "karma_delta": 2,
+                "burnout_delta": 4
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_lang_doi_nguoi_o_lai",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Làng Đổi Thay, Người Ở Lại",
+      "description": "Nhà máy mới mua lại những thửa ruộng ven đê, người ta chỉ còn gọi bạn đến để ký giấy. Cả đời bạn ở lại làng, vậy mà nay làng là thứ đi mất trước. Con trâu cuối cùng của xóm đã được bán tuần trước.",
+      "location_id": "village_paddy",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 67,
+        "max_age": 75,
+        "doors_open": [
+          "l3_o_lai_lang"
+        ]
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "lang_doi_thay",
+      "scenes": [
+        {
+          "id": "lhc5_lang_doi_nguoi_o_lai_scene",
+          "name": "Làng Đổi Thay, Người Ở Lại",
+          "background_theme": "garden_peaceful",
+          "hotspots": [
+            {
+              "id": "lhc5_lang_doi_nguoi_o_lai_hs1",
+              "label": "Tờ giấy chờ ký",
+              "icon": "ledger",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Tờ giấy",
+                "text": "Chữ in sắc nét, tên bạn viết tay xiêu vẹo bên cạnh.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_lang_doi_nguoi_o_lai_hs2",
+              "label": "Thửa ruộng bờ đê",
+              "icon": "sparkles",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Thửa ruộng",
+                "text": "Lúa chín cuối cùng đang ngả vàng. Có đứa nhỏ đứng ngoài chụp ảnh.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            },
+            {
+              "id": "lhc5_lang_doi_nguoi_o_lai_hs3",
+              "label": "Chuồng trâu bỏ trống",
+              "icon": "alert",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Chuồng trâu",
+                "text": "Cọc buộc còn nhẵn đúng chỗ dây thừng đã cọ mười năm.",
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Nhà máy mới mua lại những thửa ruộng ven đê, người ta chỉ còn gọi bạn đến để ký giấy. Cả đời bạn ở lại làng, vậy mà nay làng là thứ đi mất trước. Con trâu cuối cùng của xóm đã được bán tuần trước.",
+          "rational": "Bán thì được tiền chữa bệnh và nuôi cháu. Giữ thì ai cày thay?",
+          "empathy": "Làng không biến mất, nó chỉ đổi người ở.",
+          "instinct": "Đừng ký. Đứng đây cho họ thấy vẫn còn người."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_08_A",
+          "title": "Ký bán thửa ruộng, lấy tiền cho con cháu",
+          "stance": "LÝ TRÍ",
+          "description": "Mất đất, được an tâm.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn ký bằng nét chữ run, xong rồi ngồi lại bờ đê đến tối. Tiền đủ cho đứa cháu học, và đủ để bạn không dám nhìn lúa chín nữa.",
+              "effects": {
+                "cash_delta": 250,
+                "karma_delta": -3,
+                "burnout_delta": 6
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_08_B",
+          "title": "Giữ lại thửa ruộng, cho thuê làm vườn rau",
+          "stance": "TRÁI TIM",
+          "description": "Giữ đất, bỏ tham vọng.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Mấy luống rau xanh mọc lên ở chỗ lúa. Lời lãi ít hơn nhưng sáng sáng bạn vẫn ra bờ đê, vẫn được gọi là người trồng trọt. Thứ mất đi là mùi rơm.",
+              "effects": {
+                "cash_delta": 40,
+                "karma_delta": 4,
+                "burnout_delta": 2
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_08_C",
+          "title": "Từ chối ký, rủ các ông bà già trong xóm bàn cách giữ đất",
+          "stance": "BẢN NĂNG",
+          "description": "Đối đầu với đồng tiền.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Hai ngày sau cả xóm họp ở sân đình, chia thành hai phe. Phe của bạn thua sít sao. Tối đó bạn vẫn thấy mình đúng, và thấy mình cô độc.",
+              "effects": {
+                "cash_delta": -50,
+                "karma_delta": 3,
+                "burnout_delta": 8,
+                "vitality_delta": -2
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_lang_doi_nguoi_tro_ve",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Làng Đổi Thay, Người Trở Về",
+      "description": "Về hưu, bạn trở lại làng cũ với một cái túi vải và tấm ảnh con ngõ. Ngõ ấy bây giờ lát xi măng, cây khế mất, nhà bên kia đã thành quán tạp hoá. Đứa nhỏ hỏi bạn là ai, và bạn chưa biết trả lời bằng tên cũ hay tên mới.",
+      "location_id": "village_alley",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 67,
+        "max_age": 75,
+        "doors_open": [
+          "l3_roi_lang"
+        ]
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "lang_doi_thay",
+      "scenes": [
+        {
+          "id": "lhc5_lang_doi_nguoi_tro_ve_scene",
+          "name": "Làng Đổi Thay, Người Trở Về",
+          "background_theme": "garden_peaceful",
+          "hotspots": [
+            {
+              "id": "lhc5_lang_doi_nguoi_tro_ve_hs1",
+              "label": "Con ngõ lát xi măng",
+              "icon": "alert",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Con ngõ",
+                "text": "Chân bạn vẫn rẽ đúng chỗ, dù đường đã khác.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_lang_doi_nguoi_tro_ve_hs2",
+              "label": "Quán tạp hoá",
+              "icon": "coffee",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Quán tạp hoá",
+                "text": "Bán mì gói và nước ngọt, nơi cây khế từng đứng.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            },
+            {
+              "id": "lhc5_lang_doi_nguoi_tro_ve_hs3",
+              "label": "Tấm ảnh trong túi vải",
+              "icon": "heart",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Tấm ảnh",
+                "text": "Hai đứa trẻ trước cổng nhà, một trong hai là bạn.",
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Về hưu, bạn trở lại làng cũ với một cái túi vải và tấm ảnh con ngõ. Ngõ ấy bây giờ lát xi măng, cây khế mất, nhà bên kia đã thành quán tạp hoá. Đứa nhỏ hỏi bạn là ai, và bạn chưa biết trả lời bằng tên cũ hay tên mới.",
+          "rational": "Mua lại một mảnh đất nhỏ, dựng căn nhà nhỏ mà ở.",
+          "empathy": "Làng nhận mình không phải ở thủ tục mà ở những lần ngồi lại.",
+          "instinct": "Đừng cố giành lại cái đã mất. Đi nhẹ."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_09_A",
+          "title": "Bán nhà trên tỉnh, dồn tiền về dựng nhà ở làng",
+          "stance": "TRÁI TIM",
+          "description": "Chịu mất tiện nghi.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Căn nhà trên tỉnh bán nhanh hơn bạn nghĩ. Nhà mới ở làng không có nước máy, phải ra giếng, và lần đầu sau năm chục năm, bạn nghe tiếng ếch đêm. Bạn không biết đó là nhà hay là sự bù đắp.",
+              "effects": {
+                "cash_delta": -200,
+                "karma_delta": 5,
+                "burnout_delta": 4,
+                "vitality_delta": -3
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_09_B",
+          "title": "Về chơi ít ngày rồi lên tỉnh",
+          "stance": "LÝ TRÍ",
+          "description": "Giữ chỗ ở cũ.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Ba ngày ở làng vừa đủ để chán và nhớ. Lúc ra bến xe, người bán vé hỏi quê bạn ở đâu, bạn đáp một tên huyện, chứ không đáp tên làng.",
+              "effects": {
+                "cash_delta": -40,
+                "karma_delta": -2,
+                "burnout_delta": 2
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_09_C",
+          "title": "Ngồi cả buổi chiều ở quán tạp hoá, làm quen từng người",
+          "stance": "BẢN NĂNG",
+          "description": "Bắt đầu lại từ chỗ người lạ.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bà chủ quán ban đầu đề phòng, rồi cho bạn mượn cái ghế đẩu. Cuối buổi, cô gái hỏi bác tên là gì để gọi cho đúng, và bạn nói tên cũ.",
+              "effects": {
+                "cash_delta": -20,
+                "karma_delta": 3,
+                "burnout_delta": -4
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_thua_ruong_cho_ai",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Thửa Ruộng Cho Ai",
+      "description": "Tay bạn không còn đủ lực cầm cày, và {family} đã đến hỏi chuyện chia ruộng. Hai đứa con đều muốn thửa lớn, đứa ở lại làng, đứa đi xa chỉ về mỗi Tết. Bạn không thể chia đôi mà không phá thửa ruộng, và không thể giữ mà không phụ ai.",
+      "location_id": "village_paddy",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 66,
+        "max_age": 73,
+        "family_state": [
+          "no_nan",
+          "danh_gia",
+          "binh_thuong"
+        ],
+        "requires_npc": {
+          "role": "family"
+        }
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "chia_ruong",
+      "scenes": [
+        {
+          "id": "lhc5_thua_ruong_cho_ai_scene",
+          "name": "Thửa Ruộng Cho Ai",
+          "background_theme": "garden_peaceful",
+          "hotspots": [
+            {
+              "id": "lhc5_thua_ruong_cho_ai_hs1",
+              "label": "Cột mốc đá đầu bờ",
+              "icon": "ledger",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Cột mốc",
+                "text": "Cha bạn chôn xuống, ghi ba chữ mà mưa đã làm mờ.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_thua_ruong_cho_ai_hs2",
+              "label": "Đứa ở lại đứng cuối ruộng",
+              "icon": "users",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Đứa ở lại",
+                "text": "Chân dính bùn, mắt không nhìn bạn. Nó đã nói hết rồi.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              },
+              "npc_role": "family"
+            },
+            {
+              "id": "lhc5_thua_ruong_cho_ai_hs3",
+              "label": "Phong thư của đứa đi xa",
+              "icon": "heart",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Phong thư",
+                "text": "Chữ viết cẩn thận, hai lần xin lỗi vì không về được.",
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Tay bạn không còn đủ lực cầm cày, và {family} đã đến hỏi chuyện chia ruộng. Hai đứa con đều muốn thửa lớn, đứa ở lại làng, đứa đi xa chỉ về mỗi Tết. Bạn không thể chia đôi mà không phá thửa ruộng, và không thể giữ mà không phụ ai.",
+          "rational": "Cho đứa ở lại. Đứa ở xa còn có chỗ khác để dựa.",
+          "empathy": "Đứa nào cũng là con, mà ruộng thì chỉ một thửa.",
+          "instinct": "Chia luôn mỗi đứa một nửa, rồi mặc xem chúng xoay xở."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_10_A",
+          "title": "Giao cả thửa cho đứa ở lại, ghi tên nó trong giấy",
+          "stance": "LÝ TRÍ",
+          "description": "Mất sự công bằng, giữ cái ruộng nguyên vẹn.",
+          "cost_ap": 0,
+          "irreversible": true,
+          "locks": [
+            "l5_ruong_chia_deu"
+          ],
+          "unlocks": [
+            "l5_ruong_ve_mot_con"
+          ],
+          "persist_doors": [
+            "l5_ruong_ve_mot_con"
+          ],
+          "door_labels": {
+            "l5_ruong_ve_mot_con": "Giao hết ruộng cho một người con",
+            "l5_ruong_chia_deu": "Chia ruộng đều cho các con"
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Bạn ký tên trên giấy của xã, đứa ở lại khóc không thành tiếng. Phong thư kia bạn không mở lại. Tháng sau, tiền đứa xa gửi về ít dần, rồi hết hẳn.",
+              "effects": {
+                "karma_delta": -4,
+                "burnout_delta": 4
+              },
+              "npc_memory": [
+                {
+                  "role": "family",
+                  "tag": "bị_bỏ_lại_ở_quê",
+                  "text": "Nhận cả thửa ruộng, và gánh luôn việc ở lại."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "LHC5_10_B",
+          "title": "Chia đôi thửa ruộng, đắp bờ giữa",
+          "stance": "TRÁI TIM",
+          "description": "Mất thửa liền một khối.",
+          "cost_ap": 0,
+          "locks": [
+            "l5_ruong_ve_mot_con"
+          ],
+          "unlocks": [
+            "l5_ruong_chia_deu"
+          ],
+          "door_labels": {
+            "l5_ruong_ve_mot_con": "Giao hết ruộng cho một người con",
+            "l5_ruong_chia_deu": "Chia ruộng đều cho các con"
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Hai đứa nhận phần mình với vẻ mặt không ai hài lòng. Bờ đắp ngay ngắn, nhưng nhìn từ xa thửa ruộng giống một vết rạn. Bạn thôi không ra đồng ngắm nữa.",
+              "effects": {
+                "cash_delta": -60,
+                "karma_delta": 3,
+                "burnout_delta": 6
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_10_C",
+          "title": "Giữ ruộng đến lúc mất, bảo hai đứa chờ",
+          "stance": "BẢN NĂNG",
+          "description": "Mất đi sự bình yên trong nhà.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Câu nói của bạn kéo dài như một lời hứa nhưng giống một lời dọa. Hai đứa không cãi, chỉ không ai nhắc đến nữa. Mùa cấy tới, bạn một mình ra ruộng, chân run, lưng đau.",
+              "effects": {
+                "cash_delta": -30,
+                "karma_delta": -2,
+                "burnout_delta": 8,
+                "vitality_delta": -5
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_ghe_trong_quan_nuoc",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Chiếc Ghế Trống Quán Nước",
+      "description": "Mỗi sáng bạn ngồi quán nước đầu chợ, và bên cạnh luôn có chiếc ghế cho {friend}. Hôm nay chiếc ghế vẫn trống, bà hàng xóm bảo ông bà ấy đã nằm viện từ tuần trước. Bạn đã gọi hai ly chè, theo thói quen, và giờ không biết uống ly nào trước.",
+      "location_id": "village_market",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 69,
+        "max_age": 76,
+        "requires_npc": {
+          "role": "friend",
+          "memory_has": "giữ_liên_lạc"
+        }
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "ban_cu",
+      "scenes": [
+        {
+          "id": "lhc5_ghe_trong_quan_nuoc_scene",
+          "name": "Chiếc Ghế Trống Quán Nước",
+          "background_theme": "garden_peaceful",
+          "hotspots": [
+            {
+              "id": "lhc5_ghe_trong_quan_nuoc_hs1",
+              "label": "Ly chè thứ hai",
+              "icon": "coffee",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Ly chè",
+                "text": "Hơi nóng lên đều, rồi nguội dần như hơi thở của ai đó.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_ghe_trong_quan_nuoc_hs2",
+              "label": "Chiếc ghế trống",
+              "icon": "heart",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Chiếc ghế",
+                "text": "Có vệt hằn của một người ngồi suốt bốn chục năm.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              },
+              "npc_role": "friend"
+            },
+            {
+              "id": "lhc5_ghe_trong_quan_nuoc_hs3",
+              "label": "Bà hàng nước",
+              "icon": "users",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Bà hàng",
+                "text": "Bà không hỏi, chỉ dời ly chè gần bạn hơn một chút.",
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Mỗi sáng bạn ngồi quán nước đầu chợ, và bên cạnh luôn có chiếc ghế cho {friend}. Hôm nay chiếc ghế vẫn trống, bà hàng xóm bảo ông bà ấy đã nằm viện từ tuần trước. Bạn đã gọi hai ly chè, theo thói quen, và giờ không biết uống ly nào trước.",
+          "rational": "Đi thăm ngay đi. Lần sau có khi không còn kịp.",
+          "empathy": "Ngồi với nhau cũng là cách nói thương.",
+          "instinct": "Đừng nhìn bệnh viện. Cứ ngồi ở đây, đợi tin."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_11_A",
+          "title": "Bỏ buổi chợ, xuống bệnh viện huyện thăm bạn",
+          "stance": "TRÁI TIM",
+          "description": "Mất cả ngày công và vài đồng thuốc.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn ngồi bên giường, hai ông bà già cầm tay nhau không nói. Trước khi về, người bạn bảo mang chiếc ghế ấy về nhà mà ngồi. Bạn mỉm cười và không đáp.",
+              "effects": {
+                "cash_delta": -90,
+                "karma_delta": 6,
+                "burnout_delta": -3,
+                "vitality_delta": -2
+              },
+              "npc_memory": [
+                {
+                  "role": "friend",
+                  "tag": "đã_thăm_cuối",
+                  "text": "Bỏ buổi chợ đến ngồi bên giường bạn."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "LHC5_11_B",
+          "title": "Ở lại quán, uống hết hai ly chè, gửi người mang thuốc xuống",
+          "stance": "LÝ TRÍ",
+          "description": "Gửi quà mà không gửi mình.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn uống hết ly của mình, rồi ly của bạn. Thuốc đến nơi, nhưng bạn không đến. Chiều đó quán đông, chiếc ghế vẫn trống và không ai ngồi vào.",
+              "effects": {
+                "cash_delta": -60,
+                "burnout_delta": 3
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_11_C",
+          "title": "Dời chiếc ghế sang góc khác, ngồi một mình",
+          "stance": "BẢN NĂNG",
+          "description": "Bắt đầu quen vắng bạn.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Chiếc ghế lệch đi, vệt hằn dưới sàn còn đó. Bạn thấy mình nhẹ nhõm và có lỗi, đầu óc lẩn quẩn một câu hỏi: ai là người đi trước ai.",
+              "effects": {
+                "karma_delta": -3,
+                "burnout_delta": 4
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_chau_o_xa_goi_dien",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Cháu Ở Xa Gọi Điện",
+      "description": "Bưu điện xã gọi báo có cuộc gọi đường dài cho bạn, đứa cháu vừa ra nước ngoài học. Nó nói nhanh, giọng pha lẫn tiếng lạ, bạn nghe được ba phần. {family} đứng bên cạnh cầm cái nón, hồi hộp như chính mình đang được gọi.",
+      "location_id": "village_home",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 66,
+        "max_age": 72,
+        "requires_npc": {
+          "role": "family",
+          "memory_has": "được_ở_lại_cùng"
+        },
+        "family_state": [
+          "binh_thuong",
+          "danh_gia",
+          "con_nuoi"
+        ]
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "chau_o_xa",
+      "scenes": [
+        {
+          "id": "lhc5_chau_o_xa_goi_dien_scene",
+          "name": "Cháu Ở Xa Gọi Điện",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "lhc5_chau_o_xa_goi_dien_hs1",
+              "label": "Ống nghe nặng",
+              "icon": "heart",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Ống nghe",
+                "text": "Giọng cháu vang qua đường dây, vỡ ra từng mảnh như tiếng lụa xé.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_chau_o_xa_goi_dien_hs2",
+              "label": "{family} cầm cái nón",
+              "icon": "users",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Người nhà",
+                "text": "Đứng im, mắt nhìn bạn, chỉ sợ bạn nghe nhầm một chữ.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              },
+              "npc_role": "family"
+            },
+            {
+              "id": "lhc5_chau_o_xa_goi_dien_hs3",
+              "label": "Chiếc bàn bưu điện",
+              "icon": "coffee",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Chiếc bàn",
+                "text": "Có tờ giấy ghi giờ gọi, giá cước đắt hơn nửa buổi chợ.",
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Bưu điện xã gọi báo có cuộc gọi đường dài cho bạn, đứa cháu vừa ra nước ngoài học. Nó nói nhanh, giọng pha lẫn tiếng lạ, bạn nghe được ba phần. {family} đứng bên cạnh cầm cái nón, hồi hộp như chính mình đang được gọi.",
+          "rational": "Nói ngắn thôi, cước đắt. Dặn nó học cho tốt.",
+          "empathy": "Nó không cần nghe lời dặn, nó cần nghe bạn thở.",
+          "instinct": "Kể cho nó nghe cây ổi sau nhà, dù nó chẳng hỏi."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_12_A",
+          "title": "Kể hết chuyện làng, kể cả những chuyện vụn vặt",
+          "stance": "TRÁI TIM",
+          "description": "Chịu tốn thêm vài đồng cước.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn kể về cây ổi, về con chó đẻ, về mưa dầm. Cháu cười, rồi lặng, rồi nói nghe chuyện của ông bà thấy gần hơn cả sách. Tờ phiếu cước dài hơn bạn nghĩ.",
+              "effects": {
+                "cash_delta": -80,
+                "karma_delta": 6,
+                "burnout_delta": -6
+              },
+              "npc_memory": [
+                {
+                  "role": "family",
+                  "tag": "giữ_liên_lạc",
+                  "text": "Kể chuyện làng cho đứa cháu ở xa nghe."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "LHC5_12_B",
+          "title": "Dặn học cho tốt, đừng về sớm vì nhớ nhà",
+          "stance": "LÝ TRÍ",
+          "description": "Hy sinh buổi gặp lại.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Câu nói của bạn như một tấm áo gọn gàng, đúng mà lạnh. Đầu dây bên kia im, rồi nó đáp dạ. Gác máy xong, bạn nghe {family} thở dài.",
+              "effects": {
+                "cash_delta": -30,
+                "karma_delta": 1,
+                "burnout_delta": 2
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_12_C",
+          "title": "Im lặng, để cháu nói, chỉ ừ",
+          "stance": "BẢN NĂNG",
+          "description": "Nhường hết lời cho nó.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn ừ, ừ, ừ, mỗi tiếng ừ là một nụ cười. Khi giờ gọi hết, cháu bảo ông bà ơi con thương ông bà, và bạn không biết đáp thế nào, nên nói thôi con cúp máy đi.",
+              "effects": {
+                "cash_delta": -30,
+                "karma_delta": 3,
+                "burnout_delta": -4
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_dong_ho_qua_bo",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Chiếc Đồng Hồ Quả Bồ",
+      "description": "Trong đáy hòm có một chiếc đồng hồ quả bồ bọc vải đỏ, thứ cha bạn không bao giờ cho ai xem. {creditor_or_benefactor} biết nó từ lâu và đã đến hỏi hai lần. Bạn nay đủ già để hiểu người ta giữ một vật không phải vì giá của nó.",
+      "location_id": "village_home",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 70,
+        "max_age": 77,
+        "fate_thread": "di_san_bi_mat",
+        "requires_npc": {
+          "role": "creditor_or_benefactor"
+        }
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "di_vat",
+      "scenes": [
+        {
+          "id": "lhc5_dong_ho_qua_bo_scene",
+          "name": "Chiếc Đồng Hồ Quả Bồ",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "lhc5_dong_ho_qua_bo_hs1",
+              "label": "Hòm gỗ đáy rương",
+              "icon": "tool",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Hòm gỗ",
+                "text": "Lớp vải đỏ đã bạc màu, đồng hồ bên trong vẫn nghe tiếng tích tắc yếu.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_dong_ho_qua_bo_hs2",
+              "label": "Dòng khắc sau nắp đồng hồ",
+              "icon": "book",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Dòng khắc",
+                "text": "Tên một người bạn không biết, kèm một năm trước khi bạn ra đời.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            },
+            {
+              "id": "lhc5_dong_ho_qua_bo_hs3",
+              "label": "{creditor_or_benefactor} ngồi chờ ở hiên",
+              "icon": "ledger",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Khách",
+                "text": "Ông ấy không giục, chỉ nhìn chiếc hòm như nhìn người quen.",
+                "cost_ap": 0
+              },
+              "npc_role": "creditor_or_benefactor"
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Trong đáy hòm có một chiếc đồng hồ quả bồ bọc vải đỏ, thứ cha bạn không bao giờ cho ai xem. {creditor_or_benefactor} biết nó từ lâu và đã đến hỏi hai lần. Bạn nay đủ già để hiểu người ta giữ một vật không phải vì giá của nó.",
+          "rational": "Bán cho ông ấy lấy tiền chữa bệnh, vật gì rồi cũng chỉ là vật.",
+          "empathy": "Có thể ông ấy biết chuyện bạn chưa biết.",
+          "instinct": "Chôn nó cùng bạn. Có những thứ không nên ở lại."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_13_A",
+          "title": "Trao đồng hồ cho {creditor_or_benefactor}, nghe ông kể chuyện",
+          "stance": "TRÁI TIM",
+          "description": "Mất vật dòng họ, được biết sự thật.",
+          "cost_ap": 0,
+          "irreversible": true,
+          "locks": [
+            "l5_giu_di_vat"
+          ],
+          "unlocks": [
+            "l5_da_tra_di_vat"
+          ],
+          "persist_doors": [
+            "l5_da_tra_di_vat"
+          ],
+          "door_labels": {
+            "l5_da_tra_di_vat": "Đã trả di vật cho chủ cũ",
+            "l5_giu_di_vat": "Giữ di vật dòng họ"
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Ông cầm chiếc đồng hồ bằng cả hai tay rồi kể: nó là của người bạn cha bạn, thứ cha bạn giữ hộ và chưa trả. Bạn cảm thấy một món nợ nhẹ đi, và một sự thật nặng thêm.",
+              "effects": {
+                "karma_delta": 8,
+                "burnout_delta": -3
+              },
+              "npc_memory": [
+                {
+                  "role": "creditor_or_benefactor",
+                  "tag": "benefactor",
+                  "text": "Nhận lại chiếc đồng hồ và biết nguồn gốc của nó."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "LHC5_13_B",
+          "title": "Bán đồng hồ, lấy tiền chữa bệnh",
+          "stance": "LÝ TRÍ",
+          "description": "Mất một thứ cha để lại.",
+          "cost_ap": 0,
+          "locks": [
+            "l5_da_tra_di_vat",
+            "l5_giu_di_vat"
+          ],
+          "door_labels": {
+            "l5_da_tra_di_vat": "Đã trả di vật cho chủ cũ",
+            "l5_giu_di_vat": "Giữ di vật dòng họ"
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Giá cả thoả thuận nhanh, tiền đếm xong ngay trong buổi chiều. Bạn nghe tiếng tích tắc xa dần theo chân người mua, rồi cái hòm trống chỉ còn mùi vải đỏ.",
+              "effects": {
+                "cash_delta": 220,
+                "karma_delta": -5,
+                "burnout_delta": 4,
+                "vitality_delta": 3
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_13_C",
+          "title": "Giấu lại, quấn vải, dặn con cháu đừng đụng đến",
+          "stance": "BẢN NĂNG",
+          "description": "Mang bí mật sang thế hệ sau.",
+          "cost_ap": 0,
+          "locks": [
+            "l5_da_tra_di_vat"
+          ],
+          "unlocks": [
+            "l5_giu_di_vat"
+          ],
+          "door_labels": {
+            "l5_da_tra_di_vat": "Đã trả di vật cho chủ cũ",
+            "l5_giu_di_vat": "Giữ di vật dòng họ"
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Bạn gói lại chiếc đồng hồ, đặt vào đáy rương và đóng nắp. Ông khách đứng dậy chào, vẻ mặt không giận nhưng bạn thấy mình vừa chọn đóng cửa với người cuối cùng biết chuyện.",
+              "effects": {
+                "karma_delta": -3,
+                "burnout_delta": 5
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_dieu_giu_kin",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Điều Giữ Kín",
+      "description": "Bạn đã giữ kín lời cuối của mẹ gần bốn chục năm, vì sợ nó làm đổ một ngôi nhà. Giờ trên bàn thờ chỉ còn tấm ảnh, và những người biết chuyện lần lượt đi trước bạn. Đứa cháu trai nhổ cỏ mộ, hỏi bà ngoại hay nói gì lúc cuối.",
+      "location_id": "village_home",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 68,
+        "max_age": 75,
+        "doors_open": [
+          "l3_giu_kin"
+        ]
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "dieu_giu_kin",
+      "scenes": [
+        {
+          "id": "lhc5_dieu_giu_kin_scene",
+          "name": "Điều Giữ Kín",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "lhc5_dieu_giu_kin_hs1",
+              "label": "Tấm ảnh trên bàn thờ",
+              "icon": "heart",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Tấm ảnh",
+                "text": "Khuôn mặt mẹ vẫn trẻ hơn bạn bây giờ.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_dieu_giu_kin_hs2",
+              "label": "Đứa cháu nhổ cỏ mộ",
+              "icon": "users",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Đứa cháu",
+                "text": "Nó tò mò thôi, chưa biết mình vừa hỏi một câu nặng.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            },
+            {
+              "id": "lhc5_dieu_giu_kin_hs3",
+              "label": "Cái nắm tay năm xưa",
+              "icon": "alert",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Ký ức",
+                "text": "Bàn tay mẹ ấm, rồi lạnh ngay trong lúc bà đang nói.",
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Bạn đã giữ kín lời cuối của mẹ gần bốn chục năm, vì sợ nó làm đổ một ngôi nhà. Giờ trên bàn thờ chỉ còn tấm ảnh, và những người biết chuyện lần lượt đi trước bạn. Đứa cháu trai nhổ cỏ mộ, hỏi bà ngoại hay nói gì lúc cuối.",
+          "rational": "Đã giữ kín bốn chục năm, giữ nốt cho trọn.",
+          "empathy": "Mang xuống mộ thì phí. Kể ra, chỉ còn một đứa nghe.",
+          "instinct": "Nói tránh đi. Nó còn nhỏ."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_14_A",
+          "title": "Kể hết lời cuối của mẹ cho cháu nghe",
+          "stance": "TRÁI TIM",
+          "description": "Mất bí mật, được nhẹ lòng.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Cháu im lặng rất lâu, rồi hỏi sao ông không nói với ai. Bạn không có câu trả lời. Nhưng ra khỏi nghĩa địa, bước chân bạn nhẹ hơn mọi lần.",
+              "effects": {
+                "karma_delta": 6,
+                "burnout_delta": -8
+              },
+              "npc_memory": [
+                {
+                  "role": "family",
+                  "tag": "đã_kể_sự_thật",
+                  "text": "Kể lời cuối của bà cho đứa cháu."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "LHC5_14_B",
+          "title": "Kể một nửa, giữ nửa còn lại",
+          "stance": "LÝ TRÍ",
+          "description": "Mất sự trọn vẹn.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn kể phần dễ nghe, bỏ qua phần khó. Đứa cháu gật đầu, ra chiều đã hiểu, nhưng ánh mắt nó có chỗ trống. Bạn thấy mình đang giữ cho nó một điều nó không biết là mình thiếu.",
+              "effects": {
+                "burnout_delta": 2
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_14_C",
+          "title": "Bảo đó là chuyện người lớn, đừng hỏi",
+          "stance": "BẢN NĂNG",
+          "description": "Đóng cửa với đứa nhỏ.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Đứa cháu nín thinh, tay vẫn nhổ cỏ nhưng chậm hẳn. Về sau mỗi khi qua mộ bà, nó đứng xa hơn một chút. Bạn nhìn thấy, và không biết sửa.",
+              "effects": {
+                "karma_delta": -4,
+                "burnout_delta": 6
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_giuong_benh_dong_nguoi",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Giường Bệnh Đông Người",
+      "description": "Cơn bệnh lần này khác mọi lần: bạn nằm xuống mà không đoán được ngày dậy. Con cháu kéo về đầy nhà, tiếng bước chân, tiếng nồi niêu, tiếng thì thầm sau cánh cửa. Có người nhìn bạn quá lâu, có người tránh nhìn.",
+      "location_id": "village_home",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 78,
+        "max_age": 86,
+        "family_state": [
+          "binh_thuong",
+          "danh_gia"
+        ]
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "giuong_benh_cuoi",
+      "scenes": [
+        {
+          "id": "lhc5_giuong_benh_dong_nguoi_scene",
+          "name": "Giường Bệnh Đông Người",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "lhc5_giuong_benh_dong_nguoi_hs1",
+              "label": "Tiếng trẻ con ngoài hiên",
+              "icon": "users",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Tiếng trẻ con",
+                "text": "Chúng chạy qua chạy lại, bị mắng khẽ rồi lại chạy.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_giuong_benh_dong_nguoi_hs2",
+              "label": "Bát cháo đặt đầu giường",
+              "icon": "coffee",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Bát cháo",
+                "text": "Hành thái nhỏ, đúng kiểu bạn thích từ năm nào chẳng ai nhớ.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            },
+            {
+              "id": "lhc5_giuong_benh_dong_nguoi_hs3",
+              "label": "Bàn tay ai đó nắm lấy",
+              "icon": "heart",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Bàn tay",
+                "text": "Bạn không mở mắt nổi, nhưng biết đó là ai qua vết chai.",
+                "cost_ap": 0
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Cơn bệnh lần này khác mọi lần: bạn nằm xuống mà không đoán được ngày dậy. Con cháu kéo về đầy nhà, tiếng bước chân, tiếng nồi niêu, tiếng thì thầm sau cánh cửa. Có người nhìn bạn quá lâu, có người tránh nhìn.",
+          "rational": "Dặn dò xong thì để chúng về lo việc. Đừng giữ ai lại.",
+          "empathy": "Cái nhìn lúc này đáng giá hơn mọi lời.",
+          "instinct": "Đừng nói nhiều. Cho chúng ngồi cạnh là đủ."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_15_A",
+          "title": "Gọi từng đứa lại cạnh giường, nói riêng với mỗi đứa",
+          "stance": "TRÁI TIM",
+          "description": "Mất sức, mất thời gian còn lại.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Mỗi đứa vào, ra, mắt đỏ. Đứa út cầm tay bạn không buông, bạn nói lời cuối bằng giọng rất khẽ. Đến khi mệt, bạn thiếp đi, tiếng người còn quanh giường.",
+              "effects": {
+                "karma_delta": 8,
+                "burnout_delta": -6,
+                "vitality_delta": -8
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_15_B",
+          "title": "Dặn chuyện ruộng đất, giấy tờ, không nói gì thêm",
+          "stance": "LÝ TRÍ",
+          "description": "Mất cơ hội nói điều khác.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Con cái ghi nhớ từng chữ, gật đầu nghiêm trang. Xong việc, cả nhà thở phào nhẹ, và bạn tự hiểu mình vừa dạy chúng một cách lo liệu hơn một cách thương.",
+              "effects": {
+                "burnout_delta": 2,
+                "vitality_delta": -3
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_15_C",
+          "title": "Bảo cả nhà ra ngoài, muốn nằm yên",
+          "stance": "BẢN NĂNG",
+          "description": "Mất tiếng người cuối cùng.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Cửa khép lại, tiếng ồn xa dần. Bạn nghe mưa trên mái và đếm giọt nước. Nửa đêm có ai khẽ mở cửa, nhìn vào, rồi lặng lẽ đóng lại.",
+              "effects": {
+                "karma_delta": -2,
+                "burnout_delta": -2,
+                "vitality_delta": -4
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_giuong_benh_mot_minh",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Giường Bệnh Một Mình",
+      "description": "Cơn bệnh lần này khác mọi lần: bạn nằm xuống mà không đoán được ngày dậy. Nhà yên đến mức nghe tiếng mối ăn xà. Các con đang xa, hoặc đã mất liên lạc, hoặc chưa kịp nhận tin; chỉ có tiếng gà gáy ngoài vườn là còn đúng giờ.",
+      "location_id": "village_home",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 78,
+        "max_age": 86,
+        "family_state": [
+          "no_nan",
+          "con_nuoi",
+          "cha_me_ly_tan"
+        ]
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "giuong_benh_cuoi",
+      "scenes": [
+        {
+          "id": "lhc5_giuong_benh_mot_minh_scene",
+          "name": "Giường Bệnh Một Mình",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "lhc5_giuong_benh_mot_minh_hs1",
+              "label": "Tiếng mối ăn xà",
+              "icon": "alert",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Xà nhà",
+                "text": "Rỉ rả đêm ngày, như ai đó đếm hộ thời gian còn lại.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_giuong_benh_mot_minh_hs2",
+              "label": "Cái chén chưa rửa",
+              "icon": "coffee",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Cái chén",
+                "text": "Từ hôm qua, và bạn không với tới nổi bồn nước.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_giuong_benh_mot_minh_hs3",
+              "label": "Bức thư chưa gửi",
+              "icon": "book",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Bức thư",
+                "text": "Viết ba lần, gấp lại ba lần, chưa lần nào dán tem.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Cơn bệnh lần này khác mọi lần: bạn nằm xuống mà không đoán được ngày dậy. Nhà yên đến mức nghe tiếng mối ăn xà. Các con đang xa, hoặc đã mất liên lạc, hoặc chưa kịp nhận tin; chỉ có tiếng gà gáy ngoài vườn là còn đúng giờ.",
+          "rational": "Nhờ hàng xóm gọi người nhà. Đừng để chết trong im lặng.",
+          "empathy": "Họ sẽ đến, chỉ là sớm hay muộn.",
+          "instinct": "Đừng làm phiền ai. Cuộc đời bạn đã tự lo được cả chục năm."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_16_A",
+          "title": "Nhờ bà hàng xóm gửi điện cho các con",
+          "stance": "TRÁI TIM",
+          "description": "Mất sự kiêu hãnh.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bà nhận lấy bức điện, đi một mạch qua cánh đồng. Hai ngày sau có tiếng chân ngoài ngõ, bạn nghe mà không dám đoán. Chỉ một người đến, nhưng người ấy đã đến.",
+              "effects": {
+                "cash_delta": -60,
+                "karma_delta": 6,
+                "burnout_delta": -6,
+                "vitality_delta": -3
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_16_B",
+          "title": "Nằm yên, tự lo bằng nồi cháo hàng xóm mang sang",
+          "stance": "LÝ TRÍ",
+          "description": "Mất cơ hội gặp lại.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Nồi cháo đặt ngoài hiên, nóng rồi nguội. Bạn ăn vài thìa mỗi ngày, uống thuốc nam, và đếm. Sáng thứ tư, bạn ngồi dậy được, nhưng không biết ai sẽ vui vì điều đó.",
+              "effects": {
+                "burnout_delta": 2,
+                "vitality_delta": -4
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_16_C",
+          "title": "Gửi bức thư chưa gửi, dán tem",
+          "stance": "BẢN NĂNG",
+          "description": "Nói bằng giấy thay vì giọng.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Chú đưa thư nhận phong bì, nhìn dòng địa chỉ rồi nhìn bạn, không nói gì. Bức thư đi. Câu trả lời đến sau khi bạn khỏi, hoặc không đến, tuỳ may mắn.",
+              "effects": {
+                "cash_delta": -20,
+                "karma_delta": 3,
+                "burnout_delta": -4,
+                "vitality_delta": -2
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_loi_chua_noi_den_cuoi",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Lời Chưa Nói Đến Cuối",
+      "description": "Có người từng chờ bạn, và bạn không đến. Giờ {love} cũng đã già, nhà bên kia sông thấy khói bếp nhưng không thấy người. Bạn chưa từng giải thích vì sao hôm ấy, và nếu không nói bây giờ thì chẳng còn lúc nào.",
+      "location_id": "village_riverbank",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 80,
+        "max_age": 88,
+        "requires_npc": {
+          "role": "love",
+          "memory_has": "bị_bỏ_chờ"
+        }
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "loi_chua_noi_cuoi",
+      "scenes": [
+        {
+          "id": "lhc5_loi_chua_noi_den_cuoi_scene",
+          "name": "Lời Chưa Nói Đến Cuối",
+          "background_theme": "river_storm",
+          "hotspots": [
+            {
+              "id": "lhc5_loi_chua_noi_den_cuoi_hs1",
+              "label": "Bờ sông bên kia",
+              "icon": "sparkles",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Bờ sông",
+                "text": "Khói bếp lên đều, mỏng như chữ viết bằng bút chì.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_loi_chua_noi_den_cuoi_hs2",
+              "label": "Chiếc đò ngang đã mục",
+              "icon": "tool",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Chiếc đò",
+                "text": "Người chèo mới là đứa cháu của người chèo cũ.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_loi_chua_noi_den_cuoi_hs3",
+              "label": "Cái khăn {love} để lại",
+              "icon": "heart",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Cái khăn",
+                "text": "Bạn giữ năm chục năm, giặt sạch và chưa trả.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              },
+              "npc_role": "love"
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Có người từng chờ bạn, và bạn không đến. Giờ {love} cũng đã già, nhà bên kia sông thấy khói bếp nhưng không thấy người. Bạn chưa từng giải thích vì sao hôm ấy, và nếu không nói bây giờ thì chẳng còn lúc nào.",
+          "rational": "Nói ra làm gì nữa. Cả hai đã đi qua cuộc đời của riêng mình.",
+          "empathy": "Có những lời chờ lâu chỉ vì chưa ai dám mở cửa.",
+          "instinct": "Đi ngay hôm nay, đừng đợi trời đẹp."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_17_A",
+          "title": "Qua đò, đến gõ cửa, nói hết sự thật",
+          "stance": "TRÁI TIM",
+          "description": "Mất chút tự trọng đã giữ cả đời.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Cửa mở, {love} đứng đó, tóc bạc trắng, ánh mắt chậm lại khi nhận ra bạn. Bạn nói, bà nghe, không ngắt lời. Khi bạn xong, bà chỉ bảo: tôi đoán từ lâu rồi. Bà cầm lại cái khăn.",
+              "effects": {
+                "cash_delta": -20,
+                "karma_delta": 12,
+                "burnout_delta": -10,
+                "vitality_delta": -4
+              },
+              "npc_memory": [
+                {
+                  "role": "love",
+                  "tag": "được_nghe_điều_chưa_nói",
+                  "text": "Nghe lời giải thích muộn năm chục năm."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "LHC5_17_B",
+          "title": "Gửi cái khăn qua người chèo đò, kèm một dòng",
+          "stance": "LÝ TRÍ",
+          "description": "Mất cơ hội nhìn mặt.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Dòng chữ chỉ có sáu từ, bạn viết lại bốn lần. Người chèo đò cầm lấy, đi khuất. Không có hồi âm, nhưng hôm sau khói bếp bên kia bay thẳng hơn, và bạn nghĩ có lẽ vậy là đủ.",
+              "effects": {
+                "karma_delta": 4,
+                "burnout_delta": -3
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_17_C",
+          "title": "Giữ cái khăn, không nói, để mọi thứ thế",
+          "stance": "BẢN NĂNG",
+          "description": "Mất lần cuối cùng.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn gấp khăn lại, đặt vào hòm. Bên kia sông, khói bếp ngừng một chiều rồi lại lên. Bạn nghĩ mình đã chọn thứ yên tĩnh cũ kỹ, mà không biết nó có phải là bình yên hay không.",
+              "effects": {
+                "karma_delta": -3,
+                "burnout_delta": 4
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_vu_gat_tri_nho",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Vụ Gặt Của Trí Nhớ",
+      "description": "Ngồi bờ ruộng ngày cuối vụ, bạn nhớ ra những điều chưa hiểu: vì sao cha không bao giờ cho bạn đi cùng chuyến xe đêm ấy, vì sao {family} ngập ngừng khi nhắc tên một ông chủ cũ. Món nợ máu nay đã im, nhưng trí nhớ thì đang tự gặt lại từng bó.",
+      "location_id": "village_paddy",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 76,
+        "max_age": 84,
+        "fate_thread": "cha_giau_no",
+        "requires_npc": {
+          "role": "family"
+        }
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "vu_gat_tri_nho",
+      "scenes": [
+        {
+          "id": "lhc5_vu_gat_tri_nho_scene",
+          "name": "Vụ Gặt Của Trí Nhớ",
+          "background_theme": "garden_peaceful",
+          "hotspots": [
+            {
+              "id": "lhc5_vu_gat_tri_nho_hs1",
+              "label": "Bó lúa cuối cùng",
+              "icon": "sparkles",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Bó lúa",
+                "text": "Nặng bằng cả một mùa, nhẹ hơn mọi lần bạn từng gánh.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_vu_gat_tri_nho_hs2",
+              "label": "Chiếc liềm của cha",
+              "icon": "tool",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Chiếc liềm",
+                "text": "Lưỡi mòn, cán lõm đúng bằng bàn tay một người đàn ông cô độc.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_vu_gat_tri_nho_hs3",
+              "label": "{family} ngồi bên bờ",
+              "icon": "users",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Người nhà",
+                "text": "Đã nói hết, chỉ còn một câu chưa dám nói thành tiếng.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              },
+              "npc_role": "family"
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Ngồi bờ ruộng ngày cuối vụ, bạn nhớ ra những điều chưa hiểu: vì sao cha không bao giờ cho bạn đi cùng chuyến xe đêm ấy, vì sao {family} ngập ngừng khi nhắc tên một ông chủ cũ. Món nợ máu nay đã im, nhưng trí nhớ thì đang tự gặt lại từng bó.",
+          "rational": "Biết hết sự thật thì được gì, ngoài thêm một nỗi buồn.",
+          "empathy": "Cha đã trả giá, bạn đủ già để biết ông.",
+          "instinct": "Đừng khơi nữa. Người chết đã yên."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_18_A",
+          "title": "Hỏi {family} cho rõ, nghe đến hết câu chuyện",
+          "stance": "TRÁI TIM",
+          "description": "Mất hình ảnh người cha đã yên trong lòng.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Câu chuyện không đẹp như bạn tưởng và không xấu như bạn sợ. Cha đã làm một điều sai để cứu một điều khác. Bạn khóc, lần đầu sau mười năm, vì đã hiểu ông.",
+              "effects": {
+                "karma_delta": 8,
+                "burnout_delta": -6,
+                "vitality_delta": -3
+              },
+              "npc_memory": [
+                {
+                  "role": "family",
+                  "tag": "đã_kể_sự_thật",
+                  "text": "Kể cho bạn nghe sự thật về món nợ máu của cha."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "LHC5_18_B",
+          "title": "Gặt xong vụ cuối, không hỏi thêm",
+          "stance": "LÝ TRÍ",
+          "description": "Mất cơ hội biết.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn gom bó lúa xếp ngay ngắn, buộc bằng sợi rơm. Gió thổi nhẹ. Bạn nhìn hàng bó lúa như một lời thề im lặng: những gì đã đi qua nhà này, cứ để nó đi.",
+              "effects": {
+                "cash_delta": 60,
+                "karma_delta": 1,
+                "burnout_delta": -2
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_18_C",
+          "title": "Đốt tờ giấy nợ cũ giữa ruộng",
+          "stance": "BẢN NĂNG",
+          "description": "Mất chứng cứ cuối cùng.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Tờ giấy vàng cháy thành tro trong ba hơi thở. Gió thổi tro bay vào ruộng đã gặt. {family} đứng nhìn, không ngăn, không khen. Sổ sách trong đầu bạn thì vẫn còn.",
+              "effects": {
+                "karma_delta": 3,
+                "burnout_delta": -4
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_ten_tren_bang_nha_van_hoa",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Cái Tên Trên Bảng Nhà Văn Hoá",
+      "description": "Người ta đang dựng bảng vinh danh ở nhà văn hoá, ghi những ai có công với làng. Cô giáo trẻ đọc to từng cái tên, đến cái tên của {mentor} thì cô dừng lại, hỏi ở đây có ai nhớ ông không. Bạn ngồi hàng cuối và nhận ra mình là người duy nhất còn nhớ.",
+      "location_id": "village_communal_house",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 82,
+        "max_age": 90,
+        "requires_npc": {
+          "role": "mentor",
+          "memory_has": "tin_cậy"
+        },
+        "family_state": [
+          "danh_gia",
+          "binh_thuong",
+          "con_nuoi"
+        ]
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "bi_quen_lang",
+      "scenes": [
+        {
+          "id": "lhc5_ten_tren_bang_nha_van_hoa_scene",
+          "name": "Cái Tên Trên Bảng Nhà Văn Hoá",
+          "background_theme": "garden_peaceful",
+          "hotspots": [
+            {
+              "id": "lhc5_ten_tren_bang_nha_van_hoa_hs1",
+              "label": "Tấm bảng gỗ còn thơm sơn",
+              "icon": "book",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Tấm bảng",
+                "text": "Các cái tên khắc đều, thiếu một chỗ, rộng vừa một dòng.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_ten_tren_bang_nha_van_hoa_hs2",
+              "label": "Hàng ghế cuối nhà văn hoá",
+              "icon": "users",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Hàng ghế",
+                "text": "Những người trẻ nhìn điện thoại, người già nhìn nhau.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_ten_tren_bang_nha_van_hoa_hs3",
+              "label": "Cô giáo hỏi",
+              "icon": "heart",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Cô giáo",
+                "text": "Giọng tò mò, không ác ý, và làm bạn nhớ rất nhiều thứ.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              },
+              "npc_role": "mentor"
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Người ta đang dựng bảng vinh danh ở nhà văn hoá, ghi những ai có công với làng. Cô giáo trẻ đọc to từng cái tên, đến cái tên của {mentor} thì cô dừng lại, hỏi ở đây có ai nhớ ông không. Bạn ngồi hàng cuối và nhận ra mình là người duy nhất còn nhớ.",
+          "rational": "Đứng lên nói, ngay bây giờ, trước khi cái tên bị bỏ.",
+          "empathy": "Quên là cái chết thứ hai. Đừng để ông chết lần nữa.",
+          "instinct": "Ngồi yên. Ai muốn nhớ thì tự nhớ."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_19_A",
+          "title": "Đứng lên, nói về {mentor} trước cả hội trường",
+          "stance": "TRÁI TIM",
+          "description": "Mất chút thể diện của người già yếu.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Chân bạn run, giọng khàn, nhưng ai cũng im. Bạn kể ông đã dạy bạn cầm bút thế nào, và đã đi bộ mười cây số trong mưa chỉ để đưa một quyển sách. Cô giáo viết vội vào sổ.",
+              "effects": {
+                "karma_delta": 9,
+                "burnout_delta": -4,
+                "vitality_delta": -3
+              },
+              "npc_memory": [
+                {
+                  "role": "mentor",
+                  "tag": "được_nhớ_đến",
+                  "text": "Được bạn nhớ và nhắc tên trước cả làng."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "LHC5_19_B",
+          "title": "Tìm cô giáo sau buổi họp, kể riêng",
+          "stance": "LÝ TRÍ",
+          "description": "Mất cơ hội cả làng nghe.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn kể chậm bên chén trà, cô ghi chép cẩn thận. Hai tháng sau tên ông xuất hiện bằng chữ nhỏ ở cuối bảng, mà không ai trong làng biết vì sao.",
+              "effects": {
+                "cash_delta": -20,
+                "karma_delta": 4,
+                "burnout_delta": -2
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_19_C",
+          "title": "Không nói gì, về nhà viết tên ông vào sổ riêng",
+          "stance": "BẢN NĂNG",
+          "description": "Mất một cái tên cho thiên hạ.",
+          "cost_ap": 0,
+          "outcomes": {
+            "success": {
+              "narration": "Bạn viết bằng bút bi tím, nét chữ chậm, ghi cả năm sinh, năm mất, và một câu ông hay nói. Cuốn sổ này không ai đọc, nhưng giờ nó là nơi duy nhất ông còn tồn tại.",
+              "effects": {
+                "burnout_delta": 3
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lhc5_chum_chia_khoa_nha",
+      "arc_id": "arc_lang_hau_chien",
+      "stage": 4,
+      "title": "Chùm Chìa Khoá Nhà",
+      "description": "Căn nhà này bạn dựng từ ba cây cột đầu tiên, giờ đến lúc quyết ai giữ chùm chìa khoá. {family} muốn bạn dọn sang ở cùng cho tiện, còn thằng lớn muốn bán lấy tiền chia. Chùm chìa nằm trên bàn, rỉ ở đầu, và cả hai đều đang nhìn nó.",
+      "location_id": "village_home",
+      "prerequisites": {
+        "era": [
+          "lang_hau_chien"
+        ],
+        "min_age": 77,
+        "max_age": 85,
+        "family_state": [
+          "danh_gia",
+          "binh_thuong",
+          "no_nan"
+        ],
+        "requires_npc": {
+          "role": "family"
+        }
+      },
+      "weight": 5,
+      "cooldown_years": 25,
+      "group": "giao_nha",
+      "scenes": [
+        {
+          "id": "lhc5_chum_chia_khoa_nha_scene",
+          "name": "Chùm Chìa Khoá Nhà",
+          "background_theme": "home_cozy",
+          "hotspots": [
+            {
+              "id": "lhc5_chum_chia_khoa_nha_hs1",
+              "label": "Chùm chìa khoá",
+              "icon": "tool",
+              "position_x": 220,
+              "dialogue": {
+                "speaker": "Chùm chìa",
+                "text": "Ba chiếc, mỗi chiếc mở một thứ không còn tồn tại.",
+                "cost_ap": 0
+              }
+            },
+            {
+              "id": "lhc5_chum_chia_khoa_nha_hs2",
+              "label": "Cột nhà đầu tiên",
+              "icon": "heart",
+              "position_x": 480,
+              "dialogue": {
+                "speaker": "Cột nhà",
+                "text": "Vết dao khắc chiều cao của bọn trẻ, đã mờ dưới lớp bồ hóng.",
+                "cost_ap": 0,
+                "trust_delta": 5
+              }
+            },
+            {
+              "id": "lhc5_chum_chia_khoa_nha_hs3",
+              "label": "{family} đứng cạnh cửa",
+              "icon": "users",
+              "position_x": 750,
+              "dialogue": {
+                "speaker": "Người nhà",
+                "text": "Bà cầm chiếc nón như sắp bước đi, hoặc sắp ở lại.",
+                "cost_ap": 0
+              },
+              "npc_role": "family"
+            }
+          ]
+        }
+      ],
+      "mind_stage": {
+        "whispers": {
+          "dilemma_prompt": "Căn nhà này bạn dựng từ ba cây cột đầu tiên, giờ đến lúc quyết ai giữ chùm chìa khoá. {family} muốn bạn dọn sang ở cùng cho tiện, còn thằng lớn muốn bán lấy tiền chia. Chùm chìa nằm trên bàn, rỉ ở đầu, và cả hai đều đang nhìn nó.",
+          "rational": "Để con quyết, bạn đủ già rồi, đừng giữ thêm.",
+          "empathy": "Nhà là nơi nhớ mình, không phải nơi giữ mình.",
+          "instinct": "Đừng đi. Chết ở đâu thì ở đó."
+        }
+      },
+      "choices": [
+        {
+          "id": "LHC5_20_A",
+          "title": "Trao chìa cho {family}, dọn sang ở cùng",
+          "stance": "TRÁI TIM",
+          "description": "Mất căn nhà, được người bên cạnh.",
+          "cost_ap": 0,
+          "locks": [
+            "l5_chet_o_nha_minh"
+          ],
+          "unlocks": [
+            "l5_chia_khoa_giao_di"
+          ],
+          "door_labels": {
+            "l5_chia_khoa_giao_di": "Đã giao nhà, ở cùng con",
+            "l5_chet_o_nha_minh": "Ở lại căn nhà của mình"
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Bạn khoá cửa lần cuối, hành lý chỉ là một cái bọc nhỏ. Nhà mới có giường êm hơn, mà đêm đầu bạn không ngủ được, vì không còn nghe tiếng mối quen. {family} nấu cháo, đặt cạnh tay bạn.",
+              "effects": {
+                "karma_delta": 6,
+                "burnout_delta": -4,
+                "vitality_delta": 2
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_20_B",
+          "title": "Bán nhà, chia tiền, về ở nhà dưỡng lão của xã",
+          "stance": "LÝ TRÍ",
+          "description": "Mất cả mái nhà lẫn sự gần gũi.",
+          "cost_ap": 0,
+          "locks": [
+            "l5_chia_khoa_giao_di",
+            "l5_chet_o_nha_minh"
+          ],
+          "door_labels": {
+            "l5_chia_khoa_giao_di": "Đã giao nhà, ở cùng con",
+            "l5_chet_o_nha_minh": "Ở lại căn nhà của mình"
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Tiền chia xong, mỗi đứa một phần, không đứa nào nói đủ. Phòng dưỡng lão sạch sẽ, người trông tử tế, và hành lang có mùi thuốc sát trùng. Bạn nằm nhìn trần nhà trắng và nhớ ba cây cột.",
+              "effects": {
+                "cash_delta": 180,
+                "karma_delta": -4,
+                "burnout_delta": 6,
+                "vitality_delta": -2
+              }
+            }
+          }
+        },
+        {
+          "id": "LHC5_20_C",
+          "title": "Giữ chìa, ở lại nhà, nhờ người nhà thay phiên đến thăm",
+          "stance": "BẢN NĂNG",
+          "description": "Mất sự chăm sóc thường xuyên.",
+          "cost_ap": 0,
+          "locks": [
+            "l5_chia_khoa_giao_di"
+          ],
+          "unlocks": [
+            "l5_chet_o_nha_minh"
+          ],
+          "door_labels": {
+            "l5_chia_khoa_giao_di": "Đã giao nhà, ở cùng con",
+            "l5_chet_o_nha_minh": "Ở lại căn nhà của mình"
+          },
+          "outcomes": {
+            "success": {
+              "narration": "Chùm chìa trở lại túi áo bạn. Có hôm không ai đến, có hôm cả nhà đến cùng lúc. Bạn học cách sống với những ngày không đoán được, và với những buổi chiều yên đến nỗi chỉ còn bóng bạn.",
+              "effects": {
+                "karma_delta": 2,
+                "burnout_delta": 4,
+                "vitality_delta": -5
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
