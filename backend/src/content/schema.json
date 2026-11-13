@@ -51,6 +51,8 @@
           "group": { "type": "string" },
           "locks": { "type": "array", "items": { "type": "string" } },
           "unlocks": { "type": "array", "items": { "type": "string" } },
+          "persist_doors": { "type": "array", "items": { "type": "string" } },
+          "door_labels": { "type": "object", "additionalProperties": { "type": "string", "maxLength": 60 } },
           "scenes": {
             "type": "array",
             "items": {
@@ -117,6 +119,11 @@
                   "items": { "type": "string" }
                 },
                 "cost_ap": { "type": "integer" },
+                "irreversible": { "type": "boolean" },
+                "locks": { "type": "array", "items": { "type": "string" } },
+                "unlocks": { "type": "array", "items": { "type": "string" } },
+                "persist_doors": { "type": "array", "items": { "type": "string" } },
+                "door_labels": { "type": "object", "additionalProperties": { "type": "string", "maxLength": 60 } },
                 "check": {
                   "type": "object",
                   "properties": {

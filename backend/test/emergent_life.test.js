@@ -135,7 +135,7 @@ test('cooldown decays a recently seen group; locks/unlocks update doors', () => 
   registerContentPack({ pack_id: 'cd', name: 'cd', version: '1', description: 'x', scenarios: [a, b] });
   const target = { ...legacy(50), rng_seed: 1, hidden_flags: ['active_scenario:cd_a'] };
   resolveMindStageChoice(target, 'cd_a_c', 0, [], 'cd_a');
-  assert.deepEqual(target.doors, { roi_lang: false, ve_que: true });
+  assert.deepEqual(target.doors, { roi_lang: { open: false, label: 'roi lang', age: 50 }, ve_que: { open: true, label: 've que', age: 50 } }); // Đợt 4 shape
   assert.equal(target.scenario_seen.at(-1).group, 'g');
 });
 
