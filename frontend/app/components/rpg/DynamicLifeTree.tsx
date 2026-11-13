@@ -44,6 +44,8 @@ import CulturalLandscapeBackdrop from './CulturalLandscapeBackdrop';
 import { soundFx } from '../../utils/soundEffects';
 import { ALL_UNLOCKED, UNLOCK_HINTS, type Unlocks } from '../../lib/unlocks';
 import { getNodesForState, type LifeTreeNode } from '../../lib/lifeTreeNodes';
+import { buildLifeTreeMap, seasonFromLatestEvent } from '../../lib/lifeTreeMap';
+import { LifeTreeMapLayer, LifeTreeMapCards } from './LifeTreeMapLayer';
 
 export type { LifeTreeNode } from '../../lib/lifeTreeNodes';
 
@@ -240,7 +242,10 @@ export default function DynamicLifeTree({
   ];
 
   const seasonIndex = (characterAge >= 0 ? characterAge : 0) % 4;
-  const currentSeason = SEASONS[seasonIndex];
+  // Mùa theo biến cố của năm vừa khép (nhật ký năm); không rõ thì quay về age % 4
+  const eventSeasonId = seasonFromLatestEvent(character, annualDigest?.journal_line);
+  const currentSeason = SEASONS.find(s => s.id === eventSeasonId) ?? SEASONS[seasonIndex];
+  const lifeMap = buildLifeTreeMap(character);
 
   // Country climate check (Việt Nam, Đông Nam Á & Vùng Nhiệt Đới vs Ôn đới)
   const isTropicalCountry = ['Việt Nam', 'Vietnam', 'Thailand', 'Thái Lan', 'Indonesia', 'Philippines', 'Singapore', 'Malaysia', 'Ấn Độ', 'India', 'Brazil', 'Somalia', 'Haiti'].some(c => 
@@ -2201,6 +2206,10 @@ export default function DynamicLifeTree({
             />
           )}
 
+          {treeViewMode === 'life_actions' && (
+            <LifeTreeMapLayer map={lifeMap} centerX={centerX} centerY={centerY} baseRadius={baseRadius} />
+          )}
+
           {/* Draw Leaf Petiole Vines from Center Trunk to each Foliage Leaflet */}
           {nodes.map(node => {
             const rad = (node.angleDeg * Math.PI) / 180;
@@ -3165,6 +3174,7 @@ export default function DynamicLifeTree({
           })}
         </div>
       )}
+      {treeViewMode === 'life_actions' && <LifeTreeMapCards map={lifeMap} />}
     </div>
   );
 }

@@ -47,7 +47,7 @@ import { getChildhoodMilestones, generateLocalizedName, NAMES_BY_COUNTRY } from 
 import { generateCharacterVisuals } from '../engine/avatarEngine.js';
 import { evaluateNpcLongTermArc, generateCast } from '../engine/npcEngine.js';
 import { drawLifeSeed, lifeSeedOf } from '../engine/lifeSeed.js';
-import { YEAR_FOCUSES, composeYearJournal } from '../engine/yearJournal.js';
+import { YEAR_FOCUSES, composeYearJournal, recordFocusHistory } from '../engine/yearJournal.js';
 import { checkDelayedDominoFuses, updateEventTagWindow, recordExperiencedScenario } from '../engine/antiLoopEngine.js';
 import { evaluateAspirationProgress, assignInitialAspiration, ASPIRATIONS } from '../engine/aspirationEngine.js';
 import { getLocalizedMarketAssets, HOUSING_TIERS } from '../engine/assetMarketEngine.js';
@@ -3592,6 +3592,7 @@ router.post('/tick', async (req, res) => {
     // Close the year: one-line journal from this year's events, then clear the year focus.
     character.year_journal = composeYearJournal(character);
     character.year_log_cursor = (character.history_log ?? []).length;
+    recordFocusHistory(character);
     character.year_focus = null;
     if (passiveSummary?.annual_digest) passiveSummary.annual_digest.journal_line = character.year_journal;
 
